@@ -1,13 +1,6 @@
 import fetchTimetable from "@/helpers/fetchTimetable";
 import { Table, TimetableList } from "@wulkanowy/timetable-parser";
-import Content from "./components/Content";
-import DropdownClass from "./components/Dropdowns/ClassDropdown";
-import DropdownRoom from "./components/Dropdowns/RoomDropdown";
-import DropdownTeacher from "./components/Dropdowns/TeacherDropdown";
-import Footer from "./components/Footer";
-import Jumbotron from "./components/Jumbotron";
-import Layout from "./components/Layout";
-import ThemeChanger from "./components/ThemeChanger";
+import Layout from "../components/Layout";
 import fetchTimetableList from "@/helpers/fetchTimetableList";
 import removeUndefined from "@/helpers/removeUndefined";
 import Head from "next/head";
@@ -41,20 +34,21 @@ const MainRoute = ({ timeTable }) => {
           name="msapplication-TileImage"
           content="https://zstiojar.edu.pl/wp-content/uploads/2023/03/cropped-cropped-cropped-bez-tla-1-270x270.png"
         ></meta>
-      </Head>
-      <Layout>
-        <ThemeChanger />
-        <Jumbotron title={title} />
-        <Content
-          lessons={lessons}
-          hours={hours}
-          generatedDate={generatedDate}
+        <link
+          href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.css"
+          rel="stylesheet"
         />
-        <DropdownRoom />
-        <DropdownTeacher />
-        <DropdownClass />
-        <Footer />
-      </Layout>
+        <script
+          src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.4/flowbite.min.js"
+          async
+        ></script>
+      </Head>
+      <Layout
+        title={title}
+        lessons={lessons}
+        hours={hours}
+        generatedDate={generatedDate}
+      />
     </>
   );
 };

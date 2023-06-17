@@ -6,14 +6,23 @@ function Jumbotron({ title }) {
       <h1 className="mb-4 transition-all text-4xl font-extrabold tracking-tight leading-none text-[#2B161B] md:text-5xl lg:text-6xl dark:text-white">
         Plan lekcji ZSTIO
       </h1>
-      {/* {loading ? (
+      {title ? (
+        <div className="flex justify-center items-center">
+          <p className="mb-4 transition-all text-lg font-normal text-gray-500 lg:text-xl mr-1 dark:text-gray-400">
+            Oddziały /
+          </p>
+          <p className="mb-4 transition-all text-lg font-bold text-gray-500 lg:text-xl dark:text-gray-400">
+            {title}
+          </p>
+        </div>
+      ) : (
         <div
           role="status"
           className="mb-8 transition-all lg:text-xl w-full flex justify-center"
         >
           <svg
             aria-hidden="true"
-            class="w-8 h-8 mr-2 text-gray-200 animate-spin dark:text-gray-600 fill-[#2B161B]"
+            class="w-8 h-8 mr-2 text-gray-200 animate-spin dark:text-gray-600 fill-[#2B161B] dark:fill-blue-800"
             viewBox="0 0 100 101"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
@@ -29,16 +38,7 @@ function Jumbotron({ title }) {
           </svg>
           <span class="sr-only">Loading...</span>
         </div>
-      ) : ( */}
-      <div className="flex justify-center items-center">
-        <p className="mb-4 transition-all text-lg font-normal text-gray-500 lg:text-xl mr-1 dark:text-gray-400">
-          Oddziały /
-        </p>
-        <p className="mb-4 transition-all text-lg font-bold text-gray-500 lg:text-xl dark:text-gray-400">
-          {title}
-        </p>
-      </div>
-      {/* )} */}
+      )}
 
       <button
         id="dropdownSearchClass"

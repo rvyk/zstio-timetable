@@ -2,11 +2,9 @@
 module.exports = {
   content: [
     "./node_modules/flowbite-react/**/*.js",
-    "./src/pages/**/*.{ts,tsx, js, jsx}",
     "./src/pages/*.jsx",
-    "./src/pages/components/*.jsx",
-    "./src/pages/utils/*.jsx",
-    "./public/**/*.html",
+    "./src/components/*.jsx",
+    "./src/components/Dropdowns/*.jsx",
   ],
   safelist: [
     "animate-[fade-in_1s_ease-in-out]",

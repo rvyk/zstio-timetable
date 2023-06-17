@@ -1,14 +1,18 @@
 const fetchTimetableList = async () => {
   let timeTableData = "";
   let timeTableOk = false;
-  await fetch(`http://localhost:3000/api/timetablelist`)
-    .then((response) => {
-      timeTableOk = response.ok;
-      return response.text();
-    })
-    .then((data) => {
-      timeTableData = data;
-    });
+  try {
+    await fetch(`${process.env.API_URL}/api/timetablelist`)
+      .then((response) => {
+        timeTableOk = response.ok;
+        return response.text();
+      })
+      .then((data) => {
+        timeTableData = data;
+      });
+  } catch (e) {
+    timeTableData = {};
+  }
   return { data: timeTableData, ok: timeTableOk };
 };
 

@@ -1,8 +1,6 @@
 export default async function handler(req, res) {
   try {
-    const response = await fetch(
-      `http://www.zstio-elektronika.pl/plan/lista.html`
-    );
+    const response = await fetch(`${process.env.TIMETABLE_URL}/lista.html`);
     const data = await response.text();
     res.status(200).send(data);
   } catch (error) {
