@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import fetchTimetable from "@/helpers/fetchTimetable";
 import { Table, TimetableList } from "@wulkanowy/timetable-parser";
 import Content from "./components/Content";
@@ -10,19 +9,53 @@ import Jumbotron from "./components/Jumbotron";
 import Layout from "./components/Layout";
 import ThemeChanger from "./components/ThemeChanger";
 import fetchTimetableList from "@/helpers/fetchTimetableList";
+import removeUndefined from "@/helpers/removeUndefined";
+import Head from "next/head";
 
 const MainRoute = ({ timeTable }) => {
   const { lessons, hours, generatedDate, title } = timeTable;
   return (
-    <Layout>
-      <ThemeChanger />
-      <Jumbotron title={title} />
-      <Content lessons={lessons} hours={hours} generatedDate={generatedDate} />
-      <DropdownRoom />
-      <DropdownTeacher />
-      <DropdownClass />
-      <Footer />
-    </Layout>
+    <>
+      <Head>
+        <title>ZSTIO - Plan lekcji</title>
+        <meta
+          name="description"
+          content="Plan lekcji ZSTIO w odświeżonym stylu."
+        />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link
+          rel="icon"
+          href="https://zstiojar.edu.pl/wp-content/uploads/2023/03/cropped-cropped-cropped-bez-tla-1-32x32.png"
+          sizes="32x32"
+        ></link>
+        <link
+          rel="icon"
+          href="https://zstiojar.edu.pl/wp-content/uploads/2023/03/cropped-cropped-cropped-bez-tla-1-192x192.png"
+          sizes="192x192"
+        ></link>
+        <link
+          rel="apple-touch-icon"
+          href="https://zstiojar.edu.pl/wp-content/uploads/2023/03/cropped-cropped-cropped-bez-tla-1-180x180.png"
+        ></link>
+        <meta
+          name="msapplication-TileImage"
+          content="https://zstiojar.edu.pl/wp-content/uploads/2023/03/cropped-cropped-cropped-bez-tla-1-270x270.png"
+        ></meta>
+      </Head>
+      <Layout>
+        <ThemeChanger />
+        <Jumbotron title={title} />
+        <Content
+          lessons={lessons}
+          hours={hours}
+          generatedDate={generatedDate}
+        />
+        <DropdownRoom />
+        <DropdownTeacher />
+        <DropdownClass />
+        <Footer />
+      </Layout>
+    </>
   );
 };
 
@@ -45,17 +78,17 @@ export async function getStaticPaths() {
 
 export async function getStaticProps(context) {
   let id = "";
-  let timeTableResponse = null;
+  let timeTableData = null;
   if (context.params?.all) {
     if (context.params.all[0] === "class") id = `o${context.params.all[1]}`;
     if (context.params.all[0] === "teacher") id = `n${context.params.all[1]}`;
     if (context.params.all[0] === "room") id = `s${context.params.all[1]}`;
   }
 
-  await fetchTimetable(id).then((response) => {
-    timeTableResponse = response.data;
-  });
-  const timetableList = new Table(timeTableResponse);
+  const response = await fetchTimetable(id);
+  timeTableData = response.data;
+
+  const timetableList = new Table(timeTableData);
   const timeTable = {
     lessons: timetableList.getDays(),
     hours: timetableList.getHours(),
@@ -65,7 +98,7 @@ export async function getStaticProps(context) {
 
   return {
     props: {
-      timeTable,
+      timeTable: removeUndefined(timeTable),
     },
     revalidate: 12 * 3600,
   };

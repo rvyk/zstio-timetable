@@ -1,8 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { Table, TimetableList } from "@wulkanowy/timetable-parser";
-import fetchTimetable from "@/helpers/fetchTimetable";
+import React from "react";
 import Link from "next/link";
-import TableLoading from "./TableLoading";
 
 function Content({ lessons, hours, generatedDate }) {
   const daysOfWeek = ["Poniedziałek", "Wtorek", "Środa", "Czwartek", "Piątek"];
@@ -54,18 +51,24 @@ function Content({ lessons, hours, generatedDate }) {
                       <div className="font-semibold mr-1">
                         {lesson?.subject}
                       </div>
-                      <Link
-                        href={`/teacher/${lesson?.teacherId}`}
-                        className="flex items-center mr-1"
-                      >
-                        {lesson?.teacher}
-                      </Link>
-                      <Link
-                        href={`/class/${lesson?.roomId}`}
-                        className="flex items-center"
-                      >
-                        {lesson?.room}
-                      </Link>
+
+                      {lesson?.teacher && lesson?.teacherId && (
+                        <Link
+                          href={`/teacher/${lesson?.teacherId}`}
+                          className="flex items-center mr-1"
+                        >
+                          {lesson?.teacher}
+                        </Link>
+                      )}
+
+                      {lesson?.roomId && lesson?.room && (
+                        <Link
+                          href={`/class/${lesson?.roomId}`}
+                          className="flex items-center"
+                        >
+                          {lesson?.room}
+                        </Link>
+                      )}
                     </div>
                   ))}
                 </td>
@@ -75,7 +78,7 @@ function Content({ lessons, hours, generatedDate }) {
         </tbody>
         <tfoot
           className={`bg-[#2B161B] ${
-            hours.length % 2 != 0
+            Object.entries(hours).length % 2 == 0
               ? "bg-white dark:bg-gray-800"
               : "bg-gray-100 dark:bg-gray-700"
           }`}

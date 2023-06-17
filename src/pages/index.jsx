@@ -7,17 +7,7 @@ export default function Home() {
 
   useEffect(() => {
     router.push("/class/1");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  return (
-    <>
-      <Head>
-        <title>ZSTIO - Plan lekcji</title>
-        <meta
-          name="description"
-          content="Zastępstwa ZSTIO w odświeżonym stylu."
-        />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-      </Head>
-    </>
-  );
+  return null;
 }
