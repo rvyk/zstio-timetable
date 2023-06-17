@@ -1,10 +1,7 @@
 const fetchTimetable = async (id) => {
   let timeTableData = "";
   let timeTableOk = false;
-  await fetch(
-    `https://www.zstio-elektronika.pl/plan/plany/o${id}.html
-`
-  )
+  await fetch(`http://localhost:3000/api/timetable?id=${id}`)
     .then((response) => {
       timeTableOk = response.ok;
       return response.text();

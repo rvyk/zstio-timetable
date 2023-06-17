@@ -68,7 +68,7 @@ function DropdownRoom() {
           filteredRooms.map((room) => (
             <li key={room.value}>
               <Link
-                href={`/class/${room.value}`}
+                href={`/room/${room.value}`}
                 className="flex items-center pl-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600"
               >
                 <p className="w-full py-2 ml-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">

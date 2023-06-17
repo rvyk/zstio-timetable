@@ -1,13 +1,13 @@
 import Head from "next/head";
-import Layout from "./components/Layout";
-import ThemeChanger from "./components/ThemeChanger";
-import Jumbotron from "./components/Jumbotron";
-import Content from "./components/Content";
-import DropdownClass from "./components/Dropdowns/ClassDropdown";
-import DropdownTeacher from "./components/Dropdowns/TeacherDropdown";
-import DropdownRoom from "./components/Dropdowns/RoomDropdown";
+import { useRouter } from "next/router";
+import { useEffect } from "react";
 
 export default function Home() {
+  const router = useRouter();
+
+  useEffect(() => {
+    router.push("/class/1");
+  }, []);
   return (
     <>
       <Head>
@@ -18,14 +18,6 @@ export default function Home() {
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
-      <Layout>
-        <ThemeChanger />
-        <Jumbotron />
-        <Content />
-        <DropdownRoom />
-        <DropdownTeacher />
-        <DropdownClass />
-      </Layout>
     </>
   );
 }
