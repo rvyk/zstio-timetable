@@ -1,24 +1,6 @@
-import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
+import React from "react";
 
-function Jumbotron({ title }) {
-  const [text, setText] = useState("");
-  const router = useRouter();
-  const { query } = router;
-
-  useEffect(() => {
-    if (query.all && Array.isArray(query.all)) {
-      const path = query.all.join("/");
-      if (path.includes("class/")) {
-        setText("Oddziały");
-      } else if (path.includes("teacher/")) {
-        setText("Nauczyciele");
-      } else if (path.includes("room/")) {
-        setText("Sale");
-      }
-    }
-  }, [query.all]);
-
+function Jumbotron({ title, text }) {
   return (
     <div className="py-8 px-4 mx-auto max-w-screen-xl text-center lg:py-16">
       <h1 className="mb-4 transition-all text-4xl font-extrabold tracking-tight leading-none text-[#2B161B] md:text-5xl lg:text-6xl dark:text-white">
@@ -36,11 +18,11 @@ function Jumbotron({ title }) {
       ) : (
         <div
           role="status"
-          className="mb-8 transition-all lg:text-xl w-full flex justify-center"
+          className="mb-4 transition-all lg:text-xl w-full flex justify-center"
         >
           <svg
             aria-hidden="true"
-            className="w-8 h-8 mr-2 text-gray-200 animate-spin dark:text-gray-600 fill-[#2B161B] dark:fill-blue-800"
+            className="w-7 h-7 mr-2 text-gray-200 animate-spin dark:text-gray-600 fill-[#2B161B] dark:fill-blue-800"
             viewBox="0 0 100 101"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
