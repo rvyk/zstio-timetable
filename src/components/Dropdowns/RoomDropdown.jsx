@@ -1,19 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { TimetableList } from "@wulkanowy/timetable-parser";
-import fetchTimetableList from "@/helpers/fetchTimetableList";
+import fetchTimetableList from "./../../helpers/fetchTimetableList";
 import Link from "next/link";
 
-function DropdownRoom() {
+function DropdownRoom({ rooms }) {
   const [searchRoom, setSearchRoom] = useState("");
-  const [rooms, setRooms] = useState([]);
-
-  useEffect(() => {
-    fetchTimetableList().then((res) => {
-      const timetableList = new TimetableList(res.data);
-      const roomList = timetableList.getList().rooms;
-      setRooms(roomList);
-    });
-  }, []);
 
   const handleSearch = (event) => {
     setSearchRoom(event.target.value);
@@ -28,7 +19,7 @@ function DropdownRoom() {
   return (
     <div
       id="dropdownRoom"
-      className="z-10 hidden bg-white rounded-lg shadow w-60 dark:bg-gray-700 "
+      className="z-10 hidden bg-white rounded-lg shadow w-60 dark:bg-gray-700"
     >
       <div className="p-3">
         <label htmlFor="input-group-search" className="sr-only">
@@ -53,6 +44,7 @@ function DropdownRoom() {
           <input
             type="text"
             id="input-group-search"
+            autoComplete="off"
             className="block w-full p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 transition-all duration-200 focus:ring-[#2B161B] focus:border-[#2B161B] dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             placeholder="Wyszukaj salę"
             value={searchRoom}
@@ -67,10 +59,7 @@ function DropdownRoom() {
         {filteredRooms.length > 0 ? (
           filteredRooms.map((room) => (
             <li key={room.value}>
-              <Link
-                href={`/room/${room.value}`}
-                className="flex items-center pl-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600"
-              >
+              <Link href={`/room/${room.value}`}>
                 <p className="w-full py-2 ml-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">
                   {room.name}
                 </p>
@@ -79,7 +68,7 @@ function DropdownRoom() {
           ))
         ) : (
           <li className="px-2 py-1 text-center text-gray-500 dark:text-gray-400">
-            Nie znaleziono takiej klasy
+            Nie znaleziono takiej sali
           </li>
         )}
       </ul>

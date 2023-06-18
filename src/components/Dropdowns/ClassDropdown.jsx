@@ -1,19 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { TimetableList } from "@wulkanowy/timetable-parser";
-import fetchTimetableList from "@/helpers/fetchTimetableList";
 import Link from "next/link";
 
-function DropdownClass() {
+function DropdownClass({ classes }) {
   const [searchClass, setSearchClass] = useState("");
-  const [classes, setClass] = useState([]);
-
-  useEffect(() => {
-    fetchTimetableList().then((res) => {
-      const timetableList = new TimetableList(res.data);
-      const classList = timetableList.getList().classes;
-      setClass(classList);
-    });
-  }, []);
 
   const handleSearch = (event) => {
     setSearchClass(event.target.value);
@@ -54,7 +43,7 @@ function DropdownClass() {
             type="text"
             autoComplete="false"
             id="input-group-search-class"
-            className="block w-full p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            className="block w-full p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 transition-all duration-200 focus:ring-[#2B161B] focus:border-[#2B161B] dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             placeholder="Wyszukaj klasę"
             value={searchClass}
             onChange={handleSearch}

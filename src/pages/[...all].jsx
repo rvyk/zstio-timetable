@@ -4,8 +4,11 @@ import Layout from "../components/Layout";
 import fetchTimetableList from "@/helpers/fetchTimetableList";
 import removeUndefined from "@/helpers/removeUndefined";
 import Head from "next/head";
+import DropdownRoom from "@/components/Dropdowns/RoomDropdown";
+import DropdownTeacher from "@/components/Dropdowns/TeacherDropdown";
+import DropdownClass from "@/components/Dropdowns/ClassDropdown";
 
-const MainRoute = ({ timeTable }) => {
+const MainRoute = ({ timeTable, classes, teachers, rooms }) => {
   const { lessons, hours, generatedDate, title } = timeTable;
   return (
     <>
@@ -16,39 +19,17 @@ const MainRoute = ({ timeTable }) => {
           content="Plan lekcji ZSTIO w odświeżonym stylu."
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link
-          rel="icon"
-          href="https://zstiojar.edu.pl/wp-content/uploads/2023/03/cropped-cropped-cropped-bez-tla-1-32x32.png"
-          sizes="32x32"
-        ></link>
-        <link
-          rel="icon"
-          href="https://zstiojar.edu.pl/wp-content/uploads/2023/03/cropped-cropped-cropped-bez-tla-1-192x192.png"
-          sizes="192x192"
-        ></link>
-        <link
-          rel="apple-touch-icon"
-          href="https://zstiojar.edu.pl/wp-content/uploads/2023/03/cropped-cropped-cropped-bez-tla-1-180x180.png"
-        ></link>
-        <meta
-          name="msapplication-TileImage"
-          content="https://zstiojar.edu.pl/wp-content/uploads/2023/03/cropped-cropped-cropped-bez-tla-1-270x270.png"
-        ></meta>
-        <link
-          href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.css"
-          rel="stylesheet"
-        />
-        <script
-          src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.4/flowbite.min.js"
-          async
-        ></script>
       </Head>
       <Layout
         title={title}
         lessons={lessons}
         hours={hours}
         generatedDate={generatedDate}
-      />
+      >
+        <DropdownRoom rooms={rooms} />
+        <DropdownTeacher teachers={teachers} />
+        <DropdownClass classes={classes} />
+      </Layout>
     </>
   );
 };
@@ -90,9 +71,16 @@ export async function getStaticProps(context) {
     title: timetableList.getTitle(),
   };
 
+  const list = await fetchTimetableList();
+  const tableList = new TimetableList(list.data);
+  const { classes, teachers, rooms } = tableList.getList();
+
   return {
     props: {
       timeTable: removeUndefined(timeTable),
+      classes,
+      teachers,
+      rooms,
     },
     revalidate: 12 * 3600,
   };

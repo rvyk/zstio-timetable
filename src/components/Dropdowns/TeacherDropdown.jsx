@@ -1,20 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { TimetableList } from "@wulkanowy/timetable-parser";
-import fetchTimetableList from "@/helpers/fetchTimetableList";
 import Link from "next/link";
 
-function DropdownTeacher() {
+function DropdownTeacher({ teachers }) {
   const [searchTeacher, setSearchTeacher] = useState("");
-  const [teachers, setTeachers] = useState([]);
-
-  useEffect(() => {
-    fetchTimetableList().then((res) => {
-      const timetableList = new TimetableList(res.data);
-      const teacherList = timetableList.getList().teachers;
-      setTeachers(teacherList);
-    });
-  }, []);
-
   const handleSearch = (event) => {
     setSearchTeacher(event.target.value);
   };
@@ -54,7 +42,7 @@ function DropdownTeacher() {
             type="text"
             autoComplete="false"
             id="input-group-search-teacher"
-            className="block w-full p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            className="block w-full p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 transition-all duration-200 focus:ring-[#2B161B] focus:border-[#2B161B] dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             placeholder="Wyszukaj nauczyciela"
             value={searchTeacher}
             onChange={handleSearch}
