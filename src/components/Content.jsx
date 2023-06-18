@@ -79,6 +79,8 @@ function Content({ lessons, hours, generatedDate }) {
     },
   ];
 
+  const currentHour = new Date().getHours();
+  const currentMinutes = new Date().getMinutes();
   return (
     <>
       {typeof hours == "object" ? (
@@ -103,72 +105,97 @@ function Content({ lessons, hours, generatedDate }) {
             </thead>
 
             <tbody>
-              {Object.entries(hours)?.map(([key, item], index) => (
-                <tr
-                  className={`border-b ${
-                    index % 2 == 0
-                      ? "bg-white dark:bg-gray-800"
-                      : "bg-gray-100 dark:bg-gray-700"
-                  } dark:border-gray-700`}
-                  key={index}
-                >
-                  <td className="border-r py-4 text-center h-full last:border-none font-semibold dark:border-gray-700">
-                    {item.number}
-                  </td>
-                  <td className="text-center px-4 border-r last:border-none dark:border-gray-700">
-                    {item.timeFrom} - {item.timeTo}
-                  </td>
+              {Object.entries(hours)?.map(([key, item], index) => {
+                const { timeFrom, timeTo } = item;
+                const [fromHour, fromMinutes] = timeFrom.split(":");
+                const [toHour, toMinutes] = timeTo.split(":");
+                const isAfterFromTime =
+                  currentHour > Number(fromHour) ||
+                  (currentHour === Number(fromHour) &&
+                    currentMinutes >= Number(fromMinutes));
+                const isBeforeToTime =
+                  currentHour < Number(toHour) ||
+                  (currentHour === Number(toHour) &&
+                    currentMinutes < Number(toMinutes));
+                const isWithinTimeRange = isAfterFromTime && isBeforeToTime;
 
-                  {lessons?.map((day, lessonIndex) => (
+                return (
+                  <tr
+                    className={`border-b ${
+                      index % 2 === 0
+                        ? "bg-white dark:bg-gray-800"
+                        : "bg-gray-50 dark:bg-gray-700"
+                    } dark:border-gray-600`}
+                    key={index}
+                  >
                     <td
-                      className="px-6 py-4 whitespace-nowrap border-r last:border-none dark:border-gray-700 text-gray-500 dark:text-gray-400"
-                      key={`${day}-${lessonIndex}`}
+                      className={`py-4 text-center h-full border-r last:border-none font-semibold dark:border-gray-600`}
                     >
-                      {day[key - 1]?.map((lesson, subIndex) => (
-                        <div
-                          key={`${day}-${lessonIndex}-${subIndex}`}
-                          className="flex"
-                        >
-                          {lesson?.groupName && (
-                            <p className="flex items-center mr-1">
-                              {lesson?.groupName}
-                            </p>
-                          )}
-                          <div className="font-semibold mr-1">
-                            {lesson?.subject}
-                          </div>
-                          {lesson?.className && lesson?.classId && (
-                            <Link
-                              href={`/class/${lesson?.classId}`}
-                              className="flex items-center mr-1"
-                            >
-                              {lesson?.className}
-                            </Link>
-                          )}
-
-                          {lesson?.teacher && lesson?.teacherId && (
-                            <Link
-                              href={`/teacher/${lesson?.teacherId}`}
-                              className="flex items-center mr-1"
-                            >
-                              {lesson?.teacher}
-                            </Link>
-                          )}
-
-                          {lesson?.roomId && lesson?.room && (
-                            <Link
-                              href={`/room/${lesson?.roomId}`}
-                              className="flex items-center"
-                            >
-                              {lesson?.room}
-                            </Link>
-                          )}
-                        </div>
-                      ))}
+                      <div className="flex justify-center items-center flex-col">
+                        {item.number}
+                        {isWithinTimeRange && (
+                          <span class="bg-blue-100 mt-1 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">
+                            TERAZ
+                          </span>
+                        )}
+                      </div>
                     </td>
-                  ))}
-                </tr>
-              ))}
+                    <td className="text-center px-4 border-r last:border-none dark:border-gray-600">
+                      {timeFrom} - {timeTo}
+                    </td>
+
+                    {lessons?.map((day, lessonIndex) => (
+                      <td
+                        className="px-6 py-4 whitespace-nowrap border-r last:border-none dark:border-gray-600 text-gray-500 dark:text-gray-400"
+                        key={`${day}-${lessonIndex}`}
+                      >
+                        {day[key - 1]?.map((lesson, subIndex) => (
+                          <div
+                            key={`${day}-${lessonIndex}-${subIndex}`}
+                            className="flex"
+                          >
+                            <div className="font-semibold mr-1">
+                              {lesson?.subject}
+                            </div>
+                            {lesson?.groupName && (
+                              <p className="flex items-center mr-1">
+                                {`(${lesson?.groupName})`}
+                              </p>
+                            )}
+
+                            {lesson?.className && lesson?.classId && (
+                              <Link
+                                href={`/class/${lesson?.classId}`}
+                                className="flex items-center mr-1"
+                              >
+                                {lesson?.className}
+                              </Link>
+                            )}
+
+                            {lesson?.teacher && lesson?.teacherId && (
+                              <Link
+                                href={`/teacher/${lesson?.teacherId}`}
+                                className="flex items-center mr-1"
+                              >
+                                {lesson?.teacher}
+                              </Link>
+                            )}
+
+                            {lesson?.roomId && lesson?.room && (
+                              <Link
+                                href={`/room/${lesson?.roomId}`}
+                                className="flex items-center"
+                              >
+                                {lesson?.room}
+                              </Link>
+                            )}
+                          </div>
+                        ))}
+                      </td>
+                    ))}
+                  </tr>
+                );
+              })}
             </tbody>
             <tfoot
               className={`bg-[#2B161B] ${
