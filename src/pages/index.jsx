@@ -6,7 +6,10 @@ export default function Home() {
   const router = useRouter();
 
   useEffect(() => {
-    router.replace("/class/1");
+    const lastSelectValue = localStorage.getItem("LastSelect");
+    if (lastSelectValue) {
+      router.push(lastSelectValue);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return <Layout />;

@@ -3,9 +3,23 @@ import Link from "next/link";
 
 function DropdownClass({ classes }) {
   const [searchClass, setSearchClass] = useState("");
+  const [lastSelect, setLastSelect] = useState("");
+
+  useEffect(() => {
+    const lastSelectValue = localStorage.getItem("LastSelect");
+    if (lastSelectValue) {
+      setLastSelect(lastSelectValue);
+    }
+  }, []);
 
   const handleSearch = (event) => {
     setSearchClass(event.target.value);
+  };
+
+  const handleSelectClass = (classPrefix) => {
+    const classLink = `/class/${classPrefix.value}`;
+    setLastSelect(classLink);
+    localStorage.setItem("LastSelect", classLink);
   };
 
   const filteredClasses = classes.filter((classPrefix) => {
@@ -59,7 +73,12 @@ function DropdownClass({ classes }) {
             <li key={classPrefix.value}>
               <Link
                 href={`/class/${classPrefix.value}`}
-                className="flex items-center pl-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600"
+                className={`flex items-center pl-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600 ${
+                  lastSelect === `/class/${classPrefix.value}`
+                    ? "bg-gray-100 dark:bg-gray-600"
+                    : ""
+                }`}
+                onClick={() => handleSelectClass(classPrefix)}
               >
                 <p className="w-full py-2 ml-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">
                   {classPrefix.name}

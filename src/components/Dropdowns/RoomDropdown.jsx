@@ -1,13 +1,25 @@
 import React, { useEffect, useState } from "react";
-import { TimetableList } from "@wulkanowy/timetable-parser";
-import fetchTimetableList from "./../../helpers/fetchTimetableList";
 import Link from "next/link";
 
 function DropdownRoom({ rooms }) {
   const [searchRoom, setSearchRoom] = useState("");
+  const [lastSelect, setLastSelect] = useState("");
+
+  useEffect(() => {
+    const lastSelectValue = localStorage.getItem("LastSelect");
+    if (lastSelectValue) {
+      setLastSelect(lastSelectValue);
+    }
+  }, []);
 
   const handleSearch = (event) => {
     setSearchRoom(event.target.value);
+  };
+
+  const handleSelectRoom = (room) => {
+    const roomLink = `/room/${room.value}`;
+    setLastSelect(roomLink);
+    localStorage.setItem("LastSelect", roomLink);
   };
 
   const filteredRooms = rooms.filter((room) => {
@@ -59,7 +71,15 @@ function DropdownRoom({ rooms }) {
         {filteredRooms.length > 0 ? (
           filteredRooms.map((room) => (
             <li key={room.value}>
-              <Link href={`/room/${room.value}`}>
+              <Link
+                href={`/room/${room.value}`}
+                className={`flex items-center pl-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600 ${
+                  lastSelect === `/room/${room.value}`
+                    ? "bg-gray-100 dark:bg-gray-600"
+                    : ""
+                }`}
+                onClick={() => handleSelectRoom(room)}
+              >
                 <p className="w-full py-2 ml-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">
                   {room.name}
                 </p>

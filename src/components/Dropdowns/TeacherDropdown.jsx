@@ -3,8 +3,23 @@ import Link from "next/link";
 
 function DropdownTeacher({ teachers }) {
   const [searchTeacher, setSearchTeacher] = useState("");
+  const [lastSelect, setLastSelect] = useState("");
+
+  useEffect(() => {
+    const lastSelectValue = localStorage.getItem("LastSelect");
+    if (lastSelectValue) {
+      setLastSelect(lastSelectValue);
+    }
+  }, []);
+
   const handleSearch = (event) => {
     setSearchTeacher(event.target.value);
+  };
+
+  const handleSelectTeacher = (teacher) => {
+    const teacherLink = `/teacher/${teacher.value}`;
+    setLastSelect(teacherLink);
+    localStorage.setItem("LastSelect", teacherLink);
   };
 
   const filteredTeachers = teachers.filter((teacher) => {
@@ -58,7 +73,12 @@ function DropdownTeacher({ teachers }) {
             <li key={teacher.value}>
               <Link
                 href={`/teacher/${teacher.value}`}
-                className="flex items-center pl-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600"
+                className={`flex items-center pl-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600 ${
+                  lastSelect === `/teacher/${teacher.value}`
+                    ? "bg-gray-100 dark:bg-gray-600"
+                    : ""
+                }`}
+                onClick={() => handleSelectTeacher(teacher)}
               >
                 <p className="w-full py-2 ml-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">
                   {teacher.name}
