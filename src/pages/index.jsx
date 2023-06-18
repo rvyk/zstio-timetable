@@ -9,6 +9,8 @@ export default function Home() {
     const lastSelectValue = localStorage.getItem("LastSelect");
     if (lastSelectValue) {
       router.push(lastSelectValue);
+    } else {
+      router.push("/class/1");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
