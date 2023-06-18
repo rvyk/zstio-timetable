@@ -7,11 +7,11 @@ function Jumbotron({ title, text }) {
         Plan lekcji ZSTIO
       </h1>
       {title && text.length > 0 ? (
-        <div className="flex justify-center items-center">
-          <p className="mb-4 transition-all text-lg font-normal text-gray-500 lg:text-xl mr-1 dark:text-gray-400">
+        <div className="flex justify-center mb-4 flex-wrap items-center ">
+          <p className="transition-all text-lg font-normal mr-1 hidden sm:flex text-gray-500 lg:text-xl dark:text-gray-400">
             {text} /
           </p>
-          <p className="mb-4 transition-all text-lg font-bold text-gray-500 lg:text-xl dark:text-gray-400">
+          <p className="transition-all text-lg font-bold text-gray-500 lg:text-xl dark:text-gray-400">
             {title}
           </p>
         </div>
