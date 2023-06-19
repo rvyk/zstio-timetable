@@ -1,11 +1,18 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import TableLoading from "./TableLoading";
 
 function Content({ lessons, hours, generatedDate, text, title }) {
   const daysOfWeek = ["Poniedziałek", "Wtorek", "Środa", "Czwartek", "Piątek"];
+  const [isShortHours, setIsShortHours] = useState(false);
 
-  // TODO:
+  useEffect(() => {
+    const shortHours = localStorage.getItem("shortHours");
+    if (shortHours) {
+      setIsShortHours(JSON.parse(shortHours));
+    }
+  }, []);
+
   const shortHours = [
     {
       number: 1,
@@ -81,6 +88,10 @@ function Content({ lessons, hours, generatedDate, text, title }) {
 
   const currentHour = new Date().getHours();
   const currentMinutes = new Date().getMinutes();
+  const maxLessons =
+    typeof hours == "object" &&
+    Math.max(Object.entries(hours).length, ...lessons.map((day) => day.length));
+
   return (
     <>
       {typeof hours == "object" ? (
@@ -92,6 +103,39 @@ function Content({ lessons, hours, generatedDate, text, title }) {
             <caption className="p-5 transition-all text-lg font-semibold text-left text-gray-900 bg-white dark:text-white dark:bg-gray-800">
               {title && text.length > 0 ? (
                 <div className="flex items-center">
+                  <div
+                    className="inline-flex rounded-md shadow-sm mr-2"
+                    role="group"
+                  >
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setIsShortHours(false);
+                        localStorage.setItem("shortHours", false);
+                      }}
+                      className={` ${
+                        isShortHours
+                          ? "bg-white dark:bg-gray-700 "
+                          : "bg-[#73110e] dark:bg-gray-900 text-white hover:text-gray-200 focus:text-gray-200"
+                      } px-4 py-2 text-sm font-medium text-gray-900 border border-gray-200 rounded-l-lg hover:text-blue-700 focus:z-10 focus:ring-0 focus:text-blue-700 dark:border-gray-600 dark:text-white dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-blue-500 dark:focus:text-white`}
+                    >
+                      {"45'"}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setIsShortHours(true);
+                        localStorage.setItem("shortHours", true);
+                      }}
+                      className={` ${
+                        isShortHours
+                          ? "bg-[#73110e] dark:bg-gray-900 text-white hover:text-gray-200 focus:text-gray-200"
+                          : "bg-white dark:bg-gray-700"
+                      } px-4 py-2 text-sm font-medium text-gray-900 border border-gray-200 rounded-r-lg hover:text-blue-700 focus:z-10 focus:ring-0 focus:text-blue-700 dark:border-gray-600 dark:text-white dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-blue-500 dark:focus:text-white`}
+                    >
+                      {"30'"}
+                    </button>
+                  </div>
                   <p className="transition-all text-lg font-normal text-gray-500 lg:text-xl mr-1 dark:text-gray-400">
                     {text} /
                   </p>
@@ -129,8 +173,8 @@ function Content({ lessons, hours, generatedDate, text, title }) {
                 <th scope="col" className="px-6 py-3">
                   <div className="flex items-center justify-center">Lekcja</div>
                 </th>
-                <th scope="col" className="px-6 py-3">
-                  <div className="flex items-center justify-center">Godz</div>
+                <th scope="col" className="px-8 py-3">
+                  <div className="flex items-center justify-center">Godz.</div>
                 </th>
                 {daysOfWeek.map((day) => (
                   <th scope="col" className="px-6 py-3" key={day}>
@@ -143,8 +187,10 @@ function Content({ lessons, hours, generatedDate, text, title }) {
             </thead>
 
             <tbody>
-              {Object.entries(hours)?.map(([key, item], index) => {
-                const { timeFrom, timeTo } = item;
+              {Object.entries(
+                isShortHours ? shortHours.slice(0, maxLessons) : hours
+              )?.map(([key, item], index) => {
+                const { number, timeFrom, timeTo } = item;
                 const [fromHour, fromMinutes] = timeFrom.split(":");
                 const [toHour, toMinutes] = timeTo.split(":");
                 const isAfterFromTime =
@@ -170,15 +216,15 @@ function Content({ lessons, hours, generatedDate, text, title }) {
                       className={`py-4 text-center h-full border-r last:border-none font-semibold dark:border-gray-600`}
                     >
                       <div className="flex justify-center items-center flex-col">
-                        {item.number}
+                        {number}
                         {isWithinTimeRange && (
-                          <span class="bg-blue-100 mt-1 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">
+                          <span className="bg-blue-100 mt-1 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">
                             TRWA
                           </span>
                         )}
                       </div>
                     </td>
-                    <td className="text-center px-4 border-r last:border-none dark:border-gray-600">
+                    <td className="text-center border-r last:border-none dark:border-gray-600">
                       {timeFrom} - {timeTo}
                     </td>
 
@@ -187,7 +233,7 @@ function Content({ lessons, hours, generatedDate, text, title }) {
                         className="px-6 py-4 whitespace-nowrap border-r last:border-none dark:border-gray-600 text-gray-500 dark:text-gray-400"
                         key={`${day}-${lessonIndex}`}
                       >
-                        {day[key - 1]?.map((lesson, subIndex) => (
+                        {day[number - 1]?.map((lesson, subIndex) => (
                           <div
                             key={`${day}-${lessonIndex}-${subIndex}`}
                             className="flex"
