@@ -74,7 +74,6 @@ export async function getStaticProps(context) {
   const list = await fetchTimetableList();
   const tableList = new TimetableList(list.data);
   const { classes, teachers, rooms } = tableList.getList();
-
   return {
     props: {
       timeTable: removeUndefined(timeTable),

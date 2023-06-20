@@ -5,12 +5,9 @@ function Footer() {
       <div className="max-w-screen mx-auto p-4 transition-all">
         <span className="text-sm text-[#ffffff] block text-center dark:text-gray-400">
           © {new Date().getFullYear()}
-          <span className="ml-1 font-roboto tracking-wide">
-            Made with ❤️ in Dziurosław by
+          <span className="ml-1 tracking-wide">
+            Made with ❤️ for ZSTIO by Szymański Paweł & Majcher Kacper
           </span>
-          <a href="https://awfulworld.space/" className="hover:underline ml-1">
-            awfulworld
-          </a>
         </span>
       </div>
     </footer>
