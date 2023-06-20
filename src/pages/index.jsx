@@ -8,9 +8,9 @@ export default function Home() {
   useEffect(() => {
     const lastSelectValue = localStorage.getItem("LastSelect");
     if (lastSelectValue) {
-      router.push(lastSelectValue);
+      router.replace(lastSelectValue);
     } else {
-      router.push("/class/1");
+      router.replace("/class/1");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

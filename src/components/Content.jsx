@@ -115,9 +115,9 @@ function Content({ lessons, hours, generatedDate, text, title }) {
                       }}
                       className={` ${
                         isShortHours
-                          ? "bg-white dark:bg-gray-700 "
-                          : "bg-[#73110e] dark:bg-gray-900 text-white hover:text-gray-200 focus:text-gray-200"
-                      } px-4 py-2 text-sm font-medium text-gray-900 border border-gray-200 rounded-l-lg hover:text-blue-700 focus:z-10 focus:ring-0 focus:text-blue-700 dark:border-gray-600 dark:text-white dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-blue-500 dark:focus:text-white`}
+                          ? "bg-white dark:bg-gray-700 dark:hover:bg-gray-600 hover:bg-gray-200"
+                          : "bg-[#73110e] hover:bg-[#480e0c] dark:hover:bg-gray-950 dark:bg-gray-900 text-white hover:text-gray-200 focus:text-gray-200"
+                      } transition-all duration-200 px-4 py-2 text-sm font-medium text-gray-900 border border-gray-200 rounded-l-lg focus:z-10 focus:ring-0 focus:text-blue-700 dark:border-gray-600 dark:text-white dark:hover:text-white dark:focus:ring-blue-500 dark:focus:text-white`}
                     >
                       {"45'"}
                     </button>
@@ -129,9 +129,9 @@ function Content({ lessons, hours, generatedDate, text, title }) {
                       }}
                       className={` ${
                         isShortHours
-                          ? "bg-[#73110e] dark:bg-gray-900 text-white hover:text-gray-200 focus:text-gray-200"
-                          : "bg-white dark:bg-gray-700"
-                      } px-4 py-2 text-sm font-medium text-gray-900 border border-gray-200 rounded-r-lg hover:text-blue-700 focus:z-10 focus:ring-0 focus:text-blue-700 dark:border-gray-600 dark:text-white dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-blue-500 dark:focus:text-white`}
+                          ? "bg-[#73110e] hover:bg-[#480e0c] dark:hover:bg-gray-950 dark:bg-gray-900 text-white hover:text-gray-200 focus:text-gray-200"
+                          : "bg-white dark:bg-gray-700 dark:hover:bg-gray-600 hover:bg-gray-200"
+                      } transition-all duration-200 px-4 py-2 text-sm font-medium text-gray-900 border border-gray-200 rounded-r-lg focus:z-10 focus:ring-0 focus:text-blue-700 dark:border-gray-600 dark:text-white dark:hover:text-white dark:focus:ring-blue-500 dark:focus:text-white`}
                     >
                       {"30'"}
                     </button>
