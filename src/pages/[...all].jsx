@@ -9,7 +9,7 @@ import DropdownTeacher from "@/components/Dropdowns/TeacherDropdown";
 import DropdownClass from "@/components/Dropdowns/ClassDropdown";
 
 const MainRoute = ({ timeTable, classes, teachers, rooms }) => {
-  const { lessons, hours, generatedDate, title } = timeTable;
+  const { lessons, hours, generatedDate, title, status } = timeTable;
   return (
     <>
       <Head>
@@ -25,6 +25,7 @@ const MainRoute = ({ timeTable, classes, teachers, rooms }) => {
         lessons={lessons}
         hours={hours}
         generatedDate={generatedDate}
+        status={status}
       >
         <DropdownRoom rooms={rooms} />
         <DropdownTeacher teachers={teachers} />
@@ -52,6 +53,7 @@ export async function getStaticPaths() {
 }
 
 export async function getStaticProps(context) {
+  let status = false;
   let id = "";
   let timeTableData = null;
   if (context.params?.all) {
@@ -62,7 +64,7 @@ export async function getStaticProps(context) {
 
   const response = await fetchTimetable(id);
   timeTableData = response.data;
-
+  status = response.ok;
   const timetableList = new Table(timeTableData);
   const timeTable = {
     lessons: timetableList.getDays(),
@@ -80,6 +82,7 @@ export async function getStaticProps(context) {
       classes,
       teachers,
       rooms,
+      status,
     },
     revalidate: 12 * 3600,
   };

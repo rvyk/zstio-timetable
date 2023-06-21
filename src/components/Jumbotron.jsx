@@ -1,24 +1,39 @@
+import Image from "next/image";
+import Link from "next/link";
 import React from "react";
 
 function Jumbotron({ title, text }) {
   return (
     <div className="py-8 px-4 mx-auto max-w-screen-xl text-center lg:py-16">
-      <h1 className="mb-4 transition-all text-4xl font-extrabold tracking-tight leading-none text-[#2B161B] md:text-5xl lg:text-6xl dark:text-white">
-        Plan lekcji ZSTIO
-      </h1>
+      <div className="flex justify-center items-center mb-4 md:mb-0 -ml-0 md:-ml-16">
+        <Link href={"https://zstiojar.edu.pl"} className="hidden md:block">
+          <Image
+            alt="logo"
+            width={120}
+            height={120}
+            className="w-auto h-auto"
+            src={
+              "https://zstiojar.edu.pl/wp-content/uploads/2023/03/cropped-zstio_godlo_logo-222x107.png"
+            }
+          />
+        </Link>
+        <h1 className="transition-all text-4xl font-extrabold tracking-tight leading-none text-[#2B161B] md:text-5xl lg:text-6xl dark:text-gray-100">
+          Plan lekcji
+        </h1>
+      </div>
       {title && text.length > 0 ? (
-        <div className="flex justify-center mb-4 flex-wrap items-center ">
-          <p className="transition-all text-lg font-normal mr-1 hidden sm:flex text-gray-500 lg:text-xl dark:text-gray-400">
+        <div className="flex justify-center md:my-4 mb-2 flex-wrap items-center ">
+          <p className="transition-all text-xl font-normal mr-1 hidden sm:flex text-gray-500 lg:text-xl dark:text-gray-400">
             {text} /
           </p>
-          <p className="transition-all text-lg font-bold text-gray-500 lg:text-xl dark:text-gray-400">
+          <p className="transition-all text-xl font-bold text-gray-500 lg:text-xl dark:text-gray-400">
             {title}
           </p>
         </div>
       ) : (
         <div
           role="status"
-          className="mb-4 transition-all lg:text-xl w-full flex justify-center"
+          className="my-4 transition-all lg:text-xl w-full flex justify-center"
         >
           <svg
             aria-hidden="true"

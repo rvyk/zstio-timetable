@@ -97,7 +97,7 @@ function Content({ lessons, hours, generatedDate, text, title }) {
       {typeof hours == "object" ? (
         <div
           id="timetable"
-          className="relative overflow-x-auto shadow-md sm:rounded-lg w-[90%] transition-all duration-100"
+          className="relative overflow-x-auto shadow-md sm:rounded-xl w-[90%] transition-all duration-100"
         >
           <table className="w-full text-sm text-left transition-all duration-200 text-gray-500 dark:text-gray-400">
             <caption className="p-5 transition-all text-lg font-semibold text-left text-gray-900 bg-white dark:text-white dark:bg-gray-800">
@@ -117,7 +117,7 @@ function Content({ lessons, hours, generatedDate, text, title }) {
                         isShortHours
                           ? "bg-white dark:bg-gray-700 dark:hover:bg-gray-600 hover:bg-gray-200"
                           : "bg-[#73110e] hover:bg-[#480e0c] dark:hover:bg-gray-950 dark:bg-gray-900 text-white hover:text-gray-200 focus:text-gray-200"
-                      } transition-all duration-200 px-4 py-2 text-sm font-medium text-gray-900 border border-gray-200 rounded-l-lg focus:z-10 focus:ring-0 focus:text-blue-700 dark:border-gray-600 dark:text-white dark:hover:text-white dark:focus:ring-blue-500 dark:focus:text-white`}
+                      } transition-all duration-200 px-4 py-2 text-sm font-medium text-gray-900 border border-gray-200 rounded-l-lg focus:z-10 focus:ring-0 dark:border-gray-600 dark:text-white dark:hover:text-white dark:focus:ring-blue-500 dark:focus:text-white`}
                     >
                       {"45'"}
                     </button>
@@ -131,7 +131,7 @@ function Content({ lessons, hours, generatedDate, text, title }) {
                         isShortHours
                           ? "bg-[#73110e] hover:bg-[#480e0c] dark:hover:bg-gray-950 dark:bg-gray-900 text-white hover:text-gray-200 focus:text-gray-200"
                           : "bg-white dark:bg-gray-700 dark:hover:bg-gray-600 hover:bg-gray-200"
-                      } transition-all duration-200 px-4 py-2 text-sm font-medium text-gray-900 border border-gray-200 rounded-r-lg focus:z-10 focus:ring-0 focus:text-blue-700 dark:border-gray-600 dark:text-white dark:hover:text-white dark:focus:ring-blue-500 dark:focus:text-white`}
+                      } transition-all duration-200 px-4 py-2 text-sm font-medium text-gray-900 border border-gray-200 rounded-r-lg focus:z-10 focus:ring-0 dark:border-gray-600 dark:text-white dark:hover:text-white dark:focus:ring-blue-500 dark:focus:text-white`}
                     >
                       {"30'"}
                     </button>
@@ -292,14 +292,14 @@ function Content({ lessons, hours, generatedDate, text, title }) {
                 <td
                   scope="row"
                   colSpan={5}
-                  className="px-6 py-4 font-semibold w-1 text-left text-gray-900 whitespace-nowrap dark:text-white transition-all"
+                  className="px-6 py-4 font-semibold w-1 text-left text-gray-900 whitespace-nowrap dark:text-gray-100 transition-all"
                 >
                   Wygenerowany dnia: {generatedDate}
                 </td>
                 <td
                   scope="row"
                   colSpan={2}
-                  className="px-6 py-4 font-semibold w-1 text-right text-gray-900 whitespace-nowrap dark:text-white transition-all"
+                  className="px-6 py-4 font-semibold w-1 text-right text-gray-900 whitespace-nowrap dark:text-gray-100 transition-all"
                 >
                   <Link
                     href={"http://www.zstio-elektronika.pl/plan/index.html"}
