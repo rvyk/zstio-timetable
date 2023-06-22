@@ -6,7 +6,7 @@ function Footer() {
         <span className="text-sm text-[#ffffff] block text-center dark:text-gray-400">
           © {new Date().getFullYear()}
           <span className="ml-1 tracking-wide">
-            Made with ❤️ for ZSTIO by Szymański Paweł & Majcher Kacper
+            Made with ❤️ for ZSTiO by Szymański Paweł & Majcher Kacper
           </span>
         </span>
       </div>
