@@ -1,4 +1,5 @@
 import Layout from "@/components/Layout";
+import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 
@@ -14,5 +15,17 @@ export default function Home() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  return <Layout />;
+  return (
+    <>
+      <Head>
+        <title>Wczytywanie planu...</title>
+        <meta
+          name="description"
+          content="Plan lekcji ZSTiO w odświeżonym stylu."
+        />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+      </Head>
+      <Layout />
+    </>
+  );
 }

@@ -2,6 +2,8 @@ import { useTheme } from "next-themes";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
+import InstallPWA from "./InstallPWA";
+import { Tooltip } from "react-tooltip";
 
 function Navbar() {
   const [isMounted, setIsMounted] = useState(false);
@@ -32,12 +34,46 @@ function Navbar() {
           />
         </Link>
       </div>
-      <div className="absolute top-2 right-2 z-50 transition-all">
-        {resolvedTheme != undefined && (
+      {resolvedTheme != undefined && (
+        <div className="absolute top-2 right-2 z-50 transition-all flex">
+          <button
+            data-tooltip-id="navbar_tooltips"
+            data-tooltip-content="Zainstaluj apkę"
+          >
+            <InstallPWA />
+          </button>
+          <Link
+            href={"https://zastepstwa-zstio.netlify.app/"}
+            data-tooltip-id="navbar_tooltips"
+            data-tooltip-content="Przejdź do zastępstw"
+            className="flex transition-all items-center p-3 mr-2 text-xs font-medium text-gray-700 bg-white border border-gray-200 rounded-lg toggle-dark-state-example hover:bg-gray-200 hover:text-gray-900 focus:z-10 focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-500 dark:bg-gray-800 focus:outline-none dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth="1.5"
+              stroke="currentColor"
+              aria-hidden="true"
+              className="h-4 w-4 transition-all"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M19.5 12c0-1.232-.046-2.453-.138-3.662a4.006 4.006 0 00-3.7-3.7 48.678 48.678 0 00-7.324 0 4.006 4.006 0 00-3.7 3.7c-.017.22-.032.441-.046.662M19.5 12l3-3m-3 3l-3-3m-12 3c0 1.232.046 2.453.138 3.662a4.006 4.006 0 003.7 3.7 48.656 48.656 0 007.324 0 4.006 4.006 0 003.7-3.7c.017-.22.032-.441.046-.662M4.5 12l3 3m-3-3l-3 3"
+              ></path>
+            </svg>
+          </Link>
+          <Tooltip
+            id="navbar_tooltips"
+            className="!bg-[#2B161B] dark:!text-gray-200 dark:!bg-gray-800"
+          />
           <button
             type="button"
             onClick={toggleTheme}
-            className="flex transition-all items-center p-2 md:p-3 mr-2 text-xs font-medium text-gray-700 bg-white border border-gray-200 rounded-lg toggle-dark-state-example hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-500 dark:bg-gray-800 focus:outline-none dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+            data-tooltip-id="navbar_tooltips"
+            data-tooltip-content="Zmień motyw"
+            className="flex transition-all items-center p-3 mr-2 text-xs font-medium text-gray-700 bg-white border border-gray-200 rounded-lg toggle-dark-state-example hover:bg-gray-200 hover:text-gray-900 focus:z-10 focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-500 dark:bg-gray-800 focus:outline-none dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
           >
             {resolvedTheme === "light" ? (
               <svg
@@ -66,8 +102,8 @@ function Navbar() {
             )}
             <span className="sr-only">Toggle dark/light mode</span>
           </button>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 }

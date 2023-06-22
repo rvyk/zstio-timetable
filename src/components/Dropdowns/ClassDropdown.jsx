@@ -58,7 +58,7 @@ function DropdownClass({ classes }) {
             autoComplete="false"
             id="input-group-search-class"
             className="block w-full p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 transition-all duration-200 focus:ring-[#2B161B] focus:border-[#2B161B] dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            placeholder="Wyszukaj klasę"
+            placeholder="Wyszukaj oddział"
             value={searchClass}
             onChange={handleSearch}
           />
@@ -88,7 +88,7 @@ function DropdownClass({ classes }) {
           ))
         ) : (
           <li className="px-2 py-1 text-center text-gray-500 dark:text-gray-400">
-            Nie znaleziono takiej klasy
+            Nie znaleziono takiego oddziału
           </li>
         )}
       </ul>

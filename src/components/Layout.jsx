@@ -4,29 +4,19 @@ import Footer from "../components/Footer";
 import Jumbotron from "../components/Jumbotron";
 import Navbar from "./Navbar";
 import { initFlowbite } from "flowbite";
-import { useRouter } from "next/router";
 
-function Layout({ title, lessons, hours, generatedDate, children }) {
+function Layout({
+  title,
+  lessons,
+  hours,
+  generatedDate,
+  validDate,
+  text,
+  children,
+}) {
   useEffect(() => {
     initFlowbite();
   }, []);
-
-  const [text, setText] = useState("");
-  const router = useRouter();
-  const { query } = router;
-
-  useEffect(() => {
-    if (query.all && Array.isArray(query.all)) {
-      const path = query.all.join("/");
-      if (path.includes("class/")) {
-        setText("Oddziały");
-      } else if (path.includes("teacher/")) {
-        setText("Nauczyciele");
-      } else if (path.includes("room/")) {
-        setText("Sale");
-      }
-    }
-  }, [query.all]);
 
   return (
     <div className="min-h-screen w-screen flex flex-col justify-center items-center bg-[#F7F3F5] dark:bg-gray-900 transition-all">
@@ -38,6 +28,7 @@ function Layout({ title, lessons, hours, generatedDate, children }) {
         generatedDate={generatedDate}
         title={title}
         text={text}
+        validDate={validDate}
       />
       {children}
       <Footer />

@@ -25,6 +25,10 @@ export default function Document() {
           src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.4/flowbite.min.js"
           async
         ></script>
+
+        <link rel="manifest" href="/manifest.json" />
+        <link rel="apple-touch-icon" href="/icon-192x192.png"></link>
+        <meta name="theme-color" content="#fff" />
       </Head>
       <body>
         <Main />

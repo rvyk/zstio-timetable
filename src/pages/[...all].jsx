@@ -7,16 +7,39 @@ import Head from "next/head";
 import DropdownRoom from "@/components/Dropdowns/RoomDropdown";
 import DropdownTeacher from "@/components/Dropdowns/TeacherDropdown";
 import DropdownClass from "@/components/Dropdowns/ClassDropdown";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 
 const MainRoute = ({ timeTable, classes, teachers, rooms }) => {
-  const { lessons, hours, generatedDate, title, status } = timeTable;
+  const { lessons, hours, generatedDate, title, status, validDate } = timeTable;
+
+  const [text, setText] = useState("");
+  const [siteTitle, setSiteTitle] = useState("Ładowanie...");
+  const router = useRouter();
+  const { query } = router;
+
+  useEffect(() => {
+    if (query.all && Array.isArray(query.all)) {
+      const path = query.all.join("/");
+      if (path.includes("class/")) {
+        setText("Oddziały");
+      } else if (path.includes("teacher/")) {
+        setText("Nauczyciele");
+      } else if (path.includes("room/")) {
+        setText("Sale");
+      }
+
+      setSiteTitle(`${text} / ${title}`);
+    }
+  }, [query.all, text, title]);
+
   return (
     <>
       <Head>
-        <title>ZSTIO - Plan lekcji</title>
+        <title>{siteTitle}</title>
         <meta
           name="description"
-          content="Plan lekcji ZSTIO w odświeżonym stylu."
+          content="Plan lekcji ZSTiO w odświeżonym stylu."
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
@@ -26,6 +49,8 @@ const MainRoute = ({ timeTable, classes, teachers, rooms }) => {
         hours={hours}
         generatedDate={generatedDate}
         status={status}
+        validDate={validDate}
+        text={text}
       >
         <DropdownRoom rooms={rooms} />
         <DropdownTeacher teachers={teachers} />
@@ -71,6 +96,7 @@ export async function getStaticProps(context) {
     hours: timetableList.getHours(),
     generatedDate: timetableList.getGeneratedDate(),
     title: timetableList.getTitle(),
+    validDate: timetableList.getValidFromDate(),
   };
 
   const list = await fetchTimetableList();
