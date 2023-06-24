@@ -1,3 +1,4 @@
+import Link from "next/link";
 import React from "react";
 function Footer() {
   return (
@@ -7,6 +8,13 @@ function Footer() {
           © {new Date().getFullYear()}
           <span className="ml-1 tracking-wide">
             Made with ❤️ for ZSTiO by Szymański Paweł & Majcher Kacper
+            <br />
+            <Link
+              target="_blank"
+              href={"https://github.com/rvyk/zstio-timetable/"}
+            >
+              GitHub (GPLv3)
+            </Link>
           </span>
         </span>
       </div>
