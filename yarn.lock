@@ -1331,7 +1331,8 @@
 
 "@wulkanowy/timetable-parser@https://github.com/MajekPL0770/timetable-parser-js.git":
   version "1.5.0"
-  resolved "https://github.com/MajekPL0770/timetable-parser-js.git#ce3714b4faeb7f45a59866a17d340c46f0aaef99"
+  uid f113437258c43cb18a3661d9da1f4a99b5a0b85e
+  resolved "https://github.com/MajekPL0770/timetable-parser-js.git#f113437258c43cb18a3661d9da1f4a99b5a0b85e"
   dependencies:
     "@types/chai" "^4.1.7"
     "@types/cheerio" "^0.22.11"
