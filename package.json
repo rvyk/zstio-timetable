@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@wulkanowy/timetable-parser": "https://github.com/MajekPL0770/timetable-parser-js.git",
-    "autoprefixer": "10.4.14",
+    "autoprefixer": "10.4.15",
     "eslint": "8.47.0",
     "eslint-config-next": "13.4.16",
     "flowbite": "^1.8.1",
