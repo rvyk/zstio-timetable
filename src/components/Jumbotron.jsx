@@ -9,12 +9,10 @@ function Jumbotron({ title, text, status }) {
         <Link href={"https://zstiojar.edu.pl"} className="hidden md:block">
           <Image
             alt="logo"
-            width={125}
-            height={125}
-            className="w-auto h-auto"
-            src={
-              "https://zstiojar.edu.pl/wp-content/uploads/2023/03/cropped-zstio_godlo_logo-222x107.png"
-            }
+            width={75}
+            height={75}
+            className="w-auto h-auto mr-4"
+            src={"/icon-192x192.png"}
           />
         </Link>
         <h1 className="transition-all text-5xl font-extrabold tracking-tight leading-none text-[#2B161B] md:text-5xl lg:text-6xl dark:text-gray-100">
@@ -22,7 +20,7 @@ function Jumbotron({ title, text, status }) {
         </h1>
       </div>
       {!status ? (
-        <div className="flex justify-center md:my-4 mb-2 flex-wrap items-center ">
+        <div className="flex justify-center mb-5 flex-wrap items-center ">
           <p className="transition-all text-xl font-normal mr-1 hidden sm:flex text-gray-500 lg:text-2xl dark:text-gray-400">
             Nie znaleziono pasującego planu lekcji
           </p>
@@ -30,7 +28,7 @@ function Jumbotron({ title, text, status }) {
       ) : (
         <>
           {title && text.length > 0 ? (
-            <div className="flex justify-center md:my-4 mb-2 flex-wrap items-center ">
+            <div className="flex justify-center mb-5 flex-wrap items-center ">
               <p className="transition-all text-xl font-normal mr-1 hidden sm:flex text-gray-500 lg:text-2xl dark:text-gray-400">
                 {text} /
               </p>
