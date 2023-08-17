@@ -13,6 +13,7 @@ function Layout({
   validDate,
   text,
   children,
+  status,
 }) {
   useEffect(() => {
     initFlowbite();
@@ -21,7 +22,7 @@ function Layout({
   return (
     <div className="min-h-screen w-screen flex flex-col justify-center items-center bg-[#F7F3F5] dark:bg-gray-900 transition-all">
       <Navbar />
-      <Jumbotron title={title} text={text} />
+      <Jumbotron title={title} text={text} status={status} />
       <Content
         lessons={lessons}
         hours={hours}
@@ -29,6 +30,7 @@ function Layout({
         title={title}
         text={text}
         validDate={validDate}
+        status={status}
       />
       {children}
       <Footer />

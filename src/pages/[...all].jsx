@@ -10,8 +10,8 @@ import DropdownClass from "@/components/Dropdowns/ClassDropdown";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
-const MainRoute = ({ timeTable, classes, teachers, rooms }) => {
-  const { lessons, hours, generatedDate, title, status, validDate } = timeTable;
+const MainRoute = ({ timeTable, classes, teachers, rooms, status }) => {
+  const { lessons, hours, generatedDate, title, validDate } = timeTable;
 
   const [text, setText] = useState("");
   const [siteTitle, setSiteTitle] = useState("Ładowanie...");
