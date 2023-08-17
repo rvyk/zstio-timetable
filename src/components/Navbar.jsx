@@ -46,7 +46,7 @@ function Navbar() {
             href={"https://zastepstwa-zstio.netlify.app/"}
             data-tooltip-id="navbar_tooltips"
             data-tooltip-content="Przejdź do zastępstw"
-            className="flex transition-all items-center p-3 mr-2 text-xs font-medium text-gray-700 bg-white border border-gray-200 rounded-lg toggle-dark-state-example hover:bg-gray-200 hover:text-gray-900 focus:z-10 focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-500 dark:bg-gray-800 focus:outline-none dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+            className="flex transition-all items-center p-3 mr-2 text-xs font-medium text-gray-700 bg-white border border-gray-200 rounded-lg toggle-dark-state-example hover:bg-[#321c21] hover:text-gray-100 focus:z-10 focus:ring-2 focus:ring-[#2B161B] dark:focus:ring-gray-500 dark:bg-gray-800 focus:outline-none dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -55,7 +55,7 @@ function Navbar() {
               strokeWidth="1.5"
               stroke="currentColor"
               aria-hidden="true"
-              className="h-4 w-4 transition-all"
+              className="h-4 w-4 transition-none"
             >
               <path
                 strokeLinecap="round"
@@ -73,12 +73,12 @@ function Navbar() {
             onClick={toggleTheme}
             data-tooltip-id="navbar_tooltips"
             data-tooltip-content="Zmień motyw"
-            className="flex transition-all items-center p-3 mr-2 text-xs font-medium text-gray-700 bg-white border border-gray-200 rounded-lg toggle-dark-state-example hover:bg-gray-200 hover:text-gray-900 focus:z-10 focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-500 dark:bg-gray-800 focus:outline-none dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+            className="flex transition-all items-center p-3 mr-2 text-xs font-medium text-gray-700 bg-white border border-gray-200 rounded-lg toggle-dark-state-example hover:bg-[#321c21] hover:text-gray-100 focus:z-10 focus:ring-2 focus:ring-[#2B161B] dark:focus:ring-gray-500 dark:bg-gray-800 focus:outline-none dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
           >
             {resolvedTheme === "light" ? (
               <svg
                 aria-hidden="true"
-                className="w-4 h-4 transition-all"
+                className="w-4 h-4 transition-none"
                 fill="currentColor"
                 viewBox="0 0 20 20"
                 xmlns="http://www.w3.org/2000/svg"
@@ -92,7 +92,7 @@ function Navbar() {
             ) : (
               <svg
                 aria-hidden="true"
-                className="w-4 h-4 transition-all"
+                className="w-4 h-4 transition-none"
                 fill="currentColor"
                 viewBox="0 0 20 20"
                 xmlns="http://www.w3.org/2000/svg"
