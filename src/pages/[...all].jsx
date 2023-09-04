@@ -110,7 +110,7 @@ export async function getStaticProps(context) {
       rooms,
       status,
     },
-    revalidate: 12 * 3600,
+    revalidate: 3600,
   };
 }
 
