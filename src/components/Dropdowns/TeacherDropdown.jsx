@@ -17,12 +17,13 @@ function DropdownTeacher({ teachers }) {
   };
 
   const handleSelectTeacher = (teacher) => {
+    document.getElementById("dropdownSearchTeacher").click();
     const teacherLink = `/teacher/${teacher.value}`;
     setLastSelect(teacherLink);
     localStorage.setItem("LastSelect", teacherLink);
   };
 
-  const filteredTeachers = teachers.filter((teacher) => {
+  const filteredTeachers = teachers?.filter((teacher) => {
     const teacherName = teacher.name.toLowerCase();
     const searchQuery = searchTeacher.toLowerCase();
     return teacherName.startsWith(searchQuery);
@@ -68,7 +69,7 @@ function DropdownTeacher({ teachers }) {
         className="h-48 px-3 pb-3 overflow-y-auto text-sm text-gray-700 dark:text-gray-200"
         aria-labelledby="dropdownSearchTeacher"
       >
-        {filteredTeachers.length > 0 ? (
+        {filteredTeachers?.length > 0 ? (
           filteredTeachers.map((teacher) => (
             <li key={teacher.value}>
               <Link

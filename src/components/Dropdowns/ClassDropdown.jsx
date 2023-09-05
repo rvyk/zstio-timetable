@@ -17,12 +17,13 @@ function DropdownClass({ classes }) {
   };
 
   const handleSelectClass = (classPrefix) => {
+    document.getElementById("dropdownSearchClass").click();
     const classLink = `/class/${classPrefix.value}`;
     setLastSelect(classLink);
     localStorage.setItem("LastSelect", classLink);
   };
 
-  const filteredClasses = classes.filter((classPrefix) => {
+  const filteredClasses = classes?.filter((classPrefix) => {
     const className = classPrefix.name.toLowerCase();
     const searchQuery = searchClass.toLowerCase();
     return className.startsWith(searchQuery);
@@ -68,7 +69,7 @@ function DropdownClass({ classes }) {
         className="h-48 px-3 pb-3 overflow-y-auto text-sm text-gray-700 dark:text-gray-200"
         aria-labelledby="dropdownSearchClass"
       >
-        {filteredClasses.length > 0 ? (
+        {filteredClasses?.length > 0 ? (
           filteredClasses.map((classPrefix) => (
             <li key={classPrefix.value}>
               <Link

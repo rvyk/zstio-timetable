@@ -17,12 +17,13 @@ function DropdownRoom({ rooms }) {
   };
 
   const handleSelectRoom = (room) => {
+    document.getElementById("dropdownSearchRoom").click();
     const roomLink = `/room/${room.value}`;
     setLastSelect(roomLink);
     localStorage.setItem("LastSelect", roomLink);
   };
 
-  const filteredRooms = rooms.filter((room) => {
+  const filteredRooms = rooms?.filter((room) => {
     const roomName = room.name.toLowerCase();
     const searchQuery = searchRoom.toLowerCase();
     return roomName.startsWith(searchQuery);
@@ -68,7 +69,7 @@ function DropdownRoom({ rooms }) {
         className="h-48 px-3 pb-3 overflow-y-auto text-sm text-gray-700 dark:text-gray-200"
         aria-labelledby="dropdownSearchRoom"
       >
-        {filteredRooms.length > 0 ? (
+        {filteredRooms?.length > 0 ? (
           filteredRooms.map((room) => (
             <li key={room.value}>
               <Link

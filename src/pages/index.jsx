@@ -9,20 +9,17 @@ export default function Home() {
   useEffect(() => {
     const lastSelectValue = localStorage.getItem("LastSelect");
     if (lastSelectValue) {
-      router.replace(lastSelectValue);
+      router.push(lastSelectValue);
     } else {
-      router.replace("/class/1");
+      router.push("/class/1");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
     <>
       <Head>
-        <title>Wczytywanie planu...</title>
-        <meta
-          name="description"
-          content="Plan lekcji ZSTiO w odświeżonym stylu."
-        />
+        <title>Plan lekcji | Wczytywanie planu...</title>
+        <meta property="og:title" content="Plan lekcji ZSTiO" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <Layout />

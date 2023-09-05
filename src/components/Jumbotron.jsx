@@ -2,7 +2,11 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
-function Jumbotron({ title, text, status }) {
+function Jumbotron(props) {
+  let title = props?.timeTable?.title;
+  let text = props?.text;
+  let status = props?.status;
+
   return (
     <div className="py-8 px-4 mx-auto max-w-screen-xl text-center lg:py-16">
       <div className="flex justify-center items-center mb-4 md:mb-0 -ml-0 md:-ml-16">

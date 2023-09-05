@@ -3,17 +3,17 @@ import Link from "next/link";
 import TableLoading from "./TableLoading";
 import { Tooltip } from "react-tooltip";
 
-function Content({
-  lessons,
-  hours,
-  generatedDate,
-  validDate,
-  text,
-  title,
-  status,
-}) {
+function Content(props) {
   const daysOfWeek = ["Poniedziałek", "Wtorek", "Środa", "Czwartek", "Piątek"];
   const [isShortHours, setIsShortHours] = useState(false);
+
+  let lessons = props?.timeTable?.lessons;
+  let hours = props?.timeTable?.hours;
+  let generatedDate = props?.timeTable?.generatedDate;
+  let title = props?.timeTable?.title;
+  let validDate = props?.timeTable?.validDate;
+  let status = props?.status;
+  let text = props?.text;
 
   useEffect(() => {
     const shortHours = localStorage.getItem("shortHours");

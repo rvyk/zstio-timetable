@@ -3,61 +3,15 @@ import { Table, TimetableList } from "@wulkanowy/timetable-parser";
 import Layout from "../components/Layout";
 import fetchTimetableList from "@/helpers/fetchTimetableList";
 import removeUndefined from "@/helpers/removeUndefined";
-import Head from "next/head";
-import DropdownRoom from "@/components/Dropdowns/RoomDropdown";
-import DropdownTeacher from "@/components/Dropdowns/TeacherDropdown";
-import DropdownClass from "@/components/Dropdowns/ClassDropdown";
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
-const MainRoute = ({ timeTable, classes, teachers, rooms, status }) => {
-  const { lessons, hours, generatedDate, title, validDate } = timeTable;
-
-  const [text, setText] = useState("");
-  const [siteTitle, setSiteTitle] = useState("Ładowanie...");
-  const router = useRouter();
-  const { query } = router;
-
+const MainRoute = (props) => {
   useEffect(() => {
-    if (query.all && Array.isArray(query.all)) {
-      const path = query.all.join("/");
-      if (path.includes("class/")) {
-        setText("Oddziały");
-      } else if (path.includes("teacher/")) {
-        setText("Nauczyciele");
-      } else if (path.includes("room/")) {
-        setText("Sale");
-      }
-
-      setSiteTitle(`${text} / ${title}`);
+    if (!props.timeTable) {
+      window.location.reload();
     }
-  }, [query.all, text, title]);
-
-  return (
-    <>
-      <Head>
-        <title>{siteTitle}</title>
-        <meta
-          name="description"
-          content="Plan lekcji ZSTiO w odświeżonym stylu."
-        />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-      </Head>
-      <Layout
-        title={title}
-        lessons={lessons}
-        hours={hours}
-        generatedDate={generatedDate}
-        status={status}
-        validDate={validDate}
-        text={text}
-      >
-        <DropdownRoom rooms={rooms} />
-        <DropdownTeacher teachers={teachers} />
-        <DropdownClass classes={classes} />
-      </Layout>
-    </>
-  );
+  }, [props.timeTable]);
+  return <Layout {...props} />;
 };
 
 export async function getStaticPaths() {
@@ -81,10 +35,20 @@ export async function getStaticProps(context) {
   let status = false;
   let id = "";
   let timeTableData = null;
+  let text;
   if (context.params?.all) {
-    if (context.params.all[0] === "class") id = `o${context.params.all[1]}`;
-    if (context.params.all[0] === "teacher") id = `n${context.params.all[1]}`;
-    if (context.params.all[0] === "room") id = `s${context.params.all[1]}`;
+    if (context.params.all[0] === "class") {
+      id = `o${context.params.all[1]}`;
+      text = "Oddziały";
+    }
+    if (context.params.all[0] === "teacher") {
+      id = `n${context.params.all[1]}`;
+      text = "Nauczyciele";
+    }
+    if (context.params.all[0] === "room") {
+      id = `s${context.params.all[1]}`;
+      text = "Sale";
+    }
   }
 
   const response = await fetchTimetable(id);
@@ -102,6 +66,8 @@ export async function getStaticProps(context) {
   const list = await fetchTimetableList();
   const tableList = new TimetableList(list.data);
   const { classes, teachers, rooms } = tableList.getList();
+
+  let siteTitle = `${text} / ${timeTable.title}`;
   return {
     props: {
       timeTable: removeUndefined(timeTable),
@@ -109,6 +75,8 @@ export async function getStaticProps(context) {
       teachers,
       rooms,
       status,
+      text,
+      siteTitle,
     },
     revalidate: 3600,
   };
