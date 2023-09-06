@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/router";
+import getLastSelect from "./lastSelect";
 
 function DropdownTeacher({ teachers }) {
   const [searchTeacher, setSearchTeacher] = useState("");
   const [lastSelect, setLastSelect] = useState("");
+  const router = useRouter();
+  const currentUrl = router.asPath;
 
   useEffect(() => {
-    const lastSelectValue = localStorage.getItem("LastSelect");
-    if (lastSelectValue) {
-      setLastSelect(lastSelectValue);
-    }
-  }, []);
+    const lastSelect = getLastSelect(currentUrl);
+    setLastSelect(lastSelect);
+  }, [currentUrl]);
 
   const handleSearch = (event) => {
     setSearchTeacher(event.target.value);

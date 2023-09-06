@@ -18,8 +18,9 @@ function Layout(props) {
     <>
       <Head>
         <title>
-          ZSTiO - Plan lekcji |{" "}
-          {props?.timeTable ? props?.timeTable?.title : "Wczytywanie planu..."}
+          {props?.timeTable
+            ? `ZSTiO - Plan lekcji | ${props?.timeTable?.title}`
+            : "ZSTiO - Plan lekcji | Wczytywanie planu..."}
         </title>
         <meta
           property="og:title"
