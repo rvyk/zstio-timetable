@@ -227,7 +227,7 @@ function Content(props) {
 
                   return (
                     <tr
-                      className={`border-b ${
+                      className={`text-gray-600 dark:text-gray-300 border-b ${
                         index % 2 === 0
                           ? "bg-white dark:bg-gray-800"
                           : "bg-gray-50 dark:bg-gray-700"
@@ -252,7 +252,7 @@ function Content(props) {
 
                       {lessons?.map((day, lessonIndex) => (
                         <td
-                          className="px-6 py-4 whitespace-nowrap border-r last:border-none dark:border-gray-600 text-gray-500 dark:text-gray-400"
+                          className="px-6 py-4 whitespace-nowrap border-r last:border-none dark:border-gray-600"
                           key={`${day}-${lessonIndex}`}
                         >
                           {day[number - 1]?.map((lesson, subIndex) => (

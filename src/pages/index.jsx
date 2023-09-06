@@ -18,7 +18,7 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>Plan lekcji | Wczytywanie planu...</title>
+        <title>ZSTiO - Plan lekcji | Wczytywanie planu...</title>
         <meta property="og:title" content="Plan lekcji ZSTiO" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
