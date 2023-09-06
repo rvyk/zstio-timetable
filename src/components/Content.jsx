@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import TableLoading from "./TableLoading";
 import { Tooltip } from "react-tooltip";
+import shortHours from "./shortHours";
 
 function Content(props) {
   const daysOfWeek = ["Poniedziałek", "Wtorek", "Środa", "Czwartek", "Piątek"];
@@ -21,79 +22,6 @@ function Content(props) {
       setIsShortHours(JSON.parse(shortHours));
     }
   }, []);
-
-  const shortHours = [
-    {
-      number: 1,
-      timeFrom: "8:00",
-      timeTo: "8:30",
-    },
-    {
-      number: 2,
-      timeFrom: "8:35",
-      timeTo: "9:05",
-    },
-    {
-      number: 3,
-      timeFrom: "9:10",
-      timeTo: "9:40",
-    },
-    {
-      number: 4,
-      timeFrom: "9:45",
-      timeTo: "10:15",
-    },
-    {
-      number: 5,
-      timeFrom: "10:30",
-      timeTo: "11:00",
-    },
-    {
-      number: 6,
-      timeFrom: "11:05",
-      timeTo: "11:35",
-    },
-    {
-      number: 7,
-      timeFrom: "11:40",
-      timeTo: "12:10",
-    },
-    {
-      number: 8,
-      timeFrom: "12:15",
-      timeTo: "12:45",
-    },
-    {
-      number: 9,
-      timeFrom: "12:50",
-      timeTo: "13:20",
-    },
-    {
-      number: 10,
-      timeFrom: "13:25",
-      timeTo: "13:55",
-    },
-    {
-      number: 11,
-      timeFrom: "14:00",
-      timeTo: "14:30",
-    },
-    {
-      number: 12,
-      timeFrom: "14:35",
-      timeTo: "15:05",
-    },
-    {
-      number: 13,
-      timeFrom: "15:10",
-      timeTo: "15:40",
-    },
-    {
-      number: 14,
-      timeFrom: "15:45",
-      timeTo: "16:15",
-    },
-  ];
 
   const currentHour = new Date().getHours();
   const currentMinutes = new Date().getMinutes();
@@ -225,6 +153,27 @@ function Content(props) {
                       currentMinutes < Number(toMinutes));
                   const isWithinTimeRange = isAfterFromTime && isBeforeToTime;
 
+                  let timeRemaining = "";
+                  if (isWithinTimeRange) {
+                    const endTime = new Date();
+                    endTime.setHours(Number(toHour), Number(toMinutes), 0);
+                    const timeDifference = endTime - new Date();
+                    const minutesRemaining = Math.floor(
+                      (timeDifference % (1000 * 60 * 60)) / (1000 * 60)
+                    );
+                    timeRemaining = (
+                      <>
+                        {minutesRemaining > 0 && (
+                          <>
+                            <div>
+                              {minutesRemaining == 1 ? "ZOSTAŁA" : "ZOSTAŁO"}
+                            </div>
+                            <div>{`${minutesRemaining} MIN`}</div>
+                          </>
+                        )}
+                      </>
+                    );
+                  }
                   return (
                     <tr
                       className={`text-gray-600 dark:text-gray-300 border-b ${
@@ -241,7 +190,7 @@ function Content(props) {
                           {number}
                           {isWithinTimeRange && (
                             <span className="bg-blue-100 mt-1 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">
-                              TRWA
+                              {timeRemaining}
                             </span>
                           )}
                         </div>
