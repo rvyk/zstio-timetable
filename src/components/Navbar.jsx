@@ -7,13 +7,17 @@ import { Tooltip } from "react-tooltip";
 
 function Navbar() {
   const [isMounted, setIsMounted] = useState(false);
-  const { theme, setTheme, resolvedTheme } = useTheme();
+  const { theme, setTheme, resolvedTheme, systemTheme } = useTheme();
 
   useEffect(() => {
     setIsMounted(true);
   }, []);
 
   const toggleTheme = () => {
+    if (theme === "system") {
+      setTheme(systemTheme === "light" ? "dark" : "light");
+      return;
+    }
     const newTheme = theme === "light" ? "dark" : "light";
     setTheme(newTheme);
   };
