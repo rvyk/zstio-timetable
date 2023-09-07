@@ -153,22 +153,13 @@ function Content(props) {
                       currentMinutes < Number(toMinutes));
                   const isWithinTimeRange = isAfterFromTime && isBeforeToTime;
 
-                  let timeDifference = 0;
-                  let timeRemaining = "";
+                  let minutesRemaining = 0;
                   if (isWithinTimeRange) {
                     const endTime = new Date();
                     endTime.setHours(Number(toHour), Number(toMinutes), 0);
-                    timeDifference = endTime - new Date();
-                    const minutesRemaining = Math.floor(
+                    const timeDifference = endTime - new Date();
+                    minutesRemaining = Math.floor(
                       (timeDifference % (1000 * 60 * 60)) / (1000 * 60)
-                    );
-                    timeRemaining = (
-                      <>
-                        <div>
-                          {minutesRemaining == 1 ? "ZOSTAŁA" : "ZOSTAŁO"}
-                        </div>
-                        <div>{`${minutesRemaining} MIN`}</div>
-                      </>
                     );
                   }
                   return (
@@ -185,10 +176,13 @@ function Content(props) {
                       >
                         <div className="flex justify-center items-center flex-col">
                           {number}
-                          {isWithinTimeRange && timeDifference > 0 && (
-                            <span className="bg-blue-100 mt-1 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">
-                              {timeRemaining}
-                            </span>
+                          {isWithinTimeRange && minutesRemaining > 0 && (
+                            <div className="bg-blue-100 mt-1 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">
+                              <p>
+                                {minutesRemaining == 1 ? "ZOSTAŁA" : "ZOSTAŁO"}
+                              </p>
+                              <p>{`${minutesRemaining} MIN`}</p>
+                            </div>
                           )}
                         </div>
                       </td>
