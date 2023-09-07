@@ -153,24 +153,21 @@ function Content(props) {
                       currentMinutes < Number(toMinutes));
                   const isWithinTimeRange = isAfterFromTime && isBeforeToTime;
 
+                  let timeDifference = 0;
                   let timeRemaining = "";
                   if (isWithinTimeRange) {
                     const endTime = new Date();
                     endTime.setHours(Number(toHour), Number(toMinutes), 0);
-                    const timeDifference = endTime - new Date();
+                    timeDifference = endTime - new Date();
                     const minutesRemaining = Math.floor(
                       (timeDifference % (1000 * 60 * 60)) / (1000 * 60)
                     );
                     timeRemaining = (
                       <>
-                        {minutesRemaining > 0 && (
-                          <>
-                            <div>
-                              {minutesRemaining == 1 ? "ZOSTAŁA" : "ZOSTAŁO"}
-                            </div>
-                            <div>{`${minutesRemaining} MIN`}</div>
-                          </>
-                        )}
+                        <div>
+                          {minutesRemaining == 1 ? "ZOSTAŁA" : "ZOSTAŁO"}
+                        </div>
+                        <div>{`${minutesRemaining} MIN`}</div>
                       </>
                     );
                   }
@@ -188,7 +185,7 @@ function Content(props) {
                       >
                         <div className="flex justify-center items-center flex-col">
                           {number}
-                          {isWithinTimeRange && (
+                          {isWithinTimeRange && timeDifference > 0 && (
                             <span className="bg-blue-100 mt-1 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">
                               {timeRemaining}
                             </span>
