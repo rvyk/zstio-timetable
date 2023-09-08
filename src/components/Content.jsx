@@ -8,18 +8,16 @@ function Content(props) {
   const daysOfWeek = ["Poniedziałek", "Wtorek", "Środa", "Czwartek", "Piątek"];
   const [isShortHours, setIsShortHours] = useState(false);
 
-  let lessons = props?.timeTable?.lessons;
-  let hours = props?.timeTable?.hours;
-  let generatedDate = props?.timeTable?.generatedDate;
-  let title = props?.timeTable?.title;
-  let validDate = props?.timeTable?.validDate;
-  let status = props?.status;
-  let text = props?.text;
+  const {
+    status,
+    text,
+    timeTable: { lessons, hours, generatedDate, title, validDate },
+  } = props;
 
   useEffect(() => {
-    const shortHours = localStorage.getItem("shortHours");
-    if (shortHours) {
-      setIsShortHours(JSON.parse(shortHours));
+    const storedShortHours = JSON.parse(localStorage.getItem("shortHours"));
+    if (storedShortHours !== null) {
+      setIsShortHours(storedShortHours);
     }
   }, []);
 
@@ -28,6 +26,181 @@ function Content(props) {
   const maxLessons =
     typeof hours == "object" &&
     Math.max(Object.entries(hours).length, ...lessons.map((day) => day.length));
+
+  const renderTableHeader = () => {
+    return (
+      <thead className="text-xs transition-all duration-200 text-[#ffffff] bg-[#2B161B] uppercase dark:bg-gray-700 dark:text-gray-400">
+        <tr>
+          <th scope="col" className="px-6 py-3">
+            <div className="flex items-center justify-center">Lekcja</div>
+          </th>
+          <th scope="col" className="px-8 py-3">
+            <div className="flex items-center justify-center">Godz.</div>
+          </th>
+          {daysOfWeek.map((day) => (
+            <th scope="col" className="px-6 py-3" key={day}>
+              <div className="flex items-center justify-center">{day}</div>
+            </th>
+          ))}
+        </tr>
+      </thead>
+    );
+  };
+
+  const renderTableRow = () => {
+    return (
+      <tbody>
+        {Object.entries(hours).length > 1 ? (
+          Object.entries(
+            isShortHours ? shortHours.slice(0, maxLessons) : hours
+          )?.map(([key, item], index) => {
+            const { number, timeFrom, timeTo } = item;
+            const [fromHour, fromMinutes] = timeFrom.split(":");
+            const [toHour, toMinutes] = timeTo.split(":");
+            const isAfterFromTime =
+              currentHour > Number(fromHour) ||
+              (currentHour === Number(fromHour) &&
+                currentMinutes >= Number(fromMinutes));
+            const isBeforeToTime =
+              currentHour < Number(toHour) ||
+              (currentHour === Number(toHour) &&
+                currentMinutes < Number(toMinutes));
+            const isWithinTimeRange = isAfterFromTime && isBeforeToTime;
+
+            let minutesRemaining = 0;
+            if (isWithinTimeRange) {
+              const endTime = new Date();
+              endTime.setHours(Number(toHour), Number(toMinutes), 0);
+              const timeDifference = endTime - new Date();
+              minutesRemaining = Math.floor(
+                (timeDifference % (1000 * 60 * 60)) / (1000 * 60)
+              );
+            }
+            return (
+              <tr
+                className={`text-gray-600 dark:text-gray-300 border-b ${
+                  index % 2 === 0
+                    ? "bg-white dark:bg-gray-800"
+                    : "bg-gray-50 dark:bg-gray-700"
+                } dark:border-gray-600`}
+                key={index}
+              >
+                <td
+                  className={`py-4 text-center h-full border-r last:border-none font-semibold dark:border-gray-600`}
+                >
+                  <div className="flex justify-center items-center flex-col">
+                    {number}
+                    {isWithinTimeRange && minutesRemaining > 0 && (
+                      <div className="bg-blue-100 mt-1 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">
+                        <p>{minutesRemaining == 1 ? "ZOSTAŁA" : "ZOSTAŁO"}</p>
+                        <p>{`${minutesRemaining} MIN`}</p>
+                      </div>
+                    )}
+                  </div>
+                </td>
+                <td className="text-center border-r last:border-none dark:border-gray-600">
+                  {timeFrom} - {timeTo}
+                </td>
+
+                {lessons?.map((day, lessonIndex) => (
+                  <td
+                    className="px-6 py-4 whitespace-nowrap border-r last:border-none dark:border-gray-600"
+                    key={`${day}-${lessonIndex}`}
+                  >
+                    {day[number - 1]?.map((lesson, subIndex) => (
+                      <div
+                        key={`${day}-${lessonIndex}-${subIndex}`}
+                        className="flex"
+                      >
+                        <div className="font-semibold mr-1">
+                          {lesson?.subject}
+                        </div>
+                        {lesson?.groupName && (
+                          <p className="flex items-center mr-1">
+                            {`(${lesson?.groupName})`}
+                          </p>
+                        )}
+
+                        {lesson?.className && lesson?.classId && (
+                          <Link
+                            href={`/class/${lesson?.classId}`}
+                            className="flex items-center mr-1"
+                          >
+                            {lesson?.className}
+                          </Link>
+                        )}
+
+                        {lesson?.teacher && lesson?.teacherId && (
+                          <Link
+                            href={`/teacher/${lesson?.teacherId}`}
+                            className="flex items-center mr-1"
+                          >
+                            {lesson?.teacher}
+                          </Link>
+                        )}
+
+                        {lesson?.roomId && lesson?.room && (
+                          <Link
+                            href={`/room/${lesson?.roomId}`}
+                            className="flex items-center"
+                          >
+                            {lesson?.room}
+                          </Link>
+                        )}
+                      </div>
+                    ))}
+                  </td>
+                ))}
+              </tr>
+            );
+          })
+        ) : (
+          <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 transition-all">
+            <td
+              scope="row"
+              colSpan={7}
+              className="px-6 py-4 font-semibold text-center text-gray-900 whitespace-nowrap dark:text-white transition-all"
+            >
+              Nie znaleziono żadnych lekcji
+            </td>
+          </tr>
+        )}
+      </tbody>
+    );
+  };
+
+  const renderTableFooter = () => {
+    return (
+      <tfoot
+        className={`bg-[#2B161B] ${
+          Object.entries(hours)?.length % 2 == 0
+            ? "bg-white dark:bg-gray-800"
+            : "bg-gray-100 dark:bg-gray-700"
+        }`}
+      >
+        <tr className="font-semibold text-gray-900 dark:text-white">
+          {status && (
+            <td
+              scope="row"
+              colSpan={5}
+              className="px-6 py-4 font-semibold w-1 text-left text-gray-900 whitespace-nowrap dark:text-gray-100 transition-all"
+            >
+              Wygenerowany dnia: {generatedDate}, obowiązuje od: {validDate}
+            </td>
+          )}
+          <td
+            scope="row"
+            colSpan={!status ? 7 : 2}
+            className="px-6 py-4 font-semibold w-1 text-right text-gray-900 whitespace-nowrap dark:text-gray-100 transition-all"
+          >
+            <Link href={"http://www.zstio-elektronika.pl/plan/index.html"}>
+              Źródło danych
+            </Link>
+          </td>
+        </tr>
+      </tfoot>
+    );
+  };
 
   return (
     <>
@@ -117,176 +290,10 @@ function Content(props) {
                 </>
               )}
             </caption>
-            <thead className="text-xs transition-all duration-200 text-[#ffffff] bg-[#2B161B] uppercase dark:bg-gray-700 dark:text-gray-400">
-              <tr>
-                <th scope="col" className="px-6 py-3">
-                  <div className="flex items-center justify-center">Lekcja</div>
-                </th>
-                <th scope="col" className="px-8 py-3">
-                  <div className="flex items-center justify-center">Godz.</div>
-                </th>
-                {daysOfWeek.map((day) => (
-                  <th scope="col" className="px-6 py-3" key={day}>
-                    <div className="flex items-center justify-center">
-                      {day}
-                    </div>
-                  </th>
-                ))}
-              </tr>
-            </thead>
 
-            {Object.entries(hours).length > 1 ? (
-              <tbody>
-                {Object.entries(
-                  isShortHours ? shortHours.slice(0, maxLessons) : hours
-                )?.map(([key, item], index) => {
-                  const { number, timeFrom, timeTo } = item;
-                  const [fromHour, fromMinutes] = timeFrom.split(":");
-                  const [toHour, toMinutes] = timeTo.split(":");
-                  const isAfterFromTime =
-                    currentHour > Number(fromHour) ||
-                    (currentHour === Number(fromHour) &&
-                      currentMinutes >= Number(fromMinutes));
-                  const isBeforeToTime =
-                    currentHour < Number(toHour) ||
-                    (currentHour === Number(toHour) &&
-                      currentMinutes < Number(toMinutes));
-                  const isWithinTimeRange = isAfterFromTime && isBeforeToTime;
-
-                  let minutesRemaining = 0;
-                  if (isWithinTimeRange) {
-                    const endTime = new Date();
-                    endTime.setHours(Number(toHour), Number(toMinutes), 0);
-                    const timeDifference = endTime - new Date();
-                    minutesRemaining = Math.floor(
-                      (timeDifference % (1000 * 60 * 60)) / (1000 * 60)
-                    );
-                  }
-                  return (
-                    <tr
-                      className={`text-gray-600 dark:text-gray-300 border-b ${
-                        index % 2 === 0
-                          ? "bg-white dark:bg-gray-800"
-                          : "bg-gray-50 dark:bg-gray-700"
-                      } dark:border-gray-600`}
-                      key={index}
-                    >
-                      <td
-                        className={`py-4 text-center h-full border-r last:border-none font-semibold dark:border-gray-600`}
-                      >
-                        <div className="flex justify-center items-center flex-col">
-                          {number}
-                          {isWithinTimeRange && minutesRemaining > 0 && (
-                            <div className="bg-blue-100 mt-1 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">
-                              <p>
-                                {minutesRemaining == 1 ? "ZOSTAŁA" : "ZOSTAŁO"}
-                              </p>
-                              <p>{`${minutesRemaining} MIN`}</p>
-                            </div>
-                          )}
-                        </div>
-                      </td>
-                      <td className="text-center border-r last:border-none dark:border-gray-600">
-                        {timeFrom} - {timeTo}
-                      </td>
-
-                      {lessons?.map((day, lessonIndex) => (
-                        <td
-                          className="px-6 py-4 whitespace-nowrap border-r last:border-none dark:border-gray-600"
-                          key={`${day}-${lessonIndex}`}
-                        >
-                          {day[number - 1]?.map((lesson, subIndex) => (
-                            <div
-                              key={`${day}-${lessonIndex}-${subIndex}`}
-                              className="flex"
-                            >
-                              <div className="font-semibold mr-1">
-                                {lesson?.subject}
-                              </div>
-                              {lesson?.groupName && (
-                                <p className="flex items-center mr-1">
-                                  {`(${lesson?.groupName})`}
-                                </p>
-                              )}
-
-                              {lesson?.className && lesson?.classId && (
-                                <Link
-                                  href={`/class/${lesson?.classId}`}
-                                  className="flex items-center mr-1"
-                                >
-                                  {lesson?.className}
-                                </Link>
-                              )}
-
-                              {lesson?.teacher && lesson?.teacherId && (
-                                <Link
-                                  href={`/teacher/${lesson?.teacherId}`}
-                                  className="flex items-center mr-1"
-                                >
-                                  {lesson?.teacher}
-                                </Link>
-                              )}
-
-                              {lesson?.roomId && lesson?.room && (
-                                <Link
-                                  href={`/room/${lesson?.roomId}`}
-                                  className="flex items-center"
-                                >
-                                  {lesson?.room}
-                                </Link>
-                              )}
-                            </div>
-                          ))}
-                        </td>
-                      ))}
-                    </tr>
-                  );
-                })}
-              </tbody>
-            ) : (
-              <tbody>
-                <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 transition-all">
-                  <td
-                    scope="row"
-                    colSpan={7}
-                    className="px-6 py-4 font-semibold text-center text-gray-900 whitespace-nowrap dark:text-white transition-all"
-                  >
-                    Nie znaleziono żadnych lekcji
-                  </td>
-                </tr>
-              </tbody>
-            )}
-            <tfoot
-              className={`bg-[#2B161B] ${
-                Object.entries(hours)?.length % 2 == 0
-                  ? "bg-white dark:bg-gray-800"
-                  : "bg-gray-100 dark:bg-gray-700"
-              }`}
-            >
-              <tr className="font-semibold text-gray-900 dark:text-white">
-                {status && (
-                  <td
-                    scope="row"
-                    colSpan={5}
-                    className="px-6 py-4 font-semibold w-1 text-left text-gray-900 whitespace-nowrap dark:text-gray-100 transition-all"
-                  >
-                    Wygenerowany dnia: {generatedDate}, obowiązuje od:{" "}
-                    {validDate}
-                  </td>
-                )}
-                <td
-                  scope="row"
-                  colSpan={!status ? 7 : 2}
-                  className="px-6 py-4 font-semibold w-1 text-right text-gray-900 whitespace-nowrap dark:text-gray-100 transition-all"
-                >
-                  <Link
-                    href={"http://www.zstio-elektronika.pl/plan/index.html"}
-                  >
-                    Źródło danych
-                  </Link>
-                </td>
-              </tr>
-            </tfoot>
+            {renderTableHeader()}
+            {renderTableRow()}
+            {renderTableFooter()}
           </table>
         </div>
       ) : (

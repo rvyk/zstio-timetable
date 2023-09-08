@@ -4,13 +4,17 @@ import Layout from "../components/Layout";
 import fetchTimetableList from "@/helpers/fetchTimetableList";
 import removeUndefined from "@/helpers/removeUndefined";
 import { useEffect } from "react";
+import { useRouter } from "next/router";
 
 const MainRoute = (props) => {
+  const router = useRouter();
+
   useEffect(() => {
     if (!props.timeTable) {
-      window.location.reload();
+      router.reload();
     }
-  }, [props.timeTable]);
+  }, [props.timeTable, router]);
+
   return <Layout {...props} />;
 };
 
@@ -35,7 +39,7 @@ export async function getStaticProps(context) {
   let status = false;
   let id = "";
   let timeTableData = null;
-  let text;
+  let text = "";
   if (context.params?.all) {
     if (context.params.all[0] === "class") {
       id = `o${context.params.all[1]}`;
@@ -55,7 +59,7 @@ export async function getStaticProps(context) {
   timeTableData = response.data;
   status = response.ok;
   const timetableList = new Table(timeTableData);
-  const timeTable = {
+  const timeTableObj = {
     lessons: timetableList.getDays(),
     hours: timetableList.getHours(),
     generatedDate: timetableList.getGeneratedDate(),
@@ -67,19 +71,24 @@ export async function getStaticProps(context) {
   const tableList = new TimetableList(list.data);
   const { classes, teachers, rooms } = tableList.getList();
 
-  let siteTitle = `${text} / ${timeTable.title}`;
-  return {
-    props: {
-      timeTable: removeUndefined(timeTable),
-      classes,
-      teachers,
-      rooms,
-      status,
-      text,
-      siteTitle,
-    },
-    revalidate: 3600,
-  };
+  let siteTitle = `${text} / ${timeTableObj.title}`;
+
+  const timeTable = removeUndefined(timeTableObj);
+
+  if (timeTable) {
+    return {
+      props: {
+        timeTable,
+        classes,
+        teachers,
+        rooms,
+        status,
+        text,
+        siteTitle,
+      },
+      revalidate: 3600,
+    };
+  }
 }
 
 export default MainRoute;

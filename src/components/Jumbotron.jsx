@@ -52,7 +52,7 @@ function Jumbotron(props) {
         </>
       )}
 
-      {title && (
+      {title && status && (
         <>
           <button
             id="dropdownSearchClass"

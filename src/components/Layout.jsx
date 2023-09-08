@@ -10,6 +10,14 @@ import DropdownClass from "./Dropdowns/ClassDropdown";
 import Head from "next/head";
 
 function Layout(props) {
+  const {
+    rooms,
+    teachers,
+    classes,
+    siteTitle,
+    timeTable: { title },
+  } = props;
+
   useEffect(() => {
     initFlowbite();
   }, []);
@@ -18,13 +26,13 @@ function Layout(props) {
     <>
       <Head>
         <title>
-          {props?.timeTable
-            ? `ZSTiO - Plan lekcji | ${props?.timeTable?.title}`
+          {title
+            ? `ZSTiO - Plan lekcji | ${title}`
             : "ZSTiO - Plan lekcji | Wczytywanie planu..."}
         </title>
         <meta
           property="og:title"
-          content={`Sprawdź plan lekcji ${props?.siteTitle} | ZSTiO`}
+          content={`Sprawdź plan lekcji ${siteTitle} | ZSTiO`}
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
@@ -32,9 +40,9 @@ function Layout(props) {
         <Navbar />
         <Jumbotron {...props} />
         <Content {...props} />
-        <DropdownRoom rooms={props.rooms} />
-        <DropdownTeacher teachers={props.teachers} />
-        <DropdownClass classes={props.classes} />
+        <DropdownRoom rooms={rooms} />
+        <DropdownTeacher teachers={teachers} />
+        <DropdownClass classes={classes} />
         <Footer />
       </div>
     </>
