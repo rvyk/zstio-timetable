@@ -25,7 +25,6 @@ export default function Document() {
           src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.4/flowbite.min.js"
           async
         ></script>
-
         <link rel="manifest" href="/manifest.json" />
         <meta name="theme-color" content="#fff" />
       </Head>
