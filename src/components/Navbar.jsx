@@ -6,12 +6,7 @@ import InstallPWA from "./InstallPWA";
 import { Tooltip } from "react-tooltip";
 
 function Navbar() {
-  const [isMounted, setIsMounted] = useState(false);
   const { theme, setTheme, resolvedTheme, systemTheme } = useTheme();
-
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
 
   const toggleTheme = () => {
     if (theme === "system") {
@@ -21,8 +16,6 @@ function Navbar() {
     const newTheme = theme === "light" ? "dark" : "light";
     setTheme(newTheme);
   };
-
-  if (!isMounted) return null;
 
   return (
     <div className="w-screen h-14 block lg:absolute top-0">
