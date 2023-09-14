@@ -27,6 +27,16 @@ function Content(props) {
     typeof hours == "object" &&
     Math.max(Object.entries(hours).length, ...lessons.map((day) => day.length));
 
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  if (!isMounted) {
+    return <TableLoading />;
+  }
+
   const renderTableHeader = () => {
     return (
       <thead className="text-xs transition-all duration-200 text-[#ffffff] bg-[#2B161B] uppercase dark:bg-gray-700 dark:text-gray-400">

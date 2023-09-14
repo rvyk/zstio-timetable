@@ -18,7 +18,24 @@ const MainRoute = (props) => {
   return <Layout {...props} />;
 };
 
-export async function getServerSideProps(context) {
+export async function getStaticPaths() {
+  const list = await fetchTimetableList();
+  const tableList = new TimetableList(list.data);
+
+  const { classes, teachers, rooms } = tableList.getList();
+  const classesPaths = classes?.map((classItem) => `/class/${classItem.value}`);
+  const teachersPaths = teachers?.map(
+    (teacherItem) => `/teacher/${teacherItem.value}`
+  );
+  const roomsPaths = rooms?.map((roomItem) => `/room/${roomItem.value}`);
+
+  return {
+    paths: [...classesPaths, ...teachersPaths, ...roomsPaths],
+    fallback: "blocking",
+  };
+}
+
+export async function getStaticProps(context) {
   let status = false;
   let id = "";
   let timeTableData = null;
@@ -69,6 +86,7 @@ export async function getServerSideProps(context) {
         text,
         siteTitle,
       },
+      revalidate: 3600,
     };
   }
 }
