@@ -15,7 +15,7 @@ function Layout(props) {
     teachers,
     classes,
     siteTitle,
-    timeTable: { title },
+    timeTable: { title = "Wczytywanie planu..." },
   } = props;
 
   useEffect(() => {
