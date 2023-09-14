@@ -1,5 +1,4 @@
 import { useTheme } from "next-themes";
-import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 function Footer() {
@@ -17,19 +16,13 @@ function Footer() {
     <>
       {resolvedTheme !== undefined && (
         <div className="-mb-2">
-          {theme == "light" ? (
+          <a href="https://skillhost.pl/" target="_blank">
             <img
-              src={"/skill-light.png"}
+              src={theme == "light" ? "/skill-light.png" : "/skill-dark.png"}
               className="h-24"
               alt="skill-host-logo"
             />
-          ) : (
-            <img
-              src={"/skill-dark.png"}
-              className="h-24"
-              alt="skill-host-logo"
-            />
-          )}
+          </a>
         </div>
       )}
       <footer className="rounded-lg shadow m-4 w-[90%] sm:w-auto dark:bg-gray-800 transition-all bg-[#2B161B]">
