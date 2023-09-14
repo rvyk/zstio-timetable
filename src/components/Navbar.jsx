@@ -28,11 +28,11 @@ function Navbar() {
 
   return (
     <div className="w-screen h-14 block lg:absolute top-0">
-      {/* <div className="absolute top-2 left-2 z-50 md:hidden transition-all">
+      <div className="absolute top-2 left-2 z-50 md:hidden transition-all">
         <Link href={"https://zstiojar.edu.pl"}>
           <Image alt="logo" width={80} height={80} src={"/icon-192x192.png"} />
         </Link>
-      </div> */}
+      </div>
       {resolvedTheme != undefined && (
         <div className="absolute top-2 right-2 z-50 transition-all flex">
           <button
