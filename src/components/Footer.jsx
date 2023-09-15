@@ -16,7 +16,7 @@ function Footer() {
     <>
       {resolvedTheme !== undefined && (
         <div className="-mb-2">
-          <a href="https://skillhost.pl/" target="_blank">
+          <a href="https://skillhost.pl/?pk_source=plan-lekcji" target="_blank">
             <img
               src={
                 theme == "light" || systemTheme == "light"
