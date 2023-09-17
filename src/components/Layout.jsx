@@ -10,13 +10,12 @@ import DropdownClass from "./Dropdowns/ClassDropdown";
 import Head from "next/head";
 
 function Layout(props) {
-  const {
-    rooms,
-    teachers,
-    classes,
-    siteTitle,
-    timeTable: { title = "Wczytywanie planu..." },
-  } = props;
+  // Destructuring does not work properly on some hosts, so it is required to do it this way.
+  let rooms = props?.rooms,
+    teachers = props?.teachers,
+    classes = props?.classes,
+    siteTitle = props?.siteTitle,
+    title = props?.timeTable?.title;
 
   useEffect(() => {
     initFlowbite();

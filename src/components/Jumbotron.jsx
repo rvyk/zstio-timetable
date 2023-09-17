@@ -3,9 +3,10 @@ import Link from "next/link";
 import React from "react";
 
 function Jumbotron(props) {
-  let title = props?.timeTable?.title;
-  let text = props?.text;
-  let status = props?.status;
+  // Destructuring does not work properly on some hosts, so it is required to do it this way.
+  let title = props?.timeTable?.title,
+    text = props?.text,
+    status = props?.status;
 
   return (
     <div className="py-8 px-4 mx-auto max-w-screen-xl text-center lg:py-16">

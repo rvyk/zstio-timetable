@@ -85,6 +85,7 @@ export async function getStaticProps(context) {
         status,
         text,
         siteTitle,
+        timeTableID: id,
       },
       revalidate: 3600,
     };

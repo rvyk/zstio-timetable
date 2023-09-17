@@ -8,11 +8,15 @@ function Content(props) {
   const daysOfWeek = ["Poniedziałek", "Wtorek", "Środa", "Czwartek", "Piątek"];
   const [isShortHours, setIsShortHours] = useState(false);
 
-  const {
-    status,
-    text,
-    timeTable: { lessons, hours, generatedDate, title, validDate },
-  } = props;
+  // Destructuring does not work properly on some hosts, so it is required to do it this way.
+  let status = props?.status,
+    text = props?.text,
+    hours = props?.timeTable?.hours,
+    generatedDate = props?.timeTable?.generatedDate,
+    title = props?.timeTable?.title,
+    validDate = props?.timeTable?.validDate,
+    timeTableID = props?.timeTableID,
+    lessons = props?.timeTable?.lessons;
 
   useEffect(() => {
     const storedShortHours = JSON.parse(localStorage.getItem("shortHours"));
@@ -193,7 +197,10 @@ function Content(props) {
             colSpan={!status ? 7 : 2}
             className="px-6 py-4 font-semibold w-1 text-right text-gray-900 whitespace-nowrap dark:text-gray-100 transition-all"
           >
-            <Link href={"http://www.zstio-elektronika.pl/plan/index.html"}>
+            <Link
+              href={`http://www.zstio-elektronika.pl/plan/plany/${timeTableID}.html`}
+              target="_blank"
+            >
               Źródło danych
             </Link>
           </td>
