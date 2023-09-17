@@ -72,7 +72,7 @@ function Content(props) {
               const endTime = new Date();
               endTime.setHours(Number(toHour), Number(toMinutes), 0);
               const timeDifference = endTime - new Date();
-              minutesRemaining = Math.floor(
+              minutesRemaining = Math.ceil(
                 (timeDifference % (1000 * 60 * 60)) / (1000 * 60)
               );
             }
