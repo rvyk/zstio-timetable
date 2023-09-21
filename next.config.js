@@ -12,8 +12,8 @@ module.exports = withPWA({
     domains: ["zstiojar.edu.pl"],
   },
   i18n: {
-    locales: ['pl-PL'],
-    defaultLocale: 'pl-PL',
+    locales: ['pl'],
+    defaultLocale: 'pl',
     localeDetection: false,
   },
 });
