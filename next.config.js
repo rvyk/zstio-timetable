@@ -11,4 +11,9 @@ module.exports = withPWA({
   images: {
     domains: ["zstiojar.edu.pl"],
   },
+  i18n: {
+    locales: ["pl"],
+    defaultLocale: "pl",
+    localeDetection: false,
+  },
 });
