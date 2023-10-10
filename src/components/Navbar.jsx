@@ -15,11 +15,21 @@ function Navbar() {
     }
     const newTheme = theme === "light" ? "dark" : "light";
     setTheme(newTheme);
+    console.log(window?.location?.hostname);
+    document.cookie = `selectedTheme=${newTheme}; path=/; domain=${window?.location?.hostname};`;
   };
 
   useEffect(() => {
     setIsMounted(true);
-  }, []);
+    const theme = document.cookie.replace(
+      /(?:(?:^|.*;\s*)selectedTheme\s*\=\s*([^;]*).*$)|^.*$/,
+      "$1"
+    );
+
+    if (theme) {
+      setTheme(theme);
+    }
+  }, [setTheme]);
 
   if (!isMounted) {
     return null;
