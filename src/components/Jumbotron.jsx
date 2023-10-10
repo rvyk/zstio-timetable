@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
@@ -12,11 +11,9 @@ function Jumbotron(props) {
     <div className="py-8 px-4 mx-auto max-w-screen-xl text-center lg:py-16">
       <div className="flex justify-center items-center mb-4 md:mb-0 -ml-0 md:-ml-16">
         <Link href={"https://zstiojar.edu.pl"} className="hidden md:block">
-          <Image
+          <img
             alt="logo"
-            width={75}
-            height={75}
-            className="w-auto h-auto mr-4"
+            className="w-20 h-20 mr-4"
             src={"/icon-192x192.png"}
           />
         </Link>

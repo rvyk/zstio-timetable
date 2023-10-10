@@ -1,5 +1,4 @@
 import { useTheme } from "next-themes";
-import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import InstallPWA from "./InstallPWA";
@@ -30,7 +29,11 @@ function Navbar() {
     <div className="w-screen h-14 block lg:absolute top-0">
       <div className="absolute top-2 left-2 z-50 md:hidden transition-all">
         <Link href={"https://zstiojar.edu.pl"}>
-          <Image alt="logo" width={80} height={80} src={"/icon-192x192.png"} />
+          <img
+            alt="logo"
+            className="w-20 h-20 mr-4"
+            src={"/icon-192x192.png"}
+          />
         </Link>
       </div>
       {resolvedTheme != undefined && (
