@@ -16,7 +16,10 @@ function Navbar() {
     const newTheme = theme === "light" ? "dark" : "light";
     setTheme(newTheme);
     console.log(window?.location?.hostname);
-    document.cookie = `selectedTheme=${newTheme}; path=/; domain=${window?.location?.hostname};`;
+    document.cookie = `selectedTheme=${newTheme}; path=/; domain=${(window?.location?.hostname)
+      .split(".")
+      .slice(-2)
+      .join(".")};`;
   };
 
   useEffect(() => {
