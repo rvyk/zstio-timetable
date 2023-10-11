@@ -10,6 +10,38 @@ const MainRoute = (props) => {
   const router = useRouter();
 
   useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === "ArrowRight" || e.key === "ArrowLeft") {
+        e.preventDefault();
+        const data = router.query.all[0];
+        console.log(data);
+        if (data) {
+          const currentNumber = parseInt(router.query.all[1]);
+          const changeTo =
+            e.key === "ArrowRight" ? currentNumber + 1 : currentNumber - 1;
+          const dataToPropertyMap = {
+            class: "classes",
+            room: "rooms",
+            teacher: "teachers",
+          };
+          const propertyName = dataToPropertyMap[data];
+          if (propertyName) {
+            const maxNumber = props[propertyName].length;
+            if (changeTo >= 1 && changeTo <= maxNumber) {
+              router.push(`/${data}/${changeTo}`);
+            }
+          }
+        }
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [props, router]);
+
+  useEffect(() => {
     if (!props.timeTable) {
       router.reload();
     }
@@ -41,17 +73,19 @@ export async function getStaticProps(context) {
   let timeTableData = null;
   let text = "";
   if (context.params?.all) {
-    if (context.params.all[0] === "class") {
-      id = `o${context.params.all[1]}`;
-      text = "Oddziały";
-    }
-    if (context.params.all[0] === "teacher") {
-      id = `n${context.params.all[1]}`;
-      text = "Nauczyciele";
-    }
-    if (context.params.all[0] === "room") {
-      id = `s${context.params.all[1]}`;
-      text = "Sale";
+    switch (context.params.all[0]) {
+      case "class":
+        id = `o${context.params.all[1]}`;
+        text = "Oddziały";
+        break;
+      case "teacher":
+        id = `n${context.params.all[1]}`;
+        text = "Nauczyciele";
+        break;
+      case "room":
+        id = `s${context.params.all[1]}`;
+        text = "Sale";
+        break;
     }
   }
 
