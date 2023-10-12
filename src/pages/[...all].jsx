@@ -14,7 +14,6 @@ const MainRoute = (props) => {
       if (e.key === "ArrowRight" || e.key === "ArrowLeft") {
         e.preventDefault();
         const data = router.query.all[0];
-        console.log(data);
         if (data) {
           const currentNumber = parseInt(router.query.all[1]);
           const changeTo =
@@ -68,24 +67,22 @@ export async function getStaticPaths() {
 }
 
 export async function getStaticProps(context) {
-  let status = false;
-  let id = "";
-  let timeTableData = null;
-  let text = "";
+  let status = false,
+    id = "",
+    timeTableData = null,
+    text = "";
   if (context.params?.all) {
-    switch (context.params.all[0]) {
-      case "class":
-        id = `o${context.params.all[1]}`;
-        text = "Oddziały";
-        break;
-      case "teacher":
-        id = `n${context.params.all[1]}`;
-        text = "Nauczyciele";
-        break;
-      case "room":
-        id = `s${context.params.all[1]}`;
-        text = "Sale";
-        break;
+    if (context.params.all[0] === "class") {
+      id = `o${context.params.all[1]}`;
+      text = "Oddziały";
+    }
+    if (context.params.all[0] === "teacher") {
+      id = `n${context.params.all[1]}`;
+      text = "Nauczyciele";
+    }
+    if (context.params.all[0] === "room") {
+      id = `s${context.params.all[1]}`;
+      text = "Sale";
     }
   }
 
