@@ -1,4 +1,4 @@
-# Timetable ZSTIO
+# Timetable ZSTiO
 
 A refreshed version of the [timetable](https://www.zstio-elektronika.pl/plan/index.html) for [Zespół Szkół Technicznych i Ogólnokształcących](https://zstiojar.edu.pl/).
 Data scraping & parsing via [@wulkanowy/timetable-parser-js](https://github.com/wulkanowy/timetable-parser-js)
