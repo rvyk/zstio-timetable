@@ -1,10 +1,7 @@
-import fetchTimetable from "@/helpers/fetchTimetable";
-import { Table, TimetableList } from "@wulkanowy/timetable-parser";
-import Layout from "../components/Layout";
-import fetchTimetableList from "@/helpers/fetchTimetableList";
-import removeUndefined from "@/helpers/removeUndefined";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
+import Layout from "../components/Layout";
+import axios from "axios";
 
 const MainRoute = (props) => {
   const router = useRouter();
@@ -40,87 +37,71 @@ const MainRoute = (props) => {
     };
   }, [props, router]);
 
-  useEffect(() => {
-    if (!props.timeTable) {
-      router.reload();
-    }
-  }, [props.timeTable, router]);
-
   return <Layout {...props} />;
 };
 
-export async function getStaticPaths() {
-  const list = await fetchTimetableList();
-  const tableList = new TimetableList(list.data);
+export async function getServerSideProps(context) {
+  const { params } = context;
+  const param0 = params?.all[0];
+  const param1 = params?.all[1];
 
-  const { classes, teachers, rooms } = tableList.getList();
-  const classesPaths = classes?.map((classItem) => `/class/${classItem.value}`);
-  const teachersPaths = teachers?.map(
-    (teacherItem) => `/teacher/${teacherItem.value}`
-  );
-  const roomsPaths = rooms?.map((roomItem) => `/room/${roomItem.value}`);
+  let id = "";
+  let text = "";
 
-  return {
-    paths: [...classesPaths, ...teachersPaths, ...roomsPaths],
-    fallback: "blocking",
-  };
-}
-
-export async function getStaticProps(context) {
-  let status = false,
-    id = "",
-    timeTableData = null,
-    text = "";
-  if (context.params?.all) {
-    if (context.params.all[0] === "class") {
-      id = `o${context.params.all[1]}`;
+  switch (param0) {
+    case "class":
+      id = `o${param1}`;
       text = "Oddziały";
-    }
-    if (context.params.all[0] === "teacher") {
-      id = `n${context.params.all[1]}`;
+      break;
+    case "teacher":
+      id = `n${param1}`;
       text = "Nauczyciele";
-    }
-    if (context.params.all[0] === "room") {
-      id = `s${context.params.all[1]}`;
+      break;
+    case "room":
+      id = `s${param1}`;
       text = "Sale";
-    }
+      break;
   }
 
-  const response = await fetchTimetable(id);
-  timeTableData = response.data;
-  status = response.ok;
-  const timetableList = new Table(timeTableData);
-  const timeTableObj = {
-    lessons: timetableList.getDays(),
-    hours: timetableList.getHours(),
-    generatedDate: timetableList.getGeneratedDate(),
-    title: timetableList.getTitle(),
-    validDate: timetableList.getValidFromDate(),
-  };
+  const host = context.req.headers.host;
+  const protocol = host === "localhost:3000" ? "http" : "https";
 
-  const list = await fetchTimetableList();
-  const tableList = new TimetableList(list.data);
-  const { classes, teachers, rooms } = tableList.getList();
+  const validateStatus = (status) => status === 200 || status === 404;
 
-  let siteTitle = `${text} / ${timeTableObj.title}`;
+  const timeTableReq = await axios.get(
+    `${protocol}://${host}/api/timetable/getTimetable?id=${id}`,
+    {
+      validateStatus,
+    }
+  );
 
-  const timeTable = removeUndefined(timeTableObj);
+  const listReq = await axios.get(`${protocol}://${host}/api/timetable/list`, {
+    validateStatus,
+  });
 
-  if (timeTable) {
+  const isStatusOK = listReq.status === 200 && timeTableReq.status === 200;
+  const { classes, teachers, rooms } = listReq.data;
+
+  if (isStatusOK) {
     return {
       props: {
-        timeTable,
+        status: true,
+        timeTable: timeTableReq.data,
         classes,
         teachers,
         rooms,
-        status,
-        text,
-        siteTitle,
         timeTableID: id,
+        siteTitle: timeTableReq.data.title,
+        text,
       },
-      revalidate: 3600,
     };
   }
+
+  return {
+    props: {
+      status: false,
+    },
+  };
 }
 
 export default MainRoute;
