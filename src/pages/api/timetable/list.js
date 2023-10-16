@@ -1,8 +1,20 @@
 import { TimetableList } from "@wulkanowy/timetable-parser";
+import NodeCache from "node-cache";
+
+const cache = new NodeCache({ stdTTL: 600, checkperiod: 60 });
 
 export default async function handler(req, res) {
   try {
-    const response = await fetch(`${process.env.TIMETABLE_URL}/lista.html`);
+    const cacheKey = req.query.select || "default";
+
+    const cachedData = cache.get(cacheKey);
+    if (cachedData) {
+      return res.status(200).send(cachedData);
+    }
+
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_TIMETABLE_URL}/lista.html`
+    );
     const data = await response.text();
     const tableList = new TimetableList(data);
     const { classes, teachers, rooms } = tableList.getList();
@@ -31,6 +43,8 @@ export default async function handler(req, res) {
         responseObj.rooms = rooms;
         break;
     }
+
+    cache.set(cacheKey, responseObj);
 
     res.status(200).send(responseObj);
   } catch (error) {

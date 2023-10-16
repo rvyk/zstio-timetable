@@ -191,7 +191,8 @@ function Content(props) {
               colSpan={5}
               className="px-6 py-4 font-semibold w-1 text-left text-gray-900 whitespace-nowrap dark:text-gray-100 transition-all"
             >
-              Wygenerowany dnia: {generatedDate}, obowiązuje od: {validDate}
+              {generatedDate && `Wygenerowano: ${generatedDate}`}{" "}
+              {validDate && `Obowiązuje od: ${validDate}`}
             </td>
           )}
           <td
@@ -200,7 +201,7 @@ function Content(props) {
             className="px-6 py-4 font-semibold w-1 text-right text-gray-900 whitespace-nowrap dark:text-gray-100 transition-all"
           >
             <Link
-              href={`http://www.zstio-elektronika.pl/plan/plany/${timeTableID}.html`}
+              href={`${process.env.NEXT_PUBLIC_TIMETABLE_URL}/plany/${timeTableID}.html`}
               target="_blank"
             >
               Źródło danych

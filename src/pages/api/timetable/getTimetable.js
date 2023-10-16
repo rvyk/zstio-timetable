@@ -1,4 +1,7 @@
-import { Table, TimetableList } from "@wulkanowy/timetable-parser";
+import { Table } from "@wulkanowy/timetable-parser";
+import NodeCache from "node-cache";
+
+const cache = new NodeCache({ stdTTL: 600, checkperiod: 60 });
 
 export default async function handler(req, res) {
   try {
@@ -7,8 +10,14 @@ export default async function handler(req, res) {
     if (!id) {
       id = "o1";
     }
+
+    const cachedData = cache.get(id);
+    if (cachedData) {
+      return res.status(200).send(cachedData);
+    }
+
     const response = await fetch(
-      `${process.env.TIMETABLE_URL}/plany/${id}.html`
+      `${process.env.NEXT_PUBLIC_TIMETABLE_URL}/plany/${id}.html`
     );
     const data = await response.text();
 
@@ -32,10 +41,12 @@ export default async function handler(req, res) {
       title: timetableList.getTitle(),
       days: timetableList.getDayNames(),
       generatedDate: timetableList.getGeneratedDate(),
-      validDate: timetableList.getValidFromDate(),
+      validDate: timetableList.getVersionInfo(),
       lessons: timetableList.getDays(),
       hours: timetableList.getHours(),
     };
+
+    cache.set(id, timeTableObj);
 
     res.status(200).send(timeTableObj);
   } catch (error) {

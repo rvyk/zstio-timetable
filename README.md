@@ -3,6 +3,8 @@
 A refreshed version of the [timetable](https://www.zstio-elektronika.pl/plan/index.html) for [Zespół Szkół Technicznych i Ogólnokształcących](https://zstiojar.edu.pl/).
 Data scraping & parsing via [@wulkanowy/timetable-parser-js](https://github.com/wulkanowy/timetable-parser-js)
 
+The timetable is **universal**, you just need to change the value of the `NEXT_PUBLIC_TIMETABLE_URL` in `.env` to the correct address for your school's timetable (UONET generated).
+
 ## Tech Stack
 
 - Next.js, React, TailwindCSS, Flowbite
