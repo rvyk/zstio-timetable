@@ -19,10 +19,9 @@ module.exports = withPWA({
   async rewrites() {
     return [
       {
-        source: '/api/getSubstitutions',
-        destination: `http://localhost:3001/api/getSubstitutions`,
+        source: "/api/getSubstitutions",
+        destination: `${process.env.SUBSTITUTIONS_API || ""} `,
       },
-    ]
+    ];
   },
-
 });

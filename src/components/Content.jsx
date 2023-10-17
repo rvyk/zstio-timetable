@@ -1,13 +1,14 @@
 "use client";
 
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import TableLoading from "./TableLoading";
-import {Tooltip} from "react-tooltip";
+import { Tooltip } from "react-tooltip";
 import shortHours from "./shortHours";
-import axios from "axios"
+import axios from "axios";
 
 function Content(props) {
+  const cases = ["Uczniowie przychodzą później", "Przeniesiona"];
   const daysOfWeek = ["Poniedziałek", "Wtorek", "Środa", "Czwartek", "Piątek"];
   const [isShortHours, setIsShortHours] = useState(false);
   const [substitutions, setSubstitutions] = useState({});
@@ -27,31 +28,46 @@ function Content(props) {
     if (storedShortHours !== null) {
       setIsShortHours(storedShortHours);
     }
-
-
   }, []);
 
   useEffect(() => {
     async function getSubstitutions() {
-      let search = text === "Oddziały" ? "branch" : (text === "Nauczyciele" ? "teacher" : undefined)
+      let search =
+        text === "Oddziały"
+          ? "branch"
+          : text === "Nauczyciele"
+          ? "teacher"
+          : undefined;
       if (search) {
-        const substitutionsRes = await axios.get(`/api/getSubstitutions?search=${search}&query=${title}`)
-        const shortDayNames = ["pon", "wt", "śr", "czw", "pt", "sob", "nie"];
-        const match = substitutionsRes.data?.tables[0]?.time.match(/\([^)]*\)/i);
+        try {
+          const substitutionsRes = await axios.get(
+            `/api/getSubstitutions?search=${search}&query=${title}`
+          );
+          const shortDayNames = ["pon", "wt", "śr", "czw", "pt", "sob", "nie"];
+          const match =
+            substitutionsRes.data?.tables[0]?.time.match(/\([^)]*\)/i);
 
-        if (match && match.length > 0) {
-          const dayIndex = shortDayNames.indexOf(match[0].substring(1).replace(".)", ""));
-          if (dayIndex > 0) {
-            setSubstitutions({dayIndex, zastepstwa: substitutionsRes.data.tables[0].zastepstwa})
+          if (match && match.length > 0) {
+            const dayIndex = shortDayNames.indexOf(
+              match[0].substring(1).replace(".)", "")
+            );
+            if (dayIndex > 0) {
+              setSubstitutions({
+                dayIndex,
+                zastepstwa: substitutionsRes.data.tables[0].zastepstwa,
+              });
+            }
+          } else {
+            setSubstitutions({});
           }
-        } else {
-          setSubstitutions({})
+        } catch (e) {
+          setSubstitutions({});
         }
       }
     }
 
-    getSubstitutions()
-  }, [substitutions]);
+    getSubstitutions();
+  }, [text, title]);
 
   const currentHour = new Date().getHours();
   const currentMinutes = new Date().getMinutes();
@@ -61,21 +77,20 @@ function Content(props) {
 
   const renderTableHeader = () => {
     return (
-      <thead
-        className="text-xs transition-all duration-200 text-[#ffffff] bg-[#2B161B] uppercase dark:bg-gray-700 dark:text-gray-400">
-      <tr>
-        <th scope="col" className="px-6 py-3">
-          <div className="flex items-center justify-center">Lekcja</div>
-        </th>
-        <th scope="col" className="px-8 py-3">
-          <div className="flex items-center justify-center">Godz.</div>
-        </th>
-        {daysOfWeek.map((day) => (
-          <th scope="col" className="px-6 py-3" key={day}>
-            <div className="flex items-center justify-center">{day}</div>
+      <thead className="text-xs transition-all duration-200 text-[#ffffff] bg-[#2B161B] uppercase dark:bg-gray-700 dark:text-gray-400">
+        <tr>
+          <th scope="col" className="px-6 py-3">
+            <div className="flex items-center justify-center">Lekcja</div>
           </th>
-        ))}
-      </tr>
+          <th scope="col" className="px-8 py-3">
+            <div className="flex items-center justify-center">Godz.</div>
+          </th>
+          {daysOfWeek.map((day) => (
+            <th scope="col" className="px-6 py-3" key={day}>
+              <div className="flex items-center justify-center">{day}</div>
+            </th>
+          ))}
+        </tr>
       </thead>
     );
   };
@@ -83,127 +98,184 @@ function Content(props) {
   const renderTableRow = () => {
     return (
       <tbody>
-      {Object.entries(hours).length > 1 ? (
-        Object.entries(
-          isShortHours ? shortHours.slice(0, maxLessons) : hours
-        )?.map(([key, item], index) => {
-          const {number, timeFrom, timeTo} = item;
-          const [fromHour, fromMinutes] = timeFrom.split(":");
-          const [toHour, toMinutes] = timeTo.split(":");
-          const isAfterFromTime =
-            currentHour > Number(fromHour) ||
-            (currentHour === Number(fromHour) &&
-              currentMinutes >= Number(fromMinutes));
-          const isBeforeToTime =
-            currentHour < Number(toHour) ||
-            (currentHour === Number(toHour) &&
-              currentMinutes < Number(toMinutes));
-          const isWithinTimeRange = isAfterFromTime && isBeforeToTime;
+        {Object.entries(hours).length > 1 ? (
+          Object.entries(
+            isShortHours ? shortHours.slice(0, maxLessons) : hours
+          )?.map(([key, item], index) => {
+            const { number, timeFrom, timeTo } = item;
+            const [fromHour, fromMinutes] = timeFrom.split(":");
+            const [toHour, toMinutes] = timeTo.split(":");
+            const isAfterFromTime =
+              currentHour > Number(fromHour) ||
+              (currentHour === Number(fromHour) &&
+                currentMinutes >= Number(fromMinutes));
+            const isBeforeToTime =
+              currentHour < Number(toHour) ||
+              (currentHour === Number(toHour) &&
+                currentMinutes < Number(toMinutes));
+            const isWithinTimeRange = isAfterFromTime && isBeforeToTime;
 
-          let minutesRemaining = 0;
-          if (isWithinTimeRange) {
-            const endTime = new Date();
-            endTime.setHours(Number(toHour), Number(toMinutes), 0);
-            const timeDifference = endTime - new Date();
-            minutesRemaining = Math.ceil(
-              (timeDifference % (1000 * 60 * 60)) / (1000 * 60)
-            );
-          }
-          return (
-            <tr
-              className={`text-gray-600 dark:text-gray-300 border-b ${
-                index % 2 === 0
-                  ? "bg-white dark:bg-gray-800"
-                  : "bg-gray-50 dark:bg-gray-700"
-              } dark:border-gray-600`}
-              key={index}
-            >
-              <td
-                className={`py-4 text-center h-full border-r last:border-none font-semibold dark:border-gray-600`}
+            let minutesRemaining = 0;
+            if (isWithinTimeRange) {
+              const endTime = new Date();
+              endTime.setHours(Number(toHour), Number(toMinutes), 0);
+              const timeDifference = endTime - new Date();
+              minutesRemaining = Math.ceil(
+                (timeDifference % (1000 * 60 * 60)) / (1000 * 60)
+              );
+            }
+            return (
+              <tr
+                className={`text-gray-600 dark:text-gray-300 border-b ${
+                  index % 2 === 0
+                    ? "bg-white dark:bg-gray-800"
+                    : "bg-gray-50 dark:bg-gray-700"
+                } dark:border-gray-600`}
+                key={index}
               >
-                <div className="flex justify-center items-center flex-col">
-                  {number}
-                  {isWithinTimeRange && minutesRemaining > 0 && (
-                    <div
-                      className="bg-blue-100 mt-1 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">
-                      <p>{minutesRemaining == 1 ? "ZOSTAŁA" : "ZOSTAŁO"}</p>
-                      <p>{`${minutesRemaining} MIN`}</p>
-                    </div>
-                  )}
-                </div>
-              </td>
-              <td className="text-center border-r last:border-none dark:border-gray-600">
-                {timeFrom} - {timeTo}
-              </td>
-
-              {lessons?.map((day, lessonIndex) => (
                 <td
-                  className="px-6 py-4 whitespace-nowrap border-r last:border-none dark:border-gray-600"
-                  key={`${day}-${lessonIndex}`}
+                  className={`py-4 text-center h-full border-r last:border-none font-semibold dark:border-gray-600`}
                 >
-                  {day[number - 1]?.map((lesson, subIndex) => (
-                    <div
-                      key={`${day}-${lessonIndex}-${subIndex}`}
-                      className="flex"
-                    >
-                      <div
-                        className={`font-semibold mr-1 ${lessonIndex == substitutions.dayIndex && substitutions.zastepstwa.filter((zastepstwo) => zastepstwo.lesson.split(",")[0] - 1 == index).length > 0 ? "bg-red-500" : ""}`}>
-                        {lesson?.subject}
+                  <div className="flex justify-center items-center flex-col">
+                    {number}
+                    {isWithinTimeRange && minutesRemaining > 0 && (
+                      <div className="bg-blue-100 mt-1 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">
+                        <p>{minutesRemaining == 1 ? "ZOSTAŁA" : "ZOSTAŁO"}</p>
+                        <p>{`${minutesRemaining} MIN`}</p>
                       </div>
-
-
-                      {lesson?.groupName ? (
-                        <p className="flex items-center mr-1">
-                          {`(${lesson?.groupName})`}
-                        </p>
-                      ) : day[number - 1].length > 1 && (<p className="flex items-center mr-1">
-                        {`(${subIndex + 1}/${day[number - 1].length})`}
-                      </p>)}
-
-                      {lesson?.className && lesson?.classId && (
-                        <Link
-                          href={`/class/${lesson?.classId}`}
-                          className="flex items-center mr-1"
-                        >
-                          {lesson?.className}
-                        </Link>
-                      )}
-
-                      {lesson?.teacher && lesson?.teacherId && (
-                        <Link
-                          href={`/teacher/${lesson?.teacherId}`}
-                          className="flex items-center mr-1"
-                        >
-                          {lesson?.teacher}
-                        </Link>
-                      )}
-
-                      {lesson?.roomId && lesson?.room && (
-                        <Link
-                          href={`/room/${lesson?.roomId}`}
-                          className="flex items-center"
-                        >
-                          {lesson?.room}
-                        </Link>
-                      )}
-                    </div>
-                  ))}
+                    )}
+                  </div>
                 </td>
-              ))}
-            </tr>
-          );
-        })
-      ) : (
-        <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 transition-all">
-          <td
-            scope="row"
-            colSpan={7}
-            className="px-6 py-4 font-semibold text-center text-gray-900 whitespace-nowrap dark:text-white transition-all"
-          >
-            Nie znaleziono żadnych lekcji
-          </td>
-        </tr>
-      )}
+                <td className="text-center border-r last:border-none dark:border-gray-600">
+                  {timeFrom} - {timeTo}
+                </td>
+
+                {lessons?.map((day, lessonIndex) => (
+                  <td
+                    className="px-6 py-4 whitespace-nowrap border-r last:border-none dark:border-gray-600"
+                    key={`${day}-${lessonIndex}`}
+                  >
+                    {day[number - 1]?.map((lesson, subIndex) => {
+                      const zastepstwo =
+                        lessonIndex == substitutions.dayIndex
+                          ? day[number - 1].length > 1
+                            ? substitutions?.zastepstwa?.filter(
+                                (zastepstwo) => {
+                                  return (
+                                    zastepstwo.lesson.split(",")[0] - 1 ==
+                                      index &&
+                                    zastepstwo?.branch?.includes(
+                                      lesson?.groupName
+                                    )
+                                  );
+                                }
+                              )[0]
+                            : substitutions?.zastepstwa?.filter(
+                                (zastepstwo) =>
+                                  zastepstwo.lesson.split(",")[0] - 1 == index
+                              )[0]
+                          : undefined;
+
+                      return (
+                        <div
+                          key={`${day}-${lessonIndex}-${subIndex}`}
+                          className="flex flex-col"
+                        >
+                          <div className="flex flex-row">
+                            <div
+                              className={`font-semibold mr-1 flex flex-col ${
+                                zastepstwo && "line-through opacity-60"
+                              }`}
+                            >
+                              {lesson?.subject}
+                            </div>
+
+                            {lesson?.groupName ? (
+                              <p
+                                className={`flex items-center mr-1 ${
+                                  zastepstwo && "line-through opacity-60"
+                                }`}
+                              >
+                                {`(${lesson?.groupName})`}
+                              </p>
+                            ) : (
+                              day[number - 1].length > 1 && (
+                                <p className="flex items-center mr-1 ">
+                                  {`(${subIndex + 1}/${
+                                    day[number - 1].length
+                                  })`}
+                                </p>
+                              )
+                            )}
+
+                            {lesson?.className && lesson?.classId && (
+                              <Link
+                                href={`/class/${lesson?.classId}`}
+                                className="flex items-center mr-1"
+                              >
+                                {lesson?.className}
+                              </Link>
+                            )}
+
+                            {lesson?.teacher && lesson?.teacherId && (
+                              <Link
+                                href={`/teacher/${lesson?.teacherId}`}
+                                className={`flex items-center mr-1 ${
+                                  zastepstwo && "line-through opacity-60"
+                                }`}
+                              >
+                                {lesson?.teacher}
+                              </Link>
+                            )}
+                            {lesson?.roomId && lesson?.room && (
+                              <Link
+                                href={`/room/${lesson?.roomId}`}
+                                className={`flex items-center ${
+                                  zastepstwo && "line-through opacity-60"
+                                }`}
+                              >
+                                {zastepstwo && zastepstwo?.class != lesson?.room
+                                  ? zastepstwo?.class
+                                  : lesson?.room}
+                              </Link>
+                            )}
+                          </div>
+
+                          {zastepstwo && (
+                            <>
+                              {cases.includes(zastepstwo.case) === false && (
+                                <p className="text-orange-400 font-semibold">
+                                  {zastepstwo.subject}
+                                </p>
+                              )}
+                              <p className="dark:text-red-400 text-red-500 font-semibold">
+                                {zastepstwo.case}
+                              </p>
+                            </>
+                          )}
+
+                          {zastepstwo && day[number - 1]?.length > 1 && (
+                            <div className="w-full my-1"></div>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </td>
+                ))}
+              </tr>
+            );
+          })
+        ) : (
+          <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 transition-all">
+            <td
+              scope="row"
+              colSpan={7}
+              className="px-6 py-4 font-semibold text-center text-gray-900 whitespace-nowrap dark:text-white transition-all"
+            >
+              Nie znaleziono żadnych lekcji
+            </td>
+          </tr>
+        )}
       </tbody>
     );
   };
@@ -217,30 +289,30 @@ function Content(props) {
             : "bg-gray-100 dark:bg-gray-700"
         }`}
       >
-      <tr className="font-semibold text-gray-900 dark:text-white">
-        {status && (
+        <tr className="font-semibold text-gray-900 dark:text-white">
+          {status && (
+            <td
+              scope="row"
+              colSpan={5}
+              className="px-6 py-4 font-semibold w-1 text-left text-gray-900 whitespace-nowrap dark:text-gray-100 transition-all"
+            >
+              {generatedDate && `Wygenerowano: ${generatedDate}`}{" "}
+              {validDate && `Obowiązuje od: ${validDate}`}
+            </td>
+          )}
           <td
             scope="row"
-            colSpan={5}
-            className="px-6 py-4 font-semibold w-1 text-left text-gray-900 whitespace-nowrap dark:text-gray-100 transition-all"
+            colSpan={!status ? 7 : 2}
+            className="px-6 py-4 font-semibold w-1 text-right text-gray-900 whitespace-nowrap dark:text-gray-100 transition-all"
           >
-            {generatedDate && `Wygenerowano: ${generatedDate}`}{" "}
-            {validDate && `Obowiązuje od: ${validDate}`}
+            <Link
+              href={`${process.env.NEXT_PUBLIC_TIMETABLE_URL}/plany/${timeTableID}.html`}
+              target="_blank"
+            >
+              Źródło danych
+            </Link>
           </td>
-        )}
-        <td
-          scope="row"
-          colSpan={!status ? 7 : 2}
-          className="px-6 py-4 font-semibold w-1 text-right text-gray-900 whitespace-nowrap dark:text-gray-100 transition-all"
-        >
-          <Link
-            href={`${process.env.NEXT_PUBLIC_TIMETABLE_URL}/plany/${timeTableID}.html`}
-            target="_blank"
-          >
-            Źródło danych
-          </Link>
-        </td>
-      </tr>
+        </tr>
       </tfoot>
     );
   };
@@ -253,8 +325,7 @@ function Content(props) {
           className="relative overflow-x-auto shadow-md md:rounded-xl w-[90%] transition-all duration-100"
         >
           <table className="w-full text-sm text-left transition-all duration-200 text-gray-500 dark:text-gray-400">
-            <caption
-              className="p-5 transition-all text-lg font-semibold text-left text-gray-900 bg-white dark:text-white dark:bg-gray-800">
+            <caption className="p-5 transition-all text-lg font-semibold text-left text-gray-900 bg-white dark:text-white dark:bg-gray-800">
               {!status ? (
                 <p className="transition-all text-lg font-normal text-gray-500 lg:text-xl mr-1 dark:text-gray-400">
                   Nie znaleziono pasującego planu lekcji
@@ -300,8 +371,7 @@ function Content(props) {
                           {"30'"}
                         </button>
                       </div>
-                      <p
-                        className="transition-all text-lg font-normal text-gray-500 lg:text-xl mr-1 dark:text-gray-400">
+                      <p className="transition-all text-lg font-normal text-gray-500 lg:text-xl mr-1 dark:text-gray-400">
                         {text} /
                       </p>
                       <p className="transition-all text-lg font-bold text-gray-500 lg:text-xl dark:text-gray-400">
@@ -342,7 +412,7 @@ function Content(props) {
           </table>
         </div>
       ) : (
-        <TableLoading/>
+        <TableLoading />
       )}
       <Tooltip
         id="content_tooltips"
