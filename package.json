@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@wulkanowy/timetable-parser": "^1.6.0",
+    "@wulkanowy/timetable-parser": "https://github.com/majusss/timetable-parser-js.git",
     "autoprefixer": "^10.4.16",
     "axios": "^1.5.1",
     "eslint": "^8.51.0",

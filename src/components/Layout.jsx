@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Content from "../components/Content";
+import Timetable from "./Timetable";
 import Footer from "../components/Footer";
 import Jumbotron from "../components/Jumbotron";
 import Navbar from "./Navbar";
@@ -38,7 +38,7 @@ function Layout(props) {
       <div className="min-h-screen w-screen flex flex-col justify-center items-center bg-[#F7F3F5] dark:bg-gray-900 transition-all">
         <Navbar />
         <Jumbotron {...props} />
-        <Content {...props} />
+        <Timetable {...props} />
         <DropdownRoom rooms={rooms} />
         <DropdownTeacher teachers={teachers} />
         <DropdownClass classes={classes} />

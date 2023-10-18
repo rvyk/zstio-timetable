@@ -1206,6 +1206,18 @@
   dependencies:
     tslib "^2.4.0"
 
+"@types/chai@^4.1.7":
+  version "4.3.9"
+  resolved "https://registry.yarnpkg.com/@types/chai/-/chai-4.3.9.tgz#144d762491967db8c6dea38e03d2206c2623feec"
+  integrity sha512-69TtiDzu0bcmKQv3yg1Zx409/Kd7r0b5F1PfpYJfSHzLGtB53547V4u+9iqKYsTu/O2ai6KTb0TInNpvuQ3qmg==
+
+"@types/cheerio@^0.22.11":
+  version "0.22.33"
+  resolved "https://registry.yarnpkg.com/@types/cheerio/-/cheerio-0.22.33.tgz#e4792408b107384d7d7469e3b4d31408078ec620"
+  integrity sha512-XUlu2BK4q3xJsccRLK69m/cABZd7m60o+cDEPUTG6jTpuG2vqN35UioeF99MQ/HoSOEPq0Bgil8g3jtzE0oH9A==
+  dependencies:
+    "@types/node" "*"
+
 "@types/eslint-scope@^3.7.3":
   version "3.7.5"
   resolved "https://registry.yarnpkg.com/@types/eslint-scope/-/eslint-scope-3.7.5.tgz#e28b09dbb1d9d35fdfa8a884225f00440dfc5a3e"
@@ -1438,11 +1450,12 @@
     "@webassemblyjs/ast" "1.11.6"
     "@xtuc/long" "4.2.2"
 
-"@wulkanowy/timetable-parser@^1.6.0":
-  version "1.6.0"
-  resolved "https://registry.yarnpkg.com/@wulkanowy/timetable-parser/-/timetable-parser-1.6.0.tgz#58e5cdff9db44739c6dd02bf22ce459a3b72a83c"
-  integrity sha512-61ueFNHDtm3+7gVX1j5dbG3sYRd25vEbhk7EMMs0iVAVgR4M0bvnPJmCGo6AF8lLhOProHQtTwRT1HEUQ0roYw==
+"@wulkanowy/timetable-parser@https://github.com/majusss/timetable-parser-js.git":
+  version "1.5.0"
+  resolved "https://github.com/majusss/timetable-parser-js.git#5ae155bf18f9ec97b71ca72adfc60eeb79ddf3f3"
   dependencies:
+    "@types/chai" "^4.1.7"
+    "@types/cheerio" "^0.22.11"
     cheerio "^1.0.0-rc.12"
 
 "@xtuc/ieee754@^1.2.0":
