@@ -5,10 +5,13 @@ import Link from "next/link";
 import TableLoading from "./TableLoading";
 import { Tooltip } from "react-tooltip";
 import shortHours from "./shortHours";
+import axios from "axios";
 
 function Content(props) {
+  const cases = ["Uczniowie przychodzą później", "Przeniesiona"];
   const daysOfWeek = ["Poniedziałek", "Wtorek", "Środa", "Czwartek", "Piątek"];
   const [isShortHours, setIsShortHours] = useState(false);
+  const [substitutions, setSubstitutions] = useState({});
 
   // Destructuring does not work properly on some hosts, so it is required to do it this way.
   let status = props?.status,
@@ -26,6 +29,45 @@ function Content(props) {
       setIsShortHours(storedShortHours);
     }
   }, []);
+
+  useEffect(() => {
+    async function getSubstitutions() {
+      let search =
+        text === "Oddziały"
+          ? "branch"
+          : text === "Nauczyciele"
+          ? "teacher"
+          : undefined;
+      if (search) {
+        try {
+          const substitutionsRes = await axios.get(
+            `/api/getSubstitutions?search=${search}&query=${title}`
+          );
+          const shortDayNames = ["pon", "wt", "śr", "czw", "pt", "sob", "nie"];
+          const match =
+            substitutionsRes.data?.tables[0]?.time.match(/\([^)]*\)/i);
+
+          if (match && match.length > 0) {
+            const dayIndex = shortDayNames.indexOf(
+              match[0].substring(1).replace(".)", "")
+            );
+            if (dayIndex > 0) {
+              setSubstitutions({
+                dayIndex,
+                zastepstwa: substitutionsRes.data.tables[0].zastepstwa,
+              });
+            }
+          } else {
+            setSubstitutions({});
+          }
+        } catch (e) {
+          setSubstitutions({});
+        }
+      }
+    }
+
+    getSubstitutions();
+  }, [text, title]);
 
   const currentHour = new Date().getHours();
   const currentMinutes = new Date().getMinutes();
@@ -113,48 +155,111 @@ function Content(props) {
                     className="px-6 py-4 whitespace-nowrap border-r last:border-none dark:border-gray-600"
                     key={`${day}-${lessonIndex}`}
                   >
-                    {day[number - 1]?.map((lesson, subIndex) => (
-                      <div
-                        key={`${day}-${lessonIndex}-${subIndex}`}
-                        className="flex"
-                      >
-                        <div className="font-semibold mr-1">
-                          {lesson?.subject}
+                    {day[number - 1]?.map((lesson, subIndex) => {
+                      const zastepstwo =
+                        lessonIndex == substitutions.dayIndex
+                          ? day[number - 1].length > 1
+                            ? substitutions?.zastepstwa?.filter(
+                                (zastepstwo) => {
+                                  return (
+                                    zastepstwo.lesson.split(",")[0] - 1 ==
+                                      index &&
+                                    zastepstwo?.branch?.includes(
+                                      lesson?.groupName
+                                    )
+                                  );
+                                }
+                              )[0]
+                            : substitutions?.zastepstwa?.filter(
+                                (zastepstwo) =>
+                                  zastepstwo.lesson.split(",")[0] - 1 == index
+                              )[0]
+                          : undefined;
+
+                      return (
+                        <div
+                          key={`${day}-${lessonIndex}-${subIndex}`}
+                          className="flex flex-col"
+                        >
+                          <div className="flex flex-row">
+                            <div
+                              className={`font-semibold mr-1 flex flex-col ${
+                                zastepstwo && "line-through opacity-60"
+                              }`}
+                            >
+                              {lesson?.subject}
+                            </div>
+
+                            {lesson?.groupName ? (
+                              <p
+                                className={`flex items-center mr-1 ${
+                                  zastepstwo && "line-through opacity-60"
+                                }`}
+                              >
+                                {`(${lesson?.groupName})`}
+                              </p>
+                            ) : (
+                              day[number - 1].length > 1 && (
+                                <p className="flex items-center mr-1 ">
+                                  {`(${subIndex + 1}/${
+                                    day[number - 1].length
+                                  })`}
+                                </p>
+                              )
+                            )}
+
+                            {lesson?.className && lesson?.classId && (
+                              <Link
+                                href={`/class/${lesson?.classId}`}
+                                className="flex items-center mr-1"
+                              >
+                                {lesson?.className}
+                              </Link>
+                            )}
+
+                            {lesson?.teacher && lesson?.teacherId && (
+                              <Link
+                                href={`/teacher/${lesson?.teacherId}`}
+                                className={`flex items-center mr-1 ${
+                                  zastepstwo && "line-through opacity-60"
+                                }`}
+                              >
+                                {lesson?.teacher}
+                              </Link>
+                            )}
+                            {lesson?.roomId && lesson?.room && (
+                              <Link
+                                href={`/room/${lesson?.roomId}`}
+                                className={`flex items-center ${
+                                  zastepstwo && "line-through opacity-60"
+                                }`}
+                              >
+                                {zastepstwo && zastepstwo?.class != lesson?.room
+                                  ? zastepstwo?.class
+                                  : lesson?.room}
+                              </Link>
+                            )}
+                          </div>
+
+                          {zastepstwo && (
+                            <>
+                              {cases.includes(zastepstwo.case) === false && (
+                                <p className="text-orange-400 font-semibold">
+                                  {zastepstwo.subject}
+                                </p>
+                              )}
+                              <p className="dark:text-red-400 text-red-500 font-semibold">
+                                {zastepstwo.case}
+                              </p>
+                            </>
+                          )}
+
+                          {zastepstwo && day[number - 1]?.length > 1 && (
+                            <div className="w-full my-1"></div>
+                          )}
                         </div>
-                        {lesson?.groupName && (
-                          <p className="flex items-center mr-1">
-                            {`(${lesson?.groupName})`}
-                          </p>
-                        )}
-
-                        {lesson?.className && lesson?.classId && (
-                          <Link
-                            href={`/class/${lesson?.classId}`}
-                            className="flex items-center mr-1"
-                          >
-                            {lesson?.className}
-                          </Link>
-                        )}
-
-                        {lesson?.teacher && lesson?.teacherId && (
-                          <Link
-                            href={`/teacher/${lesson?.teacherId}`}
-                            className="flex items-center mr-1"
-                          >
-                            {lesson?.teacher}
-                          </Link>
-                        )}
-
-                        {lesson?.roomId && lesson?.room && (
-                          <Link
-                            href={`/room/${lesson?.roomId}`}
-                            className="flex items-center"
-                          >
-                            {lesson?.room}
-                          </Link>
-                        )}
-                      </div>
-                    ))}
+                      );
+                    })}
                   </td>
                 ))}
               </tr>

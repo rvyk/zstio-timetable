@@ -16,4 +16,12 @@ module.exports = withPWA({
     defaultLocale: "pl",
     localeDetection: false,
   },
+  async rewrites() {
+    return [
+      {
+        source: "/api/getSubstitutions",
+        destination: `${process.env.SUBSTITUTIONS_API || ""} `,
+      },
+    ];
+  },
 });
