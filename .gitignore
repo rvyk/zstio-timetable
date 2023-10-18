@@ -19,3 +19,5 @@ yarn.lock
 /.github/
 /.vscode/
 /.idea/
+
+public/teachers.json
