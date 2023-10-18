@@ -34,9 +34,7 @@ function Content(props) {
     async function getSubstitutions() {
       let search =
         text === "Oddziały"
-          ? "branch"
-          : text === "Nauczyciele"
-          ? "teacher"
+          ? "branch" 
           : undefined;
       if (search) {
         try {
