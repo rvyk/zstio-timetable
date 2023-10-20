@@ -1,6 +1,14 @@
+import { ExclamationCircleIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 
-function RenderLesson({number, index, lessonIndex, day, lessons, substitutions,}) {
+function RenderLesson({
+  number,
+  index,
+  lessonIndex,
+  day,
+  lessons,
+  substitutions,
+}) {
   const cases = [
     "Uczniowie przychodzą później",
     "Przeniesiona",
@@ -30,9 +38,11 @@ function RenderLesson({number, index, lessonIndex, day, lessons, substitutions,}
   return (
     <>
       {day[number - 1]?.map((lesson, subIndex) => {
-        let substitution = getSubstitution(), possibleSubstitution = substitution, sure = true;
+        let substitution = getSubstitution(),
+          possibleSubstitution = substitution,
+          sure = true;
         if (day[number - 1]?.length > 1) {
-          substitution = getSubstitutionForGroup(lesson.groupName)
+          substitution = getSubstitutionForGroup(lesson.groupName);
           if (!substitution) {
             sure = false;
           }
@@ -103,24 +113,28 @@ function RenderLesson({number, index, lessonIndex, day, lessons, substitutions,}
               )}
 
               {possibleSubstitution && !sure && (
-                <div className={"bg-[#ffdd00] w-4 h-4 flex justify-center items-center rounded-full"}>
-                  <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 64 512">
-                    <path
-                      d="M64 64c0-17.7-14.3-32-32-32S0 46.3 0 64V320c0 17.7 14.3 32 32 32s32-14.3 32-32V64zM32 480a40 40 0 1 0 0-80 40 40 0 1 0 0 80z"/>
-                  </svg>
-                </div>
+                <ExclamationCircleIcon
+                  className="w-5 h-5"
+                  color="#ff0000"
+                  data-tooltip-id="content_tooltips"
+                  data-tooltip-html={`${possibleSubstitution?.case}? <br /> (Sprawdź zastępstwa)`}
+                />
               )}
             </div>
 
             {substitution && sure && (
               <>
-                {cases.includes(substitution.case) === false && (
+                {cases.includes(substitution?.case) === false && (
                   <p className="text-orange-400 font-semibold">
-                    {substitution.subject}
+                    {substitution?.subject}
                   </p>
                 )}
-                <p className="dark:text-red-400 text-red-500 font-semibold">
-                  {substitution.case}
+                <p
+                  className="dark:text-red-400 text-red-500 font-semibold"
+                  data-tooltip-id="content_tooltips"
+                  data-tooltip-html={`${substitution?.message}`}
+                >
+                  {substitution?.case}
                 </p>
               </>
             )}

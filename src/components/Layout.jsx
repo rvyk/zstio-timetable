@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import Timetable from "./Timetable";
 import Footer from "../components/Footer";
 import Jumbotron from "../components/Jumbotron";
@@ -10,12 +10,13 @@ import DropdownClass from "./Dropdowns/ClassDropdown";
 import Head from "next/head";
 
 function Layout(props) {
-  // Destructuring does not work properly on some hosts, so it is required to do it this way.
-  let rooms = props?.rooms,
-    teachers = props?.teachers,
-    classes = props?.classes,
-    siteTitle = props?.siteTitle,
-    title = props?.timeTable?.title;
+  let {
+    rooms,
+    teachers,
+    classes,
+    siteTitle,
+    timeTable: { title },
+  } = props;
 
   useEffect(() => {
     initFlowbite();
