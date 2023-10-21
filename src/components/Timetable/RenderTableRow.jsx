@@ -1,5 +1,7 @@
+"use client";
+
 import RenderLesson from "./RenderLesson";
-import shortHours from "./../shortHours";
+import shortHours from "./../../utils/shortHours";
 
 export default function RenderTableRow({
   hours,
