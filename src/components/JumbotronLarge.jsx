@@ -8,7 +8,7 @@ import {
 } from "@heroicons/react/24/outline";
 import { UserGroupIcon } from "@heroicons/react/24/outline";
 
-function Jumbotron(props) {
+function JumbotronLarge(props) {
   let {
     text,
     status,
@@ -92,7 +92,7 @@ function Jumbotron(props) {
   );
 }
 
-export default Jumbotron;
+export default JumbotronLarge;
 
 function Item({ dropdownId, dropdownToggleId, item }) {
   return (

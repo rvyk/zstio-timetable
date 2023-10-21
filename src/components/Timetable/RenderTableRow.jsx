@@ -78,7 +78,6 @@ export default function RenderTableRow({
                     index={index}
                     lessonIndex={lessonIndex}
                     day={day}
-                    lessons={lessons}
                     substitutions={substitutions}
                   />
                 </td>

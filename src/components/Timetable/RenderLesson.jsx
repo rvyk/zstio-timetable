@@ -1,14 +1,7 @@
 import { ExclamationCircleIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 
-function RenderLesson({
-  number,
-  index,
-  lessonIndex,
-  day,
-  lessons,
-  substitutions,
-}) {
+function RenderLesson({ number, index, lessonIndex, day, substitutions }) {
   const cases = [
     "Uczniowie przychodzą później",
     "Przeniesiona",

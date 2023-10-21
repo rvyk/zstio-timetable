@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@headlessui/react": "^1.7.17",
     "@heroicons/react": "^2.0.18",
     "@wulkanowy/timetable-parser": "https://github.com/majusss/timetable-parser-js.git",
     "autoprefixer": "^10.4.16",

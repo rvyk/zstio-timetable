@@ -10,7 +10,7 @@ import RenderTableFooter from "./Timetable/RenderTableFooter";
 import RenderTableRow from "./Timetable/RenderTableRow";
 import { ArrowPathIcon } from "@heroicons/react/24/outline";
 
-function Timetable(props) {
+function TimetableLarge(props) {
   const [isShortHours, setIsShortHours] = useState(false);
   const [substitutions, setSubstitutions] = useState({});
 
@@ -178,4 +178,4 @@ function Timetable(props) {
   );
 }
 
-export default Timetable;
+export default TimetableLarge;
