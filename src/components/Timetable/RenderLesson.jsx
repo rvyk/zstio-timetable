@@ -114,8 +114,7 @@ function RenderLesson({
 
               {possibleSubstitution && !sure && (
                 <ExclamationCircleIcon
-                  className="w-5 h-5"
-                  color="#ff0000"
+                  className="w-5 h-5 text-red-600 dark:text-red-400"
                   data-tooltip-id="content_tooltips"
                   data-tooltip-html={`${possibleSubstitution?.case}? <br /> (Sprawdź zastępstwa)`}
                 />
