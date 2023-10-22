@@ -4,7 +4,7 @@ import Link from "next/link";
 
 function RenderNavbar({ isShortHours, setIsShortHours }) {
   return (
-    <div className="flex items-center w-full">
+    <div className="flex items-center w-full bg-[#F7F3F5] dark:bg-gray-900">
       <div className="ml-2 flex justify-center items-center mx-4">
         <Link href={"https://zstiojar.edu.pl"}>
           <img

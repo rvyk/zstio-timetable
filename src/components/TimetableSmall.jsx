@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState } from "react";
 import BottomBar from "./TimetableSmall/BottomBar";
 import RenderTimetable from "./TimetableSmall/RenderTimetable";
@@ -6,10 +8,7 @@ import RenderNavbar from "./TimetableSmall/RenderNavbar";
 function TimetableSmall({ handleKey, ...props }) {
   const [isShortHours, setIsShortHours] = useState(false);
   let {
-    status,
-    text,
-    timeTableID,
-    timeTable: { hours, generatedDate, title, validDate, lessons },
+    timeTable: { hours, lessons },
   } = props;
 
   return (
@@ -25,7 +24,7 @@ function TimetableSmall({ handleKey, ...props }) {
         isShortHours={isShortHours}
       />
 
-      <BottomBar handleKey={handleKey} text={text} title={title} />
+      <BottomBar handleKey={handleKey} {...props} />
     </div>
   );
 }

@@ -5,6 +5,9 @@ Data scraping & parsing via [@wulkanowy/timetable-parser-js](https://github.com/
 
 The timetable is **universal**, you just need to change the value of the `NEXT_PUBLIC_TIMETABLE_URL` in `.env` to the correct address for your school's timetable (UONET generated).
 
+The phone mode is inspired by the school's timetable
+[Zespół Szkół Elektronicznych w Rzeszowie](https://plan-lekcji.zse.rzeszow.pl)
+
 ## Tech Stack
 
 - Next.js, React, TailwindCSS, Flowbite

@@ -1,7 +1,10 @@
+"use client";
+
 import shortHours from "@/utils/shortHours";
 import { MapPinIcon, UsersIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
+import RenderLesson from "../Timetable/RenderLesson";
 
 function RenderTimetable({ hours, lessons, isShortHours }) {
   const [isScreenSmall, setIsScreenSmall] = useState(false);
@@ -36,8 +39,8 @@ function RenderTimetable({ hours, lessons, isShortHours }) {
   }, []);
   return (
     <>
-      <div className="w-full ">
-        <ul className="w-full border-b-2 border-[#321c21] dark:border-gray-900 text-sm font-medium text-center text-gray-500 divide-x divide-gray-200 shadow flex dark:divide-gray-600 dark:text-gray-400">
+      <div className="w-full">
+        <ul className="w-full text-sm font-medium text-center text-gray-500 divide-x border-b dark:border-gray-600 border-gray-200 divide-gray-200 shadow flex dark:divide-gray-600 dark:text-gray-400">
           {days.map((item, index) => (
             <li
               className={`w-full`}
@@ -59,63 +62,69 @@ function RenderTimetable({ hours, lessons, isShortHours }) {
           ))}
         </ul>
       </div>
-      <div className="min-w-full min-h-full dark:bg-gray-900 ">
+      <div className="min-w-full min-h-full dark:bg-gray-800 ">
         {Object.entries(hours).length > 1 ? (
           Object.entries(
             isShortHours ? shortHours.slice(0, maxLessons) : hours
           )?.map(([key, hour], hourIndex) => {
-            return (
-              <div
-                key={`hour-${hour.number}`}
-                className={`text-gray-600 dark:text-gray-300 border-b flex ${
-                  hourIndex % 2 === 0
-                    ? "bg-white dark:bg-gray-800"
-                    : "bg-gray-50 dark:bg-gray-700"
-                } dark:border-gray-600`}
-              >
+            if (lessons[selectedDay][hour.number - 1].length > 0) {
+              return (
                 <div
-                  className={`w-24 rounded-l py-1 flex-shrink-0 flex flex-col justify-center `}
+                  key={`hour-${hour.number}`}
+                  className={`text-gray-600 dark:text-gray-300 border-b flex bg-[#ffffff] dark:bg-gray-800 dark:border-gray-600`}
                 >
-                  <span className="block text-center font-bold mb-1">
-                    {hour.number}
-                  </span>
-                  <span className="block text-center text-sm">
-                    {hour.timeFrom} - {hour.timeTo}
-                  </span>
-                </div>
+                  <div
+                    className={`w-24 rounded-l py-1 flex-shrink-0 flex flex-col justify-center `}
+                  >
+                    <span className="block text-center font-bold mb-1">
+                      {hour.number}
+                    </span>
+                    <span className="block text-center text-sm">
+                      {hour.timeFrom} - {hour.timeTo}
+                    </span>
+                  </div>
 
-                <div className="w-full px-4 py-1">
-                  {lessons[selectedDay][hour.number - 1]?.map(
-                    (lesson, index) => {
-                      return (
-                        <div key={`lesson-${index}`} className="p-2">
-                          <div className="flex">
-                            <p className="font-semibold">{lesson?.subject}</p>
-                            <p className="ml-2">{lesson?.groupName}</p>
+                  <div className="w-full px-5 py-2 min-h-[4rem]">
+                    {lessons[selectedDay][hour.number - 1]?.map(
+                      (lesson, index) => {
+                        return (
+                          <div key={`lesson-${index}`} className="p-2">
+                            <div className="flex">
+                              <p className="font-semibold">{lesson?.subject}</p>
+                              <p className="ml-2">{lesson?.groupName}</p>
+                            </div>
+                            <div className="flex items-center">
+                              {lesson?.teacher && (
+                                <>
+                                  <UsersIcon className="h-4 w-4 mr-1" />
+                                  <Link
+                                    href={`/teacher/${lesson?.teacherId}`}
+                                    className={`flex items-center text-sm mr-3`}
+                                  >
+                                    {lesson?.teacher}
+                                  </Link>
+                                </>
+                              )}
+                              {lesson?.room && (
+                                <>
+                                  <MapPinIcon className="h-4 w-4 mr-1" />
+                                  <Link
+                                    href={`/room/${lesson?.roomId}`}
+                                    className={`flex items-center mr-1 text-sm`}
+                                  >
+                                    {lesson?.room}
+                                  </Link>
+                                </>
+                              )}
+                            </div>
                           </div>
-                          <div className="flex">
-                            <UsersIcon className="h-4 w-4" />
-                            <Link
-                              href={`/teacher/${lesson?.teacherId}`}
-                              className={`flex items-center mr-1 text-sm`}
-                            >
-                              {lesson?.teacher}
-                            </Link>
-                            <MapPinIcon className="ml-3 h-4 w-4" />
-                            <Link
-                              href={`/room/${lesson?.roomId}`}
-                              className={`flex items-center mr-1 text-sm`}
-                            >
-                              {lesson?.room}
-                            </Link>
-                          </div>
-                        </div>
-                      );
-                    }
-                  )}
+                        );
+                      }
+                    )}
+                  </div>
                 </div>
-              </div>
-            );
+              );
+            }
           })
         ) : (
           <div className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 transition-all">

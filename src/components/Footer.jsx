@@ -1,7 +1,7 @@
 import { useTheme } from "next-themes";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
-function Footer() {
+function Footer({ small }) {
   const { theme, resolvedTheme, systemTheme } = useTheme();
   const [isMounted, setIsMounted] = useState(false);
 
@@ -14,7 +14,7 @@ function Footer() {
   }
   return (
     <>
-      {resolvedTheme !== undefined && (
+      {resolvedTheme !== undefined && !small && (
         <div className="-mb-2">
           <a href="https://skillhost.pl/?pk_source=plan-lekcji" target="_blank">
             <img
@@ -29,7 +29,18 @@ function Footer() {
           </a>
         </div>
       )}
-      <footer className="rounded-lg shadow m-4 w-[90%] sm:w-auto dark:bg-gray-800 transition-all bg-[#2B161B]">
+      <footer
+        className={`rounded-lg shadow m-4 ${
+          small && "flex justify-center items-center"
+        } w-[90%] sm:w-auto lg:dark:bg-gray-800 dark:bg-[#0f1421] transition-all bg-[#2B161B]`}
+      >
+        {small && (
+          <img
+            src="/transparent_skillhost.png"
+            alt="skill-host-logo"
+            className="h-20"
+          />
+        )}
         <div className="max-w-screen mx-auto p-4 transition-all">
           <span className="text-sm text-[#ffffff] block text-center dark:text-gray-400">
             © {new Date().getFullYear()}
