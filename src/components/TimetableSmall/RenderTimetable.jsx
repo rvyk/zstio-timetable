@@ -4,7 +4,6 @@ import shortHours from "@/utils/shortHours";
 import { MapPinIcon, UsersIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
-import RenderLesson from "../Timetable/RenderLesson";
 
 function RenderTimetable({ hours, lessons, isShortHours }) {
   const [isScreenSmall, setIsScreenSmall] = useState(false);
@@ -71,7 +70,7 @@ function RenderTimetable({ hours, lessons, isShortHours }) {
               return (
                 <div
                   key={`hour-${hour.number}`}
-                  className={`text-gray-600 dark:text-gray-300 border-b flex bg-[#ffffff] dark:bg-gray-800 dark:border-gray-600`}
+                  className={`text-gray-600 dark:text-gray-300 border-b flex dark:bg-gray-800 dark:border-gray-600`}
                 >
                   <div
                     className={`w-24 rounded-l py-1 flex-shrink-0 flex flex-col justify-center `}

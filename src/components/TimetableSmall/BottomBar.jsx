@@ -12,6 +12,7 @@ import Search from "./Search";
 import { useRouter } from "next/router";
 import getLastSelect from "@/utils/lastSelect";
 import { lock, unlock } from "tua-body-scroll-lock";
+import MobileDetect from "mobile-detect";
 
 function BottomBar({ handleKey, ...props }) {
   let {
@@ -46,10 +47,17 @@ function BottomBar({ handleKey, ...props }) {
   ];
 
   useEffect(() => {
-    if (isMenuExpanded) {
-      lock();
-    } else {
-      unlock();
+    const userAgent = window?.navigator?.userAgent;
+    const sys = new MobileDetect(userAgent);
+
+    // Dropdown scrolling not working on iOS when lock();
+    // TODO: Fix on iOS without this if
+    if (sys.os() != "iOS") {
+      if (isMenuExpanded) {
+        lock();
+      } else {
+        unlock();
+      }
     }
   }, [isMenuExpanded]);
 
