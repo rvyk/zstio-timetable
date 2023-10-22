@@ -4,7 +4,6 @@ import {
   ChevronDownIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
-  MagnifyingGlassIcon,
 } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import React, { Fragment, useEffect, useState } from "react";
@@ -14,6 +13,7 @@ import {
   disableBodyScroll,
   enableBodyScroll,
 } from "body-scroll-lock";
+import Search from "./Search";
 
 function BottomBar({ handleKey, ...props }) {
   let {
@@ -104,18 +104,15 @@ function BottomBar({ handleKey, ...props }) {
         } overflow-scroll transition-all duration-300 flex flex-col justify-around h-full`}
       >
         <div>
-          <div class="relative mx-4 my-4">
-            <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-              <MagnifyingGlassIcon className="w-6 h-6" />
-            </div>
-            <input
-              class="block w-full p-3 pl-10 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 ring-0 outline-none dark:bg-[#0f1421] dark:border-gray-800 dark:placeholder-gray-400 dark:text-white"
-              placeholder="Wyszukaj klasę, nauczyciela i salę..."
-            />
-          </div>
+          <Search
+            teachers={teachers}
+            classes={classes}
+            rooms={rooms}
+            setIsMenuExpanded={setIsMenuExpanded}
+          />
 
           <div className="mx-4 transition-all">
-            {dropdowns.map((dropdown) => (
+            {dropdowns?.map((dropdown) => (
               <Menu
                 key={`dropdown-${dropdown.title}`}
                 as="div"
