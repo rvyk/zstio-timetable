@@ -14,6 +14,8 @@ import {
   enableBodyScroll,
 } from "body-scroll-lock";
 import Search from "./Search";
+import { useRouter } from "next/router";
+import getLastSelect from "@/utils/lastSelect";
 
 function BottomBar({ handleKey, ...props }) {
   let {
@@ -26,6 +28,21 @@ function BottomBar({ handleKey, ...props }) {
   } = props;
 
   const [isMenuExpanded, setIsMenuExpanded] = useState(false);
+  const [lastSelect, setLastSelect] = useState("");
+  const router = useRouter();
+  const currentUrl = router.asPath;
+
+  useEffect(() => {
+    const lastSelect = getLastSelect(currentUrl);
+    setLastSelect(lastSelect);
+  }, [currentUrl]);
+
+  const handleSelect = (name, value) => {
+    const link = `/${name}/${value}`;
+    setLastSelect(link);
+    localStorage.setItem("LastSelect", link);
+  };
+
   const dropdowns = [
     { data: classes, link: "class", title: "Oddziały" },
     { data: teachers, link: "teacher", title: "Nauczyciele" },
@@ -109,6 +126,7 @@ function BottomBar({ handleKey, ...props }) {
             classes={classes}
             rooms={rooms}
             setIsMenuExpanded={setIsMenuExpanded}
+            handleSelect={handleSelect}
           />
 
           <div className="mx-4 transition-all">
@@ -141,7 +159,7 @@ function BottomBar({ handleKey, ...props }) {
                       leaveFrom="transform opacity-100 scale-100"
                       leaveTo="transform opacity-0 scale-95"
                     >
-                      <Menu.Items className="absolute max-h-[35%] mt-3 overflow-y-scroll mx-4 right-0 left-0 origin-top-right divide-y divide-gray-100 dark:divide-gray-600 rounded-md bg-gray-50 dark:bg-[#0f1421] shadow-lg ring-0 focus:outline-none">
+                      <Menu.Items className="absolute max-h-[35%] mt-3 overflow-y-scroll mx-4 right-0 left-0 origin-top-right divide-y divide-gray-100 dark:divide-gray-800 rounded-md bg-gray-50 dark:bg-[#0f1421] shadow-lg ring-0 focus:outline-none">
                         {dropdown.data.map((item) => (
                           <div className="px-2 py-2" key={item.name}>
                             <Menu.Item as={Fragment}>
@@ -150,8 +168,13 @@ function BottomBar({ handleKey, ...props }) {
                                   href={`/${dropdown.link}/${item.value}`}
                                   onClick={() => {
                                     setIsMenuExpanded(false);
+                                    handleSelect(dropdown.link, item.value);
                                   }}
                                   className={`${
+                                    lastSelect ===
+                                      `/${dropdown.link}/${item.value}` &&
+                                    "bg-gray-200 dark:bg-[#090d13]"
+                                  } ${
                                     active
                                       ? "dark:bg-[#0e131d] dark:text-white text-black bg-gray-100 font-semibold"
                                       : "text-gray-900 dark:text-white font-semibold"

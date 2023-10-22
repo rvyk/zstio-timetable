@@ -62,7 +62,7 @@ function RenderTimetable({ hours, lessons, isShortHours }) {
           ))}
         </ul>
       </div>
-      <div className="min-w-full min-h-full dark:bg-gray-800 ">
+      <div className="min-w-full min-h-full dark:bg-gray-800">
         {Object.entries(hours).length > 1 ? (
           Object.entries(
             isShortHours ? shortHours.slice(0, maxLessons) : hours

@@ -3,7 +3,7 @@ import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import React, { Fragment, useState } from "react";
 
-function Search({ teachers, rooms, classes, setIsMenuExpanded }) {
+function Search({ teachers, rooms, classes, setIsMenuExpanded, handleSelect }) {
   const [searchResults, setSearchResults] = useState([]);
   const [query, setQuery] = useState("");
   const [showList, setShowList] = useState(false);
@@ -78,6 +78,7 @@ function Search({ teachers, rooms, classes, setIsMenuExpanded }) {
                       href={`/${item.type}/${item.value}`}
                       onClick={() => {
                         setIsMenuExpanded(false);
+                        handleSelect(item.type, item.value);
                       }}
                       className={`${
                         active
