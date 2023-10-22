@@ -8,14 +8,10 @@ import {
 import Link from "next/link";
 import React, { Fragment, useEffect, useState } from "react";
 import Footer from "../Footer";
-import {
-  clearAllBodyScrollLocks,
-  disableBodyScroll,
-  enableBodyScroll,
-} from "body-scroll-lock";
 import Search from "./Search";
 import { useRouter } from "next/router";
 import getLastSelect from "@/utils/lastSelect";
+import { lock, unlock } from "tua-body-scroll-lock";
 
 function BottomBar({ handleKey, ...props }) {
   let {
@@ -50,19 +46,11 @@ function BottomBar({ handleKey, ...props }) {
   ];
 
   useEffect(() => {
-    const targetElement = document.querySelector("#bottomBar");
-    if (isMenuExpanded && targetElement) {
-      disableBodyScroll(targetElement);
-      document.body.style.width = "100%";
-      document.getElementsByTagName("html")[0].style.height = "100vh";
-    } else if (targetElement) {
-      enableBodyScroll(targetElement);
-      document.body.style.width = "";
-      document.getElementsByTagName("html")[0].style.height = "";
+    if (isMenuExpanded) {
+      lock();
+    } else {
+      unlock();
     }
-    return function cleanup() {
-      if (targetElement) clearAllBodyScrollLocks();
-    };
   }, [isMenuExpanded]);
 
   return (

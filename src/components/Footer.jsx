@@ -35,11 +35,17 @@ function Footer({ small }) {
         } w-[90%] sm:w-auto lg:dark:bg-gray-800 dark:bg-[#0f1421] transition-all bg-[#2B161B]`}
       >
         {small && (
-          <img
-            src="/transparent_skillhost.png"
-            alt="skill-host-logo"
-            className="h-20"
-          />
+          <a
+            href="https://skillhost.pl/?pk_source=plan-lekcji"
+            target="_blank"
+            className="h-20 w-28 ml-2 -mr-4"
+          >
+            <img
+              src="/transparent_skillhost.png"
+              alt="skill-host-logo"
+              className="h-20 w-20 object-contain"
+            />
+          </a>
         )}
         <div className="max-w-screen mx-auto p-4 transition-all">
           <span className="text-sm text-[#ffffff] block text-center dark:text-gray-400">
