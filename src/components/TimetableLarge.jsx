@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import Link from "next/link";
 import TableLoading from "./TableLoading";
-import { Tooltip } from "react-tooltip";
+import {Tooltip} from "react-tooltip";
 import axios from "axios";
 import RenderTableHeader from "./Timetable/RenderTableHeader";
 import RenderTableFooter from "./Timetable/RenderTableFooter";
@@ -43,9 +43,9 @@ function TimetableLarge(props) {
         text === "Oddziały"
           ? "branch"
           : text === "Nauczyciele"
-          ? "teacher"
-          : undefined;
-      const query = search === "teacher" ? getTeacher(title) : title;
+            ? "teacher"
+            : undefined;
+      const query = search === "teacher" ? getTeacher(title) : (title.includes(" ") ? title.split(" ")[0] : title);
 
       if (search && query) {
         try {
@@ -86,7 +86,8 @@ function TimetableLarge(props) {
           className="relative overflow-x-auto shadow-md md:rounded-xl w-[90%] transition-all duration-100"
         >
           <table className="w-full text-sm text-left transition-all duration-200 text-gray-500 dark:text-gray-400">
-            <caption className="p-5 transition-all text-lg font-semibold text-left text-gray-900 bg-white dark:text-white dark:bg-gray-800">
+            <caption
+              className="p-5 transition-all text-lg font-semibold text-left text-gray-900 bg-white dark:text-white dark:bg-gray-800">
               {!status ? (
                 <p className="transition-all text-lg font-normal text-gray-500 lg:text-xl mr-1 dark:text-gray-400">
                   Nie znaleziono pasującego planu lekcji
@@ -132,7 +133,8 @@ function TimetableLarge(props) {
                           {"30'"}
                         </button>
                       </div>
-                      <p className="transition-all text-lg font-normal text-gray-500 lg:text-xl mr-1 dark:text-gray-400">
+                      <p
+                        className="transition-all text-lg font-normal text-gray-500 lg:text-xl mr-1 dark:text-gray-400">
                         {text} /
                       </p>
                       <p className="transition-all text-lg font-bold text-gray-500 lg:text-xl dark:text-gray-400">
@@ -151,7 +153,7 @@ function TimetableLarge(props) {
               )}
             </caption>
 
-            <RenderTableHeader />
+            <RenderTableHeader/>
             <RenderTableRow
               hours={hours}
               isShortHours={isShortHours}
@@ -168,7 +170,7 @@ function TimetableLarge(props) {
           </table>
         </div>
       ) : (
-        <TableLoading />
+        <TableLoading/>
       )}
       <Tooltip
         id="content_tooltips"
