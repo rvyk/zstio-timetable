@@ -66,7 +66,7 @@ function BottomBar({ handleKey, ...props }) {
       id="bottomBar"
       className={`!fixed bottom-0 transition-all ${
         isMenuExpanded ? "h-full overflow-auto" : "h-[4.25rem]"
-      } left-0 w-full flex flex-col bg-[#321c21] dark:bg-gray-900 duration-700 z-50`}
+      } left-0 w-full flex flex-col bg-[#321c21] dark:bg-[#3b3b3b] duration-700 z-50`}
     >
       <div
         className={`h-24 relative mt-1.5 w-full flex justify-center items-center transition-all`}
@@ -75,21 +75,21 @@ function BottomBar({ handleKey, ...props }) {
           onClick={() => {
             handleKey("ArrowLeft");
           }}
-          className="h-14 w-14 cursor-pointer group dark:bg-[#0f1421] dark:hover:bg-[#0e131d] bg-[#27161a] hover:bg-[#1f1115] rounded-xl flex justify-center items-center ml-2 mr-3 transition-all duration-300"
+          className="h-14 w-14 cursor-pointer group dark:bg-[#202020] dark:hover:bg-[#171717] bg-[#27161a] hover:bg-[#1f1115] rounded-xl flex justify-center items-center ml-2 mr-3 transition-all duration-300"
         >
           <ChevronLeftIcon className="h-8 w-8 text-white group-hover:opacity-100 opacity-60 transition-all" />
         </div>
         <div
-          className="flex w-[70%] dark:bg-[#0f1421] dark:hover:bg-[#0e131d] bg-[#27161a] hover:bg-[#27161a] rounded-xl transition-all duration-300 cursor-pointer h-14 items-center whitespace-nowrap"
+          className="flex w-[70%] dark:bg-[#202020] dark:hover:bg-[#171717] bg-[#27161a] hover:bg-[#27161a] rounded-xl transition-all duration-300 cursor-pointer h-14 items-center whitespace-nowrap"
           onClick={() => {
             setIsMenuExpanded(!isMenuExpanded);
           }}
         >
           <div className="w-[calc(100%-3rem)] left flex">
-            <p className="transition-all text-xl font-normal text-gray-100 ml-3 mr-1 dark:text-gray-400">
+            <p className="transition-all text-xl font-normal text-gray-100 ml-3 mr-1 dark:text-gray-300">
               {text} /
             </p>
-            <p className="transition-all text-xl font-bold text-gray-100 dark:text-gray-400 overflow-hidden text-ellipsis">
+            <p className="transition-all text-xl font-bold text-gray-100 dark:text-gray-300 overflow-hidden text-ellipsis">
               {title}
             </p>
           </div>
@@ -105,7 +105,7 @@ function BottomBar({ handleKey, ...props }) {
           onClick={() => {
             handleKey("ArrowRight");
           }}
-          className="h-14 cursor-pointer w-14 group dark:bg-[#0f1421] dark:hover:bg-[#0e131d] bg-[#27161a] hover:bg-[#1f1115] rounded-xl flex justify-center items-center ml-3 mr-2 transition-all duration-300"
+          className="h-14 cursor-pointer w-14 group dark:bg-[#202020] dark:hover:bg-[#171717] bg-[#27161a] hover:bg-[#1f1115] rounded-xl flex justify-center items-center ml-3 mr-2 transition-all duration-300"
         >
           <ChevronRightIcon className="h-8 w-8 text-white group-hover:opacity-100 opacity-60 transition-all" />
         </div>
@@ -135,7 +135,7 @@ function BottomBar({ handleKey, ...props }) {
                 {({ open }) => (
                   <>
                     <div>
-                      <Menu.Button className="inline-flex w-full justify-center rounded-md bg-black bg-opacity-20 py-4 text-lg font-medium text-white hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
+                      <Menu.Button className="inline-flex w-full justify-center dark:text-gray-300 rounded-md bg-[#202020] py-4 text-lg font-medium text-white hover:bg-[#171717] transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
                         {dropdown.title}
 
                         <ChevronDownIcon
@@ -155,7 +155,7 @@ function BottomBar({ handleKey, ...props }) {
                       leaveFrom="transform opacity-100 scale-100"
                       leaveTo="transform opacity-0 scale-95"
                     >
-                      <Menu.Items className="absolute max-h-[35%] mt-3 overflow-y-scroll mx-4 right-0 left-0 origin-top-right divide-y divide-gray-100 dark:divide-gray-800 rounded-md bg-gray-50 dark:bg-[#0f1421] shadow-lg ring-0 focus:outline-none">
+                      <Menu.Items className="absolute max-h-[35%] mt-3 overflow-y-scroll mx-4 right-0 left-0 origin-top-right divide-y divide-gray-100 dark:divide-[#323232] rounded-md bg-gray-50 dark:bg-[#202020] shadow-lg ring-0 focus:outline-none">
                         {dropdown.data.map((item) => (
                           <div className="px-2 py-2" key={item.name}>
                             <Menu.Item as={Fragment}>
@@ -169,11 +169,11 @@ function BottomBar({ handleKey, ...props }) {
                                   className={`${
                                     lastSelect ===
                                       `/${dropdown.link}/${item.value}` &&
-                                    "bg-gray-200 dark:bg-[#090d13]"
+                                    "bg-gray-200 dark:bg-[#171717]"
                                   } ${
                                     active
-                                      ? "dark:bg-[#0e131d] dark:text-white text-black bg-gray-100 font-semibold"
-                                      : "text-gray-900 dark:text-white font-semibold"
+                                      ? "dark:bg-[#171717] dark:text-gray-300 text-black bg-gray-100 font-semibold"
+                                      : "text-gray-900 dark:text-gray-300 font-semibold"
                                   } group flex w-full items-center rounded-md px-2 py-2 transition-all text-sm duration-300`}
                                 >
                                   {item.name}
@@ -188,7 +188,7 @@ function BottomBar({ handleKey, ...props }) {
                 )}
               </Menu>
             ))}
-            <div className="flex justify-center items-center w-full flex-col text-gray-50 text-center">
+            <div className="flex justify-center items-center w-full flex-col text-gray-50 dark:text-gray-300 text-center">
               {generatedDate && (
                 <p>
                   Wygenerowano:{" "}

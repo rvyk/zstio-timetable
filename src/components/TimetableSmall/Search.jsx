@@ -39,7 +39,7 @@ function Search({ teachers, rooms, classes, setIsMenuExpanded, handleSelect }) {
           <MagnifyingGlassIcon className="w-6 h-6" />
         </div>
         <input
-          className="block w-full p-3 pl-10 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 ring-0 outline-none dark:bg-[#0f1421] dark:border-gray-800 dark:placeholder-gray-400 dark:text-white"
+          className="block w-full p-3 pl-10 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 ring-0 outline-none dark:bg-[#202020] dark:border-none dark:placeholder-gray-300 dark:text-gray-300"
           placeholder="Wyszukaj klasę, nauczyciela i salę..."
           value={query}
           onChange={(e) => {
@@ -69,7 +69,7 @@ function Search({ teachers, rooms, classes, setIsMenuExpanded, handleSelect }) {
           leaveFrom="transform opacity-100 scale-100"
           leaveTo="transform opacity-0 scale-95"
         >
-          <Menu.Items className="absolute max-h-[35%] overflow-y-scroll mx-4 right-0 left-0 origin-top-right divide-y divide-gray-100 dark:divide-gray-600 rounded-md bg-gray-50 dark:bg-[#0f1421] shadow-lg ring-0 focus:outline-none">
+          <Menu.Items className="absolute max-h-[35%] overflow-y-scroll mx-4 right-0 left-0 origin-top-right divide-y divide-gray-100 dark:divide-[#323232] rounded-md bg-gray-50 dark:bg-[#202020] shadow-lg ring-0 focus:outline-none">
             {searchResults?.map((item) => (
               <div className="px-2 py-2" key={item.name}>
                 <Menu.Item as={Fragment}>
@@ -82,8 +82,8 @@ function Search({ teachers, rooms, classes, setIsMenuExpanded, handleSelect }) {
                       }}
                       className={`${
                         active
-                          ? "dark:bg-[#0e131d] dark:text-white text-black bg-gray-100 font-semibold"
-                          : "text-gray-900 dark:text-white font-semibold"
+                          ? "dark:bg-[#171717] dark:text-gray-300 text-black bg-gray-100 font-semibold"
+                          : "text-gray-900 dark:text-gray-300 font-semibold"
                       } group flex w-full items-center rounded-md px-2 py-2 transition-all text-sm duration-300`}
                     >
                       {item.name}

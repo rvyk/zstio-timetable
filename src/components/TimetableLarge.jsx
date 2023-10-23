@@ -1,14 +1,14 @@
 "use client";
 
-import React, {useEffect, useState} from "react";
-import Link from "next/link";
+import React, { useEffect, useState } from "react";
 import TableLoading from "./TableLoading";
-import {Tooltip} from "react-tooltip";
+import { Tooltip } from "react-tooltip";
 import axios from "axios";
 import RenderTableHeader from "./Timetable/RenderTableHeader";
 import RenderTableFooter from "./Timetable/RenderTableFooter";
 import RenderTableRow from "./Timetable/RenderTableRow";
 import { ArrowPathIcon } from "@heroicons/react/24/outline";
+import ShortHours from "./Table/ShortHours";
 
 function TimetableLarge(props) {
   const [isShortHours, setIsShortHours] = useState(false);
@@ -43,9 +43,14 @@ function TimetableLarge(props) {
         text === "Oddziały"
           ? "branch"
           : text === "Nauczyciele"
-            ? "teacher"
-            : undefined;
-      const query = search === "teacher" ? getTeacher(title) : (title.includes(" ") ? title.split(" ")[0] : title);
+          ? "teacher"
+          : undefined;
+      const query =
+        search === "teacher"
+          ? getTeacher(title)
+          : title.includes(" ")
+          ? title.split(" ")[0]
+          : title;
 
       if (search && query) {
         try {
@@ -85,9 +90,8 @@ function TimetableLarge(props) {
           id="timetable"
           className="relative overflow-x-auto shadow-md md:rounded-xl w-[90%] transition-all duration-100"
         >
-          <table className="w-full text-sm text-left transition-all duration-200 text-gray-500 dark:text-gray-400">
-            <caption
-              className="p-5 transition-all text-lg font-semibold text-left text-gray-900 bg-white dark:text-white dark:bg-gray-800">
+          <table className="w-full text-sm text-left transition-all duration-200 text-gray-500 dark:text-gray-300">
+            <caption className="p-5 transition-all text-lg font-semibold text-left text-gray-900 bg-white dark:text-gray-300 dark:bg-[#171717]">
               {!status ? (
                 <p className="transition-all text-lg font-normal text-gray-500 lg:text-xl mr-1 dark:text-gray-400">
                   Nie znaleziono pasującego planu lekcji
@@ -100,44 +104,15 @@ function TimetableLarge(props) {
                         className="inline-flex rounded-md shadow-sm mr-2"
                         role="group"
                       >
-                        <button
-                          type="button"
-                          data-tooltip-id="content_tooltips"
-                          data-tooltip-content="Normalne lekcje - 45 minut"
-                          onClick={() => {
-                            setIsShortHours(false);
-                            localStorage.setItem("shortHours", false);
-                          }}
-                          className={` ${
-                            isShortHours
-                              ? "bg-white dark:bg-gray-700 dark:hover:bg-gray-600 hover:bg-gray-200"
-                              : "bg-[#73110e] hover:bg-[#480e0c] dark:hover:bg-gray-950 dark:bg-gray-900 text-white hover:text-gray-200 focus:text-gray-200"
-                          } transition-all duration-200 px-4 py-2 text-sm font-medium text-gray-900 border border-gray-200 rounded-l-lg focus:z-10 focus:ring-0 dark:border-gray-600 dark:text-white dark:hover:text-white dark:focus:ring-blue-500 dark:focus:text-white`}
-                        >
-                          {"45'"}
-                        </button>
-                        <button
-                          type="button"
-                          data-tooltip-id="content_tooltips"
-                          data-tooltip-content="Skrócone lekcje - 30 minut"
-                          onClick={() => {
-                            setIsShortHours(true);
-                            localStorage.setItem("shortHours", true);
-                          }}
-                          className={` ${
-                            isShortHours
-                              ? "bg-[#73110e] hover:bg-[#480e0c] dark:hover:bg-gray-950 dark:bg-gray-900 text-white hover:text-gray-200 focus:text-gray-200"
-                              : "bg-white dark:bg-gray-700 dark:hover:bg-gray-600 hover:bg-gray-200"
-                          } transition-all duration-200 px-4 py-2 text-sm font-medium text-gray-900 border border-gray-200 rounded-r-lg focus:z-10 focus:ring-0 dark:border-gray-600 dark:text-white dark:hover:text-white dark:focus:ring-blue-500 dark:focus:text-white`}
-                        >
-                          {"30'"}
-                        </button>
+                        <ShortHours
+                          setIsShortHours={setIsShortHours}
+                          isShortHours={isShortHours}
+                        />
                       </div>
-                      <p
-                        className="transition-all text-lg font-normal text-gray-500 lg:text-xl mr-1 dark:text-gray-400">
+                      <p className="transition-all text-lg font-normal text-gray-500 lg:text-xl mr-1 dark:text-gray-300">
                         {text} /
                       </p>
-                      <p className="transition-all text-lg font-bold text-gray-500 lg:text-xl dark:text-gray-400">
+                      <p className="transition-all text-lg font-bold text-gray-500 lg:text-xl dark:text-gray-300">
                         {title}
                       </p>
                     </div>
@@ -146,14 +121,14 @@ function TimetableLarge(props) {
                       role="status"
                       className="transition-all lg:text-xl w-full flex items-center"
                     >
-                      <ArrowPathIcon className="w-7 h-7 text-gray-200 animate-spin dark:text-gray-600 fill-[#2B161B] dark:fill-blue-800" />
+                      <ArrowPathIcon className="w-7 h-7 text-gray-200 animate-spin dark:text-gray-300 fill-[#2B161B] dark:fill-[#171717]" />
                     </div>
                   )}
                 </>
               )}
             </caption>
 
-            <RenderTableHeader/>
+            <RenderTableHeader />
             <RenderTableRow
               hours={hours}
               isShortHours={isShortHours}
@@ -170,11 +145,11 @@ function TimetableLarge(props) {
           </table>
         </div>
       ) : (
-        <TableLoading/>
+        <TableLoading />
       )}
       <Tooltip
         id="content_tooltips"
-        className="!bg-[#2B161B] dark:!text-gray-200 dark:!bg-gray-800 text-center"
+        className="!bg-[#2B161B] dark:!text-gray-300 dark:!bg-[#161616] text-center"
       />
     </>
   );

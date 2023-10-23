@@ -60,7 +60,7 @@ function Navbar() {
           />
           <Tooltip
             id="navbar_tooltips"
-            className="!bg-[#2B161B] dark:!text-gray-200 dark:!bg-gray-800"
+            className="!bg-[#2B161B] dark:!text-gray-300 dark:!bg-[#161616] text-center"
           />
         </div>
       )}

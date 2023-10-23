@@ -37,7 +37,7 @@ function Layout({ handleKey, ...props }) {
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
-      <div className="min-h-screen w-screen flex flex-col lg:justify-center lg:items-center lg:bg-[#F7F3F5] bg-[#fff] lg:dark:bg-gray-900 dark:bg-gray-800 transition-all">
+      <div className="min-h-screen w-screen flex flex-col lg:justify-center lg:items-center lg:bg-[#F7F3F5] bg-[#fff] dark:bg-[#202020] transition-all">
         <div className="flex justify-center lg:hidden w-full ">
           <TimetableSmall {...props} handleKey={handleKey} />
         </div>

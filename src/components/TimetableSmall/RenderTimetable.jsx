@@ -39,7 +39,7 @@ function RenderTimetable({ hours, lessons, isShortHours }) {
   return (
     <>
       <div className="w-full">
-        <ul className="w-full text-sm font-medium text-center text-gray-500 divide-x border-b dark:border-gray-600 border-gray-200 divide-gray-200 shadow flex dark:divide-gray-600 dark:text-gray-400">
+        <ul className="w-full text-sm font-medium text-center text-gray-500 divide-x dark:divide-[#2b2b2b] border dark:border-[#2b2b2b] border-gray-200 divide-gray-200 shadow flex dark:text-gray-400">
           {days.map((item, index) => (
             <li
               className={`w-full`}
@@ -51,9 +51,9 @@ function RenderTimetable({ hours, lessons, isShortHours }) {
               <p
                 className={`${
                   item.index == selectedDay
-                    ? "!bg-[#321c21] dark:!bg-gray-900 !text-white"
-                    : "hover:bg-gray-100 dark:hover:bg-gray-800"
-                } transition-all inline-block cursor-pointer w-full p-4 text-gray-900 bg-white focus:ring-transparent focus:outline-none dark:bg-gray-700 dark:text-white`}
+                    ? "!bg-[#321c21] dark:!bg-[#2b2b2b] !text-white"
+                    : "hover:bg-gray-100 dark:hover:bg-[#202020]"
+                } transition-all inline-block cursor-pointer w-full p-4 dark:border-[#2b2b2b] text-gray-900 bg-white focus:ring-transparent focus:outline-none dark:bg-[#3b3b3b] dark:text-white`}
               >
                 {isScreenSmall ? item.short : item.long}
               </p>
@@ -61,7 +61,7 @@ function RenderTimetable({ hours, lessons, isShortHours }) {
           ))}
         </ul>
       </div>
-      <div className="min-w-full min-h-full dark:bg-gray-800">
+      <div className="min-w-full min-h-full dark:bg-[#202020]">
         {Object.entries(hours).length > 1 ? (
           Object.entries(
             isShortHours ? shortHours.slice(0, maxLessons) : hours
@@ -70,7 +70,7 @@ function RenderTimetable({ hours, lessons, isShortHours }) {
               return (
                 <div
                   key={`hour-${hour.number}`}
-                  className={`text-gray-600 dark:text-gray-300 border-b flex dark:bg-gray-800 dark:border-gray-600`}
+                  className={`text-gray-600 dark:text-gray-300 border-b flex dark:bg-[#2b2b2b] dark:border-[#323232]`}
                 >
                   <div
                     className={`w-24 rounded-l py-1 flex-shrink-0 flex flex-col justify-center `}

@@ -2,7 +2,7 @@ export default function RenderTableHeader({ day }) {
   const daysOfWeek = ["Poniedziałek", "Wtorek", "Środa", "Czwartek", "Piątek"];
 
   return (
-    <thead className="text-xs transition-all duration-200 text-[#ffffff] bg-[#2B161B] uppercase dark:bg-gray-700 dark:text-gray-400">
+    <thead className="text-xs transition-all duration-200 text-[#ffffff] bg-[#2B161B] uppercase dark:bg-[#151515] dark:text-gray-300">
       <tr>
         <th scope="col" className="px-6 py-3">
           <div className="flex items-center justify-center">Lekcja</div>
