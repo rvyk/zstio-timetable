@@ -1,3 +1,4 @@
+import fetchTimetable from "@/utils/fetchTimetable";
 import { Table } from "@wulkanowy/timetable-parser";
 import NodeCache from "node-cache";
 
@@ -16,22 +17,19 @@ export default async function handler(req, res) {
       return res.status(200).send(cachedData);
     }
 
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_TIMETABLE_URL}/plany/${id}.html`
-    );
-    const data = await response.text();
+    const { data, ok, err } = await fetchTimetable(id);
 
-    if (response.status !== 200) {
-      switch (response.status) {
+    if (!ok) {
+      switch (err.response.status) {
         case 404:
           return res.status(404).send({
             success: false,
-            msg: `Nie znaleziono danych o id ${id}`,
+            msg: `No data found with id (${id})`,
           });
         default:
           return res.status(500).send({
             success: false,
-            msg: "ZSTiO Elektronika returned status other than 200",
+            msg: `Timetable returned status other than 200 (${err.response.status})`,
           });
       }
     }

@@ -1,7 +1,10 @@
 import { useEffect } from "react";
 import { useRouter } from "next/router";
 import Layout from "../components/Layout";
-import axios from "axios";
+import fetchTimetableList from "@/utils/fetchTimetableList";
+import { Table, TimetableList } from "@wulkanowy/timetable-parser";
+import fetchTimetable from "@/utils/fetchTimetable";
+import removeUndefined from "@/utils/removeUndefined";
 
 const MainRoute = (props) => {
   const router = useRouter();
@@ -40,7 +43,23 @@ const MainRoute = (props) => {
   return <Layout {...props} />;
 };
 
-export async function getServerSideProps(context) {
+export async function getStaticPaths() {
+  const list = await fetchTimetableList();
+  const tableList = new TimetableList(list.data);
+  const { classes, teachers, rooms } = tableList.getList();
+  const classesPaths = classes?.map((classItem) => `/class/${classItem.value}`);
+  const teachersPaths = teachers?.map(
+    (teacherItem) => `/teacher/${teacherItem.value}`
+  );
+  const roomsPaths = rooms?.map((roomItem) => `/room/${roomItem.value}`);
+
+  return {
+    paths: [...classesPaths, ...teachersPaths, ...roomsPaths],
+    fallback: "blocking",
+  };
+}
+
+export async function getStaticProps(context) {
   const { params } = context;
   const param0 = params?.all[0];
   const param1 = params?.all[1];
@@ -63,44 +82,33 @@ export async function getServerSideProps(context) {
       break;
   }
 
-  const host = context.req.headers.host;
-  const protocol = host === "localhost:3000" ? "http" : "https";
+  const timetableList = await fetchTimetable(id);
+  const timetableListData = new Table(timetableList.data);
 
-  const validateStatus = (status) => status === 200 || status === 404;
+  const timeTable = {
+    lessons: timetableListData.getDays(),
+    hours: timetableListData.getHours(),
+    generatedDate: timetableListData.getGeneratedDate(),
+    title: timetableListData.getTitle(),
+    validDate: timetableListData.getVersionInfo(),
+  };
 
-  const timeTableReq = await axios.get(
-    `${protocol}://${host}/api/timetable/getTimetable?id=${id}`,
-    {
-      validateStatus,
-    }
-  );
-
-  const listReq = await axios.get(`${protocol}://${host}/api/timetable/list`, {
-    validateStatus,
-  });
-
-  const isStatusOK = listReq.status === 200 && timeTableReq.status === 200;
-  const { classes, teachers, rooms } = listReq.data;
-
-  if (isStatusOK) {
-    return {
-      props: {
-        status: true,
-        timeTable: timeTableReq.data,
-        classes,
-        teachers,
-        rooms,
-        timeTableID: id,
-        siteTitle: timeTableReq.data.title,
-        text,
-      },
-    };
-  }
+  const list = await fetchTimetableList();
+  const tableList = new TimetableList(list.data);
+  const { classes, teachers, rooms } = tableList.getList();
 
   return {
     props: {
-      status: false,
+      status: timetableList.ok,
+      timeTable: removeUndefined(timeTable),
+      classes,
+      teachers,
+      rooms,
+      timeTableID: id,
+      siteTitle: timeTable.title,
+      text,
     },
+    revalidate: 3600,
   };
 }
 
