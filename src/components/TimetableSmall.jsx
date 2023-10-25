@@ -22,6 +22,7 @@ function TimetableSmall({ handleKey, ...props }) {
         hours={hours}
         lessons={lessons}
         isShortHours={isShortHours}
+        suppressHydrationWarning
       />
 
       <BottomBar handleKey={handleKey} {...props} />

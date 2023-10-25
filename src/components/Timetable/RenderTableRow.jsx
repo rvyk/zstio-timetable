@@ -2,6 +2,7 @@
 
 import RenderLesson from "./RenderLesson";
 import shortHours from "./../../utils/shortHours";
+import { getCurrentLesson } from "@/utils/currentLesson";
 
 export default function RenderTableRow({
   hours,
@@ -9,8 +10,6 @@ export default function RenderTableRow({
   lessons,
   substitutions,
 }) {
-  const currentHour = new Date().getHours();
-  const currentMinutes = new Date().getMinutes();
   const maxLessons =
     typeof hours == "object" &&
     Math.max(Object.entries(hours).length, ...lessons.map((day) => day.length));
@@ -19,36 +18,20 @@ export default function RenderTableRow({
       {Object.entries(hours).length > 1 ? (
         Object.entries(
           isShortHours ? shortHours.slice(0, maxLessons) : hours
-        )?.map(([key, item], index) => {
-          const { number, timeFrom, timeTo } = item;
-          const [fromHour, fromMinutes] = timeFrom.split(":");
-          const [toHour, toMinutes] = timeTo.split(":");
-          const isAfterFromTime =
-            currentHour > Number(fromHour) ||
-            (currentHour === Number(fromHour) &&
-              currentMinutes >= Number(fromMinutes));
-          const isBeforeToTime =
-            currentHour < Number(toHour) ||
-            (currentHour === Number(toHour) &&
-              currentMinutes < Number(toMinutes));
-          const isWithinTimeRange = isAfterFromTime && isBeforeToTime;
+        )?.map(([key, hour], index) => {
+          const { number, timeFrom, timeTo } = hour;
+          let { isWithinTimeRange, minutesRemaining } = getCurrentLesson(
+            timeFrom,
+            timeTo
+          );
 
-          let minutesRemaining = 0;
-          if (isWithinTimeRange) {
-            const endTime = new Date();
-            endTime.setHours(Number(toHour), Number(toMinutes), 0);
-            const timeDifference = endTime - new Date();
-            minutesRemaining = Math.ceil(
-              (timeDifference % (1000 * 60 * 60)) / (1000 * 60)
-            );
-          }
           return (
             <tr
               className={`text-gray-600 dark:text-gray-300 border-b ${
                 index % 2 === 0
                   ? "bg-white dark:bg-[#191919]"
                   : "bg-gray-50 dark:bg-[#202020]"
-              } dark:border-[#181818]`}
+              } dark:border-[#181818] `}
               key={index}
             >
               <td
@@ -57,7 +40,7 @@ export default function RenderTableRow({
                 <div className="flex justify-center items-center flex-col">
                   {number}
                   {isWithinTimeRange && minutesRemaining > 0 && (
-                    <div className="bg-blue-100 mt-1 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">
+                    <div className="bg-blue-100 mt-1 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-red-100 dark:text-red-800 border border-blue-400 dark:border-red-400">
                       <p>{minutesRemaining == 1 ? "ZOSTAŁA" : "ZOSTAŁO"}</p>
                       <p>{`${minutesRemaining} MIN`}</p>
                     </div>
@@ -70,7 +53,7 @@ export default function RenderTableRow({
 
               {lessons?.map((day, lessonIndex) => (
                 <td
-                  className="px-6 py-4 whitespace-nowrap border-r last:border-none dark:border-[#171717]"
+                  className={`px-6 py-4 whitespace-nowrap border-r last:border-none dark:border-[#171717]`}
                   key={`${day}-${lessonIndex}`}
                 >
                   <RenderLesson
