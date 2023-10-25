@@ -40,7 +40,6 @@ function RenderLesson({ number, index, lessonIndex, day, substitutions }) {
           if (!substitution) {
             sure = false;
             day[number - 1]?.map((lessonCheck, checkIndex) => {
-              console.log(subIndex, lesson, checkIndex, lessonCheck);
               if (
                 getSubstitutionForGroup(lessonCheck?.groupName) &&
                 checkIndex !== subIndex
