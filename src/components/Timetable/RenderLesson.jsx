@@ -1,5 +1,6 @@
 import { ExclamationCircleIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
+import { useState } from "react";
 
 function RenderLesson({ number, index, lessonIndex, day, substitutions }) {
   const cases = [
@@ -34,10 +35,20 @@ function RenderLesson({ number, index, lessonIndex, day, substitutions }) {
         let substitution = getSubstitution(),
           possibleSubstitution = substitution,
           sure = true;
-        if (day[number - 1]?.length > 1) {
+        if (substitution && day[number - 1]?.length > 1) {
           substitution = getSubstitutionForGroup(lesson.groupName);
           if (!substitution) {
             sure = false;
+            day[number - 1]?.map((lessonCheck, checkIndex) => {
+              console.log(subIndex, lesson, checkIndex, lessonCheck);
+              if (
+                getSubstitutionForGroup(lessonCheck?.groupName) &&
+                checkIndex !== subIndex
+              ) {
+                substitution = undefined;
+                sure = true;
+              }
+            });
           }
         }
 
