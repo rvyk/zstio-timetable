@@ -141,8 +141,8 @@ function RenderTimetable({ hours, lessons, isShortHours }) {
             }
           })
         ) : (
-          <div className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 transition-all">
-            <p className="px-6 py-4 font-semibold text-center text-gray-900 whitespace-nowrap dark:text-white transition-all">
+          <div className="bg-white dark:bg-[#202020] first-letter:transition-all">
+            <p className="px-6 py-4 font-semibold text-center text-gray-900 whitespace-nowrap dark:text-gray-300 transition-all">
               Nie znaleziono żadnych lekcji
             </p>
           </div>
