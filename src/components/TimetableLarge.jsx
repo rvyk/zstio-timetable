@@ -91,7 +91,7 @@ function TimetableLarge(props) {
           className="relative overflow-x-auto shadow-md md:rounded-xl w-[90%] transition-all duration-100"
         >
           <table className="w-full text-sm text-left transition-all duration-200 text-gray-500 dark:text-gray-300">
-            <caption className="p-5 transition-all text-lg font-semibold text-left text-gray-900 bg-white dark:text-gray-300 dark:bg-[#171717]">
+            <caption className="p-5 transition-all text-lg font-semibold text-left text-gray-900 bg-white dark:text-gray-300 dark:bg-[#202020]">
               {!status ? (
                 <p className="transition-all text-lg font-normal text-gray-500 lg:text-xl mr-1 dark:text-gray-400">
                   Nie znaleziono pasującego planu lekcji

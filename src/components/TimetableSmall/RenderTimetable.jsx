@@ -43,7 +43,7 @@ function RenderTimetable({ hours, lessons, isShortHours }) {
   return (
     <>
       <div className="w-full">
-        <ul className="w-full text-sm font-medium text-center text-gray-500 divide-x dark:divide-[#2b2b2b] border dark:border-[#2b2b2b] border-gray-200 divide-gray-200 shadow flex dark:text-gray-400">
+        <ul className="w-full text-sm font-medium text-center text-gray-500 divide-x dark:divide-none divide-gray-200 shadow flex dark:text-gray-400">
           {days.map((item, index) => (
             <li
               className={`w-full`}
@@ -74,7 +74,7 @@ function RenderTimetable({ hours, lessons, isShortHours }) {
               return (
                 <div
                   key={`hour-${hour.number}`}
-                  className={`text-gray-600 dark:text-gray-300 border-b flex dark:bg-[#2b2b2b] dark:border-[#323232]`}
+                  className={`text-gray-600 dark:text-gray-300 border-b flex dark:bg-[#2b2b2b] dark:border-[#242424]`}
                 >
                   <div
                     className={`w-24 rounded-l py-1 flex-shrink-0 flex flex-col justify-center `}

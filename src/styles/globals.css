@@ -51,7 +51,7 @@ body {
 /* Scrollbar styles for dark theme */
 
 .dark *::-webkit-scrollbar {
-  width: 4px;
+  width: 5px;
   height: 6px;
 }
 
@@ -76,5 +76,5 @@ body {
 }
 
 .dark *::-webkit-scrollbar-thumb:active {
-  background-color: #212f4d;
+  background-color: #181818;
 }

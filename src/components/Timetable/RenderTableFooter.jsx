@@ -11,8 +11,8 @@ export default function RenderTableHeader({
     <tfoot
       className={`bg-[#2B161B] ${
         Object.entries(hours)?.length % 2 == 0
-          ? "bg-white dark:bg-[#181818]"
-          : "bg-gray-50 dark:bg-[#141414]"
+          ? "bg-white dark:bg-[#191919]"
+          : "bg-gray-50 dark:bg-[#202020]"
       }`}
     >
       <tr className="font-semibold text-gray-900 dark:text-gray-300">

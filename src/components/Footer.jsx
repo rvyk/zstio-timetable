@@ -32,7 +32,7 @@ function Footer({ small }) {
       <footer
         className={`rounded-lg shadow m-4 ${
           small && "flex justify-center items-center"
-        } w-[90%] sm:w-auto dark:bg-[#202020] lg:dark:bg-[#171717] transition-all bg-[#2B161B]`}
+        } w-[90%] sm:w-auto dark:bg-[#202020] transition-all bg-[#2B161B]`}
       >
         {small && (
           <a

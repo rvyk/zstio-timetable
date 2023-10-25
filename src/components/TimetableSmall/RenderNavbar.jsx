@@ -15,7 +15,10 @@ function RenderNavbar({ isShortHours, setIsShortHours }) {
           />
         </Link>
       </div>
-      <div className="inline-flex rounded-md shadow-sm mr-2" role="group">
+      <div
+        className="inline-flex -mt-1.5 rounded-md shadow-sm mr-2"
+        role="group"
+      >
         <ShortHours
           setIsShortHours={setIsShortHours}
           isShortHours={isShortHours}

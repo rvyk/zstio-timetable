@@ -13,8 +13,8 @@ function ShortHours({ setIsShortHours, isShortHours }) {
         }}
         className={` ${
           isShortHours
-            ? "bg-white dark:bg-[#2b2b2b] dark:hover:bg-[#202020] hover:bg-gray-200 dark:border-[#2b2b2b]"
-            : "bg-[#321c21] hover:bg-[#480e0c] dark:hover:bg-[#171717] dark:bg-[#202020] dark:border-[#202020] text-white hover:text-gray-200 focus:text-gray-200"
+            ? "bg-white dark:bg-[#202020] lg:dark:bg-[#171717] dark:hover:bg-[#191919] hover:bg-gray-200 dark:border-none"
+            : "bg-[#321c21] hover:bg-[#480e0c] dark:hover:bg-red-500 dark:bg-red-400 dark:border-none text-white hover:text-gray-200 focus:text-gray-200"
         }  px-4 py-2 transition-all text-sm font-medium text-gray-900 border border-gray-200 rounded-l-lg focus:z-10 focus:ring-0 dark:text-white dark:hover:text-white dark:focus:text-white`}
       >
         {"45'"}
@@ -29,8 +29,8 @@ function ShortHours({ setIsShortHours, isShortHours }) {
         }}
         className={` ${
           isShortHours
-            ? "bg-[#321c21] hover:bg-[#480e0c] dark:hover:bg-[#171717] dark:bg-[#202020] dark:border-[#202020] text-white hover:text-gray-200 focus:text-gray-200"
-            : "bg-white dark:bg-[#2b2b2b] dark:hover:bg-[#202020] hover:bg-gray-200 dark:border-[#2b2b2b]"
+            ? "bg-[#321c21] hover:bg-[#480e0c] dark:hover:bg-red-500 dark:bg-red-400 dark:border-none text-white hover:text-gray-200 focus:text-gray-200"
+            : "bg-white dark:bg-[#202020] lg:dark:bg-[#171717] dark:hover:bg-[#191919] hover:bg-gray-200 dark:border-none"
         } px-4 py-2 transition-all text-sm font-medium text-gray-900 border border-gray-200 rounded-r-lg focus:z-10 focus:ring-0 dark:text-white dark:hover:text-white dark:focus:ring-blue-500 dark:focus:text-white`}
       >
         {"30'"}
