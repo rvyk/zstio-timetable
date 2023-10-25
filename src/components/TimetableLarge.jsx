@@ -1,13 +1,13 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import TableLoading from "./TableLoading";
-import { Tooltip } from "react-tooltip";
+import {Tooltip} from "react-tooltip";
 import axios from "axios";
 import RenderTableHeader from "./Timetable/RenderTableHeader";
 import RenderTableFooter from "./Timetable/RenderTableFooter";
 import RenderTableRow from "./Timetable/RenderTableRow";
-import { ArrowPathIcon } from "@heroicons/react/24/outline";
+import {ArrowPathIcon} from "@heroicons/react/24/outline";
 import ShortHours from "./Table/ShortHours";
 
 function TimetableLarge(props) {
@@ -18,7 +18,7 @@ function TimetableLarge(props) {
     status,
     text,
     timeTableID,
-    timeTable: { hours, generatedDate, title, validDate, lessons },
+    timeTable: {hours, generatedDate, title, validDate, lessons},
   } = props;
 
   useEffect(() => {
@@ -43,14 +43,14 @@ function TimetableLarge(props) {
         text === "Oddziały"
           ? "branch"
           : text === "Nauczyciele"
-          ? "teacher"
-          : undefined;
+            ? "teacher"
+            : undefined;
       const query =
         search === "teacher"
-          ? getTeacher(title)
+          ? await getTeacher(title)
           : title.includes(" ")
-          ? title.split(" ")[0]
-          : title;
+            ? title.split(" ")[0]
+            : title;
 
       if (search && query) {
         try {
@@ -91,7 +91,8 @@ function TimetableLarge(props) {
           className="relative overflow-x-auto shadow-md md:rounded-xl w-[90%] transition-all duration-100"
         >
           <table className="w-full text-sm text-left transition-all duration-200 text-gray-500 dark:text-gray-300">
-            <caption className="p-5 transition-all text-lg font-semibold text-left text-gray-900 bg-white dark:text-gray-300 dark:bg-[#202020]">
+            <caption
+              className="p-5 transition-all text-lg font-semibold text-left text-gray-900 bg-white dark:text-gray-300 dark:bg-[#202020]">
               {!status ? (
                 <p className="transition-all text-lg font-normal text-gray-500 lg:text-xl mr-1 dark:text-gray-400">
                   Nie znaleziono pasującego planu lekcji
@@ -109,7 +110,8 @@ function TimetableLarge(props) {
                           isShortHours={isShortHours}
                         />
                       </div>
-                      <p className="transition-all text-lg font-normal text-gray-500 lg:text-xl mr-1 dark:text-gray-300">
+                      <p
+                        className="transition-all text-lg font-normal text-gray-500 lg:text-xl mr-1 dark:text-gray-300">
                         {text} /
                       </p>
                       <p className="transition-all text-lg font-bold text-gray-500 lg:text-xl dark:text-gray-300">
@@ -121,14 +123,15 @@ function TimetableLarge(props) {
                       role="status"
                       className="transition-all lg:text-xl w-full flex items-center"
                     >
-                      <ArrowPathIcon className="w-7 h-7 text-gray-200 animate-spin dark:text-gray-300 fill-[#2B161B] dark:fill-[#171717]" />
+                      <ArrowPathIcon
+                        className="w-7 h-7 text-gray-200 animate-spin dark:text-gray-300 fill-[#2B161B] dark:fill-[#171717]"/>
                     </div>
                   )}
                 </>
               )}
             </caption>
 
-            <RenderTableHeader />
+            <RenderTableHeader/>
             <RenderTableRow
               hours={hours}
               isShortHours={isShortHours}
@@ -146,7 +149,7 @@ function TimetableLarge(props) {
           </table>
         </div>
       ) : (
-        <TableLoading />
+        <TableLoading/>
       )}
       <Tooltip
         id="content_tooltips"
