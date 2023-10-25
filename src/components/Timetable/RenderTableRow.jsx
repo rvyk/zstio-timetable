@@ -17,12 +17,12 @@ export default function RenderTableRow({
     <tbody>
       {Object.entries(hours).length > 1 ? (
         Object.entries(
-          isShortHours ? shortHours.slice(0, maxLessons) : hours
+          isShortHours ? shortHours.slice(0, maxLessons) : hours,
         )?.map(([key, hour], index) => {
           const { number, timeFrom, timeTo } = hour;
           let { isWithinTimeRange, minutesRemaining } = getCurrentLesson(
             timeFrom,
-            timeTo
+            timeTo,
           );
 
           return (
@@ -69,7 +69,7 @@ export default function RenderTableRow({
           );
         })
       ) : (
-        <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 transition-all">
+        <tr className="bg-white border-b dark:bg-[#202020] dark:border-[#181818] transition-all">
           <td
             scope="row"
             colSpan={7}
