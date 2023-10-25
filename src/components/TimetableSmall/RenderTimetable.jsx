@@ -35,6 +35,8 @@ function RenderTimetable({ hours, lessons, isShortHours }) {
         window.removeEventListener("resize", handleResize);
       };
     }
+    
+    setSelectedDay(new Date().getDay() > 4 ? 0 : new Date().getDay()); //TODO: TEST IT
   }, []);
   return (
     <>
