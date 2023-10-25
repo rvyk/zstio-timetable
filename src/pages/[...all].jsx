@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { useRouter } from "next/router";
 import Layout from "../components/Layout";
 import fetchTimetableList from "@/utils/fetchTimetableList";
@@ -9,28 +9,34 @@ import removeUndefined from "@/utils/removeUndefined";
 const MainRoute = (props) => {
   const router = useRouter();
 
+  const handleKey = useCallback(
+    (key) => {
+      const data = router.query.all[0];
+      if (data) {
+        const currentNumber = parseInt(router.query.all[1]);
+        const changeTo =
+          key === "ArrowRight" ? currentNumber + 1 : currentNumber - 1;
+        const dataToPropertyMap = {
+          class: "classes",
+          room: "rooms",
+          teacher: "teachers",
+        };
+        const propertyName = dataToPropertyMap[data];
+        if (propertyName) {
+          const maxNumber = props[propertyName].length;
+          if (changeTo >= 1 && changeTo <= maxNumber) {
+            router.push(`/${data}/${changeTo}`);
+          }
+        }
+      }
+    },
+    [props, router]
+  );
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.key === "ArrowRight" || e.key === "ArrowLeft") {
         e.preventDefault();
-        const data = router.query.all[0];
-        if (data) {
-          const currentNumber = parseInt(router.query.all[1]);
-          const changeTo =
-            e.key === "ArrowRight" ? currentNumber + 1 : currentNumber - 1;
-          const dataToPropertyMap = {
-            class: "classes",
-            room: "rooms",
-            teacher: "teachers",
-          };
-          const propertyName = dataToPropertyMap[data];
-          if (propertyName) {
-            const maxNumber = props[propertyName].length;
-            if (changeTo >= 1 && changeTo <= maxNumber) {
-              router.push(`/${data}/${changeTo}`);
-            }
-          }
-        }
+        handleKey(e.key);
       }
     };
 
@@ -38,9 +44,9 @@ const MainRoute = (props) => {
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [props, router]);
+  }, [props, router, handleKey]);
 
-  return <Layout {...props} />;
+  return <Layout {...props} handleKey={handleKey} />;
 };
 
 export async function getStaticPaths() {
@@ -91,6 +97,7 @@ export async function getStaticProps(context) {
     generatedDate: timetableListData.getGeneratedDate(),
     title: timetableListData.getTitle(),
     validDate: timetableListData.getVersionInfo(),
+    days: timetableListData.getDays(),
   };
 
   const list = await fetchTimetableList();

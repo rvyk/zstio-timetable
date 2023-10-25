@@ -19,7 +19,7 @@ module.exports = {
           scrollbar: "#2b161b",
         },
         dark: {
-          scrollbar: "#111827",
+          scrollbar: "#141414",
         },
       },
     },

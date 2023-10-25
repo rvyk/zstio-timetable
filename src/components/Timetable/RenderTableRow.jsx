@@ -46,13 +46,13 @@ export default function RenderTableRow({
             <tr
               className={`text-gray-600 dark:text-gray-300 border-b ${
                 index % 2 === 0
-                  ? "bg-white dark:bg-gray-800"
-                  : "bg-gray-50 dark:bg-gray-700"
-              } dark:border-gray-600`}
+                  ? "bg-white dark:bg-[#191919]"
+                  : "bg-gray-50 dark:bg-[#202020]"
+              } dark:border-[#181818]`}
               key={index}
             >
               <td
-                className={`py-4 text-center h-full border-r last:border-none font-semibold dark:border-gray-600`}
+                className={`py-4 text-center h-full border-r last:border-none font-semibold dark:border-[#171717]`}
               >
                 <div className="flex justify-center items-center flex-col">
                   {number}
@@ -64,13 +64,13 @@ export default function RenderTableRow({
                   )}
                 </div>
               </td>
-              <td className="text-center border-r last:border-none dark:border-gray-600">
+              <td className="text-center border-r dark:border-[#171717]">
                 {timeFrom} - {timeTo}
               </td>
 
               {lessons?.map((day, lessonIndex) => (
                 <td
-                  className="px-6 py-4 whitespace-nowrap border-r last:border-none dark:border-gray-600"
+                  className="px-6 py-4 whitespace-nowrap border-r last:border-none dark:border-[#171717]"
                   key={`${day}-${lessonIndex}`}
                 >
                   <RenderLesson
@@ -78,7 +78,6 @@ export default function RenderTableRow({
                     index={index}
                     lessonIndex={lessonIndex}
                     day={day}
-                    lessons={lessons}
                     substitutions={substitutions}
                   />
                 </td>

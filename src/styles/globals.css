@@ -8,6 +8,17 @@ body {
   overflow-x: hidden;
 }
 
+@media (max-width: 1024px) {
+  .dark *::-webkit-scrollbar {
+    width: 0px !important;
+    height: 0px !important;
+  }
+  *::-webkit-scrollbar {
+    width: 0px !important;
+      height: 0px !important;
+  }
+}
+
 /* Scrollbar styles for light theme */
 *::-webkit-scrollbar {
   width: 4px;
@@ -38,8 +49,9 @@ body {
 }
 
 /* Scrollbar styles for dark theme */
+
 .dark *::-webkit-scrollbar {
-  width: 4px;
+  width: 5px;
   height: 6px;
 }
 
@@ -64,5 +76,5 @@ body {
 }
 
 .dark *::-webkit-scrollbar-thumb:active {
-  background-color: #212f4d;
+  background-color: #181818;
 }

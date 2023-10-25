@@ -1,14 +1,7 @@
 import { ExclamationCircleIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 
-function RenderLesson({
-  number,
-  index,
-  lessonIndex,
-  day,
-  lessons,
-  substitutions,
-}) {
+function RenderLesson({ number, index, lessonIndex, day, substitutions }) {
   const cases = [
     "Uczniowie przychodzą później",
     "Przeniesiona",
@@ -113,11 +106,13 @@ function RenderLesson({
               )}
 
               {possibleSubstitution && !sure && (
-                <ExclamationCircleIcon
-                  className="w-5 h-5 text-red-600 dark:text-red-400"
-                  data-tooltip-id="content_tooltips"
-                  data-tooltip-html={`${possibleSubstitution?.case}? <br /> (Sprawdź zastępstwa)`}
-                />
+                <Link href={`https://zastepstwa.awfulworld.space`}>
+                  <ExclamationCircleIcon
+                    className="w-5 h-5 text-red-600 dark:text-red-400"
+                    data-tooltip-id="content_tooltips"
+                    data-tooltip-html={`${possibleSubstitution?.case}? <br /> (Sprawdź zastępstwa)`}
+                  />
+                </Link>
               )}
             </div>
 

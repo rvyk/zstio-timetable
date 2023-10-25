@@ -1,15 +1,16 @@
 import React, { useEffect } from "react";
-import Timetable from "./Timetable";
+import TimetableLarge from "./TimetableLarge";
 import Footer from "../components/Footer";
-import Jumbotron from "../components/Jumbotron";
+import JumbotronLarge from "./JumbotronLarge";
 import Navbar from "./Navbar";
 import { initFlowbite } from "flowbite";
 import DropdownRoom from "./Dropdowns/RoomDropdown";
 import DropdownTeacher from "./Dropdowns/TeacherDropdown";
 import DropdownClass from "./Dropdowns/ClassDropdown";
 import Head from "next/head";
+import TimetableSmall from "./TimetableSmall";
 
-function Layout(props) {
+function Layout({ handleKey, ...props }) {
   let {
     rooms,
     teachers,
@@ -36,14 +37,19 @@ function Layout(props) {
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
-      <div className="min-h-screen w-screen flex flex-col justify-center items-center bg-[#F7F3F5] dark:bg-gray-900 transition-all">
-        <Navbar />
-        <Jumbotron {...props} />
-        <Timetable {...props} />
+      <div className="min-h-screen w-screen flex flex-col lg:justify-center lg:items-center lg:bg-[#F7F3F5] bg-[#fff] dark:bg-[#171717] transition-all">
+        <div className="flex justify-center lg:hidden w-full ">
+          <TimetableSmall {...props} handleKey={handleKey} />
+        </div>
+        <div className="hidden justify-center lg:flex flex-col w-full items-center">
+          <Navbar />
+          <JumbotronLarge {...props} />
+          <TimetableLarge {...props} />
+          <Footer />
+        </div>
         <DropdownRoom rooms={rooms} />
         <DropdownTeacher teachers={teachers} />
         <DropdownClass classes={classes} />
-        <Footer />
       </div>
     </>
   );
