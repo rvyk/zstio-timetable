@@ -135,7 +135,7 @@ function BottomBar({ handleKey, ...props }) {
                 {({ open }) => (
                   <>
                     <div>
-                      <Menu.Button className="inline-flex w-full justify-center dark:text-gray-300 rounded-md bg-[#202020] py-4 text-lg font-medium text-white hover:bg-[#171717] transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
+                      <Menu.Button className="inline-flex w-full justify-center dark:text-gray-300 rounded-md bg-[#2B161B] dark:bg-[#202020] py-4 text-lg font-medium text-white hover:bg-[#171717] transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
                         {dropdown.title}
 
                         <ChevronDownIcon
