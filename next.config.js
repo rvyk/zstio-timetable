@@ -16,6 +16,7 @@ module.exports = withPWA({
     defaultLocale: "pl",
     localeDetection: false,
   },
+
   async rewrites() {
     return [
       {
@@ -25,10 +26,11 @@ module.exports = withPWA({
       {
         source: "/proxy/getTimetable/:path",
         destination: `${process.env.NEXT_PUBLIC_TIMETABLE_URL}/plany/:path`,
-      }, {
+      },
+      {
         source: "/proxy/getTimetableList",
-        destination: `${process.env.NEXT_PUBLIC_TIMETABLE_URL}/lista.html`
-      }
+        destination: `${process.env.NEXT_PUBLIC_TIMETABLE_URL}/lista.html`,
+      },
     ];
   },
 });

@@ -13,12 +13,12 @@ import TimetableSmall from "./TimetableSmall";
 function Layout({ handleKey, ...props }) {
   const [isShortHours, setIsShortHours] = useState(false);
 
-   useEffect(() => {
-     const storedShortHours = JSON.parse(localStorage.getItem("shortHours"));
-     if (storedShortHours !== null) {
-       setIsShortHours(storedShortHours);
-     }
-   }, []);
+  useEffect(() => {
+    const storedShortHours = JSON.parse(localStorage.getItem("shortHours"));
+    if (storedShortHours !== null) {
+      setIsShortHours(storedShortHours);
+    }
+  }, []);
 
   let {
     rooms,
