@@ -66,7 +66,7 @@ function BottomBar({ handleKey, ...props }) {
       id="bottomBar"
       className={`!fixed bottom-0 transition-all ${
         isMenuExpanded ? "h-full overflow-auto" : "h-[4.25rem]"
-      } left-0 w-full flex flex-col bg-[#321c21] dark:bg-[#3b3b3b] duration-700 z-50`}
+      } left-0 w-full flex flex-col bg-[#321c21] dark:bg-[#2b2b2b] duration-700 z-50`}
     >
       <div
         className={`h-24 relative mt-1.5 w-full flex justify-center items-center transition-all`}

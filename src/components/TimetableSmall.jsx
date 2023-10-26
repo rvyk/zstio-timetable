@@ -16,7 +16,7 @@ function TimetableSmall({
   } = props;
 
   return (
-    <div className="flex flex-col min-w-full mb-[4.25rem] dark:bg-[#202020]">
+    <div className="flex flex-col min-w-full dark:bg-[#202020]">
       <RenderNavbar
         isShortHours={isShortHours}
         setIsShortHours={setIsShortHours}

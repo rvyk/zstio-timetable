@@ -47,7 +47,7 @@ function RenderTimetable({ hours, lessons, isShortHours }) {
   }, []);
   return (
     <>
-      <div className="w-full">
+      <div className="w-full sticky top-0">
         <ul className="w-full text-sm font-medium text-center text-gray-500 divide-x dark:divide-none divide-gray-200 shadow flex dark:text-gray-400">
           {days.map((item, index) => (
             <li
@@ -60,9 +60,9 @@ function RenderTimetable({ hours, lessons, isShortHours }) {
               <p
                 className={`${
                   item.index == selectedDay
-                    ? "!bg-[#321c21] dark:!bg-[#2b2b2b] !text-white"
-                    : "hover:bg-gray-100 dark:hover:bg-[#202020]"
-                } transition-all inline-block cursor-pointer w-full p-4 dark:border-[#2b2b2b] text-gray-900 bg-white focus:ring-transparent focus:outline-none dark:bg-[#3b3b3b] dark:text-white`}
+                    ? "!bg-[#321c21] dark:!bg-[#202020] !text-white"
+                    : "hover:bg-gray-100 dark:hover:bg-[#181818]"
+                } transition-all inline-block cursor-pointer w-full p-4 dark:border-[#2b2b2b] text-gray-900 bg-white focus:ring-transparent focus:outline-none dark:bg-[#282828] dark:text-white`}
               >
                 {isScreenSmall ? item.short : item.long}
               </p>
@@ -70,7 +70,7 @@ function RenderTimetable({ hours, lessons, isShortHours }) {
           ))}
         </ul>
       </div>
-      <div className="min-w-full min-h-full dark:bg-[#202020]">
+      <div id="timetable" className="min-w-full mb-[4.25rem] dark:bg-[#202020]">
         {Object.entries(hours).length > 1 ? (
           Object.entries(
             isShortHours ? shortHours.slice(0, maxLessons) : hours
@@ -84,7 +84,11 @@ function RenderTimetable({ hours, lessons, isShortHours }) {
             return (
               <div
                 key={`hour-${number}`}
-                className={`text-gray-600 dark:text-gray-300 border-b flex dark:bg-[#2b2b2b] dark:border-[#242424]`}
+                className={`text-gray-600 ${
+                  number % 2 === 0
+                    ? "bg-white dark:bg-[#282828]"
+                    : "bg-gray-50 dark:bg-[#242424]"
+                } dark:text-gray-300 border-b flex dark:border-[#282828]`}
               >
                 <div
                   className={`w-24 rounded-l py-1 my-2 flex-shrink-0 flex flex-col justify-center `}
