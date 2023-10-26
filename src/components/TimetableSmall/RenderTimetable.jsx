@@ -77,7 +77,6 @@ function RenderTimetable({ hours, lessons, isShortHours }) {
               timeTo
             );
 
-            if (lessons[selectedDay][number - 1].length > 0) {
               return (
                 <div
                   key={`hour-${number}`}
@@ -138,7 +137,6 @@ function RenderTimetable({ hours, lessons, isShortHours }) {
                   </div>
                 </div>
               );
-            }
           })
         ) : (
           <div className="bg-white dark:bg-[#202020] first-letter:transition-all">
