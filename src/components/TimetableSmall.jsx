@@ -5,13 +5,18 @@ import BottomBar from "./TimetableSmall/BottomBar";
 import RenderTimetable from "./TimetableSmall/RenderTimetable";
 import RenderNavbar from "./TimetableSmall/RenderNavbar";
 
-function TimetableSmall({ handleKey, setIsShortHours, isShortHours, ...props }) {
+function TimetableSmall({
+  handleKey,
+  setIsShortHours,
+  isShortHours,
+  ...props
+}) {
   let {
     timeTable: { hours, lessons },
   } = props;
 
   return (
-    <div className="flex flex-col min-w-full min-h-full dark:bg-[#202020]">
+    <div className="flex flex-col min-w-full mb-[4.25rem] dark:bg-[#202020]">
       <RenderNavbar
         isShortHours={isShortHours}
         setIsShortHours={setIsShortHours}

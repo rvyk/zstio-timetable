@@ -2,7 +2,11 @@
 
 import { getCurrentLesson } from "@/utils/currentLesson";
 import shortHours from "@/utils/shortHours";
-import { MapPinIcon, UsersIcon } from "@heroicons/react/24/outline";
+import {
+  MapPinIcon,
+  UsersIcon,
+  AcademicCapIcon,
+} from "@heroicons/react/24/outline";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 
@@ -77,66 +81,77 @@ function RenderTimetable({ hours, lessons, isShortHours }) {
               timeTo
             );
 
-              return (
+            return (
+              <div
+                key={`hour-${number}`}
+                className={`text-gray-600 dark:text-gray-300 border-b flex dark:bg-[#2b2b2b] dark:border-[#242424]`}
+              >
                 <div
-                  key={`hour-${number}`}
-                  className={`text-gray-600 dark:text-gray-300 border-b flex dark:bg-[#2b2b2b] dark:border-[#242424]`}
+                  className={`w-24 rounded-l py-1 my-2 flex-shrink-0 flex flex-col justify-center `}
                 >
-                  <div
-                    className={`w-24 rounded-l py-1 my-2 flex-shrink-0 flex flex-col justify-center `}
-                  >
-                    <span className="block text-center font-bold mb-1">
-                      {number}
-                    </span>
-                    <span className="block text-center text-sm">
-                      {timeFrom} - {timeTo}
-                      {isWithinTimeRange && minutesRemaining > 0 && (
-                        <div className="bg-blue-100 mt-1 mx-2 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-red-100 dark:text-red-800 border border-blue-400 dark:border-red-400">
-                          <p>{minutesRemaining == 1 ? "ZOSTAŁA" : "ZOSTAŁO"}</p>
-                          <p>{`${minutesRemaining} MIN`}</p>
-                        </div>
-                      )}
-                    </span>
-                  </div>
-
-                  <div className="w-full px-5 py-2 min-h-[4rem] flex flex-col justify-center">
-                    {lessons[selectedDay][number - 1]?.map((lesson, index) => {
-                      return (
-                        <div key={`lesson-${index}`} className="p-2">
-                          <div className="flex">
-                            <p className="font-semibold">{lesson?.subject}</p>
-                            <p className="ml-2">{lesson?.groupName}</p>
-                          </div>
-                          <div className="flex items-center">
-                            {lesson?.teacher && (
-                              <>
-                                <UsersIcon className="h-4 w-4 mr-1" />
-                                <Link
-                                  href={`/teacher/${lesson?.teacherId}`}
-                                  className={`flex items-center text-sm mr-3`}
-                                >
-                                  {lesson?.teacher}
-                                </Link>
-                              </>
-                            )}
-                            {lesson?.room && (
-                              <>
-                                <MapPinIcon className="h-4 w-4 mr-1" />
-                                <Link
-                                  href={`/room/${lesson?.roomId}`}
-                                  className={`flex items-center mr-1 text-sm`}
-                                >
-                                  {lesson?.room}
-                                </Link>
-                              </>
-                            )}
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
+                  <span className="block text-center font-bold mb-1">
+                    {number}
+                  </span>
+                  <span className="block text-center text-sm">
+                    {timeFrom} - {timeTo}
+                    {isWithinTimeRange && minutesRemaining > 0 && (
+                      <div className="bg-blue-100 mt-1 mx-2 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-red-100 dark:text-red-800 border border-blue-400 dark:border-red-400">
+                        <p>{minutesRemaining == 1 ? "ZOSTAŁA" : "ZOSTAŁO"}</p>
+                        <p>{`${minutesRemaining} MIN`}</p>
+                      </div>
+                    )}
+                  </span>
                 </div>
-              );
+
+                <div className="w-full px-5 py-2 min-h-[4rem] flex flex-col justify-center">
+                  {lessons[selectedDay][number - 1]?.map((lesson, index) => {
+                    return (
+                      <div key={`lesson-${index}`} className="p-2">
+                        <div className="flex">
+                          <p className="font-semibold">{lesson?.subject}</p>
+                          <p className="ml-2">{lesson?.groupName}</p>
+                        </div>
+                        <div className="flex items-center">
+                          {lesson?.className && (
+                            <>
+                              <AcademicCapIcon className="h-4 w-4 mr-1" />
+                              <Link
+                                href={`/teacher/${lesson?.classId}`}
+                                className={`flex items-center text-sm mr-3`}
+                              >
+                                {lesson?.className}
+                              </Link>
+                            </>
+                          )}
+                          {lesson?.teacher && (
+                            <>
+                              <UsersIcon className="h-4 w-4 mr-1" />
+                              <Link
+                                href={`/teacher/${lesson?.teacherId}`}
+                                className={`flex items-center text-sm mr-3`}
+                              >
+                                {lesson?.teacher}
+                              </Link>
+                            </>
+                          )}
+                          {lesson?.room && (
+                            <>
+                              <MapPinIcon className="h-4 w-4 mr-1" />
+                              <Link
+                                href={`/room/${lesson?.roomId}`}
+                                className={`flex items-center mr-1 text-sm`}
+                              >
+                                {lesson?.room}
+                              </Link>
+                            </>
+                          )}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            );
           })
         ) : (
           <div className="bg-white dark:bg-[#202020] first-letter:transition-all">
