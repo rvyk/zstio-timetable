@@ -26,7 +26,6 @@ export default function Document() {
           async
         ></script>
         <link rel="manifest" href="/manifest.json" />
-        <meta name="theme-color" content="#fff" />
       </Head>
       <body>
         <Main />

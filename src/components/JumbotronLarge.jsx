@@ -1,22 +1,13 @@
 import Link from "next/link";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
-  AcademicCapIcon,
   ArrowPathIcon,
   ChevronDownIcon,
   MapPinIcon,
 } from "@heroicons/react/24/outline";
-import { UserGroupIcon } from "@heroicons/react/24/outline";
 
 function JumbotronLarge(props) {
-  let {
-    text,
-    status,
-    classes,
-    teachers,
-    rooms,
-    timeTable: { title },
-  } = props;
+  let { text, status, classes, teachers, rooms, timeTable } = props;
 
   return (
     <div className="py-8 px-4 mx-auto max-w-screen-xl text-center lg:py-16">
@@ -46,13 +37,13 @@ function JumbotronLarge(props) {
         </>
       ) : (
         <>
-          {title && text.length > 0 ? (
+          {timeTable?.title && text.length > 0 ? (
             <div className="flex justify-center mb-5 flex-wrap items-center ">
               <p className="transition-all text-xl font-normal mr-1 hidden sm:flex text-gray-500 lg:text-2xl dark:text-gray-400">
                 {text} /
               </p>
               <p className="transition-all text-xl font-bold text-gray-500 lg:text-2xl dark:text-gray-400">
-                {title}
+                {timeTable?.title}
               </p>
             </div>
           ) : (
@@ -61,7 +52,7 @@ function JumbotronLarge(props) {
         </>
       )}
 
-      {title && status && (
+      {timeTable?.title && status && (
         <>
           {classes.length > 0 && (
             <Item
@@ -110,12 +101,32 @@ function Item({ dropdownId, dropdownToggleId, item }) {
 }
 
 function Loading() {
+  const [loadingText, setLoadingText] = useState("Wczytywanie planu");
+  const [dots, setDots] = useState("");
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setDots((prevDots) => {
+        if (prevDots === "...") {
+          return ".";
+        } else {
+          return prevDots + ".";
+        }
+      });
+    }, 300);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    setLoadingText(`Wczytywanie planu${dots}`);
+  }, [dots]);
   return (
     <div
       role="status"
-      className="my-4 transition-all lg:text-xl w-full flex justify-center"
+      className="my-4 transition-all text-xl w-full flex justify-center items-center text-gray-500 dark:text-gray-300"
     >
-      <ArrowPathIcon className="w-7 h-7 mr-2 text-gray-200 animate-spin dark:text-gray-600 fill-[#2B161B] dark:fill-blue-800" />
+      <ArrowPathIcon className="w-7 h-7 lg:w-10 lg:h-10 mr-2 animate-spin" />
+      <h1 className="lg:text-2xl ">{loadingText}</h1>
     </div>
   );
 }
