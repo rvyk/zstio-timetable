@@ -10,8 +10,7 @@ import RenderTableRow from "./Timetable/RenderTableRow";
 import {ArrowPathIcon} from "@heroicons/react/24/outline";
 import ShortHours from "./Table/ShortHours";
 
-function TimetableLarge(props) {
-  const [isShortHours, setIsShortHours] = useState(false);
+function TimetableLarge({isShortHours, setIsShortHours, ...props}) {
   const [substitutions, setSubstitutions] = useState({});
 
   let {
@@ -20,13 +19,6 @@ function TimetableLarge(props) {
     timeTableID,
     timeTable: {hours, generatedDate, title, validDate, lessons},
   } = props;
-
-  useEffect(() => {
-    const storedShortHours = JSON.parse(localStorage.getItem("shortHours"));
-    if (storedShortHours !== null) {
-      setIsShortHours(storedShortHours);
-    }
-  }, []);
 
   const getTeacher = async (title) => {
     const teachers = await axios.get("/teachers.json");

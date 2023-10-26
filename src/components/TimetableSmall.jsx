@@ -5,8 +5,7 @@ import BottomBar from "./TimetableSmall/BottomBar";
 import RenderTimetable from "./TimetableSmall/RenderTimetable";
 import RenderNavbar from "./TimetableSmall/RenderNavbar";
 
-function TimetableSmall({ handleKey, ...props }) {
-  const [isShortHours, setIsShortHours] = useState(false);
+function TimetableSmall({ handleKey, setIsShortHours, isShortHours, ...props }) {
   let {
     timeTable: { hours, lessons },
   } = props;
