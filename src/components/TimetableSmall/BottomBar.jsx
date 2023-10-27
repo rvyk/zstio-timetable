@@ -127,66 +127,70 @@ function BottomBar({ handleKey, ...props }) {
 
           <div className="mx-4 transition-all">
             {dropdowns?.map((dropdown) => (
-              <Menu
-                key={`dropdown-${dropdown.title}`}
-                as="div"
-                className="text-left w-full my-4"
-              >
-                {({ open }) => (
-                  <>
-                    <div>
-                      <Menu.Button className="inline-flex w-full justify-center dark:text-gray-300 rounded-md bg-[#2B161B] dark:bg-[#202020] py-4 text-lg font-medium text-white hover:bg-[#171717] transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
-                        {dropdown.title}
+              <>
+                {dropdown.data.length > 0 && (
+                  <Menu
+                    key={`dropdown-${dropdown.title}`}
+                    as="div"
+                    className="text-left w-full my-4"
+                  >
+                    {({ open }) => (
+                      <>
+                        <div>
+                          <Menu.Button className="inline-flex w-full justify-center dark:text-gray-300 rounded-md bg-[#2B161B] hover:bg-[#201114] dark:bg-[#202020] py-4 text-lg font-medium text-white dark:hover:bg-[#171717] transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
+                            {dropdown.title}
 
-                        <ChevronDownIcon
-                          className={`ml-2 mt-1 -mr-1 h-6 w-6 text-white hover:text-gray-50 transition-all duration-300 ${
-                            open && "rotate-180"
-                          }`}
-                          aria-hidden="true"
-                        />
-                      </Menu.Button>
-                    </div>
-                    <Transition
-                      as={Fragment}
-                      enter="transition ease-out duration-100"
-                      enterFrom="transform opacity-0 scale-95"
-                      enterTo="transform opacity-100 scale-100"
-                      leave="transition ease-in duration-75"
-                      leaveFrom="transform opacity-100 scale-100"
-                      leaveTo="transform opacity-0 scale-95"
-                    >
-                      <Menu.Items className="absolute max-h-[35%] mt-3 overflow-y-scroll mx-4 right-0 left-0 origin-top-right divide-y divide-gray-100 dark:divide-[#323232] rounded-md bg-gray-50 dark:bg-[#202020] shadow-lg ring-0 focus:outline-none">
-                        {dropdown.data.map((item) => (
-                          <div className="px-2 py-2" key={item.name}>
-                            <Menu.Item as={Fragment}>
-                              {({ active }) => (
-                                <Link
-                                  href={`/${dropdown.link}/${item.value}`}
-                                  onClick={() => {
-                                    setIsMenuExpanded(false);
-                                    handleSelect(dropdown.link, item.value);
-                                  }}
-                                  className={`${
-                                    lastSelect ===
-                                      `/${dropdown.link}/${item.value}` &&
-                                    "bg-gray-200 dark:bg-[#171717]"
-                                  } ${
-                                    active
-                                      ? "dark:bg-[#171717] dark:text-gray-300 text-black bg-gray-100 font-semibold"
-                                      : "text-gray-900 dark:text-gray-300 font-semibold"
-                                  } group flex w-full items-center rounded-md px-2 py-2 transition-all text-sm duration-300`}
-                                >
-                                  {item.name}
-                                </Link>
-                              )}
-                            </Menu.Item>
-                          </div>
-                        ))}
-                      </Menu.Items>
-                    </Transition>
-                  </>
+                            <ChevronDownIcon
+                              className={`ml-2 mt-1 -mr-1 h-6 w-6 text-white hover:text-gray-50 transition-all duration-300 ${
+                                open && "rotate-180"
+                              }`}
+                              aria-hidden="true"
+                            />
+                          </Menu.Button>
+                        </div>
+                        <Transition
+                          as={Fragment}
+                          enter="transition ease-out duration-100"
+                          enterFrom="transform opacity-0 scale-95"
+                          enterTo="transform opacity-100 scale-100"
+                          leave="transition ease-in duration-75"
+                          leaveFrom="transform opacity-100 scale-100"
+                          leaveTo="transform opacity-0 scale-95"
+                        >
+                          <Menu.Items className="absolute max-h-[35%] mt-3 overflow-y-scroll mx-4 right-0 left-0 origin-top-right divide-y divide-gray-100 dark:divide-[#323232] rounded-md bg-gray-50 dark:bg-[#202020] shadow-lg ring-0 focus:outline-none">
+                            {dropdown.data.map((item) => (
+                              <div className="px-2 py-2" key={item.name}>
+                                <Menu.Item as={Fragment}>
+                                  {({ active }) => (
+                                    <Link
+                                      href={`/${dropdown.link}/${item.value}`}
+                                      onClick={() => {
+                                        setIsMenuExpanded(false);
+                                        handleSelect(dropdown.link, item.value);
+                                      }}
+                                      className={`${
+                                        lastSelect ===
+                                          `/${dropdown.link}/${item.value}` &&
+                                        "bg-gray-200 dark:bg-[#171717]"
+                                      } ${
+                                        active
+                                          ? "dark:bg-[#171717] dark:text-gray-300 text-black bg-gray-100 font-semibold"
+                                          : "text-gray-900 dark:text-gray-300 font-semibold"
+                                      } group flex w-full items-center rounded-md px-2 py-2 transition-all text-sm duration-300`}
+                                    >
+                                      {item.name}
+                                    </Link>
+                                  )}
+                                </Menu.Item>
+                              </div>
+                            ))}
+                          </Menu.Items>
+                        </Transition>
+                      </>
+                    )}
+                  </Menu>
                 )}
-              </Menu>
+              </>
             ))}
             <div className="flex justify-center items-center w-full flex-col text-gray-50 dark:text-gray-300 text-center">
               {generatedDate && (

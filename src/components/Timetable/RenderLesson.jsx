@@ -1,6 +1,5 @@
 import { ExclamationCircleIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
-import { useState } from "react";
 
 function RenderLesson({ number, index, lessonIndex, day, substitutions }) {
   const cases = [
@@ -134,7 +133,7 @@ function RenderLesson({ number, index, lessonIndex, day, substitutions }) {
                   </p>
                 )}
                 <p
-                  className="dark:text-red-400 text-red-500 font-semibold"
+                  className="dark:text-red-400 w-fit text-red-500 font-semibold"
                   data-tooltip-id="content_tooltips"
                   data-tooltip-html={`${substitution?.message}`}
                 >

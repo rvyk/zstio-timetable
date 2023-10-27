@@ -4,7 +4,7 @@ import Layout from "../components/Layout";
 import fetchTimetableList from "@/utils/fetchTimetableList";
 import { Table, TimetableList } from "@wulkanowy/timetable-parser";
 import fetchTimetable from "@/utils/fetchTimetable";
-import removeUndefined from "@/utils/removeUndefined";
+import { convertTextDate, removeUndefined } from "@/utils/helpers";
 
 const MainRoute = (props) => {
   const router = useRouter();
@@ -96,7 +96,7 @@ export async function getStaticProps(context) {
     hours: timetableListData.getHours(),
     generatedDate: timetableListData.getGeneratedDate(),
     title: timetableListData.getTitle(),
-    validDate: timetableListData.getVersionInfo(),
+    validDate: convertTextDate(timetableListData.getVersionInfo()),
     days: timetableListData.getDays(),
   };
 

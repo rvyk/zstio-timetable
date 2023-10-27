@@ -9,9 +9,11 @@ import DropdownTeacher from "./Dropdowns/TeacherDropdown";
 import DropdownClass from "./Dropdowns/ClassDropdown";
 import Head from "next/head";
 import TimetableSmall from "./TimetableSmall";
+import { getSubstitutions } from "@/utils/getter";
 
 function Layout({ handleKey, ...props }) {
   const [isShortHours, setIsShortHours] = useState(false);
+  const [substitutions, setSubstitutions] = useState({});
 
   useEffect(() => {
     const storedShortHours = JSON.parse(localStorage.getItem("shortHours"));
@@ -24,6 +26,7 @@ function Layout({ handleKey, ...props }) {
     rooms,
     teachers,
     classes,
+    text,
     siteTitle,
     timeTable: { title },
   } = props;
@@ -31,6 +34,15 @@ function Layout({ handleKey, ...props }) {
   useEffect(() => {
     initFlowbite();
   }, []);
+
+  useEffect(() => {
+    const substitutionsGetter = async () => {
+      let substitutions = await getSubstitutions(text, title);
+      setSubstitutions(substitutions);
+    };
+
+    substitutionsGetter();
+  }, [text, title]);
 
   return (
     <>
@@ -60,6 +72,7 @@ function Layout({ handleKey, ...props }) {
           <JumbotronLarge {...props} />
           <TimetableLarge
             {...props}
+            substitutions={substitutions}
             isShortHours={isShortHours}
             setIsShortHours={setIsShortHours}
           />

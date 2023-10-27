@@ -42,20 +42,22 @@ export default function RenderTableRow({
                 {timeFrom} - {timeTo}
               </td>
 
-              {lessons?.map((day, lessonIndex) => (
-                <td
-                  className={`px-6 py-4 whitespace-nowrap border-r last:border-none dark:border-[#171717]`}
-                  key={`${day}-${lessonIndex}`}
-                >
-                  <RenderLesson
-                    number={number}
-                    index={index}
-                    lessonIndex={lessonIndex}
-                    day={day}
-                    substitutions={substitutions}
-                  />
-                </td>
-              ))}
+              {lessons?.map((day, lessonIndex) => {
+                return (
+                  <td
+                    className={`px-6 py-4 whitespace-nowrap border-r last:border-none dark:border-[#171717]`}
+                    key={`${day}-${lessonIndex}`}
+                  >
+                    <RenderLesson
+                      number={number}
+                      index={index}
+                      lessonIndex={lessonIndex}
+                      day={day}
+                      substitutions={substitutions}
+                    />
+                  </td>
+                );
+              })}
             </tr>
           );
         })
