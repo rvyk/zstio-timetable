@@ -1,6 +1,5 @@
 "use client";
 
-import { getCurrentLesson } from "@/utils/currentLesson";
 import shortHours from "@/utils/shortHours";
 import {
   MapPinIcon,
@@ -9,6 +8,7 @@ import {
 } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
+import CurrentLesson from "../Table/CurrentLesson";
 
 function RenderTimetable({ hours, lessons, isShortHours }) {
   const [isScreenSmall, setIsScreenSmall] = useState(false);
@@ -76,10 +76,6 @@ function RenderTimetable({ hours, lessons, isShortHours }) {
             isShortHours ? shortHours.slice(0, maxLessons) : hours
           )?.map(([key, hour], hourIndex) => {
             const { number, timeFrom, timeTo } = hour;
-            let { isWithinTimeRange, minutesRemaining } = getCurrentLesson(
-              timeFrom,
-              timeTo
-            );
 
             return (
               <div
@@ -98,12 +94,7 @@ function RenderTimetable({ hours, lessons, isShortHours }) {
                   </span>
                   <span className="block text-center text-sm">
                     {timeFrom} - {timeTo}
-                    {isWithinTimeRange && minutesRemaining > 0 && (
-                      <div className="bg-blue-100 mt-1 mx-2 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-red-100 dark:text-red-800 border border-blue-400 dark:border-red-400">
-                        <p>{minutesRemaining == 1 ? "ZOSTAŁA" : "ZOSTAŁO"}</p>
-                        <p>{`${minutesRemaining} MIN`}</p>
-                      </div>
-                    )}
+                    <CurrentLesson timeFrom={timeFrom} timeTo={timeTo} />
                   </span>
                 </div>
 

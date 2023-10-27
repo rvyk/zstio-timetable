@@ -2,7 +2,7 @@
 
 import RenderLesson from "./RenderLesson";
 import shortHours from "./../../utils/shortHours";
-import { getCurrentLesson } from "@/utils/currentLesson";
+import CurrentLesson from "../Table/CurrentLesson";
 
 export default function RenderTableRow({
   hours,
@@ -17,13 +17,9 @@ export default function RenderTableRow({
     <tbody>
       {Object.entries(hours).length > 1 ? (
         Object.entries(
-          isShortHours ? shortHours.slice(0, maxLessons) : hours,
+          isShortHours ? shortHours.slice(0, maxLessons) : hours
         )?.map(([key, hour], index) => {
           const { number, timeFrom, timeTo } = hour;
-          let { isWithinTimeRange, minutesRemaining } = getCurrentLesson(
-            timeFrom,
-            timeTo,
-          );
 
           return (
             <tr
@@ -39,12 +35,7 @@ export default function RenderTableRow({
               >
                 <div className="flex justify-center items-center flex-col">
                   {number}
-                  {isWithinTimeRange && minutesRemaining > 0 && (
-                    <div className="bg-blue-100 mt-1 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-red-100 dark:text-red-800 border border-blue-400 dark:border-red-400">
-                      <p>{minutesRemaining == 1 ? "ZOSTAŁA" : "ZOSTAŁO"}</p>
-                      <p>{`${minutesRemaining} MIN`}</p>
-                    </div>
-                  )}
+                  <CurrentLesson timeFrom={timeFrom} timeTo={timeTo} />
                 </div>
               </td>
               <td className="text-center border-r dark:border-[#171717]">
