@@ -65,6 +65,7 @@ function Layout({ handleKey, ...props }) {
             handleKey={handleKey}
             isShortHours={isShortHours}
             setIsShortHours={setIsShortHours}
+            substitutions={substitutions}
           />
         </div>
         <div className="hidden justify-center lg:flex flex-col w-full items-center">

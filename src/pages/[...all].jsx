@@ -46,6 +46,16 @@ const MainRoute = (props) => {
     };
   }, [props, router, handleKey]);
 
+  useEffect(() => {
+    // We use several servers, so we use this console.log to verify connectivity to the servers.
+    if (process.env.NEXT_PUBLIC_SERVER_ID) {
+      console.log(
+        `%cConnected with SERVER #${process.env.NEXT_PUBLIC_SERVER_ID}`,
+        "background: lime; color: white; font-size: x-large; text-align: center; border-radius: 15px; margin: 20px 0px 20px 0px; font-weight: bold; padding: 10px; width: full; "
+      );
+    }
+  }, []);
+
   return <Layout {...props} handleKey={handleKey} />;
 };
 

@@ -17,7 +17,7 @@ function CurrentLesson({ timeFrom, timeTo }) {
       );
       setMinutesRemaining(minutesRemaining);
       setIsWithinTimeRange(isWithinTimeRange);
-    }, 10000);
+    }, 1000);
 
     return () => clearInterval(timer);
   }, [timeFrom, timeTo]);

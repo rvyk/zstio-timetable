@@ -10,7 +10,7 @@ import React, { Fragment, useEffect, useState } from "react";
 import Footer from "../Footer";
 import Search from "./Search";
 import { useRouter } from "next/router";
-import getLastSelect from "@/utils/lastSelect";
+import { getLastSelect } from "@/utils/helpers";
 import { lock, unlock } from "tua-body-scroll-lock";
 import MobileDetect from "mobile-detect";
 
@@ -127,7 +127,7 @@ function BottomBar({ handleKey, ...props }) {
 
           <div className="mx-4 transition-all">
             {dropdowns?.map((dropdown) => (
-              <>
+              <div key={`dropdown-container-${dropdown.title}`}>
                 {dropdown.data.length > 0 && (
                   <Menu
                     key={`dropdown-${dropdown.title}`}
@@ -190,7 +190,7 @@ function BottomBar({ handleKey, ...props }) {
                     )}
                   </Menu>
                 )}
-              </>
+              </div>
             ))}
             <div className="flex justify-center items-center w-full flex-col text-gray-50 dark:text-gray-300 text-center">
               {generatedDate && (

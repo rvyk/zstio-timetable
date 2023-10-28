@@ -45,7 +45,7 @@ export default function RenderTableRow({
               {lessons?.map((day, lessonIndex) => {
                 return (
                   <td
-                    className={`px-6 py-4 whitespace-nowrap border-r last:border-none dark:border-[#171717]`}
+                    className={`px-6 py-4 whitespace-nowrap text-ellipsis overflow-hidden border-r last:border-none dark:border-[#171717]`}
                     key={`${day}-${lessonIndex}`}
                   >
                     <RenderLesson

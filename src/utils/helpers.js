@@ -51,3 +51,15 @@ export const convertTextDate = (inputDate) => {
 
   return formattedDate;
 };
+
+export const cases = [
+  "Uczniowie przychodzą później",
+  "Przeniesiona",
+  "Okienko dla uczniów",
+  "Uczniowie zwolnieni do domu",
+];
+
+export const getLastSelect = (path) => {
+  let currentSelection = path;
+  return currentSelection;
+};

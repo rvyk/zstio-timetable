@@ -50,3 +50,27 @@ export async function getSubstitutions(text, title) {
     }
   }
 }
+
+export const getSubstitution = (dayIndex, lessonIndex, substitutions) => {
+  if (dayIndex === substitutions.dayIndex)
+    return substitutions?.zastepstwa?.filter((subs) => {
+      return subs.lesson.split(",")[0] - 1 === lessonIndex;
+    })[0];
+};
+
+export const getSubstitutionForGroup = (
+  groupName,
+  substitutions,
+  lessonIndex,
+  dayIndex
+) => {
+  if (dayIndex === substitutions?.dayIndex)
+    return substitutions?.zastepstwa?.filter((subs) => {
+      if (
+        subs.lesson.split(",")[0] - 1 === lessonIndex &&
+        subs.branch.includes(groupName)
+      ) {
+        return subs;
+      }
+    })[0];
+};

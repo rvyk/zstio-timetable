@@ -1,46 +1,32 @@
+import { getSubstitution, getSubstitutionForGroup } from "@/utils/getter";
+import { cases } from "@/utils/helpers";
 import { ExclamationCircleIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 
 function RenderLesson({ number, index, lessonIndex, day, substitutions }) {
-  const cases = [
-    "Uczniowie przychodzą później",
-    "Przeniesiona",
-    "Okienko dla uczniów",
-    "Uczniowie zwolnieni do domu",
-  ];
-
-  const getSubstitution = () => {
-    if (lessonIndex === substitutions.dayIndex)
-      return substitutions?.zastepstwa?.filter((subs) => {
-        return subs.lesson.split(",")[0] - 1 === index;
-      })[0];
-  };
-
-  const getSubstitutionForGroup = (groupName) => {
-    if (lessonIndex === substitutions.dayIndex)
-      return substitutions?.zastepstwa?.filter((subs) => {
-        if (
-          subs.lesson.split(",")[0] - 1 === index &&
-          subs.branch.includes(groupName)
-        ) {
-          return subs;
-        }
-      })[0];
-  };
-
   return (
     <>
       {day[number - 1]?.map((lesson, subIndex) => {
-        let substitution = getSubstitution(),
+        let substitution = getSubstitution(lessonIndex, index, substitutions),
           possibleSubstitution = substitution,
           sure = true;
         if (substitution && day[number - 1]?.length > 1) {
-          substitution = getSubstitutionForGroup(lesson.groupName);
+          substitution = getSubstitutionForGroup(
+            lesson.groupName,
+            substitutions,
+            index,
+            lessonIndex
+          );
           if (!substitution) {
             sure = false;
             day[number - 1]?.map((lessonCheck, checkIndex) => {
               if (
-                getSubstitutionForGroup(lessonCheck?.groupName) &&
+                getSubstitutionForGroup(
+                  lessonCheck?.groupName,
+                  substitutions,
+                  index,
+                  lessonIndex
+                ) &&
                 checkIndex !== subIndex
               ) {
                 substitution = undefined;
@@ -133,11 +119,15 @@ function RenderLesson({ number, index, lessonIndex, day, substitutions }) {
                   </p>
                 )}
                 <p
-                  className="dark:text-red-400 w-fit text-red-500 font-semibold"
-                  data-tooltip-id="content_tooltips"
-                  data-tooltip-html={`${substitution?.message}`}
+                  className={`${
+                    substitution?.case == cases[1]
+                      ? "text-yellow-400"
+                      : "text-red-500 dark:text-red-400"
+                  } font-semibold`}
                 >
-                  {substitution?.case}
+                  {substitution?.case == cases[1] && substitution?.message
+                    ? substitution?.message
+                    : substitution?.case}
                 </p>
               </>
             )}

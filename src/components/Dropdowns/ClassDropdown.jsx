@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import getLastSelect from "../../utils/lastSelect";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
+import { getLastSelect } from "@/utils/helpers";
 
 function DropdownClass({ classes }) {
   const [searchClass, setSearchClass] = useState("");

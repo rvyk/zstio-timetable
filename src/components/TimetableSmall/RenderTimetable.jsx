@@ -5,12 +5,15 @@ import {
   MapPinIcon,
   UsersIcon,
   AcademicCapIcon,
+  ExclamationCircleIcon,
 } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import CurrentLesson from "../Table/CurrentLesson";
+import { getSubstitution, getSubstitutionForGroup } from "@/utils/getter";
+import { cases } from "@/utils/helpers";
 
-function RenderTimetable({ hours, lessons, isShortHours }) {
+function RenderTimetable({ hours, lessons, isShortHours, substitutions }) {
   const [isScreenSmall, setIsScreenSmall] = useState(false);
   const [selectedDay, setSelectedDay] = useState(0);
 
@@ -47,7 +50,7 @@ function RenderTimetable({ hours, lessons, isShortHours }) {
   }, []);
   return (
     <>
-      <div className="w-full sticky top-0">
+      <div className="w-full sticky top-0 z-20">
         <ul className="w-full text-sm font-medium text-center text-gray-500 divide-x dark:divide-none divide-gray-200 shadow flex dark:text-gray-400">
           {days.map((item, index) => (
             <li
@@ -100,11 +103,61 @@ function RenderTimetable({ hours, lessons, isShortHours }) {
 
                 <div className="w-full px-5 py-2 min-h-[4rem] flex flex-col justify-center">
                   {lessons[selectedDay][number - 1]?.map((lesson, index) => {
+                    let substitution = getSubstitution(
+                        selectedDay,
+                        hourIndex,
+                        substitutions
+                      ),
+                      possibleSubstitution = substitution,
+                      sure = true;
+                    if (
+                      substitution &&
+                      lessons[selectedDay][number - 1]?.length > 1
+                    ) {
+                      substitution = getSubstitutionForGroup(
+                        lesson.groupName,
+                        substitutions,
+                        hourIndex,
+                        selectedDay
+                      );
+                      if (!substitution) {
+                        sure = false;
+                        lessons[selectedDay][number - 1]?.map(
+                          (lessonCheck, checkIndex) => {
+                            if (
+                              getSubstitutionForGroup(
+                                lessonCheck.groupName,
+                                substitutions,
+                                hourIndex,
+                                selectedDay
+                              ) &&
+                              checkIndex !== index
+                            ) {
+                              substitution = undefined;
+                              sure = true;
+                            }
+                          }
+                        );
+                      }
+                    }
+
                     return (
                       <div key={`lesson-${index}`} className="p-2">
                         <div className="flex">
-                          <p className="font-semibold">{lesson?.subject}</p>
-                          <p className="ml-2">{lesson?.groupName}</p>
+                          <p
+                            className={`font-semibold ${
+                              substitution && sure && "line-through opacity-60"
+                            }`}
+                          >
+                            {lesson?.subject}
+                          </p>
+                          <p
+                            className={`ml-2 ${
+                              substitution && sure && "line-through opacity-60"
+                            }`}
+                          >
+                            {lesson?.groupName}
+                          </p>
                         </div>
                         <div className="flex items-center">
                           {lesson?.className && (
@@ -112,18 +165,27 @@ function RenderTimetable({ hours, lessons, isShortHours }) {
                               <AcademicCapIcon className="h-4 w-4 mr-1" />
                               <Link
                                 href={`/teacher/${lesson?.classId}`}
-                                className={`flex items-center text-sm mr-3`}
+                                className={`flex ${
+                                  substitution &&
+                                  sure &&
+                                  "line-through opacity-60"
+                                } items-center text-sm mr-3`}
                               >
                                 {lesson?.className}
                               </Link>
                             </>
                           )}
+
                           {lesson?.teacher && (
                             <>
                               <UsersIcon className="h-4 w-4 mr-1" />
                               <Link
                                 href={`/teacher/${lesson?.teacherId}`}
-                                className={`flex items-center text-sm mr-3`}
+                                className={`flex ${
+                                  substitution &&
+                                  sure &&
+                                  "line-through opacity-60"
+                                } items-center text-sm mr-3`}
                               >
                                 {lesson?.teacher}
                               </Link>
@@ -134,13 +196,52 @@ function RenderTimetable({ hours, lessons, isShortHours }) {
                               <MapPinIcon className="h-4 w-4 mr-1" />
                               <Link
                                 href={`/room/${lesson?.roomId}`}
-                                className={`flex items-center mr-1 text-sm`}
+                                className={`flex ${
+                                  substitution &&
+                                  sure &&
+                                  "line-through opacity-60"
+                                } items-center mr-1 text-sm`}
                               >
-                                {lesson?.room}
+                                {substitution &&
+                                sure &&
+                                substitution?.class != lesson?.room
+                                  ? substitution?.class
+                                  : lesson?.room}
                               </Link>
                             </>
                           )}
+
+                          {possibleSubstitution && !sure && (
+                            <Link href={`https://zastepstwa.awfulworld.space`}>
+                              <ExclamationCircleIcon
+                                className="w-5 h-5 text-red-600 dark:text-red-400"
+                                data-tooltip-id="content_tooltips"
+                                data-tooltip-html={`${possibleSubstitution?.case}? <br /> (Sprawdź zastępstwa)`}
+                              />
+                            </Link>
+                          )}
                         </div>
+                        {substitution && sure && (
+                          <>
+                            {cases.includes(substitution?.case) === false && (
+                              <p className="text-orange-400 font-semibold">
+                                {substitution?.subject}
+                              </p>
+                            )}
+                            <p
+                              className={`${
+                                substitution?.case == cases[1]
+                                  ? "text-yellow-400"
+                                  : "text-red-500 dark:text-red-400"
+                              } font-semibold`}
+                            >
+                              {substitution?.case == cases[1] &&
+                              substitution?.message
+                                ? substitution?.message
+                                : substitution?.case}
+                            </p>
+                          </>
+                        )}
                       </div>
                     );
                   })}

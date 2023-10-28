@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import BottomBar from "./TimetableSmall/BottomBar";
 import RenderTimetable from "./TimetableSmall/RenderTimetable";
 import RenderNavbar from "./TimetableSmall/RenderNavbar";
@@ -9,6 +9,7 @@ function TimetableSmall({
   handleKey,
   setIsShortHours,
   isShortHours,
+  substitutions,
   ...props
 }) {
   let {
@@ -27,6 +28,7 @@ function TimetableSmall({
         lessons={lessons}
         isShortHours={isShortHours}
         suppressHydrationWarning
+        substitutions={substitutions}
       />
 
       <BottomBar handleKey={handleKey} {...props} />
