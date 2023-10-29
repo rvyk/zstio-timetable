@@ -11,7 +11,7 @@ import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import CurrentLesson from "../Table/CurrentLesson";
 import { getSubstitution, getSubstitutionForGroup } from "@/utils/getter";
-import { cases } from "@/utils/helpers";
+import { cases, days } from "@/utils/helpers";
 
 function RenderTimetable({ hours, lessons, isShortHours, substitutions }) {
   const [isScreenSmall, setIsScreenSmall] = useState(false);
@@ -20,14 +20,6 @@ function RenderTimetable({ hours, lessons, isShortHours, substitutions }) {
   const maxLessons =
     typeof hours == "object" &&
     Math.max(Object.entries(hours).length, ...lessons.map((day) => day.length));
-
-  const days = [
-    { long: "Poniedziałek", short: "Pon.", index: 0 },
-    { long: "Wtorek", short: "Wt.", index: 1 },
-    { long: "Środa", short: "Śr.", index: 2 },
-    { long: "Czwartek", short: "Czw.", index: 3 },
-    { long: "Piątek", short: "Pt.", index: 4 },
-  ];
 
   useEffect(() => {
     function handleResize() {

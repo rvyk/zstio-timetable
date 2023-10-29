@@ -7,6 +7,8 @@ import RenderTableFooter from "./Timetable/RenderTableFooter";
 import RenderTableRow from "./Timetable/RenderTableRow";
 import { ArrowPathIcon } from "@heroicons/react/24/outline";
 import ShortHours from "./Table/ShortHours";
+import { useRouter } from "next/router";
+import LoadingTable from "./Table/LoadingTable";
 
 function TimetableLarge({
   substitutions,
@@ -14,12 +16,18 @@ function TimetableLarge({
   setIsShortHours,
   ...props
 }) {
+  const { isReady } = useRouter();
+
   let {
     status,
     text,
     timeTableID,
     timeTable: { hours, generatedDate, title, validDate, lessons },
   } = props;
+
+  if (!isReady) {
+    return <LoadingTable />;
+  }
 
   return (
     <>

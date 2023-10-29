@@ -1,6 +1,6 @@
-export default function RenderTableHeader({ day }) {
-  const daysOfWeek = ["Poniedziałek", "Wtorek", "Środa", "Czwartek", "Piątek"];
+import { days } from "@/utils/helpers";
 
+export default function RenderTableHeader() {
   return (
     <thead className="text-xs transition-all duration-200 text-[#ffffff] bg-[#2B161B] uppercase dark:bg-[#151515] dark:text-gray-300">
       <tr>
@@ -10,9 +10,9 @@ export default function RenderTableHeader({ day }) {
         <th scope="col" className="px-8 py-3">
           <div className="flex items-center justify-center">Godz.</div>
         </th>
-        {daysOfWeek.map((day) => (
-          <th scope="col" className="px-6 py-3" key={day}>
-            <div className="flex items-center justify-center">{day}</div>
+        {days.map((day) => (
+          <th scope="col" className="px-6 py-3" key={day.long}>
+            <div className="flex items-center justify-center">{day.long}</div>
           </th>
         ))}
       </tr>

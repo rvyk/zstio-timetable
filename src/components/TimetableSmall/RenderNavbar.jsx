@@ -13,7 +13,7 @@ function RenderNavbar({ isShortHours, setIsShortHours }) {
             <Image
               alt="logo"
               layout="fill"
-              objectFit="conver"
+              objectFit="cover"
               objectPosition="center"
               src={"/icon-152x152.png"}
             />

@@ -11,7 +11,7 @@
   "dependencies": {
     "@headlessui/react": "^1.7.17",
     "@heroicons/react": "^2.0.18",
-    "@wulkanowy/timetable-parser": "^1.6.0",
+    "@wulkanowy/timetable-parser": "https://github.com/majusss/timetable-parser-js.git",
     "autoprefixer": "^10.4.16",
     "axios": "^1.5.1",
     "eslint": "^8.52.0",
