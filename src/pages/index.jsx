@@ -1,7 +1,6 @@
 import JumbotronLarge from "@/components/JumbotronLarge";
-import Navbar from "@/components/Navbar";
-import { ArrowPathIcon } from "@heroicons/react/24/outline";
 import Head from "next/head";
+import Image from "next/legacy/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -30,8 +29,17 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <div className="min-h-screen w-screen overflow-hidden flex flex-col justify-center items-center bg-[#F7F3F5] dark:bg-[#171717] transition-all">
-        <Link href={"https://zstiojar.edu.pl"} className="block md:hidden">
-          <img alt="logo" className="w-20 h-20" src={"/icon-192x192.png"} />
+        <Link
+          href={"https://zstiojar.edu.pl"}
+          className="relative w-20 h-20 first-line:block md:hidden"
+        >
+          <Image
+            src={"/icon-192x192.png"}
+            alt="Logo"
+            layout="fill"
+            objectFit="cover"
+            objectPosition="center"
+          />
         </Link>
         <JumbotronLarge />
         <div

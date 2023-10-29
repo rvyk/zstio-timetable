@@ -5,6 +5,7 @@ import InstallPWA from "./Navbar/InstallPWA";
 import { Tooltip } from "react-tooltip";
 import ThemeButton from "./Navbar/ThemeButton";
 import SubstitutionsButton from "./Navbar/SubstitutionsButton";
+import Image from "next/legacy/image";
 
 function Navbar() {
   const { theme, setTheme, resolvedTheme, systemTheme } = useTheme();
@@ -41,15 +42,6 @@ function Navbar() {
 
   return (
     <div className="w-screen h-14 block lg:absolute top-0">
-      <div className="absolute top-2 left-2 z-50 hidden lg:visible transition-all">
-        <Link href={"https://zstiojar.edu.pl"}>
-          <img
-            alt="logo"
-            className="w-20 h-20 mr-4"
-            src={"/icon-192x192.png"}
-          />
-        </Link>
-      </div>
       {resolvedTheme != undefined && (
         <div className="absolute top-2 right-2 z-50 transition-all flex">
           <InstallPWA />

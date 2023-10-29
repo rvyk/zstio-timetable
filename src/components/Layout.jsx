@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import TimetableLarge from "./TimetableLarge";
-import Footer from "../components/Footer";
 import JumbotronLarge from "./JumbotronLarge";
 import Navbar from "./Navbar";
 import { initFlowbite } from "flowbite";
@@ -10,6 +9,9 @@ import DropdownClass from "./Dropdowns/ClassDropdown";
 import Head from "next/head";
 import TimetableSmall from "./TimetableSmall";
 import { getSubstitutions } from "@/utils/getter";
+import dynamic from "next/dynamic";
+
+const Footer = dynamic(() => import("../components/Footer"));
 
 function Layout({ handleKey, ...props }) {
   const [isShortHours, setIsShortHours] = useState(false);

@@ -9,7 +9,7 @@ const withPWA = require("next-pwa")({
 module.exports = withPWA({
   reactStrictMode: false,
   images: {
-    domains: ["zstiojar.edu.pl"],
+    remotePatterns: [{ hostname: "zstiojar.edu.pl" }],
   },
   i18n: {
     locales: ["pl"],

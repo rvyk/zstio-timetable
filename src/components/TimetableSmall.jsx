@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import BottomBar from "./TimetableSmall/BottomBar";
+// import BottomBar from "./TimetableSmall/BottomBar";
 import RenderTimetable from "./TimetableSmall/RenderTimetable";
 import RenderNavbar from "./TimetableSmall/RenderNavbar";
+import dynamic from "next/dynamic";
+
+const BottomBar = dynamic(() => import("./TimetableSmall/BottomBar"));
 
 function TimetableSmall({
   handleKey,
@@ -27,7 +30,6 @@ function TimetableSmall({
         hours={hours}
         lessons={lessons}
         isShortHours={isShortHours}
-        suppressHydrationWarning
         substitutions={substitutions}
       />
 

@@ -1,7 +1,7 @@
 import { Html, Head, Main, NextScript } from "next/document";
 export default function Document() {
   return (
-    <Html lang="pl">
+    <Html lang="pl" suppressHydrationWarning={true}>
       <Head>
         <link
           rel="icon"
@@ -27,7 +27,7 @@ export default function Document() {
         ></script>
         <link rel="manifest" href="/manifest.json" />
       </Head>
-      <body>
+      <body suppressHydrationWarning={true}>
         <Main />
         <NextScript />
       </body>

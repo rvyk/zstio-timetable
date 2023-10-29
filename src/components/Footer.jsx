@@ -1,4 +1,5 @@
 import { useTheme } from "next-themes";
+import Image from "next/legacy/image";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 function Footer({ small }) {
@@ -16,7 +17,10 @@ function Footer({ small }) {
     <>
       {resolvedTheme !== undefined && !small && (
         <div className="-mb-2">
-          <a href="https://skillhost.pl/?pk_source=plan-lekcji" target="_blank">
+          <Link
+            href="https://skillhost.pl/?pk_source=plan-lekcji"
+            target="_blank"
+          >
             <img
               src={
                 theme == "light" || systemTheme == "light"
@@ -26,7 +30,7 @@ function Footer({ small }) {
               className="h-24"
               alt="skill-host-logo"
             />
-          </a>
+          </Link>
         </div>
       )}
       <footer
@@ -38,12 +42,14 @@ function Footer({ small }) {
           <a
             href="https://skillhost.pl/?pk_source=plan-lekcji"
             target="_blank"
-            className="h-20 w-28 ml-2 -mr-4"
+            className="relative h-20 w-28 ml-2 -mr-4"
           >
-            <img
+            <Image
+              layout="fill"
+              objectPosition="center"
+              objectFit="contain"
               src="/transparent_skillhost.png"
               alt="skill-host-logo"
-              className="h-20 w-20 object-contain"
             />
           </a>
         )}

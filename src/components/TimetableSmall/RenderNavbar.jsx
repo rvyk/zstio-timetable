@@ -2,23 +2,25 @@ import React from "react";
 import Navbar from "./../Navbar";
 import Link from "next/link";
 import ShortHours from "../Table/ShortHours";
+import Image from "next/legacy/image";
 
 function RenderNavbar({ isShortHours, setIsShortHours }) {
   return (
     <div className="flex items-center w-full bg-[#F7F3F5] dark:bg-[#2b2b2b]">
       <div className="ml-2 flex justify-center items-center mx-4">
         <Link href={"https://zstiojar.edu.pl"}>
-          <img
-            alt="logo"
-            className="w-16 h-16 mr-4 object-contain"
-            src={"/icon-152x152.png"}
-          />
+          <div className="relative w-12 h-12 mr-2 object-contain">
+            <Image
+              alt="logo"
+              layout="fill"
+              objectFit="conver"
+              objectPosition="center"
+              src={"/icon-152x152.png"}
+            />
+          </div>
         </Link>
       </div>
-      <div
-        className="inline-flex -mt-1.5 rounded-md shadow-sm mr-2"
-        role="group"
-      >
+      <div className="inline-flex rounded-md shadow-sm mr-2" role="group">
         <ShortHours
           setIsShortHours={setIsShortHours}
           isShortHours={isShortHours}

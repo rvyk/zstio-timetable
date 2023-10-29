@@ -72,7 +72,6 @@ function TimetableLarge({
               isShortHours={isShortHours}
               lessons={lessons}
               substitutions={substitutions}
-              suppressHydrationWarning
             />
             <RenderTableFooter
               status={status}

@@ -46,7 +46,8 @@ function RenderTimetable({ hours, lessons, isShortHours, substitutions }) {
   }, []);
 
   useEffect(() => {
-    setSelectedDay(new Date().getDay() > 5 ? 0 : new Date().getDay() - 1);
+    let day = new Date().getDay();
+    setSelectedDay(day >= 6 || day == 0 ? 0 : day - 1);
   }, []);
   return (
     <>
