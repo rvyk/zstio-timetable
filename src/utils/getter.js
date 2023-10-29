@@ -52,7 +52,7 @@ export async function getSubstitutions(text, title) {
 }
 
 export const getSubstitution = (dayIndex, lessonIndex, substitutions) => {
-  if (dayIndex === substitutions.dayIndex)
+  if (dayIndex === substitutions?.dayIndex)
     return substitutions?.zastepstwa?.filter((subs) => {
       return subs.lesson.split(",")[0] - 1 === lessonIndex;
     })[0];
