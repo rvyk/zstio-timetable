@@ -79,8 +79,8 @@ function RenderTimetable({ hours, lessons, isShortHours, substitutions }) {
                 className={`text-gray-600 ${
                   number % 2 === 0
                     ? "bg-white dark:bg-[#282828]"
-                    : "bg-gray-50 dark:bg-[#242424]"
-                } dark:text-gray-300 border-b flex dark:border-[#282828]`}
+                    : "bg-zinc-50 dark:bg-[#242424]"
+                } dark:text-gray-300 border-b flex dark:border-[#282828] border-zinc-100`}
               >
                 <div
                   className={`w-24 rounded-l py-1 my-2 flex-shrink-0 flex flex-col justify-center `}
@@ -157,7 +157,7 @@ function RenderTimetable({ hours, lessons, isShortHours, substitutions }) {
                             <>
                               <AcademicCapIcon className="h-4 w-4 mr-1" />
                               <Link
-                                href={`/teacher/${lesson?.classId}`}
+                                href={`/class/${lesson?.classId}`}
                                 className={`flex ${
                                   substitution &&
                                   sure &&
