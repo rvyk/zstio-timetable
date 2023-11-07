@@ -43,7 +43,7 @@ export const convertTextDate = (inputDate) => {
     return inputDate;
   }
 
-  const day = words[0];
+  const day = words[0].padStart(2, "0");
   const month = months[words[1]];
   const year = words[2].slice(0, -2);
 
