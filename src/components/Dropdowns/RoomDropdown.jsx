@@ -29,7 +29,7 @@ function DropdownRoom({ rooms }) {
   const filteredRooms = rooms?.filter((room) => {
     const roomName = room.name.toLowerCase();
     const searchQuery = searchRoom.toLowerCase();
-    return roomName.startsWith(searchQuery);
+    return roomName.includes(searchQuery);
   });
 
   return (

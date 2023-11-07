@@ -29,7 +29,7 @@ function DropdownTeacher({ teachers }) {
   const filteredTeachers = teachers?.filter((teacher) => {
     const teacherName = teacher.name.toLowerCase();
     const searchQuery = searchTeacher.toLowerCase();
-    return teacherName.startsWith(searchQuery);
+    return teacherName.includes(searchQuery);
   });
 
   return (

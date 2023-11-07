@@ -29,7 +29,7 @@ function DropdownClass({ classes }) {
   const filteredClasses = classes?.filter((classPrefix) => {
     const className = classPrefix.name.toLowerCase();
     const searchQuery = searchClass.toLowerCase();
-    return className.startsWith(searchQuery);
+    return className.includes(searchQuery);
   });
 
   return (
