@@ -1,5 +1,9 @@
 import axios from "axios";
 
+/*
+
+  This code was required to search for teachers names, but the names were entered on the timetable
+
 export const getTeacher = async (title) => {
   const teachers = await axios.get("/teachers.json");
   if (typeof teachers?.data != "object") {
@@ -7,7 +11,7 @@ export const getTeacher = async (title) => {
   }
   const result = teachers.data?.filter((teacher) => teacher.name === title);
   if (result?.length === 1) return result[0].full.split(" ")[0];
-};
+}; */
 
 export async function getSubstitutions(text, title) {
   const search =
@@ -18,10 +22,12 @@ export async function getSubstitutions(text, title) {
       : undefined;
   const query =
     search === "teacher"
-      ? await getTeacher(title)
+      ? title.match(/(\w+)\s\(/)[1] // await getTeacher(title)
       : title.includes(" ")
       ? title.split(" ")[0]
       : title;
+
+  console.log(search, query, title);
 
   if (search && query) {
     try {
