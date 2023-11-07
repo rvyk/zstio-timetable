@@ -27,8 +27,6 @@ export async function getSubstitutions(text, title) {
       ? title.split(" ")[0]
       : title;
 
-  console.log(search, query, title);
-
   if (search && query) {
     try {
       const substitutionsRes = await axios.get(
