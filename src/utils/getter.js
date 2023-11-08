@@ -22,7 +22,10 @@ export async function getSubstitutions(text, title) {
       : undefined;
   const query =
     search === "teacher"
-      ? title.match(/(\w+)\s\(/)[1] // await getTeacher(title)
+      ? title
+          .match(/\b(\p{L}+)\s/u)[0]
+          .toString()
+          .trim() // await getTeacher(title)
       : title.includes(" ")
       ? title.split(" ")[0]
       : title;

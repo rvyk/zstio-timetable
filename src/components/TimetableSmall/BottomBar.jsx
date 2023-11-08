@@ -157,7 +157,7 @@ function BottomBar({ handleKey, ...props }) {
                           leaveFrom="transform opacity-100 scale-100"
                           leaveTo="transform opacity-0 scale-95"
                         >
-                          <Menu.Items className="absolute max-h-[35%] mt-3 overflow-y-scroll mx-4 right-0 left-0 origin-top-right divide-y divide-gray-100 dark:divide-[#323232] rounded-md bg-gray-50 dark:bg-[#202020] shadow-lg ring-0 focus:outline-none">
+                          <Menu.Items className="absolute max-h-[35%] z-50 mt-3 overflow-y-scroll mx-4 right-0 left-0 origin-top-right divide-y divide-gray-100 dark:divide-[#323232] rounded-md bg-gray-50 dark:bg-[#202020] shadow-lg ring-0 focus:outline-none">
                             {dropdown.data.map((item) => (
                               <div className="px-2 py-2" key={item.name}>
                                 <Menu.Item as={Fragment}>

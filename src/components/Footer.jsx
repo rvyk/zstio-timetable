@@ -41,7 +41,7 @@ function Footer({ small }) {
           <a
             href="https://skillhost.pl/?pk_source=plan-lekcji"
             target="_blank"
-            className="relative h-20 w-28 ml-2 -mr-4"
+            className="relative z-0 h-20 w-28 ml-2 -mr-4"
           >
             <Image
               layout="fill"
