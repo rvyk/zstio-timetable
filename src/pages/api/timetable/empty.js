@@ -5,8 +5,6 @@ export default async function handler(req, res) {
     const { day: dayIndex, lesson: lessonIndex } = req.query,
       target = req.query?.target || "all";
 
-    console.log(req.query);
-
     if (!dayIndex || !lessonIndex) {
       return res.status(400).send({
         success: false,
