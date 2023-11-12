@@ -2,8 +2,7 @@ import axios from "axios";
 
 export default async function handler(req, res) {
   try {
-    const { day: dayIndex, lesson: lessonIndex } = req.query,
-      target = req.query?.target || "all";
+    const { day: dayIndex, lesson: lessonIndex } = req.query;
 
     if (!dayIndex || !lessonIndex) {
       return res.status(400).send({
@@ -13,30 +12,18 @@ export default async function handler(req, res) {
     }
 
     const all = (
-      await axios.get(
-        `${process.env.NEXT_PUBLIC_HOST}/api/timetable/all?target=${target}`,
-      )
+      await axios.get(`${process.env.NEXT_PUBLIC_HOST}/api/timetable/all`)
     )?.data;
 
-    const responseObj = { success: true, classes: [], teachers: [] };
+    const responseObj = { success: true, classes: [] };
 
-    if (target === "classes" || target === "all")
-      for (const classObj of all.classes) {
-        if (classObj.lessons[dayIndex][lessonIndex]?.length === 0)
-          responseObj.classes.push({
-            name: classObj.title,
-            value: classObj.id,
-          });
-      }
-
-    if (target === "teachers" || target === "all")
-      for (const teacherObj of all.teachers) {
-        if (teacherObj.lessons[dayIndex][lessonIndex]?.length === 0)
-          responseObj.teachers.push({
-            name: teacherObj.title,
-            value: teacherObj.id,
-          });
-      }
+    for (const classObj of all.classes) {
+      if (classObj.lessons[dayIndex][lessonIndex]?.length === 0)
+        responseObj.classes.push({
+          name: classObj.title,
+          value: classObj.id,
+        });
+    }
 
     res.status(200).send(responseObj);
   } catch (error) {

@@ -7,9 +7,7 @@ const cache = new NodeCache({ stdTTL: 600, checkperiod: 60 });
 
 export default async function handler(req, res) {
   try {
-    const target = req.query?.target || "all";
-
-    const cachedData = cache.get(target);
+    const cachedData = cache.get("all");
     if (cachedData) {
       return res.status(200).send(cachedData);
     }
@@ -23,35 +21,22 @@ export default async function handler(req, res) {
     }
 
     const tableList = new TimetableList(data);
-    const { classes, teachers, rooms } = tableList.getList();
+    const { classes } = tableList.getList();
 
-    const responseObj = { success: true, classes: [], teachers: [] };
+    const responseObj = { success: true, classes: [] };
 
-    if (target === "classes" || target === "all")
-      for (const { value } of classes) {
-        const res = await axios.get(
-          `${process.env.NEXT_PUBLIC_HOST}/api/timetable/getTimetable?id=s${value}`,
-        );
-        responseObj.classes.push({
-          title: res.data.title,
-          id: value,
-          lessons: res.data.lessons,
-        });
-      }
+    for (const { value } of classes) {
+      const res = await axios.get(
+        `${process.env.NEXT_PUBLIC_HOST}/api/timetable/getTimetable?id=s${value}`,
+      );
+      responseObj.classes.push({
+        title: res.data.title,
+        id: value,
+        lessons: res.data.lessons,
+      });
+    }
 
-    if (target === "teachers" || target === "all")
-      for (const { value } of teachers) {
-        const res = await axios.get(
-          `${process.env.NEXT_PUBLIC_HOST}/api/timetable/getTimetable?id=n${value}`,
-        );
-        responseObj.teachers.push({
-          title: res.data.title,
-          id: value,
-          lessons: res.data.lessons,
-        });
-      }
-
-    cache.set(target, responseObj);
+    cache.set("all", responseObj);
 
     res.status(200).send(responseObj);
   } catch (error) {
