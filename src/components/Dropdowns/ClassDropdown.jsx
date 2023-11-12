@@ -50,6 +50,16 @@ function DropdownClass({ classes }) {
             placeholder="Wyszukaj oddział"
             value={searchClass}
             onChange={handleSearch}
+            onKeyDown={({ key }) => {
+              if (
+                key === "Enter" &&
+                filteredClasses?.length === 1 &&
+                typeof filteredClasses[0]?.value !== "undefined"
+              ) {
+                handleSelectClass(filteredClasses[0]);
+                router.push(`/class/${filteredClasses[0].value}`);
+              }
+            }}
           />
         </div>
       </div>

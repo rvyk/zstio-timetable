@@ -50,6 +50,16 @@ function DropdownRoom({ rooms }) {
             placeholder="Wyszukaj salę"
             value={searchRoom}
             onChange={handleSearch}
+            onKeyDown={({ key }) => {
+              if (
+                key === "Enter" &&
+                filteredRooms?.length === 1 &&
+                typeof filteredRooms[0]?.value !== "undefined"
+              ) {
+                handleSelectRoom(filteredRooms[0]);
+                router.push(`/room/${filteredRooms[0].value}`);
+              }
+            }}
           />
         </div>
       </div>

@@ -50,6 +50,16 @@ function DropdownTeacher({ teachers }) {
             placeholder="Wyszukaj nauczyciela"
             value={searchTeacher}
             onChange={handleSearch}
+            onKeyDown={({ key }) => {
+              if (
+                key === "Enter" &&
+                filteredTeachers?.length === 1 &&
+                typeof filteredTeachers[0]?.value !== "undefined"
+              ) {
+                handleSelectTeacher(filteredTeachers[0]);
+                router.push(`/teacher/${filteredTeachers[0].value}`);
+              }
+            }}
           />
         </div>
       </div>
