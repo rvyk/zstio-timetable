@@ -9,6 +9,9 @@
 **/public/sw.js.map
 **/public/workbox-*.js.map
 **/public/worker-*.js.map
+**/public/sitemap-0.xml
+**/public/sitemap.xml
+**/public/robots.txt
 /build
 .DS_Store
 *.pem
