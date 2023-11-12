@@ -39,17 +39,15 @@ export const convertTextDate = (inputDate) => {
 
   const words = inputDate.split(" ");
 
-  if (words.length !== 3) {
+  if (words.length < 3) {
     return inputDate;
   }
 
   const day = words[0].padStart(2, "0");
   const month = months[words[1]];
-  const year = words[2].slice(0, -2);
+  const year = words[2].replace("r.", "");
 
-  const formattedDate = `${year}-${month}-${day}`;
-
-  return formattedDate;
+  return `${year}-${month}-${day}`;
 };
 
 export const cases = [
