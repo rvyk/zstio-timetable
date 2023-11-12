@@ -19,10 +19,10 @@ module.exports = withPWA({
   async rewrites() {
     return [
       {
-        source: '/api/getSubstitutions',
+        source: "/api/getSubstitutions",
         destination: `http://localhost:3001/api/getSubstitutions`,
       },
-    ]
+    ];
   },
-
+  output: "standalone",
 });
