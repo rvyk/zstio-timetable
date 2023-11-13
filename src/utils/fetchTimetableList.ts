@@ -6,9 +6,9 @@ const fetchTimetableList = async () => {
   let err;
   try {
     const res = await axios.get(
-      `${process.env.NEXT_PUBLIC_HOST}/proxy/getTimetableList`
+      `${process.env.NEXT_PUBLIC_HOST}/proxy/getTimetableList`,
     );
-    timeTableOk = res.status = 200 ? true : false;
+    timeTableOk = res.status == 200;
     timeTableData = res.data;
   } catch (e) {
     timeTableData = {};

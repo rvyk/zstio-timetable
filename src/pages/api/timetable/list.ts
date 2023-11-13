@@ -24,7 +24,7 @@ export default async function handler(req, res) {
     const tableList = new TimetableList(data);
     const { classes, teachers, rooms } = tableList.getList();
 
-    let responseObj = { success: true };
+    let responseObj = { success: true, classes, teachers, rooms };
     switch (req.query.select) {
       case "classes":
         responseObj.classes = classes;

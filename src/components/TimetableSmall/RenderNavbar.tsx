@@ -1,5 +1,5 @@
 import React from "react";
-import Navbar from "./../Navbar";
+import Navbar from "../Navbar";
 import Link from "next/link";
 import ShortHours from "../Table/ShortHours";
 import Image from "next/legacy/image";

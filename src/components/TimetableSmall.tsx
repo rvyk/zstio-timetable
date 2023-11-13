@@ -1,5 +1,3 @@
-"use client";
-
 import React from "react";
 import RenderTimetable from "./TimetableSmall/RenderTimetable";
 import RenderNavbar from "./TimetableSmall/RenderNavbar";
@@ -24,7 +22,7 @@ function TimetableSmall({
   } = props;
 
   if (!isReady) {
-    return <LoadingTable small />;
+    return <LoadingTable small={true} />;
   }
 
   return (

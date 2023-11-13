@@ -11,7 +11,7 @@ import TimetableSmall from "./TimetableSmall";
 import { getSubstitutions } from "@/utils/getter";
 import dynamic from "next/dynamic";
 
-const Footer = dynamic(() => import("../components/Footer"));
+const Footer = dynamic(() => import("./Footer"));
 
 function Layout({ handleKey, ...props }) {
   const [isShortHours, setIsShortHours] = useState(false);
@@ -79,7 +79,7 @@ function Layout({ handleKey, ...props }) {
             isShortHours={isShortHours}
             setIsShortHours={setIsShortHours}
           />
-          <Footer />
+          <Footer small={false} />
         </div>
         <DropdownRoom rooms={rooms} />
         <DropdownTeacher teachers={teachers} />

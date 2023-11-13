@@ -18,7 +18,8 @@ function Navbar() {
     }
     const newTheme = theme === "light" ? "dark" : "light";
     setTheme(newTheme);
-    document.cookie = `selectedTheme=${newTheme}; path=/; domain=${(window?.location?.hostname)
+    document.cookie = `selectedTheme=${newTheme}; path=/; domain=${(window
+      ?.location?.hostname)
       .split(".")
       .slice(-2)
       .join(".")};`;
@@ -28,7 +29,7 @@ function Navbar() {
     setIsMounted(true);
     const theme = document.cookie.replace(
       /(?:(?:^|.*;\s*)selectedTheme\s*\=\s*([^;]*).*$)|^.*$/,
-      "$1"
+      "$1",
     );
 
     if (theme) {

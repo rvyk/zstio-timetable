@@ -18,7 +18,7 @@ function ShortHours({ setIsShortHours, isShortHours }) {
         data-tooltip-content="Normalne lekcje - 45 minut"
         onClick={() => {
           setIsShortHours(false);
-          localStorage.setItem("shortHours", false);
+          localStorage.setItem("shortHours", "false");
         }}
         className={` ${
           isShortHours
@@ -34,7 +34,7 @@ function ShortHours({ setIsShortHours, isShortHours }) {
         data-tooltip-content="Skrócone lekcje - 30 minut"
         onClick={() => {
           setIsShortHours(true);
-          localStorage.setItem("shortHours", true);
+          localStorage.setItem("shortHours", "true");
         }}
         className={` ${
           isShortHours

@@ -16,9 +16,9 @@ export const getCurrentLesson = (timeFrom, timeTo) => {
   if (isWithinTimeRange) {
     const endTime = new Date();
     endTime.setHours(Number(toHour), Number(toMinutes), 0);
-    const timeDifference = endTime - new Date();
+    const timeDifference = endTime.getTime() - new Date().getTime();
     minutesRemaining = Math.ceil(
-      (timeDifference % (1000 * 60 * 60)) / (1000 * 60)
+      (timeDifference % (1000 * 60 * 60)) / (1000 * 60),
     );
   }
 

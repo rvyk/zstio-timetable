@@ -1,7 +1,5 @@
-"use client";
-
 import RenderLesson from "./RenderLesson";
-import shortHours from "./../../utils/shortHours";
+import shortHours from "../../utils/shortHours";
 import CurrentLesson from "../Table/CurrentLesson";
 
 export default function RenderTableRow({
@@ -17,9 +15,9 @@ export default function RenderTableRow({
     <tbody>
       {Object.entries(hours).length > 1 ? (
         Object.entries(
-          isShortHours ? shortHours.slice(0, maxLessons) : hours
+          isShortHours ? shortHours.slice(0, maxLessons) : hours,
         )?.map(([key, hour], index) => {
-          const { number, timeFrom, timeTo } = hour;
+          const { number, timeFrom, timeTo }: any = hour;
 
           return (
             <tr

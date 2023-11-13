@@ -1,5 +1,3 @@
-"use client";
-
 import React from "react";
 import { Tooltip } from "react-tooltip";
 import RenderTableHeader from "./Timetable/RenderTableHeader";
@@ -26,7 +24,7 @@ function TimetableLarge({
   } = props;
 
   if (!isReady) {
-    return <LoadingTable />;
+    return <LoadingTable small={false} />;
   }
 
   return (

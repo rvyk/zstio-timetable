@@ -1,5 +1,3 @@
-"use client";
-
 import shortHours from "@/utils/shortHours";
 import {
   MapPinIcon,
@@ -69,8 +67,8 @@ function RenderTimetable({ hours, lessons, isShortHours, substitutions }) {
       <div id="timetable" className="min-w-full mb-[4.25rem] dark:bg-[#202020]">
         {Object.entries(hours).length > 1 ? (
           Object.entries(
-            isShortHours ? shortHours.slice(0, maxLessons) : hours
-          )?.map(([key, hour], hourIndex) => {
+            isShortHours ? shortHours.slice(0, maxLessons) : hours,
+          )?.map(([key, hour]: [string, hourType], hourIndex) => {
             const { number, timeFrom, timeTo } = hour;
 
             return (
@@ -99,7 +97,7 @@ function RenderTimetable({ hours, lessons, isShortHours, substitutions }) {
                     let substitution = getSubstitution(
                         selectedDay,
                         hourIndex,
-                        substitutions
+                        substitutions,
                       ),
                       possibleSubstitution = substitution,
                       sure = true;
@@ -111,7 +109,7 @@ function RenderTimetable({ hours, lessons, isShortHours, substitutions }) {
                         lesson.groupName,
                         substitutions,
                         hourIndex,
-                        selectedDay
+                        selectedDay,
                       );
                       if (!substitution) {
                         sure = false;
@@ -122,14 +120,14 @@ function RenderTimetable({ hours, lessons, isShortHours, substitutions }) {
                                 lessonCheck.groupName,
                                 substitutions,
                                 hourIndex,
-                                selectedDay
+                                selectedDay,
                               ) &&
                               checkIndex !== index
                             ) {
                               substitution = undefined;
                               sure = true;
                             }
-                          }
+                          },
                         );
                       }
                     }
