@@ -1,21 +1,32 @@
 import axios from "axios";
+import { NextApiRequest, NextApiResponse } from "next";
+import { allApiType, emptyApiType } from "@/types/api";
 
-export default async function handler(req, res) {
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse,
+) {
   try {
-    const { day: dayIndex, lesson: lessonIndex } = req.query;
+    const { dayIndex, lessonIndex }: { dayIndex: number; lessonIndex: number } =
+      {
+        // @ts-ignore
+        dayIndex: parseInt(req?.query?.day),
+        // @ts-ignore
+        lessonIndex: parseInt(req?.query?.lesson),
+      };
 
-    if (!dayIndex || !lessonIndex) {
+    if (isNaN(dayIndex) || isNaN(lessonIndex)) {
       return res.status(400).send({
         success: false,
         msg: `Specify dayIndex and lessonIndex to continue`,
       });
     }
 
-    const all = (
+    const all: allApiType = (
       await axios.get(`${process.env.NEXT_PUBLIC_HOST}/api/timetable/all`)
     )?.data;
 
-    const responseObj = { success: true, classes: [] };
+    const responseObj: emptyApiType = { success: true, classes: [] };
 
     for (const classObj of all.classes) {
       if (classObj.lessons[dayIndex][lessonIndex]?.length === 0)

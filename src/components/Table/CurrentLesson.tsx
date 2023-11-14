@@ -3,17 +3,17 @@ import { useEffect, useState } from "react";
 
 function CurrentLesson({ timeFrom, timeTo }) {
   const [minutesRemaining, setMinutesRemaining] = useState(
-    getCurrentLesson(timeFrom, timeTo).minutesRemaining
+    getCurrentLesson(timeFrom, timeTo).minutesRemaining,
   );
   const [isWithinTimeRange, setIsWithinTimeRange] = useState(
-    getCurrentLesson(timeFrom, timeTo).isWithinTimeRange
+    getCurrentLesson(timeFrom, timeTo).isWithinTimeRange,
   );
 
   useEffect(() => {
     const timer = setInterval(() => {
       let { isWithinTimeRange, minutesRemaining } = getCurrentLesson(
         timeFrom,
-        timeTo
+        timeTo,
       );
       setMinutesRemaining(minutesRemaining);
       setIsWithinTimeRange(isWithinTimeRange);

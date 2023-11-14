@@ -24,3 +24,4 @@ yarn.lock
 /.idea/
 
 public/teachers.json
+tsconfig.tsbuildinfo

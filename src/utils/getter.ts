@@ -33,14 +33,14 @@ export async function getSubstitutions(text, title) {
   if (search && query) {
     try {
       const substitutionsRes = await axios.get(
-        `/api/getSubstitutions?search=${search}&query=${query}`
+        `/api/getSubstitutions?search=${search}&query=${query}`,
       );
       const shortDayNames = ["pon", "wt", "śr", "czw", "pt", "sob", "nie"];
       const match = substitutionsRes.data?.tables[0]?.time.match(/\([^)]*\)/i);
 
       if (match && match.length > 0) {
         const dayIndex = shortDayNames.indexOf(
-          match[0].substring(1).replace(".)", "")
+          match[0].substring(1).replace(".)", ""),
         );
         if (dayIndex >= 0) {
           return {
@@ -69,7 +69,7 @@ export const getSubstitutionForGroup = (
   groupName,
   substitutions,
   lessonIndex,
-  dayIndex
+  dayIndex,
 ) => {
   if (dayIndex === substitutions?.dayIndex)
     return substitutions?.zastepstwa?.filter((subs) => {

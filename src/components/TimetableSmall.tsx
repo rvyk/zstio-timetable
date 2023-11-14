@@ -3,7 +3,6 @@ import RenderTimetable from "./TimetableSmall/RenderTimetable";
 import RenderNavbar from "./TimetableSmall/RenderNavbar";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
-import Loading from "./Loading";
 import LoadingTable from "./Table/LoadingTable";
 
 const BottomBar = dynamic(() => import("./TimetableSmall/BottomBar"));

@@ -15,7 +15,7 @@ function RenderLesson({ number, index, lessonIndex, day, substitutions }) {
             lesson.groupName,
             substitutions,
             index,
-            lessonIndex
+            lessonIndex,
           );
           if (!substitution) {
             sure = false;
@@ -25,7 +25,7 @@ function RenderLesson({ number, index, lessonIndex, day, substitutions }) {
                   lessonCheck?.groupName,
                   substitutions,
                   index,
-                  lessonIndex
+                  lessonIndex,
                 ) &&
                 checkIndex !== subIndex
               ) {

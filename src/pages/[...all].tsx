@@ -30,7 +30,7 @@ const MainRoute = (props) => {
         }
       }
     },
-    [props, router]
+    [props, router],
   );
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -51,7 +51,7 @@ const MainRoute = (props) => {
     if (process.env.NEXT_PUBLIC_SERVER_ID) {
       console.log(
         `%cConnected with SERVER #${process.env.NEXT_PUBLIC_SERVER_ID}`,
-        "background: lime; color: white; font-size: x-large; text-align: center; border-radius: 15px; margin: 20px 0px 20px 0px; font-weight: bold; padding: 10px; width: full; "
+        "background: lime; color: white; font-size: x-large; text-align: center; border-radius: 15px; margin: 20px 0px 20px 0px; font-weight: bold; padding: 10px; width: full; ",
       );
     }
   }, []);
@@ -65,7 +65,7 @@ export async function getStaticPaths() {
   const { classes, teachers, rooms } = tableList.getList();
   const classesPaths = classes?.map((classItem) => `/class/${classItem.value}`);
   const teachersPaths = teachers?.map(
-    (teacherItem) => `/teacher/${teacherItem.value}`
+    (teacherItem) => `/teacher/${teacherItem.value}`,
   );
   const roomsPaths = rooms?.map((roomItem) => `/room/${roomItem.value}`);
 
@@ -75,7 +75,9 @@ export async function getStaticPaths() {
   };
 }
 
-export async function getStaticProps(context) {
+export async function getStaticProps(
+  context,
+): Promise<{ props: props; revalidate: number }> {
   const { params } = context;
   const param0 = params?.all[0];
   const param1 = params?.all[1];

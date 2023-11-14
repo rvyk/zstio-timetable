@@ -1,18 +1,23 @@
 import fetchTimetable from "@/utils/fetchTimetable";
 import { Table } from "@wulkanowy/timetable-parser";
 import NodeCache from "node-cache";
+import { NextApiRequest, NextApiResponse } from "next";
+import { timetableApiType } from "@/types/api";
 
 const cache = new NodeCache({ stdTTL: 600, checkperiod: 60 });
 
-export default async function handler(req, res) {
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse,
+) {
   try {
-    let { id } = req.query;
+    let id = req?.query?.id?.toString();
 
     if (!id) {
       id = "o1";
     }
 
-    const cachedData = cache.get(id);
+    const cachedData: timetableApiType = cache.get(id);
     if (cachedData) {
       return res.status(200).send(cachedData);
     }
@@ -35,7 +40,7 @@ export default async function handler(req, res) {
     }
 
     const timetableList = new Table(data);
-    const timeTableObj = {
+    const timeTableObj: timetableApiType = {
       title: timetableList.getTitle(),
       days: timetableList.getDayNames(),
       generatedDate: timetableList.getGeneratedDate(),

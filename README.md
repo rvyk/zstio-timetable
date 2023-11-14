@@ -1,9 +1,11 @@
 # Timetable ZSTiO
 
-A refreshed version of the [timetable](https://www.zstio-elektronika.pl/plan/index.html) for [Zespół Szkół Technicznych i Ogólnokształcących](https://zstiojar.edu.pl/).
+A refreshed version of the [timetable](https://www.zstio-elektronika.pl/plan/index.html)
+for [Zespół Szkół Technicznych i Ogólnokształcących](https://zstiojar.edu.pl/).
 Data scraping & parsing via [@wulkanowy/timetable-parser-js](https://github.com/wulkanowy/timetable-parser-js)
 
-The timetable is **universal**, you just need to change the value of the `NEXT_PUBLIC_TIMETABLE_URL` in `.env` to the correct address for your school's timetable (UONET generated).
+The timetable is **universal**, you just need to change the value of the `NEXT_PUBLIC_TIMETABLE_URL` in `.env` to the
+correct address for your school's timetable (UONET generated).
 
 The phone mode is inspired by the school's timetable
 [Zespół Szkół Elektronicznych w Rzeszowie](https://plan-lekcji.zse.rzeszow.pl)
@@ -21,7 +23,7 @@ The phone mode is inspired by the school's timetable
 ```
 
 | Parameter (Optional) | Description           |
-| :------------------- | :-------------------- |
+|:---------------------|:----------------------|
 | `?select=classes`    | Returns only classes  |
 | `?select=teachers`   | Returns only teachers |
 | `?select=rooms`      | Returns only rooms    |
@@ -33,13 +35,13 @@ The phone mode is inspired by the school's timetable
 ```
 
 | Parameter (Optional) | Description                                               |
-| :------------------- | :-------------------------------------------------------- |
+|:---------------------|:----------------------------------------------------------|
 | `?id=o1`             | Returns, for example, the timetable of a Branch with id 1 |
 
 #### What is **id** and how do I find it?
 
 | Id prefix | Description      | Value                                            |
-| :-------- | :--------------- | :----------------------------------------------- |
+|:----------|:-----------------|:-------------------------------------------------|
 | `o`       | Branch / Classes | `value from /api/timetable/list?select=classes`  |
 | `n`       | Teacher          | `value from /api/timetable/list?select=teachers` |
 | `s`       | Room             | `value from /api/timetable/list?select=rooms`    |

@@ -21,7 +21,7 @@ function Search({ teachers, rooms, classes, setIsMenuExpanded, handleSelect }) {
 
     const teacherResults = teachers
       .filter((teacher) =>
-        teacher.name.toLowerCase().includes(term.toLowerCase())
+        teacher.name.toLowerCase().includes(term.toLowerCase()),
       )
       .slice(0, 8)
       .map((teacher) => ({ ...teacher, type: "teacher" }));

@@ -6,7 +6,7 @@ const cache = new NodeCache({ stdTTL: 600, checkperiod: 60 });
 
 export default async function handler(req, res) {
   try {
-    const cacheKey = req.query.select || "default";
+    const cacheKey: string = req.query.select || "default";
 
     const cachedData = cache.get(cacheKey);
     if (cachedData) {
