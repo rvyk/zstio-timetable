@@ -163,6 +163,7 @@ function BottomBar({ handleKey, ...props }) {
                                 <Menu.Item as={Fragment}>
                                   {({ active }) => (
                                     <Link
+                                      prefetch={false}
                                       href={`/${dropdown.link}/${item.value}`}
                                       onClick={() => {
                                         setIsMenuExpanded(false);
@@ -206,6 +207,7 @@ function BottomBar({ handleKey, ...props }) {
                 </p>
               )}
               <Link
+                prefetch={false}
                 href={`${process.env.NEXT_PUBLIC_TIMETABLE_URL}/plany/${timeTableID}.html`}
                 target="_blank"
                 className="font-semibold"

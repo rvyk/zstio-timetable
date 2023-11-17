@@ -16,11 +16,7 @@
 .DS_Store
 *.pem
 .env*.local
-yarn.lock
-/yarn.lock
 /.netlify/
 /.github/
 /.vscode/
 /.idea/
-
-public/teachers.json

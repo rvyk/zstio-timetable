@@ -17,14 +17,6 @@ export default function Document() {
           rel="apple-touch-icon"
           href="https://zstiojar.edu.pl/wp-content/uploads/2023/03/cropped-cropped-cropped-bez-tla-1-180x180.png"
         ></link>
-        <link
-          href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.css"
-          rel="stylesheet"
-        />
-        <script
-          src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.4/flowbite.min.js"
-          async
-        ></script>
         <link rel="manifest" href="/manifest.json" />
       </Head>
       <body suppressHydrationWarning={true}>

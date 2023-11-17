@@ -32,6 +32,7 @@ export default function RenderTableHeader({
           className="px-6 py-4 font-semibold w-1 text-right text-gray-900 whitespace-nowrap dark:text-gray-300 transition-all"
         >
           <Link
+            prefetch={false}
             href={`${process.env.NEXT_PUBLIC_TIMETABLE_URL}/plany/${timeTableID}.html`}
             target="_blank"
           >

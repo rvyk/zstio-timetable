@@ -1,11 +1,9 @@
 import { useTheme } from "next-themes";
-import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import InstallPWA from "./Navbar/InstallPWA";
 import { Tooltip } from "react-tooltip";
 import ThemeButton from "./Navbar/ThemeButton";
 import SubstitutionsButton from "./Navbar/SubstitutionsButton";
-import Image from "next/legacy/image";
 
 function Navbar() {
   const { theme, setTheme, resolvedTheme, systemTheme } = useTheme();

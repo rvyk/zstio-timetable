@@ -157,6 +157,7 @@ function RenderTimetable({ hours, lessons, isShortHours, substitutions }) {
                             <>
                               <AcademicCapIcon className="h-4 w-4 mr-1" />
                               <Link
+                                prefetch={false}
                                 href={`/class/${lesson?.classId}`}
                                 className={`flex ${
                                   substitution &&
@@ -173,6 +174,7 @@ function RenderTimetable({ hours, lessons, isShortHours, substitutions }) {
                             <>
                               <UsersIcon className="h-4 w-4 mr-1" />
                               <Link
+                                prefetch={false}
                                 href={`/teacher/${lesson?.teacherId}`}
                                 className={`flex ${
                                   substitution &&
@@ -188,6 +190,7 @@ function RenderTimetable({ hours, lessons, isShortHours, substitutions }) {
                             <>
                               <MapPinIcon className="h-4 w-4 mr-1" />
                               <Link
+                                prefetch={false}
                                 href={`/room/${lesson?.roomId}`}
                                 className={`flex ${
                                   substitution &&
@@ -205,7 +208,10 @@ function RenderTimetable({ hours, lessons, isShortHours, substitutions }) {
                           )}
 
                           {possibleSubstitution && !sure && (
-                            <Link href={`https://zastepstwa.awfulworld.space`}>
+                            <Link
+                              prefetch={false}
+                              href={`https://zastepstwa.awfulworld.space`}
+                            >
                               <ExclamationCircleIcon
                                 className="w-5 h-5 text-red-600 dark:text-red-400"
                                 data-tooltip-id="content_tooltips"
