@@ -12,8 +12,8 @@ export default function Home() {
     const lastSelect = localStorage.getItem("LastSelect");
 
     lastSelect
-      ? router.push(lastSelect, undefined, { shallow: true })
-      : router.push("/class/1", undefined, { shallow: true });
+      ? router.push(lastSelect)
+      : router.push("/class/1");
   }, [router]);
 
   useEffect(() => {

@@ -10,7 +10,6 @@ import React, { Fragment, useEffect, useState } from "react";
 import Footer from "../Footer";
 import Search from "./Search";
 import { useRouter } from "next/router";
-import { getLastSelect } from "@/utils/helpers";
 import { lock, unlock } from "tua-body-scroll-lock";
 import MobileDetect from "mobile-detect";
 
@@ -30,8 +29,7 @@ function BottomBar({ handleKey, ...props }) {
   const currentUrl = router.asPath;
 
   useEffect(() => {
-    const lastSelect = getLastSelect(currentUrl);
-    setLastSelect(lastSelect);
+    setLastSelect(currentUrl);
   }, [currentUrl]);
 
   const handleSelect = (name, value) => {

@@ -1,16 +1,16 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 
 const fetchTimetable = async (
-  id,
-): Promise<{ data: string; ok: boolean; err: any }> => {
+  id: string
+): Promise<{ data: string; ok: boolean; err: AxiosError }> => {
   let timeTableData: string;
   let timeTableOk = false;
-  let err;
+  let err: AxiosError;
   try {
     const res = await axios.get(
-      `${process.env.NEXT_PUBLIC_HOST}/proxy/getTimetable/${id}.html`,
+      `${process.env.NEXT_PUBLIC_HOST}/proxy/getTimetable/${id}.html`
     );
-    timeTableOk = res.status == 200;
+    timeTableOk = true;
     timeTableData = res.data;
   } catch (e) {
     err = e;

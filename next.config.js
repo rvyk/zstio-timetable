@@ -1,5 +1,3 @@
-// @ts-check
-
 /** @type {import('next').NextConfig} */
 
 const withPWA = require("next-pwa")({
@@ -8,6 +6,7 @@ const withPWA = require("next-pwa")({
   skipWaiting: true,
 });
 
+// @ts-ignore
 module.exports = withPWA({
   reactStrictMode: false,
   images: {

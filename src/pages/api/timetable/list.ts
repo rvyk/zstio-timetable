@@ -21,8 +21,7 @@ export default async function handler(req, res) {
       });
     }
 
-    const tableList = new TimetableList(data);
-    const { classes, teachers, rooms } = tableList.getList();
+    const { classes, teachers, rooms } = data;
 
     let responseObj = { success: true, classes, teachers, rooms };
     switch (req.query.select) {

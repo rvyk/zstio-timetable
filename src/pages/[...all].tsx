@@ -2,10 +2,11 @@ import { useCallback, useEffect } from "react";
 import { useRouter } from "next/router";
 import Layout from "../components/Layout";
 import fetchTimetableList from "@/utils/fetchTimetableList";
-import { Table, TimetableList } from "@wulkanowy/timetable-parser";
+import { Table } from "@wulkanowy/timetable-parser";
 import fetchTimetable from "@/utils/fetchTimetable";
 import { convertTextDate, removeUndefined } from "@/utils/helpers";
 import { GetStaticPaths } from "next";
+import { GetStaticProps } from "next/types";
 
 const MainRoute = (props) => {
   const router = useRouter();
@@ -31,8 +32,9 @@ const MainRoute = (props) => {
         }
       }
     },
-    [props, router],
+    [props, router]
   );
+
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.key === "ArrowRight" || e.key === "ArrowLeft") {
@@ -52,7 +54,7 @@ const MainRoute = (props) => {
     if (process.env.NEXT_PUBLIC_SERVER_ID) {
       console.log(
         `%cConnected with SERVER #${process.env.NEXT_PUBLIC_SERVER_ID}`,
-        "background: lime; color: white; font-size: x-large; text-align: center; border-radius: 15px; margin: 20px 0px 20px 0px; font-weight: bold; padding: 10px; width: full; ",
+        "background: lime; color: white; font-size: x-large; text-align: center; border-radius: 15px; margin: 20px 0px 20px 0px; font-weight: bold; padding: 10px; width: full; "
       );
     }
   }, []);
@@ -61,24 +63,30 @@ const MainRoute = (props) => {
 };
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const list = await fetchTimetableList();
-  const tableList = new TimetableList("" + list.data);
-  const { classes, teachers, rooms } = tableList.getList();
-  const classesPaths = classes?.map((classItem) => `/class/${classItem.value}`);
-  const teachersPaths = teachers?.map(
-    (teacherItem) => `/teacher/${teacherItem.value}`,
-  );
-  const roomsPaths = rooms?.map((roomItem) => `/room/${roomItem.value}`);
+  const { data, ok } = await fetchTimetableList();
+
+  if (!ok) {
+    return {
+      paths: [],
+      fallback: "blocking",
+    };
+  }
+
+  const { classes, teachers, rooms } = data;
+
+  const paths = [
+    ...(classes?.map((classItem) => `/class/${classItem.value}`) || []),
+    ...(teachers?.map((teacherItem) => `/teacher/${teacherItem.value}`) || []),
+    ...(rooms?.map((roomItem) => `/room/${roomItem.value}`) || []),
+  ];
 
   return {
-    paths: [...classesPaths, ...teachersPaths, ...roomsPaths],
+    paths,
     fallback: "blocking",
   };
 };
 
-export async function getStaticProps(
-  context,
-): Promise<{ props: props; revalidate: number }> {
+export const getStaticProps: GetStaticProps = async (context) => {
   const { params } = context;
   const param0 = params?.all[0];
   const param1 = params?.all[1];
@@ -113,9 +121,8 @@ export async function getStaticProps(
     days: timetableListData.getDays(),
   };
 
-  const list = await fetchTimetableList();
-  const tableList = new TimetableList(list.data);
-  const { classes, teachers, rooms } = tableList.getList();
+  const { data } = await fetchTimetableList();
+  const { classes, teachers, rooms } = data;
 
   return {
     props: {
@@ -130,6 +137,6 @@ export async function getStaticProps(
     },
     revalidate: 3600,
   };
-}
+};
 
 export default MainRoute;

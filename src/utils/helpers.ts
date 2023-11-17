@@ -64,9 +64,3 @@ export const days = [
   { long: "Czwartek", short: "Czw.", index: 3 },
   { long: "Piątek", short: "Pt.", index: 4 },
 ];
-
-// TODO: fix whatever is this
-export const getLastSelect = (path) => {
-  let currentSelection = path;
-  return currentSelection;
-};
