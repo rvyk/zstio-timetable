@@ -6,6 +6,7 @@ const withPWA = require("next-pwa")({
   skipWaiting: true,
 });
 
+// @ts-ignore
 module.exports = withPWA({
   reactStrictMode: false,
   images: {
