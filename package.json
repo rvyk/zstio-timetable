@@ -13,7 +13,7 @@
     "@headlessui/react": "^1.7.17",
     "@heroicons/react": "^2.0.18",
     "@types/node": "^20.9.0",
-    "@types/react": "^18.2.37",
+    "@types/react": "18.2.37",
     "@wulkanowy/timetable-parser": "https://github.com/majusss/timetable-parser-js.git",
     "autoprefixer": "^10.4.16",
     "axios": "^1.5.1",

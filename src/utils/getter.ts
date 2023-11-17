@@ -13,7 +13,10 @@ export const getTeacher = async (title) => {
   if (result?.length === 1) return result[0].full.split(" ")[0];
 }; */
 
-export async function getSubstitutions(text, title) {
+export async function getSubstitutions(
+  text: string,
+  title: string,
+): Promise<substitutionsListType | {}> {
   const search =
     text === "Oddziały"
       ? "branch"
@@ -58,23 +61,27 @@ export async function getSubstitutions(text, title) {
   }
 }
 
-export const getSubstitution = (dayIndex, lessonIndex, substitutions) => {
+export const getSubstitution = (
+  dayIndex: number,
+  lessonIndex: number,
+  substitutions: substitutionsListType,
+) => {
   if (dayIndex === substitutions?.dayIndex)
     return substitutions?.zastepstwa?.filter((subs) => {
-      return subs.lesson.split(",")[0] - 1 === lessonIndex;
+      return parseInt(subs.lesson.split(",")[0]) - 1 === lessonIndex;
     })[0];
 };
 
 export const getSubstitutionForGroup = (
-  groupName,
-  substitutions,
-  lessonIndex,
-  dayIndex,
+  groupName: string,
+  substitutions: substitutionsListType,
+  lessonIndex: number,
+  dayIndex: number,
 ) => {
   if (dayIndex === substitutions?.dayIndex)
     return substitutions?.zastepstwa?.filter((subs) => {
       if (
-        subs.lesson.split(",")[0] - 1 === lessonIndex &&
+        parseInt(subs.lesson.split(",")[0]) - 1 === lessonIndex &&
         subs.branch.includes(groupName)
       ) {
         return subs;

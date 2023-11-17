@@ -21,7 +21,7 @@ export const removeUndefined = (obj) => {
 };
 
 // ZSTiO Elektronika returns the "valid" date in "16 października, 2023r." format and the "Generated" date in "yyyy-mm-dd" format, so we should convert them to one format.
-export const convertTextDate = (inputDate) => {
+export const convertTextDate = (inputDate: string): string => {
   const months = {
     stycznia: "01",
     lutego: "02",
@@ -65,6 +65,7 @@ export const days = [
   { long: "Piątek", short: "Pt.", index: 4 },
 ];
 
+// TODO: fix whatever is this
 export const getLastSelect = (path) => {
   let currentSelection = path;
   return currentSelection;

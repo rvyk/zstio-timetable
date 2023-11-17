@@ -35,3 +35,18 @@ type props = {
   rooms: nameValueType[];
   teachers: nameValueType[];
 };
+
+type substitutionType = {
+  lesson: string;
+  teacher: string;
+  branch: string;
+  subject: string;
+  class: string;
+  case: string;
+  message: string;
+};
+
+type substitutionsListType = {
+  dayIndex: number;
+  zastepstwa: substitutionType[];
+};

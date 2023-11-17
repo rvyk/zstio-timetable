@@ -1,3 +1,5 @@
+// @ts-check
+
 /** @type {import('next').NextConfig} */
 
 const withPWA = require("next-pwa")({
@@ -9,7 +11,7 @@ const withPWA = require("next-pwa")({
 module.exports = withPWA({
   reactStrictMode: false,
   images: {
-    remotePatterns: [{hostname: "zstiojar.edu.pl"}],
+    remotePatterns: [{ hostname: "zstiojar.edu.pl" }],
   },
   i18n: {
     locales: ["pl"],

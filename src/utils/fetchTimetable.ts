@@ -1,7 +1,9 @@
 import axios from "axios";
 
-const fetchTimetable = async (id) => {
-  let timeTableData;
+const fetchTimetable = async (
+  id,
+): Promise<{ data: string; ok: boolean; err: any }> => {
+  let timeTableData: string;
   let timeTableOk = false;
   let err;
   try {
@@ -11,7 +13,6 @@ const fetchTimetable = async (id) => {
     timeTableOk = res.status == 200;
     timeTableData = res.data;
   } catch (e) {
-    timeTableData = {};
     err = e;
   }
   return { data: timeTableData, ok: timeTableOk, err };

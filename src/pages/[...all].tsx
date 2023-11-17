@@ -5,6 +5,7 @@ import fetchTimetableList from "@/utils/fetchTimetableList";
 import { Table, TimetableList } from "@wulkanowy/timetable-parser";
 import fetchTimetable from "@/utils/fetchTimetable";
 import { convertTextDate, removeUndefined } from "@/utils/helpers";
+import { GetStaticPaths } from "next";
 
 const MainRoute = (props) => {
   const router = useRouter();
@@ -59,9 +60,9 @@ const MainRoute = (props) => {
   return <Layout {...props} handleKey={handleKey} />;
 };
 
-export async function getStaticPaths() {
+export const getStaticPaths: GetStaticPaths = async () => {
   const list = await fetchTimetableList();
-  const tableList = new TimetableList(list.data);
+  const tableList = new TimetableList("" + list.data);
   const { classes, teachers, rooms } = tableList.getList();
   const classesPaths = classes?.map((classItem) => `/class/${classItem.value}`);
   const teachersPaths = teachers?.map(
@@ -73,7 +74,7 @@ export async function getStaticPaths() {
     paths: [...classesPaths, ...teachersPaths, ...roomsPaths],
     fallback: "blocking",
   };
-}
+};
 
 export async function getStaticProps(
   context,

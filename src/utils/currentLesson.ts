@@ -1,10 +1,13 @@
-export const getCurrentLesson = (timeFrom, timeTo) => {
+export const getCurrentLesson = (
+  timeFrom,
+  timeTo,
+): { isWithinTimeRange: boolean; minutesRemaining: number | undefined } => {
   const currentHour = new Date().getHours();
   const currentMinutes = new Date().getMinutes();
 
   const [fromHour, fromMinutes] = timeFrom.split(":");
   const [toHour, toMinutes] = timeTo.split(":");
-  let minutesRemaining, isWithinTimeRange;
+  let minutesRemaining: number, isWithinTimeRange: boolean | undefined;
   const isAfterFromTime =
     currentHour > Number(fromHour) ||
     (currentHour === Number(fromHour) && currentMinutes >= Number(fromMinutes));

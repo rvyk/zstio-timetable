@@ -1,7 +1,11 @@
 import axios from "axios";
 
-const fetchTimetableList = async () => {
-  let timeTableData;
+const fetchTimetableList = async (): Promise<{
+  data: string | undefined;
+  ok: boolean;
+  err: any;
+}> => {
+  let timeTableData: string;
   let timeTableOk = false;
   let err;
   try {
@@ -11,7 +15,6 @@ const fetchTimetableList = async () => {
     timeTableOk = res.status == 200;
     timeTableData = res.data;
   } catch (e) {
-    timeTableData = {};
     err = e;
   }
   return { data: timeTableData, ok: timeTableOk, err };

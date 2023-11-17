@@ -1,4 +1,4 @@
-const shortHours = [
+const shortHours: hourType[] = [
   {
     number: 1,
     timeFrom: "8:00",
