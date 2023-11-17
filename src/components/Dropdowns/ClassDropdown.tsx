@@ -71,6 +71,7 @@ function DropdownClass({ classes }) {
           filteredClasses.map((classPrefix) => (
             <li key={classPrefix.value}>
               <Link
+                prefetch={false}
                 href={`/class/${classPrefix.value}`}
                 className={`flex items-center pl-2 rounded hover:bg-gray-100 dark:hover:bg-[#202020] ${
                   lastSelect === `/class/${classPrefix.value}`

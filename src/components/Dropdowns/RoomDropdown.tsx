@@ -71,6 +71,7 @@ function DropdownRoom({ rooms }) {
           filteredRooms.map((room) => (
             <li key={room.value}>
               <Link
+                prefetch={false}
                 href={`/room/${room.value}`}
                 className={`flex items-center pl-2 rounded hover:bg-gray-100 dark:hover:bg-[#202020] ${
                   lastSelect === `/room/${room.value}`

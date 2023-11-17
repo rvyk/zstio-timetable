@@ -75,6 +75,7 @@ function Search({ teachers, rooms, classes, setIsMenuExpanded, handleSelect }) {
                 <Menu.Item as={Fragment}>
                   {({ active }) => (
                     <Link
+                      prefetch={false}
                       href={`/${item.type}/${item.value}`}
                       onClick={() => {
                         setIsMenuExpanded(false);

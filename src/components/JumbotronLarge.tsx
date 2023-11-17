@@ -16,6 +16,7 @@ function JumbotronLarge(props) {
     <div className="py-8 px-4 mx-auto max-w-screen-xl text-center lg:py-16">
       <div className="flex justify-center items-center mb-4 md:mb-0 -ml-0 md:-ml-16">
         <Link
+          prefetch={false}
           href={"https://zstiojar.edu.pl"}
           className="relative w-20 h-20 mr-4 hidden md:block"
         >

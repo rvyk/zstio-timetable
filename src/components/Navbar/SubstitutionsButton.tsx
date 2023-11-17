@@ -5,6 +5,7 @@ import React from "react";
 function SubstitutionsButton() {
   return (
     <Link
+      prefetch={false}
       href={"https://zastepstwa.awfulworld.space/"}
       data-tooltip-id="navbar_tooltips"
       data-tooltip-content="Przejdź do zastępstw"

@@ -30,6 +30,7 @@ export default function Home() {
       </Head>
       <div className="min-h-screen w-screen overflow-hidden flex flex-col justify-center items-center bg-[#F7F3F5] dark:bg-[#171717] transition-all">
         <Link
+          prefetch={false}
           href={"https://zstiojar.edu.pl"}
           className="relative w-20 h-20 first-line:block md:hidden"
         >
@@ -50,6 +51,7 @@ export default function Home() {
           <p className="text-xl">Utknąłeś?</p>
 
           <Link
+            prefetch={false}
             href="/class/1"
             className="text-[#a91712] hover:text-white hover:border-transparent bg-transparent dark:border-[2px] border-[1px] border-[#a91712] mx-2 my-2 hover:bg-[#73110e] transition-all focus:ring-4 focus:outline-none focus:ring-transparent font-medium text-sm px-4 py-2.5 text-center inline-flex items-center dark:text-gray-300 hover:dark:text-white dark:bg-[#202020] dark:rounded-lg dark:border-none dark:hover:bg-[#141414] dark:outline-none"
             type="button"

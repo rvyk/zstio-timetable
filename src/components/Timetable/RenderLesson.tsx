@@ -68,6 +68,7 @@ function RenderLesson({ number, index, lessonIndex, day, substitutions }) {
 
               {lesson?.className && lesson?.classId && (
                 <Link
+                  prefetch={false}
                   href={`/class/${lesson?.classId}`}
                   className={`flex items-center mr-1 ${
                     substitution && sure && "line-through opacity-60"
@@ -79,6 +80,7 @@ function RenderLesson({ number, index, lessonIndex, day, substitutions }) {
 
               {lesson?.teacher && lesson?.teacherId && (
                 <Link
+                  prefetch={false}
                   href={`/teacher/${lesson?.teacherId}`}
                   className={`flex items-center mr-1 ${
                     substitution && sure && "line-through opacity-60"
@@ -89,6 +91,7 @@ function RenderLesson({ number, index, lessonIndex, day, substitutions }) {
               )}
               {lesson?.roomId && lesson?.room && (
                 <Link
+                  prefetch={false}
                   href={`/room/${lesson?.roomId}`}
                   className={`flex items-center mr-1 ${
                     substitution && sure && "line-through opacity-60"
@@ -101,7 +104,10 @@ function RenderLesson({ number, index, lessonIndex, day, substitutions }) {
               )}
 
               {possibleSubstitution && !sure && (
-                <Link href={`https://zastepstwa.awfulworld.space`}>
+                <Link
+                  prefetch={false}
+                  href={`https://zastepstwa.awfulworld.space`}
+                >
                   <ExclamationCircleIcon
                     className="w-5 h-5 text-red-600 dark:text-red-400"
                     data-tooltip-id="content_tooltips"

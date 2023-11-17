@@ -20,6 +20,7 @@ function Footer({ small }) {
       {resolvedTheme !== undefined && !small && (
         <div className="-mb-2">
           <Link
+            prefetch={false}
             href="https://skillhost.pl/?pk_source=plan-lekcji"
             target="_blank"
           >
@@ -60,6 +61,7 @@ function Footer({ small }) {
               Made with ❤️ for ZSTiO by Szymański Paweł & Majcher Kacper
               <br />
               <Link
+                prefetch={false}
                 target="_blank"
                 href={"https://github.com/rvyk/zstio-timetable/"}
               >
