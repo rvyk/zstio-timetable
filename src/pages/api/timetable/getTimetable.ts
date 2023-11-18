@@ -22,7 +22,7 @@ export default async function handler(
       return res.status(200).send(cachedData);
     }
 
-    const { data, ok, err } = await fetchTimetable(id);
+    const { data: timetableList, ok, err } = await fetchTimetable(id);
 
     if (!ok) {
       switch (err.response.status) {
@@ -39,7 +39,6 @@ export default async function handler(
       }
     }
 
-    const timetableList = new Table(data);
     const timeTableObj: timetableApiType = {
       title: timetableList.getTitle(),
       days: timetableList.getDayNames(),
