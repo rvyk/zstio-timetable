@@ -11,12 +11,13 @@ const fetchTimetableList = async (): Promise<{
   let err: AxiosError;
   try {
     const res = await axios.get(
-      `${process.env.NEXT_PUBLIC_HOST}/proxy/getTimetableList`
+      `${process.env.NEXT_PUBLIC_HOST}/proxy/getTimetableList`,
     );
 
-    timeTableList = new TimetableList(await res.data).getList();
-
-    timeTableOk = true;
+    if (res.data) {
+      timeTableList = new TimetableList(res.data).getList();
+      timeTableOk = true;
+    }
   } catch (e) {
     err = e;
   }

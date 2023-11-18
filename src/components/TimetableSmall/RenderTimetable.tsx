@@ -88,7 +88,9 @@ function RenderTimetable({ hours, lessons, isShortHours, substitutions }) {
                   </span>
                   <span className="block text-center text-sm">
                     {timeFrom} - {timeTo}
-                    <CurrentLesson timeFrom={timeFrom} timeTo={timeTo} />
+                    {selectedDay == new Date().getDay() - 1 && (
+                      <CurrentLesson timeFrom={timeFrom} timeTo={timeTo} />
+                    )}
                   </span>
                 </div>
 
@@ -133,7 +135,10 @@ function RenderTimetable({ hours, lessons, isShortHours, substitutions }) {
                     }
 
                     return (
-                      <div key={`lesson-${index}`} className="p-2">
+                      <div
+                        key={`lesson-${index}`}
+                        className="p-2 flex justify-center items-center flex-col"
+                      >
                         <div className="flex">
                           <p
                             className={`font-semibold ${

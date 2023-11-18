@@ -35,7 +35,7 @@ function JumbotronLarge(props) {
       {!status ? (
         <>
           {status === undefined ? (
-            <Loading small={false} />
+            <Loading />
           ) : (
             <div className="flex justify-center mb-5 flex-wrap items-center ">
               <p className="transition-all text-xl font-normal mr-1 hidden sm:flex text-gray-500 lg:text-2xl dark:text-gray-400">
@@ -56,7 +56,7 @@ function JumbotronLarge(props) {
               </p>
             </div>
           ) : (
-            <Loading small={false} />
+            <Loading />
           )}
         </>
       )}

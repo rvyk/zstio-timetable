@@ -8,7 +8,7 @@ const cache = new NodeCache({ stdTTL: 600, checkperiod: 60 });
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse,
 ) {
   try {
     let id = req?.query?.id?.toString();

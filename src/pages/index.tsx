@@ -11,9 +11,7 @@ export default function Home() {
   useEffect(() => {
     const lastSelect = localStorage.getItem("LastSelect");
 
-    lastSelect
-      ? router.push(lastSelect)
-      : router.push("/class/1");
+    lastSelect ? router.push(lastSelect) : router.push("/class/1");
   }, [router]);
 
   useEffect(() => {

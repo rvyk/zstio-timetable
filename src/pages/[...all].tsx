@@ -32,7 +32,7 @@ const MainRoute = (props) => {
         }
       }
     },
-    [props, router]
+    [props, router],
   );
 
   useEffect(() => {
@@ -54,7 +54,7 @@ const MainRoute = (props) => {
     if (process.env.NEXT_PUBLIC_SERVER_ID) {
       console.log(
         `%cConnected with SERVER #${process.env.NEXT_PUBLIC_SERVER_ID}`,
-        "background: lime; color: white; font-size: x-large; text-align: center; border-radius: 15px; margin: 20px 0px 20px 0px; font-weight: bold; padding: 10px; width: full; "
+        "background: lime; color: white; font-size: x-large; text-align: center; border-radius: 15px; margin: 20px 0px 20px 0px; font-weight: bold; padding: 10px; width: full; ",
       );
     }
   }, []);
@@ -109,8 +109,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
       break;
   }
 
-  const timetableList = await fetchTimetable(id);
-  const timetableListData = new Table(timetableList.data);
+  const { data: timetableListData, ok } = await fetchTimetable(id);
 
   const timeTable = {
     lessons: timetableListData.getDays(),
@@ -126,7 +125,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
 
   return {
     props: {
-      status: timetableList.ok,
+      status: ok,
       timeTable: removeUndefined(timeTable),
       classes,
       teachers,

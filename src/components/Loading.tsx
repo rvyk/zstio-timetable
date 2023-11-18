@@ -1,7 +1,7 @@
 import { ArrowPathIcon } from "@heroicons/react/24/outline";
 import { useEffect, useState } from "react";
 
-function Loading({ small }) {
+function Loading() {
   const [loadingText, setLoadingText] = useState("Wczytywanie planu");
   const [dots, setDots] = useState("");
   useEffect(() => {

@@ -11,6 +11,7 @@ export default function RenderTableRow({
   const maxLessons =
     typeof hours == "object" &&
     Math.max(Object.entries(hours).length, ...lessons.map((day) => day.length));
+
   return (
     <tbody>
       {Object.entries(hours).length > 1 ? (
@@ -33,7 +34,9 @@ export default function RenderTableRow({
               >
                 <div className="flex justify-center items-center flex-col">
                   {number}
-                  <CurrentLesson timeFrom={timeFrom} timeTo={timeTo} />
+                  {new Date().getDay() < 6 && new Date().getDay() != 0 && (
+                    <CurrentLesson timeFrom={timeFrom} timeTo={timeTo} />
+                  )}
                 </div>
               </td>
               <td className="text-center border-r dark:border-[#171717]">

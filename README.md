@@ -23,7 +23,7 @@ The phone mode is inspired by the school's timetable
 ```
 
 | Parameter (Optional) | Description           |
-|:---------------------|:----------------------|
+| :------------------- | :-------------------- |
 | `?select=classes`    | Returns only classes  |
 | `?select=teachers`   | Returns only teachers |
 | `?select=rooms`      | Returns only rooms    |
@@ -35,13 +35,13 @@ The phone mode is inspired by the school's timetable
 ```
 
 | Parameter (Optional) | Description                                               |
-|:---------------------|:----------------------------------------------------------|
+| :------------------- | :-------------------------------------------------------- |
 | `?id=o1`             | Returns, for example, the timetable of a Branch with id 1 |
 
 #### What is **id** and how do I find it?
 
 | Id prefix | Description      | Value                                            |
-|:----------|:-----------------|:-------------------------------------------------|
+| :-------- | :--------------- | :----------------------------------------------- |
 | `o`       | Branch / Classes | `value from /api/timetable/list?select=classes`  |
 | `n`       | Teacher          | `value from /api/timetable/list?select=teachers` |
 | `s`       | Room             | `value from /api/timetable/list?select=rooms`    |
