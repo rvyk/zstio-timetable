@@ -29,11 +29,13 @@ function SearchForEmptyRoom({
     const res = await axios.get(
       `/api/timetable/empty?day=${selectedDayForQuery}&lesson=${
         lessonIndex - 1
-      }}`
+      }`
     );
     if (res.data.success) {
       setLoading(false);
       setData(res.data.classes);
+    } else {
+      setLoading(false);
     }
   };
 
