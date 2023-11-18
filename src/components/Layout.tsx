@@ -8,16 +8,20 @@ import DropdownTeacher from "./Dropdowns/TeacherDropdown";
 import DropdownClass from "./Dropdowns/ClassDropdown";
 import Head from "next/head";
 import TimetableSmall from "./TimetableSmall";
-import { getSubstitutions } from "@/utils/getter";
 import dynamic from "next/dynamic";
+import SearchForEmptyRoom from "./SearchForEmptyRoom";
+import { getSubstitutions } from "../utils/getter";
 
 const Footer = dynamic(() => import("./Footer"));
 
 function Layout({ handleKey, ...props }) {
   const [isShortHours, setIsShortHours] = useState(false);
   const [substitutions, setSubstitutions] = useState({});
+  const [searchDialog, setSearchDialog] = useState(false);
+  const [selectedDay, setSelectedDay] = useState(0);
 
   useEffect(() => {
+    if (!localStorage.getItem("shortHours")) return;
     const storedShortHours = JSON.parse(localStorage.getItem("shortHours"));
     if (storedShortHours !== null) {
       setIsShortHours(storedShortHours);
@@ -64,14 +68,21 @@ function Layout({ handleKey, ...props }) {
         <div className="flex justify-center lg:hidden w-full ">
           <TimetableSmall
             {...props}
+            setSearchDialog={setSearchDialog}
+            searchDialog={searchDialog}
             handleKey={handleKey}
             isShortHours={isShortHours}
             setIsShortHours={setIsShortHours}
             substitutions={substitutions}
+            setSelectedDay={setSelectedDay}
+            selectedDay={selectedDay}
           />
         </div>
         <div className="hidden justify-center lg:flex flex-col w-full items-center">
-          <Navbar />
+          <Navbar
+            searchDialog={searchDialog}
+            setSearchDialog={setSearchDialog}
+          />
           <JumbotronLarge {...props} />
           <TimetableLarge
             {...props}
@@ -80,6 +91,12 @@ function Layout({ handleKey, ...props }) {
             setIsShortHours={setIsShortHours}
           />
           <Footer small={false} />
+          <SearchForEmptyRoom
+            setSelectedDay={setSelectedDay}
+            selectedDay={selectedDay}
+            searchDialog={searchDialog}
+            setSearchDialog={setSearchDialog}
+          />
         </div>
         <DropdownRoom rooms={rooms} />
         <DropdownTeacher teachers={teachers} />

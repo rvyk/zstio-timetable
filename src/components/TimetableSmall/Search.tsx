@@ -4,7 +4,10 @@ import Link from "next/link";
 import React, { Fragment, useState } from "react";
 
 function Search({ teachers, rooms, classes, setIsMenuExpanded, handleSelect }) {
-  const [searchResults, setSearchResults] = useState([]);
+  const [searchResults, setSearchResults]: [
+    { name: string; type: string; value: string }[],
+    any
+  ] = useState([]);
   const [query, setQuery] = useState("");
   const [showList, setShowList] = useState(false);
   const toggleList = (value) => {
@@ -21,7 +24,7 @@ function Search({ teachers, rooms, classes, setIsMenuExpanded, handleSelect }) {
 
     const teacherResults = teachers
       .filter((teacher) =>
-        teacher.name.toLowerCase().includes(term.toLowerCase()),
+        teacher.name.toLowerCase().includes(term.toLowerCase())
       )
       .slice(0, 8)
       .map((teacher) => ({ ...teacher, type: "teacher" }));

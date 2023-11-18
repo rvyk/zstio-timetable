@@ -1,10 +1,11 @@
 import axios from "axios";
 import { NextApiRequest, NextApiResponse } from "next";
 import { allApiType, emptyApiType } from "@/types/api";
+import NodeCache from "node-cache";
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse,
+  res: NextApiResponse
 ) {
   try {
     const { dayIndex, lessonIndex }: { dayIndex: number; lessonIndex: number } =

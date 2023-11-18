@@ -4,8 +4,9 @@ import InstallPWA from "./Navbar/InstallPWA";
 import { Tooltip } from "react-tooltip";
 import ThemeButton from "./Navbar/ThemeButton";
 import SubstitutionsButton from "./Navbar/SubstitutionsButton";
+import SearchButton from "./Navbar/SearchButton";
 
-function Navbar() {
+function Navbar({ searchDialog, setSearchDialog }) {
   const { theme, setTheme, resolvedTheme, systemTheme } = useTheme();
   const [isMounted, setIsMounted] = useState(false);
 
@@ -16,8 +17,7 @@ function Navbar() {
     }
     const newTheme = theme === "light" ? "dark" : "light";
     setTheme(newTheme);
-    document.cookie = `selectedTheme=${newTheme}; path=/; domain=${(window
-      ?.location?.hostname)
+    document.cookie = `selectedTheme=${newTheme}; path=/; domain=${(window?.location?.hostname)
       .split(".")
       .slice(-2)
       .join(".")};`;
@@ -27,7 +27,7 @@ function Navbar() {
     setIsMounted(true);
     const theme = document.cookie.replace(
       /(?:(?:^|.*;\s*)selectedTheme\s*\=\s*([^;]*).*$)|^.*$/,
-      "$1",
+      "$1"
     );
 
     if (theme) {
@@ -44,6 +44,10 @@ function Navbar() {
       {resolvedTheme != undefined && (
         <div className="absolute top-2 right-2 z-50 transition-all flex">
           <InstallPWA />
+          <SearchButton
+            searchDialog={searchDialog}
+            setSearchDialog={setSearchDialog}
+          />
           <SubstitutionsButton />
           <ThemeButton
             toggleTheme={toggleTheme}

@@ -18,7 +18,7 @@ function DropdownClass({ classes }) {
   };
 
   const handleSelectClass = (classPrefix) => {
-    document.getElementById("dropdownSearchClass").click();
+    document.getElementById("dropdownSearchClass")?.click();
     const classLink = `/class/${classPrefix.value}`;
     setLastSelect(classLink);
     localStorage.setItem("LastSelect", classLink);

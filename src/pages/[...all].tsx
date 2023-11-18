@@ -1,8 +1,7 @@
-import { useCallback, useEffect } from "react";
+import React, { useCallback, useEffect } from "react";
 import { useRouter } from "next/router";
 import Layout from "../components/Layout";
 import fetchTimetableList from "@/utils/fetchTimetableList";
-import { Table } from "@wulkanowy/timetable-parser";
 import fetchTimetable from "@/utils/fetchTimetable";
 import { convertTextDate, removeUndefined } from "@/utils/helpers";
 import { GetStaticPaths } from "next";
@@ -13,7 +12,7 @@ const MainRoute = (props) => {
 
   const handleKey = useCallback(
     (key) => {
-      const data = router.query.all[0];
+      const data = router?.query?.all[0];
       if (data) {
         const currentNumber = parseInt(router.query.all[1]);
         const changeTo =
@@ -32,7 +31,7 @@ const MainRoute = (props) => {
         }
       }
     },
-    [props, router],
+    [props, router]
   );
 
   useEffect(() => {
@@ -54,7 +53,7 @@ const MainRoute = (props) => {
     if (process.env.NEXT_PUBLIC_SERVER_ID) {
       console.log(
         `%cConnected with SERVER #${process.env.NEXT_PUBLIC_SERVER_ID}`,
-        "background: lime; color: white; font-size: x-large; text-align: center; border-radius: 15px; margin: 20px 0px 20px 0px; font-weight: bold; padding: 10px; width: full; ",
+        "background: lime; color: white; font-size: x-large; text-align: center; border-radius: 15px; margin: 20px 0px 20px 0px; font-weight: bold; padding: 10px; width: full; "
       );
     }
   }, []);
@@ -87,6 +86,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 };
 
 export const getStaticProps: GetStaticProps = async (context) => {
+  if (!context?.params) return { props: {} };
   const { params } = context;
   const param0 = params?.all[0];
   const param1 = params?.all[1];
@@ -112,12 +112,12 @@ export const getStaticProps: GetStaticProps = async (context) => {
   const { data: timetableListData, ok } = await fetchTimetable(id);
 
   const timeTable = {
-    lessons: timetableListData.getDays(),
-    hours: timetableListData.getHours(),
-    generatedDate: timetableListData.getGeneratedDate(),
-    title: timetableListData.getTitle(),
-    validDate: convertTextDate(timetableListData.getVersionInfo()),
-    days: timetableListData.getDays(),
+    lessons: timetableListData?.getDays(),
+    hours: timetableListData?.getHours(),
+    generatedDate: timetableListData?.getGeneratedDate(),
+    title: timetableListData?.getTitle(),
+    validDate: convertTextDate(timetableListData?.getVersionInfo()),
+    days: timetableListData?.getDays(),
   };
 
   const { data } = await fetchTimetableList();

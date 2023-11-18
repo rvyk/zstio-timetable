@@ -12,6 +12,10 @@ function TimetableSmall({
   setIsShortHours,
   isShortHours,
   substitutions,
+  searchDialog,
+  setSearchDialog,
+  selectedDay,
+  setSelectedDay,
   ...props
 }) {
   const { isReady } = useRouter();
@@ -27,11 +31,15 @@ function TimetableSmall({
   return (
     <div className="flex flex-col min-w-full dark:bg-[#202020]">
       <RenderNavbar
+        setSearchDialog={setSearchDialog}
+        searchDialog={searchDialog}
         isShortHours={isShortHours}
         setIsShortHours={setIsShortHours}
       />
 
       <RenderTimetable
+        setSelectedDay={setSelectedDay}
+        selectedDay={selectedDay}
         hours={hours}
         lessons={lessons}
         isShortHours={isShortHours}

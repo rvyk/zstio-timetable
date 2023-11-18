@@ -11,9 +11,15 @@ import CurrentLesson from "../Table/CurrentLesson";
 import { getSubstitution, getSubstitutionForGroup } from "@/utils/getter";
 import { cases, days } from "@/utils/helpers";
 
-function RenderTimetable({ hours, lessons, isShortHours, substitutions }) {
+function RenderTimetable({
+  hours,
+  lessons,
+  isShortHours,
+  substitutions,
+  selectedDay,
+  setSelectedDay,
+}) {
   const [isScreenSmall, setIsScreenSmall] = useState(false);
-  const [selectedDay, setSelectedDay] = useState(0);
 
   const maxLessons =
     typeof hours == "object" &&
@@ -38,7 +44,7 @@ function RenderTimetable({ hours, lessons, isShortHours, substitutions }) {
   useEffect(() => {
     let day = new Date().getDay();
     setSelectedDay(day >= 6 || day == 0 ? 0 : day - 1);
-  }, []);
+  }, [setSelectedDay]);
   return (
     <>
       <div className="w-full sticky top-0 z-20">
@@ -67,7 +73,7 @@ function RenderTimetable({ hours, lessons, isShortHours, substitutions }) {
       <div id="timetable" className="min-w-full mb-[4.25rem] dark:bg-[#202020]">
         {Object.entries(hours).length > 1 ? (
           Object.entries(
-            isShortHours ? shortHours.slice(0, maxLessons) : hours,
+            isShortHours ? shortHours.slice(0, maxLessons) : hours
           )?.map(([key, hour]: [string, hourType], hourIndex) => {
             const { number, timeFrom, timeTo } = hour;
 
@@ -99,7 +105,7 @@ function RenderTimetable({ hours, lessons, isShortHours, substitutions }) {
                     let substitution = getSubstitution(
                         selectedDay,
                         hourIndex,
-                        substitutions,
+                        substitutions
                       ),
                       possibleSubstitution = substitution,
                       sure = true;
@@ -111,7 +117,7 @@ function RenderTimetable({ hours, lessons, isShortHours, substitutions }) {
                         lesson.groupName,
                         substitutions,
                         hourIndex,
-                        selectedDay,
+                        selectedDay
                       );
                       if (!substitution) {
                         sure = false;
@@ -122,23 +128,20 @@ function RenderTimetable({ hours, lessons, isShortHours, substitutions }) {
                                 lessonCheck.groupName,
                                 substitutions,
                                 hourIndex,
-                                selectedDay,
+                                selectedDay
                               ) &&
                               checkIndex !== index
                             ) {
                               substitution = undefined;
                               sure = true;
                             }
-                          },
+                          }
                         );
                       }
                     }
 
                     return (
-                      <div
-                        key={`lesson-${index}`}
-                        className="p-2 flex justify-center items-center flex-col"
-                      >
+                      <div key={`lesson-${index}`} className="p-2">
                         <div className="flex">
                           <p
                             className={`font-semibold ${

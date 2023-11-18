@@ -18,7 +18,7 @@ function DropdownTeacher({ teachers }) {
   };
 
   const handleSelectTeacher = (teacher) => {
-    document.getElementById("dropdownSearchTeacher").click();
+    document.getElementById("dropdownSearchTeacher")?.click();
     const teacherLink = `/teacher/${teacher.value}`;
     setLastSelect(teacherLink);
     localStorage.setItem("LastSelect", teacherLink);

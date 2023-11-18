@@ -18,7 +18,7 @@ function DropdownRoom({ rooms }) {
   };
 
   const handleSelectRoom = (room) => {
-    document.getElementById("dropdownSearchRoom").click();
+    document.getElementById("dropdownSearchRoom")?.click();
     const roomLink = `/room/${room.value}`;
     setLastSelect(roomLink);
     localStorage.setItem("LastSelect", roomLink);
