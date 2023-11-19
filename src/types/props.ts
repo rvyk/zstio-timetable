@@ -50,3 +50,8 @@ type substitutionsListType = {
   dayIndex: number;
   zastepstwa: substitutionType[];
 };
+
+type dropdownSearchType = {
+  name: string;
+  value: string;
+};

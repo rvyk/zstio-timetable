@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
+import { handleSelect } from "./functions";
 
 function DropdownClass({ classes }) {
   const [searchClass, setSearchClass] = useState("");
@@ -13,18 +14,11 @@ function DropdownClass({ classes }) {
     setLastSelect(currentUrl);
   }, [currentUrl]);
 
-  const handleSearch = (event) => {
+  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchClass(event.target.value);
   };
 
-  const handleSelectClass = (classPrefix) => {
-    document.getElementById("dropdownSearchClass")?.click();
-    const classLink = `/class/${classPrefix.value}`;
-    setLastSelect(classLink);
-    localStorage.setItem("LastSelect", classLink);
-  };
-
-  const filteredClasses = classes?.filter((classPrefix) => {
+  const filteredClasses = classes?.filter((classPrefix: dropdownSearchType) => {
     const className = classPrefix.name.toLowerCase();
     const searchQuery = searchClass.toLowerCase();
     return className.includes(searchQuery);
@@ -54,7 +48,12 @@ function DropdownClass({ classes }) {
                 filteredClasses?.length === 1 &&
                 typeof filteredClasses[0]?.value !== "undefined"
               ) {
-                handleSelectClass(filteredClasses[0]);
+                handleSelect(
+                  "class",
+                  "dropdownSearchClass",
+                  filteredClasses[0],
+                  setLastSelect
+                );
                 router.push(`/class/${filteredClasses[0].value}`);
               }
             }}
@@ -66,7 +65,7 @@ function DropdownClass({ classes }) {
         aria-labelledby="dropdownSearchClass"
       >
         {filteredClasses?.length > 0 ? (
-          filteredClasses.map((classPrefix) => (
+          filteredClasses.map((classPrefix: dropdownSearchType) => (
             <li key={classPrefix.value}>
               <Link
                 prefetch={false}
@@ -76,7 +75,14 @@ function DropdownClass({ classes }) {
                     ? "bg-gray-100 dark:bg-[#202020]"
                     : ""
                 }`}
-                onClick={() => handleSelectClass(classPrefix)}
+                onClick={() =>
+                  handleSelect(
+                    "class",
+                    "dropdownSearchClass",
+                    classPrefix,
+                    setLastSelect
+                  )
+                }
               >
                 <p className="w-full py-2 ml-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">
                   {classPrefix.name}

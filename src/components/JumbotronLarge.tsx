@@ -9,7 +9,7 @@ import {
 import Image from "next/legacy/image";
 import Loading from "./Loading";
 
-function JumbotronLarge(props) {
+function JumbotronLarge({ ...props }) {
   let { text, status, classes, teachers, rooms, timeTable } = props;
 
   return (

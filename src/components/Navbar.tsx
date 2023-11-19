@@ -17,8 +17,8 @@ function Navbar({ searchDialog, setSearchDialog }) {
     }
     const newTheme = theme === "light" ? "dark" : "light";
     setTheme(newTheme);
-    document.cookie = `selectedTheme=${newTheme}; path=/; domain=${(window?.location?.hostname)
-      .split(".")
+    document.cookie = `selectedTheme=${newTheme}; path=/; domain=${window?.location?.hostname
+      ?.split(".")
       .slice(-2)
       .join(".")};`;
   };

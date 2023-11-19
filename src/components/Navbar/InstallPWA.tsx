@@ -16,8 +16,8 @@ const InstallPWA = () => {
     return () => window.removeEventListener("transitionend", handler);
   }, []);
 
-  const onClick = (evt) => {
-    evt.preventDefault();
+  const onClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.preventDefault();
     if (!promptInstall) {
       return;
     }

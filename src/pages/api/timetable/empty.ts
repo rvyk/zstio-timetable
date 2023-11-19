@@ -1,7 +1,6 @@
 import axios from "axios";
 import { NextApiRequest, NextApiResponse } from "next";
 import { allApiType, emptyApiType } from "@/types/api";
-import NodeCache from "node-cache";
 
 export default async function handler(
   req: NextApiRequest,
@@ -10,10 +9,8 @@ export default async function handler(
   try {
     const { dayIndex, lessonIndex }: { dayIndex: number; lessonIndex: number } =
       {
-        // @ts-ignore
-        dayIndex: parseInt(req?.query?.day),
-        // @ts-ignore
-        lessonIndex: parseInt(req?.query?.lesson),
+        dayIndex: parseInt(req?.query?.day[0]),
+        lessonIndex: parseInt(req?.query?.lesson[0]),
       };
 
     if (isNaN(dayIndex) || isNaN(lessonIndex)) {

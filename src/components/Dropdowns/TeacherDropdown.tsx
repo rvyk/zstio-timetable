@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
+import { handleSelect } from "./functions";
 
 function DropdownTeacher({ teachers }) {
   const [searchTeacher, setSearchTeacher] = useState("");
@@ -13,18 +14,11 @@ function DropdownTeacher({ teachers }) {
     setLastSelect(currentUrl);
   }, [currentUrl]);
 
-  const handleSearch = (event) => {
+  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTeacher(event.target.value);
   };
 
-  const handleSelectTeacher = (teacher) => {
-    document.getElementById("dropdownSearchTeacher")?.click();
-    const teacherLink = `/teacher/${teacher.value}`;
-    setLastSelect(teacherLink);
-    localStorage.setItem("LastSelect", teacherLink);
-  };
-
-  const filteredTeachers = teachers?.filter((teacher) => {
+  const filteredTeachers = teachers?.filter((teacher: dropdownSearchType) => {
     const teacherName = teacher.name.toLowerCase();
     const searchQuery = searchTeacher.toLowerCase();
     return teacherName.includes(searchQuery);
@@ -54,7 +48,12 @@ function DropdownTeacher({ teachers }) {
                 filteredTeachers?.length === 1 &&
                 typeof filteredTeachers[0]?.value !== "undefined"
               ) {
-                handleSelectTeacher(filteredTeachers[0]);
+                handleSelect(
+                  "teacher",
+                  "dropdownSearchTeacher",
+                  filteredTeachers[0],
+                  setLastSelect
+                );
                 router.push(`/teacher/${filteredTeachers[0].value}`);
               }
             }}
@@ -66,7 +65,7 @@ function DropdownTeacher({ teachers }) {
         aria-labelledby="dropdownSearchTeacher"
       >
         {filteredTeachers?.length > 0 ? (
-          filteredTeachers.map((teacher) => (
+          filteredTeachers.map((teacher: dropdownSearchType) => (
             <li key={teacher.value}>
               <Link
                 prefetch={false}
@@ -76,7 +75,14 @@ function DropdownTeacher({ teachers }) {
                     ? "bg-gray-100 dark:bg-[#202020]"
                     : ""
                 }`}
-                onClick={() => handleSelectTeacher(teacher)}
+                onClick={() =>
+                  handleSelect(
+                    "teacher",
+                    "dropdownSearchTeacher",
+                    teacher,
+                    setLastSelect
+                  )
+                }
               >
                 <p className="w-full py-2 ml-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">
                   {teacher.name}

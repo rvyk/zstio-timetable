@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
+import { handleSelect } from "./functions";
 
 function DropdownRoom({ rooms }) {
   const [searchRoom, setSearchRoom] = useState("");
@@ -13,18 +14,11 @@ function DropdownRoom({ rooms }) {
     setLastSelect(currentUrl);
   }, [currentUrl]);
 
-  const handleSearch = (event) => {
+  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchRoom(event.target.value);
   };
 
-  const handleSelectRoom = (room) => {
-    document.getElementById("dropdownSearchRoom")?.click();
-    const roomLink = `/room/${room.value}`;
-    setLastSelect(roomLink);
-    localStorage.setItem("LastSelect", roomLink);
-  };
-
-  const filteredRooms = rooms?.filter((room) => {
+  const filteredRooms = rooms?.filter((room: dropdownSearchType) => {
     const roomName = room.name.toLowerCase();
     const searchQuery = searchRoom.toLowerCase();
     return roomName.includes(searchQuery);
@@ -54,7 +48,12 @@ function DropdownRoom({ rooms }) {
                 filteredRooms?.length === 1 &&
                 typeof filteredRooms[0]?.value !== "undefined"
               ) {
-                handleSelectRoom(filteredRooms[0]);
+                handleSelect(
+                  "room",
+                  "dropdownSearchRoom",
+                  filteredRooms[0],
+                  setLastSelect
+                );
                 router.push(`/room/${filteredRooms[0].value}`);
               }
             }}
@@ -66,7 +65,7 @@ function DropdownRoom({ rooms }) {
         aria-labelledby="dropdownSearchRoom"
       >
         {filteredRooms?.length > 0 ? (
-          filteredRooms.map((room) => (
+          filteredRooms.map((room: dropdownSearchType) => (
             <li key={room.value}>
               <Link
                 prefetch={false}
@@ -76,7 +75,14 @@ function DropdownRoom({ rooms }) {
                     ? "bg-gray-100 dark:bg-[#202020]"
                     : ""
                 }`}
-                onClick={() => handleSelectRoom(room)}
+                onClick={() =>
+                  handleSelect(
+                    "room",
+                    "dropdownSearchRoom",
+                    room,
+                    setLastSelect
+                  )
+                }
               >
                 <p className="w-full py-2 ml-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">
                   {room.name}

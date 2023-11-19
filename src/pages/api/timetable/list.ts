@@ -1,11 +1,15 @@
 import fetchTimetableList from "@/utils/fetchTimetableList";
+import { NextApiRequest, NextApiResponse } from "next";
 import NodeCache from "node-cache";
 
-const cache = new NodeCache({ stdTTL: 600, checkperiod: 60 });
+const cache = new NodeCache({ stdTTL: 5400 });
 
-export default async function handler(req, res) {
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
   try {
-    const cacheKey: string = req.query.select || "default";
+    const cacheKey: string = req.query.select[0] || "default";
 
     const cachedData = cache.get(cacheKey);
     if (cachedData) {

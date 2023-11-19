@@ -36,6 +36,7 @@ function BottomBar({ handleKey, ...props }) {
     const link = `/${name}/${value}`;
     setLastSelect(link);
     localStorage.setItem("LastSelect", link);
+    router.push(link);
   };
 
   const dropdowns = [

@@ -1,12 +1,12 @@
 export const getCurrentLesson = (
   timeFrom,
-  timeTo,
+  timeTo
 ): { isWithinTimeRange: boolean; minutesRemaining: number | undefined } => {
   const currentHour = new Date().getHours();
   const currentMinutes = new Date().getMinutes();
 
-  const [fromHour, fromMinutes] = timeFrom.split(":");
-  const [toHour, toMinutes] = timeTo.split(":");
+  const [fromHour, fromMinutes] = timeFrom?.split(":");
+  const [toHour, toMinutes] = timeTo?.split(":");
   let minutesRemaining: number, isWithinTimeRange: boolean | undefined;
   const isAfterFromTime =
     currentHour > Number(fromHour) ||
@@ -21,7 +21,7 @@ export const getCurrentLesson = (
     endTime.setHours(Number(toHour), Number(toMinutes), 0);
     const timeDifference = endTime.getTime() - new Date().getTime();
     minutesRemaining = Math.ceil(
-      (timeDifference % (1000 * 60 * 60)) / (1000 * 60),
+      (timeDifference % (1000 * 60 * 60)) / (1000 * 60)
     );
   }
 

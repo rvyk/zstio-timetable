@@ -54,6 +54,16 @@ function Search({ teachers, rooms, classes, setIsMenuExpanded, handleSelect }) {
           onBlur={() => {
             toggleList(false);
           }}
+          onKeyDown={({ key }) => {
+            if (
+              key === "Enter" &&
+              searchResults?.length === 1 &&
+              typeof searchResults[0]?.value !== "undefined"
+            ) {
+              setIsMenuExpanded(false);
+              handleSelect(searchResults[0].type, searchResults[0].value);
+            }
+          }}
         />
         {searchResults.length > 0 && (
           <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-gray-400">
@@ -77,9 +87,7 @@ function Search({ teachers, rooms, classes, setIsMenuExpanded, handleSelect }) {
               <div className="px-2 py-2" key={item.name}>
                 <Menu.Item as={Fragment}>
                   {({ active }) => (
-                    <Link
-                      prefetch={false}
-                      href={`/${item.type}/${item.value}`}
+                    <button
                       onClick={() => {
                         setIsMenuExpanded(false);
                         handleSelect(item.type, item.value);
@@ -91,7 +99,7 @@ function Search({ teachers, rooms, classes, setIsMenuExpanded, handleSelect }) {
                       } group flex w-full items-center rounded-md px-2 py-2 transition-all text-sm duration-300`}
                     >
                       {item.name}
-                    </Link>
+                    </button>
                   )}
                 </Menu.Item>
               </div>

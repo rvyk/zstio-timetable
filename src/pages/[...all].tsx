@@ -7,11 +7,11 @@ import { convertTextDate, removeUndefined } from "@/utils/helpers";
 import { GetStaticPaths } from "next";
 import { GetStaticProps } from "next/types";
 
-const MainRoute = (props) => {
+const MainRoute = ({ ...props }) => {
   const router = useRouter();
 
   const handleKey = useCallback(
-    (key) => {
+    (key: string) => {
       const data = router?.query?.all[0];
       if (data) {
         const currentNumber = parseInt(router.query.all[1]);
@@ -35,7 +35,7 @@ const MainRoute = (props) => {
   );
 
   useEffect(() => {
-    const handleKeyDown = (e) => {
+    const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "ArrowRight" || e.key === "ArrowLeft") {
         e.preventDefault();
         handleKey(e.key);

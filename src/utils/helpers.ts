@@ -37,7 +37,7 @@ export const convertTextDate = (inputDate: string): string => {
     grudnia: "12",
   };
 
-  const words = inputDate.split(" ");
+  const words = inputDate?.split(" ");
 
   if (words.length < 3) {
     return inputDate;

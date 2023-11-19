@@ -1,14 +1,13 @@
 import fetchTimetable from "@/utils/fetchTimetable";
-import { Table } from "@wulkanowy/timetable-parser";
 import NodeCache from "node-cache";
 import { NextApiRequest, NextApiResponse } from "next";
 import { timetableApiType } from "@/types/api";
 
-const cache = new NodeCache({ stdTTL: 600, checkperiod: 60 });
+const cache = new NodeCache({ stdTTL: 5400 });
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse,
+  res: NextApiResponse
 ) {
   try {
     let id = req?.query?.id?.toString();

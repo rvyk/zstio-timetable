@@ -93,7 +93,6 @@ function Layout({ handleKey, ...props }) {
           <Footer small={false} />
           <SearchForEmptyRoom
             setSelectedDay={setSelectedDay}
-            selectedDay={selectedDay}
             searchDialog={searchDialog}
             setSearchDialog={setSearchDialog}
           />

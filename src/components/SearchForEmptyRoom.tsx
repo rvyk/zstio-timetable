@@ -1,7 +1,6 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, { Fragment, useState } from "react";
 import { Dialog, Menu, RadioGroup, Transition } from "@headlessui/react";
 import {
-  CheckIcon,
   ChevronDownIcon,
   MagnifyingGlassIcon,
 } from "@heroicons/react/24/outline";
@@ -9,16 +8,11 @@ import Link from "next/link";
 import { days } from "../utils/helpers";
 import axios from "axios";
 
-function SearchForEmptyRoom({
-  searchDialog,
-  setSearchDialog,
-  selectedDay,
-  setSelectedDay,
-}) {
+function SearchForEmptyRoom({ searchDialog, setSearchDialog, setSelectedDay }) {
   const [selectedDayForQuery, setSelectedDayForQuery] = useState(0);
   const [lessonIndex, setLessonindex] = useState(1);
   const [loading, setLoading] = useState(false);
-  const [data, setData] = useState([]);
+  const [data, setData] = useState(null);
   function closeModal() {
     setSearchDialog(false);
   }
@@ -32,11 +26,9 @@ function SearchForEmptyRoom({
       }`
     );
     if (res.data.success) {
-      setLoading(false);
       setData(res.data.classes);
-    } else {
-      setLoading(false);
     }
+    setLoading(false);
   };
 
   return (
@@ -96,26 +88,22 @@ function SearchForEmptyRoom({
                             <RadioGroup.Option
                               key={day.index}
                               value={day.index}
-                              className={({ active, checked }) =>
+                              className={({ checked }) =>
                                 `${
                                   checked &&
                                   "!bg-[#321c21] !text-gray-100 dark:!bg-[#171717]"
                                 } flex transition-all items-center p-3 text-xs font-medium text-gray-700 bg-white border border-gray-200 rounded-lg toggle-dark-state-example hover:bg-[#321c21] hover:text-gray-100 focus:z-10 focus:ring-2 dark:ring-0 dark:focus:ri focus:ring-[#2B161B] dark:bg-[#313131] dark:text-gray-200 dark:border-[#202020] dark:hover:border-[#171717] dark:hover:text-white dark:hover:bg-[#171717] lg:dark:hover:bg-[#141414] cursor-pointer my-2 mx-2 min-w-[4rem]`
                               }
                             >
-                              {({ active, checked }) => (
-                                <>
-                                  <div className="flex w-full items-center justify-between text-center">
-                                    <div className="flex items-center w-full">
-                                      <div className="text-sm text-center w-full">
-                                        <RadioGroup.Label as="p">
-                                          {day.short}
-                                        </RadioGroup.Label>
-                                      </div>
-                                    </div>
+                              <div className="flex w-full items-center justify-between text-center">
+                                <div className="flex items-center w-full">
+                                  <div className="text-sm text-center w-full">
+                                    <RadioGroup.Label as="p">
+                                      {day.short}
+                                    </RadioGroup.Label>
                                   </div>
-                                </>
-                              )}
+                                </div>
+                              </div>
                             </RadioGroup.Option>
                           ))}
                         </div>
@@ -149,13 +137,13 @@ function SearchForEmptyRoom({
                   <div className="mt-4 w-full justify-center flex">
                     <button
                       type="button"
-                      className="flex justify-center items-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 mr-2"
+                      className="text-[#a91712] hover:text-white hover:border-transparent bg-transparent dark:border-[2px] border-[1px] border-[#a91712] mx-2 sm:my-0 my-2 hover:bg-[#73110e] transition-all focus:ring-4 focus:outline-none focus:ring-transparent font-medium text-sm px-4 py-2.5 text-center inline-flex items-center dark:text-gray-300 hover:dark:text-white dark:bg-[#161616] dark:rounded-lg dark:border-none dark:hover:bg-[#141414] dark:outline-none"
                       onClick={handleButton}
                       disabled={loading}
                     >
                       {loading ? (
                         <svg
-                          className="w-4 h-4 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
+                          className="w-4 h-4 text-gray-200 animate-spin dark:text-gray-600 fill-red-600 dark:fill-red-500"
                           viewBox="0 0 100 101"
                           fill="none"
                           xmlns="http://www.w3.org/2000/svg"
@@ -175,7 +163,7 @@ function SearchForEmptyRoom({
                     </button>
                     <button
                       type="button"
-                      className="inline-flex justify-center rounded-md border border-transparent bg-red-100 px-4 py-2 text-sm font-medium text-red-900 hover:bg-red-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2 mr-2"
+                      className="hover:text-[#a91712] text-white border-transparent hover:bg-transparent dark:border-[2px] border-[1px] hover:border-[#a91712] mx-2 sm:my-0 my-2 bg-[#73110e] transition-all focus:ring-4 focus:outline-none focus:ring-transparent font-medium text-sm px-4 py-2.5 text-center inline-flex items-center dark:text-gray-100 hover:dark:text-white dark:hover:bg-red-600 dark:rounded-lg dark:border-none dark:bg-red-400 dark:outline-none"
                       onClick={closeModal}
                     >
                       Anuluj
@@ -183,65 +171,67 @@ function SearchForEmptyRoom({
                   </div>
 
                   <div>
-                    <Menu as="div" className="text-left w-full my-4">
-                      {({ open }) => (
-                        <>
-                          <div>
-                            <Menu.Button
-                              disabled={data?.length == 0}
-                              className="inline-flex w-full justify-center dark:text-gray-300 rounded-md bg-[#2B161B] hover:bg-[#201114] dark:bg-[#171717] py-2 text-md font-medium text-white dark:hover:bg-[#151515] transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
+                    {data != null && (
+                      <Menu as="div" className="text-left w-full my-4">
+                        {({ open }) => (
+                          <>
+                            <div>
+                              <Menu.Button
+                                disabled={data?.length == 0}
+                                className="inline-flex w-full justify-center dark:text-gray-300 rounded-md bg-[#2B161B] hover:bg-[#201114] dark:bg-[#171717] py-2 text-md font-medium text-white dark:hover:bg-[#151515] transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
+                              >
+                                {data?.length > 0
+                                  ? `Znaleziono (${data?.length}) wyników`
+                                  : "Nic nie znaleziono"}
+                                {data?.length != 0 && (
+                                  <ChevronDownIcon
+                                    className={`ml-2 mt-1 -mr-1 h-6 w-6 text-white hover:text-gray-50 transition-all duration-300 ${
+                                      open && "rotate-180"
+                                    }`}
+                                    aria-hidden="true"
+                                  />
+                                )}
+                              </Menu.Button>
+                            </div>
+                            <Transition
+                              as={Fragment}
+                              enter="transition ease-out duration-100"
+                              enterFrom="transform opacity-0 scale-95"
+                              enterTo="transform opacity-100 scale-100"
+                              leave="transition ease-in duration-75"
+                              leaveFrom="transform opacity-100 scale-100"
+                              leaveTo="transform opacity-0 scale-95"
                             >
-                              {data?.length > 0
-                                ? `Znaleziono (${data?.length}) wyników`
-                                : "Nic nie znaleziono"}
-                              {data?.length != 0 && (
-                                <ChevronDownIcon
-                                  className={`ml-2 mt-1 -mr-1 h-6 w-6 text-white hover:text-gray-50 transition-all duration-300 ${
-                                    open && "rotate-180"
-                                  }`}
-                                  aria-hidden="true"
-                                />
-                              )}
-                            </Menu.Button>
-                          </div>
-                          <Transition
-                            as={Fragment}
-                            enter="transition ease-out duration-100"
-                            enterFrom="transform opacity-0 scale-95"
-                            enterTo="transform opacity-100 scale-100"
-                            leave="transition ease-in duration-75"
-                            leaveFrom="transform opacity-100 scale-100"
-                            leaveTo="transform opacity-0 scale-95"
-                          >
-                            <Menu.Items className="max-h-[30vh] mt-3 overflow-y-scroll mx-4 right-0 left-0 origin-top-right divide-y divide-gray-100 dark:divide-[#323232] rounded-md bg-gray-50 dark:bg-[#202020] shadow-lg ring-0 focus:outline-none">
-                              {data.map((item) => (
-                                <div className="px-2 py-2" key={item.name}>
-                                  <Menu.Item as={Fragment}>
-                                    {({ active }) => (
-                                      <Link
-                                        prefetch={false}
-                                        href={`/room/${item.value}`}
-                                        onClick={() => {
-                                          closeModal();
-                                          setSelectedDay(selectedDayForQuery);
-                                        }}
-                                        className={`${
-                                          active
-                                            ? "dark:bg-[#171717] dark:text-gray-300 text-black bg-gray-100 font-semibold"
-                                            : "text-gray-900 dark:text-gray-300 font-semibold"
-                                        } group flex w-full items-center rounded-md px-2 py-2 transition-all text-sm duration-300`}
-                                      >
-                                        {item.name}
-                                      </Link>
-                                    )}
-                                  </Menu.Item>
-                                </div>
-                              ))}
-                            </Menu.Items>
-                          </Transition>
-                        </>
-                      )}
-                    </Menu>
+                              <Menu.Items className="max-h-[30vh] mt-3 overflow-y-scroll mx-4 right-0 left-0 origin-top-right divide-y divide-gray-100 dark:divide-[#323232] rounded-md bg-gray-50 dark:bg-[#202020] shadow-lg ring-0 focus:outline-none">
+                                {data.map((item) => (
+                                  <div className="px-2 py-2" key={item.name}>
+                                    <Menu.Item as={Fragment}>
+                                      {({ active }) => (
+                                        <Link
+                                          prefetch={false}
+                                          href={`/room/${item.value}`}
+                                          onClick={() => {
+                                            closeModal();
+                                            setSelectedDay(selectedDayForQuery);
+                                          }}
+                                          className={`${
+                                            active
+                                              ? "dark:bg-[#171717] dark:text-gray-300 text-black bg-gray-100 font-semibold"
+                                              : "text-gray-900 dark:text-gray-300 font-semibold"
+                                          } group flex w-full items-center rounded-md px-2 py-2 transition-all text-sm duration-300`}
+                                        >
+                                          {item.name}
+                                        </Link>
+                                      )}
+                                    </Menu.Item>
+                                  </div>
+                                ))}
+                              </Menu.Items>
+                            </Transition>
+                          </>
+                        )}
+                      </Menu>
+                    )}
                   </div>
                 </Dialog.Panel>
               </Transition.Child>
