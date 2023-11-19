@@ -20,35 +20,53 @@ export const removeUndefined = (obj) => {
   return cleanedObj;
 };
 
-// ZSTiO Elektronika returns the "valid" date in "16 października, 2023r." format and the "Generated" date in "yyyy-mm-dd" format, so we should convert them to one format.
-export const convertTextDate = (inputDate: string): string => {
-  const months = {
-    stycznia: "01",
-    lutego: "02",
-    marca: "03",
-    kwietnia: "04",
-    maja: "05",
-    czerwca: "06",
-    lipca: "07",
-    sierpnia: "08",
-    września: "09",
-    października: "10",
-    listopada: "11",
-    grudnia: "12",
+// ZSTiO Elektronika returns the "valid" date in "16 października, 2023r." or "16.10.2023r" format and the "Generated" date in "yyyy-mm-dd" format, so we should convert them to one format.
+type Months = {
+  [key: string]: string;
+};
+
+const months: Months = {
+  stycznia: "01",
+  lutego: "02",
+  marca: "03",
+  kwietnia: "04",
+  maja: "05",
+  czerwca: "06",
+  lipca: "07",
+  sierpnia: "08",
+  września: "09",
+  października: "10",
+  listopada: "11",
+  grudnia: "12",
+};
+
+export function convertTextDate(inputDate: string): string {
+  const dotsFormat = (date: string): string => {
+    const [day, month, year] = date.split(".");
+    const formattedDate = `${year.replace("r", "")}-${month}-${day}`;
+    return formattedDate;
   };
 
-  const words = inputDate?.split(" ");
+  const wordsFormat = (date: string): string => {
+    const words = date?.split(" ");
 
-  if (words.length < 3) {
-    return inputDate;
+    if (words.length < 3) {
+      return inputDate;
+    }
+
+    const day = words[0].padStart(2, "0");
+    const month = months[words[1]];
+    const year = words[2].replace("r.", "");
+
+    return `${year}-${month}-${day}`;
+  };
+
+  if (inputDate.includes(".")) {
+    return dotsFormat(inputDate);
+  } else {
+    return wordsFormat(inputDate);
   }
-
-  const day = words[0].padStart(2, "0");
-  const month = months[words[1]];
-  const year = words[2].replace("r.", "");
-
-  return `${year}-${month}-${day}`;
-};
+}
 
 export const cases = [
   "Uczniowie przychodzą później",
