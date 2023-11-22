@@ -7,6 +7,7 @@ import { ArrowPathIcon } from "@heroicons/react/24/outline";
 import ShortHours from "./Table/ShortHours";
 import { useRouter } from "next/router";
 import LoadingTable from "./Table/LoadingTable";
+import Image from "next/legacy/image";
 
 function TimetableLarge({
   substitutions,

@@ -12,7 +12,7 @@ const SnowSettings: SnowOption = {
 function Snow({ isSnowing }) {
   const { theme } = useTheme();
 
-  if (isSnowing && new Date().getMonth() === 10) {
+  if (isSnowing && new Date().getMonth() === 11) {
     return (
       <Snowfall
         speed={SnowSettings.speed}

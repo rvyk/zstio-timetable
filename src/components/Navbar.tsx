@@ -45,7 +45,7 @@ function Navbar({ searchDialog, setSearchDialog, isSnowing, setIsSnowing }) {
       {resolvedTheme != undefined && (
         <div className="absolute top-2 right-2 z-50 transition-all flex">
           <InstallPWA />
-          {new Date().getMonth() === 10 && (
+          {new Date().getMonth() === 11 && (
             <SnowEastereggButton
               isSnowing={isSnowing}
               setIsSnowing={setIsSnowing}

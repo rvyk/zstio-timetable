@@ -8,6 +8,7 @@ import {
 } from "@heroicons/react/24/outline";
 import Image from "next/legacy/image";
 import Loading from "./Loading";
+import Event from "./Event";
 
 function JumbotronLarge({ ...props }) {
   let { text, status, classes, teachers, rooms, timeTable } = props;
@@ -18,8 +19,9 @@ function JumbotronLarge({ ...props }) {
         <Link
           prefetch={false}
           href={"https://zstiojar.edu.pl"}
-          className="relative w-20 h-20 mr-4 hidden md:block"
+          className="relative w-20 h-20 mr-4 hidden md:block z-30"
         >
+          <Event />
           <Image
             alt="logo"
             src={"/icon-192x192.png"}
