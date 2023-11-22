@@ -55,3 +55,10 @@ type dropdownSearchType = {
   name: string;
   value: string;
 };
+
+interface SnowOption {
+  snowflakeCount: number;
+  speed: [number, number];
+  wind: [number, number];
+  radius: [number, number];
+}

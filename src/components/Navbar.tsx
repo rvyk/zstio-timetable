@@ -5,8 +5,9 @@ import { Tooltip } from "react-tooltip";
 import ThemeButton from "./Navbar/ThemeButton";
 import SubstitutionsButton from "./Navbar/SubstitutionsButton";
 import SearchButton from "./Navbar/SearchButton";
+import SnowEastereggButton from "./Navbar/SnowEastereggButton";
 
-function Navbar({ searchDialog, setSearchDialog }) {
+function Navbar({ searchDialog, setSearchDialog, isSnowing, setIsSnowing }) {
   const { theme, setTheme, resolvedTheme, systemTheme } = useTheme();
   const [isMounted, setIsMounted] = useState(false);
 
@@ -19,7 +20,7 @@ function Navbar({ searchDialog, setSearchDialog }) {
     setTheme(newTheme);
     document.cookie = `selectedTheme=${newTheme}; path=/; domain=${window?.location?.hostname
       ?.split(".")
-      .slice(-2)
+      .slice(-3)
       .join(".")};`;
   };
 
@@ -44,6 +45,12 @@ function Navbar({ searchDialog, setSearchDialog }) {
       {resolvedTheme != undefined && (
         <div className="absolute top-2 right-2 z-50 transition-all flex">
           <InstallPWA />
+          {new Date().getMonth() === 10 && (
+            <SnowEastereggButton
+              isSnowing={isSnowing}
+              setIsSnowing={setIsSnowing}
+            />
+          )}
           <SearchButton
             searchDialog={searchDialog}
             setSearchDialog={setSearchDialog}

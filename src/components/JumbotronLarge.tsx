@@ -13,7 +13,7 @@ function JumbotronLarge({ ...props }) {
   let { text, status, classes, teachers, rooms, timeTable } = props;
 
   return (
-    <div className="py-8 px-4 mx-auto max-w-screen-xl text-center lg:py-16">
+    <div className="py-8 relative px-4 mx-auto max-w-screen-xl text-center lg:py-16">
       <div className="flex justify-center items-center mb-4 md:mb-0 -ml-0 md:-ml-16">
         <Link
           prefetch={false}

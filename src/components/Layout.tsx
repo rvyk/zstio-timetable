@@ -11,11 +11,14 @@ import TimetableSmall from "./TimetableSmall";
 import dynamic from "next/dynamic";
 import SearchForEmptyRoom from "./SearchForEmptyRoom";
 import { getSubstitutions } from "../utils/getter";
+import Snow from "./SnowEasteregg";
 
 const Footer = dynamic(() => import("./Footer"));
 
 function Layout({ handleKey, ...props }) {
   const [isShortHours, setIsShortHours] = useState(false);
+  const [isSnowing, setIsSnowing] = useState(false);
+
   const [substitutions, setSubstitutions] = useState({});
   const [searchDialog, setSearchDialog] = useState(false);
   const [selectedDay, setSelectedDay] = useState(0);
@@ -25,6 +28,14 @@ function Layout({ handleKey, ...props }) {
     const storedShortHours = JSON.parse(localStorage.getItem("shortHours"));
     if (storedShortHours !== null) {
       setIsShortHours(storedShortHours);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!localStorage.getItem("isSnowing")) return;
+    const storedIsSnowing = JSON.parse(localStorage.getItem("isSnowing"));
+    if (storedIsSnowing !== null) {
+      setIsSnowing(storedIsSnowing);
     }
   }, []);
 
@@ -65,7 +76,7 @@ function Layout({ handleKey, ...props }) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <div className="min-h-screen w-screen flex flex-col lg:justify-center lg:items-center lg:bg-[#F7F3F5] bg-[#fff] dark:bg-[#202020] lg:dark:bg-[#171717] transition-all">
-        <div className="flex justify-center lg:hidden w-full ">
+        <div className="flex justify-center lg:hidden w-full">
           <TimetableSmall
             {...props}
             setSearchDialog={setSearchDialog}
@@ -79,9 +90,12 @@ function Layout({ handleKey, ...props }) {
           />
         </div>
         <div className="hidden justify-center lg:flex flex-col w-full items-center">
+          <Snow isSnowing={isSnowing} />
           <Navbar
             searchDialog={searchDialog}
             setSearchDialog={setSearchDialog}
+            isSnowing={isSnowing}
+            setIsSnowing={setIsSnowing}
           />
           <JumbotronLarge {...props} />
           <TimetableLarge
