@@ -17,7 +17,12 @@ function RenderNavbar({
         />
       </div>
 
-      <Navbar searchDialog={searchDialog} setSearchDialog={setSearchDialog} />
+      <Navbar
+        searchDialog={searchDialog}
+        setSearchDialog={setSearchDialog}
+        isSnowing={false}
+        setIsSnowing={() => {}}
+      />
     </div>
   );
 }
