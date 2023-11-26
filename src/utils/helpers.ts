@@ -41,30 +41,15 @@ const months: Months = {
 };
 
 export function convertTextDate(inputDate: string): string {
-  const dotsFormat = (date: string): string => {
-    const [day, month, year] = date.split(".");
-    const formattedDate = `${year.replace("r", "")}-${month}-${day}`;
-    return formattedDate;
-  };
-
-  const wordsFormat = (date: string): string => {
-    const words = date?.split(" ");
-
-    if (words.length < 3) {
-      return inputDate;
-    }
-
-    const day = words[0].padStart(2, "0");
-    const month = months[words[1]];
-    const year = words[2].replace("r.", "");
-
+  const regexes = [/(\d{1,2}) (\w+) (\d{4})/, /(\d{1,2})\.(\d{1,2})\.(\d{4})/];
+  if (regexes[0].test(inputDate)) {
+    const [, day, month, year] = inputDate.match(regexes[0]);
+    return `${year}-${months[month.toLowerCase()]}-${day}`;
+  } else if (regexes[1].test(inputDate)) {
+    const [, day, month, year] = inputDate.match(regexes[1]);
     return `${year}-${month}-${day}`;
-  };
-
-  if (inputDate.includes(".")) {
-    return dotsFormat(inputDate);
   } else {
-    return wordsFormat(inputDate);
+    return inputDate;
   }
 }
 

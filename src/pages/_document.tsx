@@ -37,7 +37,6 @@ export default function Document() {
           content="plan zajęć, plan lekcji, plan, zstio, zstiojar, plan zajęć zstiojar, plan lekcji zstiojar"
         />
         <link rel="manifest" href="/manifest.json" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <body suppressHydrationWarning={true}>
         <Main />
