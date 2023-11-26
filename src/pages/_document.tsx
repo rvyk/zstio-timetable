@@ -31,6 +31,7 @@ export default function Document() {
           name="og:description"
           content="W prosty sposób sprawdź plan zajęć oraz zastępstwa różnych klas, nauczycieli i sal."
         />
+        <meta property="og:image" content="/og-image.png" />
         <meta
           name="keywords"
           content="plan zajęć, plan lekcji, plan, zstio, zstiojar, plan zajęć zstiojar, plan lekcji zstiojar"
