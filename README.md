@@ -1,3 +1,5 @@
+![App screenshot](/public/og-image.png)
+
 # Timetable ZSTiO
 
 A refreshed version of the [timetable](https://www.zstio-elektronika.pl/plan/index.html)
