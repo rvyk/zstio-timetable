@@ -28,14 +28,28 @@ export default function Document() {
           content="W prosty sposób sprawdź plan zajęć oraz zastępstwa różnych klas, nauczycieli i sal."
         />
         <meta
-          name="og:description"
-          content="W prosty sposób sprawdź plan zajęć oraz zastępstwa różnych klas, nauczycieli i sal."
-        />
-        <meta property="og:image" content="/og-image.png" />
-        <meta
           name="keywords"
           content="plan zajęć, plan lekcji, plan, zstio, zstiojar, plan zajęć zstiojar, plan lekcji zstiojar"
         />
+        {/* ----- */}
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://plan.zstiojar.edu.pl/" />
+        <meta property="og:title" content="ZSTiO - Plan lekcji" />
+        <meta
+          property="og:description"
+          content="W prosty sposób sprawdź plan zajęć oraz zastępstwa różnych klas, nauczycieli i sal."
+        />
+        <meta property="og:image" content="/og-image.png" />
+        {/* ----- */}
+        <meta property="twitter:card" content="summary_large_image" />
+        <meta property="twitter:url" content="https://plan.zstiojar.edu.pl/" />
+        <meta property="twitter:title" content="ZSTiO - Plan lekcji" />
+        <meta
+          property="twitter:description"
+          content="W prosty sposób sprawdź plan zajęć oraz zastępstwa różnych klas, nauczycieli i sal."
+        />
+        <meta property="twitter:image" content="/og-image.png" />
+        {/* ----- */}
         <link rel="manifest" href="/manifest.json" />
       </Head>
       <body suppressHydrationWarning={true}>
