@@ -64,16 +64,11 @@ function Layout({ handleKey, ...props }) {
   return (
     <>
       <Head>
-        <title>
-          {title
-            ? `ZSTiO - Plan lekcji | ${title}`
-            : "ZSTiO - Plan lekcji | Wczytywanie planu..."}
-        </title>
+        <title>{title && `${siteTitle} | ZSTiO - Plan lekcji`}</title>
         <meta
           property="og:title"
-          content={`Sprawdź plan lekcji ${siteTitle} | ZSTiO`}
+          content={`${siteTitle} | ZSTiO - Plan lekcji`}
         />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <div className="min-h-screen w-screen flex flex-col lg:justify-center lg:items-center lg:bg-[#F7F3F5] bg-[#fff] dark:bg-[#202020] lg:dark:bg-[#171717] transition-all">
         <div className="flex justify-center lg:hidden w-full">
