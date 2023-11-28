@@ -20,6 +20,7 @@ export default function RenderTableHeader({
           <td
             scope="row"
             colSpan={5}
+            id="desktopDateTest"
             className="px-6 py-4 font-semibold w-1 text-left text-gray-900 whitespace-nowrap dark:text-gray-300 transition-all"
           >
             {generatedDate && `Wygenerowano: ${generatedDate}`}{" "}

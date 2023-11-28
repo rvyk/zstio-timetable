@@ -22,3 +22,4 @@
 /.idea/
 tsconfig.tsbuildinfo
 public/teachers.json
+cypress/screenshots/

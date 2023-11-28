@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "postbuild": "next-sitemap --next-sitemap.config.js"
+    "test": "npx cypress run --spec '.\\cypress\\e2e\\plan-lekcji.cy.ts'",
+    "postbuild": "next-sitemap --next-sitemap.config.js & start-server-and-test start http://localhost:3000"
   },
   "dependencies": {
     "@headlessui/react": "^1.7.17",
@@ -38,6 +39,10 @@
     "webpack": "^5.89.0"
   },
   "devDependencies": {
+    "cypress": "^13.6.0",
+    "cypress-dotenv": "^2.0.0",
+    "dotenv": "^16.3.1",
+    "start-server-and-test": "^2.0.3",
     "typescript": "5.3.2"
   }
 }

@@ -15,7 +15,7 @@ function RenderLesson({ number, index, lessonIndex, day, substitutions }) {
             lesson.groupName,
             substitutions,
             index,
-            lessonIndex,
+            lessonIndex
           );
           if (!substitution) {
             sure = false;
@@ -25,7 +25,7 @@ function RenderLesson({ number, index, lessonIndex, day, substitutions }) {
                   lessonCheck?.groupName,
                   substitutions,
                   index,
-                  lessonIndex,
+                  lessonIndex
                 ) &&
                 checkIndex !== subIndex
               ) {
@@ -40,6 +40,7 @@ function RenderLesson({ number, index, lessonIndex, day, substitutions }) {
           <div
             key={`${day}-${lessonIndex}-${subIndex}`}
             className="flex flex-col"
+            id={substitution ? "substitutionAvalibleTest" : undefined}
           >
             <div className="flex flex-row">
               <div
