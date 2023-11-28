@@ -21,11 +21,9 @@ export const removeUndefined = (obj) => {
 };
 
 // ZSTiO Elektronika returns the "valid" date in "16 października, 2023r." or "16.10.2023r" format and the "Generated" date in "yyyy-mm-dd" format, so we should convert them to one format.
-type Months = {
+const months: {
   [key: string]: string;
-};
-
-const months: Months = {
+} = {
   stycznia: "01",
   lutego: "02",
   marca: "03",

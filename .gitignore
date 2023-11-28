@@ -21,3 +21,4 @@
 /.vscode/
 /.idea/
 tsconfig.tsbuildinfo
+public/teachers.json
