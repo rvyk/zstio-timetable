@@ -8,10 +8,11 @@ import { useEffect, useState } from "react";
 export default function Home() {
   const router = useRouter();
   const [help, setHelp] = useState(false);
+
   useEffect(() => {
     const lastSelect = localStorage.getItem("LastSelect");
 
-    lastSelect ? router.push(lastSelect) : router.push("/class/1");
+    lastSelect ? router.replace(lastSelect) : router.replace("/class/1");
   }, [router]);
 
   useEffect(() => {
@@ -19,6 +20,7 @@ export default function Home() {
       setHelp(true);
     }, 10000);
   }, []);
+
   return (
     <>
       <Head>

@@ -7,7 +7,6 @@ import { ArrowPathIcon } from "@heroicons/react/24/outline";
 import ShortHours from "./Table/ShortHours";
 import { useRouter } from "next/router";
 import LoadingTable from "./Table/LoadingTable";
-import Image from "next/legacy/image";
 
 function TimetableLarge({
   substitutions,
@@ -18,10 +17,16 @@ function TimetableLarge({
   const { isReady } = useRouter();
 
   let {
-    status,
-    text,
-    timeTableID,
-    timeTable: { hours, generatedDate, title, validDate, lessons },
+    status = false,
+    text = "",
+    timeTableID = "",
+    timeTable: {
+      hours = {},
+      generatedDate = "",
+      title = "",
+      validDate = "",
+      lessons = [[], [], [], [], []],
+    } = {},
   } = props;
 
   if (!isReady) {

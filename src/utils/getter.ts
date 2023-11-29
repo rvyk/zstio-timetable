@@ -28,7 +28,7 @@ export async function getSubstitutions(
   const query =
     search === "teacher"
       ? await getTeacher(title)
-      : title.includes(" ")
+      : title?.includes(" ")
       ? title?.split(" ")[0]
       : title;
 

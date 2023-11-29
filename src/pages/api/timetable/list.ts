@@ -9,7 +9,7 @@ export default async function handler(
   res: NextApiResponse
 ) {
   try {
-    const cacheKey: string = req.query.select[0] || "default";
+    const cacheKey: string = req?.query?.select.toString() || "default";
 
     const cachedData = cache.get(cacheKey);
     if (cachedData) {

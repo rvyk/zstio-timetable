@@ -20,9 +20,8 @@ function TimetableSmall({
 }) {
   const { isReady } = useRouter();
 
-  let {
-    timeTable: { hours, lessons },
-  } = props;
+  let { timeTable: { hours = {}, lessons = [[], [], [], [], []] } = {} } =
+    props;
 
   if (!isReady) {
     return <LoadingTable small={true} />;

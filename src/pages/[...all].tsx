@@ -123,15 +123,17 @@ export const getStaticProps: GetStaticProps = async (context) => {
   const { data } = await fetchTimetableList();
   const { classes, teachers, rooms } = data;
 
+  const readyTimeTable = removeUndefined(timeTable, "");
+
   return {
     props: {
       status: ok,
-      timeTable: removeUndefined(timeTable),
+      timeTable: readyTimeTable,
       classes,
       teachers,
       rooms,
       timeTableID: id,
-      siteTitle: timeTable.title,
+      siteTitle: readyTimeTable?.title,
       text,
     },
     revalidate: 3600,

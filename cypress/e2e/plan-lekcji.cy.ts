@@ -4,11 +4,11 @@ describe("Testing!", () => {
     cy.visit("http://localhost:3000");
   });
 
-  it("redirect na class 1", () => {
+  it("Redirect on /class/1", () => {
     cy.url().should("include", "/class/1");
   });
 
-  it("sprawdz daty", () => {
+  it("Checking dates format", () => {
     cy.get(`#desktopDateTest`).should("exist");
     cy.get("#desktopDateTest").then(($value) => {
       const textValue = $value.text();
@@ -16,15 +16,15 @@ describe("Testing!", () => {
         .split("Wygenerowano: ")[1]
         .split(" ")[0]
         .trim();
-      const obowiazujeDate = textValue.split("Obowiązuje od: ")[1].trim();
-      cy.log(generatedDate, obowiazujeDate);
+      const validDate = textValue.split("Obowiązuje od: ")[1].trim();
+      cy.log(generatedDate, validDate);
 
       expect(generatedDate.split("-").length).eq(3);
-      expect(obowiazujeDate.split("-").length).eq(3);
+      expect(validDate.split("-").length).eq(3);
     });
   });
 
-  it("sprawdz zastepstwa", () => {
+  it("Checking substitutions", () => {
     cy.request("https://zastepstwa.zstiojar.edu.pl/api/getSubstitutions")
       .as("request")
       .its("body")
@@ -38,19 +38,19 @@ describe("Testing!", () => {
 
     cy.get("@request")
       .its("body.tables[0].zastepstwa[0]")
-      .as("exampleZastepstwo");
+      .as("exampleSubstitution");
 
     //@ts-ignore
-    cy.get("@exampleZastepstwo").then((zastepstwo: substitutionType) => {
-      const klasa = zastepstwo.branch.includes("|")
-        ? zastepstwo.branch.split("|")[0]
-        : zastepstwo.branch;
+    cy.get("@exampleSubstitution").then((substitution: substitutionType) => {
+      const branch = substitution.branch.includes("|")
+        ? substitution.branch.split("|")[0]
+        : substitution.branch;
 
       cy.get("#dropdownClass > ul")
         .children()
-        .each((lista) => {
-          if (lista.text() === klasa) {
-            cy.wrap(lista)
+        .each((list) => {
+          if (list.text() === branch) {
+            cy.wrap(list)
               .find("a")
               .first()
               .as("target")
@@ -60,12 +60,12 @@ describe("Testing!", () => {
               .invoke("attr", "href")
               .then((href) => {
                 cy.visit("http://localhost:3000" + href);
-                cy.get("#substitutionAvalibleTest")
+                cy.get("#substitutionAvailableTest")
                   .should("exist")
                   .then(() => {
-                    cy.get("#substitutionAvalibleTest").then((divs) => {
+                    cy.get("#substitutionAvailableTest").then((divs) => {
                       cy.log(
-                        `wyswietlono ${divs.length} zastepstwo dla klasy ${klasa}`
+                        `Displayed: ${divs.length} substitution for the branch: ${branch}`
                       );
                     });
                   });

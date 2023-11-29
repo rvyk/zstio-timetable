@@ -1,24 +1,13 @@
-export const removeUndefined = (obj) => {
-  const cleanedObj = {};
+import _ from "lodash";
 
-  try {
-    if (typeof obj !== "object" || obj === null) return obj;
-
-    if (Array.isArray(obj)) {
-      return obj.map(removeUndefined).filter((item) => item !== undefined);
-    }
-
-    Object.entries(obj).forEach(([key, value]) => {
-      const cleanedValue = removeUndefined(value);
-      if (cleanedValue !== undefined) {
-        cleanedObj[key] = cleanedValue;
-      }
-    });
-  } catch (e) {
-    return null;
-  }
-  return cleanedObj;
-};
+export const removeUndefined = (obj, value) =>
+  _.transform(obj, (result, val, key) => {
+    result[key] = _.isObject(val)
+      ? removeUndefined(val, value)
+      : _.isUndefined(val)
+      ? value
+      : val;
+  });
 
 // ZSTiO Elektronika returns the "valid" date in "16 października, 2023r." or "16.10.2023r" format and the "Generated" date in "yyyy-mm-dd" format, so we should convert them to one format.
 const months: {

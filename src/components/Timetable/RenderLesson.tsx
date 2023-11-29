@@ -40,7 +40,7 @@ function RenderLesson({ number, index, lessonIndex, day, substitutions }) {
           <div
             key={`${day}-${lessonIndex}-${subIndex}`}
             className="flex flex-col"
-            id={substitution ? "substitutionAvalibleTest" : undefined}
+            id={substitution ? "substitutionAvailableTest" : undefined}
           >
             <div className="flex flex-row">
               <div

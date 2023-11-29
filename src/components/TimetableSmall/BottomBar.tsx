@@ -15,12 +15,12 @@ import MobileDetect from "mobile-detect";
 
 function BottomBar({ handleKey, ...props }) {
   let {
-    text,
-    timeTableID,
-    classes,
-    teachers,
-    rooms,
-    timeTable: { generatedDate, title, validDate },
+    text = "",
+    timeTableID = "",
+    classes = [],
+    teachers = [],
+    rooms = [],
+    timeTable: { generatedDate = "", title = "", validDate = "" } = {},
   } = props;
 
   const [isMenuExpanded, setIsMenuExpanded] = useState(false);

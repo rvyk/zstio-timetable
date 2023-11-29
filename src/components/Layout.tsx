@@ -40,12 +40,12 @@ function Layout({ handleKey, ...props }) {
   }, []);
 
   let {
-    rooms,
-    teachers,
-    classes,
-    text,
-    siteTitle,
-    timeTable: { title },
+    rooms = [],
+    teachers = [],
+    classes = [],
+    text = "",
+    siteTitle = "",
+    timeTable: { title = "" } = {},
   } = props;
 
   useEffect(() => {
@@ -64,10 +64,10 @@ function Layout({ handleKey, ...props }) {
   return (
     <>
       <Head>
-        <title>{title && `${siteTitle} | ZSTiO - Plan lekcji`}</title>
+        <title>{`${siteTitle} ${siteTitle && "|"} ZSTiO - Plan lekcji`}</title>
         <meta
           property="og:title"
-          content={`${siteTitle} | ZSTiO - Plan lekcji`}
+          content={`${siteTitle} ${siteTitle && "|"} ZSTiO - Plan lekcji`}
         />
       </Head>
       <div className="min-h-screen w-screen flex flex-col lg:justify-center lg:items-center lg:bg-[#F7F3F5] bg-[#fff] dark:bg-[#202020] lg:dark:bg-[#171717] transition-all">

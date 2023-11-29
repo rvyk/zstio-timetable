@@ -11,7 +11,14 @@ import Loading from "./Loading";
 import Event from "./Event";
 
 function JumbotronLarge({ ...props }) {
-  let { text, status, classes, teachers, rooms, timeTable } = props;
+  let {
+    text = "",
+    status,
+    classes = [],
+    teachers = [],
+    rooms = [],
+    timeTable = {},
+  } = props;
 
   return (
     <div className="py-8 relative px-4 mx-auto max-w-screen-xl text-center lg:py-16">
