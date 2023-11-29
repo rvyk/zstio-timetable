@@ -38,16 +38,16 @@ export async function getSubstitutions(
         `/api/getSubstitutions?search=${search}&query=${query}`
       );
       const shortDayNames = ["pon", "wt", "śr", "czw", "pt", "sob", "nie"];
-      const match = substitutionsRes.data?.tables[0]?.time.match(/\([^)]*\)/i);
+      const match = substitutionsRes?.data?.tables[0]?.time.match(/\([^)]*\)/i);
 
       if (match && match.length > 0) {
         const dayIndex = shortDayNames.indexOf(
-          match[0].substring(1).replace(".)", "")
+          match[0]?.substring(1)?.replace(".)", "")
         );
         if (dayIndex >= 0) {
           return {
             dayIndex,
-            zastepstwa: substitutionsRes.data.tables[0].zastepstwa,
+            zastepstwa: substitutionsRes?.data?.tables[0]?.zastepstwa,
           };
         }
       } else {
