@@ -92,6 +92,7 @@ function RenderLesson({ number, index, lessonIndex, day, substitutions }) {
               )}
               {lesson?.roomId && lesson?.room && (
                 <Link
+                  target="_blank"
                   prefetch={false}
                   href={`/room/${lesson?.roomId}`}
                   className={`flex items-center mr-1 ${
@@ -107,7 +108,12 @@ function RenderLesson({ number, index, lessonIndex, day, substitutions }) {
               {possibleSubstitution && !sure && (
                 <Link
                   prefetch={false}
-                  href={`https://zastepstwa.awfulworld.space`}
+                  href={`${
+                    process.env.NEXT_PUBLIC_SUBSTITUTIONS
+                  }/zastepstwa?teachers=${possibleSubstitution?.teacher.replaceAll(
+                    " ",
+                    "+"
+                  )}&branches=${possibleSubstitution?.branch}`}
                 >
                   <ExclamationCircleIcon
                     className="w-5 h-5 text-red-600 dark:text-red-400"
@@ -119,7 +125,15 @@ function RenderLesson({ number, index, lessonIndex, day, substitutions }) {
             </div>
 
             {substitution && sure && (
-              <>
+              <a
+                target="_blank"
+                href={`${
+                  process.env.NEXT_PUBLIC_SUBSTITUTIONS
+                }/zastepstwa?teachers=${substitution?.teacher.replaceAll(
+                  " ",
+                  "+"
+                )}&branches=${substitution?.branch}`}
+              >
                 {cases.includes(substitution?.case) === false && (
                   <p className="text-orange-400 font-semibold">
                     {substitution?.subject}
@@ -136,7 +150,7 @@ function RenderLesson({ number, index, lessonIndex, day, substitutions }) {
                     ? substitution?.message
                     : substitution?.case}
                 </p>
-              </>
+              </a>
             )}
 
             {substitution && sure && day[number - 1]?.length > 1 && (

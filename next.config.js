@@ -22,7 +22,9 @@ module.exports = withPWA({
     return [
       {
         source: "/api/getSubstitutions",
-        destination: `${process.env.SUBSTITUTIONS_API || ""} `,
+        destination: `${
+          process.env.NEXT_PUBLIC_SUBSTITUTIONS + "/api/getSubstitutions" || ""
+        } `,
       },
       {
         source: "/proxy/getTimetable/:path",
