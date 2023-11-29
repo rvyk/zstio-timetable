@@ -215,8 +215,14 @@ function RenderTimetable({
 
                           {possibleSubstitution && !sure && (
                             <Link
+                              target="_blank"
                               prefetch={false}
-                              href={`https://zastepstwa.awfulworld.space`}
+                              href={`${
+                                process.env.NEXT_PUBLIC_SUBSTITUTIONS
+                              }/zastepstwa?teachers=${substitution?.teacher.replaceAll(
+                                " ",
+                                "+"
+                              )}&branches=${substitution?.branch}`}
                             >
                               <ExclamationCircleIcon
                                 className="w-5 h-5 text-red-600 dark:text-red-400"
@@ -227,7 +233,15 @@ function RenderTimetable({
                           )}
                         </div>
                         {substitution && sure && (
-                          <>
+                          <a
+                            target="_blank"
+                            href={`${
+                              process.env.NEXT_PUBLIC_SUBSTITUTIONS
+                            }/zastepstwa?teachers=${substitution?.teacher.replaceAll(
+                              " ",
+                              "+"
+                            )}&branches=${substitution?.branch}`}
+                          >
                             {cases.includes(substitution?.case) === false && (
                               <p className="text-orange-400 font-semibold">
                                 {substitution?.subject}
@@ -245,7 +259,7 @@ function RenderTimetable({
                                 ? substitution?.message
                                 : substitution?.case}
                             </p>
-                          </>
+                          </a>
                         )}
                       </div>
                     );
