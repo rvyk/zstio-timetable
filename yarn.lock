@@ -1586,7 +1586,7 @@
 
 "@wulkanowy/timetable-parser@https://github.com/majusss/timetable-parser-js.git":
   version "1.6.0"
-  resolved "https://github.com/majusss/timetable-parser-js.git#da0a9faa0a2e9e7cfd6588d9fe504ce1181ca986"
+  resolved "https://github.com/majusss/timetable-parser-js.git#8f8b6d748b1d72734f6ed67ea923465adcdf2e36"
   dependencies:
     cheerio "^1.0.0-rc.12"
 
