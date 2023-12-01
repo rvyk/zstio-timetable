@@ -64,7 +64,7 @@ function DropdownClass({ classes }) {
         className="h-48 px-3 pb-3 overflow-y-auto text-sm text-gray-700 dark:text-gray-300"
         aria-labelledby="dropdownSearchClass"
       >
-        {filteredClasses?.length > 0 ? (
+        {filteredClasses?.length ? (
           filteredClasses.map((classPrefix: dropdownSearchType) => (
             <li key={classPrefix.value}>
               <Link

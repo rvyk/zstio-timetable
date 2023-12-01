@@ -180,7 +180,7 @@ function SearchForEmptyRoom({ searchDialog, setSearchDialog, setSelectedDay }) {
                                 disabled={data?.length == 0}
                                 className="inline-flex w-full justify-center dark:text-gray-300 rounded-md bg-[#2B161B] hover:bg-[#201114] dark:bg-[#171717] py-2 text-md font-medium text-white dark:hover:bg-[#151515] transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
                               >
-                                {data?.length > 0
+                                {data?.length
                                   ? `Znaleziono (${data?.length}) wyników`
                                   : "Nic nie znaleziono"}
                                 {data?.length != 0 && (

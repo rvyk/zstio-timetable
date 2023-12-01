@@ -64,7 +64,7 @@ function DropdownTeacher({ teachers }) {
         className="h-48 px-3 pb-3 overflow-y-auto text-sm text-gray-700 dark:text-gray-300"
         aria-labelledby="dropdownSearchTeacher"
       >
-        {filteredTeachers?.length > 0 ? (
+        {filteredTeachers?.length ? (
           filteredTeachers.map((teacher: dropdownSearchType) => (
             <li key={teacher.value}>
               <Link

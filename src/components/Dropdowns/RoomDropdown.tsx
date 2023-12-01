@@ -64,7 +64,7 @@ function DropdownRoom({ rooms }) {
         className="h-48 px-3 pb-3 overflow-y-auto text-sm text-gray-700 dark:text-gray-300"
         aria-labelledby="dropdownSearchRoom"
       >
-        {filteredRooms?.length > 0 ? (
+        {filteredRooms?.length ? (
           filteredRooms.map((room: dropdownSearchType) => (
             <li key={room.value}>
               <Link

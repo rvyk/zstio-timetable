@@ -55,7 +55,7 @@ function JumbotronLarge({ ...props }) {
         </>
       ) : (
         <>
-          {timeTable?.title && text.length > 0 ? (
+          {timeTable?.title && text.length ? (
             <div className="flex justify-center mb-5 flex-wrap items-center ">
               <p className="transition-all text-xl font-normal mr-1 hidden sm:flex text-gray-500 lg:text-2xl dark:text-gray-400">
                 {text} /
@@ -72,7 +72,7 @@ function JumbotronLarge({ ...props }) {
 
       {timeTable?.title && status && (
         <>
-          {classes.length > 0 && (
+          {classes.length && (
             <Item
               dropdownId={"dropdownSearchClass"}
               dropdownToggleId={"dropdownClass"}
@@ -82,7 +82,7 @@ function JumbotronLarge({ ...props }) {
             </Item>
           )}
 
-          {teachers.length > 0 && (
+          {teachers.length && (
             <Item
               dropdownId={"dropdownSearchTeacher"}
               dropdownToggleId={"dropdownTeacher"}
@@ -92,7 +92,7 @@ function JumbotronLarge({ ...props }) {
             </Item>
           )}
 
-          {rooms.length > 0 && (
+          {rooms.length && (
             <Item
               dropdownId={"dropdownSearchRoom"}
               dropdownToggleId={"dropdownRoom"}

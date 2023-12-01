@@ -48,7 +48,7 @@ function TimetableLarge({
                 </p>
               ) : (
                 <>
-                  {title && text.length > 0 ? (
+                  {title && text.length ? (
                     <div className="flex items-center">
                       <div
                         className="inline-flex rounded-md shadow-sm mr-2"
