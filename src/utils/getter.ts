@@ -15,6 +15,42 @@ export const getTeacher = async (title) => {
   if (result?.length === 1) return result[0].full.split(" ")[0];
 };
 
+/**
+ * Only for server side (api)
+ */
+export async function getSubstitutionsObject(): Promise<substitutionsListType> {
+  try {
+    const substitutionsRes = await axios.get(
+      `${process.env.NEXT_PUBLIC_HOST}/api/getSubstitutions`
+    );
+    const shortDayNames = ["pon", "wt", "śr", "czw", "pt", "sob", "nie"];
+    const match = substitutionsRes?.data?.tables[0]?.time.match(/\([^)]*\)/i);
+
+    if (match && match.length) {
+      const dayIndex = shortDayNames.indexOf(
+        match[0]?.substring(1)?.replace(".)", "")
+      );
+      if (dayIndex >= 0) {
+        return {
+          dayIndex,
+          zastepstwa: substitutionsRes?.data?.tables[0]?.zastepstwa,
+        };
+      }
+    } else {
+      return {
+        dayIndex: -1,
+        zastepstwa: [],
+      };
+    }
+  } catch (e) {
+    console.log(e);
+    return {
+      dayIndex: -1,
+      zastepstwa: [],
+    };
+  }
+}
+
 export async function getSubstitutions(
   text: string,
   title: string
@@ -40,7 +76,7 @@ export async function getSubstitutions(
       const shortDayNames = ["pon", "wt", "śr", "czw", "pt", "sob", "nie"];
       const match = substitutionsRes?.data?.tables[0]?.time.match(/\([^)]*\)/i);
 
-      if (match && match.length > 0) {
+      if (match && match.length) {
         const dayIndex = shortDayNames.indexOf(
           match[0]?.substring(1)?.replace(".)", "")
         );

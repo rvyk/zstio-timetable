@@ -11,9 +11,15 @@ type allApiType = {
   classes: classesApiType[];
 };
 
+type emptyClassesType = {
+  name: string;
+  value?: string;
+  url?: string;
+};
+
 type emptyApiType = {
   success: boolean;
-  classes: nameValueType[];
+  classes: emptyClassesType[];
 };
 
 type timetableApiType = {

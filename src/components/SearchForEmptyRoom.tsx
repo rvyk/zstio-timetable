@@ -209,7 +209,9 @@ function SearchForEmptyRoom({ searchDialog, setSearchDialog, setSelectedDay }) {
                                       {({ active }) => (
                                         <Link
                                           prefetch={false}
-                                          href={`/room/${item.value}`}
+                                          href={
+                                            item.url || `/room/${item.value}`
+                                          }
                                           onClick={() => {
                                             closeModal();
                                             setSelectedDay(selectedDayForQuery);
