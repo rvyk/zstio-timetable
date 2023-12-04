@@ -65,12 +65,10 @@ function Search({ teachers, rooms, classes, setIsMenuExpanded, handleSelect }) {
             }
           }}
         />
-        {searchResults.length ? (
+        {searchResults.length > 0 && (
           <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-gray-400">
             ({searchResults.length})
           </div>
-        ) : (
-          <></>
         )}
       </div>
       <Menu>

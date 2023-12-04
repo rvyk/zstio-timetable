@@ -183,15 +183,13 @@ function SearchForEmptyRoom({ searchDialog, setSearchDialog, setSelectedDay }) {
                                 {data?.length
                                   ? `Znaleziono (${data?.length}) wyników`
                                   : "Nic nie znaleziono"}
-                                {data?.length ? (
+                                {data?.length > 0 && (
                                   <ChevronDownIcon
                                     className={`ml-2 mt-1 -mr-1 h-6 w-6 text-white hover:text-gray-50 transition-all duration-300 ${
                                       open && "rotate-180"
                                     }`}
                                     aria-hidden="true"
                                   />
-                                ) : (
-                                  <></>
                                 )}
                               </Menu.Button>
                             </div>
