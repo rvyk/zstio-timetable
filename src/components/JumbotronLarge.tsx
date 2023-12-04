@@ -72,7 +72,7 @@ function JumbotronLarge({ ...props }) {
 
       {timeTable?.title && status && (
         <>
-          {classes.length && (
+          {classes.length ? (
             <Item
               dropdownId={"dropdownSearchClass"}
               dropdownToggleId={"dropdownClass"}
@@ -80,9 +80,11 @@ function JumbotronLarge({ ...props }) {
             >
               <AcademicCapIcon className="h-5 w-5 mr-2" />
             </Item>
+          ) : (
+            <></>
           )}
 
-          {teachers.length && (
+          {teachers.length ? (
             <Item
               dropdownId={"dropdownSearchTeacher"}
               dropdownToggleId={"dropdownTeacher"}
@@ -90,9 +92,11 @@ function JumbotronLarge({ ...props }) {
             >
               <UsersIcon className="h-5 w-5 mr-2" />
             </Item>
+          ) : (
+            <></>
           )}
 
-          {rooms.length && (
+          {rooms.length ? (
             <Item
               dropdownId={"dropdownSearchRoom"}
               dropdownToggleId={"dropdownRoom"}
@@ -100,6 +104,8 @@ function JumbotronLarge({ ...props }) {
             >
               <MapPinIcon className="h-5 w-5 mr-2" />
             </Item>
+          ) : (
+            <></>
           )}
         </>
       )}

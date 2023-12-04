@@ -177,19 +177,21 @@ function SearchForEmptyRoom({ searchDialog, setSearchDialog, setSelectedDay }) {
                           <>
                             <div>
                               <Menu.Button
-                                disabled={data?.length == 0}
+                                disabled={!data?.length}
                                 className="inline-flex w-full justify-center dark:text-gray-300 rounded-md bg-[#2B161B] hover:bg-[#201114] dark:bg-[#171717] py-2 text-md font-medium text-white dark:hover:bg-[#151515] transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
                               >
                                 {data?.length
                                   ? `Znaleziono (${data?.length}) wyników`
                                   : "Nic nie znaleziono"}
-                                {data?.length != 0 && (
+                                {data?.length ? (
                                   <ChevronDownIcon
                                     className={`ml-2 mt-1 -mr-1 h-6 w-6 text-white hover:text-gray-50 transition-all duration-300 ${
                                       open && "rotate-180"
                                     }`}
                                     aria-hidden="true"
                                   />
+                                ) : (
+                                  <></>
                                 )}
                               </Menu.Button>
                             </div>

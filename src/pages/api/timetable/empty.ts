@@ -29,7 +29,7 @@ export default async function handler(
     const responseObj: emptyApiType = { success: true, classes: [] };
 
     for (const classObj of all.classes) {
-      if (classObj.lessons[dayIndex][lessonIndex]?.length === 0) {
+      if (!classObj.lessons[dayIndex][lessonIndex]?.length) {
         responseObj.classes.push({
           name: classObj.title,
           value: classObj.id,

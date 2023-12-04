@@ -127,7 +127,7 @@ function BottomBar({ handleKey, ...props }) {
           <div className="mx-4 transition-all">
             {dropdowns?.map((dropdown) => (
               <div key={`dropdown-container-${dropdown.title}`}>
-                {dropdown.data.length && (
+                {dropdown.data.length ? (
                   <Menu
                     key={`dropdown-${dropdown.title}`}
                     as="div"
@@ -189,6 +189,8 @@ function BottomBar({ handleKey, ...props }) {
                       </>
                     )}
                   </Menu>
+                ) : (
+                  <></>
                 )}
               </div>
             ))}
