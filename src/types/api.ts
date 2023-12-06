@@ -1,4 +1,4 @@
-import { TableHour, TableLesson } from "@wulkanowy/timetable-parser/lib/types";
+import { TableHour, TableLesson } from "@wulkanowy/timetable-parser";
 
 type classesApiType = {
   title: string;
