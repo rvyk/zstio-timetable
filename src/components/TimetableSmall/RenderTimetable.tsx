@@ -138,6 +138,11 @@ function RenderTimetable({
                           }
                         );
                       }
+                    } else if (
+                      substitution &&
+                      substitution?.branch?.includes("|")
+                    ) {
+                      sure = false;
                     }
 
                     return (
