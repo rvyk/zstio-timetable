@@ -117,7 +117,8 @@ export const getSubstitutionForGroup = (
     return substitutions?.zastepstwa?.filter((subs) => {
       if (
         parseInt(subs.lesson?.split(",")[0]) - 1 === lessonIndex &&
-        subs.branch.includes(groupName)
+        subs?.branch?.includes("|") &&
+        subs?.branch?.split("|")[0] === groupName
       ) {
         return subs;
       }
