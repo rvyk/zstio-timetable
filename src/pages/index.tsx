@@ -1,3 +1,4 @@
+import Event from "@/components/Event";
 import JumbotronLarge from "@/components/JumbotronLarge";
 import Head from "next/head";
 import Image from "next/legacy/image";
@@ -33,6 +34,7 @@ export default function Home() {
           href={"https://zstiojar.edu.pl"}
           className="relative w-20 h-20 first-line:block md:hidden"
         >
+          <Event />
           <Image
             src={"/icon-192x192.png"}
             alt="Logo"
