@@ -64,6 +64,7 @@ function Layout({ handleKey, ...props }) {
   return (
     <>
       <Head>
+        <link rel="canonical" href="https://zstiojar.edu.pl" />
         <title>{`${siteTitle} ${siteTitle && "|"} ZSTiO - Plan lekcji`}</title>
         <meta
           property="og:title"
