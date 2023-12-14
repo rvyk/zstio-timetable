@@ -3,11 +3,17 @@ import React, { useEffect, useState } from "react";
 import InstallPWA from "./Navbar/InstallPWA";
 import { Tooltip } from "react-tooltip";
 import ThemeButton from "./Navbar/ThemeButton";
-import SubstitutionsButton from "./Navbar/SubstitutionsButton";
+import ChangeButton from "./Navbar/ChangeButton";
 import SearchButton from "./Navbar/SearchButton";
 import SnowEastereggButton from "./Navbar/SnowEastereggButton";
 
-function Navbar({ searchDialog, setSearchDialog, isSnowing, setIsSnowing }) {
+function Navbar({
+  searchDialog,
+  setSearchDialog,
+  isSnowing,
+  setIsSnowing,
+  inTimetable,
+}) {
   const { theme, setTheme, resolvedTheme, systemTheme } = useTheme();
   const [isMounted, setIsMounted] = useState(false);
 
@@ -51,11 +57,13 @@ function Navbar({ searchDialog, setSearchDialog, isSnowing, setIsSnowing }) {
               setIsSnowing={setIsSnowing}
             />
           )}
-          <SearchButton
-            searchDialog={searchDialog}
-            setSearchDialog={setSearchDialog}
-          />
-          <SubstitutionsButton />
+          {!!(searchDialog && setSearchDialog) && (
+            <SearchButton
+              searchDialog={searchDialog}
+              setSearchDialog={setSearchDialog}
+            />
+          )}
+          <ChangeButton inTimetable={inTimetable} />
           <ThemeButton
             toggleTheme={toggleTheme}
             resolvedTheme={resolvedTheme}

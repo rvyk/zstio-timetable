@@ -220,11 +220,8 @@ function RenderTimetable({
 
                           {possibleSubstitution && !sure && (
                             <Link
-                              target="_blank"
                               prefetch={false}
-                              href={`${
-                                process.env.NEXT_PUBLIC_SUBSTITUTIONS
-                              }/zastepstwa?teachers=${substitution?.teacher.replaceAll(
+                              href={`/zastepstwa?teachers=${substitution?.teacher.replaceAll(
                                 " ",
                                 "+"
                               )}&branches=${substitution?.branch}`}
@@ -239,10 +236,7 @@ function RenderTimetable({
                         </div>
                         {substitution && sure && (
                           <a
-                            target="_blank"
-                            href={`${
-                              process.env.NEXT_PUBLIC_SUBSTITUTIONS
-                            }/zastepstwa?teachers=${substitution?.teacher.replaceAll(
+                            href={`/zastepstwa?teachers=${substitution?.teacher.replaceAll(
                               " ",
                               "+"
                             )}&branches=${substitution?.branch}`}

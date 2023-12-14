@@ -21,12 +21,6 @@ module.exports = withPWA({
   async rewrites() {
     return [
       {
-        source: "/api/getSubstitutions",
-        destination: `${
-          process.env.NEXT_PUBLIC_SUBSTITUTIONS + "/api/getSubstitutions" || ""
-        } `,
-      },
-      {
         source: "/proxy/getTimetable/:path",
         destination: `${process.env.NEXT_PUBLIC_TIMETABLE_URL}/plany/:path`,
       },

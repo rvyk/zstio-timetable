@@ -47,9 +47,7 @@ export default async function handler(
         ) {
           responseObj.classes.push({
             name: `Z zastępstw: ${sub.class}`,
-            url: `${
-              process.env.NEXT_PUBLIC_SUBSTITUTIONS
-            }/zastepstwa?teachers=${sub?.teacher.replaceAll(
+            url: `/zastepstwa?teachers=${sub?.teacher.replaceAll(
               " ",
               "+"
             )}&branches=${sub?.branch}`,
