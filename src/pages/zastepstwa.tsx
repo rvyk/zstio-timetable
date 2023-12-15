@@ -11,6 +11,7 @@ import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import Snow from "@/components/SnowEasteregg";
 import { GetStaticProps } from "next";
+import { load } from "cheerio";
 
 export default function Home({ ...props }) {
   const [checkedTeachers, setCheckedTeachers] = useState([]);
@@ -68,20 +69,59 @@ export default function Home({ ...props }) {
 }
 
 export const getStaticProps: GetStaticProps = async (context) => {
-  const apiResponse = await axios.get(
-    `${process.env.NEXT_PUBLIC_HOST}/api/getSubstitutions`
-  );
+  try {
+    const response = await axios.get(
+      "http://kristofc.webd.pro/plan/InformacjeOZastepstwach.html"
+    );
 
-  if (apiResponse.status === 200) {
-    const { data } = apiResponse;
+    const $ = load(response.data);
+    const time = $("h2").text().trim();
+    const tables: tables[] = [];
 
-    return { props: { form: data } };
-  } else {
-    return {
-      props: {
-        error: true,
-        message: "Wystąpił błąd podczas pobierania danych",
-      },
-    };
+    $("table").each((index, table) => {
+      const rows = $(table).find("tr");
+      const zastepstwa: substitutions[] = [];
+
+      rows.slice(1).each((i, row) => {
+        const columns = $(row).find("td");
+        const [
+          lesson,
+          teacher,
+          branch,
+          subject,
+          classValue,
+          caseValue,
+          message,
+        ] = columns.map((index, column) => $(column).text().trim()).get();
+
+        if (lesson) {
+          zastepstwa.push({
+            lesson,
+            teacher,
+            branch,
+            subject,
+            class: classValue,
+            case: caseValue,
+            message,
+          });
+        }
+      });
+
+      tables.push({
+        time: rows.first().text().trim(),
+        zastepstwa: zastepstwa,
+      });
+    });
+
+    return { props: { form: { time, tables } } };
+  } catch (error) {
+    console.error(error);
   }
+
+  return {
+    props: {
+      error: true,
+      message: "Wystąpił błąd podczas pobierania danych",
+    },
+  };
 };
