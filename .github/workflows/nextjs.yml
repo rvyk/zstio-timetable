@@ -24,6 +24,10 @@ concurrency:
   group: "pages"
   cancel-in-progress: false
 
+env:
+  NEXT_PUBLIC_HOST: http://localhost:3000
+  NEXT_PUBLIC_TIMETABLE_URL: http://www.zstio-elektronika.pl/plan
+  
 jobs:
   # Build job
   build:
@@ -31,10 +35,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: 'Create env file'
-        run: |
-          echo "NEXT_PUBLIC_TIMETABLE_URL=http://www.zstio-elektronika.pl/plan" >> .env
-          echo "NEXT_PUBLIC_HOST=http://localhost:3000" >> .env
       - uses: pnpm/action-setup@v2
         with:
           version: 8
