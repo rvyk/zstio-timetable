@@ -1,7 +1,6 @@
 import Head from "next/head";
 import axios from "axios";
 import React, { useState } from "react";
-import { GetServerSideProps } from "next";
 import Layout from "@/components/Substitutions/Layout";
 import Jumbotron from "@/components/Substitutions/Jumbotron";
 import DropdownTeachers from "@/components/Substitutions/DropdownTeachers";
@@ -11,6 +10,7 @@ import Content from "@/components/Substitutions/Content";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import Snow from "@/components/SnowEasteregg";
+import { GetStaticProps } from "next";
 
 export default function Home({ ...props }) {
   const [checkedTeachers, setCheckedTeachers] = useState([]);
@@ -67,11 +67,9 @@ export default function Home({ ...props }) {
   );
 }
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const host = context.req.headers.host;
-  const protocol = host === "localhost:3000" ? "http" : "https";
+export const getStaticProps: GetStaticProps = async (context) => {
   const apiResponse = await axios.get(
-    `${protocol}://${host}/api/getSubstitutions`
+    `${process.env.NEXT_PUBLIC_HOST}/api/getSubstitutions`
   );
 
   if (apiResponse.status === 200) {
