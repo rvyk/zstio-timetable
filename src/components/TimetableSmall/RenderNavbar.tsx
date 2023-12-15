@@ -18,6 +18,7 @@ function RenderNavbar({
       </div>
 
       <Navbar
+        inTimetable={true}
         searchDialog={searchDialog}
         setSearchDialog={setSearchDialog}
         isSnowing={false}
