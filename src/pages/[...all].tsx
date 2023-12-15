@@ -66,7 +66,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
   if (!ok) {
     return {
-      paths: [],
+      paths: [{ params: { all: ["zastepstwa"] } }],
       fallback: "blocking",
     };
   }
@@ -74,6 +74,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
   const { classes, teachers, rooms } = data;
 
   const paths = [
+    { params: { all: ["zastepstwa"] } },
     ...(classes?.map((classItem) => `/class/${classItem.value}`) || []),
     ...(teachers?.map((teacherItem) => `/teacher/${teacherItem.value}`) || []),
     ...(rooms?.map((roomItem) => `/room/${roomItem.value}`) || []),
@@ -86,7 +87,9 @@ export const getStaticPaths: GetStaticPaths = async () => {
 };
 
 export const getStaticProps: GetStaticProps = async (context) => {
-  if (!context?.params) return { props: {} };
+  if (!context?.params || context?.params?.all[0] == "zastepstwa")
+    return { props: {} };
+
   const { params } = context;
   const param0 = params?.all[0];
   const param1 = params?.all[1];
