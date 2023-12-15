@@ -6645,6 +6645,7 @@ packages:
     resolution: {tarball: https://codeload.github.com/majusss/timetable-parser-js/tar.gz/1c1c421935155a3beedba127bd05fe0eee6e0b20}
     name: '@wulkanowy/timetable-parser'
     version: 1.6.0
+    prepare: true
     requiresBuild: true
     dependencies:
       cheerio: 1.0.0-rc.12
