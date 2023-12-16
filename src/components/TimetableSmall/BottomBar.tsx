@@ -218,7 +218,7 @@ function BottomBar({ handleKey, ...props }) {
         </div>
 
         <div className="w-full flex justify-center items-center flex-col">
-          <Footer small />
+          <Footer />
         </div>
       </div>
     </div>
