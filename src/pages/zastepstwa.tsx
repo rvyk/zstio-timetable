@@ -13,13 +13,13 @@ import Snow from "@/components/SnowEasteregg";
 import { GetStaticProps } from "next";
 import { load } from "cheerio";
 
-export default function Home({ ...props }) {
-  const [checkedTeachers, setCheckedTeachers] = useState([]);
-  const [checkedBranches, setCheckedBranches] = useState([]);
-  const handleCheckboxChange = (checkedItems) => {
+export default function Home({ ...props }: any) {
+  const [checkedTeachers, setCheckedTeachers] = useState<any[]>([]);
+  const [checkedBranches, setCheckedBranches] = useState<any[]>([]);
+  const handleCheckboxChange = (checkedItems: any[]) => {
     setCheckedTeachers(checkedItems);
   };
-  const handleCheckboxChangeBranch = (checkedItems) => {
+  const handleCheckboxChangeBranch = (checkedItems: any[]) => {
     setCheckedBranches(checkedItems);
   };
 
@@ -76,7 +76,7 @@ export default function Home({ ...props }) {
   );
 }
 
-export const getStaticProps: GetStaticProps = async (context) => {
+export const getStaticProps: GetStaticProps = async () => {
   try {
     const response = await axios.get(
       "http://kristofc.webd.pro/plan/InformacjeOZastepstwach.html"
@@ -86,11 +86,11 @@ export const getStaticProps: GetStaticProps = async (context) => {
     const time = $("h2").text().trim();
     const tables: tables[] = [];
 
-    $("table").each((index, table) => {
+    $("table").each((_index, table) => {
       const rows = $(table).find("tr");
       const zastepstwa: substitutions[] = [];
 
-      rows.slice(1).each((i, row) => {
+      rows.slice(1).each((_i, row) => {
         const columns = $(row).find("td");
         const [
           lesson,
@@ -100,7 +100,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
           classValue,
           caseValue,
           message,
-        ] = columns.map((index, column) => $(column).text().trim()).get();
+        ] = columns.map((_index, column) => $(column).text().trim()).get();
 
         if (lesson) {
           zastepstwa.push({
