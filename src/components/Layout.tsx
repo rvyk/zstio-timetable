@@ -101,7 +101,7 @@ function Layout({ handleKey, ...props }) {
             isShortHours={isShortHours}
             setIsShortHours={setIsShortHours}
           />
-          <Footer small={false} />
+          <Footer />
           <SearchForEmptyRoom
             setSelectedDay={setSelectedDay}
             searchDialog={searchDialog}

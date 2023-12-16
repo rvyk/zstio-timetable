@@ -1,6 +1,6 @@
 import Head from "next/head";
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Layout from "@/components/Substitutions/Layout";
 import Jumbotron from "@/components/Substitutions/Jumbotron";
 import DropdownTeachers from "@/components/Substitutions/DropdownTeachers";
@@ -24,6 +24,14 @@ export default function Home({ ...props }) {
   };
 
   const [isSnowing, setIsSnowing] = useState(false);
+
+  useEffect(() => {
+    if (!localStorage.getItem("isSnowing")) return;
+    const storedIsSnowing = JSON.parse(localStorage.getItem("isSnowing"));
+    if (storedIsSnowing !== null) {
+      setIsSnowing(storedIsSnowing);
+    }
+  }, []);
 
   return (
     <>
@@ -62,7 +70,7 @@ export default function Home({ ...props }) {
             checkedBranches={checkedBranches}
           />
         )}
-        <Footer small={false} />
+        <Footer />
       </Layout>
     </>
   );
