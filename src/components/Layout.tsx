@@ -88,6 +88,7 @@ function Layout({ handleKey, ...props }) {
         <div className="hidden justify-center lg:flex flex-col w-full items-center">
           <Snow isSnowing={isSnowing} />
           <Navbar
+            inTimetable={true}
             searchDialog={searchDialog}
             setSearchDialog={setSearchDialog}
             isSnowing={isSnowing}

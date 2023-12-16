@@ -26,6 +26,9 @@ dependencies:
   axios:
     specifier: ^1.6.2
     version: 1.6.2(debug@4.3.4)
+  cheerio:
+    specifier: 1.0.0-rc.12
+    version: 1.0.0-rc.12
   eslint:
     specifier: ^8.55.0
     version: 8.55.0

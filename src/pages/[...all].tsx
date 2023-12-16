@@ -87,6 +87,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
 export const getStaticProps: GetStaticProps = async (context) => {
   if (!context?.params) return { props: {} };
+
   const { params } = context;
   const param0 = params?.all[0];
   const param1 = params?.all[1];

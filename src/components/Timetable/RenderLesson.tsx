@@ -108,9 +108,7 @@ function RenderLesson({ number, index, lessonIndex, day, substitutions }) {
               {possibleSubstitution && !sure && (
                 <Link
                   prefetch={false}
-                  href={`${
-                    process.env.NEXT_PUBLIC_SUBSTITUTIONS
-                  }/zastepstwa?teachers=${possibleSubstitution?.teacher.replaceAll(
+                  href={`/zastepstwa?teachers=${possibleSubstitution?.teacher.replaceAll(
                     " ",
                     "+"
                   )}&branches=${possibleSubstitution?.branch}`}
@@ -126,10 +124,7 @@ function RenderLesson({ number, index, lessonIndex, day, substitutions }) {
 
             {substitution && sure && (
               <a
-                target="_blank"
-                href={`${
-                  process.env.NEXT_PUBLIC_SUBSTITUTIONS
-                }/zastepstwa?teachers=${substitution?.teacher.replaceAll(
+                href={`/zastepstwa?teachers=${substitution?.teacher.replaceAll(
                   " ",
                   "+"
                 )}&branches=${substitution?.branch}`}
