@@ -118,7 +118,7 @@ export const getSubstitutionForGroup = (
       if (
         parseInt(subs.lesson?.split(",")[0]) - 1 === lessonIndex &&
         subs?.branch?.includes("|") &&
-        subs?.branch?.split("|")[0] === groupName
+        subs?.branch?.split("|")[1] === groupName
       ) {
         return subs;
       }
