@@ -62,7 +62,7 @@ export default function Home({ ...props }) {
             checkedBranches={checkedBranches}
           />
         )}
-        <Footer small={false} />
+        <Footer />
       </Layout>
     </>
   );
