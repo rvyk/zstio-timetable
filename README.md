@@ -26,26 +26,6 @@ The phone mode is inspired by the school's timetable
 
 ## API Reference
 
-#### Get lists (Selects)
-
-```http
-  GET /api/timetable/list
-```
-
-| Parameters (Optional)              | Description                             |
-| :--------------------------------- | :-------------------------------------- |
-| `?select=classes\|teachers\|rooms` | Returns only classes, teachers or rooms |
-
-#### Get timetable and other data
-
-```http
-  GET /api/timetable/getTimetable
-```
-
-| Parameter (Default: o1) | Description                                                 |
-| :---------------------- | :---------------------------------------------------------- |
-| `?id=id`                | Returns the timetable of a Branch with the specified **id** |
-
 #### Get empty classes
 
 ```http
@@ -67,14 +47,6 @@ The phone mode is inspired by the school's timetable
 | :------------------------ | :----------------------------------------------- |
 | `?search=teacher\|branch` | Search substitutions for branch or for a teacher |
 | `?query=index`            | What api will search in substitution             |
-
-#### What is **id** and how do I find it?
-
-| Id prefix | Description      | Value                                            |
-| :-------- | :--------------- | :----------------------------------------------- |
-| `o`       | Branch / Classes | `value from /api/timetable/list?select=classes`  |
-| `n`       | Teacher          | `value from /api/timetable/list?select=teachers` |
-| `s`       | Room             | `value from /api/timetable/list?select=rooms`    |
 
 ## Links
 
