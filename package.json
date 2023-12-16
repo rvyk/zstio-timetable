@@ -20,13 +20,8 @@
     "axios": "^1.6.2",
     "cheerio": "1.0.0-rc.12",
     "eslint": "^8.56.0",
-<<<<<<< Updated upstream
-    "eslint-config-next": "^14.0.3",
-    "flowbite": "^2.2.0",
-=======
     "eslint-config-next": "^14.0.4",
     "flowbite": "^2.2.1",
->>>>>>> Stashed changes
     "lodash": "^4.17.21",
     "mobile-detect": "^1.4.5",
     "next": "14.0.4",
