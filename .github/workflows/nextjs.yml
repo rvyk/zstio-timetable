@@ -25,9 +25,8 @@ concurrency:
   cancel-in-progress: false
 
 env:
-  NEXT_PUBLIC_HOST: http://localhost:3000
+  NEXT_PUBLIC_HOST: https://plan.zstiojar.edu.pl
   NEXT_PUBLIC_TIMETABLE_URL: http://www.zstio-elektronika.pl/plan
-  NEXT_PUBLIC_SUBSTITUTIONS: https://zastepstwa.zstiojar.edu.pl
 
 jobs:
   # Build job
