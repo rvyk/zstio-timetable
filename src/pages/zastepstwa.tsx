@@ -5,7 +5,6 @@ import Layout from "@/components/Substitutions/Layout";
 import Jumbotron from "@/components/Substitutions/Jumbotron";
 import DropdownTeachers from "@/components/Substitutions/DropdownTeachers";
 import DropdownBranch from "@/components/Substitutions/DropdownBranch";
-import TableSkeleton from "@/components/Substitutions/TableSkeleton";
 import Content from "@/components/Substitutions/Content";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
@@ -62,7 +61,15 @@ export default function Home({ ...props }: any) {
           onCheckboxChangeBranch={handleCheckboxChangeBranch}
         />
         {props.error == true ? (
-          <TableSkeleton />
+          <>
+            <h1 className="text-xl">Przepraszamy za utrudnienia</h1>
+            <a
+              className="mb-10 font-bold hover:underline"
+              href="http://kristofc.webd.pro/plan/InformacjeOZastepstwach.html"
+            >
+              Przejdź do zastępstw
+            </a>
+          </>
         ) : (
           <Content
             props={props}
@@ -121,7 +128,7 @@ export const getStaticProps: GetStaticProps = async () => {
       });
     });
 
-    return { props: { form: { time, tables } }, revalidate: 3600 };
+    return { props: { form: { time, tables } } };
   } catch (error) {
     console.error(error);
   }
@@ -131,6 +138,5 @@ export const getStaticProps: GetStaticProps = async () => {
       error: true,
       message: "Wystąpił błąd podczas pobierania danych",
     },
-    revalidate: 3600,
   };
 };

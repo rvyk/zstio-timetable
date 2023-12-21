@@ -47,9 +47,9 @@ function Navbar({
   }
 
   return (
-    <div className="w-screen h-14 block lg:absolute top-0">
+    <div className="w-screen h-14 block top-0">
       {resolvedTheme != undefined && (
-        <div className="absolute top-2 right-2 z-50 transition-all flex">
+        <div className="float-right mt-2 mr-2 z-50 transition-all flex">
           <InstallPWA />
           {new Date().getMonth() === 11 && (
             <SnowEastereggButton

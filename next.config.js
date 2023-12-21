@@ -28,6 +28,10 @@ module.exports = withPWA({
         source: "/proxy/getTimetableList",
         destination: `${process.env.NEXT_PUBLIC_TIMETABLE_URL}/lista.html`,
       },
+      {
+        source: "/proxy/cms/:path",
+        destination: `${process.env.NEXT_PUBLIC_CMS}/api/:path`,
+      },
     ];
   },
 });

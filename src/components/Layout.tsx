@@ -12,6 +12,7 @@ import dynamic from "next/dynamic";
 import SearchForEmptyRoom from "./SearchForEmptyRoom";
 import { getSubstitutions } from "../utils/getter";
 import Snow from "./SnowEasteregg";
+import Message from "./Message";
 
 const Footer = dynamic(() => import("./Footer"));
 
@@ -87,6 +88,7 @@ function Layout({ handleKey, ...props }) {
         </div>
         <div className="hidden justify-center lg:flex flex-col w-full items-center">
           <Snow isSnowing={isSnowing} />
+          <Message />
           <Navbar
             inTimetable={true}
             searchDialog={searchDialog}
