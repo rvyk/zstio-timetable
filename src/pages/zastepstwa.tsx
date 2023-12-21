@@ -121,7 +121,7 @@ export const getStaticProps: GetStaticProps = async () => {
       });
     });
 
-    return { props: { form: { time, tables } } };
+    return { props: { form: { time, tables } }, revalidate: 3600 };
   } catch (error) {
     console.error(error);
   }
@@ -131,5 +131,6 @@ export const getStaticProps: GetStaticProps = async () => {
       error: true,
       message: "Wystąpił błąd podczas pobierania danych",
     },
+    revalidate: 3600,
   };
 };
