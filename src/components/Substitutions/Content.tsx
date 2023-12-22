@@ -252,11 +252,7 @@ function Content({ props, checkedTeachers, checkedBranches }) {
                       colSpan={7}
                       className="px-6 py-4 font-semibold w-1 text-left text-gray-900 whitespace-nowrap dark:text-gray-300 transition-all"
                     >
-                      <Link
-                        href={
-                          "http://kristofc.webd.pro/plan/InformacjeOZastepstwach.html"
-                        }
-                      >
+                      <Link href={process.env.NEXT_PUBLIC_SUBSTITUTIONS_URL}>
                         Źródło danych
                       </Link>
                     </td>

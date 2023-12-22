@@ -26,7 +26,7 @@ const MainRoute = ({ ...props }) => {
         if (propertyName) {
           const maxNumber = props[propertyName].length;
           if (changeTo >= 1 && changeTo <= maxNumber) {
-            router.push(`/${data}/${changeTo}`);
+            router.push(`/${data}/${changeTo}`, undefined, { scroll: false });
           }
         }
       }

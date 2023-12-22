@@ -7,9 +7,7 @@ export default async function handler(
   res: NextApiResponse
 ) {
   try {
-    const response = await axios.get(
-      "http://kristofc.webd.pro/plan/InformacjeOZastepstwach.html"
-    );
+    const response = await axios.get(process.env.NEXT_PUBLIC_SUBSTITUTIONS_URL);
 
     const $ = load(response.data);
     const time = $("h2").text().trim();
@@ -101,7 +99,8 @@ export default async function handler(
 
     res.status(200).json({ time, tables });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Something went wrong" });
+    res
+      .status(500)
+      .json({ error: "Something went wrong", time: {}, tables: {} });
   }
 }

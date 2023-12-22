@@ -61,15 +61,15 @@ export default function Home({ ...props }: any) {
           onCheckboxChangeBranch={handleCheckboxChangeBranch}
         />
         {props.error == true ? (
-          <>
+          <div className="dark:text-gray-400 text-gray-500 text-center mb-10">
             <h1 className="text-xl">Przepraszamy za utrudnienia</h1>
             <a
-              className="mb-10 font-bold hover:underline"
-              href="http://kristofc.webd.pro/plan/InformacjeOZastepstwach.html"
+              className="font-bold hover:underline"
+              href={process.env.NEXT_PUBLIC_SUBSTITUTIONS_URL}
             >
               Przejdź do zastępstw
             </a>
-          </>
+          </div>
         ) : (
           <Content
             props={props}
@@ -85,9 +85,7 @@ export default function Home({ ...props }: any) {
 
 export const getStaticProps: GetStaticProps = async () => {
   try {
-    const response = await axios.get(
-      "http://kristofc.webd.pro/plan/InformacjeOZastepstwach.html"
-    );
+    const response = await axios.get(process.env.NEXT_PUBLIC_SUBSTITUTIONS_URL);
 
     const $ = load(response.data);
     const time = $("h2").text().trim();
@@ -129,9 +127,7 @@ export const getStaticProps: GetStaticProps = async () => {
     });
 
     return { props: { form: { time, tables } } };
-  } catch (error) {
-    console.error(error);
-  }
+  } catch (error) {}
 
   return {
     props: {
