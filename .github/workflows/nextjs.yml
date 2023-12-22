@@ -27,7 +27,9 @@ concurrency:
 env:
   NEXT_PUBLIC_HOST: https://plan.zstiojar.edu.pl
   NEXT_PUBLIC_TIMETABLE_URL: http://www.zstio-elektronika.pl/plan
-
+  NEXT_PUBLIC_CMS: https://cms.awfulworld.space
+  NEXT_PUBLIC_SUBSTITUTIONS_URL: http://kristofc.webd.pro/plan/InformacjeOZastepstwach.html
+  
 jobs:
   # Build job
   build:
