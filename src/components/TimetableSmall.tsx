@@ -4,6 +4,7 @@ import RenderNavbar from "./TimetableSmall/RenderNavbar";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import LoadingTable from "./Table/LoadingTable";
+import Message from "./Message";
 
 const BottomBar = dynamic(() => import("./TimetableSmall/BottomBar"));
 
@@ -35,7 +36,7 @@ function TimetableSmall({
         isShortHours={isShortHours}
         setIsShortHours={setIsShortHours}
       />
-
+      <Message />
       <RenderTimetable
         setSelectedDay={setSelectedDay}
         selectedDay={selectedDay}

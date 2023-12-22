@@ -11,6 +11,7 @@ import Navbar from "@/components/Navbar";
 import Snow from "@/components/SnowEasteregg";
 import { GetStaticProps } from "next";
 import { load } from "cheerio";
+import Message from "@/components/Message";
 
 export default function Home({ ...props }: any) {
   const [checkedTeachers, setCheckedTeachers] = useState<any[]>([]);
@@ -43,6 +44,7 @@ export default function Home({ ...props }: any) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <Layout>
+        <Message />
         <Navbar
           inTimetable={false}
           isSnowing={isSnowing}
