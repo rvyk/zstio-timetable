@@ -13,7 +13,7 @@
   "dependencies": {
     "@headlessui/react": "^1.7.17",
     "@heroicons/react": "^2.0.18",
-    "@types/node": "^20.10.4",
+    "@types/node": "^20.10.5",
     "@types/react": "18.2.38",
     "@wulkanowy/timetable-parser": "github:majusss/timetable-parser-js",
     "autoprefixer": "^10.4.16",
