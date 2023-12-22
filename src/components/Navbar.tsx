@@ -57,13 +57,15 @@ function Navbar({
               setIsSnowing={setIsSnowing}
             />
           )}
-          {!!(searchDialog && setSearchDialog) && (
+          {!!setSearchDialog && (
             <SearchButton
               searchDialog={searchDialog}
               setSearchDialog={setSearchDialog}
             />
           )}
-          <ChangeButton inTimetable={inTimetable} />
+          {process.env.NEXT_PUBLIC_SUBSTITUTIONS_URL && (
+            <ChangeButton inTimetable={inTimetable} />
+          )}
           <ThemeButton
             toggleTheme={toggleTheme}
             resolvedTheme={resolvedTheme}

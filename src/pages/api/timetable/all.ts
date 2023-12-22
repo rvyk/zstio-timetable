@@ -38,7 +38,6 @@ export default async function handler(
         lessons: res.data.lessons,
       });
     }
-
     cache.set("all", responseObj);
 
     res.status(200).send(responseObj);

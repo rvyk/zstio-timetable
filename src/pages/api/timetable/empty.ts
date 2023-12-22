@@ -37,23 +37,25 @@ export default async function handler(
       }
     }
 
-    const substitutions = await getSubstitutionsObject();
-    if (substitutions.dayIndex === dayIndex) {
-      substitutions.zastepstwa.forEach((sub) => {
-        if (
-          sub.class &&
-          cases.includes(sub.case) &&
-          +sub.lesson.split(",")[0] === lessonIndex + 1
-        ) {
-          responseObj.classes.push({
-            name: `Z zastępstw: ${sub.class}`,
-            url: `/zastepstwa?teachers=${sub?.teacher.replaceAll(
-              " ",
-              "+"
-            )}&branches=${sub?.branch}`,
-          });
-        }
-      });
+    if (process.env.NEXT_PUBLIC_SUBSTITUTIONS_URL) {
+      const substitutions = await getSubstitutionsObject();
+      if (substitutions.dayIndex === dayIndex) {
+        substitutions.zastepstwa.forEach((sub) => {
+          if (
+            sub.class &&
+            cases.includes(sub.case) &&
+            +sub.lesson.split(",")[0] === lessonIndex + 1
+          ) {
+            responseObj.classes.push({
+              name: `Z zastępstw: ${sub.class}`,
+              url: `/zastepstwa?teachers=${sub?.teacher.replaceAll(
+                " ",
+                "+"
+              )}&branches=${sub?.branch}`,
+            });
+          }
+        });
+      }
     }
     res.status(200).send(responseObj);
   } catch (error) {
