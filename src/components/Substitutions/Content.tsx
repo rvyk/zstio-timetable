@@ -1,3 +1,9 @@
+import {
+  CheckIcon,
+  ClipboardIcon,
+  FunnelIcon,
+  XMarkIcon,
+} from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
@@ -71,49 +77,16 @@ function Content({ props, checkedTeachers, checkedBranches }) {
                     {(filtersTeachers?.length > 0 ||
                       filtersBranches?.length > 0) && (
                       <>
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          viewBox="0 0 512 512"
-                          fill="currentColor"
-                          className="w-4 h-4"
-                        >
-                          <path d="M3.9 54.9C10.5 40.9 24.5 32 40 32H472c15.5 0 29.5 8.9 36.1 22.9s4.6 30.5-5.2 42.5L320 320.9V448c0 12.1-6.8 23.2-17.7 28.6s-23.8 4.3-33.5-3l-64-48c-8.1-6-12.8-15.5-12.8-25.6V320.9L9 97.3C-.7 85.4-2.8 68.8 3.9 54.9z" />
-                        </svg>
+                        <FunnelIcon className="w-4 h-4" />
                         <p className="mr-2">Filtry: </p>
                         <button
                           onClick={handleShare}
                           className="cursor-pointer justify-center inline-flex items-center transition-all px-2 py-1 mr-2 text-sm font-medium text-red-900 bg-red-300 rounded dark:bg-blue-300 dark:text-blue-900 "
                         >
                           {isCopied ? (
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              strokeWidth="1.5"
-                              stroke="currentColor"
-                              className="w-5 h-5"
-                            >
-                              <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                d="M4.5 12.75l6 6 9-13.5"
-                              />
-                            </svg>
+                            <CheckIcon className="w-5 h-5" />
                           ) : (
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              strokeWidth="1.5"
-                              stroke="currentColor"
-                              className="w-5 h-5"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"
-                              />
-                            </svg>
+                            <ClipboardIcon className="w-5 h-5" />
                           )}
                         </button>
 
@@ -130,20 +103,7 @@ function Content({ props, checkedTeachers, checkedBranches }) {
                           className="cursor-pointer justify-center inline-flex items-center transition-all px-2 py-1 mr-2 text-sm font-medium text-red-800 bg-red-100 rounded dark:bg-blue-100 dark:text-blue-800 "
                         >
                           Wyczyść filtry
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            strokeWidth="1.5"
-                            stroke="currentColor"
-                            className="w-4 h-4"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              d="M6 18L18 6M6 6l12 12"
-                            />
-                          </svg>
+                          <XMarkIcon className="w-4 h-4 ml-1" />
                         </button>
                         {Object.entries({
                           ...checkedTeachers,
