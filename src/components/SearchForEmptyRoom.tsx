@@ -92,7 +92,7 @@ function SearchForEmptyRoom({ searchDialog, setSearchDialog, setSelectedDay }) {
                                 `${
                                   checked &&
                                   "!bg-[#321c21] !text-gray-100 dark:!bg-[#171717]"
-                                } flex transition-all items-center p-3 text-xs font-medium text-gray-700 bg-white border border-gray-200 rounded-lg toggle-dark-state-example hover:bg-[#321c21] hover:text-gray-100 focus:z-10 focus:ring-2 dark:ring-0 dark:focus:ri focus:ring-[#2B161B] dark:bg-[#313131] dark:text-gray-200 dark:border-[#202020] dark:hover:border-[#171717] dark:hover:text-white dark:hover:bg-[#171717] lg:dark:hover:bg-[#141414] cursor-pointer my-2 mx-2 min-w-[4rem]`
+                                } flex transition-all items-center p-3 text-xs font-medium text-gray-700 bg-white border border-gray-200 rounded-lg toggle-dark-state-example hover:bg-[#321c21] hover:text-gray-100 focus:z-10 focus:ring-2 dark:ring-0 dark:focus:ri focus:ring-[#313131] dark:bg-[#313131] dark:text-gray-200 dark:border-[#202020] dark:hover:border-[#171717] dark:hover:text-white dark:hover:bg-[#171717] lg:dark:hover:bg-[#141414] cursor-pointer my-2 mx-2 min-w-[4rem]`
                               }
                             >
                               <div className="flex w-full items-center justify-between text-center">
@@ -137,7 +137,7 @@ function SearchForEmptyRoom({ searchDialog, setSearchDialog, setSelectedDay }) {
                   <div className="mt-4 w-full justify-center flex">
                     <button
                       type="button"
-                      className="text-[#a91712] hover:text-white hover:border-transparent bg-transparent dark:border-[2px] border-[1px] border-[#a91712] mx-2 sm:my-0 my-2 hover:bg-[#73110e] transition-all focus:ring-4 focus:outline-none focus:ring-transparent font-medium text-sm px-4 py-2.5 text-center inline-flex items-center dark:text-gray-300 hover:dark:text-white dark:bg-[#161616] dark:rounded-lg dark:border-none dark:hover:bg-[#141414] dark:outline-none"
+                      className="hover:text-[#a91712] text-white border-transparent hover:bg-transparent dark:border-[2px] border-[1px] hover:border-[#a91712] mx-2 sm:my-0 my-2 bg-[#73110e] transition-all focus:ring-4 focus:outline-none focus:ring-transparent font-medium text-sm px-4 py-2.5 text-center inline-flex items-center dark:text-gray-100 hover:dark:text-white dark:hover:bg-red-600 dark:rounded-lg dark:border-none dark:bg-red-400 dark:outline-none"
                       onClick={handleButton}
                       disabled={loading}
                     >
@@ -162,8 +162,7 @@ function SearchForEmptyRoom({ searchDialog, setSearchDialog, setSelectedDay }) {
                       )}
                     </button>
                     <button
-                      type="button"
-                      className="hover:text-[#a91712] text-white border-transparent hover:bg-transparent dark:border-[2px] border-[1px] hover:border-[#a91712] mx-2 sm:my-0 my-2 bg-[#73110e] transition-all focus:ring-4 focus:outline-none focus:ring-transparent font-medium text-sm px-4 py-2.5 text-center inline-flex items-center dark:text-gray-100 hover:dark:text-white dark:hover:bg-red-600 dark:rounded-lg dark:border-none dark:bg-red-400 dark:outline-none"
+                      className="text-[#a91712] hover:text-white hover:border-transparent bg-transparent dark:border-[2px] border-[1px] border-[#a91712] mx-2 sm:my-0 my-2 hover:bg-[#73110e] transition-all focus:ring-4 focus:outline-none focus:ring-transparent font-medium text-sm px-4 py-2.5 text-center inline-flex items-center dark:text-gray-300 hover:dark:text-white dark:bg-[#161616] dark:rounded-lg dark:border-none dark:hover:bg-[#141414] dark:outline-none"
                       onClick={closeModal}
                     >
                       Anuluj
