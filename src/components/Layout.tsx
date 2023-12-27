@@ -10,7 +10,6 @@ import Head from "next/head";
 import TimetableSmall from "./TimetableSmall";
 import dynamic from "next/dynamic";
 import SearchForEmptyRoom from "./SearchForEmptyRoom";
-import { getSubstitutions } from "../utils/getter";
 import Snow from "./SnowEasteregg";
 import Message from "./Message";
 
@@ -20,7 +19,6 @@ function Layout({ handleKey, ...props }) {
   const [isShortHours, setIsShortHours] = useState(false);
   const [isSnowing, setIsSnowing] = useState(false);
 
-  const [substitutions, setSubstitutions] = useState({});
   const [searchDialog, setSearchDialog] = useState(false);
   const [selectedDay, setSelectedDay] = useState(0);
 
@@ -53,15 +51,6 @@ function Layout({ handleKey, ...props }) {
     initFlowbite();
   }, []);
 
-  useEffect(() => {
-    const substitutionsGetter = async () => {
-      let substitutions = await getSubstitutions(text, title);
-      setSubstitutions(substitutions);
-    };
-
-    substitutionsGetter();
-  }, [text, title]);
-
   return (
     <>
       <Head>
@@ -81,7 +70,6 @@ function Layout({ handleKey, ...props }) {
             handleKey={handleKey}
             isShortHours={isShortHours}
             setIsShortHours={setIsShortHours}
-            substitutions={substitutions}
             setSelectedDay={setSelectedDay}
             selectedDay={selectedDay}
           />
@@ -99,7 +87,6 @@ function Layout({ handleKey, ...props }) {
           <JumbotronLarge {...props} />
           <TimetableLarge
             {...props}
-            substitutions={substitutions}
             isShortHours={isShortHours}
             setIsShortHours={setIsShortHours}
           />

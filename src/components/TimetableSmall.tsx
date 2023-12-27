@@ -12,7 +12,6 @@ function TimetableSmall({
   handleKey,
   setIsShortHours,
   isShortHours,
-  substitutions,
   searchDialog,
   setSearchDialog,
   selectedDay,
@@ -43,7 +42,7 @@ function TimetableSmall({
         hours={hours}
         lessons={lessons}
         isShortHours={isShortHours}
-        substitutions={substitutions}
+        substitutions={props.substitutions}
       />
 
       <BottomBar handleKey={handleKey} {...props} />

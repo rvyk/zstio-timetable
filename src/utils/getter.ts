@@ -1,4 +1,5 @@
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
+import { load } from "cheerio";
 
 export const getTeacher = async (title) => {
   if (title?.match(/\b(\p{L}+)\s/u)?.length) {
@@ -20,11 +21,49 @@ export const getTeacher = async (title) => {
  */
 export async function getSubstitutionsObject(): Promise<substitutionsListType> {
   try {
-    const substitutionsRes = await axios.get(
-      `${process.env.NEXT_PUBLIC_HOST}/api/getSubstitutions`
-    );
+    const response = await axios.get(process.env.NEXT_PUBLIC_SUBSTITUTIONS_URL);
+
+    const $ = load(response.data);
+    const time = $("h2").text().trim();
+    const tables: tables[] = [];
+
+    $("table").each((index, table) => {
+      const rows = $(table).find("tr");
+      const zastepstwa: substitutions[] = [];
+
+      rows.slice(1).each((i, row) => {
+        const columns = $(row).find("td");
+        const [
+          lesson,
+          teacher,
+          branch,
+          subject,
+          classValue,
+          caseValue,
+          message,
+        ] = columns.map((index, column) => $(column).text().trim()).get();
+
+        if (lesson) {
+          zastepstwa.push({
+            lesson,
+            teacher,
+            branch,
+            subject,
+            class: classValue,
+            case: caseValue,
+            message,
+          });
+        }
+      });
+
+      tables.push({
+        time: rows.first().text().trim(),
+        zastepstwa: zastepstwa,
+      });
+    });
+
     const shortDayNames = ["pon", "wt", "śr", "czw", "pt", "sob", "nie"];
-    const match = substitutionsRes?.data?.tables[0]?.time.match(/\([^)]*\)/i);
+    const match = tables[0]?.time.match(/\([^)]*\)/i);
 
     if (match && match.length) {
       const dayIndex = shortDayNames.indexOf(
@@ -33,7 +72,7 @@ export async function getSubstitutionsObject(): Promise<substitutionsListType> {
       if (dayIndex >= 0) {
         return {
           dayIndex,
-          zastepstwa: substitutionsRes?.data?.tables[0]?.zastepstwa,
+          zastepstwa: tables[0]?.zastepstwa,
         };
       }
     } else {
@@ -50,7 +89,6 @@ export async function getSubstitutionsObject(): Promise<substitutionsListType> {
     };
   }
 }
-
 export async function getSubstitutions(
   text: string,
   title: string
@@ -70,10 +108,18 @@ export async function getSubstitutions(
 
   if (search && query) {
     try {
-      const substitutionsRes = await axios.get(
+      const substitutionsRes: AxiosResponse = await axios.get(
         `/api/getSubstitutions?search=${search}&query=${query}`
       );
-      const shortDayNames = ["pon", "wt", "śr", "czw", "pt", "sob", "nie"];
+      const shortDayNames: string[] = [
+        "pon",
+        "wt",
+        "śr",
+        "czw",
+        "pt",
+        "sob",
+        "nie",
+      ];
       const match = substitutionsRes?.data?.tables[0]?.time.match(/\([^)]*\)/i);
 
       if (match && match.length) {

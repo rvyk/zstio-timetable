@@ -63,9 +63,9 @@ function Content({ props, checkedTeachers, checkedBranches }) {
   let rowCounter = 0;
   return (
     <>
-      {props?.form?.tables?.length > 0 ? (
+      {props?.substitutions?.tables?.length > 0 ? (
         <div className="relative overflow-x-auto shadow-md sm:rounded-xl w-[90%] transition-all duration-100">
-          {props?.form?.tables.map((table: tables, index: number) => {
+          {props?.substitutions?.tables.map((table: tables, index: number) => {
             return (
               <table
                 className="w-full text-sm text-left transition-all duration-200 text-gray-500 dark:text-gray-300"

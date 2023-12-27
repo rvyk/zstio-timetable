@@ -37,17 +37,6 @@ The phone mode is inspired by the school's timetable
 | `?day=index`         | Day of the week (0-4)                                      |
 | `?lesson=index`      | Lesson of the day's lesson, e.g., `lesson=1` for index `0` |
 
-#### Get substitutions
-
-```http
-  GET /api/getSubstitutions
-```
-
-| Parameter (Optional)      | Description                                      |
-| :------------------------ | :----------------------------------------------- |
-| `?search=teacher\|branch` | Search substitutions for branch or for a teacher |
-| `?query=index`            | What api will search in substitution             |
-
 ## Links
 
 [![portfolio](https://img.shields.io/badge/GitHub-rvyk-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/rvyk/)

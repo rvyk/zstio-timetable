@@ -8,12 +8,7 @@ import ShortHours from "./Table/ShortHours";
 import { useRouter } from "next/router";
 import LoadingTable from "./Table/LoadingTable";
 
-function TimetableLarge({
-  substitutions,
-  isShortHours,
-  setIsShortHours,
-  ...props
-}) {
+function TimetableLarge({ isShortHours, setIsShortHours, ...props }) {
   const { isReady } = useRouter();
 
   let {
@@ -83,7 +78,7 @@ function TimetableLarge({
               hours={hours}
               isShortHours={isShortHours}
               lessons={lessons}
-              substitutions={substitutions}
+              substitutions={props.substitutions}
             />
             <RenderTableFooter
               status={status}

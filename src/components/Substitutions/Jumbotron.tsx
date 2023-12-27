@@ -68,9 +68,9 @@ function Jumbotron({ props }) {
         </h1>
       </div>
       <p className="md:my-4 mb-2 transition-all text-xl font-normal text-gray-500 lg:text-xl sm:px-16 lg:px-48 dark:text-gray-400">
-        {props?.message ? props?.message : props?.form?.time}
+        {props?.message ? props?.message : props?.substitutions?.time}
       </p>
-      {props?.form?.tables?.length > 0 && (
+      {props?.substitutions?.tables?.length > 0 && (
         <>
           {buttons.map((button) => (
             <ButtonComponent key={button.id} {...button} />

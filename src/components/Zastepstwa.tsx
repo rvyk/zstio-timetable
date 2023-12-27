@@ -13,7 +13,7 @@ import { GetStaticProps } from "next";
 import { load } from "cheerio";
 import Message from "@/components/Message";
 
-export default function Home({ ...props }: any) {
+export default function Zastepstwa({ ...props }: any) {
   const [checkedTeachers, setCheckedTeachers] = useState<any[]>([]);
   const [checkedBranches, setCheckedBranches] = useState<any[]>([]);
   const handleCheckboxChange = (checkedItems: any[]) => {

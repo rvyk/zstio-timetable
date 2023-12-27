@@ -6,59 +6,58 @@ import fetchTimetable from "@/utils/fetchTimetable";
 import { convertTextDate, removeUndefined } from "@/utils/helpers";
 import { GetStaticPaths } from "next";
 import { GetStaticProps } from "next/types";
+import axios from "axios";
+import { load } from "cheerio";
+import Zastepstwa from "@/components/Zastepstwa";
 
 const MainRoute = ({ ...props }) => {
   const router = useRouter();
 
-  const handleKey = useCallback(
-    (key: string) => {
-      const data = router?.query?.all[0];
-      if (data) {
-        const currentNumber = parseInt(router.query.all[1]);
-        const changeTo =
-          key === "ArrowRight" ? currentNumber + 1 : currentNumber - 1;
-        const dataToPropertyMap = {
-          class: "classes",
-          room: "rooms",
-          teacher: "teachers",
-        };
-        const propertyName = dataToPropertyMap[data];
-        if (propertyName) {
-          const maxNumber = props[propertyName].length;
-          if (changeTo >= 1 && changeTo <= maxNumber) {
-            router.push(`/${data}/${changeTo}`, undefined, { scroll: false });
+  if (router.query.all.toString() === "zastepstwa") {
+    return <Zastepstwa {...props} />;
+  } else {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const handleKey = useCallback(
+      (key: string) => {
+        const data = router?.query?.all[0];
+        if (data) {
+          const currentNumber = parseInt(router.query.all[1]);
+          const changeTo =
+            key === "ArrowRight" ? currentNumber + 1 : currentNumber - 1;
+          const dataToPropertyMap = {
+            class: "classes",
+            room: "rooms",
+            teacher: "teachers",
+          };
+          const propertyName = dataToPropertyMap[data];
+          if (propertyName) {
+            const maxNumber = props[propertyName].length;
+            if (changeTo >= 1 && changeTo <= maxNumber) {
+              router.push(`/${data}/${changeTo}`, undefined, { scroll: false });
+            }
           }
         }
-      }
-    },
-    [props, router]
-  );
+      },
+      [props, router]
+    );
 
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "ArrowRight" || e.key === "ArrowLeft") {
-        e.preventDefault();
-        handleKey(e.key);
-      }
-    };
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    useEffect(() => {
+      const handleKeyDown = (e: KeyboardEvent) => {
+        if (e.key === "ArrowRight" || e.key === "ArrowLeft") {
+          e.preventDefault();
+          handleKey(e.key);
+        }
+      };
 
-    window.addEventListener("keydown", handleKeyDown);
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [props, router, handleKey]);
+      window.addEventListener("keydown", handleKeyDown);
+      return () => {
+        window.removeEventListener("keydown", handleKeyDown);
+      };
+    }, [handleKey]);
 
-  useEffect(() => {
-    // We use several servers, so we use this console.log to verify connectivity to the servers.
-    if (process.env.NEXT_PUBLIC_SERVER_ID) {
-      console.log(
-        `%cConnected with SERVER #${process.env.NEXT_PUBLIC_SERVER_ID}`,
-        "background: lime; color: white; font-size: x-large; text-align: center; border-radius: 15px; margin: 20px 0px 20px 0px; font-weight: bold; padding: 10px; width: full; "
-      );
-    }
-  }, []);
-
-  return <Layout {...props} handleKey={handleKey} />;
+    return <Layout {...props} handleKey={handleKey} />;
+  }
 };
 
 export const getStaticPaths: GetStaticPaths = async () => {
@@ -89,6 +88,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
   if (!context?.params) return { props: {} };
 
   const { params } = context;
+
   const param0 = params?.all[0];
   const param1 = params?.all[1];
 
@@ -112,30 +112,81 @@ export const getStaticProps: GetStaticProps = async (context) => {
 
   const { data: timetableListData, ok } = await fetchTimetable(id);
 
-  const timeTable = {
-    lessons: timetableListData?.getDays(),
-    hours: timetableListData?.getHours(),
-    generatedDate: timetableListData?.getGeneratedDate(),
-    title: timetableListData?.getTitle(),
-    validDate: convertTextDate(timetableListData?.getVersionInfo()),
-    days: timetableListData?.getDays(),
-  };
+  const timeTable = removeUndefined(
+    {
+      lessons: timetableListData?.getDays(),
+      hours: timetableListData?.getHours(),
+      generatedDate: timetableListData?.getGeneratedDate(),
+      title: timetableListData?.getTitle(),
+      validDate: convertTextDate(timetableListData?.getVersionInfo()),
+      days: timetableListData?.getDays(),
+    },
+    ""
+  );
 
   const { data } = await fetchTimetableList();
   const { classes, teachers, rooms } = data;
 
-  const readyTimeTable = removeUndefined(timeTable, "");
+  const substitutions = {
+    time: "Wystąpił błąd podczas pobierania danych",
+    tables: [] as tables[],
+  };
+
+  try {
+    const response = await axios.get(process.env.NEXT_PUBLIC_SUBSTITUTIONS_URL);
+
+    const $ = load(response.data);
+    substitutions.time = $("h2").text().trim();
+
+    $("table").each((_index, table) => {
+      const rows = $(table).find("tr");
+      const zastepstwa: substitutions[] = [];
+
+      rows.slice(1).each((_i, row) => {
+        const columns = $(row).find("td");
+        const [
+          lesson,
+          teacher,
+          branch,
+          subject,
+          classValue,
+          caseValue,
+          message,
+        ] = columns.map((_index, column) => $(column).text().trim()).get();
+
+        if (lesson) {
+          zastepstwa.push({
+            lesson,
+            teacher,
+            branch,
+            subject,
+            class: classValue,
+            case: caseValue,
+            message,
+          });
+        }
+      });
+
+      substitutions.tables.push({
+        time: rows.first().text().trim(),
+        zastepstwa: zastepstwa,
+      });
+    });
+  } catch (error) {
+    console.error(error);
+  }
 
   return {
     props: {
       status: ok,
-      timeTable: readyTimeTable,
+      timeTable,
       classes,
       teachers,
       rooms,
       timeTableID: id,
-      siteTitle: readyTimeTable?.title,
+      siteTitle: timeTable?.title,
       text,
+      substitutions,
     },
     revalidate: 3600,
   };
