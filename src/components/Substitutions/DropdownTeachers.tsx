@@ -4,9 +4,15 @@ import { getQueryItems } from "@/utils/getQueryItems";
 import { handleCheckboxChange } from "@/utils/handleCheckboxChange";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 
-function DropdownTeachers({ props, onCheckboxChange }) {
+function DropdownTeachers({
+  props,
+  onCheckboxChangeTeacher,
+}: {
+  props: props;
+  onCheckboxChangeTeacher: (checkedItems: any[]) => void;
+}) {
   const [searchTeachers, setSearchTeachers] = useState("");
-  const [checkedItems, setCheckedItems] = useState({});
+  const [checkedItems, setCheckedItems] = useState<any>({});
   const router = useRouter();
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -22,8 +28,8 @@ function DropdownTeachers({ props, onCheckboxChange }) {
   };
 
   useEffect(() => {
-    onCheckboxChange(checkedItems);
-  }, [checkedItems, onCheckboxChange]);
+    onCheckboxChangeTeacher(checkedItems);
+  }, [checkedItems, onCheckboxChangeTeacher]);
 
   return (
     <div

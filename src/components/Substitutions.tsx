@@ -13,13 +13,13 @@ import { GetStaticProps } from "next";
 import { load } from "cheerio";
 import Message from "@/components/Message";
 
-export default function Substitutions({ ...props }: any) {
+export default function Substitutions({ ...props }: props) {
   const [checkedTeachers, setCheckedTeachers] = useState<any[]>([]);
   const [checkedBranches, setCheckedBranches] = useState<any[]>([]);
-  const handleCheckboxChange = (checkedItems: any[]) => {
+  const onCheckboxChangeTeacher = (checkedItems: any[]) => {
     setCheckedTeachers(checkedItems);
   };
-  const handleCheckboxChangeBranch = (checkedItems: any[]) => {
+  const onCheckboxChangeBranch = (checkedItems: any[]) => {
     setCheckedBranches(checkedItems);
   };
 
@@ -56,13 +56,13 @@ export default function Substitutions({ ...props }: any) {
         <Jumbotron props={props} />
         <DropdownTeachers
           props={props}
-          onCheckboxChange={handleCheckboxChange}
+          onCheckboxChangeTeacher={onCheckboxChangeTeacher}
         />
         <DropdownBranch
           props={props}
-          onCheckboxChangeBranch={handleCheckboxChangeBranch}
+          onCheckboxChangeBranch={onCheckboxChangeBranch}
         />
-        {props.error == true ? (
+        {props.substitutions.status == false ? (
           <div className="dark:text-gray-400 text-gray-500 text-center mb-10">
             <h1 className="text-xl">Przepraszamy za utrudnienia</h1>
             <a

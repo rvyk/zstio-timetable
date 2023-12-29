@@ -45,7 +45,7 @@ const ButtonComponent = ({
   </button>
 );
 
-function Jumbotron({ props }) {
+function Jumbotron({ props }: { props: props }) {
   return (
     <div className="py-8 px-4 mx-auto max-w-screen-xl text-center">
       <div className="flex justify-center items-center mb-4 md:mb-0 -ml-0 md:-ml-16">
@@ -68,7 +68,9 @@ function Jumbotron({ props }) {
         </h1>
       </div>
       <p className="md:my-4 mb-2 transition-all text-xl font-normal text-gray-500 lg:text-xl sm:px-16 lg:px-48 dark:text-gray-400">
-        {props?.message ? props?.message : props?.substitutions?.timeRange}
+        {props?.substitutions?.status
+          ? props?.substitutions?.timeRange
+          : "Wystąpił błąd podczas pobierania danych"}
       </p>
       {props?.substitutions?.tables?.length > 0 && (
         <>

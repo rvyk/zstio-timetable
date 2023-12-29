@@ -5,13 +5,13 @@ import fetchTimetableList from "@/utils/fetchTimetableList";
 import fetchTimetable from "@/utils/fetchTimetable";
 import { convertTextDate, removeUndefined } from "@/utils/helpers";
 import { GetStaticPaths } from "next";
-import { GetStaticProps } from "next/types";
+import { GetStaticProps, NextPage } from "next/types";
 import axios from "axios";
 import { load } from "cheerio";
 import Substitutions from "@/components/Substitutions";
 import { getSubstitutionsObject } from "@/utils/getter";
 
-const MainRoute = ({ ...props }) => {
+const MainRoute: NextPage<props> = ({ ...props }) => {
   const router = useRouter();
 
   if (router.query.all.toString() === "zastepstwa") {
@@ -56,7 +56,6 @@ const MainRoute = ({ ...props }) => {
         window.removeEventListener("keydown", handleKeyDown);
       };
     }, [handleKey]);
-
     return <Layout {...props} handleKey={handleKey} />;
   }
 };
@@ -128,20 +127,20 @@ export const getStaticProps: GetStaticProps = async (context) => {
   const { data } = await fetchTimetableList();
   const { classes, teachers, rooms } = data;
 
+  const props: props = {
+    status: ok,
+    timeTableID: id,
+    timeTable,
+    classes,
+    teachers,
+    rooms,
+    siteTitle: timeTable?.title,
+    text,
+    substitutions: await getSubstitutionsObject(),
   };
 
   return {
-    props: {
-      status: ok,
-      timeTable,
-      classes,
-      teachers,
-      rooms,
-      timeTableID: id,
-      siteTitle: timeTable?.title,
-      text,
-      substitutions: await getSubstitutionsObject(),
-    },
+    props,
     revalidate: 3600,
   };
 };

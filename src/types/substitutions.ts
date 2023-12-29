@@ -15,6 +15,7 @@ type substitutionTableType = {
 };
 
 type substitutions = {
+  status: boolean;
   timeRange: string;
   tables: substitutionTableType[];
 };

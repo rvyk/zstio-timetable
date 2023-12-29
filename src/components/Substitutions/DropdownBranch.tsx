@@ -4,9 +4,15 @@ import { getQueryItems } from "@/utils/getQueryItems";
 import { handleCheckboxChange } from "@/utils/handleCheckboxChange";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 
-function DropdownBranch({ props, onCheckboxChangeBranch }) {
+function DropdownBranch({
+  props,
+  onCheckboxChangeBranch,
+}: {
+  props: props;
+  onCheckboxChangeBranch: (checkedItems: any[]) => void;
+}) {
   const [searchBranch, setSearchBranch] = useState("");
-  const [checkedItems, setCheckedItems] = useState({});
+  const [checkedItems, setCheckedItems] = useState<any>({});
   const router = useRouter();
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {

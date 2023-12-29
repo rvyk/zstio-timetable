@@ -70,12 +70,14 @@ export async function getSubstitutionsObject(): Promise<substitutions> {
     });
 
     return {
+      status: true,
       timeRange,
       tables,
     };
   } catch (error) {
     console.error(error);
     return {
+      status: false,
       timeRange: "",
       tables: [],
     };

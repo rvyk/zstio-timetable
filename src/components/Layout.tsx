@@ -15,7 +15,10 @@ import Message from "./Message";
 
 const Footer = dynamic(() => import("./Footer"));
 
-function Layout({ handleKey, ...props }) {
+function Layout({
+  handleKey,
+  ...props
+}: props & { handleKey: (key: string) => void }) {
   const [isShortHours, setIsShortHours] = useState(false);
   const [isSnowing, setIsSnowing] = useState(false);
 

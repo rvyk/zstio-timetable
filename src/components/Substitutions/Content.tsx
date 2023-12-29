@@ -7,7 +7,15 @@ import {
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
-function Content({ props, checkedTeachers, checkedBranches }) {
+function Content({
+  props,
+  checkedTeachers,
+  checkedBranches,
+}: {
+  props: props;
+  checkedTeachers: any;
+  checkedBranches: any;
+}) {
   const [isCopied, setIsCopied] = useState(false);
   const router = useRouter();
   let filtersTeachers: Array<string>, filtersBranches: Array<string>;

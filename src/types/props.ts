@@ -27,13 +27,14 @@ type nameValueType = {
 
 type props = {
   status: boolean;
-  text: string;
-  siteTitle: string;
   timeTableID: string;
   timeTable: timeTableType;
   classes: nameValueType[];
-  rooms: nameValueType[];
   teachers: nameValueType[];
+  rooms: nameValueType[];
+  siteTitle: string;
+  text: string;
+  substitutions: substitutions;
 };
 
 type dropdownSearchType = {
