@@ -78,7 +78,7 @@ function TimetableLarge({ isShortHours, setIsShortHours, ...props }) {
               hours={hours}
               isShortHours={isShortHours}
               lessons={lessons}
-              substitutions={props.substitutions}
+              substitutions={props.substitutions.tables[0]}
             />
             <RenderTableFooter
               status={status}

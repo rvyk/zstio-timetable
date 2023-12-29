@@ -51,9 +51,9 @@ function DropdownTeachers({ props, onCheckboxChange }) {
         className="h-48 px-3 pb-3 overflow-y-auto text-sm text-gray-700 dark:text-gray-300"
         aria-labelledby="dropdownSearchTeacher"
       >
-        {props?.substitutions?.tables.map((table: tables) => {
+        {props?.substitutions?.tables.map((table: substitutionTableType) => {
           const uniqueTeachers: Array<string> = [];
-          table.zastepstwa.forEach((item: substitutions) => {
+          table.zastepstwa.forEach((item: substitutionType) => {
             const isTeacherExist = uniqueTeachers.some(
               (teacher) => teacher === item.teacher
             );

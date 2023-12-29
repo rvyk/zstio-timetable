@@ -13,7 +13,7 @@ import { GetStaticProps } from "next";
 import { load } from "cheerio";
 import Message from "@/components/Message";
 
-export default function Zastepstwa({ ...props }: any) {
+export default function Substitutions({ ...props }: any) {
   const [checkedTeachers, setCheckedTeachers] = useState<any[]>([]);
   const [checkedBranches, setCheckedBranches] = useState<any[]>([]);
   const handleCheckboxChange = (checkedItems: any[]) => {
@@ -84,57 +84,3 @@ export default function Zastepstwa({ ...props }: any) {
     </>
   );
 }
-
-export const getStaticProps: GetStaticProps = async () => {
-  try {
-    const response = await axios.get(process.env.NEXT_PUBLIC_SUBSTITUTIONS_URL);
-
-    const $ = load(response.data);
-    const time = $("h2").text().trim();
-    const tables: tables[] = [];
-
-    $("table").each((_index, table) => {
-      const rows = $(table).find("tr");
-      const zastepstwa: substitutions[] = [];
-
-      rows.slice(1).each((_i, row) => {
-        const columns = $(row).find("td");
-        const [
-          lesson,
-          teacher,
-          branch,
-          subject,
-          classValue,
-          caseValue,
-          message,
-        ] = columns.map((_index, column) => $(column).text().trim()).get();
-
-        if (lesson) {
-          zastepstwa.push({
-            lesson,
-            teacher,
-            branch,
-            subject,
-            class: classValue,
-            case: caseValue,
-            message,
-          });
-        }
-      });
-
-      tables.push({
-        time: rows.first().text().trim(),
-        zastepstwa: zastepstwa,
-      });
-    });
-
-    return { props: { form: { time, tables } } };
-  } catch (error) {}
-
-  return {
-    props: {
-      error: true,
-      message: "Wystąpił błąd podczas pobierania danych",
-    },
-  };
-};

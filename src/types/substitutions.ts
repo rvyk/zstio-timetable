@@ -1,4 +1,4 @@
-type substitutions = {
+type substitutionType = {
   lesson: string;
   teacher: string;
   branch: string;
@@ -8,7 +8,13 @@ type substitutions = {
   message: string;
 };
 
-type tables = {
+type substitutionTableType = {
   time: string;
-  zastepstwa: substitutions[];
+  dayIndex: number;
+  zastepstwa: substitutionType[];
+};
+
+type substitutions = {
+  timeRange: string;
+  tables: substitutionTableType[];
 };

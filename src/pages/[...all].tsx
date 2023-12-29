@@ -8,13 +8,14 @@ import { GetStaticPaths } from "next";
 import { GetStaticProps } from "next/types";
 import axios from "axios";
 import { load } from "cheerio";
-import Zastepstwa from "@/components/Zastepstwa";
+import Substitutions from "@/components/Substitutions";
+import { getSubstitutionsObject } from "@/utils/getter";
 
 const MainRoute = ({ ...props }) => {
   const router = useRouter();
 
   if (router.query.all.toString() === "zastepstwa") {
-    return <Zastepstwa {...props} />;
+    return <Substitutions {...props} />;
   } else {
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const handleKey = useCallback(
@@ -127,54 +128,10 @@ export const getStaticProps: GetStaticProps = async (context) => {
   const { data } = await fetchTimetableList();
   const { classes, teachers, rooms } = data;
 
-  const substitutions = {
-    time: "Wystąpił błąd podczas pobierania danych",
-    tables: [] as tables[],
+  const substitutions: substitutions = {
+    timeRange: "Wystąpił błąd podczas pobierania danych",
+    tables: [],
   };
-
-  try {
-    const response = await axios.get(process.env.NEXT_PUBLIC_SUBSTITUTIONS_URL);
-
-    const $ = load(response.data);
-    substitutions.time = $("h2").text().trim();
-
-    $("table").each((_index, table) => {
-      const rows = $(table).find("tr");
-      const zastepstwa: substitutions[] = [];
-
-      rows.slice(1).each((_i, row) => {
-        const columns = $(row).find("td");
-        const [
-          lesson,
-          teacher,
-          branch,
-          subject,
-          classValue,
-          caseValue,
-          message,
-        ] = columns.map((_index, column) => $(column).text().trim()).get();
-
-        if (lesson) {
-          zastepstwa.push({
-            lesson,
-            teacher,
-            branch,
-            subject,
-            class: classValue,
-            case: caseValue,
-            message,
-          });
-        }
-      });
-
-      substitutions.tables.push({
-        time: rows.first().text().trim(),
-        zastepstwa: zastepstwa,
-      });
-    });
-  } catch (error) {
-    console.error(error);
-  }
 
   return {
     props: {
@@ -186,7 +143,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
       timeTableID: id,
       siteTitle: timeTable?.title,
       text,
-      substitutions,
+      substitutions: await getSubstitutionsObject(),
     },
     revalidate: 3600,
   };

@@ -51,9 +51,9 @@ function DropdownBranch({ props, onCheckboxChangeBranch }) {
         className="h-48 px-3 pb-3 overflow-y-auto text-sm text-gray-700 dark:text-gray-300"
         aria-labelledby="dropdownSearchBranch"
       >
-        {props?.substitutions?.tables.map((table: tables) => {
+        {props?.substitutions?.tables.map((table: substitutionTableType) => {
           const uniqueBranches: Array<string> = [];
-          table.zastepstwa.forEach((item: substitutions) => {
+          table.zastepstwa.forEach((item: substitutionType) => {
             const isBranchExist = uniqueBranches.some(
               (branch) => branch === item.branch
             );

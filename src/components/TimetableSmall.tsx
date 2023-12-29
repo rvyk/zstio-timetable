@@ -42,7 +42,7 @@ function TimetableSmall({
         hours={hours}
         lessons={lessons}
         isShortHours={isShortHours}
-        substitutions={props.substitutions}
+        substitutions={props.substitutions.tables[0]}
       />
 
       <BottomBar handleKey={handleKey} {...props} />

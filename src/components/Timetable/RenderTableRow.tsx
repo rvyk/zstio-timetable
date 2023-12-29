@@ -16,18 +16,18 @@ export default function RenderTableRow({
     <tbody>
       {Object.entries(hours).length > 1 ? (
         Object.entries(
-          isShortHours ? shortHours.slice(0, maxLessons) : hours,
-        )?.map(([key, hour], index) => {
-          const { number, timeFrom, timeTo }: any = hour;
+          isShortHours ? shortHours.slice(0, maxLessons) : hours
+        )?.map(([key, hour]: [string, hourType], lessonIndex) => {
+          const { number, timeFrom, timeTo } = hour;
 
           return (
             <tr
               className={`text-gray-600 dark:text-gray-300 border-b ${
-                index % 2 === 0
+                lessonIndex % 2 === 0
                   ? "bg-white dark:bg-[#191919]"
                   : "bg-gray-50 dark:bg-[#202020]"
               } dark:border-[#181818] `}
-              key={index}
+              key={lessonIndex}
             >
               <td
                 className={`py-4 text-center h-full border-r last:border-none font-semibold dark:border-[#171717]`}
@@ -43,16 +43,15 @@ export default function RenderTableRow({
                 {timeFrom} - {timeTo}
               </td>
 
-              {lessons?.map((day, lessonIndex) => {
+              {lessons?.map((day, dayIndex) => {
                 return (
                   <td
                     className={`px-6 py-4 whitespace-nowrap text-ellipsis overflow-hidden border-r last:border-none dark:border-[#171717]`}
-                    key={`${day}-${lessonIndex}`}
+                    key={`${day}-${dayIndex}`}
                   >
                     <RenderLesson
-                      number={number}
-                      index={index}
                       lessonIndex={lessonIndex}
+                      dayIndex={dayIndex}
                       day={day}
                       substitutions={substitutions}
                     />

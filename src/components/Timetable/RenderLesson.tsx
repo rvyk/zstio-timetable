@@ -3,29 +3,34 @@ import { cases } from "@/utils/helpers";
 import { ExclamationCircleIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 
-function RenderLesson({ number, index, lessonIndex, day, substitutions }) {
+function RenderLesson({ lessonIndex, dayIndex, day, substitutions }) {
   return (
     <>
-      {day[number - 1]?.map((lesson, subIndex) => {
-        let substitution = getSubstitution(lessonIndex, index, substitutions),
+      {day[lessonIndex]?.map((lesson, subIndex) => {
+        let substitution = getSubstitution(
+            dayIndex,
+            lessonIndex,
+            substitutions
+          ),
           possibleSubstitution = substitution,
           sure = true;
-        if (substitution && day[number - 1]?.length > 1) {
+        console.log(substitutions);
+        if (substitution && day[lessonIndex]?.length > 1) {
           substitution = getSubstitutionForGroup(
             lesson.groupName,
             substitutions,
-            index,
-            lessonIndex
+            lessonIndex,
+            dayIndex
           );
           if (!substitution) {
             sure = false;
-            day[number - 1]?.map((lessonCheck, checkIndex) => {
+            day[lessonIndex]?.map((lessonCheck, checkIndex) => {
               if (
                 getSubstitutionForGroup(
                   lessonCheck?.groupName,
                   substitutions,
-                  index,
-                  lessonIndex
+                  lessonIndex,
+                  dayIndex
                 ) &&
                 checkIndex !== subIndex
               ) {
@@ -42,6 +47,7 @@ function RenderLesson({ number, index, lessonIndex, day, substitutions }) {
             className="flex flex-col"
             id={substitution ? "substitutionAvailableTest" : undefined}
           >
+            <p>{dayIndex + " " + lessonIndex}</p>
             <div className="flex flex-row">
               <div
                 className={`font-semibold mr-1 flex flex-col ${
@@ -60,9 +66,9 @@ function RenderLesson({ number, index, lessonIndex, day, substitutions }) {
                   {`(${lesson?.groupName})`}
                 </p>
               ) : (
-                day[number - 1].length > 1 && (
+                day[lessonIndex].length > 1 && (
                   <p className="flex items-center mr-1 ">
-                    {`(${subIndex + 1}/${day[number - 1].length})`}
+                    {`(${subIndex + 1}/${day[lessonIndex].length})`}
                   </p>
                 )
               )}
@@ -148,7 +154,7 @@ function RenderLesson({ number, index, lessonIndex, day, substitutions }) {
               </a>
             )}
 
-            {substitution && sure && day[number - 1]?.length > 1 && (
+            {substitution && sure && day[lessonIndex]?.length > 1 && (
               <div className="w-full my-1"></div>
             )}
           </div>

@@ -19,19 +19,19 @@ export const getTeacher = async (title) => {
 /**
  * Only for server side (api)
  */
-export async function getSubstitutionsObject(): Promise<substitutionsListType> {
+export async function getSubstitutionsObject(): Promise<substitutions> {
   try {
     const response = await axios.get(process.env.NEXT_PUBLIC_SUBSTITUTIONS_URL);
-
     const $ = load(response.data);
-    const time = $("h2").text().trim();
-    const tables: tables[] = [];
+    const timeRange = $("h2").text().trim();
+    const tables: substitutionTableType[] = [];
 
-    $("table").each((index, table) => {
+    $("table").each((_index, table) => {
       const rows = $(table).find("tr");
-      const zastepstwa: substitutions[] = [];
+      const tableDate = rows.first().text().trim();
+      const zastepstwa: substitutionType[] = [];
 
-      rows.slice(1).each((i, row) => {
+      rows.slice(1).each((_i, row) => {
         const columns = $(row).find("td");
         const [
           lesson,
@@ -41,7 +41,7 @@ export async function getSubstitutionsObject(): Promise<substitutionsListType> {
           classValue,
           caseValue,
           message,
-        ] = columns.map((index, column) => $(column).text().trim()).get();
+        ] = columns.map((_index, column) => $(column).text().trim()).get();
 
         if (lesson) {
           zastepstwa.push({
@@ -56,96 +56,36 @@ export async function getSubstitutionsObject(): Promise<substitutionsListType> {
         }
       });
 
+      const shortDayNames = ["pon", "wt", "śr", "czw", "pt", "sob", "nie"];
+      const match = tableDate.match(/\([^)]*\)/i);
+      const dayIndex = match
+        ? shortDayNames.indexOf(match[0]?.substring(1)?.replace(".)", ""))
+        : -1;
+
       tables.push({
-        time: rows.first().text().trim(),
-        zastepstwa: zastepstwa,
+        time: tableDate,
+        dayIndex,
+        zastepstwa,
       });
     });
 
-    const shortDayNames = ["pon", "wt", "śr", "czw", "pt", "sob", "nie"];
-    const match = tables[0]?.time.match(/\([^)]*\)/i);
-
-    if (match && match.length) {
-      const dayIndex = shortDayNames.indexOf(
-        match[0]?.substring(1)?.replace(".)", "")
-      );
-      if (dayIndex >= 0) {
-        return {
-          dayIndex,
-          zastepstwa: tables[0]?.zastepstwa,
-        };
-      }
-    } else {
-      return {
-        dayIndex: -1,
-        zastepstwa: [],
-      };
-    }
-  } catch (e) {
-    console.log(e);
     return {
-      dayIndex: -1,
-      zastepstwa: [],
+      timeRange,
+      tables,
     };
-  }
-}
-export async function getSubstitutions(
-  text: string,
-  title: string
-): Promise<substitutionsListType | {}> {
-  const search =
-    text === "Oddziały"
-      ? "branch"
-      : text === "Nauczyciele"
-      ? "teacher"
-      : undefined;
-  const query =
-    search === "teacher"
-      ? await getTeacher(title)
-      : title?.includes(" ")
-      ? title?.split(" ")[0]
-      : title;
-
-  if (search && query) {
-    try {
-      const substitutionsRes: AxiosResponse = await axios.get(
-        `/api/getSubstitutions?search=${search}&query=${query}`
-      );
-      const shortDayNames: string[] = [
-        "pon",
-        "wt",
-        "śr",
-        "czw",
-        "pt",
-        "sob",
-        "nie",
-      ];
-      const match = substitutionsRes?.data?.tables[0]?.time.match(/\([^)]*\)/i);
-
-      if (match && match.length) {
-        const dayIndex = shortDayNames.indexOf(
-          match[0]?.substring(1)?.replace(".)", "")
-        );
-        if (dayIndex >= 0) {
-          return {
-            dayIndex,
-            zastepstwa: substitutionsRes?.data?.tables[0]?.zastepstwa,
-          };
-        }
-      } else {
-        return {};
-      }
-    } catch (e) {
-      console.log(e);
-      return {};
-    }
+  } catch (error) {
+    console.error(error);
+    return {
+      timeRange: "",
+      tables: [],
+    };
   }
 }
 
 export const getSubstitution = (
   dayIndex: number,
   lessonIndex: number,
-  substitutions: substitutionsListType
+  substitutions: substitutionTableType
 ) => {
   if (dayIndex === substitutions?.dayIndex)
     return substitutions?.zastepstwa?.filter((subs) => {
@@ -155,7 +95,7 @@ export const getSubstitution = (
 
 export const getSubstitutionForGroup = (
   groupName: string,
-  substitutions: substitutionsListType,
+  substitutions: substitutionTableType,
   lessonIndex: number,
   dayIndex: number
 ) => {
