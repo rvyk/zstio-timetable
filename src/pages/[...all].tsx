@@ -128,9 +128,6 @@ export const getStaticProps: GetStaticProps = async (context) => {
   const { data } = await fetchTimetableList();
   const { classes, teachers, rooms } = data;
 
-  const substitutions: substitutions = {
-    timeRange: "Wystąpił błąd podczas pobierania danych",
-    tables: [],
   };
 
   return {

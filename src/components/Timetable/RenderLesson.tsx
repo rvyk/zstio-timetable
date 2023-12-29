@@ -14,7 +14,6 @@ function RenderLesson({ lessonIndex, dayIndex, day, substitutions }) {
           ),
           possibleSubstitution = substitution,
           sure = true;
-        console.log(substitutions);
         if (substitution && day[lessonIndex]?.length > 1) {
           substitution = getSubstitutionForGroup(
             lesson.groupName,
@@ -47,7 +46,6 @@ function RenderLesson({ lessonIndex, dayIndex, day, substitutions }) {
             className="flex flex-col"
             id={substitution ? "substitutionAvailableTest" : undefined}
           >
-            <p>{dayIndex + " " + lessonIndex}</p>
             <div className="flex flex-row">
               <div
                 className={`font-semibold mr-1 flex flex-col ${
