@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { handleSelect } from "./functions";
 
-function DropdownTeacher({ teachers }) {
+function DropdownTeacher({ teachers }: { teachers: nameValueType[] }) {
   const [searchTeacher, setSearchTeacher] = useState("");
   const [lastSelect, setLastSelect] = useState("");
   const router = useRouter();

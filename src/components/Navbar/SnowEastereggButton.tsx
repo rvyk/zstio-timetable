@@ -1,6 +1,12 @@
 import React from "react";
 
-function SnowEastereggButton({ isSnowing, setIsSnowing }) {
+function SnowEastereggButton({
+  isSnowing,
+  setIsSnowing,
+}: {
+  isSnowing: boolean;
+  setIsSnowing: React.Dispatch<React.SetStateAction<boolean>>;
+}) {
   return (
     <div className="hidden lg:block">
       <button

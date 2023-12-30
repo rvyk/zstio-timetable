@@ -7,6 +7,11 @@ export default function RenderTableRow({
   isShortHours,
   lessons,
   substitutions,
+}: {
+  hours: hourType[];
+  isShortHours: boolean;
+  lessons: lessonType[][][];
+  substitutions: substitutionTableType;
 }) {
   const maxLessons =
     typeof hours == "object" &&

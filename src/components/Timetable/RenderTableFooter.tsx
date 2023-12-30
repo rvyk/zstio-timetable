@@ -6,6 +6,12 @@ export default function RenderTableHeader({
   generatedDate,
   status,
   timeTableID,
+}: {
+  hours: hourType[];
+  validDate: string;
+  generatedDate: string;
+  status: boolean;
+  timeTableID: string;
 }) {
   return (
     <tfoot

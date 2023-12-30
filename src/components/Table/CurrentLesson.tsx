@@ -1,7 +1,13 @@
 import { getCurrentLesson } from "@/utils/currentLesson";
 import React, { useEffect, useState } from "react";
 
-function CurrentLesson({ timeFrom, timeTo }) {
+function CurrentLesson({
+  timeFrom,
+  timeTo,
+}: {
+  timeFrom: string;
+  timeTo: string;
+}) {
   const [minutesRemaining, setMinutesRemaining] = useState(
     getCurrentLesson(timeFrom, timeTo).minutesRemaining
   );

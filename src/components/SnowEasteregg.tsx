@@ -9,7 +9,7 @@ const SnowSettings: SnowOption = {
   radius: [1, 5],
 };
 
-function Snow({ isSnowing }) {
+function Snow({ isSnowing }: { isSnowing: boolean }) {
   const { theme } = useTheme();
 
   if (isSnowing && new Date().getMonth() === 11) {

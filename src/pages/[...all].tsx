@@ -124,8 +124,9 @@ export const getStaticProps: GetStaticProps = async (context) => {
     ""
   );
 
-  const { data } = await fetchTimetableList();
-  const { classes, teachers, rooms } = data;
+  const {
+    data: { classes = [], teachers = [], rooms = [] },
+  } = await fetchTimetableList();
 
   const props: props = {
     status: ok,

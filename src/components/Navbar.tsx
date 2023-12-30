@@ -13,6 +13,12 @@ function Navbar({
   isSnowing,
   setIsSnowing,
   inTimetable,
+}: {
+  searchDialog: boolean;
+  setSearchDialog: React.Dispatch<React.SetStateAction<boolean>>;
+  isSnowing: boolean;
+  setIsSnowing: React.Dispatch<React.SetStateAction<boolean>>;
+  inTimetable: boolean;
 }) {
   const { theme, setTheme, resolvedTheme, systemTheme } = useTheme();
   const [isMounted, setIsMounted] = useState(false);

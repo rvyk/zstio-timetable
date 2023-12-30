@@ -45,10 +45,14 @@ function Layout({
     rooms = [],
     teachers = [],
     classes = [],
-    text = "",
-    siteTitle = "",
-    timeTable: { title = "" } = {},
-  } = props;
+    timeTable = {
+      hours: [],
+      generatedDate: "",
+      title: "",
+      validDate: "",
+      lessons: null,
+    },
+  }: props = props;
 
   useEffect(() => {
     initFlowbite();
@@ -58,10 +62,14 @@ function Layout({
     <>
       <Head>
         <link rel="canonical" href="https://plan.zstiojar.edu.pl" />
-        <title>{`${siteTitle} ${siteTitle && "|"} ZSTiO - Plan lekcji`}</title>
+        <title>{`${timeTable.title} ${
+          timeTable.title && "|"
+        } ZSTiO - Plan lekcji`}</title>
         <meta
           property="og:title"
-          content={`${siteTitle} ${siteTitle && "|"} ZSTiO - Plan lekcji`}
+          content={`${timeTable.title} ${
+            timeTable.title && "|"
+          } ZSTiO - Plan lekcji`}
         />
       </Head>
       <div className="min-h-screen w-screen flex flex-col lg:justify-center lg:items-center lg:bg-[#F7F3F5] bg-[#fff] dark:bg-[#202020] lg:dark:bg-[#171717] transition-all">

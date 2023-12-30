@@ -8,7 +8,14 @@ import ShortHours from "./Table/ShortHours";
 import { useRouter } from "next/router";
 import LoadingTable from "./Table/LoadingTable";
 
-function TimetableLarge({ isShortHours, setIsShortHours, ...props }) {
+function TimetableLarge({
+  isShortHours,
+  setIsShortHours,
+  ...props
+}: props & {
+  isShortHours: boolean;
+  setIsShortHours: React.Dispatch<React.SetStateAction<boolean>>;
+}) {
   const { isReady } = useRouter();
 
   let {
@@ -16,13 +23,13 @@ function TimetableLarge({ isShortHours, setIsShortHours, ...props }) {
     text = "",
     timeTableID = "",
     timeTable: {
-      hours = {},
+      hours = [],
       generatedDate = "",
-      title = "",
       validDate = "",
-      lessons = [[], [], [], [], []],
-    } = {},
-  } = props;
+      title = "",
+      lessons = null,
+    },
+  }: props = props;
 
   if (!isReady) {
     return <LoadingTable small={false} />;

@@ -2,7 +2,7 @@ import { ArrowPathIcon } from "@heroicons/react/24/outline";
 import React from "react";
 import RenderTableHeader from "../Timetable/RenderTableHeader";
 
-function LoadingTable({ small }) {
+function LoadingTable({ small }: { small: boolean }) {
   if (small) {
     return (
       <div className="h-screen w-full flex justify-center items-center flex-col">

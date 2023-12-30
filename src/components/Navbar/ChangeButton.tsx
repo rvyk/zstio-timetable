@@ -3,7 +3,7 @@ import { ArrowPathRoundedSquareIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/router";
 import React from "react";
 
-function ChangeButton({ inTimetable }) {
+function ChangeButton({ inTimetable }: { inTimetable: boolean }) {
   const router = useRouter();
 
   return (

@@ -18,6 +18,13 @@ function RenderTimetable({
   substitutions,
   selectedDay,
   setSelectedDay,
+}: {
+  hours: hourType[];
+  lessons: lessonType[][][];
+  isShortHours: boolean;
+  substitutions: substitutionTableType;
+  selectedDay: number;
+  setSelectedDay: React.Dispatch<React.SetStateAction<number>>;
 }) {
   const [isScreenSmall, setIsScreenSmall] = useState(false);
 

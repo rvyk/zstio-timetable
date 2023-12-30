@@ -10,15 +10,21 @@ import Image from "next/legacy/image";
 import Loading from "./Loading";
 import Event from "./Event";
 
-function JumbotronLarge({ ...props }) {
+function JumbotronLarge({ ...props }: props | null) {
   let {
     text = "",
     status,
     classes = [],
     teachers = [],
     rooms = [],
-    timeTable = {},
-  } = props;
+    timeTable = {
+      hours: [],
+      generatedDate: "",
+      title: "",
+      validDate: "",
+      lessons: null,
+    },
+  }: props = props;
 
   return (
     <div className="py-8 relative px-4 mx-auto max-w-screen-xl text-center lg:py-16">

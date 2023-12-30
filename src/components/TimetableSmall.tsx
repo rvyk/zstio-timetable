@@ -17,11 +17,26 @@ function TimetableSmall({
   selectedDay,
   setSelectedDay,
   ...props
+}: props & {
+  handleKey: (key: string) => void;
+  setIsShortHours: React.Dispatch<React.SetStateAction<boolean>>;
+  isShortHours: boolean;
+  searchDialog: boolean;
+  setSearchDialog: React.Dispatch<React.SetStateAction<boolean>>;
+  selectedDay: number;
+  setSelectedDay: React.Dispatch<React.SetStateAction<number>>;
 }) {
   const { isReady } = useRouter();
 
-  let { timeTable: { hours = {}, lessons = [[], [], [], [], []] } = {} } =
-    props;
+  let {
+    timeTable: { hours = [], lessons = [[], [], [], [], []] } = {
+      hours: [],
+      generatedDate: "",
+      title: "",
+      validDate: "",
+      lessons: [[], [], [], [], []],
+    },
+  }: props = props;
 
   if (!isReady) {
     return <LoadingTable small={true} />;

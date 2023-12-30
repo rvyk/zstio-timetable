@@ -43,7 +43,17 @@ export default function Home() {
             objectPosition="center"
           />
         </Link>
-        <JumbotronLarge />
+        <JumbotronLarge
+          classes={null}
+          rooms={null}
+          siteTitle={null}
+          status={undefined}
+          substitutions={null}
+          teachers={null}
+          text={null}
+          timeTable={null}
+          timeTableID={null}
+        />
         <div
           className={`transition-all text-gray-500 dark:text-gray-300 flex duration-700 justify-center items-center flex-col ${
             help ? "translate-y-0" : "translate-y-[100vh]"

@@ -6,18 +6,21 @@ type hourType = {
 
 type lessonType = {
   subject: string;
-  teacher: string;
-  teacherId: string;
-  room: string;
-  roomId: string;
+  room?: string;
+  roomId?: string;
+  groupName?: string;
+  teacher?: string;
+  teacherId?: string;
+  className?: string;
+  classId?: string;
 };
 
 type timeTableType = {
   hours: hourType[];
   generatedDate: string;
   title: string;
-  validate: string;
-  lessons: [lessonType, lessonType, lessonType, lessonType, lessonType];
+  validDate: string;
+  lessons: lessonType[][][];
 };
 
 type nameValueType = {

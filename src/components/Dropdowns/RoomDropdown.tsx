@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { handleSelect } from "./functions";
 
-function DropdownRoom({ rooms }) {
+function DropdownRoom({ rooms }: { rooms: nameValueType[] }) {
   const [searchRoom, setSearchRoom] = useState("");
   const [lastSelect, setLastSelect] = useState("");
   const router = useRouter();

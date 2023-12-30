@@ -2,7 +2,13 @@ import React from "react";
 import { SunIcon } from "@heroicons/react/20/solid";
 import { MoonIcon } from "@heroicons/react/24/outline";
 
-function ThemeButton({ toggleTheme, resolvedTheme }) {
+function ThemeButton({
+  toggleTheme,
+  resolvedTheme,
+}: {
+  toggleTheme: () => void;
+  resolvedTheme: string;
+}) {
   return (
     <button
       type="button"

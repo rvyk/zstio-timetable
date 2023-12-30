@@ -8,7 +8,15 @@ import Link from "next/link";
 import { days } from "../utils/helpers";
 import axios from "axios";
 
-function SearchForEmptyRoom({ searchDialog, setSearchDialog, setSelectedDay }) {
+function SearchForEmptyRoom({
+  searchDialog,
+  setSearchDialog,
+  setSelectedDay,
+}: {
+  searchDialog: boolean;
+  setSearchDialog: React.Dispatch<React.SetStateAction<boolean>>;
+  setSelectedDay: React.Dispatch<React.SetStateAction<number>>;
+}) {
   const [selectedDayForQuery, setSelectedDayForQuery] = useState(0);
   const [lessonIndex, setLessonindex] = useState(1);
   const [loading, setLoading] = useState(false);

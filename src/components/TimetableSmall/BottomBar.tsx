@@ -13,15 +13,24 @@ import { useRouter } from "next/router";
 import { lock, unlock } from "tua-body-scroll-lock";
 import MobileDetect from "mobile-detect";
 
-function BottomBar({ handleKey, ...props }) {
+function BottomBar({
+  handleKey,
+  ...props
+}: props & { handleKey: (key: string) => void }) {
   let {
+    rooms = [],
+    teachers = [],
+    classes = [],
     text = "",
     timeTableID = "",
-    classes = [],
-    teachers = [],
-    rooms = [],
-    timeTable: { generatedDate = "", title = "", validDate = "" } = {},
-  } = props;
+    timeTable = {
+      hours: [],
+      generatedDate: "",
+      title: "",
+      validDate: "",
+      lessons: null,
+    },
+  }: props = props;
 
   const [isMenuExpanded, setIsMenuExpanded] = useState(false);
   const [lastSelect, setLastSelect] = useState("");
@@ -89,7 +98,7 @@ function BottomBar({ handleKey, ...props }) {
               {text} /
             </p>
             <p className="transition-all text-xl font-bold text-gray-100 dark:text-gray-300 overflow-hidden text-ellipsis">
-              {title}
+              {timeTable.title}
             </p>
           </div>
           <div className="w-12 h-full right flex justify-center items-center text-gray-50">
@@ -193,16 +202,18 @@ function BottomBar({ handleKey, ...props }) {
               </div>
             ))}
             <div className="flex justify-center items-center w-full flex-col text-gray-50 dark:text-gray-300 text-center">
-              {generatedDate && (
+              {timeTable.generatedDate && (
                 <p>
                   Wygenerowano:{" "}
-                  <span className="font-semibold">{generatedDate}</span>
+                  <span className="font-semibold">
+                    {timeTable.generatedDate}
+                  </span>
                 </p>
               )}
-              {validDate && (
+              {timeTable.validDate && (
                 <p>
                   Obowiązuje od:{" "}
-                  <span className="font-semibold">{validDate}</span>
+                  <span className="font-semibold">{timeTable.validDate}</span>
                 </p>
               )}
               <Link
