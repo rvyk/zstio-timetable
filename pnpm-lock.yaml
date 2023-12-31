@@ -72,8 +72,8 @@ dependencies:
     specifier: ^1.2.1
     version: 1.2.1(react-dom@18.2.0)(react@18.2.0)
   react-tooltip:
-    specifier: ^5.25.0
-    version: 5.25.0(react-dom@18.2.0)(react@18.2.0)
+    specifier: ^5.25.1
+    version: 5.25.1(react-dom@18.2.0)(react@18.2.0)
   sharp:
     specifier: ^0.33.1
     version: 0.33.1
@@ -5343,8 +5343,8 @@ packages:
       react-fast-compare: 3.2.2
     dev: false
 
-  /react-tooltip@5.25.0(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-/eGhmlwbHlJrVoUe75fb58rJfAy9aZnTvQAK9ZUPM0n9mmBGpEk13vDPiQVCeUuax+fBej+7JPsUXlhzaySc7w==}
+  /react-tooltip@5.25.1(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-GDD0hrfbwGr2C6zEzVzzDzXSKeHM55cRFZQv2/EFmiFKVxWZk8hzOO5FNcwCpPyqVxQKUtYckReU5bXMd63alQ==}
     peerDependencies:
       react: '>=16.14.0'
       react-dom: '>=16.14.0'
