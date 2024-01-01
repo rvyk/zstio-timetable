@@ -1,25 +1,27 @@
 import { useTheme } from "next-themes";
 import React, { useEffect, useState } from "react";
-import InstallPWA from "./Navbar/InstallPWA";
 import { Tooltip } from "react-tooltip";
-import ThemeButton from "./Navbar/ThemeButton";
 import ChangeButton from "./Navbar/ChangeButton";
+import InstallPWA from "./Navbar/InstallPWA";
 import SearchButton from "./Navbar/SearchButton";
 import SnowEastereggButton from "./Navbar/SnowEastereggButton";
+import ThemeButton from "./Navbar/ThemeButton";
 
-function Navbar({
-  searchDialog,
-  setSearchDialog,
-  isSnowing,
-  setIsSnowing,
-  inTimetable,
-}: {
-  searchDialog: boolean;
-  setSearchDialog: React.Dispatch<React.SetStateAction<boolean>>;
-  isSnowing: boolean;
-  setIsSnowing: React.Dispatch<React.SetStateAction<boolean>>;
-  inTimetable: boolean;
-}) {
+function Navbar(
+  {
+    searchDialog,
+    setSearchDialog,
+    isSnowing,
+    setIsSnowing,
+    inTimetable,
+  }: {
+    searchDialog: boolean;
+    setSearchDialog: React.Dispatch<React.SetStateAction<boolean>>;
+    isSnowing: boolean;
+    setIsSnowing: React.Dispatch<React.SetStateAction<boolean>>;
+    inTimetable: boolean;
+  },
+) {
   const { theme, setTheme, resolvedTheme, systemTheme } = useTheme();
   const [isMounted, setIsMounted] = useState(false);
 
@@ -40,7 +42,7 @@ function Navbar({
     setIsMounted(true);
     const theme = document.cookie.replace(
       /(?:(?:^|.*;\s*)selectedTheme\s*\=\s*([^;]*).*$)|^.*$/,
-      "$1"
+      "$1",
     );
 
     if (theme) {

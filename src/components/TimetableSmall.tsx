@@ -1,31 +1,33 @@
-import React from "react";
-import RenderTimetable from "./TimetableSmall/RenderTimetable";
-import RenderNavbar from "./TimetableSmall/RenderNavbar";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
-import LoadingTable from "./Table/LoadingTable";
+import React from "react";
 import Message from "./Message";
+import LoadingTable from "./Table/LoadingTable";
+import RenderNavbar from "./TimetableSmall/RenderNavbar";
+import RenderTimetable from "./TimetableSmall/RenderTimetable";
 
 const BottomBar = dynamic(() => import("./TimetableSmall/BottomBar"));
 
-function TimetableSmall({
-  handleKey,
-  setIsShortHours,
-  isShortHours,
-  searchDialog,
-  setSearchDialog,
-  selectedDay,
-  setSelectedDay,
-  ...props
-}: props & {
-  handleKey: (key: string) => void;
-  setIsShortHours: React.Dispatch<React.SetStateAction<boolean>>;
-  isShortHours: boolean;
-  searchDialog: boolean;
-  setSearchDialog: React.Dispatch<React.SetStateAction<boolean>>;
-  selectedDay: number;
-  setSelectedDay: React.Dispatch<React.SetStateAction<number>>;
-}) {
+function TimetableSmall(
+  {
+    handleKey,
+    setIsShortHours,
+    isShortHours,
+    searchDialog,
+    setSearchDialog,
+    selectedDay,
+    setSelectedDay,
+    ...props
+  }: props & {
+    handleKey: (key: string) => void;
+    setIsShortHours: React.Dispatch<React.SetStateAction<boolean>>;
+    isShortHours: boolean;
+    searchDialog: boolean;
+    setSearchDialog: React.Dispatch<React.SetStateAction<boolean>>;
+    selectedDay: number;
+    setSelectedDay: React.Dispatch<React.SetStateAction<number>>;
+  },
+) {
   const { isReady } = useRouter();
 
   let {

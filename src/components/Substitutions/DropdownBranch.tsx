@@ -1,16 +1,18 @@
-import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
 import { getQueryItems } from "@/utils/getQueryItems";
 import { handleCheckboxChange } from "@/utils/handleCheckboxChange";
 import { XMarkIcon } from "@heroicons/react/24/outline";
+import { useRouter } from "next/router";
+import React, { useEffect, useState } from "react";
 
-function DropdownBranch({
-  props,
-  onCheckboxChangeBranch,
-}: {
-  props: props;
-  onCheckboxChangeBranch: (checkedItems: any[]) => void;
-}) {
+function DropdownBranch(
+  {
+    props,
+    onCheckboxChangeBranch,
+  }: {
+    props: props;
+    onCheckboxChangeBranch: (checkedItems: any[]) => void;
+  },
+) {
   const [searchBranch, setSearchBranch] = useState("");
   const [checkedItems, setCheckedItems] = useState<any>({});
   const router = useRouter();
@@ -61,7 +63,7 @@ function DropdownBranch({
           const uniqueBranches: Array<string> = [];
           table.zastepstwa.forEach((item: substitutionType) => {
             const isBranchExist = uniqueBranches.some(
-              (branch) => branch === item.branch
+              (branch) => branch === item.branch,
             );
             if (!isBranchExist) {
               uniqueBranches.push(item.branch);
@@ -85,7 +87,7 @@ function DropdownBranch({
                           e,
                           "branches",
                           router,
-                          setCheckedItems
+                          setCheckedItems,
                         )
                       }
                       className="w-4 h-4 text-blue-600 dark:text-[#282828] bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-[#171717] dark:ring-offset-[#171717] dark:focus:ring-offset-[#171717] focus:ring-2 dark:bg-[#282828] dark:border-[#202020]"

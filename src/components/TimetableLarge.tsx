@@ -1,21 +1,23 @@
+import { ArrowPathIcon } from "@heroicons/react/24/outline";
+import { useRouter } from "next/router";
 import React from "react";
 import { Tooltip } from "react-tooltip";
-import RenderTableHeader from "./Timetable/RenderTableHeader";
-import RenderTableFooter from "./Timetable/RenderTableFooter";
-import RenderTableRow from "./Timetable/RenderTableRow";
-import { ArrowPathIcon } from "@heroicons/react/24/outline";
-import ShortHours from "./Table/ShortHours";
-import { useRouter } from "next/router";
 import LoadingTable from "./Table/LoadingTable";
+import ShortHours from "./Table/ShortHours";
+import RenderTableFooter from "./Timetable/RenderTableFooter";
+import RenderTableHeader from "./Timetable/RenderTableHeader";
+import RenderTableRow from "./Timetable/RenderTableRow";
 
-function TimetableLarge({
-  isShortHours,
-  setIsShortHours,
-  ...props
-}: props & {
-  isShortHours: boolean;
-  setIsShortHours: React.Dispatch<React.SetStateAction<boolean>>;
-}) {
+function TimetableLarge(
+  {
+    isShortHours,
+    setIsShortHours,
+    ...props
+  }: props & {
+    isShortHours: boolean;
+    setIsShortHours: React.Dispatch<React.SetStateAction<boolean>>;
+  },
+) {
   const { isReady } = useRouter();
 
   let {

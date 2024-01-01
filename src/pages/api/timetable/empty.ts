@@ -1,12 +1,12 @@
-import axios from "axios";
-import { NextApiRequest, NextApiResponse } from "next";
 import { allApiType, emptyApiType } from "@/types/api";
 import { getSubstitutionsObject } from "@/utils/getter";
 import { cases } from "@/utils/helpers";
+import axios from "axios";
+import { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse,
 ) {
   try {
     const { dayIndex, lessonIndex }: { dayIndex: number; lessonIndex: number } =
@@ -50,7 +50,7 @@ export default async function handler(
               name: `Z zastępstw: ${sub.class}`,
               url: `/zastepstwa?teachers=${sub?.teacher.replaceAll(
                 " ",
-                "+"
+                "+",
               )}&branches=${sub?.branch}`,
             });
           }

@@ -1,5 +1,3 @@
-import Link from "next/link";
-import React from "react";
 import {
   AcademicCapIcon,
   ChevronDownIcon,
@@ -7,8 +5,9 @@ import {
   UsersIcon,
 } from "@heroicons/react/24/outline";
 import Image from "next/legacy/image";
-import Loading from "./Loading";
+import Link from "next/link";
 import Event from "./Event";
+import Loading from "./Loading";
 
 function JumbotronLarge({ ...props }: props | null) {
   let {

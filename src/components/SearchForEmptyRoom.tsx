@@ -1,22 +1,24 @@
-import React, { Fragment, useState } from "react";
 import { Dialog, Menu, RadioGroup, Transition } from "@headlessui/react";
 import {
   ChevronDownIcon,
   MagnifyingGlassIcon,
 } from "@heroicons/react/24/outline";
-import Link from "next/link";
-import { days } from "../utils/helpers";
 import axios from "axios";
+import Link from "next/link";
+import React, { Fragment, useState } from "react";
+import { days } from "../utils/helpers";
 
-function SearchForEmptyRoom({
-  searchDialog,
-  setSearchDialog,
-  setSelectedDay,
-}: {
-  searchDialog: boolean;
-  setSearchDialog: React.Dispatch<React.SetStateAction<boolean>>;
-  setSelectedDay: React.Dispatch<React.SetStateAction<number>>;
-}) {
+function SearchForEmptyRoom(
+  {
+    searchDialog,
+    setSearchDialog,
+    setSelectedDay,
+  }: {
+    searchDialog: boolean;
+    setSearchDialog: React.Dispatch<React.SetStateAction<boolean>>;
+    setSelectedDay: React.Dispatch<React.SetStateAction<number>>;
+  },
+) {
   const [selectedDayForQuery, setSelectedDayForQuery] = useState(0);
   const [lessonIndex, setLessonindex] = useState(1);
   const [loading, setLoading] = useState(false);
@@ -31,7 +33,7 @@ function SearchForEmptyRoom({
     const res = await axios.get(
       `/api/timetable/empty?day=${selectedDayForQuery}&lesson=${
         lessonIndex - 1
-      }`
+      }`,
     );
     if (res.data.success) {
       setData(res.data.classes);
@@ -134,7 +136,7 @@ function SearchForEmptyRoom({
                             setLessonindex(
                               parseInt(e.target.value) < 1
                                 ? 1
-                                : parseInt(e.target.value)
+                                : parseInt(e.target.value),
                             );
                           }}
                         />

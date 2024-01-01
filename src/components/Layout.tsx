@@ -1,24 +1,23 @@
-import React, { useEffect, useState } from "react";
-import TimetableLarge from "./TimetableLarge";
-import JumbotronLarge from "./JumbotronLarge";
-import Navbar from "./Navbar";
 import { initFlowbite } from "flowbite";
+import dynamic from "next/dynamic";
+import Head from "next/head";
+import { useEffect, useState } from "react";
+import DropdownClass from "./Dropdowns/ClassDropdown";
 import DropdownRoom from "./Dropdowns/RoomDropdown";
 import DropdownTeacher from "./Dropdowns/TeacherDropdown";
-import DropdownClass from "./Dropdowns/ClassDropdown";
-import Head from "next/head";
-import TimetableSmall from "./TimetableSmall";
-import dynamic from "next/dynamic";
+import JumbotronLarge from "./JumbotronLarge";
+import Message from "./Message";
+import Navbar from "./Navbar";
 import SearchForEmptyRoom from "./SearchForEmptyRoom";
 import Snow from "./SnowEasteregg";
-import Message from "./Message";
+import TimetableLarge from "./TimetableLarge";
+import TimetableSmall from "./TimetableSmall";
 
 const Footer = dynamic(() => import("./Footer"));
 
-function Layout({
-  handleKey,
-  ...props
-}: props & { handleKey: (key: string) => void }) {
+function Layout(
+  { handleKey, ...props }: props & { handleKey: (key: string) => void },
+) {
   const [isShortHours, setIsShortHours] = useState(false);
   const [isSnowing, setIsSnowing] = useState(false);
 

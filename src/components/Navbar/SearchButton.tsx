@@ -1,13 +1,15 @@
 import { MagnifyingGlassCircleIcon } from "@heroicons/react/24/outline";
 import React from "react";
 
-function SearchButton({
-  searchDialog,
-  setSearchDialog,
-}: {
-  searchDialog: boolean;
-  setSearchDialog: React.Dispatch<React.SetStateAction<boolean>>;
-}) {
+function SearchButton(
+  {
+    searchDialog,
+    setSearchDialog,
+  }: {
+    searchDialog: boolean;
+    setSearchDialog: React.Dispatch<React.SetStateAction<boolean>>;
+  },
+) {
   return (
     <button
       onClick={() => setSearchDialog(!searchDialog)}

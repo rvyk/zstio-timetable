@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
+import React, { useEffect, useState } from "react";
 import { handleSelect } from "./functions";
 
 function DropdownClass({ classes }: { classes: nameValueType[] }) {
@@ -52,7 +52,7 @@ function DropdownClass({ classes }: { classes: nameValueType[] }) {
                   "class",
                   "dropdownSearchClass",
                   filteredClasses[0],
-                  setLastSelect
+                  setLastSelect,
                 );
                 router.push(`/class/${filteredClasses[0].value}`);
               }
@@ -80,7 +80,7 @@ function DropdownClass({ classes }: { classes: nameValueType[] }) {
                     "class",
                     "dropdownSearchClass",
                     classPrefix,
-                    setLastSelect
+                    setLastSelect,
                   )
                 }
               >

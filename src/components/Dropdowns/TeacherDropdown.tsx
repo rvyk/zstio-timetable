@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
+import React, { useEffect, useState } from "react";
 import { handleSelect } from "./functions";
 
 function DropdownTeacher({ teachers }: { teachers: nameValueType[] }) {
@@ -52,7 +52,7 @@ function DropdownTeacher({ teachers }: { teachers: nameValueType[] }) {
                   "teacher",
                   "dropdownSearchTeacher",
                   filteredTeachers[0],
-                  setLastSelect
+                  setLastSelect,
                 );
                 router.push(`/teacher/${filteredTeachers[0].value}`);
               }
@@ -80,7 +80,7 @@ function DropdownTeacher({ teachers }: { teachers: nameValueType[] }) {
                     "teacher",
                     "dropdownSearchTeacher",
                     teacher,
-                    setLastSelect
+                    setLastSelect,
                   )
                 }
               >

@@ -1,63 +1,60 @@
-import React, { useCallback, useEffect } from "react";
-import { useRouter } from "next/router";
-import Layout from "../components/Layout";
-import fetchTimetableList from "@/utils/fetchTimetableList";
+import Substitutions from "@/components/Substitutions";
 import fetchTimetable from "@/utils/fetchTimetable";
+import fetchTimetableList from "@/utils/fetchTimetableList";
+import { getSubstitutionsObject } from "@/utils/getter";
 import { convertTextDate, removeUndefined } from "@/utils/helpers";
 import { GetStaticPaths } from "next";
+import { useRouter } from "next/router";
 import { GetStaticProps, NextPage } from "next/types";
-import axios from "axios";
-import { load } from "cheerio";
-import Substitutions from "@/components/Substitutions";
-import { getSubstitutionsObject } from "@/utils/getter";
+import { useCallback, useEffect } from "react";
+import Layout from "../components/Layout";
 
 const MainRoute: NextPage<props> = ({ ...props }) => {
   const router = useRouter();
 
-  if (router.query.all.toString() === "zastepstwa") {
+  if (router.query.all.toString() === "zastepstwa")
     return <Substitutions {...props} />;
-  } else {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    const handleKey = useCallback(
-      (key: string) => {
-        const data = router?.query?.all[0];
-        if (data) {
-          const currentNumber = parseInt(router.query.all[1]);
-          const changeTo =
-            key === "ArrowRight" ? currentNumber + 1 : currentNumber - 1;
-          const dataToPropertyMap = {
-            class: "classes",
-            room: "rooms",
-            teacher: "teachers",
-          };
-          const propertyName = dataToPropertyMap[data];
-          if (propertyName) {
-            const maxNumber = props[propertyName].length;
-            if (changeTo >= 1 && changeTo <= maxNumber) {
-              router.push(`/${data}/${changeTo}`, undefined, { scroll: false });
-            }
+
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const handleKey = useCallback(
+    (key: string) => {
+      const data = router?.query?.all[0];
+      if (data) {
+        const currentNumber = parseInt(router.query.all[1]);
+        const changeTo =
+          key === "ArrowRight" ? currentNumber + 1 : currentNumber - 1;
+        const dataToPropertyMap = {
+          class: "classes",
+          room: "rooms",
+          teacher: "teachers",
+        };
+        const propertyName = dataToPropertyMap[data];
+        if (propertyName) {
+          const maxNumber = props[propertyName].length;
+          if (changeTo >= 1 && changeTo <= maxNumber) {
+            router.push(`/${data}/${changeTo}`, undefined, { scroll: false });
           }
         }
-      },
-      [props, router]
-    );
+      }
+    },
+    [props, router],
+  );
 
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    useEffect(() => {
-      const handleKeyDown = (e: KeyboardEvent) => {
-        if (e.key === "ArrowRight" || e.key === "ArrowLeft") {
-          e.preventDefault();
-          handleKey(e.key);
-        }
-      };
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "ArrowRight" || e.key === "ArrowLeft") {
+        e.preventDefault();
+        handleKey(e.key);
+      }
+    };
 
-      window.addEventListener("keydown", handleKeyDown);
-      return () => {
-        window.removeEventListener("keydown", handleKeyDown);
-      };
-    }, [handleKey]);
-    return <Layout {...props} handleKey={handleKey} />;
-  }
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [handleKey]);
+  return <Layout {...props} handleKey={handleKey} />;
 };
 
 export const getStaticPaths: GetStaticPaths = async () => {
@@ -121,7 +118,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
       validDate: convertTextDate(timetableListData?.getVersionInfo()),
       days: timetableListData?.getDays(),
     },
-    ""
+    "",
   );
 
   const {

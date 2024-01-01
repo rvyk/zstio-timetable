@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
 
-function ShortHours({
-  setIsShortHours,
-  isShortHours,
-}: {
-  setIsShortHours: React.Dispatch<React.SetStateAction<boolean>>;
-  isShortHours: boolean;
-}) {
+function ShortHours(
+  {
+    setIsShortHours,
+    isShortHours,
+  }: {
+    setIsShortHours: React.Dispatch<React.SetStateAction<boolean>>;
+    isShortHours: boolean;
+  },
+) {
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {

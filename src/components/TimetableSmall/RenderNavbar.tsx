@@ -2,17 +2,19 @@ import React from "react";
 import Navbar from "../Navbar";
 import ShortHours from "../Table/ShortHours";
 
-function RenderNavbar({
-  isShortHours,
-  setIsShortHours,
-  searchDialog,
-  setSearchDialog,
-}: {
-  isShortHours: boolean;
-  setIsShortHours: React.Dispatch<React.SetStateAction<boolean>>;
-  searchDialog: boolean;
-  setSearchDialog: React.Dispatch<React.SetStateAction<boolean>>;
-}) {
+function RenderNavbar(
+  {
+    isShortHours,
+    setIsShortHours,
+    searchDialog,
+    setSearchDialog,
+  }: {
+    isShortHours: boolean;
+    setIsShortHours: React.Dispatch<React.SetStateAction<boolean>>;
+    searchDialog: boolean;
+    setSearchDialog: React.Dispatch<React.SetStateAction<boolean>>;
+  },
+) {
   return (
     <div className="flex items-center w-full bg-zinc-50 dark:bg-[#2b2b2b]">
       <div className="inline-flex rounded-md shadow-sm ml-4" role="group">

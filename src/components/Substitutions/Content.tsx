@@ -6,27 +6,29 @@ import {
 } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
-function Content({
-  props,
-  checkedTeachers,
-  checkedBranches,
-}: {
-  props: props;
-  checkedTeachers: any;
-  checkedBranches: any;
-}) {
+import { useEffect, useState } from "react";
+function Content(
+  {
+    props,
+    checkedTeachers,
+    checkedBranches,
+  }: {
+    props: props;
+    checkedTeachers: any;
+    checkedBranches: any;
+  },
+) {
   const [isCopied, setIsCopied] = useState(false);
   const router = useRouter();
   let filtersTeachers: Array<string>, filtersBranches: Array<string>;
   if (checkedTeachers) {
     filtersTeachers = Object.keys(checkedTeachers).filter(
-      (key) => checkedTeachers[key]
+      (key) => checkedTeachers[key],
     );
   }
   if (checkedBranches) {
     filtersBranches = Object.keys(checkedBranches).filter(
-      (key) => checkedBranches[key]
+      (key) => checkedBranches[key],
     );
   }
 
@@ -126,7 +128,7 @@ function Content({
                                 >
                                   {item}
                                 </span>
-                              )
+                              ),
                           )}
                         </>
                       )}
@@ -191,7 +193,7 @@ function Content({
                             </tr>
                           );
                         }
-                      }
+                      },
                     )}
 
                     <>
@@ -229,7 +231,7 @@ function Content({
                   </tfoot>
                 </table>
               );
-            }
+            },
           )}
         </div>
       ) : (

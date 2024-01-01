@@ -1,14 +1,14 @@
+import { allApiType } from "@/types/api";
 import fetchTimetableList from "@/utils/fetchTimetableList";
-import NodeCache from "node-cache";
 import axios from "axios";
 import { NextApiRequest, NextApiResponse } from "next";
-import { allApiType } from "@/types/api";
+import NodeCache from "node-cache";
 
 const cache = new NodeCache({ stdTTL: 5400 });
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse,
 ) {
   try {
     const cachedData: allApiType = cache.get("all");
@@ -30,7 +30,7 @@ export default async function handler(
 
     for (const { value } of classes) {
       const res = await axios.get(
-        `${process.env.NEXT_PUBLIC_HOST}/api/timetable/getTimetable?id=s${value}`
+        `${process.env.NEXT_PUBLIC_HOST}/api/timetable/getTimetable?id=s${value}`,
       );
       responseObj.classes.push({
         title: res.data.title,

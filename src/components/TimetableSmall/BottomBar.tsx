@@ -5,18 +5,17 @@ import {
   ChevronLeftIcon,
   ChevronRightIcon,
 } from "@heroicons/react/24/outline";
+import MobileDetect from "mobile-detect";
 import Link from "next/link";
-import React, { Fragment, useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import { Fragment, useEffect, useState } from "react";
+import { lock, unlock } from "tua-body-scroll-lock";
 import Footer from "../Footer";
 import Search from "./Search";
-import { useRouter } from "next/router";
-import { lock, unlock } from "tua-body-scroll-lock";
-import MobileDetect from "mobile-detect";
 
-function BottomBar({
-  handleKey,
-  ...props
-}: props & { handleKey: (key: string) => void }) {
+function BottomBar(
+  { handleKey, ...props }: props & { handleKey: (key: string) => void },
+) {
   let {
     rooms = [],
     teachers = [],

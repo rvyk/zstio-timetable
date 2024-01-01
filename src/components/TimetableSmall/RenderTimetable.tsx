@@ -1,3 +1,5 @@
+import { getSubstitution, getSubstitutionForGroup } from "@/utils/getter";
+import { cases, days } from "@/utils/helpers";
 import shortHours from "@/utils/shortHours";
 import {
   AcademicCapIcon,
@@ -8,24 +10,24 @@ import {
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import CurrentLesson from "../Table/CurrentLesson";
-import { getSubstitution, getSubstitutionForGroup } from "@/utils/getter";
-import { cases, days } from "@/utils/helpers";
 
-function RenderTimetable({
-  hours,
-  lessons,
-  isShortHours,
-  substitutions,
-  selectedDay,
-  setSelectedDay,
-}: {
-  hours: hourType[];
-  lessons: lessonType[][][];
-  isShortHours: boolean;
-  substitutions: substitutionTableType;
-  selectedDay: number;
-  setSelectedDay: React.Dispatch<React.SetStateAction<number>>;
-}) {
+function RenderTimetable(
+  {
+    hours,
+    lessons,
+    isShortHours,
+    substitutions,
+    selectedDay,
+    setSelectedDay,
+  }: {
+    hours: hourType[];
+    lessons: lessonType[][][];
+    isShortHours: boolean;
+    substitutions: substitutionTableType;
+    selectedDay: number;
+    setSelectedDay: React.Dispatch<React.SetStateAction<number>>;
+  },
+) {
   const [isScreenSmall, setIsScreenSmall] = useState(false);
 
   const maxLessons =
@@ -80,7 +82,7 @@ function RenderTimetable({
       <div id="timetable" className="min-w-full mb-[4.25rem] dark:bg-[#202020]">
         {Object.entries(hours).length > 1 ? (
           Object.entries(
-            isShortHours ? shortHours.slice(0, maxLessons) : hours
+            isShortHours ? shortHours.slice(0, maxLessons) : hours,
           )?.map(([key, hour]: [string, hourType], hourIndex) => {
             const { number, timeFrom, timeTo } = hour;
 
@@ -112,7 +114,7 @@ function RenderTimetable({
                     let substitution = getSubstitution(
                         selectedDay,
                         hourIndex,
-                        substitutions
+                        substitutions,
                       ),
                       possibleSubstitution = substitution,
                       sure = true;
@@ -124,7 +126,7 @@ function RenderTimetable({
                         lesson.groupName,
                         substitutions,
                         hourIndex,
-                        selectedDay
+                        selectedDay,
                       );
                       if (!substitution) {
                         sure = false;
@@ -135,14 +137,14 @@ function RenderTimetable({
                                 lessonCheck.groupName,
                                 substitutions,
                                 hourIndex,
-                                selectedDay
+                                selectedDay,
                               ) &&
                               checkIndex !== index
                             ) {
                               substitution = undefined;
                               sure = true;
                             }
-                          }
+                          },
                         );
                       }
                     } else if (
@@ -230,7 +232,7 @@ function RenderTimetable({
                               prefetch={false}
                               href={`/zastepstwa?teachers=${substitution?.teacher.replaceAll(
                                 " ",
-                                "+"
+                                "+",
                               )}&branches=${substitution?.branch}`}
                             >
                               <ExclamationCircleIcon
@@ -245,7 +247,7 @@ function RenderTimetable({
                           <a
                             href={`/zastepstwa?teachers=${substitution?.teacher.replaceAll(
                               " ",
-                              "+"
+                              "+",
                             )}&branches=${substitution?.branch}`}
                           >
                             {cases.includes(substitution?.case) === false && (

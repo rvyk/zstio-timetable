@@ -3,24 +3,26 @@ import { cases } from "@/utils/helpers";
 import { ExclamationCircleIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 
-function RenderLesson({
-  lessonIndex,
-  dayIndex,
-  day,
-  substitutions,
-}: {
-  lessonIndex: number;
-  dayIndex: number;
-  day: lessonType[][];
-  substitutions: substitutionTableType;
-}) {
+function RenderLesson(
+  {
+    lessonIndex,
+    dayIndex,
+    day,
+    substitutions,
+  }: {
+    lessonIndex: number;
+    dayIndex: number;
+    day: lessonType[][];
+    substitutions: substitutionTableType;
+  },
+) {
   return (
     <>
       {day[lessonIndex]?.map((lesson, subIndex) => {
         let substitution = getSubstitution(
             dayIndex,
             lessonIndex,
-            substitutions
+            substitutions,
           ),
           possibleSubstitution = substitution,
           sure = true;
@@ -29,7 +31,7 @@ function RenderLesson({
             lesson.groupName,
             substitutions,
             lessonIndex,
-            dayIndex
+            dayIndex,
           );
           if (!substitution) {
             sure = false;
@@ -39,7 +41,7 @@ function RenderLesson({
                   lessonCheck?.groupName,
                   substitutions,
                   lessonIndex,
-                  dayIndex
+                  dayIndex,
                 ) &&
                 checkIndex !== subIndex
               ) {
@@ -124,7 +126,7 @@ function RenderLesson({
                   prefetch={false}
                   href={`/zastepstwa?teachers=${possibleSubstitution?.teacher.replaceAll(
                     " ",
-                    "+"
+                    "+",
                   )}&branches=${possibleSubstitution?.branch}`}
                 >
                   <ExclamationCircleIcon
@@ -140,7 +142,7 @@ function RenderLesson({
               <a
                 href={`/zastepstwa?teachers=${substitution?.teacher.replaceAll(
                   " ",
-                  "+"
+                  "+",
                 )}&branches=${substitution?.branch}`}
               >
                 {cases.includes(substitution?.case) === false && (

@@ -1,7 +1,7 @@
-import axios from "axios";
-import { useCallback, useEffect, useState } from "react";
-import { usePathname } from "next/navigation";
 import { ArrowRightIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import axios from "axios";
+import { usePathname } from "next/navigation";
+import { useCallback, useEffect, useState } from "react";
 
 const MessageType: {
   [key in MessageType]: {

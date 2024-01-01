@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
 import { initFlowbite } from "flowbite";
+import { useEffect } from "react";
 
 function Layout({ children }) {
   useEffect(() => {

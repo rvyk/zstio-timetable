@@ -1,5 +1,5 @@
-import axios, { AxiosError } from "axios";
 import { Table } from "@wulkanowy/timetable-parser";
+import axios, { AxiosError } from "axios";
 
 const fetchTimetable = async (
   id: string,

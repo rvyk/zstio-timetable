@@ -1,16 +1,18 @@
-import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
 import { getQueryItems } from "@/utils/getQueryItems";
 import { handleCheckboxChange } from "@/utils/handleCheckboxChange";
 import { XMarkIcon } from "@heroicons/react/24/outline";
+import { useRouter } from "next/router";
+import React, { useEffect, useState } from "react";
 
-function DropdownTeachers({
-  props,
-  onCheckboxChangeTeacher,
-}: {
-  props: props;
-  onCheckboxChangeTeacher: (checkedItems: any[]) => void;
-}) {
+function DropdownTeachers(
+  {
+    props,
+    onCheckboxChangeTeacher,
+  }: {
+    props: props;
+    onCheckboxChangeTeacher: (checkedItems: any[]) => void;
+  },
+) {
   const [searchTeachers, setSearchTeachers] = useState("");
   const [checkedItems, setCheckedItems] = useState<any>({});
   const router = useRouter();
@@ -61,7 +63,7 @@ function DropdownTeachers({
           const uniqueTeachers: Array<string> = [];
           table.zastepstwa.forEach((item: substitutionType) => {
             const isTeacherExist = uniqueTeachers.some(
-              (teacher) => teacher === item.teacher
+              (teacher) => teacher === item.teacher,
             );
             if (!isTeacherExist) {
               uniqueTeachers.push(item.teacher);
@@ -82,7 +84,7 @@ function DropdownTeachers({
                           e,
                           "teachers",
                           router,
-                          setCheckedItems
+                          setCheckedItems,
                         )
                       }
                       className="w-4 h-4 text-blue-600 dark:text-[#282828] bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-[#171717] dark:ring-offset-[#171717] dark:focus:ring-offset-[#171717] focus:ring-2 dark:bg-[#282828] dark:border-[#202020]"

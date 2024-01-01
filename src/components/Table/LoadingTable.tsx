@@ -1,5 +1,4 @@
 import { ArrowPathIcon } from "@heroicons/react/24/outline";
-import React from "react";
 import RenderTableHeader from "../Timetable/RenderTableHeader";
 
 function LoadingTable({ small }: { small: boolean }) {

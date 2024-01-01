@@ -24,7 +24,7 @@ module.exports = withPWA({
 
     if (!NEXT_PUBLIC_TIMETABLE_URL || !NEXT_PUBLIC_HOST) {
       throw new Error(
-        "Environment variable NEXT_PUBLIC_TIMETABLE_URL and NEXT_PUBLIC_HOST must be defined"
+        "Environment variable NEXT_PUBLIC_TIMETABLE_URL and NEXT_PUBLIC_HOST must be defined",
       );
     }
 

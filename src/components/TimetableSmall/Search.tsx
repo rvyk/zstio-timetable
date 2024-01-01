@@ -1,24 +1,25 @@
 import { Menu, Transition } from "@headlessui/react";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
-import Link from "next/link";
 import React, { Fragment, useState } from "react";
 
-function Search({
-  teachers,
-  rooms,
-  classes,
-  setIsMenuExpanded,
-  handleSelect,
-}: {
-  teachers: nameValueType[];
-  rooms: nameValueType[];
-  classes: nameValueType[];
-  setIsMenuExpanded: React.Dispatch<React.SetStateAction<boolean>>;
-  handleSelect: (name: any, value: any) => void;
-}) {
+function Search(
+  {
+    teachers,
+    rooms,
+    classes,
+    setIsMenuExpanded,
+    handleSelect,
+  }: {
+    teachers: nameValueType[];
+    rooms: nameValueType[];
+    classes: nameValueType[];
+    setIsMenuExpanded: React.Dispatch<React.SetStateAction<boolean>>;
+    handleSelect: (name: any, value: any) => void;
+  },
+) {
   const [searchResults, setSearchResults]: [
     { name: string; type: string; value: string }[],
-    any
+    any,
   ] = useState([]);
   const [query, setQuery] = useState("");
   const [showList, setShowList] = useState(false);
@@ -36,7 +37,7 @@ function Search({
 
     const teacherResults = teachers
       .filter((teacher) =>
-        teacher.name.toLowerCase().includes(term.toLowerCase())
+        teacher.name.toLowerCase().includes(term.toLowerCase()),
       )
       .slice(0, 8)
       .map((teacher) => ({ ...teacher, type: "teacher" }));

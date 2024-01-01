@@ -1,4 +1,4 @@
-import axios, { AxiosResponse } from "axios";
+import axios from "axios";
 import { load } from "cheerio";
 
 export const getTeacher = async (title) => {
@@ -87,7 +87,7 @@ export async function getSubstitutionsObject(): Promise<substitutions> {
 export const getSubstitution = (
   dayIndex: number,
   lessonIndex: number,
-  substitutions: substitutionTableType
+  substitutions: substitutionTableType,
 ) => {
   if (dayIndex === substitutions?.dayIndex)
     return substitutions?.zastepstwa?.filter((subs) => {
@@ -99,7 +99,7 @@ export const getSubstitutionForGroup = (
   groupName: string,
   substitutions: substitutionTableType,
   lessonIndex: number,
-  dayIndex: number
+  dayIndex: number,
 ) => {
   if (dayIndex === substitutions?.dayIndex)
     return substitutions?.zastepstwa?.filter((subs) => {

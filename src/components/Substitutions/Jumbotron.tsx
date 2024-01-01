@@ -1,12 +1,11 @@
-import Image from "next/legacy/image";
-import Link from "next/link";
-import React from "react";
 import Event from "@/components/Event";
 import {
   ChevronDownIcon,
   UserCircleIcon,
   UserGroupIcon,
 } from "@heroicons/react/24/outline";
+import Image from "next/legacy/image";
+import Link from "next/link";
 
 const buttons = [
   {
@@ -25,13 +24,9 @@ const buttons = [
   },
 ];
 
-const ButtonComponent = ({
-  id,
-  dropdownToggle,
-  dropdownPlacement,
-  text,
-  icon: Icon,
-}) => (
+const ButtonComponent = (
+  { id, dropdownToggle, dropdownPlacement, text, icon: Icon },
+) => (
   <button
     id={id}
     data-dropdown-toggle={dropdownToggle}

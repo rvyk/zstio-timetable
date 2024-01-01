@@ -1,18 +1,20 @@
 import Link from "next/link";
 
-export default function RenderTableHeader({
-  hours,
-  validDate,
-  generatedDate,
-  status,
-  timeTableID,
-}: {
-  hours: hourType[];
-  validDate: string;
-  generatedDate: string;
-  status: boolean;
-  timeTableID: string;
-}) {
+export default function RenderTableHeader(
+  {
+    hours,
+    validDate,
+    generatedDate,
+    status,
+    timeTableID,
+  }: {
+    hours: hourType[];
+    validDate: string;
+    generatedDate: string;
+    status: boolean;
+    timeTableID: string;
+  },
+) {
   return (
     <tfoot
       className={`bg-[#2B161B] ${

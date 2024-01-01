@@ -1,17 +1,14 @@
-import Head from "next/head";
-import axios from "axios";
-import React, { useEffect, useState } from "react";
-import Layout from "@/components/Substitutions/Layout";
-import Jumbotron from "@/components/Substitutions/Jumbotron";
-import DropdownTeachers from "@/components/Substitutions/DropdownTeachers";
-import DropdownBranch from "@/components/Substitutions/DropdownBranch";
-import Content from "@/components/Substitutions/Content";
 import Footer from "@/components/Footer";
+import Message from "@/components/Message";
 import Navbar from "@/components/Navbar";
 import Snow from "@/components/SnowEasteregg";
-import { GetStaticProps } from "next";
-import { load } from "cheerio";
-import Message from "@/components/Message";
+import Content from "@/components/Substitutions/Content";
+import DropdownBranch from "@/components/Substitutions/DropdownBranch";
+import DropdownTeachers from "@/components/Substitutions/DropdownTeachers";
+import Jumbotron from "@/components/Substitutions/Jumbotron";
+import Layout from "@/components/Substitutions/Layout";
+import Head from "next/head";
+import { useEffect, useState } from "react";
 
 export default function Substitutions({ ...props }: props) {
   const [checkedTeachers, setCheckedTeachers] = useState<any[]>([]);

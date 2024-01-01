@@ -6,7 +6,7 @@ export const handleCheckboxChange = (
   router: NextRouter,
   setCheckedItems: React.Dispatch<
     React.SetStateAction<{ [key: string]: boolean }>
-  >
+  >,
 ) => {
   const { name, checked } = event.target;
 
@@ -40,6 +40,6 @@ export const handleCheckboxChange = (
       },
     },
     undefined,
-    { shallow: true }
+    { shallow: true },
   );
 };

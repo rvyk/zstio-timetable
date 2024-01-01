@@ -1,13 +1,13 @@
-import fetchTimetable from "@/utils/fetchTimetable";
-import NodeCache from "node-cache";
-import { NextApiRequest, NextApiResponse } from "next";
 import { timetableApiType } from "@/types/api";
+import fetchTimetable from "@/utils/fetchTimetable";
+import { NextApiRequest, NextApiResponse } from "next";
+import NodeCache from "node-cache";
 
 const cache = new NodeCache({ stdTTL: 5400 });
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse,
 ) {
   try {
     let id = req?.query?.id?.toString();
