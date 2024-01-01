@@ -39,7 +39,7 @@ export default async function handler(
 
     if (process.env.NEXT_PUBLIC_SUBSTITUTIONS_URL) {
       const substitutions = (await getSubstitutionsObject()).tables[0];
-      if (substitutions.dayIndex === dayIndex) {
+      if (substitutions?.dayIndex === dayIndex) {
         substitutions.zastepstwa.forEach((sub) => {
           if (
             sub.class &&
