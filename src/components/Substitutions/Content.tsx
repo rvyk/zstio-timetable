@@ -7,17 +7,15 @@ import {
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-function Content(
-  {
-    props,
-    checkedTeachers,
-    checkedBranches,
-  }: {
-    props: props;
-    checkedTeachers: any;
-    checkedBranches: any;
-  },
-) {
+function Content({
+  props,
+  checkedTeachers,
+  checkedBranches,
+}: {
+  props: props;
+  checkedTeachers: any;
+  checkedBranches: any;
+}) {
   const [isCopied, setIsCopied] = useState(false);
   const router = useRouter();
   let filtersTeachers: Array<string>, filtersBranches: Array<string>;
@@ -162,10 +160,10 @@ function Content(
                           return (
                             <tr
                               className={`text-gray-600 dark:text-gray-300 border-b ${
-                                rowCounter % 2 === 0
+                                rowCounter % 2 != 0
                                   ? "bg-white dark:bg-[#191919]"
                                   : "bg-gray-50 dark:bg-[#202020]"
-                              } dark:border-[#181818] `}
+                              } dark:border-[#181818]`}
                               key={index}
                             >
                               <td
