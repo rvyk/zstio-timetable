@@ -23,6 +23,7 @@ type emptyApiType = {
 };
 
 type timetableApiType = {
+  success: boolean;
   title: string;
   days: string[];
   generatedDate: string;

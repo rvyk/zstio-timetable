@@ -39,6 +39,7 @@ export default async function handler(
     }
 
     const timeTableObj: timetableApiType = {
+      success: true,
       title: timetableList.getTitle(),
       days: timetableList.getDayNames(),
       generatedDate: timetableList.getGeneratedDate(),

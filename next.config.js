@@ -29,14 +29,14 @@ module.exports = withPWA({
     }
 
     const rewrites = [
-      {
-        source: "/proxy/getTimetable/:path",
-        destination: `${NEXT_PUBLIC_TIMETABLE_URL}/plany/:path`,
-      },
-      {
-        source: "/proxy/getTimetableList",
-        destination: `${NEXT_PUBLIC_TIMETABLE_URL}/lista.html`,
-      },
+      // {
+      //   source: "/proxy/getTimetable/:path",
+      //   destination: `${NEXT_PUBLIC_TIMETABLE_URL}/plany/:path`,
+      // },
+      // {
+      //   source: "/proxy/getTimetableList",
+      //   destination: `${NEXT_PUBLIC_TIMETABLE_URL}/lista.html`,
+      // },
     ];
 
     if (NEXT_PUBLIC_CMS) {

@@ -2,27 +2,24 @@ import { List, TimetableList } from "@wulkanowy/timetable-parser";
 import axios, { AxiosError } from "axios";
 
 const fetchTimetableList = async (): Promise<{
-  data: List;
+  data: List | null;
   ok: boolean;
-  err: AxiosError;
+  err: AxiosError | null;
 }> => {
-  let timeTableList: List;
-  let timeTableOk = false;
-  let err: AxiosError;
   try {
     const res = await axios.get(
-      `${process.env.NEXT_PUBLIC_HOST}/proxy/getTimetableList`,
+      `${process.env.NEXT_PUBLIC_TIMETABLE_URL}/lista.html`,
     );
 
     if (res.data) {
-      timeTableList = new TimetableList(res.data).getList();
-      timeTableOk = true;
+      const timeTableList = new TimetableList(res.data).getList();
+      return { data: timeTableList, ok: true, err: null };
     }
-  } catch (e) {
-    err = e;
+  } catch (err) {
+    return { data: null, ok: false, err };
   }
 
-  return { data: timeTableList, ok: timeTableOk, err };
+  return { data: null, ok: false, err: null };
 };
 
 export default fetchTimetableList;
