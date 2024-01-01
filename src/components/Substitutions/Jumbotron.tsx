@@ -46,7 +46,7 @@ const ButtonComponent = ({
 
 function Jumbotron({ props }: { props: props }) {
   return (
-    <div className="py-8 px-4 mx-auto max-w-screen-xl text-center">
+    <div className="py-8 px-4 mx-auto max-w-screen-xl text-center lg:py-16">
       <div className="flex justify-center flex-col md:flex-row items-center mb-4 md:mb-0 -ml-0 md:-ml-16">
         <Link
           prefetch={false}
