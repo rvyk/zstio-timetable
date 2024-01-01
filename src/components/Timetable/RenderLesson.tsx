@@ -3,45 +3,48 @@ import { cases } from "@/utils/helpers";
 import { ExclamationCircleIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 
-function RenderLesson(
-  {
-    lessonIndex,
-    dayIndex,
-    day,
-    substitutions,
-  }: {
-    lessonIndex: number;
-    dayIndex: number;
-    day: lessonType[][];
-    substitutions: substitutionTableType;
-  },
-) {
+function RenderLesson({
+  lessonIndex,
+  dayIndex,
+  day,
+  substitutions,
+  className,
+}: {
+  lessonIndex: number;
+  dayIndex: number;
+  day: lessonType[][];
+  substitutions: substitutionTableType;
+  className: string;
+}) {
   return (
     <>
       {day[lessonIndex]?.map((lesson, subIndex) => {
         let substitution = getSubstitution(
             dayIndex,
             lessonIndex,
+            className,
             substitutions,
           ),
           possibleSubstitution = substitution,
           sure = true;
         if (substitution && day[lessonIndex]?.length > 1) {
           substitution = getSubstitutionForGroup(
-            lesson.groupName,
-            substitutions,
-            lessonIndex,
             dayIndex,
+            lessonIndex,
+            className,
+            lesson?.groupName,
+            substitutions,
           );
           if (!substitution) {
             sure = false;
             day[lessonIndex]?.map((lessonCheck, checkIndex) => {
               if (
                 getSubstitutionForGroup(
-                  lessonCheck?.groupName,
-                  substitutions,
-                  lessonIndex,
                   dayIndex,
+                  lessonIndex,
+                  className,
+                  lessonCheck.groupName,
+                  substitutions,
                 ) &&
                 checkIndex !== subIndex
               ) {

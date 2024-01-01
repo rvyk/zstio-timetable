@@ -11,23 +11,23 @@ import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import CurrentLesson from "../Table/CurrentLesson";
 
-function RenderTimetable(
-  {
-    hours,
-    lessons,
-    isShortHours,
-    substitutions,
-    selectedDay,
-    setSelectedDay,
-  }: {
-    hours: hourType[];
-    lessons: lessonType[][][];
-    isShortHours: boolean;
-    substitutions: substitutionTableType;
-    selectedDay: number;
-    setSelectedDay: React.Dispatch<React.SetStateAction<number>>;
-  },
-) {
+function RenderTimetable({
+  hours,
+  lessons,
+  isShortHours,
+  substitutions,
+  selectedDay,
+  setSelectedDay,
+  className,
+}: {
+  hours: hourType[];
+  lessons: lessonType[][][];
+  isShortHours: boolean;
+  substitutions: substitutionTableType;
+  selectedDay: number;
+  setSelectedDay: React.Dispatch<React.SetStateAction<number>>;
+  className: string;
+}) {
   const [isScreenSmall, setIsScreenSmall] = useState(false);
 
   const maxLessons =
@@ -114,6 +114,7 @@ function RenderTimetable(
                     let substitution = getSubstitution(
                         selectedDay,
                         hourIndex,
+                        className,
                         substitutions,
                       ),
                       possibleSubstitution = substitution,
@@ -123,10 +124,11 @@ function RenderTimetable(
                       lessons[selectedDay][number - 1]?.length > 1
                     ) {
                       substitution = getSubstitutionForGroup(
+                        selectedDay,
+                        hourIndex,
+                        className,
                         lesson.groupName,
                         substitutions,
-                        hourIndex,
-                        selectedDay,
                       );
                       if (!substitution) {
                         sure = false;
@@ -134,10 +136,11 @@ function RenderTimetable(
                           (lessonCheck, checkIndex) => {
                             if (
                               getSubstitutionForGroup(
+                                selectedDay,
+                                hourIndex,
+                                className,
                                 lessonCheck.groupName,
                                 substitutions,
-                                hourIndex,
-                                selectedDay,
                               ) &&
                               checkIndex !== index
                             ) {

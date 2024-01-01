@@ -2,19 +2,19 @@ import shortHours from "../../utils/shortHours";
 import CurrentLesson from "../Table/CurrentLesson";
 import RenderLesson from "./RenderLesson";
 
-export default function RenderTableRow(
-  {
-    hours,
-    isShortHours,
-    lessons,
-    substitutions,
-  }: {
-    hours: hourType[];
-    isShortHours: boolean;
-    lessons: lessonType[][][];
-    substitutions: substitutionTableType;
-  },
-) {
+export default function RenderTableRow({
+  hours,
+  isShortHours,
+  lessons,
+  substitutions,
+  className,
+}: {
+  hours: hourType[];
+  isShortHours: boolean;
+  lessons: lessonType[][][];
+  substitutions: substitutionTableType;
+  className: string;
+}) {
   const maxLessons =
     typeof hours == "object" &&
     Math.max(Object.entries(hours).length, ...lessons.map((day) => day.length));
@@ -57,6 +57,7 @@ export default function RenderTableRow(
                     key={`${day}-${dayIndex}`}
                   >
                     <RenderLesson
+                      className={className}
                       lessonIndex={lessonIndex}
                       dayIndex={dayIndex}
                       day={day}

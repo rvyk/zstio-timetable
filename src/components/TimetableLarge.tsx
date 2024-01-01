@@ -8,16 +8,14 @@ import RenderTableFooter from "./Timetable/RenderTableFooter";
 import RenderTableHeader from "./Timetable/RenderTableHeader";
 import RenderTableRow from "./Timetable/RenderTableRow";
 
-function TimetableLarge(
-  {
-    isShortHours,
-    setIsShortHours,
-    ...props
-  }: props & {
-    isShortHours: boolean;
-    setIsShortHours: React.Dispatch<React.SetStateAction<boolean>>;
-  },
-) {
+function TimetableLarge({
+  isShortHours,
+  setIsShortHours,
+  ...props
+}: props & {
+  isShortHours: boolean;
+  setIsShortHours: React.Dispatch<React.SetStateAction<boolean>>;
+}) {
   const { isReady } = useRouter();
 
   let {
@@ -84,6 +82,7 @@ function TimetableLarge(
 
             <RenderTableHeader />
             <RenderTableRow
+              className={title}
               hours={hours}
               isShortHours={isShortHours}
               lessons={lessons}

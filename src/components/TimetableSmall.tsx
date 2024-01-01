@@ -8,30 +8,28 @@ import RenderTimetable from "./TimetableSmall/RenderTimetable";
 
 const BottomBar = dynamic(() => import("./TimetableSmall/BottomBar"));
 
-function TimetableSmall(
-  {
-    handleKey,
-    setIsShortHours,
-    isShortHours,
-    searchDialog,
-    setSearchDialog,
-    selectedDay,
-    setSelectedDay,
-    ...props
-  }: props & {
-    handleKey: (key: string) => void;
-    setIsShortHours: React.Dispatch<React.SetStateAction<boolean>>;
-    isShortHours: boolean;
-    searchDialog: boolean;
-    setSearchDialog: React.Dispatch<React.SetStateAction<boolean>>;
-    selectedDay: number;
-    setSelectedDay: React.Dispatch<React.SetStateAction<number>>;
-  },
-) {
+function TimetableSmall({
+  handleKey,
+  setIsShortHours,
+  isShortHours,
+  searchDialog,
+  setSearchDialog,
+  selectedDay,
+  setSelectedDay,
+  ...props
+}: props & {
+  handleKey: (key: string) => void;
+  setIsShortHours: React.Dispatch<React.SetStateAction<boolean>>;
+  isShortHours: boolean;
+  searchDialog: boolean;
+  setSearchDialog: React.Dispatch<React.SetStateAction<boolean>>;
+  selectedDay: number;
+  setSelectedDay: React.Dispatch<React.SetStateAction<number>>;
+}) {
   const { isReady } = useRouter();
 
   let {
-    timeTable: { hours = [], lessons = [[], [], [], [], []] } = {
+    timeTable: { hours = [], title = "", lessons = [[], [], [], [], []] } = {
       hours: [],
       generatedDate: "",
       title: "",
@@ -54,6 +52,7 @@ function TimetableSmall(
       />
       <Message />
       <RenderTimetable
+        className={title}
         setSelectedDay={setSelectedDay}
         selectedDay={selectedDay}
         hours={hours}
