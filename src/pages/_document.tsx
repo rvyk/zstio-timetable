@@ -2,7 +2,7 @@ import { Head, Html, Main, NextScript } from "next/document";
 
 export default function Document() {
   return (
-    <Html lang="pl" suppressHydrationWarning={true}>
+    <Html lang="pl">
       <Head>
         <meta
           name="msapplication-TileImage"
@@ -51,7 +51,7 @@ export default function Document() {
         {/* ----- */}
         <link rel="manifest" href="/manifest.json" />
       </Head>
-      <body suppressHydrationWarning={true}>
+      <body className="bg-[#fff] dark:bg-[#202020]">
         <Main />
         <NextScript />
       </body>
