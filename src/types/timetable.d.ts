@@ -11,3 +11,10 @@ export type TimeTableData = {
   text: string;
   id: string;
 };
+
+export type Table = {
+  status: boolean;
+  timeTable: TimeTableData;
+  timeTableList: List;
+  substitutions: Substitutions;
+};

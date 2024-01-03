@@ -1,23 +1,21 @@
 import fetchSubstitutions from "@/actions/fetch/substitutions";
 import fetchTimetable from "@/actions/fetch/timetable";
 import fetchTimetableList from "@/actions/fetch/timetableList";
-import { TimeTableData } from "@/types/timetable";
+import Layout from "@/components/layout";
+import { Table, TimeTableData } from "@/types/timetable";
 import { List } from "@wulkanowy/timetable-parser";
 import { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import { useEffect } from "react";
-
-type Table = {
-  status: boolean;
-  timeTable: TimeTableData;
-  timeTableList: List;
-  substitutions: Substitutions;
-};
 
 const MainRoute: NextPage<Table> = ({ ...props }) => {
   useEffect(() => {
     console.log(props.timeTable);
   }, [props.timeTable]);
-  return <div>Hello</div>;
+  return (
+    <Layout timeTable={props.timeTable}>
+      <p>Page with data</p>
+    </Layout>
+  );
 };
 
 export const getStaticPaths: GetStaticPaths = async () => {
