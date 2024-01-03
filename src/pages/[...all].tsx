@@ -5,14 +5,10 @@ import Layout from "@/components/layout";
 import { Table, TimeTableData } from "@/types/timetable";
 import { List } from "@wulkanowy/timetable-parser";
 import { GetStaticPaths, GetStaticProps, NextPage } from "next";
-import { useEffect } from "react";
 
 const MainRoute: NextPage<Table> = ({ ...props }) => {
-  useEffect(() => {
-    console.log(props.timeTable);
-  }, [props.timeTable]);
   return (
-    <Layout timeTable={props.timeTable}>
+    <Layout props={props}>
       <p>Page with data</p>
     </Layout>
   );

@@ -2,12 +2,16 @@ import RedirectButton from "@/components/navbar-buttons/redirect";
 import ThemeButton from "@/components/navbar-buttons/theme";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { useTheme } from "next-themes";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import PWAButton from "../navbar-buttons/pwa";
 
 function Navbar() {
   const { theme, setTheme, resolvedTheme, systemTheme } = useTheme();
   const [isClient, setIsClient] = useState(false);
+
+  const pathname = usePathname();
+  const isIndex = pathname === "/";
 
   const toggleTheme = () => {
     if (theme === "system") {
@@ -22,7 +26,7 @@ function Navbar() {
     setIsClient(true);
   }, []);
 
-  if (!resolvedTheme || !isClient) return null;
+  if (!resolvedTheme || !isClient || isIndex) return null;
 
   return (
     <div className="w-screen h-14 block lg:absolute top-0">

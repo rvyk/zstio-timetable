@@ -52,6 +52,12 @@ const config = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        light: {
+          scrollbar: "#2b161b",
+        },
+        dark: {
+          scrollbar: "#141414",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",

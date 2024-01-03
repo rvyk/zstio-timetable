@@ -1,14 +1,14 @@
 import Jumbotron from "@/components/ui/jumbotron";
 import Navbar from "@/components/ui/navbar";
-import { TimeTableData } from "@/types/timetable";
+import { Table } from "@/types/timetable";
 import Head from "next/head";
 
 function Layout({
-  timeTable,
+  props: { timeTable, timeTableList, status, substitutions },
   children,
 }: {
-  timeTable?: TimeTableData;
-  children: React.ReactNode;
+  props: Table;
+  children?: React.ReactNode;
 }) {
   return (
     <>
@@ -27,8 +27,12 @@ function Layout({
         />
       </Head>
       <Navbar />
-      <Jumbotron />
-      {children}
+      <Jumbotron
+        timeTableList={timeTableList}
+        substitutions={substitutions}
+        timeTable={timeTable}
+      />
+      <div>{children}</div>
     </>
   );
 }

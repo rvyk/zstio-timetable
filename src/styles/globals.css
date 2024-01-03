@@ -74,3 +74,93 @@
     @apply bg-background text-foreground;
   }
 }
+
+body {
+  overflow-x: hidden;
+}
+
+@media (max-width: 1024px) {
+  .dark *::-webkit-scrollbar {
+    width: 0px !important;
+    height: 0px !important;
+  }
+
+  *::-webkit-scrollbar {
+    width: 0px !important;
+    height: 0px !important;
+  }
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+/* Scrollbar styles for light theme */
+*::-webkit-scrollbar {
+  width: 4px;
+  height: 6px;
+}
+
+*::-webkit-scrollbar-track {
+  background-color: #dfe9eb;
+}
+
+*::-webkit-scrollbar-track:hover {
+  background-color: #b8c0c2;
+}
+
+*::-webkit-scrollbar-track:active {
+  background-color: #b8c0c2;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: theme("colors.light.scrollbar");
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background-color: theme("colors.light.scrollbar");
+}
+
+*::-webkit-scrollbar-thumb:active {
+  background-color: #212f4d;
+}
+
+/* Scrollbar styles for dark theme */
+
+.dark *::-webkit-scrollbar {
+  width: 5px;
+  height: 6px;
+}
+
+.dark *::-webkit-scrollbar-track {
+  background-color: #dfe9eb;
+}
+
+.dark *::-webkit-scrollbar-track:hover {
+  background-color: #b8c0c2;
+}
+
+.dark *::-webkit-scrollbar-track:active {
+  background-color: #b8c0c2;
+}
+
+.dark *::-webkit-scrollbar-thumb {
+  background-color: theme("colors.dark.scrollbar");
+}
+
+.dark *::-webkit-scrollbar-thumb:hover {
+  background-color: theme("colors.dark.scrollbar");
+}
+
+.dark *::-webkit-scrollbar-thumb:active {
+  background-color: #181818;
+}

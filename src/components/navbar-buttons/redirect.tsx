@@ -26,9 +26,9 @@ function RedirectButton() {
       }
     >
       {isSubstitution ? (
-        <UpdateIcon className="w-4 h-4" />
-      ) : (
         <TableIcon className="w-4 h-4" />
+      ) : (
+        <UpdateIcon className="w-4 h-4" />
       )}
     </ButtonWrapper>
   );

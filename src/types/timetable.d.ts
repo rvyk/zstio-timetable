@@ -1,4 +1,4 @@
-import { TableHour, TableLesson } from "@wulkanowy/timetable-parser";
+import { List, TableHour, TableLesson } from "@wulkanowy/timetable-parser";
 
 export type TimeTableData = {
   hours: Record<number, TableHour>;

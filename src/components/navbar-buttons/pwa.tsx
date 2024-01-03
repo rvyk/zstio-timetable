@@ -1,6 +1,6 @@
+import ButtonWrapper from "@/components/navbar-buttons/wrapper";
 import { DownloadIcon } from "@radix-ui/react-icons";
 import { useEffect, useState } from "react";
-import ButtonWrapper from "./wrapper";
 
 interface BeforeInstallPromptEvent extends Event {
   readonly platforms: Array<string>;
