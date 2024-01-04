@@ -1,5 +1,5 @@
 import ButtonWrapper from "@/components/navbar-buttons/wrapper";
-import { MoonIcon, SunIcon } from "@radix-ui/react-icons";
+import { MoonIcon, SunIcon } from "@heroicons/react/24/outline";
 
 function ThemeButton({
   toggleTheme,

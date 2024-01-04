@@ -1,10 +1,10 @@
+import PWAButton from "@/components/navbar-buttons/pwa";
 import RedirectButton from "@/components/navbar-buttons/redirect";
 import ThemeButton from "@/components/navbar-buttons/theme";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { useTheme } from "next-themes";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import PWAButton from "../navbar-buttons/pwa";
 
 function Navbar() {
   const { theme, setTheme, resolvedTheme, systemTheme } = useTheme();
@@ -33,11 +33,11 @@ function Navbar() {
       <div className="absolute top-2 right-2 z-30 transition-all flex">
         <TooltipProvider>
           <PWAButton />
+          <RedirectButton />
           <ThemeButton
             toggleTheme={toggleTheme}
             resolvedTheme={resolvedTheme}
           />
-          <RedirectButton />
         </TooltipProvider>
       </div>
     </div>

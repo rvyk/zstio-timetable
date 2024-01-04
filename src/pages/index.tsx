@@ -7,7 +7,7 @@ function Home({ ...props }) {
   const router = useRouter();
 
   useEffect(() => {
-    const lastSelect = localStorage.getItem("LastSelect");
+    const lastSelect = localStorage.getItem("lastSelect");
 
     lastSelect ? router.replace(lastSelect) : router.replace("/class/1");
   }, [router]);

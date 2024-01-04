@@ -1,5 +1,8 @@
 import ButtonWrapper from "@/components/navbar-buttons/wrapper";
-import { TableIcon, UpdateIcon } from "@radix-ui/react-icons";
+import {
+  ArrowPathRoundedSquareIcon,
+  CalendarDaysIcon,
+} from "@heroicons/react/24/outline";
 import { usePathname } from "next/navigation";
 import { useRouter } from "next/router";
 
@@ -26,9 +29,9 @@ function RedirectButton() {
       }
     >
       {isSubstitution ? (
-        <TableIcon className="w-4 h-4" />
+        <CalendarDaysIcon className="w-4 h-4" />
       ) : (
-        <UpdateIcon className="w-4 h-4" />
+        <ArrowPathRoundedSquareIcon className="w-4 h-4" />
       )}
     </ButtonWrapper>
   );

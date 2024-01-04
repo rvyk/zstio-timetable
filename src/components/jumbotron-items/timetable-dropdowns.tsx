@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -5,15 +7,20 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Input } from "@/components/ui/input";
 import {
   AcademicCapIcon,
+  ChevronDownIcon,
   MagnifyingGlassIcon,
   MapPinIcon,
   UsersIcon,
 } from "@heroicons/react/24/outline";
 import { List, ListItem } from "@wulkanowy/timetable-parser";
-import { NextRouter, useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
+
+type FilterKeys = "class" | "teacher" | "room";
+
 function TimetableDropdowns({
   timeTableList: { classes, rooms, teachers },
 }: {
@@ -23,7 +30,7 @@ function TimetableDropdowns({
     <>
       {!!classes?.length && (
         <TimetableDropdownItem
-          name="Klasy"
+          name="Oddziały"
           linkPrefix="class"
           item={classes}
           icon={<AcademicCapIcon />}
@@ -62,25 +69,60 @@ function TimetableDropdownItem({
   item: ListItem[];
   icon: any;
 }) {
-  const [filter, setFilter] = useState({
-    class: "",
-    teacher: "",
-    room: "",
-  });
-
-  const [lastSelect, setLastSelect] = useState("");
   const router = useRouter();
+
+  const [filter, setFilter] = useState("");
+
+  const [isOpened, setIsOpened] = useState(false);
+  const [lastSelect, setLastSelect] = useState("");
+
+  const items = useMemo(() => {
+    return item.filter((item: ListItem) =>
+      item.name.toLowerCase().includes(filter.toLowerCase()),
+    );
+  }, [item, filter]);
+
+  const handleSelect = useCallback(
+    (item: ListItem) => {
+      const link = `/${linkPrefix}/${item.value}`;
+      setLastSelect(link);
+      localStorage.setItem("lastSelect", link);
+      setIsOpened(false);
+      router.push(link);
+    },
+    [linkPrefix, router],
+  );
+
+  const onKeyDownHandler = (key: React.KeyboardEvent<HTMLInputElement>) => {
+    if (key.code !== "Enter" || items.length !== 1) return;
+    handleSelect(items[0]);
+  };
+
+  const translation = {
+    class: "oddział",
+    teacher: "nauczyciela",
+    room: "salę",
+  };
 
   useEffect(() => {
     setLastSelect(router.asPath);
   }, [router.asPath]);
 
   return (
-    <DropdownMenu>
+    <DropdownMenu
+      modal={false}
+      onOpenChange={() => setIsOpened(!isOpened)}
+      open={isOpened}
+    >
       <DropdownMenuTrigger asChild>
         <Button variant="dropdown" size="dropdown">
           <span className="h-5 w-5 mr-2">{icon}</span>
           {name}
+          <ChevronDownIcon
+            className={`w-4 h-4 ml-2 ${
+              isOpened && "rotate-180"
+            } transition-all`}
+          />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-60 mt-2 max-h-60 overflow-y-scroll bg-white rounded-lg shadow dark:bg-[#161616] border-0">
@@ -89,27 +131,27 @@ function TimetableDropdownItem({
             <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
               <MagnifyingGlassIcon className="w-5 h-5 text-gray-500 dark:text-gray-300" />
             </div>
-            <input
+            <Input
               type="text"
-              autoComplete="false"
-              id="input-group-search-class"
+              placeholder={`Wyszukaj ${translation[linkPrefix as FilterKeys]}`}
               className="block w-full p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 transition-all duration-200 focus:ring-[#2B161B] focus:border-[#2B161B] dark:bg-[#171717] dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-[#202020] dark:focus:border-[#202020]"
-              placeholder="Wyszukaj oddział"
+              value={filter}
+              onChange={(e) => setFilter(e.target.value)}
+              onKeyDown={onKeyDownHandler}
             />
           </div>
         </div>
 
-        {item.map((item) => (
+        {items.map((item) => (
           <DropdownMenuItem
+            tabIndex={0}
             key={item.value}
-            className={`flex items-center my-0.5 pl-2 rounded hover:bg-gray-100 dark:hover:bg-[#202020] ${
+            className={`flex items-center my-0.5 pl-2 rounded hover:bg-gray-100 dark:hover:bg-[#202020] dark:focus:bg-[#202020] ${
               lastSelect === `/${linkPrefix}/${item.value}`
                 ? "bg-gray-100 dark:bg-[#202020]"
                 : ""
             }`}
-            onClick={() =>
-              handleSelect(linkPrefix, item, setLastSelect, router)
-            }
+            onClick={() => handleSelect(item)}
           >
             <p className="w-full py-1 ml-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">
               {item.name}
@@ -121,16 +163,4 @@ function TimetableDropdownItem({
   );
 }
 
-const handleSelect = (
-  linkPrefix: string,
-  item: ListItem,
-  setLastSelect: React.Dispatch<React.SetStateAction<string>>,
-  router: NextRouter,
-) => {
-  const link = `/${linkPrefix}/${item.value}`;
-  setLastSelect(link);
-  localStorage.setItem("lastSelect", link);
-
-  router.push(link);
-};
 export default TimetableDropdowns;
