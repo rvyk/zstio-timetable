@@ -8,6 +8,7 @@ import DropdownTeachers from "@/components/Substitutions/DropdownTeachers";
 import Jumbotron from "@/components/Substitutions/Jumbotron";
 import Layout from "@/components/Substitutions/Layout";
 import Head from "next/head";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
 export default function Substitutions({ ...props }: props) {
@@ -21,6 +22,9 @@ export default function Substitutions({ ...props }: props) {
   };
 
   const [isSnowing, setIsSnowing] = useState(false);
+
+  const router = useRouter();
+  const isQueryExist = Object.keys(router.query).some((key) => key !== "all");
 
   useEffect(() => {
     if (!localStorage.getItem("isSnowing")) return;
@@ -39,6 +43,12 @@ export default function Substitutions({ ...props }: props) {
           content="Zastępstwa ZSTIO w odświeżonym stylu."
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        {isQueryExist && (
+          <link
+            rel="canonical"
+            href="https://plan.zstiojar.edu.pl/zastepstwa"
+          />
+        )}
       </Head>
       <Layout>
         <Message />
