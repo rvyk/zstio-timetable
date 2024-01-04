@@ -67,7 +67,7 @@ function TimetableDropdownItem({
   name: string;
   linkPrefix: string;
   item: ListItem[];
-  icon: any;
+  icon: React.ReactNode;
 }) {
   const router = useRouter();
 
@@ -98,7 +98,7 @@ function TimetableDropdownItem({
     handleSelect(items[0]);
   };
 
-  const translation = {
+  const translations = {
     class: "oddział",
     teacher: "nauczyciela",
     room: "salę",
@@ -132,8 +132,9 @@ function TimetableDropdownItem({
               <MagnifyingGlassIcon className="w-5 h-5 text-gray-500 dark:text-gray-300" />
             </div>
             <Input
+              autoFocus
               type="text"
-              placeholder={`Wyszukaj ${translation[linkPrefix as FilterKeys]}`}
+              placeholder={`Wyszukaj ${translations[linkPrefix as FilterKeys]}`}
               className="block w-full p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 transition-all duration-200 focus:ring-[#2B161B] focus:border-[#2B161B] dark:bg-[#171717] dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-[#202020] dark:focus:border-[#202020]"
               value={filter}
               onChange={(e) => setFilter(e.target.value)}
