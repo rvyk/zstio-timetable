@@ -12,6 +12,7 @@ import {
   MagnifyingGlassIcon,
   UsersIcon,
 } from "@heroicons/react/24/outline";
+import { useRouter } from "next/router";
 import React, { useMemo, useState } from "react";
 
 type CheckedItemsType = {
@@ -70,6 +71,8 @@ function SubstitutionDropdown({
   const [checkedItems, setCheckedItems] = useState<CheckedItemsType>({});
   const [isOpened, setIsOpened] = useState(false);
 
+  const router = useRouter();
+
   const translations = {
     teachers: "Filtruj wg. nauczycieli",
     branches: "Filtruj wg. oddziałów",
@@ -84,14 +87,20 @@ function SubstitutionDropdown({
   const handleCheckbox = (category: string, item: string) => {
     setCheckedItems((prevItems) => {
       const currentItems = prevItems[category] || [];
-      if (currentItems.includes(item)) {
-        return {
-          ...prevItems,
-          [category]: currentItems.filter((i) => i !== item),
-        };
+      const updatedItems = currentItems.includes(item)
+        ? currentItems.filter((i) => i !== item)
+        : [...currentItems, item];
+
+      const queryValue = updatedItems.join(",");
+
+      const newQuery = { ...router.query };
+      if (!updatedItems.length) {
+        delete newQuery[category];
       } else {
-        return { ...prevItems, [category]: [...currentItems, item] };
+        newQuery[category] = queryValue;
       }
+      router.replace({ query: newQuery }, undefined, { shallow: true });
+      return { ...prevItems, [category]: updatedItems };
     });
   };
 
@@ -132,6 +141,7 @@ function SubstitutionDropdown({
           <DropdownMenuCheckboxItem
             key={index}
             onCheckedChange={() => handleCheckbox(name, substitution)}
+            onSelect={(e) => e.preventDefault()}
             checked={checkedItems[name]?.includes(substitution) || false}
             className={`flex items-center my-0.5 pl-2 rounded hover:bg-gray-100 dark:hover:bg-[#202020] dark:focus:bg-[#202020] ${
               checkedItems[name]?.includes(substitution) &&

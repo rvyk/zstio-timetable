@@ -14,9 +14,9 @@ function Layout({
     <>
       <Head>
         <link rel="canonical" href="https://plan.zstiojar.edu.pl" />
-        {/* <title>
+        <title>
           {timeTable?.title && `${timeTable?.title} | `}ZSTiO - Plan lekcji
-        </title> */}
+        </title>
         <meta
           property="og:title"
           content={
