@@ -1,5 +1,6 @@
 import PWAButton from "@/components/navbar-buttons/pwa";
 import RedirectButton from "@/components/navbar-buttons/redirect";
+import RoomLookup from "@/components/navbar-buttons/room-lookup";
 import ThemeButton from "@/components/navbar-buttons/theme";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { useTheme } from "next-themes";
@@ -12,6 +13,7 @@ function Navbar() {
 
   const pathname = usePathname();
   const isIndex = pathname === "/";
+  const isSubstitutions = pathname === "/zastepstwa";
 
   const toggleTheme = () => {
     if (theme === "system") {
@@ -33,6 +35,7 @@ function Navbar() {
       <div className="absolute top-2 right-2 z-30 transition-all flex">
         <TooltipProvider>
           <PWAButton />
+          {!isSubstitutions && <RoomLookup />}
           <RedirectButton />
           <ThemeButton
             toggleTheme={toggleTheme}

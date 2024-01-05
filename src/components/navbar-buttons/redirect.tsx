@@ -18,7 +18,8 @@ function RedirectButton() {
     }
 
     const lastSelect = localStorage.getItem("lastSelect");
-    lastSelect ? router.replace(lastSelect) : router.replace("/class/1");
+    const route = lastSelect || "/class/1";
+    router.replace(route);
   };
 
   return (

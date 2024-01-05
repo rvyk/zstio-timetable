@@ -1,7 +1,7 @@
-import fetchSubstitutions from "@/actions/fetch/substitutions";
-import fetchTimetable from "@/actions/fetch/timetable";
-import fetchTimetableList from "@/actions/fetch/timetableList";
 import Layout from "@/components/layout";
+import fetchSubstitutions from "@/lib/fetchers/fetchSubstitutions";
+import fetchTimetable from "@/lib/fetchers/fetchTimetable";
+import fetchTimetableList from "@/lib/fetchers/fetchTimetableList";
 import { Table, TimeTableData } from "@/types/timetable";
 import { List } from "@wulkanowy/timetable-parser";
 import { GetStaticPaths, GetStaticProps, NextPage } from "next";

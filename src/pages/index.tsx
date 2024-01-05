@@ -8,12 +8,12 @@ function Home({ ...props }) {
 
   useEffect(() => {
     const lastSelect = localStorage.getItem("lastSelect");
-
-    lastSelect ? router.replace(lastSelect) : router.replace("/class/1");
+    const route = lastSelect || "/class/1";
+    router.replace(route);
   }, [router]);
 
   return (
-    <div className="h-screen flex justify-center items-center">
+    <div className="h-screen flex justify-center items-center flex-col">
       <Layout props={props as Table} />
     </div>
   );
