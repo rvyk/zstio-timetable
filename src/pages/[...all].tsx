@@ -7,11 +7,7 @@ import { List } from "@wulkanowy/timetable-parser";
 import { GetStaticPaths, GetStaticProps, NextPage } from "next";
 
 const MainRoute: NextPage<Table> = ({ ...props }) => {
-  return (
-    <Layout props={props}>
-      <p>Page with data</p>
-    </Layout>
-  );
+  return <Layout props={props} />;
 };
 
 export const getStaticPaths: GetStaticPaths = async () => {
