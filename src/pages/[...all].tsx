@@ -43,7 +43,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 export const getStaticProps: GetStaticProps = async (context) => {
   if (!context?.params) return { props: {} };
 
-  const { data: timeTable } = await fetchTimetable(context);
+  const { timeTable } = await fetchTimetable(context);
 
   const {
     data: { classes = [], teachers = [], rooms = [] },

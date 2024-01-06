@@ -19,13 +19,15 @@ function Content({ substitutions, timeTable }: TableType) {
     return <Substitutions substitutions={substitutions} />;
   }
 
-  return (
-    <Timetable
-      timeTable={timeTable}
-      substitutions={substitutions}
-      isShortHours={isShortHours}
-    />
-  );
+  if (timeTable.status) {
+    return (
+      <Timetable
+        timeTable={timeTable}
+        substitutions={substitutions}
+        isShortHours={isShortHours}
+      />
+    );
+  }
 }
 
 export default Content;

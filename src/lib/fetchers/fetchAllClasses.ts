@@ -19,12 +19,14 @@ const fetchAllClasses = async () => {
 
     for (const { value } of classes) {
       const context = { params: { all: ["room", value] } };
-      const timetable = await fetchTimetable(context);
+      const {
+        timeTable: { data },
+      } = await fetchTimetable(context);
 
       responseObj.classes.push({
-        title: timetable.data?.title ?? "",
+        title: data.title ?? "",
         id: value,
-        lessons: timetable.data?.lessons ?? [],
+        lessons: data.lessons ?? [],
       });
     }
 

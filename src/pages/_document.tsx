@@ -51,7 +51,7 @@ export default function Document() {
         {/* ----- */}
         <link rel="manifest" href="/manifest.json" />
       </Head>
-      <body className="bg-[#F7F3F5] dark:bg-[#171717] min-h-screen w-full">
+      <body className="bg-[#F7F3F5] dark:bg-[#171717] min-h-screen w-full flex justify-center flex-col">
         <Main />
         <NextScript />
       </body>

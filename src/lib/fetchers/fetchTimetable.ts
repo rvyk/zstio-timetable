@@ -16,14 +16,14 @@ const removeUndefined = (obj: any, value: any) =>
 
 const fetchTimetable = async (
   context: GetStaticPropsContext,
-): Promise<{ data: TimeTable; err?: AxiosError }> => {
+): Promise<{ timeTable: TimeTable; err?: AxiosError }> => {
   const { params } = context;
 
   const param0 = params?.all?.[0] ?? "";
   const param1 = params?.all?.[1] ?? "";
 
   if (param0 == "zastepstwa") {
-    return { data: { status: false, data: {} as TimeTableData } };
+    return { timeTable: { status: false, data: {} as TimeTableData } };
   }
 
   const idMap: Record<string, string> = {
@@ -62,9 +62,9 @@ const fetchTimetable = async (
       "",
     );
 
-    return { data: { status: true, data } };
+    return { timeTable: { status: true, data } };
   } catch (err: AxiosError | any) {
-    return { data: { status: false, data: {} as TimeTableData }, err };
+    return { timeTable: { status: false, data: {} as TimeTableData }, err };
   }
 };
 
