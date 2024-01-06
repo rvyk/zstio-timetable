@@ -1,12 +1,12 @@
 import { ThemeProvider } from "@/components/theme-provider";
+import { TooltipProvider } from "@/components/ui/tooltip";
 import "@/styles/globals.css";
-import { NextUIProvider } from "@nextui-org/react";
 import { AppProps } from "next/app";
 import Head from "next/head";
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
-    <NextUIProvider>
+    <TooltipProvider>
       <ThemeProvider
         attribute="class"
         defaultTheme="system"
@@ -18,6 +18,6 @@ export default function App({ Component, pageProps }: AppProps) {
         </Head>
         <Component {...pageProps} />
       </ThemeProvider>
-    </NextUIProvider>
+    </TooltipProvider>
   );
 }

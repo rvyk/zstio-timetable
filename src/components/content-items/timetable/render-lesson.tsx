@@ -1,3 +1,8 @@
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { getSubstitution, getSubstitutionForGroup } from "@/lib/substitutions";
 import { cases } from "@/lib/utils";
 import { ExclamationCircleIcon } from "@heroicons/react/24/outline";
@@ -60,7 +65,6 @@ function RenderLesson({
           <div
             key={`${day}-${lessonIndex}-${subIndex}`}
             className="flex flex-col"
-            id={substitution ? "substitutionAvailableTest" : undefined}
           >
             <div className="flex flex-row">
               <div
@@ -112,7 +116,6 @@ function RenderLesson({
               )}
               {lesson?.roomId && lesson?.room && (
                 <Link
-                  target="_blank"
                   prefetch={false}
                   href={`/room/${lesson?.roomId}`}
                   className={`flex items-center mr-1 ${
@@ -126,19 +129,23 @@ function RenderLesson({
               )}
 
               {possibleSubstitution && !sure && (
-                <Link
-                  prefetch={false}
-                  href={`/zastepstwa?teachers=${possibleSubstitution?.teacher.replaceAll(
-                    " ",
-                    "+",
-                  )}&branches=${possibleSubstitution?.branch}`}
-                >
-                  <ExclamationCircleIcon
-                    className="w-5 h-5 text-red-600 dark:text-red-400"
-                    data-tooltip-id="content_tooltips"
-                    data-tooltip-html={`${possibleSubstitution?.case}? <br /> (Sprawdź zastępstwa)`}
-                  />
-                </Link>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Link
+                      prefetch={false}
+                      href={`/zastepstwa?teachers=${possibleSubstitution?.teacher.replaceAll(
+                        " ",
+                        "+",
+                      )}&branches=${possibleSubstitution?.branch}`}
+                    >
+                      <ExclamationCircleIcon className="w-5 h-5 text-red-600 dark:text-red-400" />
+                    </Link>
+                  </TooltipTrigger>
+                  <TooltipContent className="text-center">
+                    <p>{possibleSubstitution?.case}?</p>
+                    <p>(Sprawdź zastępstwa)</p>
+                  </TooltipContent>
+                </Tooltip>
               )}
             </div>
 
