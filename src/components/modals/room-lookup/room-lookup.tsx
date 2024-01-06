@@ -52,28 +52,30 @@ function RoomLookupModal({
             lekcyjnej.
           </DialogDescription>
         </DialogHeader>
-        <div className="flex justify-center flex-wrap py-2">
-          <ToggleGroup
-            defaultValue={selectedDay.toString()}
-            onValueChange={(e) => setSelectedDay(+e)}
-            type="single"
-          >
-            {days.map((day) => (
-              <ToggleGroupItem
-                key={day.index}
-                value={day.index.toString()}
-                variant="roomLookup"
-                size="roomLookup"
-              >
-                <p>{day.short}</p>
-              </ToggleGroupItem>
-            ))}
-          </ToggleGroup>
 
+        <ToggleGroup
+          defaultValue={selectedDay.toString()}
+          onValueChange={(e) => setSelectedDay(+e)}
+          type="single"
+          className="flex justify-center flex-wrap pt-2"
+        >
+          {days.map((day) => (
+            <ToggleGroupItem
+              key={day.index}
+              value={day.index.toString()}
+              variant="roomLookup"
+              size="roomLookup"
+            >
+              <p>{day.short}</p>
+            </ToggleGroupItem>
+          ))}
+        </ToggleGroup>
+
+        <div className="w-full flex justify-center">
           <Input
             type="number"
             placeholder="Numer lekcji"
-            className="bg-gray-50 block mt-2 w-1/2 p-2 border-gray-300 text-center dark:bg-[#171717] dark:border-0 outline-none"
+            className="bg-gray-50 block w-1/2 p-2 border-gray-300 text-center dark:bg-[#171717] dark:border-0 outline-none"
             onChange={(e) => {
               const value = e.target.value;
               setSelectedLesson(+value);
