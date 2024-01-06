@@ -3,7 +3,7 @@ import { Table } from "@/types/timetable";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 
-function Home({ ...props }) {
+function Home() {
   const router = useRouter();
 
   useEffect(() => {
@@ -12,7 +12,7 @@ function Home({ ...props }) {
     router.replace(route);
   }, [router]);
 
-  return <Layout props={props as Table} />;
+  return <Layout props={{} as Table} />;
 }
 
 export default Home;

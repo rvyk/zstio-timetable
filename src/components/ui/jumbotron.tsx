@@ -6,10 +6,18 @@ import Image from "next/legacy/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-const Jumbotron: React.FC<Table> = ({
+interface JumbotronProps {
+  substitutions: Table["substitutions"];
+  timeTableList: Table["timeTableList"];
+  timeTable: Table["timeTable"];
+  errorMsg?: string;
+}
+
+const Jumbotron: React.FC<JumbotronProps> = ({
   substitutions,
   timeTableList,
   timeTable,
+  errorMsg,
 }) => {
   const pathname = usePathname();
   const isSubstitution = pathname === "/zastepstwa";
@@ -17,6 +25,20 @@ const Jumbotron: React.FC<Table> = ({
 
   const renderContent = () => {
     if (isIndex) return null;
+
+    if (errorMsg) {
+      return (
+        <div className="flex justify-center mb-5 flex-wrap items-center flex-col">
+          <p className="text-xl font-semibold mr-1 text-gray-600 lg:text-2xl dark:text-gray-300">
+            {errorMsg}
+          </p>
+          <p className="text-gray-600 dark:text-gray-300 lg:text-lg">
+            Spróbuj odświeżyć stronę lub zrób zrzut ekranu konsoli (klawisz F12)
+            i zgłoś ten błąd na platformie Github lub Vulcan.
+          </p>
+        </div>
+      );
+    }
 
     const substitutionsText =
       isSubstitution && substitutions.status
@@ -44,6 +66,7 @@ const Jumbotron: React.FC<Table> = ({
 
   const renderDropdowns = () => {
     if (isIndex) return <Loading />;
+    if (errorMsg) return null;
     if (isSubstitution && substitutions.status) {
       return <SubstitutionsDropdowns substitutions={substitutions} />;
     }

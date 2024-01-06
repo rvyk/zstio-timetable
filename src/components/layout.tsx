@@ -8,8 +8,10 @@ import Head from "next/head";
 
 function Layout({
   props: { timeTable, timeTableList, substitutions },
+  errorMsg,
 }: {
   props: Table;
+  errorMsg?: string;
 }) {
   return (
     <>
@@ -33,12 +35,15 @@ function Layout({
         timeTableList={timeTableList}
         substitutions={substitutions}
         timeTable={timeTable}
+        errorMsg={errorMsg}
       />
-      <Content
-        timeTable={timeTable}
-        substitutions={substitutions}
-        timeTableList={timeTableList}
-      />
+      {!errorMsg && (
+        <Content
+          timeTable={timeTable}
+          substitutions={substitutions}
+          timeTableList={timeTableList}
+        />
+      )}
       <Footer />
     </>
   );
