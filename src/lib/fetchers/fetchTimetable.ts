@@ -22,6 +22,10 @@ const fetchTimetable = async (
   const param0 = params?.all?.[0] ?? "";
   const param1 = params?.all?.[1] ?? "";
 
+  if (param0 == "zastepstwa") {
+    return { ok: true };
+  }
+
   const idMap: Record<string, string> = {
     class: `o${param1}`,
     teacher: `n${param1}`,

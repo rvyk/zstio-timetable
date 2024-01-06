@@ -32,6 +32,7 @@ function Layout({
         timeTableList={timeTableList}
         substitutions={substitutions}
         timeTable={timeTable}
+        status={status}
       />
       <Footer />
     </>
