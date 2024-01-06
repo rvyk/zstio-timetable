@@ -113,10 +113,10 @@ const DropdownMenuCheckboxItem = React.forwardRef<
         classNames={{
           icon: "text-white",
           wrapper: cn(
-            "transition-colors delay-75 bg-gray-100 dark:bg-[#282828] rounded border-2 border-gray-200 dark:border-[#202020]",
+            "transition-colors delay-75 bg-gray-100 dark:bg-[#282828] rounded border-2 border-gray-200 dark:border-[#202020] cursor-pointer",
             checked && "bg-blue-600 dark:bg-blue-700",
           ),
-          base: "ml-4",
+          base: "ml-4 cursor-default",
         }}
         isSelected={!!checked}
       />
