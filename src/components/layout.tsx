@@ -1,3 +1,4 @@
+import Content from "@/components/content";
 import Footer from "@/components/footer";
 import Messages from "@/components/messages";
 import Jumbotron from "@/components/ui/jumbotron";
@@ -6,7 +7,7 @@ import { Table } from "@/types/timetable";
 import Head from "next/head";
 
 function Layout({
-  props: { timeTable, timeTableList, status, substitutions },
+  props: { timeTable, timeTableList, substitutions },
 }: {
   props: Table;
 }) {
@@ -15,14 +16,14 @@ function Layout({
       <Head>
         <link rel="canonical" href="https://plan.zstiojar.edu.pl" />
         <title>
-          {[timeTable?.title, "ZSTiO - Plan lekcji"]
+          {[timeTable?.data?.title, "ZSTiO - Plan lekcji"]
             .filter(Boolean)
             .join(" | ")}
         </title>
         <meta
           property="og:title"
           content={`${
-            timeTable?.title ? `${timeTable?.title} | ` : ""
+            timeTable?.data?.title ? `${timeTable?.data?.title} | ` : ""
           }ZSTiO - Plan lekcji`}
         />
       </Head>
@@ -32,7 +33,11 @@ function Layout({
         timeTableList={timeTableList}
         substitutions={substitutions}
         timeTable={timeTable}
-        status={status}
+      />
+      <Content
+        timeTable={timeTable}
+        substitutions={substitutions}
+        timeTableList={timeTableList}
       />
       <Footer />
     </>

@@ -12,11 +12,7 @@ function Home({ ...props }) {
     router.replace(route);
   }, [router]);
 
-  return (
-    <div className="h-screen flex justify-center items-center flex-col">
-      <Layout props={props as Table} />
-    </div>
-  );
+  return <Layout props={props as Table} />;
 }
 
 export default Home;

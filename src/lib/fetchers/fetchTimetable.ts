@@ -1,5 +1,5 @@
 import { convertTextDate } from "@/lib/date";
-import { TimeTableData } from "@/types/timetable";
+import { TimeTable, TimeTableData } from "@/types/timetable";
 import { Table } from "@wulkanowy/timetable-parser";
 import axios, { AxiosError } from "axios";
 import _ from "lodash";
@@ -16,14 +16,14 @@ const removeUndefined = (obj: any, value: any) =>
 
 const fetchTimetable = async (
   context: GetStaticPropsContext,
-): Promise<{ ok: boolean; data?: TimeTableData; err?: AxiosError }> => {
+): Promise<{ data: TimeTable; err?: AxiosError }> => {
   const { params } = context;
 
   const param0 = params?.all?.[0] ?? "";
   const param1 = params?.all?.[1] ?? "";
 
   if (param0 == "zastepstwa") {
-    return { ok: true };
+    return { data: { status: false, data: {} as TimeTableData } };
   }
 
   const idMap: Record<string, string> = {
@@ -62,9 +62,9 @@ const fetchTimetable = async (
       "",
     );
 
-    return { data, ok: true };
+    return { data: { status: true, data } };
   } catch (err: AxiosError | any) {
-    return { ok: false, err };
+    return { data: { status: false, data: {} as TimeTableData }, err };
   }
 };
 

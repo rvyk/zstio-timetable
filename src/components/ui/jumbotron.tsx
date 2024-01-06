@@ -1,24 +1,15 @@
 import Loading from "@/components/jumbotron-items/loading";
 import SubstitutionsDropdowns from "@/components/jumbotron-items/substitutions-dropdowns";
 import TimetableDropdowns from "@/components/jumbotron-items/timetable-dropdowns";
-import { TimeTableData } from "@/types/timetable";
-import { List } from "@wulkanowy/timetable-parser";
+import { Table } from "@/types/timetable";
 import Image from "next/legacy/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-interface JumbotronProps {
-  substitutions: Substitutions;
-  timeTableList: List;
-  timeTable: TimeTableData;
-  status: boolean;
-}
-
-const Jumbotron: React.FC<JumbotronProps> = ({
+const Jumbotron: React.FC<Table> = ({
   substitutions,
   timeTableList,
   timeTable,
-  status,
 }) => {
   const pathname = usePathname();
   const isSubstitution = pathname === "/zastepstwa";
@@ -27,18 +18,24 @@ const Jumbotron: React.FC<JumbotronProps> = ({
   const renderContent = () => {
     if (isIndex) return null;
 
-    const text = isSubstitution
-      ? substitutions?.timeRange
-      : `${timeTable?.text} /`;
+    const substitutionsText =
+      isSubstitution && substitutions.status
+        ? substitutions?.timeRange
+        : "Wystąpił błąd podczas pobierania zastępstw";
+
+    const timeTableText =
+      !isSubstitution && timeTable.status
+        ? `${timeTable.data.text} /`
+        : `Nie znaleziono pasującego planu lekcji`;
 
     return (
       <div className="flex justify-center mb-5 flex-wrap items-center ">
         <p className="transition-all text-xl font-normal mr-1 hidden sm:flex text-gray-500 lg:text-2xl dark:text-gray-400">
-          {!status ? "Nie znaleziono pasującego planu lekcji" : text}
+          {!isSubstitution ? timeTableText : substitutionsText}
         </p>
-        {!isSubstitution && status && (
+        {!isSubstitution && timeTable.status && (
           <p className="transition-all text-xl font-bold text-gray-500 lg:text-2xl dark:text-gray-400">
-            {timeTable?.title}
+            {timeTable.data.title}
           </p>
         )}
       </div>
@@ -47,14 +44,14 @@ const Jumbotron: React.FC<JumbotronProps> = ({
 
   const renderDropdowns = () => {
     if (isIndex) return <Loading />;
-    if (isSubstitution) {
+    if (isSubstitution && substitutions.status) {
       return <SubstitutionsDropdowns substitutions={substitutions} />;
     }
     return <TimetableDropdowns timeTableList={timeTableList} />;
   };
 
   return (
-    <div className="py-8 relative px-4 mx-auto max-w-screen-xl text-center lg:py-16">
+    <div className="py-8 relative px-4 mx-auto max-w-screen-xl text-center">
       <div className="flex justify-center items-center flex-col sm:flex-row mb-4 sm:mb-0 -ml-0 sm:-ml-16">
         <Link
           prefetch={false}

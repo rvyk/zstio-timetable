@@ -31,18 +31,13 @@ function Navbar() {
   if (!resolvedTheme || !isClient || isIndex) return null;
 
   return (
-    <div className="w-screen h-14 block lg:absolute top-0">
-      <div className="absolute top-2 right-2 z-30 transition-all flex">
-        <TooltipProvider>
-          <PWAButton />
-          {!isSubstitutions && <RoomLookup />}
-          <RedirectButton />
-          <ThemeButton
-            toggleTheme={toggleTheme}
-            resolvedTheme={resolvedTheme}
-          />
-        </TooltipProvider>
-      </div>
+    <div className="absolute top-2 right-2 z-30 transition-all flex">
+      <TooltipProvider>
+        <PWAButton />
+        {!isSubstitutions && <RoomLookup />}
+        <RedirectButton />
+        <ThemeButton toggleTheme={toggleTheme} resolvedTheme={resolvedTheme} />
+      </TooltipProvider>
     </div>
   );
 }

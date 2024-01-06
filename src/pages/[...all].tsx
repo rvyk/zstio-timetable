@@ -2,7 +2,7 @@ import Layout from "@/components/layout";
 import fetchSubstitutions from "@/lib/fetchers/fetchSubstitutions";
 import fetchTimetable from "@/lib/fetchers/fetchTimetable";
 import fetchTimetableList from "@/lib/fetchers/fetchTimetableList";
-import { Table, TimeTableData } from "@/types/timetable";
+import { Table, TimeTable } from "@/types/timetable";
 import { List } from "@wulkanowy/timetable-parser";
 import { GetStaticPaths, GetStaticProps, NextPage } from "next";
 
@@ -43,15 +43,14 @@ export const getStaticPaths: GetStaticPaths = async () => {
 export const getStaticProps: GetStaticProps = async (context) => {
   if (!context?.params) return { props: {} };
 
-  const { data: timeTable, ok } = await fetchTimetable(context);
+  const { data: timeTable } = await fetchTimetable(context);
 
   const {
     data: { classes = [], teachers = [], rooms = [] },
   } = (await fetchTimetableList()) as { data: List };
 
   const props: Table = {
-    status: ok,
-    timeTable: timeTable ?? ({} as TimeTableData),
+    timeTable: timeTable ?? ({} as TimeTable),
     timeTableList: {
       classes,
       teachers,

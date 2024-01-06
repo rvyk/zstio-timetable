@@ -12,9 +12,13 @@ export type TimeTableData = {
   id: string;
 };
 
-export type Table = {
+export type TimeTable = {
   status: boolean;
-  timeTable: TimeTableData;
+  data: TimeTableData;
+};
+
+export type Table = {
+  timeTable: TimeTable;
   timeTableList: List;
   substitutions: Substitutions;
 };
