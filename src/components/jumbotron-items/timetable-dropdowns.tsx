@@ -113,7 +113,13 @@ function TimetableDropdownItem({
       open={isOpened}
     >
       <DropdownMenuTrigger asChild>
-        <Button variant="dropdown" size="dropdown">
+        <Button
+          variant="dropdown"
+          size="dropdown"
+          className={`${
+            isOpened && "dark:bg-[#131313] bg-[#73110e] text-white"
+          }`}
+        >
           <span className="h-5 w-5 mr-2">{icon}</span>
           {name}
           <ChevronDownIcon
@@ -123,7 +129,7 @@ function TimetableDropdownItem({
           />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-60 mt-2 max-h-60 overflow-y-scroll bg-white rounded-lg shadow dark:bg-[#161616] border-0">
+      <DropdownMenuContent className="w-60 mt-2 max-h-60 overflow-y-scroll bg-white rounded-l-lg shadow dark:bg-[#131313] border-0">
         <div className="p-3">
           <div className="relative">
             <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
@@ -145,9 +151,9 @@ function TimetableDropdownItem({
           <DropdownMenuItem
             tabIndex={0}
             key={item.value}
-            className={`flex items-center my-0.5 pl-2 rounded hover:bg-gray-100 dark:hover:bg-[#202020] dark:focus:bg-[#202020] ${
+            className={`flex items-center my-0.5 pl-2 rounded hover:bg-gray-200 dark:hover:bg-[#202020] dark:focus:bg-[#202020] ${
               lastSelect === `/${linkPrefix}/${item.value}`
-                ? "bg-gray-100 dark:bg-[#202020]"
+                ? "bg-gray-200 dark:bg-[#202020]"
                 : ""
             }`}
             onClick={() => handleSelect(item)}
