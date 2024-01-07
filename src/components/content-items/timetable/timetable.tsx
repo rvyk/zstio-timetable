@@ -85,8 +85,12 @@ const TimeTable: React.FC<TimeTableProps> = ({ timeTable, substitutions }) => {
         })
       ) : (
         <TableRow>
-          <TableCell>
-            <p> Nie znaleziono żadnych lekcji</p>
+          <TableCell
+            colSpan={7}
+            scope="row"
+            className="text-center font-semibold"
+          >
+            <p>Nie znaleziono żadnych lekcji</p>
           </TableCell>
         </TableRow>
       )}
