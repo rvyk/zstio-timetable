@@ -1,7 +1,6 @@
 "use client";
 
 import { cn, days } from "@/lib/utils";
-import { TimeTableData } from "@/types/timetable";
 import { ArrowPathIcon } from "@heroicons/react/24/outline";
 import { cva } from "class-variance-authority";
 
@@ -107,19 +106,18 @@ const TableHeader: React.FC<TableHeaderProps> = ({ isSubstitutions }) => {
 };
 
 interface TableRowProps {
-  index?: number;
+  reverseColor?: boolean;
   children?: React.ReactNode;
 }
 
-const TableRow: React.FC<TableRowProps> = ({ index, children }) => {
+const TableRow: React.FC<TableRowProps> = ({ reverseColor, children }) => {
   return (
     <tr
       className={`text-gray-600 dark:text-gray-300 border-b ${
-        index !== undefined && index % 2 === 0
+        reverseColor
           ? "bg-white dark:bg-[#191919]"
           : "bg-gray-50 dark:bg-[#202020]"
       } dark:border-[#181818] `}
-      key={index}
     >
       {children}
     </tr>
@@ -171,22 +169,11 @@ const TableCell: React.FC<TableCellProps> = ({
 };
 
 interface TableFooterProps {
-  hours?: TimeTableData["hours"];
   children?: React.ReactNode;
 }
 
-const TableFooter: React.FC<TableFooterProps> = ({ hours, children }) => {
-  return (
-    <tfoot
-      className={`bg-[#2B161B] ${
-        hours && Object.entries(hours)?.length % 2 == 0
-          ? "bg-white dark:bg-[#191919]"
-          : "bg-gray-50 dark:bg-[#202020]"
-      }`}
-    >
-      {children}
-    </tfoot>
-  );
+const TableFooter: React.FC<TableFooterProps> = ({ children }) => {
+  return <tfoot>{children}</tfoot>;
 };
 
 export { Table, TableCaption, TableCell, TableFooter, TableHeader, TableRow };

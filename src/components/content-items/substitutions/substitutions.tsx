@@ -28,7 +28,7 @@ const Substitutions: React.FC<{ substitutions: Substitutions }> = ({
               (substitution: Substitution, index: number) => {
                 return (
                   <tbody key={index}>
-                    <TableRow index={index}>
+                    <TableRow reverseColor={index % 2 == 0}>
                       <TableCell variant="substitutionNumber">
                         <div className="flex justify-center items-center flex-col">
                           {substitution.lesson}
@@ -55,7 +55,7 @@ const Substitutions: React.FC<{ substitutions: Substitutions }> = ({
               },
             )}
             <TableFooter>
-              <TableRow>
+              <TableRow reverseColor={index % 2 != 0}>
                 <TableCell scope="row" colSpan={7} className="font-semibold">
                   <Link
                     href={process.env.NEXT_PUBLIC_SUBSTITUTIONS_URL as string}

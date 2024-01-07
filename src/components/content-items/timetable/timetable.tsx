@@ -52,7 +52,7 @@ const TimeTable: React.FC<TimeTableProps> = ({ timeTable, substitutions }) => {
 
           return (
             <tbody key={lessonIndex}>
-              <TableRow index={lessonIndex}>
+              <TableRow key={lessonIndex} reverseColor={lessonIndex % 2 === 0}>
                 <TableCell variant="number">
                   <div className="flex justify-center items-center flex-col">
                     {number}
@@ -90,8 +90,10 @@ const TimeTable: React.FC<TimeTableProps> = ({ timeTable, substitutions }) => {
           </TableCell>
         </TableRow>
       )}
-      <TableFooter hours={timeTable.data.hours}>
-        <TableRow>
+      <TableFooter>
+        <TableRow
+          reverseColor={Object.entries(timeTable.data.hours).length % 2 == 0}
+        >
           {timeTable.status && (
             <TableCell
               colSpan={5}
