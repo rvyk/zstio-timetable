@@ -142,7 +142,10 @@ const TimetableDropdownItem: React.FC<TimetableDropdownItemProps> = ({
               className="block w-full p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 transition-all duration-200 focus:ring-[#2B161B] focus:border-[#2B161B] dark:bg-[#171717] dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-[#202020] dark:focus:border-[#202020]"
               value={filter}
               onChange={(e) => setFilter(e.target.value)}
-              onKeyDown={onKeyDownHandler}
+              onKeyDown={(e) => {
+                e.stopPropagation();
+                onKeyDownHandler(e);
+              }}
             />
           </div>
         </div>

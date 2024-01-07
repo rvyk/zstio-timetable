@@ -24,11 +24,7 @@ const Dropdown: React.FC<DropdownProps> = ({
   if (!data) return null;
 
   return (
-    <DropdownMenu
-      modal={false}
-      onOpenChange={() => setIsOpened(!isOpened)}
-      open={isOpened}
-    >
+    <DropdownMenu onOpenChange={() => setIsOpened(!isOpened)} open={isOpened}>
       <DropdownMenuTrigger asChild disabled={!!!data.length}>
         <Button
           variant="dropdown"
@@ -46,7 +42,6 @@ const Dropdown: React.FC<DropdownProps> = ({
       <DropdownMenuContent className="w-60 mt-2 max-h-60 overflow-y-scroll bg-white rounded-lg shadow dark:bg-[#161616] border-0">
         {data.map((item: any, index: number) => (
           <DropdownMenuItem
-            tabIndex={0}
             key={index}
             onClick={() => {
               setIsModalOpened(false);
