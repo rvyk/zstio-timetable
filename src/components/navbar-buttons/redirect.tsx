@@ -6,7 +6,7 @@ import {
 import { usePathname } from "next/navigation";
 import { useRouter } from "next/router";
 
-function RedirectButton() {
+const RedirectButton: React.FC = () => {
   const pathname = usePathname();
   const isSubstitution = pathname === "/zastepstwa";
 
@@ -36,6 +36,6 @@ function RedirectButton() {
       )}
     </ButtonWrapper>
   );
-}
+};
 
 export default RedirectButton;

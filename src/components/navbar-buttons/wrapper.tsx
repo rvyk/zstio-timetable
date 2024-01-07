@@ -6,15 +6,17 @@ import {
 } from "@/components/ui/tooltip";
 import React from "react";
 
-function ButtonWrapper({
+interface ButtonWrapperProps {
+  tooltipText: string;
+  onClick?: () => void;
+  children: React.ReactNode;
+}
+
+const ButtonWrapper: React.FC<ButtonWrapperProps> = ({
   tooltipText,
   onClick,
   children,
-}: {
-  tooltipText: string;
-  children: React.ReactNode;
-  onClick?: () => void;
-}) {
+}) => {
   return (
     <Tooltip>
       <TooltipTrigger>
@@ -34,6 +36,6 @@ function ButtonWrapper({
       </TooltipContent>
     </Tooltip>
   );
-}
+};
 
 export default ButtonWrapper;

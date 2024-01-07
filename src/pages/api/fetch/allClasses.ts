@@ -4,10 +4,7 @@ import NodeCache from "node-cache";
 
 const cache = new NodeCache({ stdTTL: 5400 });
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse,
-) {
+const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const cachedData = cache.get("all");
     if (cachedData) {
@@ -21,4 +18,6 @@ export default async function handler(
     console.log(e);
     return res.status(500).send({ success: false, msg: "An error occurred" });
   }
-}
+};
+
+export default handler;

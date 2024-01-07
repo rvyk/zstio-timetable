@@ -1,11 +1,16 @@
+import Substitutions from "@/components/content-items/substitutions/substitutions";
 import Timetable from "@/components/content-items/timetable/timetable";
 import { Table as TableType } from "@/types/timetable";
 import { usePathname } from "next/navigation";
 import { useRouter } from "next/router";
-import { useState } from "react";
-import Substitutions from "./content-items/substitutions/substitutions";
+import React, { useState } from "react";
 
-function Content({ substitutions, timeTable }: TableType) {
+interface ContentProps {
+  substitutions: TableType["substitutions"];
+  timeTable: TableType["timeTable"];
+}
+
+const Content: React.FC<ContentProps> = ({ substitutions, timeTable }) => {
   const [isShortHours, setIsShortHours] = useState(false);
 
   const pathname = usePathname();
@@ -28,6 +33,6 @@ function Content({ substitutions, timeTable }: TableType) {
       />
     );
   }
-}
+};
 
 export default Content;

@@ -8,15 +8,13 @@ import {
 } from "@/components/ui/table";
 import Link from "next/link";
 
-interface SubstitutionProps {
-  substitutions: Substitutions;
-}
-
 interface Substitution {
   [key: string]: string;
 }
 
-function Substitutions({ substitutions }: SubstitutionProps) {
+const Substitutions: React.FC<{ substitutions: Substitutions }> = ({
+  substitutions,
+}) => {
   return (
     <>
       {substitutions.tables.map((table: SubstitutionTables, index: number) => {
@@ -72,6 +70,6 @@ function Substitutions({ substitutions }: SubstitutionProps) {
       })}
     </>
   );
-}
+};
 
 export default Substitutions;

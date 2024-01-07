@@ -19,11 +19,9 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 
 type FilterKeys = "class" | "teacher" | "room";
 
-function TimetableDropdowns({
+const TimetableDropdowns: React.FC<{ timeTableList: List }> = ({
   timeTableList: { classes, rooms, teachers },
-}: {
-  timeTableList: List;
-}) {
+}) => {
   return (
     <>
       {!!classes?.length && (
@@ -54,19 +52,21 @@ function TimetableDropdowns({
       )}
     </>
   );
-}
+};
 
-function TimetableDropdownItem({
-  name,
-  linkPrefix,
-  item,
-  icon,
-}: {
+interface TimetableDropdownItemProps {
   name: string;
   linkPrefix: string;
   item: ListItem[];
   icon: React.ReactNode;
-}) {
+}
+
+const TimetableDropdownItem: React.FC<TimetableDropdownItemProps> = ({
+  name,
+  linkPrefix,
+  item,
+  icon,
+}) => {
   const router = useRouter();
 
   const [filter, setFilter] = useState("");
@@ -166,6 +166,6 @@ function TimetableDropdownItem({
       </DropdownMenuContent>
     </DropdownMenu>
   );
-}
+};
 
 export default TimetableDropdowns;

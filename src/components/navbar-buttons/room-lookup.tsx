@@ -3,7 +3,7 @@ import ButtonWrapper from "@/components/navbar-buttons/wrapper";
 import { MagnifyingGlassCircleIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
 
-function RoomLookup() {
+const RoomLookup: React.FC = () => {
   const [isOpened, setIsOpened] = useState(false);
   return (
     <>
@@ -16,6 +16,6 @@ function RoomLookup() {
       </ButtonWrapper>
     </>
   );
-}
+};
 
 export default RoomLookup;

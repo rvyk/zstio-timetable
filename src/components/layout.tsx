@@ -5,14 +5,17 @@ import Jumbotron from "@/components/ui/jumbotron";
 import Navbar from "@/components/ui/navbar";
 import { Table } from "@/types/timetable";
 import Head from "next/head";
+import React from "react";
 
-function Layout({
-  props: { timeTable, timeTableList, substitutions },
-  errorMsg,
-}: {
+interface LayoutProps {
   props: Table;
   errorMsg?: string;
-}) {
+}
+
+const Layout: React.FC<LayoutProps> = ({
+  props: { timeTable, timeTableList, substitutions },
+  errorMsg,
+}) => {
   return (
     <>
       <Head>
@@ -38,15 +41,11 @@ function Layout({
         errorMsg={errorMsg}
       />
       {!errorMsg && (
-        <Content
-          timeTable={timeTable}
-          substitutions={substitutions}
-          timeTableList={timeTableList}
-        />
+        <Content timeTable={timeTable} substitutions={substitutions} />
       )}
       <Footer />
     </>
   );
-}
+};
 
 export default Layout;

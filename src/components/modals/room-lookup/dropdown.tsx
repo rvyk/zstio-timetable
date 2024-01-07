@@ -7,15 +7,17 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import React, { useState } from "react";
 
-function Dropdown({
-  data,
-  setIsOpened: setIsModalOpened,
-}: {
+interface DropdownProps {
   data: any;
   setIsOpened: React.Dispatch<React.SetStateAction<boolean>>;
-}) {
+}
+
+const Dropdown: React.FC<DropdownProps> = ({
+  data,
+  setIsOpened: setIsModalOpened,
+}) => {
   const [isOpened, setIsOpened] = useState(false);
   const router = useRouter();
 
@@ -60,6 +62,6 @@ function Dropdown({
       </DropdownMenuContent>
     </DropdownMenu>
   );
-}
+};
 
 export default Dropdown;

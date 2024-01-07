@@ -3,13 +3,14 @@ import fetchTimetableList from "@/lib/fetchers/fetchTimetableList";
 import { AllClasses } from "@/types/api";
 import { List } from "@wulkanowy/timetable-parser";
 
-const fetchAllClasses = async () => {
+const fetchAllClasses = async (): Promise<AllClasses> => {
   try {
     const { data, ok, err } = await fetchTimetableList();
     if (!ok) {
       return {
         success: false,
         msg: `Timetable returned status other than 200 (${err?.response?.status})`,
+        classes: [],
       };
     }
 
@@ -36,6 +37,7 @@ const fetchAllClasses = async () => {
     return {
       success: false,
       msg: "An error occurred",
+      classes: [],
     };
   }
 };

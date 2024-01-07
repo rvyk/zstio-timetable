@@ -1,7 +1,7 @@
 import Link from "next/link";
-import { useState } from "react";
+import React, { useState } from "react";
 
-function Footer() {
+const Footer: React.FC = () => {
   const [clicks, setClicks] = useState(1);
   const [audioPlayed, setAudioPlayed] = useState(false);
 
@@ -39,6 +39,6 @@ function Footer() {
       </div>
     </footer>
   );
-}
+};
 
 export default Footer;

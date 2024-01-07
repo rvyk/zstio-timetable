@@ -19,7 +19,7 @@ const months: {
   grudnia: "12",
 };
 
-export function convertTextDate(inputDate: string): string {
+export const convertTextDate = (inputDate: string): string => {
   const regexes = [/(\d{1,2}) (\w+) (\d{4})/, /(\d{1,2})\.(\d{1,2})\.(\d{4})/];
   if (regexes[0].test(inputDate)) {
     const matchResult = inputDate.match(regexes[0]);
@@ -35,4 +35,4 @@ export function convertTextDate(inputDate: string): string {
     }
   }
   return inputDate;
-}
+};

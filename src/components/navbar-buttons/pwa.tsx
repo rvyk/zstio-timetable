@@ -11,7 +11,7 @@ interface BeforeInstallPromptEvent extends Event {
   prompt(): Promise<void>;
 }
 
-function PWAButton() {
+const PWAButton: React.FC = () => {
   const [supportsPWA, setSupportsPWA] = useState(false);
   const [promptInstall, setPromptInstall] =
     useState<BeforeInstallPromptEvent | null>(null);
@@ -44,6 +44,6 @@ function PWAButton() {
       <DownloadIcon className="w-4 h-4" />
     </ButtonWrapper>
   );
-}
+};
 
 export default PWAButton;

@@ -14,9 +14,14 @@ const removeUndefined = (obj: any, value: any) =>
         : val;
   });
 
+interface TimetableResponse {
+  timeTable: TimeTable;
+  err?: AxiosError;
+}
+
 const fetchTimetable = async (
   context: GetStaticPropsContext,
-): Promise<{ timeTable: TimeTable; err?: AxiosError }> => {
+): Promise<TimetableResponse> => {
   const { params } = context;
 
   const param0 = params?.all?.[0] ?? "";

@@ -9,19 +9,21 @@ import { ExclamationCircleIcon } from "@heroicons/react/24/outline";
 import { TableLesson } from "@wulkanowy/timetable-parser";
 import Link from "next/link";
 
-function RenderLesson({
-  lessonIndex,
-  dayIndex,
-  day,
-  substitutions,
-  className,
-}: {
+interface RenderLessonProps {
   lessonIndex: number;
   dayIndex: number;
   day: TableLesson[][];
   substitutions: SubstitutionTables;
   className: string;
-}) {
+}
+
+const RenderLesson: React.FC<RenderLessonProps> = ({
+  lessonIndex,
+  dayIndex,
+  day,
+  substitutions,
+  className,
+}) => {
   return (
     <>
       {day[lessonIndex]?.map((lesson, subIndex) => {
@@ -183,6 +185,6 @@ function RenderLesson({
       })}
     </>
   );
-}
+};
 
 export default RenderLesson;

@@ -1,9 +1,10 @@
 import Layout from "@/components/layout";
 import { Table } from "@/types/timetable";
+import { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 
-function Home() {
+const Home: NextPage = () => {
   const router = useRouter();
 
   useEffect(() => {
@@ -13,6 +14,6 @@ function Home() {
   }, [router]);
 
   return <Layout props={{} as Table} />;
-}
+};
 
 export default Home;

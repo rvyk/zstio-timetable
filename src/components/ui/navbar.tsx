@@ -6,7 +6,7 @@ import { useTheme } from "next-themes";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
-function Navbar() {
+const Navbar: React.FC = () => {
   const { theme, setTheme, resolvedTheme, systemTheme } = useTheme();
   const [isClient, setIsClient] = useState(false);
 
@@ -37,6 +37,6 @@ function Navbar() {
       <ThemeButton toggleTheme={toggleTheme} resolvedTheme={resolvedTheme} />
     </div>
   );
-}
+};
 
 export default Navbar;

@@ -1,7 +1,7 @@
 import { ReloadIcon } from "@radix-ui/react-icons";
 import { useEffect, useState } from "react";
 
-function Loading() {
+const Loading: React.FC = () => {
   const [loadingText, setLoadingText] = useState("Wczytywanie planu");
   const [dots, setDots] = useState("");
   useEffect(() => {
@@ -30,6 +30,6 @@ function Loading() {
       <h1 className="lg:text-2xl ">{loadingText}</h1>
     </div>
   );
-}
+};
 
 export default Loading;

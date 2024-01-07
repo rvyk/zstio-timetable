@@ -14,13 +14,15 @@ import { days } from "@/lib/utils";
 import axios from "axios";
 import { useState } from "react";
 
-function RoomLookupModal({
-  isOpened,
-  setIsOpened,
-}: {
+interface RoomLookupModalProps {
   isOpened: boolean;
   setIsOpened: React.Dispatch<React.SetStateAction<boolean>>;
-}) {
+}
+
+const RoomLookupModal: React.FC<RoomLookupModalProps> = ({
+  isOpened,
+  setIsOpened,
+}) => {
   const [selectedDay, setSelectedDay] = useState(0);
   const [selectedLesson, setSelectedLesson] = useState(1);
   const [isPending, setIsPending] = useState(false);
@@ -100,6 +102,6 @@ function RoomLookupModal({
       </DialogContent>
     </Dialog>
   );
-}
+};
 
 export default RoomLookupModal;

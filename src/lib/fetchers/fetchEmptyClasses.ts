@@ -3,11 +3,15 @@ import fetchSubstitutions from "@/lib/fetchers/fetchSubstitutions";
 import { cases } from "@/lib/utils";
 import { EmptyAPI } from "@/types/api";
 
-export async function fetchEmptyClasses(dayIndex: number, lessonIndex: number) {
+const fetchEmptyClasses = async (
+  dayIndex: number,
+  lessonIndex: number,
+): Promise<EmptyAPI> => {
   try {
     if (isNaN(dayIndex) || isNaN(lessonIndex)) {
       return {
         success: false,
+        classes: [],
         msg: `Specify dayIndex and lessonIndex to continue`,
       };
     }
@@ -50,7 +54,10 @@ export async function fetchEmptyClasses(dayIndex: number, lessonIndex: number) {
     console.log(error);
     return {
       success: false,
+      classes: [],
       msg: "An error occurred",
     };
   }
-}
+};
+
+export default fetchEmptyClasses;

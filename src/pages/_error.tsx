@@ -1,7 +1,12 @@
 import Layout from "@/components/layout";
 import { Table } from "@/types/timetable";
+import { NextPage, NextPageContext } from "next";
 
-function Error({ statusCode }: { statusCode: number }) {
+interface ErrorProps {
+  statusCode?: number;
+}
+
+const Error: NextPage<ErrorProps> = ({ statusCode }) => {
   return (
     <Layout
       props={{} as Table}
@@ -12,9 +17,9 @@ function Error({ statusCode }: { statusCode: number }) {
       }`}
     />
   );
-}
+};
 
-Error.getInitialProps = ({ res, err }: any) => {
+Error.getInitialProps = ({ res, err }: NextPageContext) => {
   const statusCode = res ? res.statusCode : err ? err.statusCode : 404;
   return { statusCode };
 };

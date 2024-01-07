@@ -9,6 +9,7 @@ type Classes = {
 type AllClasses = {
   success: boolean;
   classes: Classes[];
+  msg?: string;
 };
 
 type EmptyClasses = {
@@ -20,6 +21,7 @@ type EmptyClasses = {
 type EmptyAPI = {
   success: boolean;
   classes: EmptyClasses[];
+  msg?: string;
 };
 
 type TimetableAPI = {

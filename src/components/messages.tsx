@@ -1,7 +1,7 @@
 import { ArrowRightIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import axios from "axios";
 import { usePathname } from "next/navigation";
-import { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
 type MessageType = "INFO" | "UPDATE" | "WARNING" | "ERROR" | "SILENT";
 type MessageTypeDisplay = "POPUP" | "BANNER";
@@ -45,7 +45,7 @@ const MessageType: {
   },
 };
 
-export default function Messages() {
+const Messages: React.FC = () => {
   const [message, setMessage] = useState<Message | null>();
   const [bannerShowed, setShowBanner] = useState(false);
 
@@ -125,4 +125,6 @@ export default function Messages() {
       </div>
     );
   }
-}
+};
+
+export default Messages;

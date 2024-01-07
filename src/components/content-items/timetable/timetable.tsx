@@ -10,14 +10,19 @@ import {
 import { shortHours } from "@/lib/utils";
 import { Table as TableType } from "@/types/timetable";
 import Link from "next/link";
+import React from "react";
 
-interface TimetableProps {
+interface TimeTableProps {
   timeTable: TableType["timeTable"];
   substitutions: TableType["substitutions"];
   isShortHours: boolean;
 }
 
-function Timetable({ timeTable, substitutions, isShortHours }: TimetableProps) {
+const Timetable: React.FC<TimeTableProps> = ({
+  timeTable,
+  substitutions,
+  isShortHours,
+}) => {
   return (
     <Table>
       <TableCaption status={timeTable.status}>
@@ -112,6 +117,6 @@ function Timetable({ timeTable, substitutions, isShortHours }: TimetableProps) {
       </TableFooter>
     </Table>
   );
-}
+};
 
 export default Timetable;

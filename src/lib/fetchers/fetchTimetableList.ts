@@ -1,11 +1,13 @@
 import { List, TimetableList } from "@wulkanowy/timetable-parser";
 import axios, { AxiosError } from "axios";
 
-const fetchTimetableList = async (): Promise<{
+interface TimetableListResponse {
   ok: boolean;
   data?: List | null;
   err?: AxiosError | null;
-}> => {
+}
+
+const fetchTimetableList = async (): Promise<TimetableListResponse> => {
   try {
     const res = await axios.get(
       `${process.env.NEXT_PUBLIC_TIMETABLE_URL}/lista.html`,

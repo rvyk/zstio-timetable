@@ -21,11 +21,9 @@ type CheckedItemsType = {
 
 type Names = "branches" | "teachers";
 
-function SubstitutionsDropdowns({
+const SubstitutionsDropdowns: React.FC<{ substitutions: Substitutions }> = ({
   substitutions,
-}: {
-  substitutions: Substitutions;
-}) {
+}) => {
   let uniqueTeachers = new Set<string>();
   let uniqueBranches = new Set<string>();
 
@@ -56,17 +54,19 @@ function SubstitutionsDropdowns({
       />
     </>
   );
-}
+};
 
-function SubstitutionDropdown({
-  item,
-  name,
-  icon,
-}: {
+interface SubstitutionDropdownProps {
   item: string[];
   name: string;
   icon: React.ReactNode;
-}) {
+}
+
+const SubstitutionDropdown: React.FC<SubstitutionDropdownProps> = ({
+  item,
+  name,
+  icon,
+}) => {
   const [filter, setFilter] = useState("");
   const [checkedItems, setCheckedItems] = useState<CheckedItemsType>({});
   const [isOpened, setIsOpened] = useState(false);
@@ -162,6 +162,6 @@ function SubstitutionDropdown({
       </DropdownMenuContent>
     </DropdownMenu>
   );
-}
+};
 
 export default SubstitutionsDropdowns;
