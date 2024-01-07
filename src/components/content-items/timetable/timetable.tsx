@@ -10,27 +10,29 @@ import {
 import { shortHours } from "@/lib/utils";
 import { Table as TableType } from "@/types/timetable";
 import Link from "next/link";
-import React from "react";
+import React, { useState } from "react";
+import ShortHoursButton from "./short-hours-button";
 
 interface TimeTableProps {
   timeTable: TableType["timeTable"];
   substitutions: TableType["substitutions"];
-  isShortHours: boolean;
 }
 
-const Timetable: React.FC<TimeTableProps> = ({
-  timeTable,
-  substitutions,
-  isShortHours,
-}) => {
+const TimeTable: React.FC<TimeTableProps> = ({ timeTable, substitutions }) => {
+  const [isShortHours, setIsShortHours] = useState(
+    localStorage.getItem("shortHours") === "true",
+  );
+
+  const maxLessons = Math.max(
+    Object.entries(timeTable.data.hours).length,
+    ...timeTable.data.lessons.map((day) => day.length),
+  );
+
   return (
     <Table>
       <TableCaption status={timeTable.status}>
         <div className="inline-flex rounded-md shadow-sm mr-2" role="group">
-          {/* <ShortHours
-                        setIsShortHours={setIsShortHours}
-                        isShortHours={isShortHours}
-                    /> */}
+          <ShortHoursButton {...{ isShortHours, setIsShortHours }} />
         </div>
         <p className="transition-all text-lg font-normal text-gray-500 lg:text-xl mr-1 dark:text-gray-300">
           {timeTable?.data?.text} /
@@ -41,44 +43,46 @@ const Timetable: React.FC<TimeTableProps> = ({
       </TableCaption>
       <TableHeader />
       {Object.entries(timeTable.data?.hours).length > 1 ? (
-        Object.entries(isShortHours ? shortHours : timeTable.data?.hours)?.map(
-          ([key, hour]: [string, hourType], lessonIndex) => {
-            const { number, timeFrom, timeTo } = hour;
+        Object.entries(
+          isShortHours
+            ? shortHours.slice(0, maxLessons)
+            : timeTable.data?.hours,
+        )?.map(([key, hour]: [string, hourType], lessonIndex) => {
+          const { number, timeFrom, timeTo } = hour;
 
-            return (
-              <tbody key={lessonIndex}>
-                <TableRow index={lessonIndex}>
-                  <TableCell variant="number">
-                    <div className="flex justify-center items-center flex-col">
-                      {number}
-                      {/* {new Date().getDay() < 6 && new Date().getDay() != 0 && (
+          return (
+            <tbody key={lessonIndex}>
+              <TableRow index={lessonIndex}>
+                <TableCell variant="number">
+                  <div className="flex justify-center items-center flex-col">
+                    {number}
+                    {/* {new Date().getDay() < 6 && new Date().getDay() != 0 && (
                       <CurrentLesson timeFrom={timeFrom} timeTo={timeTo} />
                     )} */}
-                    </div>
-                  </TableCell>
+                  </div>
+                </TableCell>
 
-                  <TableCell variant="number">
-                    {timeFrom} - {timeTo}
-                  </TableCell>
+                <TableCell variant="number">
+                  {timeFrom} - {timeTo}
+                </TableCell>
 
-                  {timeTable.data?.lessons.map((day, index) => {
-                    return (
-                      <TableCell key={index}>
-                        <RenderLesson
-                          className={timeTable.data?.title}
-                          day={day}
-                          dayIndex={index}
-                          lessonIndex={lessonIndex}
-                          substitutions={substitutions.tables[0]}
-                        />
-                      </TableCell>
-                    );
-                  })}
-                </TableRow>
-              </tbody>
-            );
-          },
-        )
+                {timeTable.data?.lessons.map((day, index) => {
+                  return (
+                    <TableCell key={index}>
+                      <RenderLesson
+                        className={timeTable.data?.title}
+                        day={day}
+                        dayIndex={index}
+                        lessonIndex={lessonIndex}
+                        substitutions={substitutions.tables[0]}
+                      />
+                    </TableCell>
+                  );
+                })}
+              </TableRow>
+            </tbody>
+          );
+        })
       ) : (
         <TableRow>
           <TableCell>
@@ -119,4 +123,4 @@ const Timetable: React.FC<TimeTableProps> = ({
   );
 };
 
-export default Timetable;
+export default TimeTable;
