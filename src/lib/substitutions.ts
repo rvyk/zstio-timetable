@@ -4,16 +4,17 @@ export const getSubstitution = (
   className: string,
   substitutions: SubstitutionTables,
 ) => {
-  if (dayIndex === substitutions?.dayIndex) {
-    return substitutions?.zastepstwa?.filter((subs) => {
-      return (
-        parseInt(subs.lesson?.split(",")[0]) - 1 === lessonIndex &&
-        (className.includes(" ")
-          ? subs?.branch?.includes(className.split(" ")[0]) ||
-            subs?.branch?.includes(className.split(" ")[1])
-          : subs?.branch?.includes(className))
-      );
-    })[0];
+  if (dayIndex === substitutions.dayIndex) {
+    const matchingSubstitution = substitutions.zastepstwa?.find((subs) => {
+      const lessonNumber = parseInt(subs.lesson?.split(",")[0]) - 1;
+      const hasMatchingBranch = className.includes(" ")
+        ? className.split(" ").some((branch) => subs.branch?.includes(branch))
+        : subs.branch?.includes(className);
+
+      return lessonNumber === lessonIndex && hasMatchingBranch;
+    });
+
+    return matchingSubstitution;
   }
 };
 
@@ -24,18 +25,21 @@ export const getSubstitutionForGroup = (
   substitutions: SubstitutionTables,
   groupName?: string,
 ) => {
-  if (dayIndex === substitutions?.dayIndex)
-    return substitutions?.zastepstwa?.filter((subs) => {
-      if (
-        parseInt(subs.lesson?.split(",")[0]) - 1 === lessonIndex &&
-        (className.includes(" ")
-          ? subs?.branch?.includes(className.split(" ")[0]) ||
-            subs?.branch?.includes(className.split(" ")[1])
-          : subs?.branch?.includes(className)) &&
-        subs?.branch?.includes("|") &&
-        subs?.branch?.split("|")[1] === groupName
-      ) {
-        return subs;
-      }
-    })[0];
+  if (dayIndex === substitutions.dayIndex) {
+    const matchingSubstitution = substitutions.zastepstwa?.find((subs) => {
+      const lessonNumber = parseInt(subs.lesson?.split(",")[0]) - 1;
+      const hasMatchingBranch = className.includes(" ")
+        ? className.split(" ").some((branch) => subs.branch?.includes(branch))
+        : subs.branch?.includes(className);
+      const hasMatchingGroupName = subs.branch?.split("|")[1] === groupName;
+
+      return (
+        lessonNumber === lessonIndex &&
+        hasMatchingBranch &&
+        hasMatchingGroupName
+      );
+    });
+
+    return matchingSubstitution;
+  }
 };

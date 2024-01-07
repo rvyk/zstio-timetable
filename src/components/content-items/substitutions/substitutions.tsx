@@ -46,7 +46,16 @@ const Substitutions: React.FC<{ substitutions: Substitutions }> = ({
                           key={field}
                           className="px-6 py-4 whitespace-nowrap border-r last:border-none dark:border-[#171717]"
                         >
-                          {substitution?.[field]}
+                          {field === "branch" &&
+                          substitution?.[field]?.includes("|") ? (
+                            <>
+                              {`${substitution?.[field]?.split(
+                                "|",
+                              )[0]} (${substitution?.[field]?.split("|")[1]})`}
+                            </>
+                          ) : (
+                            substitution?.[field]
+                          )}
                         </TableCell>
                       ))}
                     </TableRow>
