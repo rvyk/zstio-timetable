@@ -4,6 +4,8 @@ type hourType = {
   timeTo: string;
 };
 
+type substitutionForType = "Oddziały" | "Nauczyciele" | "Sale";
+
 type lessonType = {
   subject: string;
   room?: string;

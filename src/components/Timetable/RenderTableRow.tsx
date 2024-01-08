@@ -8,12 +8,14 @@ export default function RenderTableRow({
   lessons,
   substitutions,
   className,
+  substitutionType,
 }: {
   hours: hourType[];
   isShortHours: boolean;
   lessons: lessonType[][][];
   substitutions: substitutionTableType;
   className: string;
+  substitutionType: substitutionForType;
 }) {
   const maxLessons =
     typeof hours == "object" &&
@@ -58,6 +60,7 @@ export default function RenderTableRow({
                   >
                     <RenderLesson
                       className={className}
+                      substitutionType={substitutionType}
                       lessonIndex={lessonIndex}
                       dayIndex={dayIndex}
                       day={day}

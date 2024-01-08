@@ -9,12 +9,14 @@ function RenderLesson({
   day,
   substitutions,
   className,
+  substitutionType,
 }: {
   lessonIndex: number;
   dayIndex: number;
   day: lessonType[][];
   substitutions: substitutionTableType;
   className: string;
+  substitutionType: substitutionForType;
 }) {
   return (
     <>
@@ -27,6 +29,8 @@ function RenderLesson({
           ),
           possibleSubstitution = substitution,
           sure = true;
+        if (substitutionType !== "Oddziały")
+          (substitution = null), (possibleSubstitution = null);
         if (substitution && day[lessonIndex]?.length > 1) {
           substitution = getSubstitutionForGroup(
             dayIndex,
@@ -140,7 +144,6 @@ function RenderLesson({
                 </Link>
               )}
             </div>
-
             {substitution && sure && (
               <a
                 href={`/zastepstwa?teachers=${substitution?.teacher.replaceAll(

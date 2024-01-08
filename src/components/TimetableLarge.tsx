@@ -83,6 +83,7 @@ function TimetableLarge({
             <RenderTableHeader />
             <RenderTableRow
               className={title}
+              substitutionType={text as substitutionForType}
               hours={hours}
               isShortHours={isShortHours}
               lessons={lessons}
