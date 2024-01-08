@@ -29,6 +29,7 @@ function TimetableSmall({
   const { isReady } = useRouter();
 
   let {
+    text = "",
     timeTable: { hours = [], title = "", lessons = [[], [], [], [], []] } = {
       hours: [],
       generatedDate: "",
@@ -52,6 +53,7 @@ function TimetableSmall({
       />
       <Message />
       <RenderTimetable
+        substitutionType={text as substitutionForType}
         className={title}
         setSelectedDay={setSelectedDay}
         selectedDay={selectedDay}

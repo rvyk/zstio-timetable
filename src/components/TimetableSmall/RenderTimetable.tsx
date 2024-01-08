@@ -19,6 +19,7 @@ function RenderTimetable({
   selectedDay,
   setSelectedDay,
   className,
+  substitutionType,
 }: {
   hours: hourType[];
   lessons: lessonType[][][];
@@ -27,6 +28,7 @@ function RenderTimetable({
   selectedDay: number;
   setSelectedDay: React.Dispatch<React.SetStateAction<number>>;
   className: string;
+  substitutionType: substitutionForType;
 }) {
   const [isScreenSmall, setIsScreenSmall] = useState(false);
 
@@ -119,6 +121,9 @@ function RenderTimetable({
                       ),
                       possibleSubstitution = substitution,
                       sure = true;
+                    if (substitutionType !== "Oddziały")
+                      substitution = undefined;
+                    possibleSubstitution = undefined;
                     if (
                       substitution &&
                       lessons[selectedDay][number - 1]?.length > 1
