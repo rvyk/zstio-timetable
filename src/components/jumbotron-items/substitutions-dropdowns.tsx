@@ -1,3 +1,4 @@
+import { parseBranchField } from "@/components/content-items/substitutions/substitutions";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -13,7 +14,7 @@ import {
   UsersIcon,
 } from "@heroicons/react/24/outline";
 import { useRouter } from "next/router";
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 
 type CheckedItemsType = {
   [key: string]: string[];
@@ -30,7 +31,7 @@ const SubstitutionsDropdowns: React.FC<{ substitutions: Substitutions }> = ({
   substitutions.tables.forEach((table: SubstitutionTables) => {
     table.zastepstwa.forEach((substitution: Substitution) => {
       uniqueTeachers.add(substitution.teacher);
-      uniqueBranches.add(substitution.branch.split("|")[0]);
+      uniqueBranches.add(substitution.branch);
     });
   });
 
@@ -104,6 +105,17 @@ const SubstitutionDropdown: React.FC<SubstitutionDropdownProps> = ({
     });
   };
 
+  useEffect(() => {
+    const queryParams = new URLSearchParams(window.location.search);
+    const branches = queryParams.get("branches")?.split(",") || [];
+    const teachers = queryParams.get("teachers")?.split(",") || [];
+
+    setCheckedItems({
+      branches,
+      teachers,
+    });
+  }, []);
+
   return (
     <DropdownMenu
       modal={false}
@@ -155,7 +167,9 @@ const SubstitutionDropdown: React.FC<SubstitutionDropdownProps> = ({
             }`}
           >
             <p className="w-full py-1 ml-4 text-sm font-medium text-gray-900 rounded dark:text-gray-300">
-              {substitution}
+              {name == "branches"
+                ? parseBranchField(substitution)
+                : substitution}
             </p>
           </DropdownMenuCheckboxItem>
         ))}

@@ -23,6 +23,8 @@ const buttonVariants = cva(
           "flex cursor-pointer transition-all items-center font-medium text-gray-700 bg-white border border-gray-200 rounded-lg toggle-dark-state-example hover:bg-[#321c21] hover:text-gray-100 focus:z-10 focus:ring-2 focus:ring-[#2B161B] dark:focus:ring-gray-500 dark:bg-[#202020] focus:outline-none dark:text-gray-200 dark:border-[#202020] dark:hover:border-[#171717] dark:hover:text-white dark:hover:bg-[#171717] lg:dark:hover:bg-[#141414]",
         dropdown:
           "text-[#a91712] hover:text-white outline-none hover:border-transparent bg-transparent dark:border-[2px] border-[1px] border-[#a91712] hover:bg-[#73110e] transition-all focus:ring-4 focus:outline-none focus:ring-transparent font-medium text-sm text-center inline-flex items-center dark:text-gray-300 hover:dark:text-white dark:bg-[#202020] dark:rounded-lg rounded-none dark:border-none dark:hover:bg-[#141414] dark:outline-none",
+        filter:
+          "cursor-pointer justify-center inline-flex items-center transition-all text-sm font-medium text-red-900 bg-red-300 rounded dark:bg-blue-300 dark:text-blue-900 ",
       },
       size: {
         default: "h-9 px-4 py-2",
@@ -31,6 +33,7 @@ const buttonVariants = cva(
         icon: "h-9 w-9",
         navbar: "p-3 mr-2 text-xs",
         dropdown: "mx-2 sm:my-0 my-2 px-4 py-2.5",
+        filter: "px-2 py-1 mr-2",
       },
     },
     defaultVariants: {

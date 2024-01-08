@@ -1,4 +1,5 @@
 import RenderLesson from "@/components/content-items/timetable/render-lesson";
+import ShortHoursButton from "@/components/content-items/timetable/short-hours-button";
 import {
   Table,
   TableCaption,
@@ -11,7 +12,6 @@ import { shortHours } from "@/lib/utils";
 import { Table as TableType } from "@/types/timetable";
 import Link from "next/link";
 import React, { useState } from "react";
-import ShortHoursButton from "./short-hours-button";
 
 interface TimeTableProps {
   timeTable: TableType["timeTable"];
@@ -84,15 +84,17 @@ const TimeTable: React.FC<TimeTableProps> = ({ timeTable, substitutions }) => {
           );
         })
       ) : (
-        <TableRow>
-          <TableCell
-            colSpan={7}
-            scope="row"
-            className="text-center font-semibold"
-          >
-            <p>Nie znaleziono żadnych lekcji</p>
-          </TableCell>
-        </TableRow>
+        <tbody>
+          <TableRow>
+            <TableCell
+              colSpan={7}
+              scope="row"
+              className="text-center font-semibold"
+            >
+              <p>Nie znaleziono żadnych lekcji</p>
+            </TableCell>
+          </TableRow>
+        </tbody>
       )}
       <TableFooter>
         <TableRow

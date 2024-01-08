@@ -22,18 +22,24 @@ interface TableCaptionProps {
   status: boolean;
   isLoading?: boolean;
   children?: React.ReactNode;
+  isSubstitutions?: boolean;
+  className?: string;
 }
 
 const TableCaption: React.FC<TableCaptionProps> = ({
   status,
   isLoading,
   children,
+  isSubstitutions,
+  className,
 }) => {
   if (!status) {
     return (
       <caption className="p-5 transition-all text-lg font-semibold text-left text-gray-900 bg-white dark:text-gray-300 dark:bg-[#202020]">
         <p className="transition-all text-lg font-normal text-gray-500 lg:text-xl mr-1 dark:text-gray-400">
-          Nie znaleziono pasującego planu lekcji
+          {isSubstitutions
+            ? "Brak zastępstw"
+            : "Nie znaleziono pasującego planu lekcji"}
         </p>
       </caption>
     );
@@ -54,7 +60,7 @@ const TableCaption: React.FC<TableCaptionProps> = ({
 
   return (
     <caption className="p-5 transition-all text-lg font-semibold text-left text-gray-900 bg-white dark:text-gray-300 dark:bg-[#202020]">
-      <div className="flex items-center">{children}</div>
+      <div className={cn("flex items-center", className)}>{children}</div>
     </caption>
   );
 };

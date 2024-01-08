@@ -34,7 +34,7 @@ const ShortHoursButton: React.FC<ShortHoursButtonProps> = ({
     default:
       "px-4 py-2 transition-all text-sm font-medium text-gray-900 border border-gray-200 focus:z-10 focus:ring-0 dark:text-white dark:hover:text-white dark:focus:text-white",
     normal:
-      "bg-white dark:bg-[#202020] lg:dark:bg-[#171717] dark:hover:bg-[#191919] hover:bg-gray-200 dark:border-none",
+      "bg-white dark:bg-[#171717] dark:hover:bg-[#191919] hover:bg-gray-200 dark:border-none",
     short:
       "bg-[#321c21] hover:bg-[#480e0c] dark:hover:bg-red-500 dark:bg-red-400 dark:border-none text-white hover:text-gray-200 focus:text-gray-200",
   };
@@ -54,7 +54,7 @@ const ShortHoursButton: React.FC<ShortHoursButtonProps> = ({
     <>
       {tooltips.map((tooltip, index) => (
         <Tooltip key={index}>
-          <TooltipTrigger>
+          <TooltipTrigger asChild>
             <button
               type="button"
               onClick={() => {
