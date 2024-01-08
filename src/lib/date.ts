@@ -25,7 +25,9 @@ export const convertTextDate = (inputDate: string): string => {
     const matchResult = inputDate.match(regexes[0]);
     if (matchResult) {
       const [, day, month, year] = matchResult;
-      return `${year}-${months[month.toLowerCase()]}-${day}`;
+      return `${year}-${
+        months[month.toLowerCase().padStart(2, "0")]
+      }-${day.padStart(2, "0")}`;
     }
   } else if (regexes[1].test(inputDate)) {
     const matchResult = inputDate.match(regexes[1]);

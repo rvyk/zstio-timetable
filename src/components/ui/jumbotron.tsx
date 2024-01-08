@@ -97,7 +97,7 @@ const JumbotronContent: React.FC<JumbotronContentProps> = ({
 
   return (
     <div className="flex justify-center mb-5 flex-wrap items-center ">
-      <p className="transition-all text-xl font-normal mr-1 hidden sm:flex text-gray-500 lg:text-2xl dark:text-gray-400">
+      <p className="transition-all text-xl font-normal mr-1 text-gray-500 lg:text-2xl dark:text-gray-400">
         {!isSubstitution ? timeTableText : substitutionsText}
       </p>
       {!isSubstitution && timeTable.status && (
