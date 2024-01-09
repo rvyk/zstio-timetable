@@ -40,6 +40,7 @@ const Substitutions: React.FC<{ substitutions: Substitutions }> = ({
           <Table key={index}>
             <TableCaption
               status={substitutions.status}
+              isSubstitutions={true}
               className="flex-col justify-center !items-start"
             >
               {table.time}

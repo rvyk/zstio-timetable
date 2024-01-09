@@ -20,7 +20,8 @@ interface TimeTableProps {
 
 const TimeTable: React.FC<TimeTableProps> = ({ timeTable, substitutions }) => {
   const [isShortHours, setIsShortHours] = useState(
-    localStorage.getItem("shortHours") === "true",
+    typeof localStorage !== "undefined" &&
+      localStorage.getItem("shortHours") === "true",
   );
 
   const maxLessons = Math.max(
