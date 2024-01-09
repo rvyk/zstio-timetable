@@ -14,11 +14,10 @@ interface Substitution {
 }
 
 export const parseBranchField = (branch: string): string => {
-  if (branch && branch.includes("|")) {
-    const [branchName, branchGroups] = branch.split("|");
-    return `${branchName} (${branchGroups})`;
-  }
-  return branch;
+  const regex = /(\w+)\|([^+]+)/g;
+  let result = branch.replace(regex, "$1 ($2)");
+  result = result.replace(/\+/g, " + ");
+  return result.trim();
 };
 
 const Substitutions: React.FC<{ substitutions: Substitutions }> = ({
@@ -90,7 +89,7 @@ const Substitutions: React.FC<{ substitutions: Substitutions }> = ({
                     colSpan={7}
                     className="text-center font-semibold"
                   >
-                    Nie znaleziono zastępstw dla wybranych filtrów
+                    Nie znaleziono zastępstw
                   </TableCell>
                 </TableRow>
               </tbody>

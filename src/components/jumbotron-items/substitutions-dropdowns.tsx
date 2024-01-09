@@ -68,6 +68,8 @@ const SubstitutionDropdown: React.FC<SubstitutionDropdownProps> = ({
   name,
   icon,
 }) => {
+  if (item.length === 0) return null;
+
   const [filter, setFilter] = useState("");
   const [checkedItems, setCheckedItems] = useState<CheckedItemsType>({});
   const [isOpened, setIsOpened] = useState(false);
