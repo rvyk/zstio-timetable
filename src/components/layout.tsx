@@ -5,6 +5,7 @@ import Jumbotron from "@/components/ui/jumbotron";
 import Navbar from "@/components/ui/navbar";
 import { Table } from "@/types/timetable";
 import Head from "next/head";
+import { usePathname } from "next/navigation";
 import React from "react";
 
 interface LayoutProps {
@@ -16,6 +17,9 @@ const Layout: React.FC<LayoutProps> = ({
   props: { timeTable, timeTableList, substitutions },
   errorMsg,
 }) => {
+  const pathname = usePathname();
+  const isIndex = pathname == "/";
+
   return (
     <>
       <Head>
@@ -43,7 +47,9 @@ const Layout: React.FC<LayoutProps> = ({
       {!errorMsg && (
         <Content timeTable={timeTable} substitutions={substitutions} />
       )}
-      <Footer />
+      <div className={`${!isIndex && !errorMsg && "md:block hidden"}`}>
+        <Footer />
+      </div>
     </>
   );
 };

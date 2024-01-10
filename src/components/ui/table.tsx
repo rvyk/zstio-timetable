@@ -6,11 +6,12 @@ import { cva } from "class-variance-authority";
 
 interface TableProps {
   children: React.ReactNode;
+  className?: string;
 }
 
-const Table: React.FC<TableProps> = ({ children }) => (
-  <div className="w-full relative mb-8 flex justify-center">
-    <div className="overflow-x-auto shadow-md md:rounded-xl w-[90%]">
+const Table: React.FC<TableProps> = ({ children, className }) => (
+  <div className={cn("w-full relative mb-8", className)}>
+    <div className="overflow-x-auto shadow-md md:rounded-xl md:w-[90%] w-full">
       <table className="w-full text-sm text-left transition-all duration-200 text-gray-500 dark:text-gray-300">
         {children}
       </table>

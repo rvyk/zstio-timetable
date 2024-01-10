@@ -1,17 +1,7 @@
-import Filters from "@/components/content-items/substitutions/filters";
 import {
-  Table,
-  TableCaption,
-  TableCell,
-  TableFooter,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import Link from "next/link";
-
-interface Substitution {
-  [key: string]: string;
-}
+  RenderSubstitutions,
+  RenderSubstitutionsMobile,
+} from "@/components/content-items/substitutions/render-substitutions";
 
 export const parseBranchField = (branch: string): string => {
   const regex = /(\w+)\|([^+]+)/g;
@@ -37,77 +27,24 @@ const Substitutions: React.FC<{ substitutions: Substitutions }> = ({
         );
 
         return (
-          <Table key={index}>
-            <TableCaption
-              status={substitutions.status}
-              isSubstitutions={true}
-              className="flex-col justify-center !items-start"
-            >
-              {table.time}
-              <Filters />
-            </TableCaption>
-            <TableHeader isSubstitutions={true} />
-            {!!filteredSubstitutions.length ? (
-              <>
-                {filteredSubstitutions.map(
-                  (substitution: Substitution, index: number) => {
-                    return (
-                      <tbody key={index}>
-                        <TableRow reverseColor={index % 2 == 0}>
-                          <TableCell variant="substitutionNumber">
-                            <div className="flex justify-center items-center flex-col">
-                              {substitution.lesson}
-                            </div>
-                          </TableCell>
-                          {[
-                            "teacher",
-                            "branch",
-                            "subject",
-                            "class",
-                            "case",
-                            "message",
-                          ].map((field) => (
-                            <TableCell
-                              key={field}
-                              className="px-6 py-4 whitespace-nowrap border-r last:border-none dark:border-[#171717]"
-                            >
-                              {field === "branch"
-                                ? parseBranchField(substitution.branch)
-                                : substitution?.[field]}
-                            </TableCell>
-                          ))}
-                        </TableRow>
-                      </tbody>
-                    );
-                  },
-                )}
-              </>
-            ) : (
-              <tbody>
-                <TableRow reverseColor={index % 2 == 0}>
-                  <TableCell
-                    scope="row"
-                    colSpan={7}
-                    className="text-center font-semibold"
-                  >
-                    Nie znaleziono zastępstw
-                  </TableCell>
-                </TableRow>
-              </tbody>
-            )}
-
-            <TableFooter>
-              <TableRow reverseColor={index % 2 != 0}>
-                <TableCell scope="row" colSpan={7} className="font-semibold">
-                  <Link
-                    href={process.env.NEXT_PUBLIC_SUBSTITUTIONS_URL as string}
-                  >
-                    Źródło danych
-                  </Link>
-                </TableCell>
-              </TableRow>
-            </TableFooter>
-          </Table>
+          <div key={index}>
+            <div className="hidden md:block">
+              <RenderSubstitutions
+                index={index}
+                filteredSubstitutions={filteredSubstitutions}
+                status={substitutions.status}
+                time={table.time}
+              />
+            </div>
+            <div className="block md:hidden">
+              <RenderSubstitutionsMobile
+                index={index}
+                filteredSubstitutions={filteredSubstitutions}
+                status={substitutions.status}
+                time={table.time}
+              />
+            </div>
+          </div>
         );
       })}
     </>

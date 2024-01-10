@@ -1,17 +1,9 @@
-import RenderLesson from "@/components/content-items/timetable/render-lesson";
-import ShortHoursButton from "@/components/content-items/timetable/short-hours-button";
 import {
-  Table,
-  TableCaption,
-  TableCell,
-  TableFooter,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { shortHours } from "@/lib/utils";
+  RenderTimeTable,
+  RenderTimeTableMobile,
+} from "@/components/content-items/timetable/render-timetable";
 import { Table as TableType } from "@/types/timetable";
-import Link from "next/link";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 interface TimeTableProps {
   timeTable: TableType["timeTable"];
@@ -19,6 +11,8 @@ interface TimeTableProps {
 }
 
 const TimeTable: React.FC<TimeTableProps> = ({ timeTable, substitutions }) => {
+  const [selectedDay, setSelectedDay] = useState(0);
+
   const [isShortHours, setIsShortHours] = useState(
     typeof localStorage !== "undefined" &&
       localStorage.getItem("shortHours") === "true",
@@ -29,106 +23,38 @@ const TimeTable: React.FC<TimeTableProps> = ({ timeTable, substitutions }) => {
     ...timeTable.data.lessons.map((day) => day.length),
   );
 
+  useEffect(() => {
+    let day = new Date().getDay();
+    setSelectedDay(day >= 6 || day == 0 ? 0 : day - 1);
+  }, [setSelectedDay]);
+
   return (
-    <Table>
-      <TableCaption status={timeTable.status}>
-        <div className="inline-flex rounded-md shadow-sm mr-2" role="group">
-          <ShortHoursButton {...{ isShortHours, setIsShortHours }} />
-        </div>
-        <p className="transition-all text-lg font-normal text-gray-500 lg:text-xl mr-1 dark:text-gray-300">
-          {timeTable?.data?.text} /
-        </p>
-        <p className="transition-all text-lg font-bold text-gray-500 lg:text-xl dark:text-gray-300">
-          {timeTable?.data?.title}
-        </p>
-      </TableCaption>
-      <TableHeader />
-      {Object.entries(timeTable.data?.hours).length > 1 ? (
-        Object.entries(
-          isShortHours
-            ? shortHours.slice(0, maxLessons)
-            : timeTable.data?.hours,
-        )?.map(([key, hour]: [string, hourType], lessonIndex) => {
-          const { number, timeFrom, timeTo } = hour;
-
-          return (
-            <tbody key={lessonIndex}>
-              <TableRow key={lessonIndex} reverseColor={lessonIndex % 2 === 0}>
-                <TableCell variant="number">
-                  <div className="flex justify-center items-center flex-col">
-                    {number}
-                    {/* {new Date().getDay() < 6 && new Date().getDay() != 0 && (
-                      <CurrentLesson timeFrom={timeFrom} timeTo={timeTo} />
-                    )} */}
-                  </div>
-                </TableCell>
-
-                <TableCell variant="number">
-                  {timeFrom} - {timeTo}
-                </TableCell>
-
-                {timeTable.data?.lessons.map((day, index) => {
-                  return (
-                    <TableCell key={index}>
-                      <RenderLesson
-                        className={timeTable.data?.title}
-                        day={day}
-                        dayIndex={index}
-                        lessonIndex={lessonIndex}
-                        substitutions={substitutions.tables[0]}
-                      />
-                    </TableCell>
-                  );
-                })}
-              </TableRow>
-            </tbody>
-          );
-        })
-      ) : (
-        <tbody>
-          <TableRow>
-            <TableCell
-              colSpan={7}
-              scope="row"
-              className="text-center font-semibold"
-            >
-              <p>Nie znaleziono żadnych lekcji</p>
-            </TableCell>
-          </TableRow>
-        </tbody>
-      )}
-      <TableFooter>
-        <TableRow
-          reverseColor={Object.entries(timeTable.data.hours).length % 2 == 0}
-        >
-          {timeTable.status && (
-            <TableCell
-              colSpan={5}
-              scope="row"
-              className="font-semibold !border-none"
-            >
-              {timeTable.data.generatedDate &&
-                `Wygenerowano: ${timeTable.data.generatedDate}`}{" "}
-              {timeTable.data.validDate &&
-                `Obowiązuje od: ${timeTable.data.validDate}`}
-            </TableCell>
-          )}
-          <TableCell
-            colSpan={!timeTable.status ? 7 : 2}
-            scope="row"
-            className="font-semibold text-right "
-          >
-            <Link
-              prefetch={false}
-              href={`${process.env.NEXT_PUBLIC_TIMETABLE_URL}/plany/${timeTable.data.id}.html`}
-              target="_blank"
-            >
-              Źródło danych
-            </Link>
-          </TableCell>
-        </TableRow>
-      </TableFooter>
-    </Table>
+    <div>
+      <div className="hidden md:block">
+        <RenderTimeTable
+          {...{
+            timeTable,
+            isShortHours,
+            setIsShortHours,
+            maxLessons,
+            substitutions,
+          }}
+        />
+      </div>
+      <div className="block md:hidden">
+        <RenderTimeTableMobile
+          {...{
+            timeTable,
+            isShortHours,
+            setIsShortHours,
+            maxLessons,
+            selectedDay,
+            setSelectedDay,
+            substitutions,
+          }}
+        />
+      </div>
+    </div>
   );
 };
 

@@ -19,16 +19,14 @@ const Content: React.FC<ContentProps> = ({ substitutions, timeTable }) => {
 
   if (isIndex) return null;
 
-  if (isSubstitution) {
-    if (!isReady) return <SkeletonLoading isSubstitution />;
+  if (!isReady) return <SkeletonLoading isSubstitution={isSubstitution} />;
 
+  if (isSubstitution) {
     return <Substitutions substitutions={substitutions} />;
   }
 
   if (timeTable.status) {
-    if (!isReady) return <SkeletonLoading />;
-
-    return <TimeTable timeTable={timeTable} substitutions={substitutions} />;
+    return <TimeTable {...{ timeTable, substitutions }} />;
   }
 };
 

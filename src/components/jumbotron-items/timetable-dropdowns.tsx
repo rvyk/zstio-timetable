@@ -23,7 +23,7 @@ const TimetableDropdowns: React.FC<{ timeTableList: List }> = ({
   timeTableList: { classes, rooms, teachers },
 }) => {
   return (
-    <>
+    <div className="hidden md:block">
       {!!classes?.length && (
         <TimetableDropdownItem
           name="Oddziały"
@@ -50,7 +50,7 @@ const TimetableDropdowns: React.FC<{ timeTableList: List }> = ({
           icon={<MapPinIcon />}
         />
       )}
-    </>
+    </div>
   );
 };
 

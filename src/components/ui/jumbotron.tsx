@@ -24,7 +24,11 @@ const Jumbotron: React.FC<JumbotronProps> = ({
   const isIndex = pathname === "/";
 
   return (
-    <div className="py-8 relative px-4 mx-auto max-w-screen-xl text-center">
+    <div
+      className={`py-8 relative px-4 mx-auto max-w-screen-xl text-center ${
+        !isIndex && !errorMsg && "md:block hidden"
+      }`}
+    >
       <div className="flex justify-center items-center flex-col sm:flex-row mb-4 sm:mb-0 -ml-0 sm:-ml-16">
         <Link
           prefetch={false}
@@ -96,7 +100,7 @@ const JumbotronContent: React.FC<JumbotronContentProps> = ({
       : `Nie znaleziono pasującego planu lekcji`;
 
   return (
-    <div className="flex justify-center mb-5 flex-wrap items-center ">
+    <div className="md:flex hidden justify-center mb-5 flex-wrap items-center ">
       <p className="transition-all text-xl font-normal mr-1 text-gray-500 lg:text-2xl dark:text-gray-400">
         {!isSubstitution ? timeTableText : substitutionsText}
       </p>

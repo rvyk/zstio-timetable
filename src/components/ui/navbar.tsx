@@ -3,6 +3,8 @@ import RedirectButton from "@/components/navbar-buttons/redirect";
 import RoomLookup from "@/components/navbar-buttons/room-lookup";
 import ThemeButton from "@/components/navbar-buttons/theme";
 import { useTheme } from "next-themes";
+import Image from "next/legacy/image";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -30,11 +32,26 @@ const Navbar: React.FC = () => {
   if (!resolvedTheme || !isClient || isIndex) return null;
 
   return (
-    <div className="absolute top-2 right-2 z-30 transition-all flex">
-      <PWAButton />
-      {!isSubstitutions && <RoomLookup />}
-      <RedirectButton />
-      <ThemeButton toggleTheme={toggleTheme} resolvedTheme={resolvedTheme} />
+    <div className="md:absolute dark:bg-[#202020] shadow-sm md:shadow-none rounded-b-lg bg-[#ffffff] md:!bg-transparent relative md:top-2 md:right-2 z-30 transition-all flex md:justify-normal justify-between p-2 md:p-0">
+      <Link
+        prefetch={false}
+        href="https://zstiojar.edu.pl"
+        className="relative w-11 h-11 md:hidden"
+      >
+        <Image
+          alt="logo"
+          src="/icon-72x72.png"
+          layout="fill"
+          objectFit="cover"
+          objectPosition="center"
+        />
+      </Link>
+      <div>
+        <PWAButton />
+        {!isSubstitutions && <RoomLookup />}
+        <RedirectButton />
+        <ThemeButton toggleTheme={toggleTheme} resolvedTheme={resolvedTheme} />
+      </div>
     </div>
   );
 };

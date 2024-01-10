@@ -76,6 +76,7 @@ const RoomLookupModal: React.FC<RoomLookupModalProps> = ({
         <div className="w-full flex justify-center">
           <Input
             type="number"
+            tabIndex={-1}
             placeholder="Numer lekcji"
             className="bg-gray-50 block w-1/2 p-2 border-gray-300 text-center dark:bg-[#171717] dark:border-0 outline-none"
             onChange={(e) => {
@@ -91,6 +92,7 @@ const RoomLookupModal: React.FC<RoomLookupModalProps> = ({
             type="submit"
             variant="outline"
             onClick={() => setIsOpened(!isOpened)}
+            className="mt-2 sm:mt-0"
           >
             Anuluj
           </Button>
