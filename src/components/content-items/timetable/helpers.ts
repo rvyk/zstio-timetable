@@ -47,8 +47,6 @@ const getSubstitutionAndSure = (
     }
   }
 
-  console.log(substitution, sure);
-
   return { substitution, sure };
 };
 
