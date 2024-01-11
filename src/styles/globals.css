@@ -79,7 +79,7 @@ body {
   overflow-x: hidden;
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 768px) {
   .dark *::-webkit-scrollbar {
     width: 0px !important;
     height: 0px !important;
@@ -135,7 +135,6 @@ input[type="number"] {
 }
 
 /* Scrollbar styles for dark theme */
-
 .dark *::-webkit-scrollbar {
   width: 5px;
   height: 6px;

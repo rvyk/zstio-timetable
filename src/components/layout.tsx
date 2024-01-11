@@ -19,21 +19,21 @@ const Layout: React.FC<LayoutProps> = ({
 }) => {
   const pathname = usePathname();
   const isIndex = pathname == "/";
+  const isSubstitutions = pathname == "/zastepstwa";
+
+  const titleTimeTable = `${
+    timeTable?.data?.title ? `${timeTable?.data?.title} | ` : ""
+  }ZSTiO - Plan lekcji`;
+  const titleSubstitutions = `ZSTiO - Zastępstwa`;
 
   return (
     <>
       <Head>
         <link rel="canonical" href="https://plan.zstiojar.edu.pl" />
-        <title>
-          {[timeTable?.data?.title, "ZSTiO - Plan lekcji"]
-            .filter(Boolean)
-            .join(" | ")}
-        </title>
+        <title>{isSubstitutions ? titleSubstitutions : titleTimeTable}</title>
         <meta
           property="og:title"
-          content={`${
-            timeTable?.data?.title ? `${timeTable?.data?.title} | ` : ""
-          }ZSTiO - Plan lekcji`}
+          content={isSubstitutions ? titleSubstitutions : titleTimeTable}
         />
       </Head>
       <Navbar />

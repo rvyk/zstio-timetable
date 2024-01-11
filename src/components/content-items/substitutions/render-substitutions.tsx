@@ -110,7 +110,7 @@ const RenderSubstitutionsMobile: React.FC<RenderSubstitutionsProps> = ({
   return (
     <div className="min-h-screen">
       <div className="w-full">
-        <div className="dark:bg-[#242424] bg-white mx-1.5 my-3 min-h-12 rounded-md flex justify-center items-center">
+        <div className="dark:bg-[#242424] bg-white mx-1.5 my-2.5 min-h-12 rounded-md flex justify-center items-center">
           <p className="font-semibold text-gray-900 dark:text-white p-2 text-center">
             {status ? time : "Brak zastępstw"}
           </p>
@@ -123,7 +123,7 @@ const RenderSubstitutionsMobile: React.FC<RenderSubstitutionsProps> = ({
               (substitution: Substitution, index: number) => {
                 return (
                   <div key={index} className="w-fit">
-                    <ListRow isReverse={index % 2 == 0} className="my-3">
+                    <ListRow reverseColor={index % 2 == 0}>
                       <ListSmallItem className="min-w-32">
                         <div className="flex justify-center items-center flex-col">
                           <p className="text-xs font-semibold">Lekcja</p>
@@ -137,7 +137,7 @@ const RenderSubstitutionsMobile: React.FC<RenderSubstitutionsProps> = ({
                           </div>
                         </div>
                       </ListSmallItem>
-                      <ListLargeItem className="px-6 w-52 py-4 whitespace-nowrap flex flex-col justify-center text-center">
+                      <ListLargeItem isSubstitutions>
                         <p className="text-xs font-semibold">
                           Nauczyciel / Oddział
                         </p>
@@ -146,7 +146,7 @@ const RenderSubstitutionsMobile: React.FC<RenderSubstitutionsProps> = ({
                           {parseBranchField(substitution.branch)}
                         </p>
                       </ListLargeItem>
-                      <ListLargeItem className="px-6 w-52 py-4 whitespace-nowrap flex flex-col justify-center text-center">
+                      <ListLargeItem isSubstitutions>
                         <p className="text-xs font-semibold">
                           Przedmiot / Sala
                         </p>
@@ -155,7 +155,7 @@ const RenderSubstitutionsMobile: React.FC<RenderSubstitutionsProps> = ({
                           {substitution.class}
                         </p>
                       </ListLargeItem>
-                      <ListLargeItem className="px-6 w-52 py-4 whitespace-nowrap flex flex-col justify-center text-center">
+                      <ListLargeItem isSubstitutions>
                         <p className="text-xs font-semibold">
                           Zastępca / Uwagi
                         </p>

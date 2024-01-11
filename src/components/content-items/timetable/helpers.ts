@@ -45,9 +45,9 @@ const getSubstitutionAndSure = (
         }
       });
     }
-  } else if (substitution && substitution?.branch?.includes("|")) {
-    sure = false;
   }
+
+  console.log(substitution, sure);
 
   return { substitution, sure };
 };
@@ -60,7 +60,10 @@ export const TimeTableSubstitutions = (
   lesson: TableLesson,
   iterationIndex: number,
   day: TableLesson[][],
+  type: string,
 ) => {
+  if (type != "Oddziały") return { substitution: undefined, sure: true };
+
   const { substitution, sure } = getSubstitutionAndSure(
     dayIndex,
     lessonIndex,
@@ -83,7 +86,10 @@ export const MobileTimeTableSubstitutions = (
   iterationIndex: number,
   lessonNumber: number,
   lessons: TableLesson[][][],
+  type: string,
 ) => {
+  if (type != "Oddziały") return { substitution: undefined, sure: true };
+
   const { substitution, sure } = getSubstitutionAndSure(
     dayIndex,
     lessonIndex,

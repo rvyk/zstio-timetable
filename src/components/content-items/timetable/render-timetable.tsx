@@ -88,6 +88,7 @@ const RenderTimeTable: React.FC<TimeTableProps> = ({
                             lesson,
                             iterationIndex,
                             day,
+                            timeTable.data.text,
                           );
 
                         return (
@@ -189,7 +190,7 @@ const RenderTimeTableMobile: React.FC<TimeTableMobileProps> = ({
         </ul>
       </div>
 
-      <div className="min-w-full flex flex-col">
+      <div className="min-w-full">
         {Object.entries(timeTable.data?.hours).length > 1 ? (
           Object.entries(
             isShortHours
@@ -199,7 +200,7 @@ const RenderTimeTableMobile: React.FC<TimeTableMobileProps> = ({
             const { number: lessonNumber, timeFrom, timeTo } = hour;
 
             return (
-              <ListRow key={lessonIndex} isReverse={lessonIndex % 2 == 0}>
+              <ListRow key={lessonIndex} reverseColor={lessonIndex % 2 == 0}>
                 <ListSmallItem>
                   <span className="block text-center font-bold mb-1">
                     {lessonNumber}
@@ -225,6 +226,7 @@ const RenderTimeTableMobile: React.FC<TimeTableMobileProps> = ({
                           iterationIndex,
                           lessonNumber,
                           timeTable.data.lessons,
+                          timeTable.data.text,
                         );
 
                       return (
