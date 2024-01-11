@@ -18,10 +18,12 @@ const TimeTable: React.FC<TimeTableProps> = ({ timeTable, substitutions }) => {
       localStorage.getItem("shortHours") === "true",
   );
 
-  const maxLessons = Math.max(
-    Object.entries(timeTable.data.hours).length,
-    ...timeTable.data.lessons.map((day) => day.length),
-  );
+  const maxLessons = timeTable.status
+    ? Math.max(
+        Object.entries(timeTable.data.hours).length,
+        ...timeTable.data.lessons.map((day) => day.length),
+      )
+    : 0;
 
   useEffect(() => {
     let day = new Date().getDay();
@@ -31,15 +33,17 @@ const TimeTable: React.FC<TimeTableProps> = ({ timeTable, substitutions }) => {
   return (
     <div>
       <div className="hidden md:block">
-        <RenderTimeTable
-          {...{
-            timeTable,
-            isShortHours,
-            setIsShortHours,
-            maxLessons,
-            substitutions,
-          }}
-        />
+        {timeTable.status && (
+          <RenderTimeTable
+            {...{
+              timeTable,
+              isShortHours,
+              setIsShortHours,
+              maxLessons,
+              substitutions,
+            }}
+          />
+        )}
       </div>
       <div className="block md:hidden">
         <RenderTimeTableMobile

@@ -191,7 +191,8 @@ const RenderTimeTableMobile: React.FC<TimeTableMobileProps> = ({
       </div>
 
       <div className="min-w-full">
-        {Object.entries(timeTable.data?.hours).length > 1 ? (
+        {timeTable.status &&
+        Object.entries(timeTable.data?.hours).length > 1 ? (
           Object.entries(
             isShortHours
               ? shortHours.slice(0, maxLessons)
@@ -247,11 +248,13 @@ const RenderTimeTableMobile: React.FC<TimeTableMobileProps> = ({
             );
           })
         ) : (
-          <div className="text-center w-full">
-            <p className="font-semibold text-lg">
-              Nie znaleziono żadnych lekcji
-            </p>
-          </div>
+          <ListRow>
+            <ListLargeItem>
+              <p className="font-semibold text-lg text-center">
+                Nie znaleziono żadnych lekcji
+              </p>
+            </ListLargeItem>
+          </ListRow>
         )}
       </div>
     </div>

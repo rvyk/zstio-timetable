@@ -25,9 +25,7 @@ const Content: React.FC<ContentProps> = ({ substitutions, timeTable }) => {
     return <Substitutions substitutions={substitutions} />;
   }
 
-  if (timeTable.status) {
-    return <TimeTable {...{ timeTable, substitutions }} />;
-  }
+  return <TimeTable {...{ timeTable, substitutions }} />;
 };
 
 export default Content;
