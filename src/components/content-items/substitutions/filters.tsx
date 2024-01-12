@@ -19,7 +19,7 @@ const Filters: React.FC = () => {
 
   return (
     <div className="flex items-center">
-      <FunnelIcon className="w-4 h-4 mr-1" />
+      <FunnelIcon className="mr-1 h-4 w-4" />
       <p className="mr-2">Filtry: </p>
 
       <CopyButton />
@@ -28,7 +28,7 @@ const Filters: React.FC = () => {
       {filterItems.map((item, index) => (
         <span
           key={index}
-          className="inline-flex items-center transition-all px-2 py-1 mr-2 text-sm font-medium text-blue-800 bg-blue-100 rounded dark:bg-red-100 dark:text-red-800"
+          className="mr-2 inline-flex items-center rounded bg-blue-100 px-2 py-1 text-sm font-medium text-blue-800 transition-all dark:bg-red-100 dark:text-red-800"
         >
           {parseBranchField(item)}
         </span>
@@ -71,9 +71,9 @@ const CopyButton: React.FC = () => {
   return (
     <Button variant="filter" size="filter" onClick={handleCopy}>
       {isCopied ? (
-        <CheckIcon className="w-5 h-5" />
+        <CheckIcon className="h-5 w-5" />
       ) : (
-        <ClipboardIcon className="w-5 h-5" />
+        <ClipboardIcon className="h-5 w-5" />
       )}
     </Button>
   );
@@ -92,10 +92,10 @@ const ClearFiltersButton: React.FC = () => {
       variant="filter"
       size="filter"
       onClick={handleClearFilters}
-      className="text-red-800 bg-red-100 dark:bg-blue-100 dark:text-blue-800"
+      className="bg-red-100 text-red-800 dark:bg-blue-100 dark:text-blue-800"
     >
       Wyczyść filtry
-      <XMarkIcon className="w-4 h-4 ml-1" />
+      <XMarkIcon className="ml-1 h-4 w-4" />
     </Button>
   );
 };

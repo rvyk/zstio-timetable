@@ -24,7 +24,7 @@ const ButtonWrapper: React.FC<ButtonWrapperProps> = ({
           variant="navbar"
           size="navbar"
           onClick={onClick}
-          className="p-3 mr-2 text-xs"
+          className="mr-2 p-3 text-xs"
           suppressHydrationWarning
           asChild
         >

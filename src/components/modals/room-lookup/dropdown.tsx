@@ -33,13 +33,13 @@ const Dropdown: React.FC<DropdownProps> = ({
         >
           Znaleziono {data.length} wyników
           <ChevronDownIcon
-            className={`w-4 h-4 ml-2 ${
+            className={`ml-2 h-4 w-4 ${
               isOpened && "rotate-180"
             } transition-all`}
           />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-60 mt-2 max-h-60 overflow-y-scroll bg-white rounded-lg shadow dark:bg-[#161616] border-0">
+      <DropdownMenuContent className="mt-2 max-h-60 w-60 overflow-y-scroll rounded-lg border-0 bg-white shadow dark:bg-[#161616]">
         {data.map((item: any, index: number) => (
           <DropdownMenuItem
             key={index}
@@ -47,9 +47,9 @@ const Dropdown: React.FC<DropdownProps> = ({
               setIsModalOpened(false);
               router.push(item.url || `/room/${item.value}`);
             }}
-            className="flex items-center cursor-pointer my-0.5 pl-2 rounded hover:bg-gray-100 dark:hover:bg-[#202020] dark:focus:bg-[#202020]"
+            className="my-0.5 flex cursor-pointer items-center rounded pl-2 hover:bg-gray-100 dark:hover:bg-[#202020] dark:focus:bg-[#202020]"
           >
-            <p className="w-full py-1 ml-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">
+            <p className="ml-2 w-full rounded py-1 text-sm font-medium text-gray-900 dark:text-gray-300">
               {item.name}
             </p>
           </DropdownMenuItem>

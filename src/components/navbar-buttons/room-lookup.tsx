@@ -12,7 +12,7 @@ const RoomLookup: React.FC = () => {
         tooltipText="Wyszukaj salę"
         onClick={() => setIsOpened(!isOpened)}
       >
-        <MagnifyingGlassCircleIcon className="w-4 h-4" />
+        <MagnifyingGlassCircleIcon className="h-4 w-4" />
       </ButtonWrapper>
     </>
   );

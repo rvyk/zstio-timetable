@@ -51,7 +51,7 @@ const Document = () => {
         {/* ----- */}
         <link rel="manifest" href="/manifest.json" />
       </Head>
-      <body className="bg-[#F7F3F5] dark:bg-[#171717] min-h-screen w-full flex justify-center flex-col">
+      <body className="flex min-h-screen w-full flex-col justify-center bg-[#F7F3F5] dark:bg-[#171717]">
         <Main />
         <NextScript />
       </body>

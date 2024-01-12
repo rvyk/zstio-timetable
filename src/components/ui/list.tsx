@@ -16,9 +16,9 @@ const ListLargeItem: React.FC<ListItemProps> = ({
   return (
     <div
       className={cn(
-        "w-full px-5 py-2 min-h-[4rem] flex flex-col justify-center",
+        "flex min-h-[4rem] w-full flex-col justify-center px-5 py-2",
         isSubstitutions &&
-          "px-6 w-52 py-4 whitespace-nowrap flex flex-col justify-center text-center",
+          "flex w-52 flex-col justify-center whitespace-nowrap px-6 py-4 text-center",
         className,
       )}
     >
@@ -31,7 +31,7 @@ const ListSmallItem: React.FC<ListItemProps> = ({ children, className }) => {
   return (
     <div
       className={cn(
-        "w-24 rounded-l py-1 my-2 flex-shrink-0 flex flex-col justify-center",
+        "my-2 flex w-24 flex-shrink-0 flex-col justify-center rounded-l py-1",
         className,
       )}
     >
@@ -58,7 +58,7 @@ const ListRow: React.FC<ListRowProps> = ({
         reverseColor
           ? "bg-white dark:bg-[#202020]"
           : "bg-zinc-50 dark:bg-[#262626]",
-        "dark:text-gray-300 flex shadow-sm border-zinc-100 mx-1.5 my-1 first:mt-0 rounded-lg",
+        "mx-1.5 my-1 flex rounded-lg border-zinc-100 shadow-sm first:mt-0 dark:text-gray-300",
         className,
       )}
     >

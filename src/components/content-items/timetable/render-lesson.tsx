@@ -29,7 +29,7 @@ const RenderLesson: React.FC<RenderLessonProps> = ({
     <div className="flex flex-col">
       <div className="flex flex-row">
         <div
-          className={`font-semibold mr-1 flex flex-col ${
+          className={`mr-1 flex flex-col font-semibold ${
             substitution && sure && "line-through opacity-60"
           }`}
         >
@@ -38,7 +38,7 @@ const RenderLesson: React.FC<RenderLessonProps> = ({
 
         {lesson?.groupName && (
           <p
-            className={`flex items-center mr-1 ${
+            className={`mr-1 flex items-center ${
               substitution && sure && "line-through opacity-60"
             }`}
           >
@@ -50,7 +50,7 @@ const RenderLesson: React.FC<RenderLessonProps> = ({
           <Link
             prefetch={false}
             href={`/class/${lesson?.classId}`}
-            className={`flex items-center mr-1 ${
+            className={`mr-1 flex items-center ${
               substitution && sure && "line-through opacity-60"
             }`}
           >
@@ -62,7 +62,7 @@ const RenderLesson: React.FC<RenderLessonProps> = ({
           <Link
             prefetch={false}
             href={`/teacher/${lesson?.teacherId}`}
-            className={`flex items-center mr-1 ${
+            className={`mr-1 flex items-center ${
               substitution && sure && "line-through opacity-60"
             }`}
           >
@@ -73,7 +73,7 @@ const RenderLesson: React.FC<RenderLessonProps> = ({
           <Link
             prefetch={false}
             href={`/room/${lesson?.roomId}`}
-            className={`flex items-center mr-1 ${
+            className={`mr-1 flex items-center ${
               substitution && sure && "line-through opacity-60"
             }`}
           >
@@ -93,7 +93,7 @@ const RenderLesson: React.FC<RenderLessonProps> = ({
                   "+",
                 )}&branches=${possibleSubstitution?.branch}`}
               >
-                <ExclamationCircleIcon className="w-5 h-5 text-red-600 dark:text-red-400" />
+                <ExclamationCircleIcon className="h-5 w-5 text-red-600 dark:text-red-400" />
               </Link>
             </TooltipTrigger>
             <TooltipContent className="text-center">
@@ -112,7 +112,7 @@ const RenderLesson: React.FC<RenderLessonProps> = ({
           )}&branches=${substitution?.branch}`}
         >
           {cases.includes(substitution?.case) === false && (
-            <p className="text-orange-400 font-semibold">
+            <p className="font-semibold text-orange-400">
               {substitution?.subject}
             </p>
           )}

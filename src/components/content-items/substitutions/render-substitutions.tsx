@@ -29,11 +29,11 @@ const RenderSubstitutions: React.FC<RenderSubstitutionsProps> = ({
   time,
 }) => {
   return (
-    <Table className="hidden md:flex justify-center">
+    <Table className="hidden justify-center md:flex">
       <TableCaption
         status={status}
         isSubstitutions={true}
-        className="flex-col justify-center !items-start"
+        className="flex-col !items-start justify-center"
       >
         {time}
         <Filters />
@@ -47,7 +47,7 @@ const RenderSubstitutions: React.FC<RenderSubstitutionsProps> = ({
                 <tbody key={index}>
                   <TableRow reverseColor={index % 2 == 0}>
                     <TableCell variant="substitutionNumber">
-                      <div className="flex justify-center items-center flex-col">
+                      <div className="flex flex-col items-center justify-center">
                         {substitution.lesson}
                       </div>
                     </TableCell>
@@ -61,7 +61,7 @@ const RenderSubstitutions: React.FC<RenderSubstitutionsProps> = ({
                     ].map((field) => (
                       <TableCell
                         key={field}
-                        className="px-6 py-4 whitespace-nowrap border-r last:border-none dark:border-[#171717]"
+                        className="whitespace-nowrap border-r px-6 py-4 last:border-none dark:border-[#171717]"
                       >
                         {field === "branch"
                           ? parseBranchField(substitution.branch)
@@ -110,13 +110,13 @@ const RenderSubstitutionsMobile: React.FC<RenderSubstitutionsProps> = ({
   return (
     <div className="min-h-screen">
       <div className="w-full">
-        <div className="dark:bg-[#242424] bg-white mx-1.5 my-2.5 min-h-12 rounded-md flex justify-center items-center">
-          <p className="font-semibold text-gray-900 dark:text-white p-2 text-center">
+        <div className="mx-1.5 my-2.5 flex min-h-12 items-center justify-center rounded-md bg-white dark:bg-[#242424]">
+          <p className="p-2 text-center font-semibold text-gray-900 dark:text-white">
             {status ? time : "Brak zastępstw"}
           </p>
         </div>
       </div>
-      <div key={index} className="overflow-x-auto w-full text-center text-sm">
+      <div key={index} className="w-full overflow-x-auto text-center text-sm">
         {!!filteredSubstitutions.length ? (
           <>
             {filteredSubstitutions.map(
@@ -125,7 +125,7 @@ const RenderSubstitutionsMobile: React.FC<RenderSubstitutionsProps> = ({
                   <div key={index} className="w-fit">
                     <ListRow reverseColor={index % 2 == 0}>
                       <ListSmallItem className="min-w-32">
-                        <div className="flex justify-center items-center flex-col">
+                        <div className="flex flex-col items-center justify-center">
                           <p className="text-xs font-semibold">Lekcja</p>
                           <div className="flex flex-col">
                             <p className="font-semibold">
@@ -169,8 +169,8 @@ const RenderSubstitutionsMobile: React.FC<RenderSubstitutionsProps> = ({
             )}
           </>
         ) : (
-          <div className="text-center w-full">
-            <p className="font-semibold text-lg">Nie znaleziono zastępstw</p>
+          <div className="w-full text-center">
+            <p className="text-lg font-semibold">Nie znaleziono zastępstw</p>
           </div>
         )}
       </div>

@@ -14,9 +14,9 @@ const ThemeButton: React.FC<ThemeButtonProps> = ({
   return (
     <ButtonWrapper tooltipText="Zmień motyw" onClick={toggleTheme}>
       {resolvedTheme === "light" ? (
-        <SunIcon className="w-4 h-4 transition-none" />
+        <SunIcon className="h-4 w-4 transition-none" />
       ) : (
-        <MoonIcon className="w-4 h-4 transition-none" />
+        <MoonIcon className="h-4 w-4 transition-none" />
       )}
     </ButtonWrapper>
   );

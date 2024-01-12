@@ -47,7 +47,7 @@ const Layout: React.FC<LayoutProps> = ({
       {!errorMsg && (
         <Content timeTable={timeTable} substitutions={substitutions} />
       )}
-      <div className={`${!isIndex && !errorMsg && "md:block hidden"}`}>
+      <div className={`${!isIndex && !errorMsg && "hidden md:block"}`}>
         <Footer />
       </div>
     </>

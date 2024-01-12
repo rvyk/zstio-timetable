@@ -10,9 +10,9 @@ interface TableProps {
 }
 
 const Table: React.FC<TableProps> = ({ children, className }) => (
-  <div className={cn("w-full relative mb-8", className)}>
-    <div className="overflow-x-auto shadow-md md:rounded-xl md:w-[90%] w-full">
-      <table className="w-full text-sm text-left transition-all duration-200 text-gray-500 dark:text-gray-300">
+  <div className={cn("relative mb-8 w-full", className)}>
+    <div className="w-full overflow-x-auto shadow-md md:w-[90%] md:rounded-xl">
+      <table className="w-full text-left text-sm text-gray-500 transition-all duration-200 dark:text-gray-300">
         {children}
       </table>
     </div>
@@ -36,8 +36,8 @@ const TableCaption: React.FC<TableCaptionProps> = ({
 }) => {
   if (!status) {
     return (
-      <caption className="p-5 transition-all text-lg font-semibold text-left text-gray-900 bg-white dark:text-gray-300 dark:bg-[#202020]">
-        <p className="transition-all text-lg font-normal text-gray-500 lg:text-xl mr-1 dark:text-gray-400">
+      <caption className="bg-white p-5 text-left text-lg font-semibold text-gray-900 transition-all dark:bg-[#202020] dark:text-gray-300">
+        <p className="mr-1 text-lg font-normal text-gray-500 transition-all dark:text-gray-400 lg:text-xl">
           {isSubstitutions
             ? "Brak zastępstw"
             : "Nie znaleziono pasującego planu lekcji"}
@@ -48,19 +48,19 @@ const TableCaption: React.FC<TableCaptionProps> = ({
 
   if (isLoading) {
     return (
-      <caption className="p-5 transition-all text-lg font-semibold text-left text-gray-900 bg-white dark:text-gray-300 dark:bg-[#202020]">
+      <caption className="bg-white p-5 text-left text-lg font-semibold text-gray-900 transition-all dark:bg-[#202020] dark:text-gray-300">
         <div
           role="status"
-          className="transition-all lg:text-xl w-full flex items-center"
+          className="flex w-full items-center transition-all lg:text-xl"
         >
-          <ArrowPathIcon className="w-7 h-7 text-gray-200 animate-spin dark:text-gray-300 fill-[#2B161B] dark:fill-[#171717]" />
+          <ArrowPathIcon className="h-7 w-7 animate-spin fill-[#2B161B] text-gray-200 dark:fill-[#171717] dark:text-gray-300" />
         </div>
       </caption>
     );
   }
 
   return (
-    <caption className="p-5 transition-all text-lg font-semibold text-left text-gray-900 bg-white dark:text-gray-300 dark:bg-[#202020]">
+    <caption className="bg-white p-5 text-left text-lg font-semibold text-gray-900 transition-all dark:bg-[#202020] dark:text-gray-300">
       <div className={cn("flex items-center", className)}>{children}</div>
     </caption>
   );
@@ -82,7 +82,7 @@ const TableHeader: React.FC<TableHeaderProps> = ({ isSubstitutions }) => {
   ];
 
   return (
-    <thead className="text-xs transition-all duration-200 text-[#ffffff] bg-[#2B161B] uppercase dark:bg-[#151515] dark:text-gray-300">
+    <thead className="bg-[#2B161B] text-xs uppercase text-[#ffffff] transition-all duration-200 dark:bg-[#151515] dark:text-gray-300">
       <tr>
         {isSubstitutions ? (
           items.map((item) => (
@@ -120,7 +120,7 @@ interface TableRowProps {
 const TableRow: React.FC<TableRowProps> = ({ reverseColor, children }) => {
   return (
     <tr
-      className={`text-gray-600 dark:text-gray-300 border-b ${
+      className={`border-b text-gray-600 dark:text-gray-300 ${
         reverseColor
           ? "bg-white dark:bg-[#191919]"
           : "bg-gray-50 dark:bg-[#202020]"

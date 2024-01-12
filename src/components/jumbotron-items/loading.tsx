@@ -24,9 +24,9 @@ const Loading: React.FC = () => {
   return (
     <div
       role="status"
-      className="my-4 transition-all text-xl w-full flex justify-center items-center text-gray-500 dark:text-gray-300"
+      className="my-4 flex w-full items-center justify-center text-xl text-gray-500 transition-all dark:text-gray-300"
     >
-      <ReloadIcon className="w-5 h-5 lg:w-6 lg:h-6 mr-2 mt-1 animate-spin" />
+      <ReloadIcon className="mr-2 mt-1 h-5 w-5 animate-spin lg:h-6 lg:w-6" />
       <h1 className="lg:text-2xl ">{loadingText}</h1>
     </div>
   );

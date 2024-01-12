@@ -16,9 +16,9 @@ const Footer: React.FC = () => {
   };
 
   return (
-    <footer className="w-full flex justify-center items-center pb-8">
-      <div className="mx-auto p-4 rounded-lg shadow dark:bg-[#202020] bg-[#2B161B] w-[90%] sm:w-auto">
-        <span className="text-sm text-[#ffffff] block text-center dark:text-gray-400">
+    <footer className="flex w-full items-center justify-center pb-8">
+      <div className="mx-auto w-[90%] rounded-lg bg-[#2B161B] p-4 shadow dark:bg-[#202020] sm:w-auto">
+        <span className="block text-center text-sm text-[#ffffff] dark:text-gray-400">
           © {new Date().getFullYear()}
           <span className="ml-1 tracking-wide">
             Made with{" "}

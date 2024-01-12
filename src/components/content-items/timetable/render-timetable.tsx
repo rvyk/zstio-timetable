@@ -38,15 +38,15 @@ const RenderTimeTable: React.FC<TimeTableProps> = ({
   substitutions,
 }) => {
   return (
-    <Table className="hidden md:flex justify-center">
+    <Table className="hidden justify-center md:flex">
       <TableCaption status={timeTable.status}>
-        <div className="inline-flex rounded-md shadow-sm mr-2" role="group">
+        <div className="mr-2 inline-flex rounded-md shadow-sm" role="group">
           <ShortHoursButton {...{ isShortHours, setIsShortHours }} />
         </div>
-        <p className="transition-all text-lg font-normal text-gray-500 lg:text-xl mr-1 dark:text-gray-300">
+        <p className="mr-1 text-lg font-normal text-gray-500 transition-all dark:text-gray-300 lg:text-xl">
           {timeTable?.data?.text} /
         </p>
-        <p className="transition-all text-lg font-bold text-gray-500 lg:text-xl dark:text-gray-300">
+        <p className="text-lg font-bold text-gray-500 transition-all dark:text-gray-300 lg:text-xl">
           {timeTable?.data?.title}
         </p>
       </TableCaption>
@@ -63,7 +63,7 @@ const RenderTimeTable: React.FC<TimeTableProps> = ({
             <tbody key={lessonIndex}>
               <TableRow key={lessonIndex} reverseColor={lessonIndex % 2 === 0}>
                 <TableCell variant="number">
-                  <div className="flex justify-center items-center flex-col">
+                  <div className="flex flex-col items-center justify-center">
                     {lessonNumber}
                     {/* {new Date().getDay() < 6 && new Date().getDay() != 0 && (
                       <CurrentLesson timeFrom={timeFrom} timeTo={timeTo} />
@@ -131,7 +131,7 @@ const RenderTimeTable: React.FC<TimeTableProps> = ({
             <TableCell
               colSpan={5}
               scope="row"
-              className="font-semibold !border-none"
+              className="!border-none font-semibold"
             >
               {timeTable.data.generatedDate &&
                 `Wygenerowano: ${timeTable.data.generatedDate}`}{" "}
@@ -142,7 +142,7 @@ const RenderTimeTable: React.FC<TimeTableProps> = ({
           <TableCell
             colSpan={!timeTable.status ? 7 : 2}
             scope="row"
-            className="font-semibold text-right"
+            className="text-right font-semibold"
           >
             <Link
               prefetch={false}
@@ -170,7 +170,7 @@ const RenderTimeTableMobile: React.FC<TimeTableMobileProps> = ({
   return (
     <div className="min-h-screen">
       <div className="w-full py-2.5">
-        <ul className="w-full px-0.5 text-sm dark:bg-[#171717] bg-[#F7F3F5] font-medium text-center text-gray-500 flex justify-around items-center dark:text-gray-400">
+        <ul className="flex w-full items-center justify-around bg-[#F7F3F5] px-0.5 text-center text-sm font-medium text-gray-500 dark:bg-[#171717] dark:text-gray-400">
           {days.map((item, index) => (
             <li
               key={index}
@@ -179,12 +179,12 @@ const RenderTimeTableMobile: React.FC<TimeTableMobileProps> = ({
               }}
               className={`${
                 item.index == selectedDay
-                  ? "!bg-[#321c21] dark:!bg-[#303030] !text-white"
+                  ? "!bg-[#321c21] !text-white dark:!bg-[#303030]"
                   : "hover:bg-gray-100 dark:hover:bg-[#242424]"
-              } transition-all w-full mx-1 inline-block cursor-pointer shadow-sm py-4 rounded-lg text-gray-900 bg-white focus:ring-transparent focus:outline-none dark:bg-[#242424] dark:text-white`}
+              } mx-1 inline-block w-full cursor-pointer rounded-lg bg-white py-4 text-gray-900 shadow-sm transition-all focus:outline-none focus:ring-transparent dark:bg-[#242424] dark:text-white`}
             >
-              <p className="hidden sm:block min-w-full">{item.long}</p>
-              <p className="block sm:hidden min-w-full">{item.short}</p>
+              <p className="hidden min-w-full sm:block">{item.long}</p>
+              <p className="block min-w-full sm:hidden">{item.short}</p>
             </li>
           ))}
         </ul>
@@ -203,7 +203,7 @@ const RenderTimeTableMobile: React.FC<TimeTableMobileProps> = ({
             return (
               <ListRow key={lessonIndex} reverseColor={lessonIndex % 2 == 0}>
                 <ListSmallItem>
-                  <span className="block text-center font-bold mb-1">
+                  <span className="mb-1 block text-center font-bold">
                     {lessonNumber}
                   </span>
                   <span className="block text-center text-sm">
@@ -250,7 +250,7 @@ const RenderTimeTableMobile: React.FC<TimeTableMobileProps> = ({
         ) : (
           <ListRow>
             <ListLargeItem>
-              <p className="font-semibold text-lg text-center">
+              <p className="text-center text-lg font-semibold">
                 Nie znaleziono żadnych lekcji
               </p>
             </ListLargeItem>

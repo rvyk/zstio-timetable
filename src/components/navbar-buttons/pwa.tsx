@@ -41,7 +41,7 @@ const PWAButton: React.FC = () => {
 
   return (
     <ButtonWrapper tooltipText="Zainstaluj apkę" onClick={install}>
-      <DownloadIcon className="w-4 h-4" />
+      <DownloadIcon className="h-4 w-4" />
     </ButtonWrapper>
   );
 };

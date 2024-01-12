@@ -25,15 +25,15 @@ const Jumbotron: React.FC<JumbotronProps> = ({
 
   return (
     <div
-      className={`py-8 relative px-4 mx-auto max-w-screen-xl text-center ${
-        !isIndex && !errorMsg && "md:block hidden"
+      className={`relative mx-auto max-w-screen-xl px-4 py-8 text-center ${
+        !isIndex && !errorMsg && "hidden md:block"
       }`}
     >
-      <div className="flex justify-center items-center flex-col sm:flex-row mb-4 sm:mb-0 -ml-0 sm:-ml-16">
+      <div className="-ml-0 mb-4 flex flex-col items-center justify-center sm:-ml-16 sm:mb-0 sm:flex-row">
         <Link
           prefetch={false}
           href="https://zstiojar.edu.pl"
-          className="relative w-20 h-20 mr-4 block z-30"
+          className="relative z-30 mr-4 block h-20 w-20"
         >
           <Image
             alt="logo"
@@ -43,7 +43,7 @@ const Jumbotron: React.FC<JumbotronProps> = ({
             objectPosition="center"
           />
         </Link>
-        <h1 className="transition-all text-5xl font-bold tracking-tight leading-none text-[#2B161B] md:text-5xl lg:text-6xl dark:text-gray-100">
+        <h1 className="text-5xl font-bold leading-none tracking-tight text-[#2B161B] transition-all dark:text-gray-100 md:text-5xl lg:text-6xl">
           {isSubstitution ? "Zastępstwa " : "Plan lekcji "}
           <span className="font-extrabold">ZSTiO</span>
         </h1>
@@ -77,8 +77,8 @@ const JumbotronContent: React.FC<JumbotronContentProps> = ({
 
   if (errorMsg) {
     return (
-      <div className="flex justify-center mb-5 flex-wrap items-center flex-col">
-        <p className="text-xl font-semibold mr-1 text-gray-600 lg:text-2xl dark:text-gray-300">
+      <div className="mb-5 flex flex-col flex-wrap items-center justify-center">
+        <p className="mr-1 text-xl font-semibold text-gray-600 dark:text-gray-300 lg:text-2xl">
           {errorMsg}
         </p>
         <p className="text-gray-600 dark:text-gray-300 lg:text-lg">
@@ -100,12 +100,12 @@ const JumbotronContent: React.FC<JumbotronContentProps> = ({
       : `Nie znaleziono pasującego planu lekcji`;
 
   return (
-    <div className="md:flex hidden justify-center mb-5 flex-wrap items-center ">
-      <p className="transition-all text-xl font-normal mr-1 text-gray-500 lg:text-2xl dark:text-gray-400">
+    <div className="mb-5 hidden flex-wrap items-center justify-center md:flex ">
+      <p className="mr-1 text-xl font-normal text-gray-500 transition-all dark:text-gray-400 lg:text-2xl">
         {!isSubstitution ? timeTableText : substitutionsText}
       </p>
       {!isSubstitution && timeTable.status && (
-        <p className="transition-all text-xl font-bold text-gray-500 lg:text-2xl dark:text-gray-400">
+        <p className="text-xl font-bold text-gray-500 transition-all dark:text-gray-400 lg:text-2xl">
           {timeTable.data.title}
         </p>
       )}

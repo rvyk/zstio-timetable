@@ -14,13 +14,13 @@ const SkeletonLoading: React.FC<{ isSubstitution?: boolean }> = ({
 }) => {
   return (
     <div>
-      <Table className="md:flex hidden justify-center items-center">
+      <Table className="hidden items-center justify-center md:flex">
         <TableCaption
           status={true}
           isSubstitutions={isSubstitution}
-          className="flex-col justify-center !items-start"
+          className="flex-col !items-start justify-center"
         >
-          <Skeleton className="w-[100px] h-[12px] rounded-full" />
+          <Skeleton className="h-[12px] w-[100px] rounded-full" />
         </TableCaption>
         <TableHeader isSubstitutions={isSubstitution} />
         {[...Array(7)].map((_, index) => (
@@ -32,7 +32,7 @@ const SkeletonLoading: React.FC<{ isSubstitution?: boolean }> = ({
                   variant="substitutionNumber"
                   className="text-center"
                 >
-                  <Skeleton className="w-[100px] h-[10px] rounded-full" />
+                  <Skeleton className="h-[10px] w-[100px] rounded-full" />
                 </TableCell>
               ))}
             </TableRow>
@@ -61,16 +61,16 @@ const SkeletonLoading: React.FC<{ isSubstitution?: boolean }> = ({
           </TableRow>
         </TableFooter>
       </Table>
-      <div className="block md:hidden min-h-screen">
+      <div className="block min-h-screen md:hidden">
         <div className="w-full pb-2">
-          <ul className="w-full px-1 text-sm dark:bg-[#171717] bg-[#F7F3F5] font-medium mt-2 text-center text-gray-500 flex justify-around items-center dark:text-gray-400">
+          <ul className="mt-2 flex w-full items-center justify-around bg-[#F7F3F5] px-1 text-center text-sm font-medium text-gray-500 dark:bg-[#171717] dark:text-gray-400">
             {[...Array(5)].map((_, index) => (
               <li
                 key={index}
                 className="
-                 transition-all w-full mx-1 flex justify-center items-center cursor-pointer shadow-sm py-4 rounded-lg text-gray-900 bg-white focus:ring-transparent focus:outline-none dark:bg-[#242424] dark:text-white"
+                 mx-1 flex w-full cursor-pointer items-center justify-center rounded-lg bg-white py-4 text-gray-900 shadow-sm transition-all focus:outline-none focus:ring-transparent dark:bg-[#242424] dark:text-white"
               >
-                <Skeleton className="w-1/2 mx-1 h-[15px] rounded-full" />
+                <Skeleton className="mx-1 h-[15px] w-1/2 rounded-full" />
               </li>
             ))}
           </ul>
@@ -83,20 +83,20 @@ const SkeletonLoading: React.FC<{ isSubstitution?: boolean }> = ({
                 index % 2 === 0
                   ? "bg-white dark:bg-[#202020]"
                   : "bg-zinc-50 dark:bg-[#242424]"
-              } dark:text-gray-300 flex shadow-sm border-zinc-100 m-1.5 first:mt-0 rounded-lg`}
+              } m-1.5 flex rounded-lg border-zinc-100 shadow-sm first:mt-0 dark:text-gray-300`}
             >
               <div
-                className={`w-24 rounded-l py-1 my-2 flex-shrink-0 flex flex-col justify-center`}
+                className={`my-2 flex w-24 flex-shrink-0 flex-col justify-center rounded-l py-1`}
               >
-                <span className="text-center font-bold mb-1 flex justify-center items-center flex-col">
-                  <Skeleton className="w-1/3 h-[10px] rounded-full my-1" />
-                  <Skeleton className="w-1/2 h-[10px] rounded-full my-1" />
+                <span className="mb-1 flex flex-col items-center justify-center text-center font-bold">
+                  <Skeleton className="my-1 h-[10px] w-1/3 rounded-full" />
+                  <Skeleton className="my-1 h-[10px] w-1/2 rounded-full" />
                 </span>
               </div>
 
-              <div className="w-full px-5 py-2 min-h-[4rem] flex flex-col justify-center">
-                <Skeleton className="w-1/3 h-2 rounded-full my-1" />
-                <Skeleton className="w-1/2 h-2 rounded-full my-1" />
+              <div className="flex min-h-[4rem] w-full flex-col justify-center px-5 py-2">
+                <Skeleton className="my-1 h-2 w-1/3 rounded-full" />
+                <Skeleton className="my-1 h-2 w-1/2 rounded-full" />
               </div>
             </div>
           ))}

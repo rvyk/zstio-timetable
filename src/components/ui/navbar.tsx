@@ -32,11 +32,11 @@ const Navbar: React.FC = () => {
   if (!resolvedTheme || !isClient || isIndex) return null;
 
   return (
-    <div className="md:absolute dark:bg-[#202020] shadow-sm md:shadow-none rounded-b-lg bg-[#ffffff] md:!bg-transparent relative md:top-2 md:right-2 z-30 transition-all flex md:justify-normal justify-between p-2 md:p-0">
+    <div className="relative z-30 flex justify-between rounded-b-lg bg-[#ffffff] p-2 shadow-sm transition-all dark:bg-[#202020] md:absolute md:right-2 md:top-2 md:justify-normal md:!bg-transparent md:p-0 md:shadow-none">
       <Link
         prefetch={false}
         href="https://zstiojar.edu.pl"
-        className="relative w-11 h-11 md:hidden"
+        className="relative h-11 w-11 md:hidden"
       >
         <Image
           alt="logo"

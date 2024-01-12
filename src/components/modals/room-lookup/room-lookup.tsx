@@ -46,7 +46,7 @@ const RoomLookupModal: React.FC<RoomLookupModalProps> = ({
 
   return (
     <Dialog open={isOpened} onOpenChange={() => setIsOpened(!isOpened)}>
-      <DialogContent className="sm:max-w-[425px] bg-white dark:bg-[#212121] border-0">
+      <DialogContent className="border-0 bg-white dark:bg-[#212121] sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>Wyszukaj wolną salę</DialogTitle>
           <DialogDescription>
@@ -59,7 +59,7 @@ const RoomLookupModal: React.FC<RoomLookupModalProps> = ({
           defaultValue={selectedDay.toString()}
           onValueChange={(e) => setSelectedDay(+e)}
           type="single"
-          className="flex justify-center flex-wrap pt-2"
+          className="flex flex-wrap justify-center pt-2"
         >
           {days.map((day) => (
             <ToggleGroupItem
@@ -73,12 +73,12 @@ const RoomLookupModal: React.FC<RoomLookupModalProps> = ({
           ))}
         </ToggleGroup>
 
-        <div className="w-full flex justify-center">
+        <div className="flex w-full justify-center">
           <Input
             type="number"
             tabIndex={-1}
             placeholder="Numer lekcji"
-            className="bg-gray-50 block w-1/2 p-2 border-gray-300 text-center dark:bg-[#171717] dark:border-0 outline-none"
+            className="block w-1/2 border-gray-300 bg-gray-50 p-2 text-center outline-none dark:border-0 dark:bg-[#171717]"
             onChange={(e) => {
               const value = e.target.value;
               setSelectedLesson(+value);

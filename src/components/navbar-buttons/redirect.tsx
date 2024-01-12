@@ -30,9 +30,9 @@ const RedirectButton: React.FC = () => {
       }
     >
       {isSubstitution ? (
-        <CalendarDaysIcon className="w-4 h-4" />
+        <CalendarDaysIcon className="h-4 w-4" />
       ) : (
-        <ArrowPathRoundedSquareIcon className="w-4 h-4" />
+        <ArrowPathRoundedSquareIcon className="h-4 w-4" />
       )}
     </ButtonWrapper>
   );
