@@ -30,15 +30,6 @@ const ShortHoursButton: React.FC<ShortHoursButtonProps> = ({
     localStorage.setItem("shortHours", state.toString());
   };
 
-  const shortHoursStyles = {
-    default:
-      "px-4 py-2 transition-all text-sm font-medium text-gray-900 border border-gray-200 focus:z-10 focus:ring-0 dark:text-white dark:hover:text-white dark:focus:text-white",
-    normal:
-      "bg-white dark:bg-[#171717] dark:hover:bg-[#191919] hover:bg-gray-200 dark:border-none",
-    short:
-      "bg-[#321c21] hover:bg-[#480e0c] dark:hover:bg-red-500 dark:bg-red-400 dark:border-none text-white hover:text-gray-200 focus:text-gray-200",
-  };
-
   const tooltips = [
     {
       text: "Normalne lekcje - 45 minut",
@@ -51,7 +42,7 @@ const ShortHoursButton: React.FC<ShortHoursButtonProps> = ({
   ];
 
   return (
-    <>
+    <div className="relative">
       {tooltips.map((tooltip, index) => (
         <Tooltip key={index}>
           <TooltipTrigger asChild>
@@ -61,11 +52,14 @@ const ShortHoursButton: React.FC<ShortHoursButtonProps> = ({
                 handleButton(tooltip.value);
               }}
               className={cn(
-                shortHoursStyles.default,
+                "border border-gray-200 bg-transparent px-4 py-2 text-sm font-medium text-gray-900 transition-all focus:z-10 focus:ring-0 dark:border-none dark:text-white dark:hover:text-white dark:focus:text-white",
                 index === 0 ? "rounded-l-lg" : "rounded-r-lg",
-                isShortHours === tooltip.value
-                  ? shortHoursStyles.short
-                  : shortHoursStyles.normal,
+                isShortHours &&
+                  index === 0 &&
+                  "hover:bg-gray-200 dark:bg-[#171717] dark:hover:bg-[#191919]",
+                !isShortHours &&
+                  index === 1 &&
+                  "hover:bg-gray-200 dark:bg-[#171717] dark:hover:bg-[#191919]",
               )}
             >
               {tooltip.value ? "30'" : "45'"}
@@ -76,7 +70,17 @@ const ShortHoursButton: React.FC<ShortHoursButtonProps> = ({
           </TooltipContent>
         </Tooltip>
       ))}
-    </>
+      <div
+        className={cn(
+          "absolute top-0 h-full w-[50%] cursor-default bg-[#321c21] px-4 py-2 text-sm font-medium text-gray-900 text-white transition-all hover:bg-[#480e0c] hover:text-gray-200 focus:text-gray-200 dark:border-none dark:bg-red-400 dark:text-white dark:hover:bg-red-500 dark:hover:text-white dark:focus:text-white",
+          isShortHours
+            ? "translate-x-[100%] transform rounded-r-lg"
+            : "rounded-l-lg",
+        )}
+      >
+        {isShortHours ? "30'" : "45'"}
+      </div>
+    </div>
   );
 };
 
