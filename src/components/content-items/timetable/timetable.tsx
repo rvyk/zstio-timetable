@@ -1,16 +1,23 @@
+import BottomBar from "@/components/content-items/bottom-bar";
 import {
   RenderTimeTable,
   RenderTimeTableMobile,
 } from "@/components/content-items/timetable/render-timetable";
 import { Table as TableType } from "@/types/timetable";
+import { List } from "@wulkanowy/timetable-parser";
 import React, { useEffect, useState } from "react";
 
 interface TimeTableProps {
   timeTable: TableType["timeTable"];
+  timeTableList: List;
   substitutions: TableType["substitutions"];
 }
 
-const TimeTable: React.FC<TimeTableProps> = ({ timeTable, substitutions }) => {
+const TimeTable: React.FC<TimeTableProps> = ({
+  timeTable,
+  timeTableList,
+  substitutions,
+}) => {
   const [selectedDay, setSelectedDay] = useState(0);
 
   const [isShortHours, setIsShortHours] = useState(
@@ -57,6 +64,8 @@ const TimeTable: React.FC<TimeTableProps> = ({ timeTable, substitutions }) => {
             substitutions,
           }}
         />
+
+        <BottomBar {...{ timeTable, timeTableList }} />
       </div>
     </div>
   );

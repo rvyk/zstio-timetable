@@ -168,7 +168,7 @@ const RenderTimeTableMobile: React.FC<TimeTableMobileProps> = ({
   setSelectedDay,
 }) => {
   return (
-    <div className="min-h-screen">
+    <div className="mb-20 min-h-screen" vaul-drawer-wrapper="">
       <div className="w-full py-2.5">
         <ul className="flex w-full items-center justify-around bg-[#F7F3F5] px-0.5 text-center text-sm font-medium text-gray-500 dark:bg-[#171717] dark:text-gray-400">
           {days.map((item, index) => (

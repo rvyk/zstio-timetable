@@ -38,14 +38,9 @@ const Layout: React.FC<LayoutProps> = ({
       </Head>
       <Navbar />
       {process.env.NEXT_PUBLIC_CMS && <Messages />}
-      <Jumbotron
-        timeTableList={timeTableList}
-        substitutions={substitutions}
-        timeTable={timeTable}
-        errorMsg={errorMsg}
-      />
+      <Jumbotron {...{ substitutions, timeTable, timeTableList }} />
       {!errorMsg && (
-        <Content timeTable={timeTable} substitutions={substitutions} />
+        <Content {...{ substitutions, timeTable, timeTableList }} />
       )}
       <div className={`${!isIndex && !errorMsg && "hidden md:block"}`}>
         <Footer />
