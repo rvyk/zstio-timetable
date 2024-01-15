@@ -4,6 +4,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
+import { useLongPress } from "@uidotdev/usehooks";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
@@ -22,6 +23,15 @@ const ShortHoursButton: React.FC<ShortHoursButtonProps> = ({
   useEffect(() => {
     setIsClient(true);
   }, []);
+
+  const longPress = useLongPress(
+    () => {
+      console.log("long press is triggered");
+    },
+    {
+      threshold: 300,
+    },
+  );
 
   if (!isClient || !isReady) return null;
 
@@ -42,7 +52,7 @@ const ShortHoursButton: React.FC<ShortHoursButtonProps> = ({
   ];
 
   return (
-    <div className="relative">
+    <div className="relative" {...longPress}>
       {tooltips.map((tooltip, index) => (
         <Tooltip key={index}>
           <TooltipTrigger asChild>
@@ -72,7 +82,7 @@ const ShortHoursButton: React.FC<ShortHoursButtonProps> = ({
       ))}
       <div
         className={cn(
-          "absolute top-0 h-full w-[50%] cursor-default bg-[#321c21] px-4 py-2 text-sm font-medium text-gray-900 text-white transition-all hover:bg-[#480e0c] hover:text-gray-200 focus:text-gray-200 dark:border-none dark:bg-red-400 dark:text-white dark:hover:bg-red-500 dark:hover:text-white dark:focus:text-white",
+          "absolute top-0 h-full w-[50%] cursor-default bg-[#321c21] px-4 py-2 text-sm font-medium text-gray-900 transition-all hover:bg-[#480e0c] hover:text-gray-200 focus:text-gray-200 dark:border-none dark:bg-red-400 dark:text-white dark:hover:bg-red-500 dark:hover:text-white dark:focus:text-white",
           isShortHours
             ? "translate-x-[100%] transform rounded-r-lg"
             : "rounded-l-lg",
