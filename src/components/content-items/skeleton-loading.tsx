@@ -9,9 +9,9 @@ import {
 } from "@/components/ui/table";
 import Link from "next/link";
 
-const SkeletonLoading: React.FC<{ isSubstitution?: boolean }> = ({
-  isSubstitution,
-}) => {
+const SkeletonLoading: React.FC<{ isSubstitution?: boolean }> = (
+  { isSubstitution },
+) => {
   return (
     <div>
       <Table className="hidden items-center justify-center md:flex">

@@ -27,13 +27,9 @@ interface TableCaptionProps {
   className?: string;
 }
 
-const TableCaption: React.FC<TableCaptionProps> = ({
-  status,
-  isLoading,
-  children,
-  isSubstitutions,
-  className,
-}) => {
+const TableCaption: React.FC<TableCaptionProps> = (
+  { status, isLoading, children, isSubstitutions, className },
+) => {
   if (!status) {
     return (
       <caption className="bg-white p-5 text-left text-lg font-semibold text-gray-900 transition-all dark:bg-[#202020] dark:text-gray-300">
@@ -157,13 +153,9 @@ interface TableCellProps {
   scope?: string;
 }
 
-const TableCell: React.FC<TableCellProps> = ({
-  className,
-  variant,
-  children,
-  colSpan,
-  scope,
-}) => {
+const TableCell: React.FC<TableCellProps> = (
+  { className, variant, children, colSpan, scope },
+) => {
   return (
     <td
       colSpan={colSpan}

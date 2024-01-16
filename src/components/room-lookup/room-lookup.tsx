@@ -30,10 +30,9 @@ interface ResponsiveLookupDialogProps {
   setIsOpened: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const ResponsiveLookupDialog: React.FC<ResponsiveLookupDialogProps> = ({
-  isOpened,
-  setIsOpened,
-}: ResponsiveLookupDialogProps) => {
+const ResponsiveLookupDialog: React.FC<ResponsiveLookupDialogProps> = (
+  { isOpened, setIsOpened }: ResponsiveLookupDialogProps,
+) => {
   const [selectedDay, setSelectedDay] = useState(0);
   const [selectedLesson, counter] = useCounter(1, {
     min: 1,
@@ -148,15 +147,17 @@ const Content: React.FC<{
   data: null;
   setIsOpened: Dispatch<SetStateAction<boolean>>;
   className?: string;
-}> = ({
-  selectedDay,
-  setSelectedDay,
-  selectedLesson,
-  counter,
-  data,
-  setIsOpened,
-  className,
-}) => {
+}> = (
+  {
+    selectedDay,
+    setSelectedDay,
+    selectedLesson,
+    counter,
+    data,
+    setIsOpened,
+    className,
+  },
+) => {
   const { decrement, increment, set } = counter;
   const [userInput, setUserInput] = useState("1");
   return (

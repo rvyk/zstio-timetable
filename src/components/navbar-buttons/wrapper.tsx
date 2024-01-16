@@ -12,11 +12,9 @@ interface ButtonWrapperProps {
   children: React.ReactNode;
 }
 
-const ButtonWrapper: React.FC<ButtonWrapperProps> = ({
-  tooltipText,
-  onClick,
-  children,
-}) => {
+const ButtonWrapper: React.FC<ButtonWrapperProps> = (
+  { tooltipText, onClick, children },
+) => {
   return (
     <Tooltip>
       <TooltipTrigger>

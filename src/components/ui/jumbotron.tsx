@@ -13,12 +13,9 @@ interface JumbotronProps {
   errorMsg?: string;
 }
 
-const Jumbotron: React.FC<JumbotronProps> = ({
-  substitutions,
-  timeTableList,
-  timeTable,
-  errorMsg,
-}) => {
+const Jumbotron: React.FC<JumbotronProps> = (
+  { substitutions, timeTableList, timeTable, errorMsg },
+) => {
   const pathname = usePathname();
   const isSubstitution = pathname === "/zastepstwa";
   const isIndex = pathname === "/";
@@ -66,13 +63,9 @@ interface JumbotronContentProps {
   errorMsg?: string;
 }
 
-const JumbotronContent: React.FC<JumbotronContentProps> = ({
-  isIndex,
-  isSubstitution,
-  substitutions,
-  timeTable,
-  errorMsg,
-}) => {
+const JumbotronContent: React.FC<JumbotronContentProps> = (
+  { isIndex, isSubstitution, substitutions, timeTable, errorMsg },
+) => {
   if (isIndex) return null;
 
   if (errorMsg) {
@@ -121,13 +114,9 @@ interface JumbotronDropdownsProps {
   errorMsg?: string;
 }
 
-const JumbotronDropdowns: React.FC<JumbotronDropdownsProps> = ({
-  isIndex,
-  isSubstitution,
-  substitutions,
-  timeTableList,
-  errorMsg,
-}) => {
+const JumbotronDropdowns: React.FC<JumbotronDropdownsProps> = (
+  { isIndex, isSubstitution, substitutions, timeTableList, errorMsg },
+) => {
   if (isIndex) return <Loading />;
   if (errorMsg) return null;
   if (isSubstitution && substitutions.status) {

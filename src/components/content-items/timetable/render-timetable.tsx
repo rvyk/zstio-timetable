@@ -30,13 +30,9 @@ interface TimeTableMobileProps extends TimeTableProps {
   setSelectedDay: React.Dispatch<React.SetStateAction<number>>;
 }
 
-const RenderTimeTable: React.FC<TimeTableProps> = ({
-  timeTable,
-  isShortHours,
-  setIsShortHours,
-  maxLessons,
-  substitutions,
-}) => {
+const RenderTimeTable: React.FC<TimeTableProps> = (
+  { timeTable, isShortHours, setIsShortHours, maxLessons, substitutions },
+) => {
   return (
     <Table className="hidden justify-center md:flex">
       <TableCaption status={timeTable.status}>
@@ -158,15 +154,17 @@ const RenderTimeTable: React.FC<TimeTableProps> = ({
   );
 };
 
-const RenderTimeTableMobile: React.FC<TimeTableMobileProps> = ({
-  isShortHours,
-  maxLessons,
-  setIsShortHours,
-  substitutions,
-  timeTable,
-  selectedDay,
-  setSelectedDay,
-}) => {
+const RenderTimeTableMobile: React.FC<TimeTableMobileProps> = (
+  {
+    isShortHours,
+    maxLessons,
+    setIsShortHours,
+    substitutions,
+    timeTable,
+    selectedDay,
+    setSelectedDay,
+  },
+) => {
   return (
     <div className="mb-20 min-h-screen" vaul-drawer-wrapper="">
       <div className="w-full py-2.5">

@@ -26,10 +26,9 @@ interface ResponsiveShortHourDialogProps {
   setIsOpen: Dispatch<SetStateAction<boolean>>;
 }
 
-const ResponsiveShortHourDialog: React.FC<ResponsiveShortHourDialogProps> = ({
-  isOpen,
-  setIsOpen,
-}) => {
+const ResponsiveShortHourDialog: React.FC<ResponsiveShortHourDialogProps> = (
+  { isOpen, setIsOpen },
+) => {
   const isDesktop = useMediaQuery("(min-width: 768px)");
 
   if (isDesktop) {

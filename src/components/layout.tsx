@@ -13,10 +13,9 @@ interface LayoutProps {
   errorMsg?: string;
 }
 
-const Layout: React.FC<LayoutProps> = ({
-  props: { timeTable, timeTableList, substitutions },
-  errorMsg,
-}) => {
+const Layout: React.FC<LayoutProps> = (
+  { props: { timeTable, timeTableList, substitutions }, errorMsg },
+) => {
   const pathname = usePathname();
   const isIndex = pathname == "/";
   const isSubstitutions = pathname == "/zastepstwa";

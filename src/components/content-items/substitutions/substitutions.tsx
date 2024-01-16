@@ -10,9 +10,9 @@ export const parseBranchField = (branch: string): string => {
   return result.trim();
 };
 
-const Substitutions: React.FC<{ substitutions: Substitutions }> = ({
-  substitutions,
-}) => {
+const Substitutions: React.FC<{ substitutions: Substitutions }> = (
+  { substitutions },
+) => {
   const queryParams = new URLSearchParams(window.location.search);
   const branches = queryParams.get("branches")?.split(",") || [];
   const teachers = queryParams.get("teachers")?.split(",") || [];

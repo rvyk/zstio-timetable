@@ -8,11 +8,9 @@ interface ListItemProps {
   isSubstitutions?: boolean;
 }
 
-const ListLargeItem: React.FC<ListItemProps> = ({
-  children,
-  className,
-  isSubstitutions,
-}) => {
+const ListLargeItem: React.FC<ListItemProps> = (
+  { children, className, isSubstitutions },
+) => {
   return (
     <div
       className={cn(
@@ -46,11 +44,9 @@ interface ListRowProps {
   className?: string;
 }
 
-const ListRow: React.FC<ListRowProps> = ({
-  children,
-  reverseColor,
-  className,
-}) => {
+const ListRow: React.FC<ListRowProps> = (
+  { children, reverseColor, className },
+) => {
   return (
     <div
       className={cn(

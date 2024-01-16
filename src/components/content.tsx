@@ -13,11 +13,9 @@ interface ContentProps {
   timeTableList: List;
 }
 
-const Content: React.FC<ContentProps> = ({
-  substitutions,
-  timeTable,
-  timeTableList,
-}) => {
+const Content: React.FC<ContentProps> = (
+  { substitutions, timeTable, timeTableList },
+) => {
   const pathname = usePathname();
   const isIndex = pathname === "/";
   const isSubstitution = pathname === "/zastepstwa";

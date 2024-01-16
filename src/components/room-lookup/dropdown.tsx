@@ -14,10 +14,9 @@ interface DropdownProps {
   setIsOpened: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const Dropdown: React.FC<DropdownProps> = ({
-  data,
-  setIsOpened: setIsModalOpened,
-}) => {
+const Dropdown: React.FC<DropdownProps> = (
+  { data, setIsOpened: setIsModalOpened },
+) => {
   const [isOpened, setIsOpened] = useState(false);
   const router = useRouter();
 

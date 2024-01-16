@@ -17,14 +17,9 @@ interface RenderLessonProps {
   lesson: TableLesson;
 }
 
-const RenderLesson: React.FC<RenderLessonProps> = ({
-  lessonIndex,
-  day,
-  substitution,
-  sure,
-  possibleSubstitution,
-  lesson,
-}) => {
+const RenderLesson: React.FC<RenderLessonProps> = (
+  { lessonIndex, day, substitution, sure, possibleSubstitution, lesson },
+) => {
   return (
     <div className="flex flex-col">
       <div className="flex flex-row">

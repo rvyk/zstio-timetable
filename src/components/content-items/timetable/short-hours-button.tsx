@@ -14,10 +14,9 @@ interface ShortHoursButtonProps {
   isShortHours: boolean;
 }
 
-const ShortHoursButton: React.FC<ShortHoursButtonProps> = ({
-  setIsShortHours,
-  isShortHours,
-}) => {
+const ShortHoursButton: React.FC<ShortHoursButtonProps> = (
+  { setIsShortHours, isShortHours },
+) => {
   const [isClient, setIsClient] = useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const { isReady } = useRouter();
