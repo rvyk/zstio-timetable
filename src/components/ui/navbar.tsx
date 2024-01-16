@@ -1,3 +1,4 @@
+import ShortHoursButton from "@/components/content-items/timetable/short-hours-button";
 import PWAButton from "@/components/navbar-buttons/pwa";
 import RedirectButton from "@/components/navbar-buttons/redirect";
 import RoomLookup from "@/components/navbar-buttons/room-lookup";
@@ -7,7 +8,6 @@ import Image from "next/legacy/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import ShortHoursButton from "../content-items/timetable/short-hours-button";
 
 const Navbar: React.FC = () => {
   const { theme, setTheme, resolvedTheme, systemTheme } = useTheme();

@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -5,12 +6,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { adjustShortenedLessons } from "@/lib/utils";
-import { MinusIcon, PlusIcon } from "@heroicons/react/24/outline";
-import { DialogClose } from "@radix-ui/react-dialog";
-import { useCounter, useMediaQuery } from "@uidotdev/usehooks";
-import { Dispatch, SetStateAction, useState } from "react";
-import { Button } from "../ui/button";
 import {
   Drawer,
   DrawerClose,
@@ -19,7 +14,12 @@ import {
   DrawerFooter,
   DrawerHeader,
   DrawerTitle,
-} from "../ui/drawer";
+} from "@/components/ui/drawer";
+import { adjustShortenedLessons } from "@/lib/utils";
+import { MinusIcon, PlusIcon } from "@heroicons/react/24/outline";
+import { DialogClose } from "@radix-ui/react-dialog";
+import { useCounter, useMediaQuery } from "@uidotdev/usehooks";
+import { Dispatch, SetStateAction, useState } from "react";
 
 interface ResponsiveShortHourDialogProps {
   isOpen: boolean;
@@ -79,7 +79,7 @@ const Content: React.FC = () => {
     max: 14,
   });
   const [userInput, setUserInput] = useState("5");
-  const newLessonArray = adjustShortenedLessons(lessonNumber + 1);
+  const newLessonArray = adjustShortenedLessons(lessonNumber);
   const miniLessonArray = [
     newLessonArray[lessonNumber - 2] || null,
     newLessonArray[lessonNumber - 1] || null,

@@ -166,14 +166,15 @@ export const normalHours: hourType[] = [
   },
 ];
 
-export function adjustShortenedLessons(startIndex: number): hourType[] {
+export const adjustShortenedLessons = (startIndex: number): hourType[] => {
   const adjustedShortenedLessons: hourType[] = [];
 
   for (let i = 0; i < normalHours.length; i++) {
     const hour = normalHours[i];
-    const previousHour = adjustedShortenedLessons[i - 1] || normalHours[i - 1] || null;
+    const previousHour =
+      adjustedShortenedLessons[i - 1] || normalHours[i - 1] || null;
 
-    if (Number(hour.number) >= startIndex) {
+    if (Number(hour.number) > startIndex) {
       const newHour: hourType = {
         number: hour.number,
         timeFrom: addMinutes(previousHour.timeTo, 5),
@@ -186,12 +187,14 @@ export function adjustShortenedLessons(startIndex: number): hourType[] {
   }
 
   return adjustedShortenedLessons;
-}
+};
 
-function addMinutes(time: string, minutes: number): string {
+const addMinutes = (time: string, minutes: number): string => {
   const [hours, minutesPart] = time.split(":");
   const totalMinutes = parseInt(hours) * 60 + parseInt(minutesPart) + minutes;
-  const adjustedHours = Math.floor(totalMinutes / 60).toString().padStart(2, "0");
+  const adjustedHours = Math.floor(totalMinutes / 60)
+    .toString()
+    .padStart(2, "0");
   const adjustedMinutes = (totalMinutes % 60).toString().padStart(2, "0");
   return `${adjustedHours}:${adjustedMinutes}`;
-}
+};

@@ -1,3 +1,4 @@
+import ResponsiveShortHourDialog from "@/components/content-items/render-short-hour";
 import {
   Tooltip,
   TooltipContent,
@@ -7,7 +8,6 @@ import { cn } from "@/lib/utils";
 import { useLongPress } from "@uidotdev/usehooks";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import ResponsiveShortHourDialog from "../render-short-hour";
 
 interface ShortHoursButtonProps {
   setIsShortHours: React.Dispatch<React.SetStateAction<boolean>>;
