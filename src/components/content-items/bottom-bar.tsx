@@ -62,7 +62,7 @@ const BottomBar: React.FC<BottomBarProps> = ({ timeTable, timeTableList }) => {
 
         <Drawer
           open={isDrawerOpened}
-          onOpenChange={(open) => setIsDrawerOpened(open)}
+          onOpenChange={setIsDrawerOpened}
           shouldScaleBackground
         >
           <DrawerTrigger asChild>

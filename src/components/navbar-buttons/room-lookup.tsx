@@ -1,5 +1,5 @@
-import RoomLookupModal from "@/components/modals/room-lookup/room-lookup";
 import ButtonWrapper from "@/components/navbar-buttons/wrapper";
+import RoomLookupModal from "@/components/room-lookup/room-lookup";
 import { MagnifyingGlassCircleIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
 

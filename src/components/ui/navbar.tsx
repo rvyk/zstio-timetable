@@ -7,10 +7,16 @@ import Image from "next/legacy/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import ShortHoursButton from "../content-items/timetable/short-hours-button";
 
 const Navbar: React.FC = () => {
   const { theme, setTheme, resolvedTheme, systemTheme } = useTheme();
   const [isClient, setIsClient] = useState(false);
+
+  const [isShortHours, setIsShortHours] = useState(
+    typeof localStorage !== "undefined" &&
+      localStorage.getItem("shortHours") === "true",
+  );
 
   const pathname = usePathname();
   const isIndex = pathname === "/";
@@ -46,6 +52,9 @@ const Navbar: React.FC = () => {
           objectPosition="center"
         />
       </Link>
+      <div className="block md:hidden">
+        <ShortHoursButton {...{ isShortHours, setIsShortHours }} />
+      </div>
       <div>
         <PWAButton />
         {!isSubstitutions && <RoomLookup />}
