@@ -30,9 +30,10 @@ interface ResponsiveLookupDialogProps {
   setIsOpened: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const ResponsiveLookupDialog: React.FC<ResponsiveLookupDialogProps> = (
-  { isOpened, setIsOpened }: ResponsiveLookupDialogProps,
-) => {
+const ResponsiveLookupDialog: React.FC<ResponsiveLookupDialogProps> = ({
+  isOpened,
+  setIsOpened,
+}: ResponsiveLookupDialogProps) => {
   const [selectedDay, setSelectedDay] = useState(0);
   const [selectedLesson, counter] = useCounter(1, {
     min: 1,
@@ -103,7 +104,7 @@ const ResponsiveLookupDialog: React.FC<ResponsiveLookupDialogProps> = (
 
   return (
     <Drawer open={isOpened} onOpenChange={setIsOpened}>
-      <DrawerContent>
+      <DrawerContent className="!focus:outline-none border-none !outline-none">
         <DrawerHeader className="text-left">
           <DrawerTitle>Wyszukaj wolną salę</DrawerTitle>
           <DrawerDescription>
@@ -147,17 +148,15 @@ const Content: React.FC<{
   data: null;
   setIsOpened: Dispatch<SetStateAction<boolean>>;
   className?: string;
-}> = (
-  {
-    selectedDay,
-    setSelectedDay,
-    selectedLesson,
-    counter,
-    data,
-    setIsOpened,
-    className,
-  },
-) => {
+}> = ({
+  selectedDay,
+  setSelectedDay,
+  selectedLesson,
+  counter,
+  data,
+  setIsOpened,
+  className,
+}) => {
   const { decrement, increment, set } = counter;
   const [userInput, setUserInput] = useState("1");
   return (
@@ -193,17 +192,19 @@ const Content: React.FC<{
           >
             <MinusIcon className="h-4 w-4" />
           </Button>
-          <div className="flex-1 text-center">
-            <input
-              type="number"
-              value={userInput}
-              onChange={(e) => setUserInput(e.currentTarget.value)}
-              onBlur={(e) => {
-                set(+e.currentTarget.value);
-                setUserInput(selectedLesson.toString());
-              }}
-              className="w-full text-center text-7xl font-bold tracking-tighter"
-            />
+          <div className="mb-2 flex w-full flex-col items-center justify-center text-center">
+            <div className="w-full text-center">
+              <input
+                type="number"
+                value={userInput}
+                onChange={(e) => setUserInput(e.currentTarget.value)}
+                onBlur={(e) => {
+                  set(+e.currentTarget.value);
+                  setUserInput(selectedLesson.toString());
+                }}
+                className="w-20 bg-transparent text-center text-6xl font-bold"
+              />
+            </div>
             <div className="text-[0.70rem] uppercase text-muted-foreground">
               nr. lekcji
             </div>

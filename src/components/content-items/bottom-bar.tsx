@@ -77,14 +77,14 @@ const BottomBar: React.FC<BottomBarProps> = ({ timeTable, timeTableList }) => {
               </div>
             </div>
           </DrawerTrigger>
-          <DrawerContent className="!focus:outline-none border-none text-white !outline-none">
+          <DrawerContent className="!focus:outline-none border-none text-gray-900 !outline-none dark:text-white">
             <div className="mx-auto w-full max-w-sm">
               <DrawerHeader className="flex w-full flex-col overflow-scroll transition-all duration-300">
                 <DrawerTitle className="flex items-center justify-center">
-                  <p className="mr-1 text-xl font-normal text-gray-100 transition-all dark:text-gray-300">
+                  <p className="mr-1 text-xl font-normal text-gray-900 transition-all dark:text-gray-300">
                     {timeTable.data.text} /
                   </p>
-                  <p className="overflow-hidden text-ellipsis text-xl font-bold text-gray-100 transition-all dark:text-gray-300">
+                  <p className="overflow-hidden text-ellipsis text-xl font-bold text-gray-900 transition-all dark:text-gray-300">
                     {timeTable.data.title}
                   </p>
                 </DrawerTitle>
@@ -106,7 +106,7 @@ const BottomBar: React.FC<BottomBarProps> = ({ timeTable, timeTableList }) => {
                 ))}
               </div>
               <DrawerFooter>
-                <div className="flex w-full flex-col items-center justify-center text-center text-gray-50 dark:text-gray-300">
+                <div className="flex w-full flex-col items-center justify-center text-center text-gray-900 dark:text-gray-300">
                   {timeTable.data.generatedDate && (
                     <p>
                       Wygenerowano:{" "}

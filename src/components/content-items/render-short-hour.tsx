@@ -26,15 +26,16 @@ interface ResponsiveShortHourDialogProps {
   setIsOpen: Dispatch<SetStateAction<boolean>>;
 }
 
-const ResponsiveShortHourDialog: React.FC<ResponsiveShortHourDialogProps> = (
-  { isOpen, setIsOpen },
-) => {
+const ResponsiveShortHourDialog: React.FC<ResponsiveShortHourDialogProps> = ({
+  isOpen,
+  setIsOpen,
+}) => {
   const isDesktop = useMediaQuery("(min-width: 768px)");
 
   if (isDesktop) {
     return (
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
-        <DialogContent className="sm:max-w-[425px]">
+        <DialogContent className="!focus:outline-none border-none text-gray-900 !outline-none dark:text-gray-50 sm:max-w-[425px]">
           <DialogHeader>
             <DialogTitle>Oblicz skrócone lekcje</DialogTitle>
             <DialogDescription>
@@ -49,7 +50,7 @@ const ResponsiveShortHourDialog: React.FC<ResponsiveShortHourDialogProps> = (
 
   return (
     <Drawer open={isOpen} onOpenChange={setIsOpen}>
-      <DrawerContent>
+      <DrawerContent className="!focus:outline-none border-none !outline-none">
         <DrawerHeader className="text-left">
           <DrawerTitle>Oblicz skrócone lekcje</DrawerTitle>
           <DrawerDescription>
@@ -88,7 +89,7 @@ const Content: React.FC = () => {
   ].filter((el) => el);
   return (
     <div className="p-4 pb-0">
-      <div className="flex items-center justify-center space-x-2">
+      <div className="flex w-full items-center justify-center">
         <Button
           variant="outline"
           size="icon"
@@ -99,19 +100,21 @@ const Content: React.FC = () => {
           }}
           disabled={lessonNumber <= 1}
         >
-          <MinusIcon className="h-4 w-4" />
+          <MinusIcon className="h-4 w-4 text-gray-900 dark:text-gray-50" />
         </Button>
-        <div className="flex-1 text-center">
-          <input
-            type="number"
-            value={userInput}
-            onChange={(e) => setUserInput(e.currentTarget.value)}
-            onBlur={(e) => {
-              set(+e.currentTarget.value);
-              setUserInput(lessonNumber.toString());
-            }}
-            className="w-full text-center text-7xl font-bold tracking-tighter"
-          />
+        <div className="mb-2 flex w-full flex-col items-center justify-center text-center">
+          <div className="w-full text-center">
+            <input
+              type="number"
+              value={userInput}
+              onChange={(e) => setUserInput(e.currentTarget.value)}
+              onBlur={(e) => {
+                set(+e.currentTarget.value);
+                setUserInput(lessonNumber.toString());
+              }}
+              className="w-20 bg-transparent text-center text-6xl font-bold"
+            />
+          </div>
           <div className="text-[0.70rem] uppercase text-muted-foreground">
             nr. lekcji
           </div>
@@ -126,7 +129,7 @@ const Content: React.FC = () => {
           }}
           disabled={lessonNumber >= 14}
         >
-          <PlusIcon className="h-4 w-4" />
+          <PlusIcon className="h-4 w-4 text-gray-900 dark:text-gray-50" />
         </Button>
       </div>
       <div className="mb-4 mt-3 flex h-[120px] flex-col items-center justify-center text-center font-medium">
@@ -135,7 +138,11 @@ const Content: React.FC = () => {
         </div>
         {miniLessonArray.map((lesson) => {
           if (typeof lesson == "string") {
-            return <div className="h-1 w-[50%] rounded bg-red-600">&nbsp;</div>;
+            return (
+              <div className="h-1 w-[50%] rounded bg-[#321c21] dark:bg-red-400">
+                &nbsp;
+              </div>
+            );
           }
           return (
             <p>{`${lesson.number}. ${lesson.timeFrom}-${lesson.timeTo}`}</p>
@@ -146,7 +153,7 @@ const Content: React.FC = () => {
         </div>
       </div>
       {isDesktop ? (
-        <div className="float-end ">
+        <div className="float-end">
           <DialogClose asChild>
             <Button type="submit" variant="outline" className="mr-2">
               Anuluj

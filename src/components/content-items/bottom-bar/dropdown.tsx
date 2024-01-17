@@ -10,9 +10,12 @@ interface DropdownProps {
   title?: string;
 }
 
-const Dropdown: React.FC<DropdownProps> = (
-  { isOpened, results, title, setIsDrawerOpened },
-) => {
+const Dropdown: React.FC<DropdownProps> = ({
+  isOpened,
+  results,
+  title,
+  setIsDrawerOpened,
+}) => {
   const router = useRouter();
   const [lastSelect, setLastSelect] = useState<string | null>(null);
 
