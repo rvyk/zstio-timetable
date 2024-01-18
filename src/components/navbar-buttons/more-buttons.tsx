@@ -1,6 +1,6 @@
 import ButtonWrapper from "@/components/navbar-buttons/wrapper";
+import { NavigationMenuTrigger } from "@/components/ui/navigation-menu";
 import { EllipsisHorizontalIcon } from "@heroicons/react/24/outline";
-import { NavigationMenuTrigger } from "../ui/navigation-menu";
 
 const MoreButtons: React.FC = () => {
   return (

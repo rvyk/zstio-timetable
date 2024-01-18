@@ -4,6 +4,7 @@ import {
 } from "@/components/content-items/timetable/helpers";
 import RenderLesson from "@/components/content-items/timetable/render-lesson";
 import ShortHoursButton from "@/components/content-items/timetable/short-hours-button";
+import ShortHoursCalculator from "@/components/content-items/timetable/short-hours-calculator";
 import { ListLargeItem, ListRow, ListSmallItem } from "@/components/ui/list";
 import {
   Table,
@@ -16,7 +17,6 @@ import {
 import { days, shortHours } from "@/lib/utils";
 import { Table as TableType } from "@/types/timetable";
 import Link from "next/link";
-import ShortHoursCalculator from "./short-hours-calculator";
 
 interface TimeTableProps {
   timeTable: TableType["timeTable"];

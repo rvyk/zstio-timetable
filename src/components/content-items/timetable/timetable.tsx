@@ -13,9 +13,11 @@ interface TimeTableProps {
   substitutions: TableType["substitutions"];
 }
 
-const TimeTable: React.FC<TimeTableProps> = (
-  { timeTable, timeTableList, substitutions },
-) => {
+const TimeTable: React.FC<TimeTableProps> = ({
+  timeTable,
+  timeTableList,
+  substitutions,
+}) => {
   const [selectedDay, setSelectedDay] = useState(0);
 
   const [isShortHours, setIsShortHours] = useState(

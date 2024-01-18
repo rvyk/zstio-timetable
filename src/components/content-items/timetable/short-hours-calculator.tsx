@@ -1,7 +1,7 @@
+import ResponsiveShortHourDialog from "@/components/content-items/render-short-hour";
 import ButtonWrapper from "@/components/navbar-buttons/wrapper";
 import { CalculatorIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
-import ResponsiveShortHourDialog from "../render-short-hour";
 
 const ShortHoursCalculator: React.FC<{ className?: string }> = ({
   className,

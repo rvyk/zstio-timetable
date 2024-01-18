@@ -68,7 +68,7 @@ const ShortHoursButton: React.FC<ShortHoursButtonProps> = ({
           ))}
           <div
             className={cn(
-              "absolute top-0 w-[50%] cursor-default bg-[#321c21] px-4 py-2 text-sm font-medium text-gray-50 transition-all hover:bg-[#480e0c] hover:text-gray-200 focus:text-gray-200 dark:border-none dark:bg-red-400 dark:text-white dark:hover:bg-red-500 dark:hover:text-white dark:focus:text-white",
+              "absolute top-0 h-full w-[50%] cursor-default bg-[#321c21] px-4 py-2 text-sm font-medium text-gray-50 transition-all hover:bg-[#480e0c] hover:text-gray-200 focus:text-gray-200 dark:border-none dark:bg-red-400 dark:text-white dark:hover:bg-red-500 dark:hover:text-white dark:focus:text-white",
               isShortHours
                 ? "translate-x-[100%] transform rounded-r-lg"
                 : "rounded-l-lg",

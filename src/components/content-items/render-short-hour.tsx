@@ -35,7 +35,7 @@ const ResponsiveShortHourDialog: React.FC<ResponsiveShortHourDialogProps> = ({
   if (isDesktop) {
     return (
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
-        <DialogContent className="!focus:outline-none border-none text-gray-900 !outline-none dark:text-gray-50 sm:max-w-[425px]">
+        <DialogContent className="!focus:outline-none border-none bg-white text-gray-900 !outline-none dark:bg-[#212121] dark:text-gray-50 sm:max-w-[425px]">
           <DialogHeader>
             <DialogTitle>Oblicz skrócone lekcje</DialogTitle>
             <DialogDescription>
@@ -100,7 +100,7 @@ const Content: React.FC = () => {
           }}
           disabled={lessonNumber <= 1}
         >
-          <MinusIcon className="h-4 w-4 text-gray-900 dark:text-gray-50" />
+          <MinusIcon className="h-4 w-4" />
         </Button>
         <div className="mb-2 flex w-full flex-col items-center justify-center text-center">
           <div className="w-full text-center">
@@ -129,7 +129,7 @@ const Content: React.FC = () => {
           }}
           disabled={lessonNumber >= 14}
         >
-          <PlusIcon className="h-4 w-4 text-gray-900 dark:text-gray-50" />
+          <PlusIcon className="h-4 w-4" />
         </Button>
       </div>
       <div className="mb-4 mt-3 flex h-[120px] flex-col items-center justify-center text-center font-medium">
