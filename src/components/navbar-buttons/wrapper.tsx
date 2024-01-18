@@ -4,17 +4,22 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { cn } from "@/lib/utils";
 import React from "react";
 
 interface ButtonWrapperProps {
   tooltipText: string;
   onClick?: () => void;
   children: React.ReactNode;
+  className?: string;
 }
 
-const ButtonWrapper: React.FC<ButtonWrapperProps> = (
-  { tooltipText, onClick, children },
-) => {
+const ButtonWrapper: React.FC<ButtonWrapperProps> = ({
+  tooltipText,
+  onClick,
+  children,
+  className,
+}) => {
   return (
     <Tooltip>
       <TooltipTrigger>
@@ -22,7 +27,7 @@ const ButtonWrapper: React.FC<ButtonWrapperProps> = (
           variant="navbar"
           size="navbar"
           onClick={onClick}
-          className="mr-2 p-3 text-xs"
+          className={cn("mr-2 p-3 text-xs", className)}
           suppressHydrationWarning
           asChild
         >

@@ -16,6 +16,7 @@ import {
 import { days, shortHours } from "@/lib/utils";
 import { Table as TableType } from "@/types/timetable";
 import Link from "next/link";
+import ShortHoursCalculator from "./short-hours-calculator";
 
 interface TimeTableProps {
   timeTable: TableType["timeTable"];
@@ -40,6 +41,9 @@ const RenderTimeTable: React.FC<TimeTableProps> = ({
   return (
     <Table className="hidden justify-center md:flex">
       <TableCaption status={timeTable.status}>
+        <div className="hidden md:block ">
+          <ShortHoursCalculator className="dark:!bg-[#171717] dark:hover:!bg-[#202020]" />
+        </div>
         <div className="mr-2 inline-flex rounded-md shadow-sm" role="group">
           <ShortHoursButton {...{ isShortHours, setIsShortHours }} />
         </div>

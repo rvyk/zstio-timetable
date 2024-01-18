@@ -22,9 +22,9 @@ type CheckedItemsType = {
 
 type Names = "branches" | "teachers";
 
-const SubstitutionsDropdowns: React.FC<{ substitutions: Substitutions }> = (
-  { substitutions },
-) => {
+const SubstitutionsDropdowns: React.FC<{ substitutions: Substitutions }> = ({
+  substitutions,
+}) => {
   let uniqueTeachers = new Set<string>();
   let uniqueBranches = new Set<string>();
 
@@ -63,9 +63,11 @@ interface SubstitutionDropdownProps {
   icon: React.ReactNode;
 }
 
-const SubstitutionDropdown: React.FC<SubstitutionDropdownProps> = (
-  { item, name, icon },
-) => {
+const SubstitutionDropdown: React.FC<SubstitutionDropdownProps> = ({
+  item,
+  name,
+  icon,
+}) => {
   if (item.length === 0) return null;
 
   const [filter, setFilter] = useState("");

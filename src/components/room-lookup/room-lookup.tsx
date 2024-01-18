@@ -24,6 +24,7 @@ import { MinusIcon, PlusIcon } from "@heroicons/react/24/outline";
 import { useCounter, useMediaQuery } from "@uidotdev/usehooks";
 import axios from "axios";
 import { Dispatch, SetStateAction, useState } from "react";
+import { Input } from "../ui/input";
 
 interface ResponsiveLookupDialogProps {
   isOpened: boolean;
@@ -194,7 +195,7 @@ const Content: React.FC<{
           </Button>
           <div className="mb-2 flex w-full flex-col items-center justify-center text-center">
             <div className="w-full text-center">
-              <input
+              <Input
                 type="number"
                 value={userInput}
                 onChange={(e) => setUserInput(e.currentTarget.value)}
@@ -202,7 +203,7 @@ const Content: React.FC<{
                   set(+e.currentTarget.value);
                   setUserInput(selectedLesson.toString());
                 }}
-                className="w-20 bg-transparent text-center text-6xl font-bold"
+                className="h-full w-20 bg-transparent text-center text-6xl font-bold"
               />
             </div>
             <div className="text-[0.70rem] uppercase text-muted-foreground">

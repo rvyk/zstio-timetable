@@ -19,9 +19,9 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 
 type FilterKeys = "class" | "teacher" | "room";
 
-const TimetableDropdowns: React.FC<{ timeTableList: List }> = (
-  { timeTableList: { classes, rooms, teachers } },
-) => {
+const TimetableDropdowns: React.FC<{ timeTableList: List }> = ({
+  timeTableList: { classes, rooms, teachers },
+}) => {
   return (
     <div className="hidden md:block">
       {!!classes?.length && (
@@ -61,9 +61,12 @@ interface TimetableDropdownItemProps {
   icon: React.ReactNode;
 }
 
-const TimetableDropdownItem: React.FC<TimetableDropdownItemProps> = (
-  { name, linkPrefix, item, icon },
-) => {
+const TimetableDropdownItem: React.FC<TimetableDropdownItemProps> = ({
+  name,
+  linkPrefix,
+  item,
+  icon,
+}) => {
   const router = useRouter();
 
   const [filter, setFilter] = useState("");
