@@ -16,7 +16,7 @@ import {
 import { useRouter } from "next/router";
 import React, { useEffect, useMemo, useState } from "react";
 
-type CheckedItemsType = {
+export type CheckedItemsType = {
   [key: string]: string[];
 };
 

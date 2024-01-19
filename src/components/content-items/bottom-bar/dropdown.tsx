@@ -1,5 +1,8 @@
+import { CheckedItemsType } from "@/components/jumbotron-items/substitutions-dropdowns";
+import { cn } from "@/lib/utils";
 import { Menu, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
+import { Checkbox } from "@nextui-org/react";
 import { useRouter } from "next/router";
 import { Fragment, useEffect, useState } from "react";
 
@@ -8,6 +11,7 @@ interface DropdownProps {
   setIsDrawerOpened?: React.Dispatch<React.SetStateAction<boolean>>;
   isOpened?: boolean;
   title?: string;
+  isSubstitutions?: boolean;
 }
 
 const Dropdown: React.FC<DropdownProps> = ({
@@ -15,9 +19,11 @@ const Dropdown: React.FC<DropdownProps> = ({
   results,
   title,
   setIsDrawerOpened,
+  isSubstitutions,
 }) => {
   const router = useRouter();
   const [lastSelect, setLastSelect] = useState<string | null>(null);
+  const [checkedItems, setCheckedItems] = useState<CheckedItemsType>({});
 
   const handleSelect = (name: string, value: string) => {
     const link = `/${name}/${value}`;
@@ -27,10 +33,40 @@ const Dropdown: React.FC<DropdownProps> = ({
     setIsDrawerOpened && setIsDrawerOpened(false);
   };
 
-  useEffect(() => {
-    setLastSelect(router.asPath);
-  }, [router.asPath]);
+  const handleCheckbox = (category: string, item: string) => {
+    setCheckedItems((prevItems) => {
+      const currentItems = prevItems[category] || [];
+      const updatedItems = currentItems.includes(item)
+        ? currentItems.filter((i) => i !== item)
+        : [...currentItems, item];
 
+      const queryValue = updatedItems.join(",");
+
+      const newQuery = { ...router.query };
+      if (!updatedItems.length) {
+        delete newQuery[category];
+      } else {
+        newQuery[category] = queryValue;
+      }
+      router.replace({ query: newQuery }, undefined, { shallow: true });
+      return { ...prevItems, [category]: updatedItems };
+    });
+  };
+
+  useEffect(() => {
+    const queryFilters = router.query;
+    const newCheckedItems: CheckedItemsType = {};
+
+    for (const category in queryFilters) {
+      const queryValue = queryFilters[category];
+      if (typeof queryValue === "string") {
+        const items = queryValue.split(",");
+        newCheckedItems[category] = items;
+      }
+    }
+
+    setCheckedItems(newCheckedItems);
+  }, [router.query]);
   return (
     <Menu as="div" className="w-full text-left">
       {({ open }) => (
@@ -47,21 +83,47 @@ const Dropdown: React.FC<DropdownProps> = ({
             leaveTo="transform opacity-0 scale-95"
           >
             <Menu.Items className="absolute left-0 right-0 z-40 mt-2.5 max-h-48 w-screen overflow-y-scroll rounded-lg border-0 bg-white p-1 shadow dark:bg-[#131313]">
-              {results?.map((item: DropdownProps["results"][0]) => (
-                <Menu.Item
-                  as={Fragment}
-                  key={`item-${item.type}-${item.value}`}
-                >
-                  <button
-                    onClick={() => handleSelect(item.type, item.value)}
-                    className="relative my-0.5 flex w-full cursor-default select-none items-center rounded p-1 px-2 py-1.5 text-sm outline-none transition-colors hover:bg-gray-200 focus:bg-accent focus:text-accent-foreground dark:hover:bg-[#202020] dark:focus:bg-[#202020]"
-                  >
-                    <p className="ml-2 w-full rounded py-1 text-left text-sm font-medium text-gray-900 dark:text-gray-300">
-                      {item.name}
-                    </p>
-                  </button>
-                </Menu.Item>
-              ))}
+              {Array.from(new Set(results))?.map(
+                (item: DropdownProps["results"][0]) => {
+                  return (
+                    <Menu.Item as="div" key={`item-${item.type}-${item.value}`}>
+                      <button
+                        onClick={(e) => {
+                          e.preventDefault();
+                          if (isSubstitutions) {
+                            handleCheckbox(item.type, item.value);
+                          } else {
+                            handleSelect(item.type, item.value);
+                          }
+                        }}
+                        className="relative my-0.5 flex w-full cursor-default select-none items-center rounded p-1 px-2 py-1.5 text-sm outline-none transition-colors hover:bg-gray-200 focus:bg-accent focus:text-accent-foreground dark:hover:bg-[#202020] dark:focus:bg-[#202020]"
+                      >
+                        {isSubstitutions && (
+                          <>
+                            <Checkbox
+                              onChange={() => {}}
+                              classNames={{
+                                icon: "text-white",
+                                wrapper: cn(
+                                  "transition-colors delay-75 bg-gray-100 dark:bg-[#282828] rounded border-2 border-gray-200 dark:border-[#202020] cursor-pointer",
+                                  !!checkedItems[item.type]?.includes(
+                                    item.value,
+                                  ) && "bg-blue-600 dark:bg-blue-700",
+                                ),
+                                base: "cursor-default",
+                              }}
+                              isSelected={true}
+                            />
+                          </>
+                        )}
+                        <p className="ml-2 w-full rounded py-1 text-left text-sm font-medium text-gray-900 dark:text-gray-300">
+                          {item.name}
+                        </p>
+                      </button>
+                    </Menu.Item>
+                  );
+                },
+              )}
             </Menu.Items>
           </Transition>
         </>

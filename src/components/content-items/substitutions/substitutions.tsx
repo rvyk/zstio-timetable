@@ -2,6 +2,7 @@ import {
   RenderSubstitutions,
   RenderSubstitutionsMobile,
 } from "@/components/content-items/substitutions/render-substitutions";
+import SubstitutionsBottomBar from "../substitutions-bottom-bar";
 
 export const parseBranchField = (branch: string): string => {
   const regex = /(\w+)\|([^+]+)/g;
@@ -10,9 +11,9 @@ export const parseBranchField = (branch: string): string => {
   return result.trim();
 };
 
-const Substitutions: React.FC<{ substitutions: Substitutions }> = (
-  { substitutions },
-) => {
+const Substitutions: React.FC<{ substitutions: Substitutions }> = ({
+  substitutions,
+}) => {
   const queryParams = new URLSearchParams(window.location.search);
   const branches = queryParams.get("branches")?.split(",") || [];
   const teachers = queryParams.get("teachers")?.split(",") || [];
@@ -43,6 +44,7 @@ const Substitutions: React.FC<{ substitutions: Substitutions }> = (
                 status={substitutions.status}
                 time={table.time}
               />
+              <SubstitutionsBottomBar substitutions={substitutions} />
             </div>
           </div>
         );
