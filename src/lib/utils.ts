@@ -128,3 +128,34 @@ const addMinutes = (time: string, minutes: number): string => {
   const adjustedMinutes = (totalMinutes % 60).toString().padStart(2, "0");
   return `${adjustedHours}:${adjustedMinutes}`;
 };
+
+export const getCurrentLesson = (
+  timeFrom: string,
+  timeTo: string,
+): { isWithinTimeRange: boolean; minutesRemaining: number } => {
+  const currentHour = new Date().getHours();
+  const currentMinutes = new Date().getMinutes();
+
+  const [fromHour, fromMinutes] = timeFrom?.split(":");
+  const [toHour, toMinutes] = timeTo?.split(":");
+  let minutesRemaining = 0,
+    isWithinTimeRange = false;
+  const isAfterFromTime =
+    currentHour > Number(fromHour) ||
+    (currentHour === Number(fromHour) && currentMinutes >= Number(fromMinutes));
+  const isBeforeToTime =
+    currentHour < Number(toHour) ||
+    (currentHour === Number(toHour) && currentMinutes < Number(toMinutes));
+  isWithinTimeRange = isAfterFromTime && isBeforeToTime;
+
+  if (isWithinTimeRange) {
+    const endTime = new Date();
+    endTime.setHours(Number(toHour), Number(toMinutes), 0);
+    const timeDifference = endTime.getTime() - new Date().getTime();
+    minutesRemaining = Math.ceil(
+      (timeDifference % (1000 * 60 * 60)) / (1000 * 60),
+    );
+  }
+
+  return { isWithinTimeRange, minutesRemaining };
+};

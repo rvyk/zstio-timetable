@@ -18,10 +18,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { days } from "@/lib/utils";
+import { days, getCurrentLesson } from "@/lib/utils";
 import { Table as TableType } from "@/types/timetable";
 import Link from "next/link";
 import { useContext } from "react";
+import CurrentLesson from "./current-lesson";
 
 interface TimeTableProps {
   timeTable: TableType["timeTable"];
@@ -39,8 +40,6 @@ const RenderTimeTable: React.FC<TimeTableProps> = ({
   maxLessons,
   substitutions,
 }) => {
-  const [isShortHours] = (useContext(SettingsContext) as SettingsContextType)
-    .shortHours;
   const [hoursTime] = (useContext(SettingsContext) as SettingsContextType)
     .hoursTime;
 
@@ -62,8 +61,10 @@ const RenderTimeTable: React.FC<TimeTableProps> = ({
       </TableCaption>
       <TableHeader />
       {Object.entries(hoursTime).length > 1 ? (
-        Object.entries(hoursTime)?.map(
-          ([key, hour]: [string, hourType], lessonIndex) => {
+        Object.entries(hoursTime)
+          .map(([_, value]) => value)
+          .splice(0, maxLessons)
+          .map((hour: hourType, lessonIndex: number) => {
             const { number: lessonNumber, timeFrom, timeTo } = hour;
 
             return (
@@ -75,9 +76,13 @@ const RenderTimeTable: React.FC<TimeTableProps> = ({
                   <TableCell variant="number">
                     <div className="flex flex-col items-center justify-center">
                       {lessonNumber}
-                      {/* {new Date().getDay() < 6 && new Date().getDay() != 0 && (
-                      <CurrentLesson timeFrom={timeFrom} timeTo={timeTo} />
-                    )} */}
+                      {new Date().getDay() < 6 && new Date().getDay() != 0 && (
+                        <CurrentLesson
+                          className="mt-1"
+                          timeFrom={timeFrom}
+                          timeTo={timeTo}
+                        />
+                      )}
                     </div>
                   </TableCell>
 
@@ -119,8 +124,7 @@ const RenderTimeTable: React.FC<TimeTableProps> = ({
                 </TableRow>
               </tbody>
             );
-          },
-        )
+          })
       ) : (
         <tbody>
           <TableRow>
@@ -176,12 +180,10 @@ const RenderTimeTableMobile: React.FC<TimeTableMobileProps> = ({
   selectedDay,
   setSelectedDay,
 }) => {
-  const [isShortHours] = (useContext(SettingsContext) as SettingsContextType)
-    .shortHours;
   const [hoursTime] = (useContext(SettingsContext) as SettingsContextType)
     .hoursTime;
   return (
-    <div className="mb-20 min-h-screen" vaul-drawer-wrapper="">
+    <div className="mb-20" vaul-drawer-wrapper="">
       <div className="w-full py-2.5">
         <ul className="flex w-full items-center justify-around bg-[#F7F3F5] px-0.5 text-center text-sm font-medium text-gray-500 dark:bg-[#171717] dark:text-gray-400">
           {days.map((item, index) => (
@@ -205,8 +207,10 @@ const RenderTimeTableMobile: React.FC<TimeTableMobileProps> = ({
 
       <div className="min-w-full">
         {timeTable.status && Object.entries(hoursTime).length > 1 ? (
-          Object.entries(hoursTime)?.map(
-            ([key, hour]: [string, hourType], lessonIndex) => {
+          Object.entries(hoursTime)
+            .map(([_, value]) => value)
+            .splice(0, maxLessons)
+            .map((hour: hourType, lessonIndex: number) => {
               const { number: lessonNumber, timeFrom, timeTo } = hour;
 
               return (
@@ -215,12 +219,15 @@ const RenderTimeTableMobile: React.FC<TimeTableMobileProps> = ({
                     <span className="mb-1 block text-center font-bold">
                       {lessonNumber}
                     </span>
-                    <span className="block text-center text-sm">
-                      {timeFrom} - {timeTo}
-                      {/* {selectedDay == new Date().getDay() - 1 && (
-                      <CurrentLesson timeFrom={timeFrom} timeTo={timeTo} />
-                    )} */}
-                    </span>
+                    {getCurrentLesson(timeFrom, timeTo).isWithinTimeRange ? (
+                      <div className="flex items-center justify-center">
+                        <CurrentLesson timeFrom={timeFrom} timeTo={timeTo} />
+                      </div>
+                    ) : (
+                      <span className="block text-center text-sm">
+                        {timeFrom} - {timeTo}
+                      </span>
+                    )}
                   </ListSmallItem>
 
                   <ListLargeItem>
@@ -255,8 +262,7 @@ const RenderTimeTableMobile: React.FC<TimeTableMobileProps> = ({
                   </ListLargeItem>
                 </ListRow>
               );
-            },
-          )
+            })
         ) : (
           <ListRow>
             <ListLargeItem>
