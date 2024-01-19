@@ -1,23 +1,22 @@
 import {
+  SettingsContext,
+  SettingsContextType,
+} from "@/components/setting-context";
+import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
-interface ShortHoursButtonProps {
-  setIsShortHours: React.Dispatch<React.SetStateAction<boolean>>;
-  isShortHours: boolean;
-}
-
-const ShortHoursButton: React.FC<ShortHoursButtonProps> = ({
-  setIsShortHours,
-  isShortHours,
-}) => {
+const ShortHoursButton: React.FC = () => {
   const [isClient, setIsClient] = useState(false);
   const { isReady } = useRouter();
+  const [isShortHours, setIsShortHours] = (
+    useContext(SettingsContext) as SettingsContextType
+  ).shortHours;
 
   useEffect(() => {
     setIsClient(true);
@@ -26,8 +25,8 @@ const ShortHoursButton: React.FC<ShortHoursButtonProps> = ({
   if (!isClient || !isReady) return null;
 
   const handleButton = (state: boolean) => {
-    localStorage.setItem("shortHours", state.toString());
     setIsShortHours(state);
+    localStorage.setItem("shortHours", state.toString());
   };
 
   const tooltips = [

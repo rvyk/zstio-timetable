@@ -20,11 +20,6 @@ const TimeTable: React.FC<TimeTableProps> = ({
 }) => {
   const [selectedDay, setSelectedDay] = useState(0);
 
-  const [isShortHours, setIsShortHours] = useState(
-    typeof localStorage !== "undefined" &&
-      localStorage.getItem("shortHours") === "true",
-  );
-
   const maxLessons = timeTable.status
     ? Math.max(
         Object.entries(timeTable.data.hours).length,
@@ -44,8 +39,6 @@ const TimeTable: React.FC<TimeTableProps> = ({
           <RenderTimeTable
             {...{
               timeTable,
-              isShortHours,
-              setIsShortHours,
               maxLessons,
               substitutions,
             }}
@@ -56,8 +49,6 @@ const TimeTable: React.FC<TimeTableProps> = ({
         <RenderTimeTableMobile
           {...{
             timeTable,
-            isShortHours,
-            setIsShortHours,
             maxLessons,
             selectedDay,
             setSelectedDay,

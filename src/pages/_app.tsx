@@ -3,6 +3,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import "@/styles/globals.css";
 import { AppProps } from "next/app";
 import Head from "next/head";
+import SettingsProvider from "../components/setting-context";
 
 const App = ({ Component, pageProps }: AppProps) => {
   return (
@@ -16,7 +17,9 @@ const App = ({ Component, pageProps }: AppProps) => {
         <Head>
           <meta name="viewport" content="width=device-width, initial-scale=1" />
         </Head>
-        <Component {...pageProps} />
+        <SettingsProvider>
+          <Component {...pageProps} />
+        </SettingsProvider>
       </ThemeProvider>
     </TooltipProvider>
   );

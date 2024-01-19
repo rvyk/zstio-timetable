@@ -5,6 +5,10 @@ import {
 import RenderLesson from "@/components/content-items/timetable/render-lesson";
 import ShortHoursButton from "@/components/content-items/timetable/short-hours-button";
 import ShortHoursCalculator from "@/components/content-items/timetable/short-hours-calculator";
+import {
+  SettingsContext,
+  SettingsContextType,
+} from "@/components/setting-context";
 import { ListLargeItem, ListRow, ListSmallItem } from "@/components/ui/list";
 import {
   Table,
@@ -17,12 +21,11 @@ import {
 import { days, shortHours } from "@/lib/utils";
 import { Table as TableType } from "@/types/timetable";
 import Link from "next/link";
+import { useContext } from "react";
 
 interface TimeTableProps {
   timeTable: TableType["timeTable"];
   substitutions: TableType["substitutions"];
-  isShortHours: boolean;
-  setIsShortHours: React.Dispatch<React.SetStateAction<boolean>>;
   maxLessons: number;
 }
 
@@ -33,11 +36,11 @@ interface TimeTableMobileProps extends TimeTableProps {
 
 const RenderTimeTable: React.FC<TimeTableProps> = ({
   timeTable,
-  isShortHours,
-  setIsShortHours,
   maxLessons,
   substitutions,
 }) => {
+  const [isShortHours] = (useContext(SettingsContext) as SettingsContextType)
+    .shortHours;
   return (
     <Table className="hidden justify-center md:flex">
       <TableCaption status={timeTable.status}>
@@ -45,7 +48,7 @@ const RenderTimeTable: React.FC<TimeTableProps> = ({
           <ShortHoursCalculator className="dark:!bg-[#171717] dark:hover:!bg-[#202020]" />
         </div>
         <div className="mr-2 inline-flex rounded-md shadow-sm" role="group">
-          <ShortHoursButton {...{ isShortHours, setIsShortHours }} />
+          <ShortHoursButton />
         </div>
         <p className="mr-1 text-lg font-normal text-gray-500 transition-all dark:text-gray-300 lg:text-xl">
           {timeTable?.data?.text} /
@@ -163,14 +166,14 @@ const RenderTimeTable: React.FC<TimeTableProps> = ({
 };
 
 const RenderTimeTableMobile: React.FC<TimeTableMobileProps> = ({
-  isShortHours,
   maxLessons,
-  setIsShortHours,
   substitutions,
   timeTable,
   selectedDay,
   setSelectedDay,
 }) => {
+  const [isShortHours] = (useContext(SettingsContext) as SettingsContextType)
+    .shortHours;
   return (
     <div className="mb-20 min-h-screen" vaul-drawer-wrapper="">
       <div className="w-full py-2.5">

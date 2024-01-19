@@ -21,11 +21,6 @@ const Navbar: React.FC = () => {
   const { theme, setTheme, resolvedTheme, systemTheme } = useTheme();
   const [isClient, setIsClient] = useState(false);
 
-  const [isShortHours, setIsShortHours] = useState(
-    typeof localStorage !== "undefined" &&
-      localStorage.getItem("shortHours") === "true",
-  );
-
   const pathname = usePathname();
   const isIndex = pathname === "/";
   const isSubstitutions = pathname === "/zastepstwa";
@@ -60,9 +55,7 @@ const Navbar: React.FC = () => {
           </Link>
         </div>
 
-        {!isSubstitutions && (
-          <ShortHoursButton {...{ isShortHours, setIsShortHours }} />
-        )}
+        {!isSubstitutions && <ShortHoursButton />}
       </div>
 
       <div className="flex items-center justify-center">
