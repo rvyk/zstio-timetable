@@ -13,7 +13,8 @@ import { Table } from "@/types/timetable";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 import { List } from "@wulkanowy/timetable-parser";
 import Link from "next/link";
-import React, { useState } from "react";
+import { useRouter } from "next/router";
+import React, { useCallback, useState } from "react";
 
 interface BottomBarProps {
   timeTable: Table["timeTable"];
@@ -22,6 +23,45 @@ interface BottomBarProps {
 
 const BottomBar: React.FC<BottomBarProps> = ({ timeTable, timeTableList }) => {
   const [isDrawerOpened, setIsDrawerOpened] = useState(false);
+
+  const router = useRouter();
+
+  const handleKey = useCallback(
+    (key: string) => {
+      const data = router?.query?.all?.[0];
+      if (data) {
+        const currentNumber = parseInt(router.query.all?.[1] ?? "0");
+        const changeTo =
+          key === "ArrowRight" ? currentNumber + 1 : currentNumber - 1;
+        const dataToPropertyMap: Record<string, string> = {
+          class: "classes",
+          room: "rooms",
+          teacher: "teachers",
+        };
+        const propertyName = dataToPropertyMap[data];
+        if (propertyName) {
+          let maxNumber = 0;
+          switch (propertyName) {
+            case "classes":
+              maxNumber = timeTableList.classes.length;
+              break;
+            case "teachers":
+              maxNumber = timeTableList.teachers?.length || 0;
+              break;
+            case "rooms":
+              maxNumber = timeTableList.rooms?.length || 0;
+              break;
+          }
+          if (changeTo >= 1 && changeTo <= maxNumber) {
+            router.push(`/${data}/${changeTo}`, undefined, {
+              scroll: false,
+            });
+          }
+        }
+      }
+    },
+    [router],
+  );
 
   const dropdowns = [
     {
@@ -56,7 +96,10 @@ const BottomBar: React.FC<BottomBarProps> = ({ timeTable, timeTableList }) => {
   return (
     <div className="fixed bottom-0 flex h-16 w-full items-center justify-around">
       <div className="relative flex w-full items-center justify-center rounded-lg bg-[#F7F3F5] p-2 pb-4 dark:bg-[#131313]">
-        <div className="group mr-1 flex h-14 w-14 cursor-pointer items-center justify-center rounded-xl bg-[#27161a] transition-all duration-300 hover:bg-[#1f1115] dark:bg-[#202020] dark:hover:bg-[#171717]">
+        <div
+          onClick={() => handleKey("ArrowLeft")}
+          className="group mr-1 flex h-14 w-14 cursor-pointer items-center justify-center rounded-xl bg-[#27161a] transition-all duration-300 hover:bg-[#1f1115] dark:bg-[#202020] dark:hover:bg-[#171717]"
+        >
           <ChevronLeftIcon className="h-8 w-8 text-white opacity-60 transition-all group-hover:opacity-100" />
         </div>
 
@@ -143,7 +186,10 @@ const BottomBar: React.FC<BottomBarProps> = ({ timeTable, timeTableList }) => {
           </DrawerContent>
         </Drawer>
 
-        <div className="group ml-1 flex h-14 w-14 cursor-pointer items-center justify-center rounded-xl bg-[#27161a] transition-all duration-300 hover:bg-[#1f1115] dark:bg-[#202020] dark:hover:bg-[#171717]">
+        <div
+          onClick={() => handleKey("ArrowRight")}
+          className="group ml-1 flex h-14 w-14 cursor-pointer items-center justify-center rounded-xl bg-[#27161a] transition-all duration-300 hover:bg-[#1f1115] dark:bg-[#202020] dark:hover:bg-[#171717]"
+        >
           <ChevronRightIcon className="h-8 w-8 text-white opacity-60 transition-all group-hover:opacity-100" />
         </div>
       </div>
