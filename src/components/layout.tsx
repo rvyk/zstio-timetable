@@ -7,15 +7,17 @@ import { Table } from "@/types/timetable";
 import Head from "next/head";
 import { usePathname } from "next/navigation";
 import React from "react";
+import SettingsProvider from "./setting-context";
 
 interface LayoutProps {
   props: Table;
   errorMsg?: string;
 }
 
-const Layout: React.FC<LayoutProps> = (
-  { props: { timeTable, timeTableList, substitutions }, errorMsg },
-) => {
+const Layout: React.FC<LayoutProps> = ({
+  props: { timeTable, timeTableList, substitutions },
+  errorMsg,
+}) => {
   const pathname = usePathname();
   const isIndex = pathname == "/";
   const isSubstitutions = pathname == "/zastepstwa";
@@ -35,15 +37,17 @@ const Layout: React.FC<LayoutProps> = (
           content={isSubstitutions ? titleSubstitutions : titleTimeTable}
         />
       </Head>
-      <Navbar />
-      {process.env.NEXT_PUBLIC_CMS && <Messages />}
-      <Jumbotron {...{ substitutions, timeTable, timeTableList }} />
-      {!errorMsg && (
-        <Content {...{ substitutions, timeTable, timeTableList }} />
-      )}
-      <div className={`${!isIndex && !errorMsg && "hidden md:block"}`}>
-        <Footer />
-      </div>
+      <SettingsProvider defaultHours={timeTable?.data?.hours as hourType[]}>
+        <Navbar />
+        {process.env.NEXT_PUBLIC_CMS && <Messages />}
+        <Jumbotron {...{ substitutions, timeTable, timeTableList }} />
+        {!errorMsg && (
+          <Content {...{ substitutions, timeTable, timeTableList }} />
+        )}
+        <div className={`${!isIndex && !errorMsg && "hidden md:block"}`}>
+          <Footer />
+        </div>
+      </SettingsProvider>
     </>
   );
 };

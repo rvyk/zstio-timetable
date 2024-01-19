@@ -19,7 +19,8 @@ import { adjustShortenedLessons } from "@/lib/utils";
 import { MinusIcon, PlusIcon } from "@heroicons/react/24/outline";
 import { DialogClose } from "@radix-ui/react-dialog";
 import { useCounter, useMediaQuery } from "@uidotdev/usehooks";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useContext, useState } from "react";
+import { SettingsContext, SettingsContextType } from "../setting-context";
 
 interface ResponsiveShortHourDialogProps {
   isOpen: boolean;
@@ -61,7 +62,7 @@ const ResponsiveShortHourDialog: React.FC<ResponsiveShortHourDialogProps> = ({
         <DrawerFooter className="pt-2">
           <DrawerClose asChild>
             <Button type="submit" variant="outline" className="mt-2 sm:mt-0">
-              Anuluj
+              Zamknij
             </Button>
           </DrawerClose>
         </DrawerFooter>
@@ -73,13 +74,19 @@ const ResponsiveShortHourDialog: React.FC<ResponsiveShortHourDialogProps> = ({
 export default ResponsiveShortHourDialog;
 
 const Content: React.FC = () => {
+  const [hoursTime, setHours, defaultHours] = (
+    useContext(SettingsContext) as SettingsContextType
+  )?.hoursTime;
   const isDesktop = useMediaQuery("(min-width: 768px)");
   const [lessonNumber, { increment, decrement, set }] = useCounter(5, {
     min: 5,
     max: 14,
   });
   const [userInput, setUserInput] = useState("5");
-  const newLessonArray = adjustShortenedLessons(lessonNumber);
+  const newLessonArray = adjustShortenedLessons(
+    lessonNumber,
+    Object.entries(defaultHours).map(([key, value]) => value),
+  );
   const miniLessonArray = [
     newLessonArray[lessonNumber - 2] || null,
     newLessonArray[lessonNumber - 1] || null,
@@ -136,16 +143,21 @@ const Content: React.FC = () => {
         <div className="text-[0.70rem] uppercase text-muted-foreground">
           normalne
         </div>
-        {miniLessonArray.map((lesson) => {
+        {miniLessonArray.map((lesson, key) => {
           if (typeof lesson == "string") {
             return (
-              <div className="h-1 w-[50%] rounded bg-[#321c21] dark:bg-red-400">
+              <div
+                key={key}
+                className="h-1 w-[50%] rounded bg-[#321c21] dark:bg-red-400"
+              >
                 &nbsp;
               </div>
             );
           }
           return (
-            <p>{`${lesson.number}. ${lesson.timeFrom}-${lesson.timeTo}`}</p>
+            <p
+              key={key}
+            >{`${lesson.number}. ${lesson.timeFrom}-${lesson.timeTo}`}</p>
           );
         })}
         <div className="text-[0.70rem] uppercase text-muted-foreground">
@@ -159,10 +171,25 @@ const Content: React.FC = () => {
               Anuluj
             </Button>
           </DialogClose>
-          <Button type="submit">Zastosuj</Button>
+          <DialogClose asChild>
+            <Button
+              type="submit"
+              onClick={() => {
+                setHours(newLessonArray);
+              }}
+            >
+              Zastosuj
+            </Button>
+          </DialogClose>
         </div>
       ) : (
-        <Button type="submit" className="w-full">
+        <Button
+          type="submit"
+          className="w-full"
+          onClick={() => {
+            setHours(newLessonArray);
+          }}
+        >
           Zastosuj
         </Button>
       )}

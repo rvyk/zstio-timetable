@@ -131,7 +131,7 @@ const ResponsiveLookupDialog: React.FC<ResponsiveLookupDialogProps> = ({
           </Button>
           <DrawerClose asChild>
             <Button type="submit" variant="outline" className="mt-2 sm:mt-0">
-              Anuluj
+              Zamknij
             </Button>
           </DrawerClose>
         </DrawerFooter>

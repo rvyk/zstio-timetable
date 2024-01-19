@@ -18,7 +18,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { days, shortHours } from "@/lib/utils";
+import { days } from "@/lib/utils";
 import { Table as TableType } from "@/types/timetable";
 import Link from "next/link";
 import { useContext } from "react";
@@ -41,6 +41,9 @@ const RenderTimeTable: React.FC<TimeTableProps> = ({
 }) => {
   const [isShortHours] = (useContext(SettingsContext) as SettingsContextType)
     .shortHours;
+  const [hoursTime] = (useContext(SettingsContext) as SettingsContextType)
+    .hoursTime;
+
   return (
     <Table className="hidden justify-center md:flex">
       <TableCaption status={timeTable.status}>
@@ -58,65 +61,66 @@ const RenderTimeTable: React.FC<TimeTableProps> = ({
         </p>
       </TableCaption>
       <TableHeader />
-      {Object.entries(timeTable.data?.hours).length > 1 ? (
-        Object.entries(
-          isShortHours
-            ? shortHours.slice(0, maxLessons)
-            : timeTable.data?.hours,
-        )?.map(([key, hour]: [string, hourType], lessonIndex) => {
-          const { number: lessonNumber, timeFrom, timeTo } = hour;
+      {Object.entries(hoursTime).length > 1 ? (
+        Object.entries(hoursTime)?.map(
+          ([key, hour]: [string, hourType], lessonIndex) => {
+            const { number: lessonNumber, timeFrom, timeTo } = hour;
 
-          return (
-            <tbody key={lessonIndex}>
-              <TableRow key={lessonIndex} reverseColor={lessonIndex % 2 === 0}>
-                <TableCell variant="number">
-                  <div className="flex flex-col items-center justify-center">
-                    {lessonNumber}
-                    {/* {new Date().getDay() < 6 && new Date().getDay() != 0 && (
+            return (
+              <tbody key={lessonIndex}>
+                <TableRow
+                  key={lessonIndex}
+                  reverseColor={lessonIndex % 2 === 0}
+                >
+                  <TableCell variant="number">
+                    <div className="flex flex-col items-center justify-center">
+                      {lessonNumber}
+                      {/* {new Date().getDay() < 6 && new Date().getDay() != 0 && (
                       <CurrentLesson timeFrom={timeFrom} timeTo={timeTo} />
                     )} */}
-                  </div>
-                </TableCell>
+                    </div>
+                  </TableCell>
 
-                <TableCell variant="number">
-                  {timeFrom} - {timeTo}
-                </TableCell>
+                  <TableCell variant="number">
+                    {timeFrom} - {timeTo}
+                  </TableCell>
 
-                {timeTable.data?.lessons?.map((day, dayIndex) => {
-                  return (
-                    <TableCell key={dayIndex}>
-                      {day[lessonIndex]?.map((lesson, iterationIndex) => {
-                        const { substitution, possibleSubstitution, sure } =
-                          TimeTableSubstitutions(
-                            dayIndex,
-                            lessonIndex,
-                            timeTable.data.title,
-                            substitutions.tables[0],
-                            lesson,
-                            iterationIndex,
-                            day,
-                            timeTable.data.text,
+                  {timeTable.data?.lessons?.map((day, dayIndex) => {
+                    return (
+                      <TableCell key={dayIndex}>
+                        {day[lessonIndex]?.map((lesson, iterationIndex) => {
+                          const { substitution, possibleSubstitution, sure } =
+                            TimeTableSubstitutions(
+                              dayIndex,
+                              lessonIndex,
+                              timeTable.data.title,
+                              substitutions.tables[0],
+                              lesson,
+                              iterationIndex,
+                              day,
+                              timeTable.data.text,
+                            );
+
+                          return (
+                            <RenderLesson
+                              key={`t-${day}-${lessonIndex}-${iterationIndex}`}
+                              lessonIndex={lessonIndex}
+                              day={day}
+                              substitution={substitution}
+                              sure={sure}
+                              possibleSubstitution={possibleSubstitution}
+                              lesson={lesson}
+                            />
                           );
-
-                        return (
-                          <RenderLesson
-                            key={`t-${day}-${lessonIndex}-${iterationIndex}`}
-                            lessonIndex={lessonIndex}
-                            day={day}
-                            substitution={substitution}
-                            sure={sure}
-                            possibleSubstitution={possibleSubstitution}
-                            lesson={lesson}
-                          />
-                        );
-                      })}
-                    </TableCell>
-                  );
-                })}
-              </TableRow>
-            </tbody>
-          );
-        })
+                        })}
+                      </TableCell>
+                    );
+                  })}
+                </TableRow>
+              </tbody>
+            );
+          },
+        )
       ) : (
         <tbody>
           <TableRow>
@@ -174,6 +178,8 @@ const RenderTimeTableMobile: React.FC<TimeTableMobileProps> = ({
 }) => {
   const [isShortHours] = (useContext(SettingsContext) as SettingsContextType)
     .shortHours;
+  const [hoursTime] = (useContext(SettingsContext) as SettingsContextType)
+    .hoursTime;
   return (
     <div className="mb-20 min-h-screen" vaul-drawer-wrapper="">
       <div className="w-full py-2.5">
@@ -198,32 +204,29 @@ const RenderTimeTableMobile: React.FC<TimeTableMobileProps> = ({
       </div>
 
       <div className="min-w-full">
-        {timeTable.status &&
-        Object.entries(timeTable.data?.hours).length > 1 ? (
-          Object.entries(
-            isShortHours
-              ? shortHours.slice(0, maxLessons)
-              : timeTable.data?.hours,
-          )?.map(([key, hour]: [string, hourType], lessonIndex) => {
-            const { number: lessonNumber, timeFrom, timeTo } = hour;
+        {timeTable.status && Object.entries(hoursTime).length > 1 ? (
+          Object.entries(hoursTime)?.map(
+            ([key, hour]: [string, hourType], lessonIndex) => {
+              const { number: lessonNumber, timeFrom, timeTo } = hour;
 
-            return (
-              <ListRow key={lessonIndex} reverseColor={lessonIndex % 2 == 0}>
-                <ListSmallItem>
-                  <span className="mb-1 block text-center font-bold">
-                    {lessonNumber}
-                  </span>
-                  <span className="block text-center text-sm">
-                    {timeFrom} - {timeTo}
-                    {/* {selectedDay == new Date().getDay() - 1 && (
+              return (
+                <ListRow key={lessonIndex} reverseColor={lessonIndex % 2 == 0}>
+                  <ListSmallItem>
+                    <span className="mb-1 block text-center font-bold">
+                      {lessonNumber}
+                    </span>
+                    <span className="block text-center text-sm">
+                      {timeFrom} - {timeTo}
+                      {/* {selectedDay == new Date().getDay() - 1 && (
                       <CurrentLesson timeFrom={timeFrom} timeTo={timeTo} />
                     )} */}
-                  </span>
-                </ListSmallItem>
+                    </span>
+                  </ListSmallItem>
 
-                <ListLargeItem>
-                  {timeTable.data?.lessons[selectedDay][lessonNumber - 1]?.map(
-                    (day, iterationIndex) => {
+                  <ListLargeItem>
+                    {timeTable.data?.lessons[selectedDay][
+                      lessonNumber - 1
+                    ]?.map((day, iterationIndex) => {
                       const { substitution, possibleSubstitution, sure } =
                         MobileTimeTableSubstitutions(
                           selectedDay,
@@ -248,12 +251,12 @@ const RenderTimeTableMobile: React.FC<TimeTableMobileProps> = ({
                           lesson={day}
                         />
                       );
-                    },
-                  )}
-                </ListLargeItem>
-              </ListRow>
-            );
-          })
+                    })}
+                  </ListLargeItem>
+                </ListRow>
+              );
+            },
+          )
         ) : (
           <ListRow>
             <ListLargeItem>

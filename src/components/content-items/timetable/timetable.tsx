@@ -23,7 +23,6 @@ export const handleArrowKey = (
   const data = router?.query?.all?.[0];
   if (data) {
     const currentNumber = parseInt(router.query.all?.[1] ?? "0");
-    console.log(currentNumber);
     const changeTo =
       key === "ArrowRight" ? currentNumber + 1 : currentNumber - 1;
     const dataToPropertyMap: Record<string, string> = {
@@ -85,7 +84,7 @@ const TimeTable: React.FC<TimeTableProps> = ({
   }, [router, timeTableList]);
 
   return (
-    <div>
+    <>
       <div className="hidden md:block">
         {timeTable.status && (
           <RenderTimeTable
@@ -110,7 +109,7 @@ const TimeTable: React.FC<TimeTableProps> = ({
 
         <BottomBar {...{ timeTable, timeTableList }} />
       </div>
-    </div>
+    </>
   );
 };
 

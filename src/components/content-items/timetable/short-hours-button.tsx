@@ -7,7 +7,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { cn } from "@/lib/utils";
+import { cn, shortHours } from "@/lib/utils";
 import { useRouter } from "next/router";
 import { useContext, useEffect, useState } from "react";
 
@@ -17,6 +17,9 @@ const ShortHoursButton: React.FC = () => {
   const [isShortHours, setIsShortHours] = (
     useContext(SettingsContext) as SettingsContextType
   ).shortHours;
+  const [, setHoursTime, defaultHours] = (
+    useContext(SettingsContext) as SettingsContextType
+  ).hoursTime;
 
   useEffect(() => {
     setIsClient(true);
@@ -27,6 +30,7 @@ const ShortHoursButton: React.FC = () => {
   const handleButton = (state: boolean) => {
     setIsShortHours(state);
     localStorage.setItem("shortHours", state.toString());
+    setHoursTime(state ? shortHours : defaultHours);
   };
 
   const tooltips = [

@@ -93,86 +93,16 @@ export const shortHours: hourType[] = [
   },
 ];
 
-export const normalHours: hourType[] = [
-  {
-    number: 1,
-    timeFrom: "08:00",
-    timeTo: "08:45",
-  },
-  {
-    number: 2,
-    timeFrom: "08:50",
-    timeTo: "09:35",
-  },
-  {
-    number: 3,
-    timeFrom: "09:40",
-    timeTo: "10:25",
-  },
-  {
-    number: 4,
-    timeFrom: "10:40",
-    timeTo: "11:25",
-  },
-  {
-    number: 5,
-    timeFrom: "11:30",
-    timeTo: "12:15",
-  },
-  {
-    number: 6,
-    timeFrom: "12:20",
-    timeTo: "13:05",
-  },
-  {
-    number: 7,
-    timeFrom: "13:10",
-    timeTo: "13:55",
-  },
-  {
-    number: 8,
-    timeFrom: "14:00",
-    timeTo: "14:45",
-  },
-  {
-    number: 9,
-    timeFrom: "14:50",
-    timeTo: "15:35",
-  },
-  {
-    number: 10,
-    timeFrom: "15:40",
-    timeTo: "16:25",
-  },
-  {
-    number: 11,
-    timeFrom: "16:35",
-    timeTo: "17:20",
-  },
-  {
-    number: 12,
-    timeFrom: "17:25",
-    timeTo: "18:10",
-  },
-  {
-    number: 13,
-    timeFrom: "18:15",
-    timeTo: "19:00",
-  },
-  {
-    number: 14,
-    timeFrom: "19:05",
-    timeTo: "19:50",
-  },
-];
-
-export const adjustShortenedLessons = (startIndex: number): hourType[] => {
+export const adjustShortenedLessons = (
+  startIndex: number,
+  defaultHours: hourType[],
+): hourType[] => {
   const adjustedShortenedLessons: hourType[] = [];
 
-  for (let i = 0; i < normalHours.length; i++) {
-    const hour = normalHours[i];
+  for (let i = 0; i < defaultHours.length; i++) {
+    const hour = defaultHours[i];
     const previousHour =
-      adjustedShortenedLessons[i - 1] || normalHours[i - 1] || null;
+      adjustedShortenedLessons[i - 1] || defaultHours[i - 1] || null;
 
     if (Number(hour.number) > startIndex) {
       const newHour: hourType = {
