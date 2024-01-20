@@ -8,7 +8,6 @@ import Head from "next/head";
 import { usePathname } from "next/navigation";
 import React from "react";
 import SettingsProvider from "./setting-context";
-
 interface LayoutProps {
   props: Table;
   errorMsg?: string;

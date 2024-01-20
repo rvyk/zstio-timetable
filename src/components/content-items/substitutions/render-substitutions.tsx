@@ -22,9 +22,12 @@ interface RenderSubstitutionsProps {
   time: string;
 }
 
-const RenderSubstitutions: React.FC<RenderSubstitutionsProps> = (
-  { index, filteredSubstitutions, status, time },
-) => {
+const RenderSubstitutions: React.FC<RenderSubstitutionsProps> = ({
+  index,
+  filteredSubstitutions,
+  status,
+  time,
+}) => {
   return (
     <Table className="hidden justify-center md:flex">
       <TableCaption
@@ -98,9 +101,12 @@ const RenderSubstitutions: React.FC<RenderSubstitutionsProps> = (
   );
 };
 
-const RenderSubstitutionsMobile: React.FC<RenderSubstitutionsProps> = (
-  { filteredSubstitutions, index, time, status },
-) => {
+const RenderSubstitutionsMobile: React.FC<RenderSubstitutionsProps> = ({
+  filteredSubstitutions,
+  index,
+  time,
+  status,
+}) => {
   return (
     <div className="min-h-screen">
       <div className="w-full">

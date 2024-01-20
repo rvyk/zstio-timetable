@@ -13,9 +13,12 @@ interface JumbotronProps {
   errorMsg?: string;
 }
 
-const Jumbotron: React.FC<JumbotronProps> = (
-  { substitutions, timeTableList, timeTable, errorMsg },
-) => {
+const Jumbotron: React.FC<JumbotronProps> = ({
+  substitutions,
+  timeTableList,
+  timeTable,
+  errorMsg,
+}) => {
   const pathname = usePathname();
   const isSubstitution = pathname === "/zastepstwa";
   const isIndex = pathname === "/";
@@ -63,9 +66,13 @@ interface JumbotronContentProps {
   errorMsg?: string;
 }
 
-const JumbotronContent: React.FC<JumbotronContentProps> = (
-  { isIndex, isSubstitution, substitutions, timeTable, errorMsg },
-) => {
+const JumbotronContent: React.FC<JumbotronContentProps> = ({
+  isIndex,
+  isSubstitution,
+  substitutions,
+  timeTable,
+  errorMsg,
+}) => {
   if (isIndex) return null;
 
   if (errorMsg) {
@@ -88,7 +95,7 @@ const JumbotronContent: React.FC<JumbotronContentProps> = (
       : "Wystąpił błąd podczas pobierania zastępstw";
 
   const timeTableText =
-    !isSubstitution && timeTable.status
+    !isSubstitution && timeTable?.status
       ? `${timeTable.data.text} /`
       : `Nie znaleziono pasującego planu lekcji`;
 
@@ -97,7 +104,7 @@ const JumbotronContent: React.FC<JumbotronContentProps> = (
       <p className="mr-1 text-xl font-normal text-gray-500 transition-all dark:text-gray-400 lg:text-2xl">
         {!isSubstitution ? timeTableText : substitutionsText}
       </p>
-      {!isSubstitution && timeTable.status && (
+      {!isSubstitution && timeTable?.status && (
         <p className="text-xl font-bold text-gray-500 transition-all dark:text-gray-400 lg:text-2xl">
           {timeTable.data.title}
         </p>
@@ -114,9 +121,13 @@ interface JumbotronDropdownsProps {
   errorMsg?: string;
 }
 
-const JumbotronDropdowns: React.FC<JumbotronDropdownsProps> = (
-  { isIndex, isSubstitution, substitutions, timeTableList, errorMsg },
-) => {
+const JumbotronDropdowns: React.FC<JumbotronDropdownsProps> = ({
+  isIndex,
+  isSubstitution,
+  substitutions,
+  timeTableList,
+  errorMsg,
+}) => {
   if (isIndex) return <Loading />;
   if (errorMsg) return null;
   if (isSubstitution && substitutions.status) {

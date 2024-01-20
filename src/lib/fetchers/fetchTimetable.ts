@@ -10,8 +10,8 @@ const removeUndefined = (obj: any, value: any) =>
     result[key] = _.isObject(val)
       ? removeUndefined(val, value)
       : _.isUndefined(val)
-      ? value
-      : val;
+        ? value
+        : val;
   });
 
 interface TimetableResponse {

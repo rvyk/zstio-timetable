@@ -42,17 +42,21 @@ const SubstitutionsDropdowns: React.FC<{ substitutions: Substitutions }> = ({
 
   return (
     <>
-      <SubstitutionDropdown
-        item={uniqueData.branches}
-        icon={<AcademicCapIcon />}
-        name="branches"
-      />
+      {!!uniqueData.branches.length && (
+        <SubstitutionDropdown
+          item={uniqueData.branches}
+          icon={<AcademicCapIcon />}
+          name="branches"
+        />
+      )}
 
-      <SubstitutionDropdown
-        item={uniqueData.teachers}
-        icon={<UsersIcon />}
-        name="teachers"
-      />
+      {!!uniqueData.teachers.length && (
+        <SubstitutionDropdown
+          item={uniqueData.teachers}
+          icon={<UsersIcon />}
+          name="teachers"
+        />
+      )}
     </>
   );
 };
@@ -68,8 +72,6 @@ const SubstitutionDropdown: React.FC<SubstitutionDropdownProps> = ({
   name,
   icon,
 }) => {
-  if (item.length === 0) return null;
-
   const [filter, setFilter] = useState("");
   const [checkedItems, setCheckedItems] = useState<CheckedItemsType>({});
   const [isOpened, setIsOpened] = useState(false);

@@ -7,9 +7,10 @@ interface ThemeButtonProps {
   resolvedTheme: string;
 }
 
-const ThemeButton: React.FC<ThemeButtonProps> = (
-  { toggleTheme, resolvedTheme },
-) => {
+const ThemeButton: React.FC<ThemeButtonProps> = ({
+  toggleTheme,
+  resolvedTheme,
+}) => {
   return (
     <ButtonWrapper tooltipText="Zmień motyw" onClick={toggleTheme}>
       {resolvedTheme === "light" ? (
