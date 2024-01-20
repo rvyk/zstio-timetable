@@ -1,0 +1,1545 @@
+{
+  "timeTable": {
+    "status": true,
+    "data": {
+      "hours": {
+        "1": { "number": 1, "timeFrom": "8:00", "timeTo": "8:45" },
+        "2": { "number": 2, "timeFrom": "8:50", "timeTo": "9:35" },
+        "3": { "number": 3, "timeFrom": "9:40", "timeTo": "10:25" },
+        "4": { "number": 4, "timeFrom": "10:40", "timeTo": "11:25" },
+        "5": { "number": 5, "timeFrom": "11:30", "timeTo": "12:15" },
+        "6": { "number": 6, "timeFrom": "12:20", "timeTo": "13:05" },
+        "7": { "number": 7, "timeFrom": "13:10", "timeTo": "13:55" },
+        "8": { "number": 8, "timeFrom": "14:00", "timeTo": "14:45" }
+      },
+      "lessons": [
+        [
+          [
+            {
+              "subject": "bad.obw.elek",
+              "teacher": "Pu",
+              "teacherId": "54",
+              "room": "W20",
+              "roomId": "28"
+            }
+          ],
+          [
+            {
+              "subject": "bad.obw.elek",
+              "teacher": "Pu",
+              "teacherId": "54",
+              "room": "W20",
+              "roomId": "28"
+            }
+          ],
+          [
+            {
+              "subject": "mi.ele-elekt",
+              "teacher": "Pu",
+              "teacherId": "54",
+              "room": "W20",
+              "roomId": "28"
+            }
+          ],
+          [
+            {
+              "subject": "mi.ele-elekt",
+              "teacher": "Pu",
+              "teacherId": "54",
+              "room": "W20",
+              "roomId": "28",
+              "groupName": "1/2"
+            },
+            {
+              "subject": "bad.el-u.ana",
+              "teacher": "Ok",
+              "teacherId": "40",
+              "room": "W6",
+              "roomId": "30",
+              "groupName": "2/2"
+            }
+          ],
+          [
+            {
+              "subject": "mi.ele-elekt",
+              "teacher": "Pu",
+              "teacherId": "54",
+              "room": "W20",
+              "roomId": "28",
+              "groupName": "1/2"
+            },
+            {
+              "subject": "bad.el-u.ana",
+              "teacher": "Ok",
+              "teacherId": "40",
+              "room": "W6",
+              "roomId": "30",
+              "groupName": "2/2"
+            }
+          ],
+          [
+            {
+              "subject": "bad.el-u.ana",
+              "teacher": "Ok",
+              "teacherId": "40",
+              "room": "W6",
+              "roomId": "30",
+              "groupName": "1/2"
+            },
+            {
+              "subject": "mi.ele-elekt",
+              "teacher": "Pu",
+              "teacherId": "54",
+              "room": "W20",
+              "roomId": "28",
+              "groupName": "2/2"
+            }
+          ],
+          [
+            {
+              "subject": "bad.el-u.ana",
+              "teacher": "Ok",
+              "teacherId": "40",
+              "room": "W6",
+              "roomId": "30",
+              "groupName": "1/2"
+            },
+            {
+              "subject": "mi.ele-elekt",
+              "teacher": "Pu",
+              "teacherId": "54",
+              "room": "W20",
+              "roomId": "28",
+              "groupName": "2/2"
+            }
+          ],
+          [
+            {
+              "subject": "hist-teraź",
+              "teacher": "BJ",
+              "teacherId": "5",
+              "room": "W20",
+              "roomId": "28"
+            }
+          ]
+        ],
+        [
+          [
+            {
+              "subject": "j.polski",
+              "teacher": "PA",
+              "teacherId": "50",
+              "room": "W16",
+              "roomId": "24"
+            }
+          ],
+          [
+            {
+              "subject": "j.polski",
+              "teacher": "PA",
+              "teacherId": "50",
+              "room": "W3",
+              "roomId": "20"
+            }
+          ],
+          [
+            {
+              "subject": "wf",
+              "teacher": "Ku",
+              "teacherId": "33",
+              "room": "WG2",
+              "roomId": "32",
+              "groupName": "1/2"
+            },
+            {
+              "subject": "wf",
+              "teacher": "TT",
+              "teacherId": "62",
+              "room": "G1",
+              "roomId": "31",
+              "groupName": "2/2"
+            }
+          ],
+          [
+            {
+              "subject": "wf",
+              "teacher": "Ku",
+              "teacherId": "33",
+              "room": "WG2",
+              "roomId": "32",
+              "groupName": "1/2"
+            },
+            {
+              "subject": "wf",
+              "teacher": "TT",
+              "teacherId": "62",
+              "room": "G1",
+              "roomId": "31",
+              "groupName": "2/2"
+            }
+          ],
+          [
+            {
+              "subject": "j.angielski",
+              "teacher": "PZ",
+              "teacherId": "53",
+              "room": "24",
+              "roomId": "7",
+              "groupName": "1/2"
+            },
+            {
+              "subject": "j.angielski",
+              "teacher": "BM",
+              "teacherId": "4",
+              "room": "W11",
+              "roomId": "21",
+              "groupName": "2/2"
+            }
+          ],
+          [
+            {
+              "subject": "geografia",
+              "teacher": "CM",
+              "teacherId": "8",
+              "room": "16",
+              "roomId": "1"
+            }
+          ],
+          [
+            {
+              "subject": "religia",
+              "teacher": "Gl",
+              "teacherId": "19",
+              "room": "3",
+              "roomId": "16"
+            }
+          ],
+          [
+            {
+              "subject": "historia",
+              "teacher": "BJ",
+              "teacherId": "5",
+              "room": "16",
+              "roomId": "1"
+            }
+          ]
+        ],
+        [
+          [
+            {
+              "subject": "bad.obw.elek",
+              "teacher": "Pu",
+              "teacherId": "54",
+              "room": "W20",
+              "roomId": "28",
+              "groupName": "1/2"
+            },
+            {
+              "subject": "pr.pod.tech",
+              "teacher": "Tu",
+              "teacherId": "63",
+              "room": "WPT",
+              "roomId": "17",
+              "groupName": "2/2"
+            }
+          ],
+          [
+            {
+              "subject": "bad.obw.elek",
+              "teacher": "Pu",
+              "teacherId": "54",
+              "room": "W20",
+              "roomId": "28",
+              "groupName": "1/2"
+            },
+            {
+              "subject": "j.niemiecki",
+              "teacher": "Wó",
+              "teacherId": "67",
+              "room": "W1",
+              "roomId": "18",
+              "groupName": "2/2"
+            }
+          ],
+          [
+            {
+              "subject": "pr.pod.tech",
+              "teacher": "Tu",
+              "teacherId": "63",
+              "room": "WPT",
+              "roomId": "17",
+              "groupName": "1/2"
+            },
+            {
+              "subject": "bad.obw.elek",
+              "teacher": "Pu",
+              "teacherId": "54",
+              "room": "W20",
+              "roomId": "28",
+              "groupName": "2/2"
+            }
+          ],
+          [
+            {
+              "subject": "j.niemiecki",
+              "teacher": "Ry",
+              "teacherId": "58",
+              "room": "W1",
+              "roomId": "18",
+              "groupName": "1/2"
+            },
+            {
+              "subject": "bad.obw.elek",
+              "teacher": "Pu",
+              "teacherId": "54",
+              "room": "W20",
+              "roomId": "28",
+              "groupName": "2/2"
+            }
+          ],
+          [
+            {
+              "subject": "fizyka",
+              "teacher": "Ba",
+              "teacherId": "1",
+              "room": "19",
+              "roomId": "3"
+            }
+          ],
+          [
+            {
+              "subject": "matematyka",
+              "teacher": "HM",
+              "teacherId": "23",
+              "room": "23",
+              "roomId": "6"
+            }
+          ],
+          [
+            {
+              "subject": "wf",
+              "teacher": "Ku",
+              "teacherId": "33",
+              "room": "WG2",
+              "roomId": "32",
+              "groupName": "1/2"
+            },
+            {
+              "subject": "wf",
+              "teacher": "TT",
+              "teacherId": "62",
+              "room": "G1",
+              "roomId": "31",
+              "groupName": "2/2"
+            }
+          ],
+          [
+            {
+              "subject": "j.polski",
+              "teacher": "PA",
+              "teacherId": "50",
+              "room": "21",
+              "roomId": "4"
+            }
+          ]
+        ],
+        [
+          [
+            {
+              "subject": "j.angielski",
+              "teacher": "PZ",
+              "teacherId": "53",
+              "room": "24",
+              "roomId": "7",
+              "groupName": "1/2"
+            },
+            {
+              "subject": "j.angielski",
+              "teacher": "BM",
+              "teacherId": "4",
+              "room": "W11",
+              "roomId": "21",
+              "groupName": "2/2"
+            }
+          ],
+          [
+            {
+              "subject": "j.niemiecki",
+              "teacher": "Ry",
+              "teacherId": "58",
+              "room": "W1",
+              "roomId": "18",
+              "groupName": "1/2"
+            },
+            {
+              "subject": "j.niemiecki",
+              "teacher": "Wó",
+              "teacherId": "67",
+              "room": "W2",
+              "roomId": "19",
+              "groupName": "2/2"
+            }
+          ],
+          [
+            {
+              "subject": "informatyka",
+              "teacher": "Oż",
+              "teacherId": "44",
+              "room": "32",
+              "roomId": "10",
+              "groupName": "1/2"
+            },
+            {
+              "subject": "informatyka",
+              "teacher": "Wa",
+              "teacherId": "64",
+              "room": "36",
+              "roomId": "14",
+              "groupName": "2/2"
+            }
+          ],
+          [
+            {
+              "subject": "geografia",
+              "teacher": "CM",
+              "teacherId": "8",
+              "room": "16",
+              "roomId": "1"
+            }
+          ],
+          [
+            {
+              "subject": "r_matematyka",
+              "teacher": "HM",
+              "teacherId": "23",
+              "room": "23",
+              "roomId": "6"
+            }
+          ],
+          [
+            {
+              "subject": "matematyka",
+              "teacher": "HM",
+              "teacherId": "23",
+              "room": "23",
+              "roomId": "6"
+            }
+          ],
+          [
+            {
+              "subject": "filozofia",
+              "teacher": "Gl",
+              "teacherId": "19",
+              "room": "25",
+              "roomId": "8"
+            }
+          ],
+          [
+            {
+              "subject": "historia",
+              "teacher": "BJ",
+              "teacherId": "5",
+              "room": "25",
+              "roomId": "8"
+            }
+          ]
+        ],
+        [
+          [
+            {
+              "subject": "religia",
+              "teacher": "Gl",
+              "teacherId": "19",
+              "room": "3",
+              "roomId": "16"
+            }
+          ],
+          [
+            {
+              "subject": "edb",
+              "teacher": "GG",
+              "teacherId": "22",
+              "room": "W2",
+              "roomId": "19"
+            }
+          ],
+          [
+            {
+              "subject": "fizyka",
+              "teacher": "Ba",
+              "teacherId": "1",
+              "room": "19",
+              "roomId": "3"
+            }
+          ],
+          [
+            {
+              "subject": "bizn.i zarz.",
+              "teacher": "Ru",
+              "teacherId": "57",
+              "room": "W12",
+              "roomId": "22"
+            }
+          ],
+          [
+            {
+              "subject": "b.h.p",
+              "teacher": "BJ",
+              "teacherId": "5",
+              "room": "W19",
+              "roomId": "27"
+            }
+          ],
+          [
+            {
+              "subject": "godz.wych",
+              "teacher": "PA",
+              "teacherId": "50",
+              "room": "W20",
+              "roomId": "28"
+            }
+          ],
+          [],
+          []
+        ]
+      ],
+      "generatedDate": "2024-01-13",
+      "title": "1TE",
+      "validDate": "2024-01-15",
+      "days": [
+        [
+          [
+            {
+              "subject": "bad.obw.elek",
+              "teacher": "Pu",
+              "teacherId": "54",
+              "room": "W20",
+              "roomId": "28"
+            }
+          ],
+          [
+            {
+              "subject": "bad.obw.elek",
+              "teacher": "Pu",
+              "teacherId": "54",
+              "room": "W20",
+              "roomId": "28"
+            }
+          ],
+          [
+            {
+              "subject": "mi.ele-elekt",
+              "teacher": "Pu",
+              "teacherId": "54",
+              "room": "W20",
+              "roomId": "28"
+            }
+          ],
+          [
+            {
+              "subject": "mi.ele-elekt",
+              "teacher": "Pu",
+              "teacherId": "54",
+              "room": "W20",
+              "roomId": "28",
+              "groupName": "1/2"
+            },
+            {
+              "subject": "bad.el-u.ana",
+              "teacher": "Ok",
+              "teacherId": "40",
+              "room": "W6",
+              "roomId": "30",
+              "groupName": "2/2"
+            }
+          ],
+          [
+            {
+              "subject": "mi.ele-elekt",
+              "teacher": "Pu",
+              "teacherId": "54",
+              "room": "W20",
+              "roomId": "28",
+              "groupName": "1/2"
+            },
+            {
+              "subject": "bad.el-u.ana",
+              "teacher": "Ok",
+              "teacherId": "40",
+              "room": "W6",
+              "roomId": "30",
+              "groupName": "2/2"
+            }
+          ],
+          [
+            {
+              "subject": "bad.el-u.ana",
+              "teacher": "Ok",
+              "teacherId": "40",
+              "room": "W6",
+              "roomId": "30",
+              "groupName": "1/2"
+            },
+            {
+              "subject": "mi.ele-elekt",
+              "teacher": "Pu",
+              "teacherId": "54",
+              "room": "W20",
+              "roomId": "28",
+              "groupName": "2/2"
+            }
+          ],
+          [
+            {
+              "subject": "bad.el-u.ana",
+              "teacher": "Ok",
+              "teacherId": "40",
+              "room": "W6",
+              "roomId": "30",
+              "groupName": "1/2"
+            },
+            {
+              "subject": "mi.ele-elekt",
+              "teacher": "Pu",
+              "teacherId": "54",
+              "room": "W20",
+              "roomId": "28",
+              "groupName": "2/2"
+            }
+          ],
+          [
+            {
+              "subject": "hist-teraź",
+              "teacher": "BJ",
+              "teacherId": "5",
+              "room": "W20",
+              "roomId": "28"
+            }
+          ]
+        ],
+        [
+          [
+            {
+              "subject": "j.polski",
+              "teacher": "PA",
+              "teacherId": "50",
+              "room": "W16",
+              "roomId": "24"
+            }
+          ],
+          [
+            {
+              "subject": "j.polski",
+              "teacher": "PA",
+              "teacherId": "50",
+              "room": "W3",
+              "roomId": "20"
+            }
+          ],
+          [
+            {
+              "subject": "wf",
+              "teacher": "Ku",
+              "teacherId": "33",
+              "room": "WG2",
+              "roomId": "32",
+              "groupName": "1/2"
+            },
+            {
+              "subject": "wf",
+              "teacher": "TT",
+              "teacherId": "62",
+              "room": "G1",
+              "roomId": "31",
+              "groupName": "2/2"
+            }
+          ],
+          [
+            {
+              "subject": "wf",
+              "teacher": "Ku",
+              "teacherId": "33",
+              "room": "WG2",
+              "roomId": "32",
+              "groupName": "1/2"
+            },
+            {
+              "subject": "wf",
+              "teacher": "TT",
+              "teacherId": "62",
+              "room": "G1",
+              "roomId": "31",
+              "groupName": "2/2"
+            }
+          ],
+          [
+            {
+              "subject": "j.angielski",
+              "teacher": "PZ",
+              "teacherId": "53",
+              "room": "24",
+              "roomId": "7",
+              "groupName": "1/2"
+            },
+            {
+              "subject": "j.angielski",
+              "teacher": "BM",
+              "teacherId": "4",
+              "room": "W11",
+              "roomId": "21",
+              "groupName": "2/2"
+            }
+          ],
+          [
+            {
+              "subject": "geografia",
+              "teacher": "CM",
+              "teacherId": "8",
+              "room": "16",
+              "roomId": "1"
+            }
+          ],
+          [
+            {
+              "subject": "religia",
+              "teacher": "Gl",
+              "teacherId": "19",
+              "room": "3",
+              "roomId": "16"
+            }
+          ],
+          [
+            {
+              "subject": "historia",
+              "teacher": "BJ",
+              "teacherId": "5",
+              "room": "16",
+              "roomId": "1"
+            }
+          ]
+        ],
+        [
+          [
+            {
+              "subject": "bad.obw.elek",
+              "teacher": "Pu",
+              "teacherId": "54",
+              "room": "W20",
+              "roomId": "28",
+              "groupName": "1/2"
+            },
+            {
+              "subject": "pr.pod.tech",
+              "teacher": "Tu",
+              "teacherId": "63",
+              "room": "WPT",
+              "roomId": "17",
+              "groupName": "2/2"
+            }
+          ],
+          [
+            {
+              "subject": "bad.obw.elek",
+              "teacher": "Pu",
+              "teacherId": "54",
+              "room": "W20",
+              "roomId": "28",
+              "groupName": "1/2"
+            },
+            {
+              "subject": "j.niemiecki",
+              "teacher": "Wó",
+              "teacherId": "67",
+              "room": "W1",
+              "roomId": "18",
+              "groupName": "2/2"
+            }
+          ],
+          [
+            {
+              "subject": "pr.pod.tech",
+              "teacher": "Tu",
+              "teacherId": "63",
+              "room": "WPT",
+              "roomId": "17",
+              "groupName": "1/2"
+            },
+            {
+              "subject": "bad.obw.elek",
+              "teacher": "Pu",
+              "teacherId": "54",
+              "room": "W20",
+              "roomId": "28",
+              "groupName": "2/2"
+            }
+          ],
+          [
+            {
+              "subject": "j.niemiecki",
+              "teacher": "Ry",
+              "teacherId": "58",
+              "room": "W1",
+              "roomId": "18",
+              "groupName": "1/2"
+            },
+            {
+              "subject": "bad.obw.elek",
+              "teacher": "Pu",
+              "teacherId": "54",
+              "room": "W20",
+              "roomId": "28",
+              "groupName": "2/2"
+            }
+          ],
+          [
+            {
+              "subject": "fizyka",
+              "teacher": "Ba",
+              "teacherId": "1",
+              "room": "19",
+              "roomId": "3"
+            }
+          ],
+          [
+            {
+              "subject": "matematyka",
+              "teacher": "HM",
+              "teacherId": "23",
+              "room": "23",
+              "roomId": "6"
+            }
+          ],
+          [
+            {
+              "subject": "wf",
+              "teacher": "Ku",
+              "teacherId": "33",
+              "room": "WG2",
+              "roomId": "32",
+              "groupName": "1/2"
+            },
+            {
+              "subject": "wf",
+              "teacher": "TT",
+              "teacherId": "62",
+              "room": "G1",
+              "roomId": "31",
+              "groupName": "2/2"
+            }
+          ],
+          [
+            {
+              "subject": "j.polski",
+              "teacher": "PA",
+              "teacherId": "50",
+              "room": "21",
+              "roomId": "4"
+            }
+          ]
+        ],
+        [
+          [
+            {
+              "subject": "j.angielski",
+              "teacher": "PZ",
+              "teacherId": "53",
+              "room": "24",
+              "roomId": "7",
+              "groupName": "1/2"
+            },
+            {
+              "subject": "j.angielski",
+              "teacher": "BM",
+              "teacherId": "4",
+              "room": "W11",
+              "roomId": "21",
+              "groupName": "2/2"
+            }
+          ],
+          [
+            {
+              "subject": "j.niemiecki",
+              "teacher": "Ry",
+              "teacherId": "58",
+              "room": "W1",
+              "roomId": "18",
+              "groupName": "1/2"
+            },
+            {
+              "subject": "j.niemiecki",
+              "teacher": "Wó",
+              "teacherId": "67",
+              "room": "W2",
+              "roomId": "19",
+              "groupName": "2/2"
+            }
+          ],
+          [
+            {
+              "subject": "informatyka",
+              "teacher": "Oż",
+              "teacherId": "44",
+              "room": "32",
+              "roomId": "10",
+              "groupName": "1/2"
+            },
+            {
+              "subject": "informatyka",
+              "teacher": "Wa",
+              "teacherId": "64",
+              "room": "36",
+              "roomId": "14",
+              "groupName": "2/2"
+            }
+          ],
+          [
+            {
+              "subject": "geografia",
+              "teacher": "CM",
+              "teacherId": "8",
+              "room": "16",
+              "roomId": "1"
+            }
+          ],
+          [
+            {
+              "subject": "r_matematyka",
+              "teacher": "HM",
+              "teacherId": "23",
+              "room": "23",
+              "roomId": "6"
+            }
+          ],
+          [
+            {
+              "subject": "matematyka",
+              "teacher": "HM",
+              "teacherId": "23",
+              "room": "23",
+              "roomId": "6"
+            }
+          ],
+          [
+            {
+              "subject": "filozofia",
+              "teacher": "Gl",
+              "teacherId": "19",
+              "room": "25",
+              "roomId": "8"
+            }
+          ],
+          [
+            {
+              "subject": "historia",
+              "teacher": "BJ",
+              "teacherId": "5",
+              "room": "25",
+              "roomId": "8"
+            }
+          ]
+        ],
+        [
+          [
+            {
+              "subject": "religia",
+              "teacher": "Gl",
+              "teacherId": "19",
+              "room": "3",
+              "roomId": "16"
+            }
+          ],
+          [
+            {
+              "subject": "edb",
+              "teacher": "GG",
+              "teacherId": "22",
+              "room": "W2",
+              "roomId": "19"
+            }
+          ],
+          [
+            {
+              "subject": "fizyka",
+              "teacher": "Ba",
+              "teacherId": "1",
+              "room": "19",
+              "roomId": "3"
+            }
+          ],
+          [
+            {
+              "subject": "bizn.i zarz.",
+              "teacher": "Ru",
+              "teacherId": "57",
+              "room": "W12",
+              "roomId": "22"
+            }
+          ],
+          [
+            {
+              "subject": "b.h.p",
+              "teacher": "BJ",
+              "teacherId": "5",
+              "room": "W19",
+              "roomId": "27"
+            }
+          ],
+          [
+            {
+              "subject": "godz.wych",
+              "teacher": "PA",
+              "teacherId": "50",
+              "room": "W20",
+              "roomId": "28"
+            }
+          ],
+          [],
+          []
+        ]
+      ],
+      "dayNames": ["Poniedziałek", "Wtorek", "Środa", "Czwartek", "Piątek"],
+      "text": "Oddziały",
+      "id": "o1"
+    }
+  },
+  "timeTableList": {
+    "classes": [
+      { "name": "1TE", "value": "1" },
+      { "name": "1TP", "value": "2" },
+      { "name": "1TI", "value": "3" },
+      { "name": "1TA", "value": "4" },
+      { "name": "1TS", "value": "5" },
+      { "name": "1TM", "value": "6" },
+      { "name": "1BS", "value": "7" },
+      { "name": "1BK", "value": "8" },
+      { "name": "2TE", "value": "9" },
+      { "name": "2TG", "value": "10" },
+      { "name": "2TI", "value": "11" },
+      { "name": "2TT", "value": "12" },
+      { "name": "2TP", "value": "13" },
+      { "name": "2TS", "value": "14" },
+      { "name": "2TM", "value": "15" },
+      { "name": "2BS", "value": "16" },
+      { "name": "2BE", "value": "17" },
+      { "name": "2BK", "value": "18" },
+      { "name": "3TE", "value": "19" },
+      { "name": "3TG", "value": "20" },
+      { "name": "3TI", "value": "21" },
+      { "name": "3TP", "value": "22" },
+      { "name": "3TS", "value": "23" },
+      { "name": "3BE", "value": "24" },
+      { "name": "3BS", "value": "25" },
+      { "name": "4Ta", "value": "26" },
+      { "name": "4Tg", "value": "27" },
+      { "name": "4Ti", "value": "28" },
+      { "name": "4Ts", "value": "29" },
+      { "name": "4Tr", "value": "30" },
+      { "name": "5Ta 5SP", "value": "31" },
+      { "name": "5Tc 5SP", "value": "32" },
+      { "name": "5Ti 5SP", "value": "33" },
+      { "name": "5Tm 5SP", "value": "34" }
+    ],
+    "teachers": [
+      { "name": "Ba", "value": "1" },
+      { "name": "BL", "value": "2" },
+      { "name": "Be", "value": "3" },
+      { "name": "BM", "value": "4" },
+      { "name": "BJ", "value": "5" },
+      { "name": "Bu", "value": "6" },
+      { "name": "CK", "value": "7" },
+      { "name": "CM", "value": "8" },
+      { "name": "CP", "value": "9" },
+      { "name": "Dę", "value": "10" },
+      { "name": "Dr", "value": "11" },
+      { "name": "Dy", "value": "12" },
+      { "name": "Dz", "value": "13" },
+      { "name": "FK", "value": "14" },
+      { "name": "Fo", "value": "15" },
+      { "name": "Fu", "value": "16" },
+      { "name": "Gi", "value": "17" },
+      { "name": "GŁ", "value": "18" },
+      { "name": "Gl", "value": "19" },
+      { "name": "GM", "value": "20" },
+      { "name": "GA", "value": "21" },
+      { "name": "GG", "value": "22" },
+      { "name": "HM", "value": "23" },
+      { "name": "Ho", "value": "24" },
+      { "name": "Iw", "value": "25" },
+      { "name": "Ka", "value": "26" },
+      { "name": "Kn", "value": "27" },
+      { "name": "KT", "value": "28" },
+      { "name": "Ko", "value": "29" },
+      { "name": "KD", "value": "30" },
+      { "name": "Kr", "value": "31" },
+      { "name": "KZ", "value": "32" },
+      { "name": "Ku", "value": "33" },
+      { "name": "La", "value": "34" },
+      { "name": "Ły", "value": "35" },
+      { "name": "MB", "value": "36" },
+      { "name": "Me", "value": "37" },
+      { "name": "ND", "value": "38" },
+      { "name": "Ny", "value": "39" },
+      { "name": "Ok", "value": "40" },
+      { "name": "Ol", "value": "41" },
+      { "name": "Or", "value": "42" },
+      { "name": "OA", "value": "43" },
+      { "name": "Oż", "value": "44" },
+      { "name": "Pł", "value": "45" },
+      { "name": "PM", "value": "46" },
+      { "name": "PB", "value": "47" },
+      { "name": "Pi", "value": "48" },
+      { "name": "Po", "value": "49" },
+      { "name": "PA", "value": "50" },
+      { "name": "PL", "value": "51" },
+      { "name": "PP", "value": "52" },
+      { "name": "PZ", "value": "53" },
+      { "name": "Pu", "value": "54" },
+      { "name": "RM", "value": "55" },
+      { "name": "Ró", "value": "56" },
+      { "name": "Ru", "value": "57" },
+      { "name": "Ry", "value": "58" },
+      { "name": "SQ", "value": "59" },
+      { "name": "TG", "value": "60" },
+      { "name": "TA", "value": "61" },
+      { "name": "TT", "value": "62" },
+      { "name": "Tu", "value": "63" },
+      { "name": "Wa", "value": "64" },
+      { "name": "WJ", "value": "65" },
+      { "name": "Wr", "value": "66" },
+      { "name": "Wó", "value": "67" },
+      { "name": "ZA", "value": "68" },
+      { "name": "Zi", "value": "69" },
+      { "name": "Żo", "value": "70" }
+    ],
+    "rooms": [
+      { "name": "16 prac. geograficzna", "value": "1" },
+      { "name": "17 prac. fizyczna", "value": "2" },
+      { "name": "19 prac. fizyczna", "value": "3" },
+      { "name": "21 prac. historii", "value": "4" },
+      { "name": "22 prac. j.polskiego", "value": "5" },
+      { "name": "23 prac. matematyczna", "value": "6" },
+      { "name": "24 prac j.angielskiego", "value": "7" },
+      { "name": "25 prac.j.niemieckiego", "value": "8" },
+      { "name": "26 prac. j.polskiego", "value": "9" },
+      { "name": "32 prac. komputerowa", "value": "10" },
+      { "name": "33 prac. komputerowa", "value": "11" },
+      { "name": "34 prac. komputerowa", "value": "12" },
+      { "name": "35 prac. komputerowa", "value": "13" },
+      { "name": "36 prac. komputerowa", "value": "14" },
+      { "name": "37 prac. komputerowa", "value": "15" },
+      { "name": "3 sala katechetyczna", "value": "16" },
+      { "name": "WPT Pracownia Podstaw Techniki", "value": "17" },
+      { "name": "W1 prac. j.niemieckiego", "value": "18" },
+      { "name": "W2 prac. rysunku technicznego", "value": "19" },
+      { "name": "W3 prac.j.angielskiego", "value": "20" },
+      { "name": "W11 prac.j.angielskiego", "value": "21" },
+      { "name": "W12 prac. mechaniczna", "value": "22" },
+      { "name": "W15 prac. mechaniczna", "value": "23" },
+      { "name": "W16 prac. mechaniczna", "value": "24" },
+      { "name": "W17 Pracownia urządzeń telekomunikacyjnych", "value": "25" },
+      { "name": "W18 Pracownia mechatroniki", "value": "26" },
+      { "name": "W19 Pracownia urządzeń telekomunikacyjnych", "value": "27" },
+      { "name": "W20 Pracownia urządzeń elektronicznych", "value": "28" },
+      { "name": "W5 Pracownia podstaw elektroniki", "value": "29" },
+      {
+        "name": "W6 Pracownia mikroprocesorów i sieci teleinformatycznych",
+        "value": "30"
+      },
+      { "name": "G1 Mała sala gimnastyczna", "value": "31" },
+      { "name": "WG2 Siłownia", "value": "32" },
+      { "name": "WG3 Boisko", "value": "33" },
+      { "name": "WG4 \"Gilówka\"", "value": "34" },
+      { "name": "Bib Biblioteka szkolna", "value": "35" }
+    ]
+  },
+  "substitutions": {
+    "status": true,
+    "timeRange": "Okres: 19.01.2024 (pt.) - 19.01.2024 (pt.)",
+    "tables": [
+      {
+        "time": "Dzień: 19.01.2024 (pt.)",
+        "dayIndex": 4,
+        "zastepstwa": [
+          {
+            "lesson": "1, 08:00-08:45",
+            "teacher": "Czerkas Magdalena",
+            "branch": "1TI",
+            "subject": "Geografia",
+            "class": "",
+            "case": "Uczniowie przychodzą później",
+            "message": ""
+          },
+          {
+            "lesson": "1, 08:00-08:45",
+            "teacher": "Krasicka Danuta",
+            "branch": "3TI|G1",
+            "subject": "Geografia rozszerzona",
+            "class": "21",
+            "case": "Uczniowie przychodzą później",
+            "message": ""
+          },
+          {
+            "lesson": "1, 08:00-08:45",
+            "teacher": "Krasicka Danuta",
+            "branch": "3TG|G1",
+            "subject": "Geografia rozszerzona",
+            "class": "21",
+            "case": "Uczniowie przychodzą później",
+            "message": ""
+          },
+          {
+            "lesson": "1, 08:00-08:45",
+            "teacher": "Nycz Bartosz",
+            "branch": "4Ta|t.automat",
+            "subject": "Automatyczna regulacja i sterowanie procesami automatyki",
+            "class": "W18",
+            "case": "Uczniowie zwolnieni do domu",
+            "message": ""
+          },
+          {
+            "lesson": "1, 08:00-08:45",
+            "teacher": "Okarmus Marek",
+            "branch": "3TE|t.elektro.",
+            "subject": "Urządzenia i sieci komputerowe",
+            "class": "W6",
+            "case": "Uczniowie przychodzą później",
+            "message": ""
+          },
+          {
+            "lesson": "1, 08:00-08:45",
+            "teacher": "Ruman Anna",
+            "branch": "2TS",
+            "subject": "Podstawy przedsiębiorczości",
+            "class": "W16",
+            "case": "Uczniowie przychodzą później",
+            "message": ""
+          },
+          {
+            "lesson": "2, 08:50-09:35",
+            "teacher": "Czerkas Magdalena",
+            "branch": "3TS",
+            "subject": "Geografia",
+            "class": "16",
+            "case": "Przeniesiona",
+            "message": "3TS religia 16"
+          },
+          {
+            "lesson": "2, 08:50-09:35",
+            "teacher": "Krasicka Danuta",
+            "branch": "3TI|G1",
+            "subject": "Geografia rozszerzona",
+            "class": "21",
+            "case": "Uczniowie przychodzą później",
+            "message": ""
+          },
+          {
+            "lesson": "2, 08:50-09:35",
+            "teacher": "Krasicka Danuta",
+            "branch": "3TG|G1",
+            "subject": "Geografia rozszerzona",
+            "class": "21",
+            "case": "Uczniowie przychodzą później",
+            "message": ""
+          },
+          {
+            "lesson": "2, 08:50-09:35",
+            "teacher": "Nycz Bartosz",
+            "branch": "4Ta|t.automat",
+            "subject": "Automatyczna regulacja i sterowanie procesami automatyki",
+            "class": "W18",
+            "case": "Uczniowie zwolnieni do domu",
+            "message": ""
+          },
+          {
+            "lesson": "2, 08:50-09:35",
+            "teacher": "Okarmus Marek",
+            "branch": "3TE|t.elektro.",
+            "subject": "Urządzenia i sieci komputerowe",
+            "class": "W6",
+            "case": "Uczniowie przychodzą później",
+            "message": ""
+          },
+          {
+            "lesson": "2, 08:50-09:35",
+            "teacher": "Ruman Anna",
+            "branch": "2TI",
+            "subject": "Podstawy przedsiębiorczości",
+            "class": "W16",
+            "case": "Przeniesiona",
+            "message": "proj.str.int-1/2 Wa w12"
+          },
+          {
+            "lesson": "3, 09:40-10:25",
+            "teacher": "Czerkas Magdalena",
+            "branch": "1TS",
+            "subject": "Geografia",
+            "class": "16",
+            "case": "Przeniesiona",
+            "message": "pdst.konst-m Fo 16"
+          },
+          {
+            "lesson": "3, 09:40-10:25",
+            "teacher": "Krasicka Danuta",
+            "branch": "1TM",
+            "subject": "Geografia",
+            "class": "W3",
+            "case": "Przeniesiona",
+            "message": "j.niemiecki-1/2 Ry W6\npr.pod.tech-2/2 Tu W3"
+          },
+          {
+            "lesson": "3, 09:40-10:25",
+            "teacher": "Nycz Bartosz",
+            "branch": "4Ta|t.automat",
+            "subject": "Podstawy sterowników programowalnych",
+            "class": "W18",
+            "case": "Uczniowie zwolnieni do domu",
+            "message": ""
+          },
+          {
+            "lesson": "3, 09:40-10:25",
+            "teacher": "Okarmus Marek",
+            "branch": "3TE|t.automat",
+            "subject": "Układy analogowe i cyfrowe",
+            "class": "W6",
+            "case": "Przeniesiona",
+            "message": "j.angielski-A MB W6"
+          },
+          {
+            "lesson": "3, 09:40-10:25",
+            "teacher": "Ruman Anna",
+            "branch": "3TI",
+            "subject": "Podstawy przedsiębiorczości",
+            "class": "W16",
+            "case": "Przeniesiona",
+            "message": "godz.wych Ho 21"
+          },
+          {
+            "lesson": "4, 10:40-11:25",
+            "teacher": "Krasicka Danuta",
+            "branch": "3TG",
+            "subject": "Geografia podstawowa",
+            "class": "21",
+            "case": "Przeniesiona",
+            "message": "tech.dr.3D_m-G Iw 37\norg.pr.prod-M Fo 21"
+          },
+          {
+            "lesson": "4, 10:40-11:25",
+            "teacher": "Nycz Bartosz",
+            "branch": "4Ta|t.automat",
+            "subject": "Pracownia sterowania automatyki",
+            "class": "W18",
+            "case": "Uczniowie zwolnieni do domu",
+            "message": ""
+          },
+          {
+            "lesson": "4, 10:40-11:25",
+            "teacher": "Okarmus Marek",
+            "branch": "4Ta|t.elektro.",
+            "subject": "Eksploatowanie urządzeń audiowizualnych",
+            "class": "W6",
+            "case": "Przeniesiona",
+            "message": "urz.elektron-E Zi W20"
+          },
+          {
+            "lesson": "4, 10:40-11:25",
+            "teacher": "Ruman Anna",
+            "branch": "1TE",
+            "subject": "Wychowanie do życia w rodzinie",
+            "class": "W15",
+            "case": "Fudali Monika",
+            "message": ""
+          },
+          {
+            "lesson": "5, 11:30-12:15",
+            "teacher": "Bulińska Agnieszka",
+            "branch": "1TI|1/2",
+            "subject": "Wychowanie fizyczne",
+            "class": "",
+            "case": "Kutyła Wiesław",
+            "message": ""
+          },
+          {
+            "lesson": "5, 11:30-12:15",
+            "teacher": "Czerkas Magdalena",
+            "branch": "2TG",
+            "subject": "Geografia",
+            "class": "16",
+            "case": "Przeniesiona",
+            "message": "tech.dr.3D_m Iw 37"
+          },
+          {
+            "lesson": "5, 11:30-12:15",
+            "teacher": "Nycz Bartosz",
+            "branch": "4Ta|t.automat",
+            "subject": "Pracownia urządzeń, instalacji i układów automatyki",
+            "class": "W18",
+            "case": "Uczniowie zwolnieni do domu",
+            "message": ""
+          },
+          {
+            "lesson": "5, 11:30-12:15",
+            "teacher": "Okarmus Marek",
+            "branch": "4Ta|t.elektro.",
+            "subject": "Eksploatowanie urządzeń audiowizualnych",
+            "class": "W6",
+            "case": "Przeniesiona",
+            "message": "religia Dz w6"
+          },
+          {
+            "lesson": "5, 11:30-12:15",
+            "teacher": "Ruman Anna",
+            "branch": "1TS",
+            "subject": "Biznes i zarządzanie",
+            "class": "W12",
+            "case": "Przeniesiona",
+            "message": "pdst.konst-m Fo W12"
+          },
+          {
+            "lesson": "6, 12:20-13:05",
+            "teacher": "Bulińska Agnieszka",
+            "branch": "1TI|1/2",
+            "subject": "Wychowanie fizyczne",
+            "class": "",
+            "case": "Kutyła Wiesław",
+            "message": ""
+          },
+          {
+            "lesson": "6, 12:20-13:05",
+            "teacher": "Czerkas Magdalena",
+            "branch": "1BS",
+            "subject": "Geografia",
+            "class": "16",
+            "case": "Uczniowie przychodzą później",
+            "message": ""
+          },
+          {
+            "lesson": "6, 12:20-13:05",
+            "teacher": "Nycz Bartosz",
+            "branch": "4Ta|t.automat",
+            "subject": "Pracownia urządzeń, instalacji i układów automatyki",
+            "class": "W18",
+            "case": "Uczniowie zwolnieni do domu",
+            "message": ""
+          },
+          {
+            "lesson": "6, 12:20-13:05",
+            "teacher": "Okarmus Marek",
+            "branch": "4Ta|t.elektro.",
+            "subject": "Eksploatowanie urządzeń audiowizualnych",
+            "class": "W6",
+            "case": "Uczniowie zwolnieni do domu",
+            "message": ""
+          },
+          {
+            "lesson": "6, 12:20-13:05",
+            "teacher": "Przystasz Piotr",
+            "branch": "5Ta",
+            "subject": "Wychowanie fizyczne",
+            "class": "",
+            "case": "Uczniowie zwolnieni do domu",
+            "message": ""
+          },
+          {
+            "lesson": "6, 12:20-13:05",
+            "teacher": "Ruman Anna",
+            "branch": "3TE|t.elektro.",
+            "subject": "Podstawy przedsiębiorczości",
+            "class": "W12",
+            "case": "Przeniesiona",
+            "message": "3TE-E j.niemiecki W12"
+          },
+          {
+            "lesson": "6, 12:20-13:05",
+            "teacher": "Ruman Anna",
+            "branch": "3TE|t.automat",
+            "subject": "Opieka nad uczniami",
+            "class": "W12",
+            "case": "Wójcik Piotr",
+            "message": ""
+          },
+          {
+            "lesson": "7, 13:10-13:55",
+            "teacher": "Bulińska Agnieszka",
+            "branch": "4Tp|2/2",
+            "subject": "Wychowanie fizyczne",
+            "class": "G3",
+            "case": "Czerkas Krzysztof",
+            "message": ""
+          },
+          {
+            "lesson": "7, 13:10-13:55",
+            "teacher": "Nycz Bartosz",
+            "branch": "4Ta|t.automat",
+            "subject": "Pracownia urządzeń, instalacji i układów automatyki",
+            "class": "W18",
+            "case": "Uczniowie zwolnieni do domu",
+            "message": ""
+          },
+          {
+            "lesson": "7, 13:10-13:55",
+            "teacher": "Przystasz Piotr",
+            "branch": "3TE|t.automat",
+            "subject": "Wychowanie fizyczne",
+            "class": "",
+            "case": "Turoń Tomasz",
+            "message": ""
+          },
+          {
+            "lesson": "7, 13:10-13:55",
+            "teacher": "Ruman Anna",
+            "branch": "2TE",
+            "subject": "Podstawy przedsiębiorczości",
+            "class": "W12",
+            "case": "Przeniesiona",
+            "message": "urz.elektron Zi W20 - przeniesiona z 18.01"
+          },
+          {
+            "lesson": "8, 14:00-14:45",
+            "teacher": "Przystasz Piotr",
+            "branch": "2BS",
+            "subject": "Wychowanie fizyczne",
+            "class": "",
+            "case": "Okienko dla uczniów",
+            "message": ""
+          },
+          {
+            "lesson": "9, 14:50-15:35",
+            "teacher": "Przystasz Piotr",
+            "branch": "2BS",
+            "subject": "Wychowanie fizyczne",
+            "class": "",
+            "case": "Okienko dla uczniów",
+            "message": ""
+          },
+          {
+            "lesson": "10, 15:40-16:25",
+            "teacher": "Przystasz Piotr",
+            "branch": "2BS",
+            "subject": "Zajęcia z wychowawcą",
+            "class": "",
+            "case": "Okienko dla uczniów",
+            "message": ""
+          },
+          {
+            "lesson": "12, 17:25-18:10",
+            "teacher": "Ruman Anna",
+            "branch": "3BE|kiermech",
+            "subject": "Planowanie i organizowanie transportu",
+            "class": "W12",
+            "case": "Uczniowie zwolnieni do domu",
+            "message": ""
+          },
+          {
+            "lesson": "13, 18:15-19:00",
+            "teacher": "Ruman Anna",
+            "branch": "3BE|kiermech",
+            "subject": "Planowanie i organizowanie transportu",
+            "class": "W12",
+            "case": "Uczniowie zwolnieni do domu",
+            "message": ""
+          }
+        ]
+      }
+    ]
+  }
+}
