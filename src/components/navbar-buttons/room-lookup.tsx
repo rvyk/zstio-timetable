@@ -1,5 +1,5 @@
 import ButtonWrapper from "@/components/navbar-buttons/wrapper";
-import RoomLookupModal from "@/components/room-lookup/room-lookup";
+import ResponsiveLookupDialog from "@/components/room-lookup/room-lookup";
 import { MagnifyingGlassCircleIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
 
@@ -7,7 +7,7 @@ const RoomLookup: React.FC = () => {
   const [isOpened, setIsOpened] = useState(false);
   return (
     <>
-      <RoomLookupModal isOpened={isOpened} setIsOpened={setIsOpened} />
+      <ResponsiveLookupDialog isOpened={isOpened} setIsOpened={setIsOpened} />
       <ButtonWrapper
         tooltipText="Wyszukaj salę"
         onClick={() => setIsOpened(!isOpened)}

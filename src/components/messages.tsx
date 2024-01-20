@@ -1,7 +1,18 @@
+import { cn } from "@/lib/utils";
 import { ArrowRightIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import axios from "axios";
 import { usePathname } from "next/navigation";
 import React, { useCallback, useEffect, useState } from "react";
+import { Button } from "./ui/button";
+import {
+  ResponsiveDialog,
+  ResponsiveDialogClose,
+  ResponsiveDialogContent,
+  ResponsiveDialogDescription,
+  ResponsiveDialogFooter,
+  ResponsiveDialogHeader,
+  ResponsiveDialogTitle,
+} from "./ui/responsive-dialog";
 
 type MessageType = "INFO" | "UPDATE" | "WARNING" | "ERROR" | "SILENT";
 type MessageTypeDisplay = "POPUP" | "BANNER";
@@ -85,6 +96,23 @@ const Messages: React.FC = () => {
 
   if (!message) return;
 
+  // TODO: FIX THIS
+  // const currentTime = new Date();
+  // const fromTime = message?.displayTime?.from?.split(":");
+  // const toTime = message?.displayTime?.to?.split(":");
+  // if (
+  //   fromTime &&
+  //   toTime &&
+  //   (+fromTime[0]! > currentTime.getHours() ||
+  //     (+fromTime[0]! === currentTime.getHours() &&
+  //       +fromTime[1]! > currentTime.getMinutes()) ||
+  //     +toTime[0]! < currentTime.getHours() ||
+  //     (+toTime[0]! === currentTime.getHours() &&
+  //       +toTime[1]! < currentTime.getMinutes()))
+  // ) {
+  //   return null;
+  // }
+
   if (message.displayType == "BANNER") {
     return (
       <div
@@ -123,6 +151,40 @@ const Messages: React.FC = () => {
           <XMarkIcon className="h-5 w-5" />
         </button>
       </div>
+    );
+  } else {
+    return (
+      <ResponsiveDialog open={bannerShowed} onOpenChange={setShowBanner}>
+        <ResponsiveDialogContent>
+          <ResponsiveDialogHeader>
+            <ResponsiveDialogTitle className="flex">
+              <div
+                className={cn(
+                  MessageType[message.type].color,
+                  "mr-1 mt-[1.5px] h-4 w-4 rounded-full",
+                )}
+              />
+              {MessageType[message.type].display}
+            </ResponsiveDialogTitle>
+            <ResponsiveDialogDescription>
+              {message?.message}
+            </ResponsiveDialogDescription>
+          </ResponsiveDialogHeader>
+          <ResponsiveDialogFooter>
+            <ResponsiveDialogClose asChild>
+              <Button
+                type="submit"
+                onClick={() => {
+                  localStorage.setItem(message.id, "readed");
+                  fetchMessage();
+                }}
+              >
+                Odczytano
+              </Button>
+            </ResponsiveDialogClose>
+          </ResponsiveDialogFooter>
+        </ResponsiveDialogContent>
+      </ResponsiveDialog>
     );
   }
 };
