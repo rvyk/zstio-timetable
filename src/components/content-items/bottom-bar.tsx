@@ -15,7 +15,6 @@ import { List } from "@wulkanowy/timetable-parser";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
-import { handleArrowKey } from "./timetable/timetable";
 
 interface BottomBarProps {
   timeTable: Table["timeTable"];
@@ -61,7 +60,11 @@ const BottomBar: React.FC<BottomBarProps> = ({ timeTable, timeTableList }) => {
     <div className="fixed bottom-0 flex h-16 w-full items-center justify-around">
       <div className="relative flex w-full items-center justify-center rounded-lg bg-[#F7F3F5] p-2 pb-4 dark:bg-[#131313]">
         <div
-          onClick={() => handleArrowKey(router, timeTableList, "ArrowLeft")}
+          onClick={() =>
+            window.dispatchEvent(
+              new KeyboardEvent("keydown", { key: "ArrowLeft" }),
+            )
+          }
           className="group mr-1 flex h-14 w-14 cursor-pointer items-center justify-center rounded-xl bg-[#27161a] transition-all duration-300 hover:bg-[#1f1115] dark:bg-[#202020] dark:hover:bg-[#171717]"
         >
           <ChevronLeftIcon className="h-8 w-8 text-white opacity-60 transition-all group-hover:opacity-100" />
@@ -151,7 +154,11 @@ const BottomBar: React.FC<BottomBarProps> = ({ timeTable, timeTableList }) => {
         </Drawer>
 
         <div
-          onClick={() => handleArrowKey(router, timeTableList, "ArrowRight")}
+          onClick={() =>
+            window.dispatchEvent(
+              new KeyboardEvent("keydown", { key: "ArrowRight" }),
+            )
+          }
           className="group ml-1 flex h-14 w-14 cursor-pointer items-center justify-center rounded-xl bg-[#27161a] transition-all duration-300 hover:bg-[#1f1115] dark:bg-[#202020] dark:hover:bg-[#171717]"
         >
           <ChevronRightIcon className="h-8 w-8 text-white opacity-60 transition-all group-hover:opacity-100" />

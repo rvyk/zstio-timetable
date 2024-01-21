@@ -7,7 +7,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { cn, shortHours } from "@/lib/utils";
+import { cn, normalHours, shortHours } from "@/lib/utils";
 import { useRouter } from "next/router";
 import { useContext, useEffect, useState } from "react";
 
@@ -17,7 +17,7 @@ const ShortHoursButton: React.FC = () => {
   const [isShortHours, setIsShortHours] = (
     useContext(SettingsContext) as SettingsContextType
   ).shortHours;
-  const [, setHoursTime, defaultHours] = (
+  const [hoursTime, setHoursTime] = (
     useContext(SettingsContext) as SettingsContextType
   ).hoursTime;
 
@@ -30,7 +30,7 @@ const ShortHoursButton: React.FC = () => {
   const handleButton = (state: boolean) => {
     setIsShortHours(state);
     localStorage.setItem("shortHours", state.toString());
-    setHoursTime(state ? shortHours : defaultHours);
+    setHoursTime(state ? shortHours : hoursTime);
   };
 
   const tooltips = [
@@ -75,6 +75,9 @@ const ShortHoursButton: React.FC = () => {
               isShortHours
                 ? "translate-x-[100%] transform rounded-r-lg"
                 : "rounded-l-lg",
+              hoursTime !== normalHours &&
+                hoursTime !== shortHours &&
+                "!hidden",
             )}
           >
             {isShortHours ? "30'" : "45'"}

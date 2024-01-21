@@ -23,17 +23,17 @@ const ResponsiveShortHourDialog: React.FC<ResponsiveShortHourDialogProps> = ({
   isOpen,
   setIsOpen,
 }) => {
-  const [, setHours, defaultHours] = (
+  const [hoursTime, setHours] = (
     useContext(SettingsContext) as SettingsContextType
   )?.hoursTime;
   const [lessonNumber, { increment, decrement, set }] = useCounter(5, {
     min: 5,
-    max: Object.entries(defaultHours).map(([key, value]) => value).length,
+    max: Object.entries(hoursTime).map(([key, value]) => value).length,
   });
   const [userInput, setUserInput] = useState("5");
   const newLessonArray = adjustShortenedLessons(
     lessonNumber,
-    Object.entries(defaultHours).map(([key, value]) => value),
+    Object.entries(hoursTime).map(([key, value]) => value),
   );
   const miniLessonArray = [
     newLessonArray[lessonNumber - 2] || null,
@@ -92,7 +92,7 @@ const ResponsiveShortHourDialog: React.FC<ResponsiveShortHourDialogProps> = ({
               }}
               disabled={
                 lessonNumber >=
-                Object.entries(defaultHours).map(([key, value]) => value).length
+                Object.entries(hoursTime).map(([key, value]) => value).length
               }
             >
               <PlusIcon className="h-4 w-4" />

@@ -1,3 +1,4 @@
+import { normalHours } from "@/lib/utils";
 import React from "react";
 
 export type SettingsContextType = {
@@ -8,7 +9,6 @@ export type SettingsContextType = {
   hoursTime: [
     hoursTime: hourType[],
     setHoursTime: React.Dispatch<React.SetStateAction<hourType[]>>,
-    defaultHours: hourType[],
   ];
 };
 
@@ -17,22 +17,21 @@ export const SettingsContext = React.createContext<SettingsContextType | null>(
 );
 
 const SettingsProvider: React.FC<{
-  defaultHours: hourType[];
   children: React.ReactNode;
-}> = ({ defaultHours, children }) => {
-  const [shortHours, setIsShortHours] = React.useState(
+}> = ({ children }) => {
+  const [shortHoursBool, setIsShortHours] = React.useState(
     typeof localStorage !== "undefined"
       ? localStorage?.getItem("shortHours") === "true"
       : false,
   );
 
-  const [hoursTime, setHoursTime] = React.useState<hourType[]>(defaultHours);
+  const [hoursTime, setHoursTime] = React.useState<hourType[]>(normalHours);
 
   return (
     <SettingsContext.Provider
       value={{
-        shortHours: [shortHours, setIsShortHours],
-        hoursTime: [hoursTime, setHoursTime, defaultHours],
+        shortHours: [shortHoursBool, setIsShortHours],
+        hoursTime: [hoursTime, setHoursTime],
       }}
     >
       {children}

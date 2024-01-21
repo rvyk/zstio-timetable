@@ -219,15 +219,17 @@ const RenderTimeTableMobile: React.FC<TimeTableMobileProps> = ({
                     <span className="mb-1 block text-center font-bold">
                       {lessonNumber}
                     </span>
-                    {getCurrentLesson(timeFrom, timeTo).isWithinTimeRange ? (
-                      <div className="flex items-center justify-center">
-                        <CurrentLesson timeFrom={timeFrom} timeTo={timeTo} />
-                      </div>
-                    ) : (
-                      <span className="block text-center text-sm">
-                        {timeFrom} - {timeTo}
-                      </span>
-                    )}
+                    {new Date().getDay() < 6 &&
+                      new Date().getDay() != 0 &&
+                      (getCurrentLesson(timeFrom, timeTo).isWithinTimeRange ? (
+                        <div className="flex items-center justify-center">
+                          <CurrentLesson timeFrom={timeFrom} timeTo={timeTo} />
+                        </div>
+                      ) : (
+                        <span className="block text-center text-sm">
+                          {timeFrom} - {timeTo}
+                        </span>
+                      ))}
                   </ListSmallItem>
 
                   <ListLargeItem>

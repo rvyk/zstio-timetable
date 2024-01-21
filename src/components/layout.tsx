@@ -36,7 +36,7 @@ const Layout: React.FC<LayoutProps> = ({
           content={isSubstitutions ? titleSubstitutions : titleTimeTable}
         />
       </Head>
-      <SettingsProvider defaultHours={timeTable?.data?.hours as hourType[]}>
+      <SettingsProvider>
         <Navbar />
         {process.env.NEXT_PUBLIC_CMS && <Messages />}
         <Jumbotron {...{ substitutions, timeTable, timeTableList }} />
