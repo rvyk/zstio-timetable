@@ -5,6 +5,7 @@ import {
 } from "@/components/content-items/timetable/render-timetable";
 import { Table as TableType } from "@/types/timetable";
 import { List } from "@wulkanowy/timetable-parser";
+import Head from "next/head";
 import { useRouter } from "next/router";
 import React, { useCallback, useEffect, useState } from "react";
 
@@ -83,6 +84,9 @@ const TimeTable: React.FC<TimeTableProps> = ({
 
   return (
     <>
+      <Head>
+        <link rel="canonical" href="https://plan.zstiojar.edu.pl" />
+      </Head>
       <div className="hidden md:block">
         {timeTable.status && (
           <RenderTimeTable

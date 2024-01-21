@@ -29,7 +29,6 @@ const Layout: React.FC<LayoutProps> = ({
   return (
     <>
       <Head>
-        <link rel="canonical" href="https://plan.zstiojar.edu.pl" />
         <title>{isSubstitutions ? titleSubstitutions : titleTimeTable}</title>
         <meta
           property="og:title"
