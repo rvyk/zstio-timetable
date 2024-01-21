@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { adjustShortenedLessons } from "@/lib/utils";
+import { adjustShortenedLessons, normalHours } from "@/lib/utils";
 import { MinusIcon, PlusIcon } from "@heroicons/react/24/outline";
 import { useCounter } from "@uidotdev/usehooks";
 import { Dispatch, SetStateAction, useContext, useState } from "react";
@@ -31,10 +31,7 @@ const ResponsiveShortHourDialog: React.FC<ResponsiveShortHourDialogProps> = ({
     max: Object.entries(hoursTime).map(([key, value]) => value).length,
   });
   const [userInput, setUserInput] = useState("5");
-  const newLessonArray = adjustShortenedLessons(
-    lessonNumber,
-    Object.entries(hoursTime).map(([key, value]) => value),
-  );
+  const newLessonArray = adjustShortenedLessons(lessonNumber, normalHours);
   const miniLessonArray = [
     newLessonArray[lessonNumber - 2] || null,
     newLessonArray[lessonNumber - 1] || null,

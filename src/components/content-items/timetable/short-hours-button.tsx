@@ -30,7 +30,7 @@ const ShortHoursButton: React.FC = () => {
   const handleButton = (state: boolean) => {
     setIsShortHours(state);
     localStorage.setItem("shortHours", state.toString());
-    setHoursTime(state ? shortHours : hoursTime);
+    setHoursTime(state ? shortHours : normalHours);
   };
 
   const tooltips = [
