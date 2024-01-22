@@ -40,7 +40,7 @@
   },
   "devDependencies": {
     "@jest/globals": "^29.7.0",
-    "@testing-library/jest-dom": "^6.1.6",
+    "@testing-library/jest-dom": "^6.2.1",
     "@testing-library/react": "^14.1.2",
     "dotenv": "^16.3.1",
     "eslint-config-prettier": "^9.1.0",
