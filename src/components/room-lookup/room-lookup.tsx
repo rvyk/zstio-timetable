@@ -133,15 +133,9 @@ const ResponsiveLookupDialog: React.FC<ResponsiveLookupDialogProps> = ({
               Anuluj
             </Button>
           </ResponsiveDialogClose>
-          <ResponsiveDialogClose asChild>
-            <Button
-              type="submit"
-              disabled={isPending}
-              onClick={handleRoomLookup}
-            >
-              {isPending ? "Wyszukiwanie..." : "Wyszukaj"}
-            </Button>
-          </ResponsiveDialogClose>
+          <Button type="submit" disabled={isPending} onClick={handleRoomLookup}>
+            {isPending ? "Wyszukiwanie..." : "Wyszukaj"}
+          </Button>
         </ResponsiveDialogFooter>
       </ResponsiveDialogContent>
     </ResponsiveDialog>

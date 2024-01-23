@@ -108,7 +108,7 @@ const RenderSubstitutionsMobile: React.FC<RenderSubstitutionsProps> = ({
   status,
 }) => {
   return (
-    <div className="min-h-screen">
+    <div className="mb-20 min-h-screen">
       <div className="w-full">
         <div className="mx-1.5 my-2.5 flex min-h-12 items-center justify-center rounded-md bg-white dark:bg-[#242424]">
           <p className="p-2 text-center font-semibold text-gray-900 dark:text-white">
