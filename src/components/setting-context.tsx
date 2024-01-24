@@ -1,4 +1,4 @@
-import { normalHours } from "@/lib/utils";
+import { normalHours, shortHours } from "@/lib/utils";
 import React from "react";
 
 export type SettingsContextType = {
@@ -18,7 +18,7 @@ export const SettingsContext = React.createContext<SettingsContextType | null>(
 
 const SettingsProvider: React.FC<{
   children: React.ReactNode;
-}> = ({ children }) => {
+}> = ({ children }: {children: React.ReactNode}) => {
   const [shortHoursBool, setIsShortHours] = React.useState(
     typeof localStorage !== "undefined"
       ? localStorage?.getItem("shortHours") === "true"
@@ -31,7 +31,7 @@ const SettingsProvider: React.FC<{
     <SettingsContext.Provider
       value={{
         shortHours: [shortHoursBool, setIsShortHours],
-        hoursTime: [hoursTime, setHoursTime],
+        hoursTime: [shortHoursBool ? shortHours : hoursTime , setHoursTime],
       }}
     >
       {children}
