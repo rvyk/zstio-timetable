@@ -26,6 +26,9 @@ const ResponsiveShortHourDialog: React.FC<ResponsiveShortHourDialogProps> = ({
   const [hoursTime, setHours] = (
     useContext(SettingsContext) as SettingsContextType
   )?.hoursTime;
+  const [, setIsShortHours] = (
+    useContext(SettingsContext) as SettingsContextType
+  )?.shortHours;
   const [lessonNumber, { increment, decrement, set }] = useCounter(5, {
     min: 5,
     max: Object.entries(hoursTime).map(([key, value]) => value).length,
@@ -130,6 +133,7 @@ const ResponsiveShortHourDialog: React.FC<ResponsiveShortHourDialogProps> = ({
               <Button
                 type="submit"
                 onClick={() => {
+                  setIsShortHours(false);
                   setHours(newLessonArray);
                 }}
               >
