@@ -23,17 +23,17 @@ export const cases = [
 export const normalHours: hourType[] = [
   {
     number: 1,
-    timeFrom: "08:00",
-    timeTo: "08:45",
+    timeFrom: "8:00",
+    timeTo: "8:45",
   },
   {
     number: 2,
-    timeFrom: "08:50",
-    timeTo: "09:35",
+    timeFrom: "8:50",
+    timeTo: "9:35",
   },
   {
     number: 3,
-    timeFrom: "09:40",
+    timeFrom: "9:40",
     timeTo: "10:25",
   },
   {
