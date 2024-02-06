@@ -4,21 +4,11 @@ const withPWA = require("next-pwa")({
   dest: "public",
   register: true,
   skipWaiting: true,
+  disable: process.env.NODE_ENV === "development",
 });
 
-// @ts-ignore
-module.exports = withPWA({
-  reactStrictMode: false,
-  images: {
-    remotePatterns: [{ hostname: "zstiojar.edu.pl" }],
-  },
-  i18n: {
-    locales: ["pl"],
-    defaultLocale: "pl",
-    localeDetection: false,
-  },
-
-  async rewrites() {
+const nextConfig = {
+  rewrites: async () => {
     const { NEXT_PUBLIC_TIMETABLE_URL, NEXT_PUBLIC_CMS, NEXT_PUBLIC_HOST } =
       process.env;
 
@@ -28,16 +18,7 @@ module.exports = withPWA({
       );
     }
 
-    const rewrites = [
-      // {
-      //   source: "/proxy/getTimetable/:path",
-      //   destination: `${NEXT_PUBLIC_TIMETABLE_URL}/plany/:path`,
-      // },
-      // {
-      //   source: "/proxy/getTimetableList",
-      //   destination: `${NEXT_PUBLIC_TIMETABLE_URL}/lista.html`,
-      // },
-    ];
+    const rewrites = [];
 
     if (NEXT_PUBLIC_CMS) {
       rewrites.push({
@@ -48,4 +29,6 @@ module.exports = withPWA({
 
     return rewrites;
   },
-});
+};
+
+module.exports = withPWA(nextConfig);

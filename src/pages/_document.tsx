@@ -1,8 +1,8 @@
 import { Head, Html, Main, NextScript } from "next/document";
 
-export default function Document() {
+const Document = () => {
   return (
-    <Html lang="pl" suppressHydrationWarning={true}>
+    <Html lang="pl">
       <Head>
         <meta
           name="msapplication-TileImage"
@@ -51,10 +51,27 @@ export default function Document() {
         {/* ----- */}
         <link rel="manifest" href="/manifest.json" />
       </Head>
-      <body suppressHydrationWarning={true}>
+      <body className="flex min-h-screen w-full flex-col justify-center !bg-[#F7F3F5] dark:!bg-[#171717]">
+        <noscript>
+          <div className="flex h-screen w-screen flex-col items-center justify-center bg-white text-center text-black">
+            <h1 className="text-4xl font-bold">Włącz JavaScript!</h1>
+            <p className="text-xl">
+              Ta strona nie działa bez włączonego JavaScriptu.
+            </p>
+            <a href={process.env.NEXT_PUBLIC_TIMETABLE_URL}>
+              Przejdź do źródła
+            </a>
+          </div>
+          <meta
+            http-equiv="refresh"
+            content={`5;url=${process.env.NEXT_PUBLIC_TIMETABLE_URL}`}
+          />
+        </noscript>
         <Main />
         <NextScript />
       </body>
     </Html>
   );
-}
+};
+
+export default Document;

@@ -1,14 +1,25 @@
+import { ThemeProvider } from "@/components/theme-provider";
+import { TooltipProvider } from "@/components/ui/tooltip";
 import "@/styles/globals.css";
-import { ThemeProvider } from "next-themes";
+import { AppProps } from "next/app";
 import Head from "next/head";
 
-export default function App({ Component, pageProps }) {
+const App = ({ Component, pageProps }: AppProps) => {
   return (
-    <ThemeProvider attribute="class" enableSystem={true}>
-      <Head>
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-      </Head>
-      <Component {...pageProps} />
-    </ThemeProvider>
+    <TooltipProvider>
+      <ThemeProvider
+        attribute="class"
+        defaultTheme="system"
+        enableSystem
+        disableTransitionOnChange
+      >
+        <Head>
+          <meta name="viewport" content="width=device-width, initial-scale=1" />
+        </Head>
+        <Component {...pageProps} />
+      </ThemeProvider>
+    </TooltipProvider>
   );
-}
+};
+
+export default App;

@@ -18,27 +18,13 @@ The phone mode is inspired by the school's timetable
 - [React](https://reactjs.org/) (JavaScript library for building user interfaces)
 - [TypeScript](https://www.typescriptlang.org/) (Typed superset of JavaScript that compiles to plain JavaScript)
 - [Tailwind CSS](https://tailwindcss.com/) (Utility-first CSS framework)
-- [Flowbite](https://flowbite.com/) (Tailwind CSS components and templates)
+- [shadcn/ui](https://ui.shadcn.com/) (A comprehensive UI library providing a set of reusable React components for building user interfaces)
 - [Headless UI](https://headlessui.dev/) (Set of completely unstyled, fully accessible UI components)
-- [Cypress](https://www.cypress.io/) (JavaScript end-to-end testing framework)
 - [cheerio](https://cheerio.js.org/) (Fast, flexible, and lean implementation of core jQuery designed specifically for the server)
 - [heroicons](https://heroicons.com/) (Beautiful hand-crafted SVG icons)
-
-## API Reference
-
-#### Get empty classes
-
-```http
-  GET /api/timetable/empty
-```
-
-| Parameter (Required) | Description                                                |
-| :------------------- | :--------------------------------------------------------- |
-| `?day=index`         | Day of the week (0-4)                                      |
-| `?lesson=index`      | Lesson of the day's lesson, e.g., `lesson=1` for index `0` |
 
 ## Links
 
 [![portfolio](https://img.shields.io/badge/GitHub-rvyk-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/rvyk/)
 [![portfolio](https://img.shields.io/badge/Github-majusss-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/majusss/)
-[![linkedin](https://img.shields.io/badge/TRY-0A66C2?style=for-the-badge&logoColor=white)](https://plan-lekcji.awfulworld.space/)
+[![linkedin](https://img.shields.io/badge/TRY-0A66C2?style=for-the-badge&logoColor=white)](https://plan.zstiojar.edu.pl/)

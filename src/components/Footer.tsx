@@ -1,26 +1,31 @@
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import React, { useState } from "react";
 
-function Footer() {
-  const [isMounted, setIsMounted] = useState(false);
+const Footer: React.FC = () => {
+  const [clicks, setClicks] = useState(1);
+  const [audioPlayed, setAudioPlayed] = useState(false);
 
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
-
-  if (!isMounted) {
-    return null;
-  }
+  const playEasteregg = () => {
+    const audio = new Audio("/piejo_kury_piejo.mp3");
+    if (clicks >= 3 && !audioPlayed) {
+      audio.play();
+      setAudioPlayed(true);
+    } else {
+      setClicks(clicks + 1);
+    }
+  };
 
   return (
-    <footer
-      className={`rounded-lg shadow m-4 w-[90%] sm:w-auto dark:bg-[#202020] transition-all bg-[#2B161B]`}
-    >
-      <div className="max-w-screen mx-auto p-4 transition-all">
-        <span className="text-sm text-[#ffffff] block text-center dark:text-gray-400">
+    <footer className="mt-2 flex w-full items-center justify-center pb-8 md:mt-0">
+      <div className="mx-auto w-[90%] rounded-lg bg-[#2B161B] p-4 shadow dark:bg-[#202020] sm:w-auto">
+        <span className="block text-center text-sm text-[#ffffff] dark:text-gray-400">
           © {new Date().getFullYear()}
           <span className="ml-1 tracking-wide">
-            Made with ❤️ for ZSTiO by Szymański Paweł & Majcher Kacper
+            Made with{" "}
+            <span onClick={playEasteregg} className="cursor-pointer ">
+              ❤️
+            </span>{" "}
+            for ZSTiO by Szymański Paweł & Majcher Kacper
             <br />
             <Link
               prefetch={false}
@@ -34,6 +39,6 @@ function Footer() {
       </div>
     </footer>
   );
-}
+};
 
 export default Footer;
