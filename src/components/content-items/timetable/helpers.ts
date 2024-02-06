@@ -60,6 +60,7 @@ export const TimeTableSubstitutions = (
   day: TableLesson[][],
   type: string,
 ) => {
+  if (!substitutions) return { substitution: undefined, sure: true };
   if (type != "Oddziały") return { substitution: undefined, sure: true };
 
   const { substitution, sure } = getSubstitutionAndSure(
@@ -86,6 +87,7 @@ export const MobileTimeTableSubstitutions = (
   lessons: TableLesson[][][],
   type: string,
 ) => {
+  if (!substitutions) return { substitution: undefined, sure: true };
   if (type != "Oddziały") return { substitution: undefined, sure: true };
 
   const { substitution, sure } = getSubstitutionAndSure(
