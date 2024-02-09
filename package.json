@@ -24,7 +24,7 @@
     "@radix-ui/react-tooltip": "^1.0.7",
     "@uidotdev/usehooks": "^2.4.1",
     "@wulkanowy/timetable-parser": "github:majusss/timetable-parser-js",
-    "axios": "^1.6.5",
+    "axios": "^1.6.7",
     "cheerio": "1.0.0-rc.12",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
