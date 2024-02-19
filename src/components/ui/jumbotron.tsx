@@ -1,3 +1,5 @@
+"use client";
+
 import Loading from "@/components/jumbotron-items/loading";
 import SubstitutionsDropdowns from "@/components/jumbotron-items/substitutions-dropdowns";
 import TimetableDropdowns from "@/components/jumbotron-items/timetable-dropdowns";
@@ -133,7 +135,11 @@ const JumbotronDropdowns: React.FC<JumbotronDropdownsProps> = ({
   if (isSubstitution && substitutions.status) {
     return <SubstitutionsDropdowns substitutions={substitutions} />;
   }
-  return <TimetableDropdowns timeTableList={timeTableList} />;
+  return (
+    <TimetableDropdowns
+      timeTableList={timeTableList || { classes: [], rooms: [], teachers: [] }}
+    />
+  );
 };
 
 export default Jumbotron;

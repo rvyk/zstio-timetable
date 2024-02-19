@@ -1,3 +1,5 @@
+"use client";
+
 import { normalHours, shortHours } from "@/lib/utils";
 import React, { useEffect } from "react";
 

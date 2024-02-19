@@ -1,3 +1,5 @@
+"use client";
+
 import { cn, getCurrentLesson } from "@/lib/utils";
 import { useEffect, useState } from "react";
 

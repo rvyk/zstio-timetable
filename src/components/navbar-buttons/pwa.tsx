@@ -1,3 +1,5 @@
+"use client";
+
 import ButtonWrapper from "@/components/navbar-buttons/wrapper";
 import { DownloadIcon } from "@radix-ui/react-icons";
 import { useEffect, useState } from "react";

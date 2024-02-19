@@ -5,8 +5,7 @@ import { ChevronRightIcon, DotFilledIcon } from "@radix-ui/react-icons";
 import * as React from "react";
 
 import { cn } from "@/lib/utils";
-
-import { Checkbox } from "@nextui-org/react";
+import { Checkbox } from "./checkbox";
 
 const DropdownMenu = DropdownMenuPrimitive.Root;
 
@@ -108,19 +107,19 @@ const DropdownMenuCheckboxItem = React.forwardRef<
     checked={checked}
     {...props}
   >
-    <span className="flex h-3.5 w-3.5 items-center justify-center">
-      <Checkbox
-        classNames={{
-          icon: "text-white",
-          wrapper: cn(
-            "transition-colors delay-75 bg-gray-100 dark:bg-[#282828] rounded border-2 border-gray-200 dark:border-[#202020] cursor-pointer",
-            checked && "bg-blue-600 dark:bg-blue-700",
-          ),
-          base: "ml-4 cursor-default",
-        }}
-        isSelected={!!checked}
-      />
-    </span>
+    {/* <span className="flex h-3.5 w-3.5 items-center justify-center"> */}
+    <Checkbox
+      // classNames={{
+      //   icon: "text-white",
+      //   wrapper: cn(
+      //     "transition-colors delay-75 bg-gray-100 dark:bg-[#282828] rounded border-2 border-gray-200 dark:border-[#202020] cursor-pointer",
+      //     checked && "bg-blue-600 dark:bg-blue-700",
+      //   ),
+      //   base: "ml-4 cursor-default",
+      // }}
+      checked={!!checked}
+    />
+    {/* </span> */}
     {children}
   </DropdownMenuPrimitive.CheckboxItem>
 ));

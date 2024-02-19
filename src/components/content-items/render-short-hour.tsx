@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import { adjustShortenedLessons, normalHours } from "@/lib/utils";
 import { MinusIcon, PlusIcon } from "@heroicons/react/24/outline";

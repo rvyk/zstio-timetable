@@ -1,9 +1,11 @@
-import { Head, Html, Main, NextScript } from "next/document";
+import { ThemeProvider } from "@/components/theme-provider";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import "@/styles/globals.css";
 
-const Document = () => {
+const RootLayout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <Html lang="pl">
-      <Head>
+    <html lang="pl">
+      <head>
         <meta
           name="msapplication-TileImage"
           content="https://zstiojar.edu.pl/wp-content/uploads/2023/03/cropped-cropped-cropped-bez-tla-1-270x270.png"
@@ -50,7 +52,7 @@ const Document = () => {
         <meta property="twitter:image" content="/og-image.png" />
         {/* ----- */}
         <link rel="manifest" href="/manifest.json" />
-      </Head>
+      </head>
       <body className="flex min-h-screen w-full flex-col justify-center !bg-[#F7F3F5] dark:!bg-[#171717]">
         <noscript>
           <div className="flex h-screen w-screen flex-col items-center justify-center bg-white text-center text-black">
@@ -63,15 +65,16 @@ const Document = () => {
             </a>
           </div>
           <meta
-            http-equiv="refresh"
+            httpEquiv="refresh"
             content={`5;url=${process.env.NEXT_PUBLIC_TIMETABLE_URL}`}
           />
         </noscript>
-        <Main />
-        <NextScript />
+        <ThemeProvider attribute="class">
+          <TooltipProvider>{children}</TooltipProvider>
+        </ThemeProvider>
       </body>
-    </Html>
+    </html>
   );
 };
 
-export default Document;
+export default RootLayout;

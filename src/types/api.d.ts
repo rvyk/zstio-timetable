@@ -18,10 +18,8 @@ type EmptyClasses = {
   url?: string;
 };
 
-type EmptyAPI = {
-  success: boolean;
+type Empty = {
   classes: EmptyClasses[];
-  msg?: string;
 };
 
 type TimetableAPI = {
@@ -34,4 +32,4 @@ type TimetableAPI = {
   hours: Record<number, TableHour>;
 };
 
-export type { AllClasses, Classes, EmptyAPI, EmptyClasses, TimetableAPI };
+export type { AllClasses, Classes, Empty, EmptyClasses, TimetableAPI };

@@ -1,8 +1,11 @@
+"use client";
+
 import {
   RenderSubstitutions,
   RenderSubstitutionsMobile,
 } from "@/components/content-items/substitutions/render-substitutions";
 import Head from "next/head";
+import { useSearchParams } from "next/navigation";
 import SubstitutionsBottomBar from "../substitutions-bottom-bar";
 
 export const parseBranchField = (branch: string): string => {
@@ -15,19 +18,20 @@ export const parseBranchField = (branch: string): string => {
 const Substitutions: React.FC<{ substitutions: Substitutions }> = ({
   substitutions,
 }) => {
-  const queryParams = new URLSearchParams(window.location.search);
+  const queryParams = useSearchParams();
   const branches = queryParams.get("branches")?.split(",") || [];
   const teachers = queryParams.get("teachers")?.split(",") || [];
 
   return (
     <>
       <Head>
-        {window.location.search && (
-          <link
-            rel="canonical"
-            href="https://plan.zstiojar.edu.pl/zastepstwa"
-          />
-        )}
+        {queryParams.getAll("branches").length ||
+          (queryParams.getAll("teachers").length && (
+            <link
+              rel="canonical"
+              href="https://plan.zstiojar.edu.pl/zastepstwa"
+            />
+          ))}
       </Head>
       <>
         {substitutions.tables.length ? (

@@ -4,20 +4,41 @@ import fetchTimetable from "@/lib/fetchers/fetchTimetable";
 import fetchTimetableList from "@/lib/fetchers/fetchTimetableList";
 import { Table, TimeTable } from "@/types/timetable";
 import { List } from "@wulkanowy/timetable-parser";
-import { GetStaticPaths, GetStaticProps, NextPage } from "next";
+import { NextPage } from "next";
 
-const MainRoute: NextPage<Table> = ({ ...props }) => {
+export const revalidate = 3600;
+
+const MainRoute: NextPage<{ params: { all: string[] } }> = async ({
+  params,
+}) => {
+  if (!["class", "teacher", "room", "zastepstwa"].includes(params.all[0]))
+    return null;
+  const { timeTable } = await fetchTimetable(params.all[0], params.all[1]);
+
+  // console.log(params.all[0], params.all[1], timeTable.data.title);
+
+  const {
+    data: { classes = [], teachers = [], rooms = [] },
+  } = (await fetchTimetableList()) as { data: List };
+
+  const props: Table = {
+    timeTable: timeTable ?? ({} as TimeTable),
+    timeTableList: {
+      classes,
+      teachers,
+      rooms,
+    },
+    substitutions: await fetchSubstitutions(),
+  };
+
   return <Layout props={props} />;
 };
 
-export const getStaticPaths: GetStaticPaths = async () => {
+export const generateStaticParams = async () => {
   const { data, ok } = await fetchTimetableList();
 
   if (!ok) {
-    return {
-      paths: [],
-      fallback: "blocking",
-    };
+    return [{ slug: "" }];
   }
 
   const { classes, teachers, rooms } = data as List;
@@ -34,35 +55,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
     ) || []),
   ];
 
-  return {
-    paths,
-    fallback: "blocking",
-  };
-};
-
-export const getStaticProps: GetStaticProps = async (context) => {
-  if (!context?.params) return { props: {} };
-
-  const { timeTable } = await fetchTimetable(context);
-
-  const {
-    data: { classes = [], teachers = [], rooms = [] },
-  } = (await fetchTimetableList()) as { data: List };
-
-  const props: Table = {
-    timeTable: timeTable ?? ({} as TimeTable),
-    timeTableList: {
-      classes,
-      teachers,
-      rooms,
-    },
-    substitutions: await fetchSubstitutions(),
-  };
-
-  return {
-    props,
-    revalidate: 3600,
-  };
+  return paths.map((slug) => ({ slug }));
 };
 
 export default MainRoute;

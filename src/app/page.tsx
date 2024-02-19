@@ -1,7 +1,9 @@
+"use client";
+
 import Layout from "@/components/layout";
 import { Table } from "@/types/timetable";
 import { NextPage } from "next";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
 const Home: NextPage = () => {

@@ -1,3 +1,5 @@
+"use client";
+
 import BottomBar from "@/components/content-items/bottom-bar";
 import {
   RenderTimeTable,
@@ -6,7 +8,7 @@ import {
 import { Table as TableType } from "@/types/timetable";
 import { List } from "@wulkanowy/timetable-parser";
 import Head from "next/head";
-import { useRouter } from "next/router";
+import { usePathname, useRouter } from "next/navigation";
 import React, { useCallback, useEffect, useState } from "react";
 
 interface TimeTableProps {
@@ -21,16 +23,24 @@ const TimeTable: React.FC<TimeTableProps> = ({
   substitutions,
 }) => {
   const [selectedDay, setSelectedDay] = useState(0);
+
+  const pathname = usePathname();
   const router = useRouter();
 
   const handleArrowKey = useCallback(
     (timeTableList: List, key: string) => {
-      // if (document.activeElement !== document.body) return;
-      const data = router?.query?.all?.[0];
+      const data = pathname.split("/")[1];
       if (data) {
-        const currentNumber = parseInt(router.query.all?.[1] ?? "0");
+        const currentNumber = parseInt(
+          pathname.split("/").slice(-1).join() || "0",
+        );
         const changeTo =
-          key === "ArrowRight" ? currentNumber + 1 : currentNumber - 1;
+          key === "ArrowRight"
+            ? currentNumber + 1
+            : key === "ArrowLeft"
+              ? currentNumber - 1
+              : null;
+        if (!changeTo) return;
         const dataToPropertyMap: Record<string, string> = {
           class: "classes",
           room: "rooms",
@@ -51,14 +61,14 @@ const TimeTable: React.FC<TimeTableProps> = ({
               break;
           }
           if (changeTo >= 1 && changeTo <= maxNumber) {
-            router.push(`/${data}/${changeTo}`, undefined, {
+            router.push(`/${data}/${changeTo}`, {
               scroll: false,
             });
           }
         }
       }
     },
-    [router],
+    [pathname, router],
   );
 
   const maxLessons = timeTable.status

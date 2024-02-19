@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -14,7 +16,7 @@ import {
   UsersIcon,
 } from "@heroicons/react/24/outline";
 import { List, ListItem } from "@wulkanowy/timetable-parser";
-import { useRouter } from "next/router";
+import { usePathname, useRouter } from "next/navigation";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 
 type FilterKeys = "class" | "teacher" | "room";
@@ -68,6 +70,7 @@ const TimetableDropdownItem: React.FC<TimetableDropdownItemProps> = ({
   icon,
 }) => {
   const router = useRouter();
+  const pathname = usePathname();
 
   const [filter, setFilter] = useState("");
 
@@ -103,8 +106,8 @@ const TimetableDropdownItem: React.FC<TimetableDropdownItemProps> = ({
   };
 
   useEffect(() => {
-    setLastSelect(router.asPath);
-  }, [router.asPath]);
+    setLastSelect(pathname);
+  }, [pathname]);
 
   return (
     <DropdownMenu

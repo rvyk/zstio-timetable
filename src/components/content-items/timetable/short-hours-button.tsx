@@ -1,3 +1,5 @@
+"use client";
+
 import {
   SettingsContext,
   SettingsContextType,
@@ -8,24 +10,15 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { cn, normalHours, shortHours } from "@/lib/utils";
-import { useRouter } from "next/router";
-import { useContext, useEffect, useState } from "react";
+import { useContext } from "react";
 
 const ShortHoursButton: React.FC = () => {
-  const [isClient, setIsClient] = useState(false);
-  const { isReady } = useRouter();
   const [isShortHours, setIsShortHours] = (
     useContext(SettingsContext) as SettingsContextType
   ).shortHours;
   const [hoursTime, setHoursTime] = (
     useContext(SettingsContext) as SettingsContextType
   ).hoursTime;
-
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
-
-  if (!isClient || !isReady) return null;
 
   const handleButton = (state: boolean) => {
     setIsShortHours(state);

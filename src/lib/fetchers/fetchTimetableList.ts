@@ -1,3 +1,5 @@
+"use server";
+
 import { List, TimetableList } from "@wulkanowy/timetable-parser";
 import axios, { AxiosError } from "axios";
 

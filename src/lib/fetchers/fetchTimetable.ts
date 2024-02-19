@@ -1,9 +1,10 @@
+"use server";
+
 import { convertTextDate } from "@/lib/date";
 import { TimeTable, TimeTableData } from "@/types/timetable";
 import { Table } from "@wulkanowy/timetable-parser";
 import axios, { AxiosError } from "axios";
 import _ from "lodash";
-import { GetStaticPropsContext } from "next";
 
 const removeUndefined = (obj: any, value: any) =>
   _.transform(obj, (result: any, val, key) => {
@@ -20,21 +21,17 @@ interface TimetableResponse {
 }
 
 const fetchTimetable = async (
-  context: GetStaticPropsContext,
+  type: string,
+  index: string,
 ): Promise<TimetableResponse> => {
-  const { params } = context;
-
-  const param0 = params?.all?.[0] ?? "";
-  const param1 = params?.all?.[1] ?? "";
-
-  if (param0 == "zastepstwa") {
+  if (type == "zastepstwa") {
     return { timeTable: { status: false, data: {} as TimeTableData } };
   }
 
   const idMap: Record<string, string> = {
-    class: `o${param1}`,
-    teacher: `n${param1}`,
-    room: `s${param1}`,
+    class: `o${index}`,
+    teacher: `n${index}`,
+    room: `s${index}`,
   };
 
   const textMap: Record<string, string> = {
@@ -43,8 +40,8 @@ const fetchTimetable = async (
     room: "Sale",
   };
 
-  const id = idMap[param0] || "";
-  const text = textMap[param0] || "";
+  const id = idMap[type] || "";
+  const text = textMap[type] || "";
 
   try {
     const res = await axios.get(

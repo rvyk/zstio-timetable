@@ -1,3 +1,5 @@
+"use client";
+
 import { Dropdown } from "@/components/content-items/bottom-bar/dropdown";
 import SearchBar from "@/components/content-items/bottom-bar/search";
 import Footer from "@/components/footer";
@@ -13,7 +15,7 @@ import { Table } from "@/types/timetable";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 import { List } from "@wulkanowy/timetable-parser";
 import Link from "next/link";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 
 interface BottomBarProps {

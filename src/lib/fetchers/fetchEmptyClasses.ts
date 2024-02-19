@@ -1,24 +1,24 @@
+"use server";
+
 import fetchAllClasses from "@/lib/fetchers/fetchAllClasses";
 import fetchSubstitutions from "@/lib/fetchers/fetchSubstitutions";
 import { cases } from "@/lib/utils";
-import { EmptyAPI } from "@/types/api";
+import { Empty } from "@/types/api";
 
 const fetchEmptyClasses = async (
   dayIndex: number,
   lessonIndex: number,
-): Promise<EmptyAPI> => {
+): Promise<Empty> => {
   try {
     if (isNaN(dayIndex) || isNaN(lessonIndex)) {
       return {
-        success: false,
         classes: [],
-        msg: `Specify dayIndex and lessonIndex to continue`,
       };
     }
 
     const data: any = await fetchAllClasses();
 
-    const responseObj: EmptyAPI = { success: true, classes: [] };
+    const responseObj: Empty = { classes: [] };
 
     for (const classObj of data.classes) {
       if (!classObj.lessons[dayIndex][lessonIndex]?.length) {
@@ -53,9 +53,7 @@ const fetchEmptyClasses = async (
   } catch (error) {
     console.log(error);
     return {
-      success: false,
       classes: [],
-      msg: "An error occurred",
     };
   }
 };

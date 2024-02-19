@@ -1,3 +1,5 @@
+"use client";
+
 import { Dropdown } from "@/components/content-items/bottom-bar/dropdown";
 import {
   Drawer,

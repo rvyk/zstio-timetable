@@ -1,3 +1,5 @@
+"use client";
+
 import { parseBranchField } from "@/components/content-items/substitutions/substitutions";
 import { Button } from "@/components/ui/button";
 import {
@@ -6,11 +8,11 @@ import {
   FunnelIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
-import { useRouter } from "next/router";
+import { useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
 const Filters: React.FC = () => {
-  const queryParams = new URLSearchParams(window.location.search);
+  const queryParams = useSearchParams();
   const branches = queryParams.get("branches")?.split(",") || [];
   const teachers = queryParams.get("teachers")?.split(",") || [];
   const filterItems = [...branches, ...teachers].filter(Boolean);
@@ -83,8 +85,8 @@ const ClearFiltersButton: React.FC = () => {
   const router = useRouter();
 
   const handleClearFilters = async () => {
-    await router.replace("/zastepstwa", undefined, { shallow: true });
-    router.reload();
+    await router.replace("/zastepstwa");
+    router.refresh();
   };
 
   return (

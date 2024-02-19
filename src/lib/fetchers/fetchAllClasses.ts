@@ -1,3 +1,5 @@
+"use server";
+
 import fetchTimetable from "@/lib/fetchers/fetchTimetable";
 import fetchTimetableList from "@/lib/fetchers/fetchTimetableList";
 import { AllClasses } from "@/types/api";
@@ -19,10 +21,9 @@ const fetchAllClasses = async (): Promise<AllClasses> => {
     const responseObj: AllClasses = { success: true, classes: [] };
 
     for (const { value } of classes) {
-      const context = { params: { all: ["room", value] } };
       const {
         timeTable: { data },
-      } = await fetchTimetable(context);
+      } = await fetchTimetable("room", value);
 
       responseObj.classes.push({
         title: data.title ?? "",

@@ -1,3 +1,5 @@
+"use client";
+
 import ButtonWrapper from "@/components/navbar-buttons/wrapper";
 import ResponsiveLookupDialog from "@/components/room-lookup/room-lookup";
 import { MagnifyingGlassCircleIcon } from "@heroicons/react/24/outline";

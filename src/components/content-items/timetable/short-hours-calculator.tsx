@@ -1,3 +1,5 @@
+"use client";
+
 import ResponsiveShortHourDialog from "@/components/content-items/render-short-hour";
 import ButtonWrapper from "@/components/navbar-buttons/wrapper";
 import {

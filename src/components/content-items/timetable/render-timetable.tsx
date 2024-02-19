@@ -205,7 +205,7 @@ const RenderTimeTableMobile: React.FC<TimeTableMobileProps> = ({
         </ul>
       </div>
 
-      <div className="min-w-full">
+      <div className="min-w-screen min-h-[calc(100vh-196px)]">
         {timeTable.status && Object.entries(hoursTime).length > 1 ? (
           Object.entries(hoursTime)
             .map(([_, value]) => value)

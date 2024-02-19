@@ -1,10 +1,13 @@
+"use client";
+
 import Dropdown from "@/components/room-lookup/dropdown";
 import { Button } from "@/components/ui/button";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import fetchEmptyClasses from "@/lib/fetchers/fetchEmptyClasses";
 import { days } from "@/lib/utils";
+import { EmptyClasses } from "@/types/api";
 import { MinusIcon, PlusIcon } from "@heroicons/react/24/outline";
 import { useCounter } from "@uidotdev/usehooks";
-import axios from "axios";
 import { useState } from "react";
 import {
   ResponsiveDialog,
@@ -31,20 +34,20 @@ const ResponsiveLookupDialog: React.FC<ResponsiveLookupDialogProps> = ({
     max: 14,
   });
   const [isPending, setIsPending] = useState(false);
-  const [data, setData] = useState(null);
+  const [data, setData] = useState<EmptyClasses[] | null>(null);
 
   const handleRoomLookup = async () => {
     if (isPending) return;
     setIsPending(true);
-    const res = await axios.get(
-      `/api/fetch/emptyClasses?dayIndex=${selectedDay}&lessonIndex=${
-        selectedLesson < 1 ? 1 : selectedLesson
-      }`,
-    );
 
-    if (res.data.success) {
-      setData(res.data.classes);
-    }
+    setData(
+      (
+        await fetchEmptyClasses(
+          selectedDay,
+          selectedLesson < 1 ? 1 : selectedLesson,
+        )
+      ).classes,
+    );
 
     setIsPending(false);
   };
@@ -61,7 +64,7 @@ const ResponsiveLookupDialog: React.FC<ResponsiveLookupDialogProps> = ({
             lekcyjnej.
           </ResponsiveDialogDescription>
         </ResponsiveDialogHeader>
-        <div className="flex flex-col justify-center">
+        <div className="flex flex-col justify-center p-4 pb-0">
           <ToggleGroup
             defaultValue={selectedDay.toString()}
             onValueChange={(e) => setSelectedDay(+e)}

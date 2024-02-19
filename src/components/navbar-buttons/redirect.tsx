@@ -1,10 +1,11 @@
+"use client";
+
 import ButtonWrapper from "@/components/navbar-buttons/wrapper";
 import {
   ArrowPathRoundedSquareIcon,
   CalendarDaysIcon,
 } from "@heroicons/react/24/outline";
-import { usePathname } from "next/navigation";
-import { useRouter } from "next/router";
+import { usePathname, useRouter } from "next/navigation";
 
 const RedirectButton: React.FC = () => {
   const pathname = usePathname();

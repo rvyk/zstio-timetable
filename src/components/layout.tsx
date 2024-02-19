@@ -1,3 +1,5 @@
+"use client";
+
 import Content from "@/components/content";
 import Footer from "@/components/footer";
 import Messages from "@/components/messages";

@@ -1,3 +1,5 @@
+"use client";
+
 import { cn } from "@/lib/utils";
 import { ArrowRightIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import axios from "axios";

@@ -1,3 +1,5 @@
+"use client";
+
 import ShortHoursButton from "@/components/content-items/timetable/short-hours-button";
 import ShortHoursCalculator from "@/components/content-items/timetable/short-hours-calculator";
 import MoreButtons from "@/components/navbar-buttons/more-buttons";
@@ -11,34 +13,16 @@ import {
   NavigationMenuItem,
   NavigationMenuList,
 } from "@/components/ui/navigation-menu";
-import { useTheme } from "next-themes";
 import Image from "next/legacy/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
 
 const Navbar: React.FC = () => {
-  const { theme, setTheme, resolvedTheme, systemTheme } = useTheme();
-  const [isClient, setIsClient] = useState(false);
-
   const pathname = usePathname();
-  const isIndex = pathname === "/";
+  const isIndex = pathname === "/" || pathname === null;
   const isSubstitutions = pathname === "/zastepstwa";
 
-  const toggleTheme = () => {
-    if (theme === "system") {
-      setTheme(systemTheme === "light" ? "dark" : "light");
-      return;
-    }
-    const newTheme = theme === "light" ? "dark" : "light";
-    setTheme(newTheme);
-  };
-
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
-
-  if (!resolvedTheme || !isClient || isIndex) return null;
+  if (isIndex) return null;
 
   return (
     <div className="relative z-30 flex justify-between rounded-b-lg bg-[#ffffff] p-2 shadow-sm transition-all dark:bg-[#202020] md:absolute md:right-2 md:top-2 md:!bg-transparent md:p-0 md:shadow-none">
@@ -82,7 +66,7 @@ const Navbar: React.FC = () => {
           {!isSubstitutions && <RoomLookup />}
           <PWAButton />
         </div>
-        <ThemeButton toggleTheme={toggleTheme} resolvedTheme={resolvedTheme} />
+        <ThemeButton />
       </div>
     </div>
   );

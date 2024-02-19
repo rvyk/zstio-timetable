@@ -1,10 +1,11 @@
+"use client";
+
 import { CheckedItemsType } from "@/components/jumbotron-items/substitutions-dropdowns";
-import { cn } from "@/lib/utils";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Menu, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
-import { Checkbox } from "@nextui-org/react";
-import { useRouter } from "next/router";
-import { Fragment, useEffect, useState } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { Fragment, useState } from "react";
 
 interface DropdownProps {
   results: { type: string; name: string; value: string }[];
@@ -21,7 +22,10 @@ const Dropdown: React.FC<DropdownProps> = ({
   setIsDrawerOpened,
   isSubstitutions,
 }) => {
+  const queryParams = useSearchParams();
+
   const router = useRouter();
+  const pathname = usePathname();
   const [lastSelect, setLastSelect] = useState<string | null>(null);
   const [checkedItems, setCheckedItems] = useState<CheckedItemsType>({});
 
@@ -42,31 +46,45 @@ const Dropdown: React.FC<DropdownProps> = ({
 
       const queryValue = updatedItems.join(",");
 
-      const newQuery = { ...router.query };
+      const oldCategory = category === "branches" ? "teachers" : "branches";
+      const oldQuery = queryParams.get(oldCategory);
       if (!updatedItems.length) {
-        delete newQuery[category];
+        if (oldQuery != null) {
+          router.push(
+            `${pathname}?${new URLSearchParams(`${oldCategory}=${oldQuery}`).toString()}`,
+          );
+        } else {
+          router.push(pathname);
+        }
       } else {
-        newQuery[category] = queryValue;
+        if (oldQuery != null) {
+          router.push(
+            `${pathname}?${new URLSearchParams(`${category}=${queryValue}`).toString()}&${new URLSearchParams(`${oldCategory}=${oldQuery}`).toString()}`,
+          );
+        } else {
+          router.push(
+            `${pathname}?${new URLSearchParams(`${category}=${queryValue}`).toString()}`,
+          );
+        }
       }
-      router.replace({ query: newQuery }, undefined, { shallow: true });
       return { ...prevItems, [category]: updatedItems };
     });
   };
 
-  useEffect(() => {
-    const queryFilters = router.query;
-    const newCheckedItems: CheckedItemsType = {};
+  // useEffect(() => {
+  //   const queryFilters = router.query;
+  //   const newCheckedItems: CheckedItemsType = {};
 
-    for (const category in queryFilters) {
-      const queryValue = queryFilters[category];
-      if (typeof queryValue === "string") {
-        const items = queryValue.split(",");
-        newCheckedItems[category] = items;
-      }
-    }
+  //   for (const category in queryFilters) {
+  //     const queryValue = queryFilters[category];
+  //     if (typeof queryValue === "string") {
+  //       const items = queryValue.split(",");
+  //       newCheckedItems[category] = items;
+  //     }
+  //   }
 
-    setCheckedItems(newCheckedItems);
-  }, [router.query]);
+  //   setCheckedItems(newCheckedItems);
+  // }, [router.query]);
   return (
     <Menu as="div" className="w-full text-left">
       {({ open }) => (
@@ -102,17 +120,17 @@ const Dropdown: React.FC<DropdownProps> = ({
                           <>
                             <Checkbox
                               onChange={() => {}}
-                              classNames={{
-                                icon: "text-white",
-                                wrapper: cn(
-                                  "transition-colors delay-75 bg-gray-100 dark:bg-[#282828] rounded border-2 border-gray-200 dark:border-[#202020] cursor-pointer",
-                                  !!checkedItems[item.type]?.includes(
-                                    item.value,
-                                  ) && "bg-blue-600 dark:bg-blue-700",
-                                ),
-                                base: "cursor-default",
-                              }}
-                              isSelected={true}
+                              // classNames={{
+                              //   icon: "text-white",
+                              //   wrapper: cn(
+                              //     "transition-colors delay-75 bg-gray-100 dark:bg-[#282828] rounded border-2 border-gray-200 dark:border-[#202020] cursor-pointer",
+                              //     !!checkedItems[item.type]?.includes(
+                              //       item.value,
+                              //     ) && "bg-blue-600 dark:bg-blue-700",
+                              //   ),
+                              //   base: "cursor-default",
+                              // }}
+                              checked={true}
                             />
                           </>
                         )}

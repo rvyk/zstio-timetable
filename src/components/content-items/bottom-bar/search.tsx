@@ -1,3 +1,5 @@
+"use client";
+
 import { Dropdown } from "@/components/content-items/bottom-bar/dropdown";
 import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
 import { List } from "@wulkanowy/timetable-parser";

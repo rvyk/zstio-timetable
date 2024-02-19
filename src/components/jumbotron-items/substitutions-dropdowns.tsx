@@ -1,3 +1,5 @@
+"use client";
+
 import { parseBranchField } from "@/components/content-items/substitutions/substitutions";
 import { Button } from "@/components/ui/button";
 import {
@@ -13,8 +15,8 @@ import {
   MagnifyingGlassIcon,
   UsersIcon,
 } from "@heroicons/react/24/outline";
-import { useRouter } from "next/router";
-import React, { useEffect, useMemo, useState } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import React, { useMemo, useState } from "react";
 
 export type CheckedItemsType = {
   [key: string]: string[];
@@ -72,11 +74,19 @@ const SubstitutionDropdown: React.FC<SubstitutionDropdownProps> = ({
   name,
   icon,
 }) => {
+  const queryParams = useSearchParams();
+  const branches = queryParams.get("branches")?.split(",") || [];
+  const teachers = queryParams.get("teachers")?.split(",") || [];
+
   const [filter, setFilter] = useState("");
-  const [checkedItems, setCheckedItems] = useState<CheckedItemsType>({});
+  const [checkedItems, setCheckedItems] = useState<CheckedItemsType>({
+    branches,
+    teachers,
+  });
   const [isOpened, setIsOpened] = useState(false);
 
   const router = useRouter();
+  const pathname = usePathname();
 
   const translations = {
     teachers: "Filtruj wg. nauczycieli",
@@ -98,27 +108,30 @@ const SubstitutionDropdown: React.FC<SubstitutionDropdownProps> = ({
 
       const queryValue = updatedItems.join(",");
 
-      const newQuery = { ...router.query };
+      const oldCategory = category === "branches" ? "teachers" : "branches";
+      const oldQuery = queryParams.get(oldCategory);
       if (!updatedItems.length) {
-        delete newQuery[category];
+        if (oldQuery != null) {
+          router.push(
+            `${pathname}?${new URLSearchParams(`${oldCategory}=${oldQuery}`).toString()}`,
+          );
+        } else {
+          router.push(pathname);
+        }
       } else {
-        newQuery[category] = queryValue;
+        if (oldQuery != null) {
+          router.push(
+            `${pathname}?${new URLSearchParams(`${category}=${queryValue}`).toString()}&${new URLSearchParams(`${oldCategory}=${oldQuery}`).toString()}`,
+          );
+        } else {
+          router.push(
+            `${pathname}?${new URLSearchParams(`${category}=${queryValue}`).toString()}`,
+          );
+        }
       }
-      router.replace({ query: newQuery }, undefined, { shallow: true });
       return { ...prevItems, [category]: updatedItems };
     });
   };
-
-  useEffect(() => {
-    const queryParams = new URLSearchParams(window.location.search);
-    const branches = queryParams.get("branches")?.split(",") || [];
-    const teachers = queryParams.get("teachers")?.split(",") || [];
-
-    setCheckedItems({
-      branches,
-      teachers,
-    });
-  }, []);
 
   return (
     <DropdownMenu

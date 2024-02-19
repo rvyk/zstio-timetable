@@ -1,10 +1,8 @@
-import SkeletonLoading from "@/components/content-items/skeleton-loading";
 import Substitutions from "@/components/content-items/substitutions/substitutions";
 import TimeTable from "@/components/content-items/timetable/timetable";
 import { Table as TableType } from "@/types/timetable";
 import { List } from "@wulkanowy/timetable-parser";
 import { usePathname } from "next/navigation";
-import { useRouter } from "next/router";
 import React from "react";
 
 interface ContentProps {
@@ -21,11 +19,10 @@ const Content: React.FC<ContentProps> = ({
   const pathname = usePathname();
   const isIndex = pathname === "/";
   const isSubstitution = pathname === "/zastepstwa";
-  const { isReady } = useRouter();
 
   if (isIndex) return null;
 
-  if (!isReady) return <SkeletonLoading {...{ isSubstitution }} />;
+  // if (!isReady) return <SkeletonLoading {...{ isSubstitution }} />;
 
   if (isSubstitution) {
     return <Substitutions {...{ substitutions }} />;
