@@ -20,14 +20,17 @@ const months: {
 };
 
 export const convertTextDate = (inputDate: string): string => {
-  const regexes = [/(\d{1,2}) (\w+) (\d{4})/, /(\d{1,2})\.(\d{1,2})\.(\d{4})/];
+  const regexes = [
+    /(\d{1,2}\.?) (\w+) (\d{4})/,
+    /(\d{1,2})\.(\d{1,2})\.(\d{4})/,
+  ];
   if (regexes[0].test(inputDate)) {
     const matchResult = inputDate.match(regexes[0]);
     if (matchResult) {
       const [, day, month, year] = matchResult;
       return `${year}-${
         months[month.toLowerCase().padStart(2, "0")]
-      }-${day.padStart(2, "0")}`;
+      }-${day.padStart(2, "0").replace(".", "")}`;
     }
   } else if (regexes[1].test(inputDate)) {
     const matchResult = inputDate.match(regexes[1]);
@@ -36,5 +39,7 @@ export const convertTextDate = (inputDate: string): string => {
       return `${year}-${month}-${day}`;
     }
   }
+  // const dateParts = inputDate.split(" ");
+  // if(dateParts.length === 3 && dateParts[1].length > 2) {}
   return inputDate;
 };
