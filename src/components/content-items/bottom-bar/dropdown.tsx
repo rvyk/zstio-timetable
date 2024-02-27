@@ -5,7 +5,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Menu, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 
 interface DropdownProps {
   results: { type: string; name: string; value: string }[];
@@ -71,20 +71,25 @@ const Dropdown: React.FC<DropdownProps> = ({
     });
   };
 
-  // useEffect(() => {
-  //   const queryFilters = router.query;
-  //   const newCheckedItems: CheckedItemsType = {};
+  useEffect(() => {
+    const newCheckedItems: CheckedItemsType = {};
 
-  //   for (const category in queryFilters) {
-  //     const queryValue = queryFilters[category];
-  //     if (typeof queryValue === "string") {
-  //       const items = queryValue.split(",");
-  //       newCheckedItems[category] = items;
-  //     }
-  //   }
+    const teachers = queryParams.get("teachers");
+    const branches = queryParams.get("branches");
 
-  //   setCheckedItems(newCheckedItems);
-  // }, [router.query]);
+    teachers?.split(",").forEach((teacher) => {
+      newCheckedItems["teachers"] = newCheckedItems["teachers"] || [];
+      newCheckedItems["teachers"].push(teacher);
+    });
+
+    branches?.split(",").forEach((branch) => {
+      newCheckedItems["branches"] = newCheckedItems["branches"] || [];
+      newCheckedItems["branches"].push(branch);
+    });
+
+    setCheckedItems(newCheckedItems);
+  }, [queryParams]);
+
   return (
     <Menu as="div" className="w-full text-left">
       {({ open }) => (
@@ -120,17 +125,9 @@ const Dropdown: React.FC<DropdownProps> = ({
                           <>
                             <Checkbox
                               onChange={() => {}}
-                              // classNames={{
-                              //   icon: "text-white",
-                              //   wrapper: cn(
-                              //     "transition-colors delay-75 bg-gray-100 dark:bg-[#282828] rounded border-2 border-gray-200 dark:border-[#202020] cursor-pointer",
-                              //     !!checkedItems[item.type]?.includes(
-                              //       item.value,
-                              //     ) && "bg-blue-600 dark:bg-blue-700",
-                              //   ),
-                              //   base: "cursor-default",
-                              // }}
-                              checked={true}
+                              checked={
+                                !!checkedItems[item.type]?.includes(item.value)
+                              }
                             />
                           </>
                         )}
