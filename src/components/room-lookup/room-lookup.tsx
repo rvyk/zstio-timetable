@@ -44,7 +44,7 @@ const ResponsiveLookupDialog: React.FC<ResponsiveLookupDialogProps> = ({
       (
         await fetchEmptyClasses(
           selectedDay,
-          selectedLesson < 1 ? 1 : selectedLesson,
+          selectedLesson - 1 < 0 ? 0 : selectedLesson - 1,
         )
       ).classes,
     );
