@@ -28,7 +28,7 @@
     "cheerio": "1.0.0-rc.12",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
-    "embla-carousel-react": "8.0.0-rc19",
+    "embla-carousel-react": "8.0.0",
     "framer-motion": "^11.0.12",
     "fs": "0.0.1-security",
     "lodash": "^4.17.21",
