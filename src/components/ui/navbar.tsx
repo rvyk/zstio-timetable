@@ -35,6 +35,7 @@ const Navbar: React.FC = () => {
               layout="fill"
               objectFit="cover"
               objectPosition="center"
+              priority
             />
           </Link>
         </div>
