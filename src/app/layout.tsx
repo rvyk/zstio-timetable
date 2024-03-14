@@ -25,10 +25,6 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
           sizes="32x32"
         ></link>
         <meta
-          name="description"
-          content="W prosty sposób sprawdź plan zajęć oraz zastępstwa różnych klas, nauczycieli i sal."
-        />
-        <meta
           name="keywords"
           content="plan zajęć, plan lekcji, plan, zstio, zstiojar, plan zajęć zstiojar, plan lekcji zstiojar"
         />

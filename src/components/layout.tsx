@@ -10,6 +10,7 @@ import Head from "next/head";
 import { usePathname } from "next/navigation";
 import React from "react";
 import SettingsProvider from "./setting-context";
+
 interface LayoutProps {
   props: Table;
   errorMsg?: string;
@@ -31,7 +32,6 @@ const Layout: React.FC<LayoutProps> = ({
   return (
     <>
       <Head>
-        <title>{isSubstitutions ? titleSubstitutions : titleTimeTable}</title>
         <meta
           property="og:title"
           content={isSubstitutions ? titleSubstitutions : titleTimeTable}

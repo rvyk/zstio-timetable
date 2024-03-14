@@ -4,7 +4,7 @@ import fetchTimetable from "@/lib/fetchers/fetchTimetable";
 import fetchTimetableList from "@/lib/fetchers/fetchTimetableList";
 import { Table, TimeTable } from "@/types/timetable";
 import { List } from "@wulkanowy/timetable-parser";
-import { NextPage } from "next";
+import { Metadata, NextPage } from "next";
 
 export const revalidate = 3600;
 
@@ -14,8 +14,6 @@ const MainRoute: NextPage<{ params: { all: string[] } }> = async ({
   if (!["class", "teacher", "room", "zastepstwa"].includes(params.all[0]))
     return null;
   const { timeTable } = await fetchTimetable(params.all[0], params.all[1]);
-
-  // console.log(params.all[0], params.all[1], timeTable.data.title);
 
   const {
     data: { classes = [], teachers = [], rooms = [] },
@@ -57,5 +55,31 @@ export const generateStaticParams = async () => {
 
   return paths.map((slug) => ({ slug }));
 };
+
+export async function generateMetadata({
+  params,
+}: {
+  params: { all: string[] };
+  searchParams: {};
+}): Promise<Metadata> {
+  const description =
+    "W prosty sposób sprawdź plan zajęć oraz zastępstwa różnych klas, nauczycieli i sal.";
+  const isSubstitutions = params.all[0] === "zastepstwa";
+  if (isSubstitutions)
+    return {
+      title: "ZSTiO - Zastępstwa",
+      description,
+    };
+
+  const { timeTable } = await fetchTimetable(params.all[0], params.all[1]);
+  const titleTimeTable = `${
+    timeTable?.data?.title ? `${timeTable?.data?.title} | ` : ""
+  }ZSTiO - Plan lekcji`;
+
+  return {
+    title: titleTimeTable,
+    description,
+  };
+}
 
 export default MainRoute;
