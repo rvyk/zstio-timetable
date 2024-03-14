@@ -43,6 +43,7 @@ const Jumbotron: React.FC<JumbotronProps> = ({
             layout="fill"
             objectFit="cover"
             objectPosition="center"
+            priority
           />
         </Link>
         <h1 className="text-5xl font-bold leading-none tracking-tight text-[#2B161B] transition-all dark:text-gray-100 md:text-5xl lg:text-6xl">
