@@ -1,5 +1,5 @@
-import { MainLayout } from "@/components/main-layout";
+import { RootLayout } from "@/components/root-layout";
 
 export default function Home() {
-    return <MainLayout />;
+    return <RootLayout />;
 }

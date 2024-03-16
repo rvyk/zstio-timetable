@@ -1,13 +1,14 @@
 "use client";
 
-import ModeToggle from "@/components/mode-toggle";
-import { SearchClassroom } from "@/components/search-classroom";
+import { PwaButton } from "@/components/items/pwa-button";
+import { SearchClassroom } from "@/components/items/search-classroom";
 import { Button } from "@/components/ui/button";
+import ModeToggle from "@/components/ui/mode-toggle";
 import icon from "@/public/icon-128x128.png";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { FaArrowsRotate, FaCalendarDays, FaDownload } from "react-icons/fa6";
+import { FaArrowsRotate, FaCalendarDays } from "react-icons/fa6";
 
 export function Aside() {
     const router = useRouter();
@@ -30,6 +31,7 @@ export function Aside() {
                     className={
                         path.startsWith("/timetable") ? "bg-accent text-accent-foreground hover:bg-accent/80" : ""
                     }
+                    aria-label="Timetable"
                 >
                     <FaCalendarDays className="h-5 w-5" />
                 </Button>
@@ -40,15 +42,14 @@ export function Aside() {
                     className={
                         path.startsWith("/substitutions") ? "bg-accent text-accent-foreground hover:bg-accent/80" : ""
                     }
+                    aria-label="Substitutions"
                 >
                     <FaArrowsRotate className="h-5 w-5" />
                 </Button>
                 <SearchClassroom />
             </nav>
             <div className="grid gap-2">
-                <Button variant="ghost" size="icon">
-                    <FaDownload className="h-5 w-5" />
-                </Button>
+                <PwaButton />
                 <ModeToggle />
             </div>
         </aside>

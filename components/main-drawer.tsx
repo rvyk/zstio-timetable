@@ -1,7 +1,7 @@
 "use client";
 
 import { Footer } from "@/components/footer";
-import { Location } from "@/components/location";
+import { Location } from "@/components/items/location";
 import { Button } from "@/components/ui/button";
 import { Drawer, DrawerContent, DrawerFooter, DrawerHeader, DrawerTitle, DrawerTrigger } from "@/components/ui/drawer";
 import {

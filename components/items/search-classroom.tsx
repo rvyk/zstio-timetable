@@ -15,7 +15,7 @@ export function SearchClassroom() {
     return (
         <Dialog>
             <DialogTrigger asChild>
-                <Button variant="ghost" size="icon">
+                <Button variant="ghost" size="icon" aria-label="Classroom Search">
                     <FaMagnifyingGlass className="h-5 w-5" />
                 </Button>
             </DialogTrigger>

@@ -3,7 +3,7 @@ import { Header } from "@/components/header";
 import { MainDrawer } from "@/components/main-drawer";
 import { MainTable } from "@/components/main-table";
 
-export function MainLayout() {
+export function RootLayout() {
     return (
         <div className="h-screen">
             <Aside />

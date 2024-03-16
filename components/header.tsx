@@ -1,10 +1,11 @@
 "use client";
 
-import { Location } from "@/components/location";
-import ModeToggle from "@/components/mode-toggle";
-import { SearchClassroom } from "@/components/search-classroom";
+import { Location } from "@/components/items/location";
+import { PwaButton } from "@/components/items/pwa-button";
+import { SearchClassroom } from "@/components/items/search-classroom";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import ModeToggle from "@/components/ui/mode-toggle";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import icon from "@/public/icon-128x128.png";
 import Image from "next/image";
@@ -43,13 +44,14 @@ export function Header() {
                 <div className="flex flex-wrap gap-2 sm:hidden">
                     <DropdownMenu onOpenChange={() => setIsOpened(!isOpened)} open={isOpened}>
                         <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" size="icon">
+                            <Button variant="ghost" size="icon" aria-label="Dropdown">
                                 <FaChevronDown className={`${isOpened && "rotate-180"} transition-transform`} />
                             </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent className="grid w-auto gap-2">
                             <SearchClassroom />
                             <ModeToggle />
+                            <PwaButton />
                         </DropdownMenuContent>
                     </DropdownMenu>
                     <Button
@@ -61,6 +63,7 @@ export function Header() {
                                 ? "bg-accent text-accent-foreground hover:bg-accent/80"
                                 : ""
                         }
+                        aria-label="Substitutions"
                     >
                         <FaArrowsRotate className="h-5 w-5" />
                     </Button>
@@ -71,6 +74,7 @@ export function Header() {
                         className={
                             path.startsWith("/timetable") ? "bg-accent text-accent-foreground hover:bg-accent/80" : ""
                         }
+                        aria-label="Timetable"
                     >
                         <FaCalendarDays className="h-5 w-5" />
                     </Button>
