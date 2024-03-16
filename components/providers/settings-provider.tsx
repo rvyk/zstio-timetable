@@ -10,29 +10,29 @@ import React from "react";
 export const SettingsContext = React.createContext</*SettingsContextType |*/ null>(null);
 
 const SettingsProvider: React.FC<{
-    children: React.ReactNode;
+  children: React.ReactNode;
 }> = ({ children }) => {
-    const [shortHoursBool, setIsShortHours] = React.useState(
-        typeof localStorage !== "undefined" ? localStorage?.getItem("shortHours") === "true" : false,
-    );
+  const [shortHoursBool, setIsShortHours] = React.useState(
+    typeof localStorage !== "undefined" ? localStorage?.getItem("shortHours") === "true" : false,
+  );
 
-    // const [hoursTime, setHoursTime] = React.useState<hourType[]>(normalHours);
+  // const [hoursTime, setHoursTime] = React.useState<hourType[]>(normalHours);
 
-    // useEffect(() => {
-    //     if (shortHoursBool) setHoursTime(shortHours);
-    // }, [shortHoursBool]);
+  // useEffect(() => {
+  //     if (shortHoursBool) setHoursTime(shortHours);
+  // }, [shortHoursBool]);
 
-    return (
-        <SettingsContext.Provider
-            /*
+  return (
+    <SettingsContext.Provider
+      /*
                 {shortHours: [shortHoursBool, setIsShortHours],
                 hoursTime: [hoursTime, setHoursTime],}
              */
-            value={null}
-        >
-            {children}
-        </SettingsContext.Provider>
-    );
+      value={null}
+    >
+      {children}
+    </SettingsContext.Provider>
+  );
 };
 
 export default SettingsProvider;

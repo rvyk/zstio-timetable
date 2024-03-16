@@ -5,15 +5,15 @@ import { useEffect, useState } from "react";
  * @see https://observablehq.com/@werehamster/avoiding-hydration-mismatch-when-using-react-hooks
  */
 export default function useMediaQuery(mediaQueryString: string) {
-    const [matches, setMatches] = useState<boolean>();
+  const [matches, setMatches] = useState<boolean>();
 
-    useEffect(() => {
-        const mediaQueryList = window.matchMedia(mediaQueryString);
-        const listener = () => setMatches(!!mediaQueryList.matches);
-        listener();
-        mediaQueryList.addEventListener("change", listener);
-        return () => mediaQueryList.removeEventListener("change", listener);
-    }, [mediaQueryString]);
+  useEffect(() => {
+    const mediaQueryList = window.matchMedia(mediaQueryString);
+    const listener = () => setMatches(!!mediaQueryList.matches);
+    listener();
+    mediaQueryList.addEventListener("change", listener);
+    return () => mediaQueryList.removeEventListener("change", listener);
+  }, [mediaQueryString]);
 
-    return matches;
+  return matches;
 }

@@ -4,7 +4,7 @@
  */
 
 export default class App {
-    static title = "ZSTiO";
-    static description = "W prosty sposób sprawdź plan zajęć oraz zastępstwa różnych klas, nauczycieli i sal.";
-    static themeColor = "#F22121";
+  static title = "ZSTiO";
+  static description = "W prosty sposób sprawdź plan zajęć oraz zastępstwa różnych klas, nauczycieli i sal.";
+  static themeColor = "#F22121";
 }

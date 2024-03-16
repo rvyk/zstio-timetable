@@ -3,93 +3,93 @@
 @tailwind utilities;
 
 @layer base {
-    :root {
-        --background: 0 0% 100%;
-        --foreground: 0 0% 1.18%;
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 0 0% 1.18%;
 
-        --card: 0 0% 100%;
-        --card-foreground: 0 0% 5%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 5%;
 
-        --popover: 0 0% 100%;
-        --popover-foreground: 0 0% 5%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 5%;
 
-        --primary: 0 0% 10%;
-        --primary-foreground: 0 0% 100%;
+    --primary: 0 0% 10%;
+    --primary-foreground: 0 0% 100%;
 
-        --secondary: 0 0% 98%;
-        --secondary-foreground: 0 0% 5%;
+    --secondary: 0 0% 98%;
+    --secondary-foreground: 0 0% 5%;
 
-        --muted: 0 0% 90%;
-        --muted-foreground: 0 0% 45%;
+    --muted: 0 0% 90%;
+    --muted-foreground: 0 0% 45%;
 
-        --accent: 0 88.9% 53.9%;
-        --accent-foreground: 0 0% 100%;
+    --accent: 0 88.9% 53.9%;
+    --accent-foreground: 0 0% 100%;
 
-        --destructive: 0 84.2% 60.2%;
-        --destructive-foreground: 0 0% 98%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
 
-        --border: 0 0% 90%;
-        --input: 0 0% 90%;
-        --ring: 0 0% 4%;
+    --border: 0 0% 90%;
+    --input: 0 0% 90%;
+    --ring: 0 0% 4%;
 
-        --radius: 0.5rem;
-    }
+    --radius: 0.5rem;
+  }
 
-    .dark {
-        --background: 0 0% 1.18%;
-        --foreground: 0 0% 100%;
+  .dark {
+    --background: 0 0% 1.18%;
+    --foreground: 0 0% 100%;
 
-        --card: 0 0% 5%;
-        --card-foreground: 0 0% 98%;
+    --card: 0 0% 5%;
+    --card-foreground: 0 0% 98%;
 
-        --popover: 0 0% 5%;
-        --popover-foreground: 0 0% 100%;
+    --popover: 0 0% 5%;
+    --popover-foreground: 0 0% 100%;
 
-        --primary: 0 0% 100%;
-        --primary-foreground: 0 0% 10%;
+    --primary: 0 0% 100%;
+    --primary-foreground: 0 0% 10%;
 
-        --secondary: 0 0% 6.5%;
-        --secondary-foreground: 0 0% 95%;
+    --secondary: 0 0% 6.5%;
+    --secondary-foreground: 0 0% 95%;
 
-        --muted: 0 0% 15%;
-        --muted-foreground: 0 0% 55%;
+    --muted: 0 0% 15%;
+    --muted-foreground: 0 0% 55%;
 
-        --accent: 0 88.9% 53.9%;
-        --accent-foreground: 0 0% 100%;
+    --accent: 0 88.9% 53.9%;
+    --accent-foreground: 0 0% 100%;
 
-        --destructive: 0 62.8% 30.6%;
-        --destructive-foreground: 0 0% 100%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 100%;
 
-        --border: 0 11% 10%;
-        --input: 0 0% 10%;
-        --ring: 0 0% 80%;
-    }
+    --border: 0 11% 10%;
+    --input: 0 0% 10%;
+    --ring: 0 0% 80%;
+  }
 }
 
 @layer base {
-    * {
-        @apply border-border;
-    }
-    body {
-        @apply bg-background text-foreground selection:bg-accent/80 selection:text-accent-foreground;
-    }
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground selection:bg-accent/80 selection:text-accent-foreground;
+  }
 }
 
 a {
-    @apply underline-offset-1 hover:underline;
+  @apply underline-offset-1 hover:underline;
 }
 
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
+  -webkit-appearance: none;
+  margin: 0;
 }
 
 input[type="number"] {
-    -moz-appearance: textfield;
-    appearance: textfield;
+  -moz-appearance: textfield;
+  appearance: textfield;
 }
 
 tr:nth-child(even) {
-    @apply bg-secondary/80;
+  @apply bg-secondary/80;
 }

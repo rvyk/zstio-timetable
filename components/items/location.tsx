@@ -1,5 +1,6 @@
 "use client";
 
+import { TimetableContext } from "@/components/providers/timetable-provider";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -9,7 +10,6 @@ import {
 } from "@/components/ui/breadcrumb";
 import { usePathname } from "next/navigation";
 import { useContext } from "react";
-import { TimetableContext } from "./providers/timetable-provider";
 
 export function Location({ className }: { className?: string }) {
   const table = useContext(TimetableContext);

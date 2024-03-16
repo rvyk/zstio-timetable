@@ -1,4 +1,4 @@
-import { MainLayout } from "@/components/main-layout";
+import { RootLayout } from "@/components/root-layout";
 import fetchOptivumList from "@/lib/fetchers/fetch-optivum-list";
 
 export default function Home({ params }: { params: { all: string[] } }) {
@@ -6,17 +6,16 @@ export default function Home({ params }: { params: { all: string[] } }) {
   // TODO: do something now xD
   if (!["class", "room", "teacher"].includes(type)) return null;
   if (!value) return null;
-  return <MainLayout type={type} value={value} />;
+  return <RootLayout type={type} value={value} />;
 }
 
 export async function generateStaticParams() {
   const { classes, rooms, teachers } = await fetchOptivumList();
-  const paths = [
+  return [
     ...classes.map((c) => ({ all: ["class", c.value] })),
     ...(rooms ?? []).map((r) => ({ all: ["room", r.value] })),
     ...(teachers ?? []).map((t) => ({ all: ["teacher", t.value] })),
   ];
-  return paths;
 }
 
 export const dynamic = "error",

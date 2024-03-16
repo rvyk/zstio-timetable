@@ -1,4 +1,4 @@
-![App screenshot](public/og-image.png)
+![App screenshot](resources/og-image.png)
 
 # Timetable ZSTiO
 
@@ -15,20 +15,20 @@ The phone mode is inspired by the school's timetable
 
 ## Tech Stack
 
--   [Next.js](https://nextjs.org/) (React framework for server-rendered React applications)
--   [React](https://reactjs.org/) (JavaScript library for building user interfaces)
--   [TypeScript](https://www.typescriptlang.org/) (Typed superset of JavaScript)
--   [Tailwind CSS](https://tailwindcss.com/) (Utility-first CSS framework)
--   [shadcn/ui](https://ui.shadcn.com/) (A comprehensive UI library providing a set of reusable React components for
-    building user interfaces)
--   [cheerio](https://cheerio.js.org/) (Fast, flexible, and lean implementation of core jQuery designed specifically for
-    the server)
--   [Font Awesome](https://fontawesome.com/) (Beautiful icon library and toolkit)
+- [Next.js](https://nextjs.org/) (React framework for server-rendered React applications)
+- [React](https://reactjs.org/) (JavaScript library for building user interfaces)
+- [TypeScript](https://www.typescriptlang.org/) (Typed superset of JavaScript)
+- [Tailwind CSS](https://tailwindcss.com/) (Utility-first CSS framework)
+- [shadcn/ui](https://ui.shadcn.com/) (A comprehensive UI library providing a set of reusable React components for
+  building user interfaces)
+- [cheerio](https://cheerio.js.org/) (Fast, flexible, and lean implementation of core jQuery designed specifically for
+  the server)
+- [Font Awesome](https://fontawesome.com/) (Beautiful icon library and toolkit)
 
 ## Links
 
-[![portfolio](https://img.shields.io/badge/GitHub-crx-100000?style=for-the-badge&logo=github&labelColor=0f172a&color=1e293b&logoColor=fff)](https://github.com/XXCoreRangerX/)
-[![portfolio](https://img.shields.io/badge/GitHub-lemonek-100000?style=for-the-badge&logo=github&labelColor=0f172a&color=1e293b&logoColor=fff)](https://github.com/lemonekq/)
-[![portfolio](https://img.shields.io/badge/GitHub-rvyk-100000?style=for-the-badge&logo=github&labelColor=0f172a&color=1e293b&logoColor=fff)](https://github.com/rvyk/)
-[![portfolio](https://img.shields.io/badge/Github-majusss-100000?style=for-the-badge&logo=github&labelColor=0f172a&color=1e293b&logoColor=fff)](https://github.com/majusss/)
+[![portfolio](https://img.shields.io/badge/GitHub-crx-100000?style=for-the-badge&logo=github&labelColor=030303&color=111111&logoColor=fff)](https://github.com/XXCoreRangerX/)
+[![portfolio](https://img.shields.io/badge/GitHub-lemonek-100000?style=for-the-badge&logo=github&labelColor=030303&color=111111&logoColor=fff)](https://github.com/lemonekq/)
+[![portfolio](https://img.shields.io/badge/GitHub-rvyk-100000?style=for-the-badge&logo=github&labelColor=030303&color=111111&logoColor=fff)](https://github.com/rvyk/)
+[![portfolio](https://img.shields.io/badge/Github-majusss-100000?style=for-the-badge&logo=github&labelColor=030303&color=111111&logoColor=fff)](https://github.com/majusss/)
 [![linkedin](https://img.shields.io/badge/TRY-0A66C2?style=for-the-badge&logoColor=white)](https://plan.zstiojar.edu.pl/)
