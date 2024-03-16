@@ -3,7 +3,7 @@
 import ModeToggle from "@/components/mode-toggle";
 import { SearchClassroom } from "@/components/search-classroom";
 import { Button } from "@/components/ui/button";
-import icon from "@/public/icon-128x128.png";
+import icon from "@/resources/icon-128x128.png";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";

@@ -1,5 +1,3 @@
-import { MainLayout } from "@/components/main-layout";
-
 export default function Home() {
-    return <MainLayout />;
+    return <>a co ty tu robisz</>; // only loading and redirecting stuff here
 }
