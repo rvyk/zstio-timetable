@@ -27,8 +27,8 @@ export function Aside() {
         <Button
           variant="ghost"
           size="icon"
-          onClick={() => switchRoute("/timetable")}
-          className={path.startsWith("/timetable") ? "bg-accent text-accent-foreground hover:bg-accent/80" : ""}
+          onClick={() => switchRoute("/class")} // TODO: Make this grab the last route from localstorage
+          className={!path.startsWith("/substitutions") ? "bg-accent text-accent-foreground hover:bg-accent/80" : ""}
           aria-label="Timetable"
         >
           <FaCalendarDays className="h-5 w-5" />

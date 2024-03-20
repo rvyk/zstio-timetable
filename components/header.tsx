@@ -1,5 +1,6 @@
 "use client";
 
+import { Dropdowns } from "@/components/items/dropdown";
 import { Location } from "@/components/items/location";
 import { PwaButton } from "@/components/items/pwa-button";
 import { SearchClassroom } from "@/components/items/search-classroom";
@@ -28,15 +29,18 @@ export function Header() {
   const table = useContext(TimetableContext);
 
   return (
-    <header className="sticky top-0 z-30 flex w-full items-center border-b bg-background p-5">
-      <div className="flex flex-1 items-center gap-5">
+    <header className="sticky top-0 z-30 flex w-full items-center justify-between border-b bg-background p-5">
+      <div className="flex items-center gap-5">
         <Link prefetch={false} href="https://zstiojar.edu.pl" className="relative h-12 w-12 sm:hidden">
           <Image src={icon} alt="Logo" sizes="80vw" fill priority />
         </Link>
         <ShortHoursToggle />
         <Location className="max-sm:hidden" />
       </div>
-      <div className="justify-end font-medium text-muted-foreground">
+      <div className="flex flex-wrap items-center justify-center gap-2 max-sm:hidden">
+        <Dropdowns />
+      </div>
+      <div className="font-medium text-muted-foreground">
         <div className="flex flex-wrap gap-2 sm:hidden">
           <DropdownMenu onOpenChange={() => setIsOpened(!isOpened)} open={isOpened}>
             <DropdownMenuTrigger asChild>
@@ -62,8 +66,8 @@ export function Header() {
           <Button
             variant="ghost"
             size="icon"
-            onClick={() => switchRoute("/timetable")}
-            className={path.startsWith("/timetable") ? "bg-accent text-accent-foreground hover:bg-accent/80" : ""}
+            onClick={() => switchRoute("/class")}
+            className={path.startsWith("/class") ? "bg-accent text-accent-foreground hover:bg-accent/80" : ""}
             aria-label="Timetable"
           >
             <FaCalendarDays className="h-5 w-5" />

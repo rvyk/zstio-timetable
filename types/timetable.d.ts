@@ -1,6 +1,7 @@
-import { TableHour, TableLesson } from "@wulkanowy/timetable-parser";
+import { List, TableHour, TableLesson } from "@wulkanowy/timetable-parser";
 
 export type OptivumTimetable = {
+  id: string;
   hours: Record<number, TableHour>;
   lessons: TableLesson[][][];
   generatedDate: string | null;
@@ -8,4 +9,5 @@ export type OptivumTimetable = {
   validDate: string;
   days: TableLesson[][][];
   dayNames: string[];
+  list: List;
 };

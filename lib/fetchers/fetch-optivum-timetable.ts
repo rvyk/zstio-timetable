@@ -1,5 +1,6 @@
 "use server";
 
+import fetchOptivumList from "@/lib/fetchers/fetch-optivum-list";
 import { OptivumTimetable } from "@/types/timetable";
 import { Table } from "@wulkanowy/timetable-parser";
 
@@ -18,6 +19,7 @@ const fetchOptivumTimetable = async (type: string, index: string): Promise<Optiv
   const timeTableData = new Table(data);
 
   return {
+    id,
     hours: timeTableData.getHours(),
     lessons: timeTableData.getDays(),
     generatedDate: timeTableData.getGeneratedDate(),
@@ -25,6 +27,7 @@ const fetchOptivumTimetable = async (type: string, index: string): Promise<Optiv
     validDate: timeTableData.getVersionInfo(), //TODO: convert data format
     days: timeTableData.getDays(),
     dayNames: timeTableData.getDayNames(),
+    list: await fetchOptivumList(),
   };
 };
 

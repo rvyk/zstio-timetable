@@ -14,6 +14,8 @@ export function MainTable() {
   const table = useContext(TimetableContext);
   const isDesktop = useMediaQuery("(min-width: 768px)");
   if (!table) return null;
+  if (table.lessons.every((row) => row[0].length === 0))
+    return <p className="pt-5 text-center text-2xl font-bold">No lessons</p>;
   const maxLessons = Math.max(Object.entries(table.hours).length, ...table.lessons.map((day) => day.length));
   return (
     <>
@@ -37,11 +39,13 @@ export function MainTable() {
               </Button>
             </header>
             <section className="flex flex-wrap border-t">
-              {Array.from({ length: 10 }).map((_, index) => (
-                <Fragment key={index}>
+              {Array.from({ length: maxLessons }).map((_, lessonIndex) => (
+                <Fragment key={lessonIndex}>
                   <div className="flex basis-2/6 items-center justify-center gap-3 border-b border-r p-3 text-muted-foreground">
-                    <span className="text-xl font-semibold">{index + 1}</span>
-                    <span className="text-xs font-medium">8:00 - 8:45</span>
+                    <span className="text-xl font-semibold">{lessonIndex + 1}</span>
+                    <span className="text-xs font-medium">
+                      {table.hours[lessonIndex + 1]?.timeFrom} - {table.hours[lessonIndex + 1]?.timeTo}
+                    </span>
                   </div>
                   <div className="flex basis-4/6 items-center justify-between border-b p-3">
                     <div className="grid text-left">
@@ -53,7 +57,7 @@ export function MainTable() {
                 </Fragment>
               ))}
               <div className="p-3 text-muted-foreground">
-                <Link href="https://www.zstio-elektronika.pl/plan/plany/o1.html">Data source</Link>
+                <Link href={`${process.env.NEXT_PUBLIC_TIMETABLE_URL}plany/${table.id}.html`}>Data source</Link>
               </div>
             </section>
           </>
@@ -61,7 +65,7 @@ export function MainTable() {
         {isDesktop && (
           <Table>
             <TableCaption>
-              <Link href="https://www.zstio-elektronika.pl/plan/plany/o1.html">Data source</Link>
+              <Link href={`${process.env.NEXT_PUBLIC_TIMETABLE_URL}plany/${table.id}.html`}>Data source</Link>
             </TableCaption>
             <>
               <TableHeader>
@@ -103,14 +107,16 @@ export function MainTable() {
                     <TableHead>
                       <div className="flex items-center justify-center gap-5 text-nowrap">
                         <span className="text-xl font-bold">{lessonIndex + 1}</span>
-                        <span className="text-sm font-medium text-muted-foreground">8:00 - 8:45</span>
+                        <span className="text-sm font-medium text-muted-foreground">
+                          {table.hours[lessonIndex + 1]?.timeFrom} - {table.hours[lessonIndex + 1]?.timeTo}
+                        </span>
                       </div>
                     </TableHead>
                     {table.lessons.map((day, dayIndex) => {
                       const lessonCell = day[lessonIndex];
                       if (lessonCell.length === 1)
                         return (
-                          <TableCell key={`${dayIndex}-${lessonIndex}`} className="!px-6 !py-7">
+                          <TableCell key={`${dayIndex}-${lessonIndex}`}>
                             <div
                               className="flex items-center justify-between gap-5 text-nowrap"
                               key={`${dayIndex}-${lessonIndex}-0`}
@@ -125,25 +131,23 @@ export function MainTable() {
                         );
                       if (lessonCell.length === 2)
                         return (
-                          <TableCell key={`${dayIndex}-${lessonIndex}`} className="!px-6 !py-7">
+                          <TableCell key={`${dayIndex}-${lessonIndex}`}>
                             <div className="flex flex-row justify-between gap-10">
                               {lessonCell.map((subLesson, subLessonIndex) => (
                                 <div
-                                  className="flex items-center justify-between text-nowrap"
+                                  className="flex items-center gap-4 text-nowrap"
                                   key={`${dayIndex}-${lessonIndex}-${subLessonIndex}`}
                                 >
-                                  <div className="inline-flex items-center justify-center gap-1">
-                                    <span className="text-xl font-semibold">
-                                      {subLesson.groupName?.split("/")[0] ?? subLesson.groupName}
-                                    </span>
-                                    <span className="flex flex-col text-left">
-                                      <span className="font-medium">{subLesson.subject}</span>
-                                      <div className="flex justify-between">
-                                        <span className="text-muted-foreground">{subLesson.teacher}</span>
-                                        <span className="text-muted-foreground">{subLesson.room}</span>
-                                      </div>
-                                    </span>
-                                  </div>
+                                  <span className="text-xl font-semibold">
+                                    {subLesson.groupName?.split("/")[0] ?? subLesson.groupName}
+                                  </span>
+                                  <span className="flex flex-col text-left">
+                                    <span className="font-medium">{subLesson.subject}</span>
+                                    <div className="flex justify-between">
+                                      <span className="text-muted-foreground">{subLesson.teacher}</span>
+                                      <span className="text-muted-foreground">{subLesson.room}</span>
+                                    </div>
+                                  </span>
                                 </div>
                               ))}
                             </div>
