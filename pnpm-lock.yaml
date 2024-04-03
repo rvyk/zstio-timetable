@@ -60,8 +60,8 @@ dependencies:
     specifier: ^2.1.0
     version: 2.1.0
   embla-carousel-react:
-    specifier: 8.0.0-rc19
-    version: 8.0.0-rc19(react@18.2.0)
+    specifier: 8.0.1
+    version: 8.0.1(react@18.2.0)
   framer-motion:
     specifier: ^11.0.12
     version: 11.0.12(react-dom@18.2.0)(react@18.2.0)
@@ -3941,26 +3941,26 @@ packages:
   /electron-to-chromium@1.4.674:
     resolution: {integrity: sha512-jZtIZxv9FlwTLX5kVZStUtXZywhEi3vqvY6iEzJnc57cNgHFQ5JCczElTs/062v6ODTT7eX8ZOTqQcxa3nMUWQ==}
 
-  /embla-carousel-react@8.0.0-rc19(react@18.2.0):
-    resolution: {integrity: sha512-4BBj1HvlUqhWXFyDJOL/JbQ74jtekfdH646B1wQzM9QmWn6CEcbD/SmovKqc6B5jYTKaaGEGEEw7bpUJRajA8w==}
+  /embla-carousel-react@8.0.1(react@18.2.0):
+    resolution: {integrity: sha512-cpFQ/HwCsjBjzpu9Z9IHmZ9DaCSf/wo4q+qUTcRW3SsNv+1Q8IY7Y8J2QIyTmz0vOWY7tliu3uE2gqRH7ZDwOQ==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.1 || ^18.0.0
     dependencies:
-      embla-carousel: 8.0.0-rc19
-      embla-carousel-reactive-utils: 8.0.0-rc19(embla-carousel@8.0.0-rc19)
+      embla-carousel: 8.0.1
+      embla-carousel-reactive-utils: 8.0.1(embla-carousel@8.0.1)
       react: 18.2.0
     dev: false
 
-  /embla-carousel-reactive-utils@8.0.0-rc19(embla-carousel@8.0.0-rc19):
-    resolution: {integrity: sha512-ed9NppY0OxTtrSIwTCYNcMLlQfSNcNy8Zsw8uIG0te3qrhvQ2ePPsbcElK2SRAV8VMU6G7JQweQIb6amzYMDXA==}
+  /embla-carousel-reactive-utils@8.0.1(embla-carousel@8.0.1):
+    resolution: {integrity: sha512-KBSkz2h9LwVFkOrwzIJKgXbmEDlIShkreeOHnV8Cph09AdBMzb412nRkcctbeDcuG9x3CVsqLzJrSXnZeYhFPQ==}
     peerDependencies:
-      embla-carousel: 8.0.0-rc19
+      embla-carousel: 8.0.1
     dependencies:
-      embla-carousel: 8.0.0-rc19
+      embla-carousel: 8.0.1
     dev: false
 
-  /embla-carousel@8.0.0-rc19:
-    resolution: {integrity: sha512-PAChVyYoVZo8subkBN8LjZ7+0vk4CmVvMnxH0Y2ux76VUEUBl1wk5xDo8+MUhH5MXU6ZrgkBpMe++bKob1Z+2g==}
+  /embla-carousel@8.0.1:
+    resolution: {integrity: sha512-RsaMRyBCd144N95gb3XoI+H9zj3RI4y0qcfvKYEh2tIAIEenL9CW9vwzltCeoYkWYipGdkvup+HGT9ewG1YTEw==}
     dev: false
 
   /emoji-regex@8.0.0:
