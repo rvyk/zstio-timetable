@@ -8,9 +8,9 @@ import Navbar from "@/components/ui/navbar";
 import fetchOptivumList from "@/lib/fetchers/fetchOptivumList";
 import fetchOptivumTimetable from "@/lib/fetchers/fetchOptivumTimetable";
 import { Metadata, NextPage } from "next";
-import Error from "next/error";
 
-export const revalidate = 3600;
+export const revalidate = 10800,
+  dynamic = "force-static";
 
 const MainRoute: NextPage<{ params: { all: string[] } }> = async ({
   params,
@@ -33,27 +33,19 @@ const MainRoute: NextPage<{ params: { all: string[] } }> = async ({
       </TimetableProvider>
     );
   } catch (error) {
-    return <Error statusCode={500} />;
+    // return <Error statusCode={500} />;
   }
+  return <>nie mo</>;
 };
 
-export const generateStaticParams = async () => {
-  const { classes, teachers, rooms } = await fetchOptivumList();
-
-  const paths = [
-    ...(classes?.map(
-      (classItem: { value: string }) => `/class/${classItem.value}`,
-    ) || []),
-    ...(teachers?.map(
-      (teacherItem: { value: string }) => `/teacher/${teacherItem.value}`,
-    ) || []),
-    ...(rooms?.map(
-      (roomItem: { value: string }) => `/room/${roomItem.value}`,
-    ) || []),
+export async function generateStaticParams() {
+  const { classes, rooms, teachers } = await fetchOptivumList();
+  return [
+    ...classes.map((c) => ({ all: ["class", c.value] })),
+    ...(rooms ?? []).map((r) => ({ all: ["room", r.value] })),
+    ...(teachers ?? []).map((t) => ({ all: ["teacher", t.value] })),
   ];
-
-  return paths.map((slug) => ({ slug }));
-};
+}
 
 export async function generateMetadata({
   params,
