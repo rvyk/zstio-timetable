@@ -5,7 +5,7 @@ import ButtonWrapper from "@/components/navbar-buttons/wrapper";
 import {
   SettingsContext,
   SettingsContextType,
-} from "@/components/setting-context";
+} from "@/components/setting-provider";
 import { cn, normalHours, shortHours } from "@/lib/utils";
 import { CalculatorIcon } from "@heroicons/react/24/outline";
 import { useContext, useState } from "react";

@@ -1,7 +1,12 @@
 "use client";
 
-import Layout from "@/components/layout";
-import { Table } from "@/types/timetable";
+import Footer from "@/components/footer";
+import Messages from "@/components/messages";
+import SettingsProvider from "@/components/setting-provider";
+import TimetableProvider from "@/components/timetable-provider";
+import Jumbotron from "@/components/ui/jumbotron";
+import Navbar from "@/components/ui/navbar";
+import { OptivumTimetable } from "@/types/timetable";
 import { NextPage } from "next";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
@@ -15,7 +20,16 @@ const Home: NextPage = () => {
     router.replace(route);
   }, [router]);
 
-  return <Layout props={{} as Table} />;
+  return (
+    <TimetableProvider value={{} as OptivumTimetable}>
+      <SettingsProvider>
+        <Navbar />
+        {process.env.NEXT_PUBLIC_CMS && <Messages />}
+        <Jumbotron />
+        <Footer />
+      </SettingsProvider>
+    </TimetableProvider>
+  );
 };
 
 export default Home;

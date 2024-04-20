@@ -4,8 +4,10 @@ import {
   RenderSubstitutions,
   RenderSubstitutionsMobile,
 } from "@/components/content-items/substitutions/render-substitutions";
+import { TimetableContext } from "@/components/timetable-provider";
 import Head from "next/head";
 import { useSearchParams } from "next/navigation";
+import { useContext } from "react";
 import SubstitutionsBottomBar from "../substitutions-bottom-bar";
 
 export const parseBranchField = (branch: string): string => {
@@ -15,9 +17,8 @@ export const parseBranchField = (branch: string): string => {
   return result.trim();
 };
 
-const Substitutions: React.FC<{ substitutions: Substitutions }> = ({
-  substitutions,
-}) => {
+const Substitutions: React.FC = () => {
+  const optivumTimetable = useContext(TimetableContext);
   const queryParams = useSearchParams();
   const branches = queryParams.get("branches")?.split(",") || [];
   const teachers = queryParams.get("teachers")?.split(",") || [];
@@ -34,9 +35,9 @@ const Substitutions: React.FC<{ substitutions: Substitutions }> = ({
           ))}
       </Head>
       <>
-        {substitutions.tables.length ? (
-          substitutions.tables.map(
-            (table: SubstitutionTables, index: number) => {
+        {optivumTimetable?.substitutions?.tables?.length ? (
+          optivumTimetable?.substitutions?.tables.map(
+            (table: SubstitutionTable, index: number) => {
               const filteredSubstitutions = table.zastepstwa.filter(
                 (substitution: Substitution) =>
                   (branches.length === 0 ||
@@ -51,7 +52,9 @@ const Substitutions: React.FC<{ substitutions: Substitutions }> = ({
                     <RenderSubstitutions
                       index={index}
                       filteredSubstitutions={filteredSubstitutions}
-                      status={substitutions.status}
+                      status={
+                        optivumTimetable?.substitutions?.tables?.length > 0
+                      }
                       time={table.time}
                     />
                   </div>
@@ -59,10 +62,14 @@ const Substitutions: React.FC<{ substitutions: Substitutions }> = ({
                     <RenderSubstitutionsMobile
                       index={index}
                       filteredSubstitutions={filteredSubstitutions}
-                      status={substitutions.status}
+                      status={
+                        optivumTimetable?.substitutions?.tables?.length > 0
+                      }
                       time={table.time}
                     />
-                    <SubstitutionsBottomBar substitutions={substitutions} />
+                    <SubstitutionsBottomBar
+                      substitutions={optivumTimetable.substitutions}
+                    />
                   </div>
                 </div>
               );
@@ -71,7 +78,7 @@ const Substitutions: React.FC<{ substitutions: Substitutions }> = ({
         ) : (
           <div className="flex h-[calc(100vh-60px)] flex-col items-center justify-center text-center md:mb-16 md:h-fit">
             <p className="font-bold">Brak zastepstwa</p>
-            <p>{substitutions.timeRange}</p>
+            <p>{optivumTimetable?.substitutions?.timeRange}</p>
           </div>
         )}
       </>

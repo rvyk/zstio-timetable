@@ -11,26 +11,18 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
-import { Table } from "@/types/timetable";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
-import { List } from "@wulkanowy/timetable-parser";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import { useContext, useState } from "react";
+import { TimetableContext } from "../timetable-provider";
 
-interface BottomBarProps {
-  timeTable: Table["timeTable"];
-  timeTableList: List;
-}
-
-const BottomBar: React.FC<BottomBarProps> = ({ timeTable, timeTableList }) => {
+const BottomBar = () => {
+  const optivumTimetable = useContext(TimetableContext);
   const [isDrawerOpened, setIsDrawerOpened] = useState(false);
-
-  const router = useRouter();
 
   const dropdowns = [
     {
-      data: timeTableList.classes.map((c) => ({
+      data: optivumTimetable?.list.classes.map((c) => ({
         type: "class",
         name: c.name,
         value: c.value,
@@ -39,7 +31,7 @@ const BottomBar: React.FC<BottomBarProps> = ({ timeTable, timeTableList }) => {
       title: "Oddziały",
     },
     {
-      data: timeTableList.teachers?.map((t) => ({
+      data: optivumTimetable?.list.teachers?.map((t) => ({
         type: "teacher",
         name: t.name,
         value: t.value,
@@ -48,7 +40,7 @@ const BottomBar: React.FC<BottomBarProps> = ({ timeTable, timeTableList }) => {
       title: "Nauczyciele",
     },
     {
-      data: timeTableList.rooms?.map((r) => ({
+      data: optivumTimetable?.list.rooms?.map((r) => ({
         type: "room",
         name: r.name,
         value: r.value,
@@ -81,10 +73,10 @@ const BottomBar: React.FC<BottomBarProps> = ({ timeTable, timeTableList }) => {
             <div className="flex h-14 w-[70%] cursor-pointer items-center whitespace-nowrap rounded-xl bg-[#27161a] transition-all duration-300 hover:bg-[#27161a] dark:bg-[#202020] dark:hover:bg-[#171717]">
               <div className="flex w-full justify-center">
                 <p className="mr-1 text-xl font-normal text-gray-100 transition-all dark:text-gray-300">
-                  {timeTable.data.text} /
+                  {optivumTimetable?.type} /
                 </p>
                 <p className="overflow-hidden text-ellipsis text-xl font-bold text-gray-100 transition-all dark:text-gray-300">
-                  {timeTable.data.title}
+                  {optivumTimetable?.title}
                 </p>
               </div>
             </div>
@@ -94,16 +86,16 @@ const BottomBar: React.FC<BottomBarProps> = ({ timeTable, timeTableList }) => {
               <DrawerHeader className="flex w-full flex-col overflow-scroll transition-all duration-300">
                 <DrawerTitle className="flex items-center justify-center">
                   <p className="mr-1 text-xl font-normal text-gray-900 transition-all dark:text-gray-300">
-                    {timeTable.data.text} /
+                    {optivumTimetable?.type} /
                   </p>
                   <p className="overflow-hidden text-ellipsis text-xl font-bold text-gray-900 transition-all dark:text-gray-300">
-                    {timeTable.data.title}
+                    {optivumTimetable?.title}
                   </p>
                 </DrawerTitle>
               </DrawerHeader>
 
               <div className="flex w-full flex-col items-center justify-center px-4">
-                <SearchBar timeTableList={timeTableList} />
+                <SearchBar />
                 {dropdowns?.map((dropdown) => (
                   <div key={`dropdown-container-${dropdown.title}`}>
                     {!!dropdown.data?.length && (
@@ -119,26 +111,26 @@ const BottomBar: React.FC<BottomBarProps> = ({ timeTable, timeTableList }) => {
               </div>
               <DrawerFooter>
                 <div className="flex w-full flex-col items-center justify-center text-center text-gray-900 dark:text-gray-300">
-                  {timeTable.data.generatedDate && (
+                  {optivumTimetable?.generatedDate && (
                     <p>
                       Wygenerowano:{" "}
                       <span className="font-semibold">
-                        {timeTable.data.generatedDate}
+                        {optivumTimetable.generatedDate}
                       </span>
                     </p>
                   )}
-                  {timeTable.data.validDate && (
+                  {optivumTimetable?.validDate && (
                     <p>
                       Obowiązuje od:{" "}
                       <span className="font-semibold">
-                        {timeTable.data.validDate}
+                        {optivumTimetable.validDate}
                       </span>
                     </p>
                   )}
-                  {timeTable.data.id && (
+                  {optivumTimetable?.id && (
                     <Link
                       prefetch={false}
-                      href={`${process.env.NEXT_PUBLIC_TIMETABLE_URL}/plany/${timeTable.data.id}.html`}
+                      href={`${process.env.NEXT_PUBLIC_TIMETABLE_URL}/plany/${optivumTimetable.id}.html`}
                       target="_blank"
                       className="font-semibold"
                     >
@@ -147,9 +139,11 @@ const BottomBar: React.FC<BottomBarProps> = ({ timeTable, timeTableList }) => {
                   )}
                 </div>
                 <Footer />
-                {!timeTable.data.id &&
-                  !timeTable.data.validDate &&
-                  !timeTable.data.generatedDate && <div className="h-16"></div>}
+                {!optivumTimetable?.id &&
+                  !optivumTimetable?.validDate &&
+                  !optivumTimetable?.generatedDate && (
+                    <div className="h-16"></div>
+                  )}
               </DrawerFooter>
             </div>
           </DrawerContent>

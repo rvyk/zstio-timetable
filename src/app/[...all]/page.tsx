@@ -1,10 +1,14 @@
-import Layout from "@/components/layout";
-import fetchSubstitutions from "@/lib/fetchers/fetchSubstitutions";
-import fetchTimetable from "@/lib/fetchers/fetchTimetable";
-import fetchTimetableList from "@/lib/fetchers/fetchTimetableList";
-import { Table, TimeTable } from "@/types/timetable";
-import { List } from "@wulkanowy/timetable-parser";
+import TimeTable from "@/components/content-items/timetable/timetable";
+import Footer from "@/components/footer";
+import Messages from "@/components/messages";
+import SettingsProvider from "@/components/setting-provider";
+import TimetableProvider from "@/components/timetable-provider";
+import Jumbotron from "@/components/ui/jumbotron";
+import Navbar from "@/components/ui/navbar";
+import fetchOptivumList from "@/lib/fetchers/fetchOptivumList";
+import fetchOptivumTimetable from "@/lib/fetchers/fetchOptivumTimetable";
 import { Metadata, NextPage } from "next";
+import Error from "next/error";
 
 export const revalidate = 3600;
 
@@ -13,33 +17,28 @@ const MainRoute: NextPage<{ params: { all: string[] } }> = async ({
 }) => {
   if (!["class", "teacher", "room", "zastepstwa"].includes(params.all[0]))
     return null;
-  const { timeTable } = await fetchTimetable(params.all[0], params.all[1]);
 
-  const {
-    data: { classes = [], teachers = [], rooms = [] },
-  } = (await fetchTimetableList()) as { data: List };
+  try {
+    const timeTable = await fetchOptivumTimetable(params.all[0], params.all[1]);
 
-  const props: Table = {
-    timeTable: timeTable ?? ({} as TimeTable),
-    timeTableList: {
-      classes,
-      teachers,
-      rooms,
-    },
-    substitutions: await fetchSubstitutions(),
-  };
-
-  return <Layout props={props} />;
+    return (
+      <TimetableProvider value={timeTable}>
+        <SettingsProvider>
+          <Navbar />
+          {process.env.NEXT_PUBLIC_CMS && <Messages />}
+          <Jumbotron />
+          <TimeTable />
+          <Footer renderInMobile={false} />
+        </SettingsProvider>
+      </TimetableProvider>
+    );
+  } catch (error) {
+    return <Error statusCode={500} />;
+  }
 };
 
 export const generateStaticParams = async () => {
-  const { data, ok } = await fetchTimetableList();
-
-  if (!ok) {
-    return [{ slug: "" }];
-  }
-
-  const { classes, teachers, rooms } = data as List;
+  const { classes, teachers, rooms } = await fetchOptivumList();
 
   const paths = [
     ...(classes?.map(
@@ -62,23 +61,15 @@ export async function generateMetadata({
   params: { all: string[] };
   searchParams: {};
 }): Promise<Metadata> {
-  const description =
-    "W prosty sposób sprawdź plan zajęć oraz zastępstwa różnych klas, nauczycieli i sal.";
-  const isSubstitutions = params.all[0] === "zastepstwa";
-  if (isSubstitutions)
-    return {
-      title: "ZSTiO - Zastępstwa",
-      description,
-    };
-
-  const { timeTable } = await fetchTimetable(params.all[0], params.all[1]);
+  const timeTable = await fetchOptivumTimetable(params.all[0], params.all[1]);
   const titleTimeTable = `${
-    timeTable?.data?.title ? `${timeTable?.data?.title} | ` : ""
+    timeTable?.title ? `${timeTable?.title} | ` : ""
   }ZSTiO - Plan lekcji`;
 
   return {
     title: titleTimeTable,
-    description,
+    description:
+      "W prosty sposób sprawdź plan zajęć oraz zastępstwa różnych klas, nauczycieli i sal.",
   };
 }
 

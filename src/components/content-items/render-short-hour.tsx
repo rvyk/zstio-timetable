@@ -5,7 +5,7 @@ import { adjustShortenedLessons, normalHours } from "@/lib/utils";
 import { MinusIcon, PlusIcon } from "@heroicons/react/24/outline";
 import { useCounter } from "@uidotdev/usehooks";
 import { Dispatch, SetStateAction, useContext, useState } from "react";
-import { SettingsContext, SettingsContextType } from "../setting-context";
+import { SettingsContext, SettingsContextType } from "../setting-provider";
 import {
   ResponsiveDialog,
   ResponsiveDialogClose,

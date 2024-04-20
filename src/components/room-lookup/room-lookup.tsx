@@ -3,9 +3,9 @@
 import Dropdown from "@/components/room-lookup/dropdown";
 import { Button } from "@/components/ui/button";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import fetchEmptyClasses from "@/lib/fetchers/fetchEmptyClasses";
+import fetchEmptyClasses from "@/lib/fetchers/getEmptyRooms";
 import { days } from "@/lib/utils";
-import { EmptyClasses } from "@/types/api";
+import { Room } from "@/types/api";
 import { MinusIcon, PlusIcon } from "@heroicons/react/24/outline";
 import { useCounter } from "@uidotdev/usehooks";
 import { useState } from "react";
@@ -34,19 +34,17 @@ const ResponsiveLookupDialog: React.FC<ResponsiveLookupDialogProps> = ({
     max: 14,
   });
   const [isPending, setIsPending] = useState(false);
-  const [data, setData] = useState<EmptyClasses[] | null>(null);
+  const [data, setData] = useState<Room[] | null>(null);
 
   const handleRoomLookup = async () => {
     if (isPending) return;
     setIsPending(true);
 
     setData(
-      (
-        await fetchEmptyClasses(
-          selectedDay,
-          selectedLesson - 1 < 0 ? 0 : selectedLesson - 1,
-        )
-      ).classes,
+      await fetchEmptyClasses(
+        selectedDay,
+        selectedLesson - 1 < 0 ? 0 : selectedLesson - 1,
+      ),
     );
 
     setIsPending(false);

@@ -8,7 +8,8 @@ import ShortHoursCalculator from "@/components/content-items/timetable/short-hou
 import {
   SettingsContext,
   SettingsContextType,
-} from "@/components/setting-context";
+} from "@/components/setting-provider";
+import { TimetableContext } from "@/components/timetable-provider";
 import { ListLargeItem, ListRow, ListSmallItem } from "@/components/ui/list";
 import {
   Table,
@@ -19,14 +20,11 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { days, getCurrentLesson } from "@/lib/utils";
-import { Table as TableType } from "@/types/timetable";
 import Link from "next/link";
 import { useContext } from "react";
 import CurrentLesson from "./current-lesson";
 
 interface TimeTableProps {
-  timeTable: TableType["timeTable"];
-  substitutions: TableType["substitutions"];
   maxLessons: number;
 }
 
@@ -35,17 +33,14 @@ interface TimeTableMobileProps extends TimeTableProps {
   setSelectedDay: React.Dispatch<React.SetStateAction<number>>;
 }
 
-const RenderTimeTable: React.FC<TimeTableProps> = ({
-  timeTable,
-  maxLessons,
-  substitutions,
-}) => {
+const RenderTimeTable: React.FC<TimeTableProps> = ({ maxLessons }) => {
+  const optivumTimetable = useContext(TimetableContext);
   const [hoursTime] = (useContext(SettingsContext) as SettingsContextType)
     .hoursTime;
 
   return (
     <Table className="hidden justify-center md:flex">
-      <TableCaption status={timeTable.status}>
+      <TableCaption>
         <div className="hidden md:block ">
           <ShortHoursCalculator className="dark:!bg-[#171717] dark:hover:!bg-[#202020]" />
         </div>
@@ -53,10 +48,10 @@ const RenderTimeTable: React.FC<TimeTableProps> = ({
           <ShortHoursButton />
         </div>
         <p className="mr-1 text-lg font-normal text-gray-500 transition-all dark:text-gray-300 lg:text-xl">
-          {timeTable?.data?.text} /
+          {optivumTimetable?.type} /
         </p>
         <p className="text-lg font-bold text-gray-500 transition-all dark:text-gray-300 lg:text-xl">
-          {timeTable?.data?.title}
+          {optivumTimetable?.title}
         </p>
       </TableCaption>
       <TableHeader />
@@ -90,7 +85,7 @@ const RenderTimeTable: React.FC<TimeTableProps> = ({
                     {timeFrom} - {timeTo}
                   </TableCell>
 
-                  {timeTable.data?.lessons?.map((day, dayIndex) => {
+                  {optivumTimetable?.lessons?.map((day, dayIndex) => {
                     return (
                       <TableCell key={dayIndex}>
                         {day[lessonIndex]?.map((lesson, iterationIndex) => {
@@ -98,12 +93,12 @@ const RenderTimeTable: React.FC<TimeTableProps> = ({
                             TimeTableSubstitutions(
                               dayIndex,
                               lessonIndex,
-                              timeTable.data.title,
-                              substitutions.tables[0],
+                              optivumTimetable.title,
+                              optivumTimetable.substitutions.tables[0],
                               lesson,
                               iterationIndex,
                               day,
-                              timeTable.data.text,
+                              optivumTimetable.type,
                             );
 
                           return (
@@ -140,28 +135,28 @@ const RenderTimeTable: React.FC<TimeTableProps> = ({
       )}
       <TableFooter>
         <TableRow
-          reverseColor={Object.entries(timeTable.data.hours).length % 2 == 0}
+          reverseColor={
+            Object.entries(optivumTimetable?.hours ?? 0).length % 2 == 0
+          }
         >
-          {timeTable.status && (
-            <TableCell
-              colSpan={5}
-              scope="row"
-              className="!border-none font-semibold"
-            >
-              {timeTable.data.generatedDate &&
-                `Wygenerowano: ${timeTable.data.generatedDate}`}{" "}
-              {timeTable.data.validDate &&
-                `Obowiązuje od: ${timeTable.data.validDate}`}
-            </TableCell>
-          )}
           <TableCell
-            colSpan={!timeTable.status ? 7 : 2}
+            colSpan={5}
+            scope="row"
+            className="!border-none font-semibold"
+          >
+            {optivumTimetable?.generatedDate &&
+              `Wygenerowano: ${optivumTimetable?.generatedDate}`}{" "}
+            {optivumTimetable?.validDate &&
+              `Obowiązuje od: ${optivumTimetable?.validDate}`}
+          </TableCell>
+          <TableCell
+            colSpan={2}
             scope="row"
             className="text-right font-semibold"
           >
             <Link
               prefetch={false}
-              href={`${process.env.NEXT_PUBLIC_TIMETABLE_URL}/plany/${timeTable.data.id}.html`}
+              href={`${process.env.NEXT_PUBLIC_TIMETABLE_URL}/plany/${optivumTimetable?.id}.html`}
               target="_blank"
             >
               Źródło danych
@@ -175,11 +170,10 @@ const RenderTimeTable: React.FC<TimeTableProps> = ({
 
 const RenderTimeTableMobile: React.FC<TimeTableMobileProps> = ({
   maxLessons,
-  substitutions,
-  timeTable,
   selectedDay,
   setSelectedDay,
 }) => {
+  const optivumTimetable = useContext(TimetableContext);
   const [hoursTime] = (useContext(SettingsContext) as SettingsContextType)
     .hoursTime;
   return (
@@ -206,7 +200,7 @@ const RenderTimeTableMobile: React.FC<TimeTableMobileProps> = ({
       </div>
 
       <div className="min-w-screen min-h-[calc(100vh-196px)]">
-        {timeTable.status && Object.entries(hoursTime).length > 1 ? (
+        {Object.entries(hoursTime).length > 1 ? (
           Object.entries(hoursTime)
             .map(([_, value]) => value)
             .splice(0, maxLessons)
@@ -233,20 +227,20 @@ const RenderTimeTableMobile: React.FC<TimeTableMobileProps> = ({
                   </ListSmallItem>
 
                   <ListLargeItem>
-                    {timeTable.data?.lessons[selectedDay][
+                    {optivumTimetable?.lessons[selectedDay][
                       lessonNumber - 1
                     ]?.map((day, iterationIndex) => {
                       const { substitution, possibleSubstitution, sure } =
                         MobileTimeTableSubstitutions(
                           selectedDay,
                           lessonIndex,
-                          timeTable.data.title,
-                          substitutions.tables[0],
+                          optivumTimetable.title,
+                          optivumTimetable.substitutions.tables[0],
                           day,
                           iterationIndex,
                           lessonNumber,
-                          timeTable.data.lessons,
-                          timeTable.data.text,
+                          optivumTimetable.lessons,
+                          optivumTimetable.type,
                         );
 
                       return (

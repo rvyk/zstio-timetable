@@ -8,14 +8,13 @@ type Substitution = {
   message: string;
 };
 
-type SubstitutionTables = {
+type SubstitutionTable = {
   time: string;
   dayIndex: number;
   zastepstwa: Substitution[];
 };
 
-type Substitutions = {
-  status: boolean;
+type SubstitutionsPage = {
   timeRange: string;
-  tables: SubstitutionTables[];
+  tables: SubstitutionTable[];
 };

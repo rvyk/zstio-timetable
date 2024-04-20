@@ -3,6 +3,9 @@
 import { cn, days } from "@/lib/utils";
 import { ArrowPathIcon } from "@heroicons/react/24/outline";
 import { cva } from "class-variance-authority";
+import { usePathname } from "next/navigation";
+import { useContext } from "react";
+import { TimetableContext } from "../timetable-provider";
 
 interface TableProps {
   children: React.ReactNode;
@@ -20,21 +23,22 @@ const Table: React.FC<TableProps> = ({ children, className }) => (
 );
 
 interface TableCaptionProps {
-  status: boolean;
-  isLoading?: boolean;
   children?: React.ReactNode;
-  isSubstitutions?: boolean;
   className?: string;
 }
 
-const TableCaption: React.FC<TableCaptionProps> = ({
-  status,
-  isLoading,
-  children,
-  isSubstitutions,
-  className,
-}) => {
-  if (!status) {
+const TableCaption: React.FC<TableCaptionProps> = ({ children, className }) => {
+  const pathname = usePathname();
+  const isLoading = pathname === "/";
+  const isSubstitutions = pathname === "/substitutions";
+  const optivumTimetable = useContext(TimetableContext);
+
+  const hasNoTimetable = !optivumTimetable?.days?.length;
+  const hasNoSubstitutions = optivumTimetable?.substitutions?.tables?.every(
+    (table) => table.zastepstwa.length === 0,
+  );
+
+  if (hasNoTimetable || hasNoSubstitutions) {
     return (
       <caption className="bg-white p-5 text-left text-lg font-semibold text-gray-900 transition-all dark:bg-[#202020] dark:text-gray-300">
         <p className="mr-1 text-lg font-normal text-gray-500 transition-all dark:text-gray-400 lg:text-xl">

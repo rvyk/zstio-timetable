@@ -30,11 +30,7 @@ const RenderSubstitutions: React.FC<RenderSubstitutionsProps> = ({
 }) => {
   return (
     <Table className="hidden justify-center md:flex">
-      <TableCaption
-        status={status}
-        isSubstitutions={true}
-        className="flex-col !items-start justify-center"
-      >
+      <TableCaption className="flex-col !items-start justify-center">
         {time}
         <Filters />
       </TableCaption>

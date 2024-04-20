@@ -1,15 +1,12 @@
 "use client";
 
 import { Dropdown } from "@/components/content-items/bottom-bar/dropdown";
+import { TimetableContext } from "@/components/timetable-provider";
 import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
-import { List } from "@wulkanowy/timetable-parser";
-import { useState } from "react";
+import { useContext, useState } from "react";
 
-interface SearchBarProps {
-  timeTableList: List;
-}
-
-const SearchBar: React.FC<SearchBarProps> = ({ timeTableList }) => {
+const SearchBar = () => {
+  const optivumTimetable = useContext(TimetableContext);
   const [query, setQuery] = useState("");
   const [searchResults, setSearchResults] = useState<
     { type: string; name: string; value: string }[]
@@ -20,24 +17,24 @@ const SearchBar: React.FC<SearchBarProps> = ({ timeTableList }) => {
     const term = e.target.value;
 
     setQuery(term);
-    const classResults = timeTableList.classes
+    const classResults = optivumTimetable?.list.classes
       .filter((cls) => cls.name.toLowerCase().includes(term.toLowerCase()))
       .slice(0, 8)
-      .map((classes) => ({ ...classes, type: "class" }));
+      .map((classes) => ({ ...classes, type: "class" })) ?? [];
 
     const teacherResults =
-      timeTableList.teachers
+      optivumTimetable?.list.teachers
         ?.filter((teacher) =>
           teacher.name.toLowerCase().includes(term.toLowerCase()),
         )
         .slice(0, 8)
-        .map((teachers) => ({ ...teachers, type: "teacher" })) || [];
+        .map((teachers) => ({ ...teachers, type: "teacher" })) ?? [];
 
     const roomsResults =
-      timeTableList.rooms
+      optivumTimetable?.list.rooms
         ?.filter((room) => room.name.toLowerCase().includes(term.toLowerCase()))
         .slice(0, 8)
-        .map((rooms) => ({ ...rooms, type: "room" })) || [];
+        .map((rooms) => ({ ...rooms, type: "room" })) ?? [];
 
     setSearchResults([...classResults, ...teacherResults, ...roomsResults]);
   };

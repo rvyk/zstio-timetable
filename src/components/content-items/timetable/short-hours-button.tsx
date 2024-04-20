@@ -3,7 +3,7 @@
 import {
   SettingsContext,
   SettingsContextType,
-} from "@/components/setting-context";
+} from "@/components/setting-provider";
 import {
   Tooltip,
   TooltipContent,

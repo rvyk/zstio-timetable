@@ -2,7 +2,7 @@ export const getSubstitution = (
   dayIndex: number,
   lessonIndex: number,
   className: string,
-  substitutions: SubstitutionTables,
+  substitutions: SubstitutionTable,
 ) => {
   if (dayIndex === substitutions.dayIndex) {
     const matchingSubstitution = substitutions.zastepstwa?.find((subs) => {
@@ -22,7 +22,7 @@ export const getSubstitutionForGroup = (
   dayIndex: number,
   lessonIndex: number,
   className: string,
-  substitutions: SubstitutionTables,
+  substitutions: SubstitutionTable,
   groupName?: string,
 ) => {
   if (dayIndex === substitutions.dayIndex) {

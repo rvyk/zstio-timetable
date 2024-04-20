@@ -15,11 +15,7 @@ const SkeletonLoading: React.FC<{ isSubstitution?: boolean }> = ({
   return (
     <div>
       <Table className="hidden items-center justify-center md:flex">
-        <TableCaption
-          status={true}
-          isSubstitutions={isSubstitution}
-          className="flex-col !items-start justify-center"
-        >
+        <TableCaption className="flex-col !items-start justify-center">
           <Skeleton className="h-[12px] w-[100px] rounded-full" />
         </TableCaption>
         <TableHeader isSubstitutions={isSubstitution} />

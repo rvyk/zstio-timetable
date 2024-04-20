@@ -13,7 +13,7 @@ import React, { useState } from "react";
 import Footer from "../footer";
 
 interface BottomBarProps {
-  substitutions: Substitutions;
+  substitutions: SubstitutionsPage;
 }
 
 const SubstitutionsBottomBar: React.FC<BottomBarProps> = ({

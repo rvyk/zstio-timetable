@@ -5,23 +5,16 @@ import {
   RenderTimeTable,
   RenderTimeTableMobile,
 } from "@/components/content-items/timetable/render-timetable";
-import { Table as TableType } from "@/types/timetable";
+import { TimetableContext } from "@/components/timetable-provider";
+import useBetterMediaQuery from "@/lib/useMediaQueryClient";
 import { List } from "@wulkanowy/timetable-parser";
-import Head from "next/head";
 import { usePathname, useRouter } from "next/navigation";
-import React, { useCallback, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
+import SkeletonLoading from "../skeleton-loading";
 
-interface TimeTableProps {
-  timeTable: TableType["timeTable"];
-  timeTableList: List;
-  substitutions: TableType["substitutions"];
-}
+const TimeTable = () => {
+  const optivumTimetable = useContext(TimetableContext);
 
-const TimeTable: React.FC<TimeTableProps> = ({
-  timeTable,
-  timeTableList,
-  substitutions,
-}) => {
   const [selectedDay, setSelectedDay] = useState(0);
 
   const pathname = usePathname();
@@ -71,12 +64,11 @@ const TimeTable: React.FC<TimeTableProps> = ({
     [pathname, router],
   );
 
-  const maxLessons = timeTable.status
-    ? Math.max(
-        Object.entries(timeTable.data.hours).length,
-        ...timeTable.data.lessons.map((day) => day.length),
-      )
-    : 0;
+  const maxLessons =
+    Math.max(
+      Object.entries(optivumTimetable?.hours || {}).length,
+      ...(optivumTimetable?.lessons ?? []).map((day) => day.length),
+    ) || 0;
 
   useEffect(() => {
     let day = new Date().getDay();
@@ -84,43 +76,36 @@ const TimeTable: React.FC<TimeTableProps> = ({
   }, [setSelectedDay]);
 
   useEffect(() => {
-    const listener = (e: KeyboardEvent) => handleArrowKey(timeTableList, e.key);
+    const listener = (e: KeyboardEvent) =>
+      handleArrowKey(
+        optivumTimetable?.list || {
+          classes: [],
+        },
+        e.key,
+      );
 
     window.addEventListener("keydown", listener);
     return () => {
       window.removeEventListener("keydown", listener);
     };
-  }, [timeTableList, handleArrowKey]);
+  }, [handleArrowKey, optivumTimetable?.list]);
+
+  const isMobile = useBetterMediaQuery("(max-width: 767.5px)");
+
+  if (!optivumTimetable) return <SkeletonLoading />;
 
   return (
     <>
-      <Head>
-        <link rel="canonical" href="https://plan.zstiojar.edu.pl" />
-      </Head>
-      <div className="hidden md:block">
-        {timeTable.status && (
-          <RenderTimeTable
-            {...{
-              timeTable,
-              maxLessons,
-              substitutions,
-            }}
+      {isMobile ? (
+        <>
+          <RenderTimeTableMobile
+            {...{ maxLessons, selectedDay, setSelectedDay }}
           />
-        )}
-      </div>
-      <div className="block md:hidden">
-        <RenderTimeTableMobile
-          {...{
-            timeTable,
-            maxLessons,
-            selectedDay,
-            setSelectedDay,
-            substitutions,
-          }}
-        />
-
-        <BottomBar {...{ timeTable, timeTableList }} />
-      </div>
+          <BottomBar />
+        </>
+      ) : (
+        <RenderTimeTable maxLessons={maxLessons} />
+      )}
     </>
   );
 };

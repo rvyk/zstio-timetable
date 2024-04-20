@@ -2,7 +2,6 @@
 
 import { cn } from "@/lib/utils";
 import { ArrowRightIcon, XMarkIcon } from "@heroicons/react/24/outline";
-import axios from "axios";
 import { usePathname } from "next/navigation";
 import React, { useCallback, useEffect, useState } from "react";
 import { Button } from "./ui/button";
@@ -82,13 +81,13 @@ const Messages: React.FC = () => {
 
   const fetchMessage = useCallback(async () => {
     try {
-      const res = await axios.get("/proxy/cms/messages");
-      const { messages } = res.data;
+      const res = await fetch("/proxy/cms/messages");
+      const { messages } = await res.json();
 
       const message = messages.find(mapMessages);
       setMessage(message || null);
     } catch (error) {
-      console.error(error);
+      console.error("Błąd podczas pobierania wiadomości:", error);
     }
   }, [mapMessages]);
 

@@ -24,13 +24,13 @@ export type CheckedItemsType = {
 
 type Names = "branches" | "teachers";
 
-const SubstitutionsDropdowns: React.FC<{ substitutions: Substitutions }> = ({
-  substitutions,
-}) => {
+const SubstitutionsDropdowns: React.FC<{
+  substitutions: SubstitutionsPage;
+}> = ({ substitutions }) => {
   let uniqueTeachers = new Set<string>();
   let uniqueBranches = new Set<string>();
 
-  substitutions.tables.forEach((table: SubstitutionTables) => {
+  substitutions.tables.forEach((table: SubstitutionTable) => {
     table.zastepstwa.forEach((substitution: Substitution) => {
       uniqueTeachers.add(substitution.teacher);
       uniqueBranches.add(substitution.branch);
