@@ -1,5 +1,5 @@
 # Stage 1: Builder
-FROM node:22-alpine as builder
+FROM arm64v8/node:22-alpine as builder
 WORKDIR /app
 COPY . ./
 RUN npm install -g pnpm && pnpm install && pnpm run build
