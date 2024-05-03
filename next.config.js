@@ -17,7 +17,6 @@ const nextConfig = {
         "Environment variable NEXT_PUBLIC_TIMETABLE_URL and NEXT_PUBLIC_HOST must be defined",
       );
     }
-
     const rewrites = [];
 
     if (NEXT_PUBLIC_CMS) {
