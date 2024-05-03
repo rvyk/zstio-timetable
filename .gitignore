@@ -17,7 +17,6 @@
 *.pem
 .env*.local
 /.netlify/
-/.github/
 /.vscode/
 /.idea/
 tsconfig.tsbuildinfo
