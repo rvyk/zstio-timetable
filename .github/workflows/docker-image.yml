@@ -48,7 +48,6 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-        env:
           NEXT_PUBLIC_TIMETABLE_URL: http://www.zstio-elektronika.pl/plan
           NEXT_PUBLIC_HOST: https://plan-lekcji.awfulworld.space
           NEXT_PUBLIC_CMS: https://cms.awfulworld.space
