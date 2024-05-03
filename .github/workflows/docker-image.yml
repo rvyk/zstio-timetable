@@ -10,10 +10,6 @@ on:
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
-  NEXT_PUBLIC_SUBSTITUTIONS_URL: ${{ github.NEXT_PUBLIC_SUBSTITUTIONS_URL }}
-  NEXT_PUBLIC_CMS: ${{ github.NEXT_PUBLIC_CMS }}
-  NEXT_PUBLIC_HOST: ${{ github.NEXT_PUBLIC_HOST }}
-  NEXT_PUBLIC_TIMETABLE_URL: ${{ github.NEXT_PUBLIC_TIMETABLE_URL }}
 
 # There is a single job in this workflow. It's configured to run on the latest available version of Ubuntu.
 jobs:
@@ -53,10 +49,10 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
         env:
-          NEXT_PUBLIC_TIMETABLE_URL: ${{ env.NEXT_PUBLIC_TIMETABLE_URL }}
-          NEXT_PUBLIC_HOST: ${{ env.NEXT_PUBLIC_HOST }}
-          NEXT_PUBLIC_CMS: ${{ env.NEXT_PUBLIC_CMS }}
-          NEXT_PUBLIC_SUBSTITUTIONS_URL: ${{ env.NEXT_PUBLIC_SUBSTITUTIONS_URL }}
+          NEXT_PUBLIC_TIMETABLE_URL: ${{ secrets.NEXT_PUBLIC_TIMETABLE_URL }}
+          NEXT_PUBLIC_HOST: ${{ secrets.NEXT_PUBLIC_HOST }}
+          NEXT_PUBLIC_CMS: ${{ secrets.NEXT_PUBLIC_CMS }}
+          NEXT_PUBLIC_SUBSTITUTIONS_URL: ${{ secrets.NEXT_PUBLIC_SUBSTITUTIONS_URL }}
 
       # This step generates an artifact attestation for the image, which is an unforgeable statement about where and how it was built. It increases supply chain security for people who consume the image. For more information, see "[AUTOTITLE](/actions/security-guides/using-artifact-attestations-to-establish-provenance-for-builds)."
       - name: Generate artifact attestation
