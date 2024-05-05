@@ -1,7 +1,7 @@
 import { NextPage } from "next";
 
 const SubstitutionRoute: NextPage = async () => {
-  return <>kutas</>;
+  return <>przerwa techniczna</>;
 };
 
 export default SubstitutionRoute;
