@@ -9,8 +9,6 @@ import { TableLesson } from "@wulkanowy/timetable-parser";
 import Link from "next/link";
 
 interface RenderLessonProps {
-  lessonIndex: number;
-  day: TableLesson[][] | TableLesson;
   substitution: Substitution | undefined;
   sure: boolean;
   possibleSubstitution: Substitution | undefined;
@@ -18,8 +16,6 @@ interface RenderLessonProps {
 }
 
 const RenderLesson: React.FC<RenderLessonProps> = ({
-  lessonIndex,
-  day,
   substitution,
   sure,
   possibleSubstitution,

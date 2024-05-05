@@ -11,21 +11,17 @@ import {
 } from "@/components/ui/table";
 import Link from "next/link";
 
-interface Substitution {
-  [key: string]: string;
-}
+// type Substitution = Record<string, string>;
 
 interface RenderSubstitutionsProps {
   index: number;
   filteredSubstitutions: Substitution[];
-  status: boolean;
   time: string;
 }
 
 const RenderSubstitutions: React.FC<RenderSubstitutionsProps> = ({
   index,
   filteredSubstitutions,
-  status,
   time,
 }) => {
   return (
@@ -61,7 +57,7 @@ const RenderSubstitutions: React.FC<RenderSubstitutionsProps> = ({
                       >
                         {field === "branch"
                           ? parseBranchField(substitution.branch)
-                          : substitution?.[field]}
+                          : substitution[field as keyof Substitution]}
                       </TableCell>
                     ))}
                   </TableRow>
@@ -101,19 +97,18 @@ const RenderSubstitutionsMobile: React.FC<RenderSubstitutionsProps> = ({
   filteredSubstitutions,
   index,
   time,
-  status,
 }) => {
   return (
     <div className="mb-20 min-h-screen">
       <div className="w-full">
         <div className="mx-1.5 my-2.5 flex min-h-12 items-center justify-center rounded-md bg-white dark:bg-[#242424]">
           <p className="p-2 text-center font-semibold text-gray-900 dark:text-white">
-            {status ? time : "Brak zastępstw"}
+            {filteredSubstitutions.length > 0 ? time : "Brak zastępstw"}
           </p>
         </div>
       </div>
       <div key={index} className="w-full overflow-x-auto text-center text-sm">
-        {!!filteredSubstitutions.length ? (
+        {!!filteredSubstitutions.length && (
           <>
             {filteredSubstitutions.map(
               (substitution: Substitution, index: number) => {
@@ -164,10 +159,6 @@ const RenderSubstitutionsMobile: React.FC<RenderSubstitutionsProps> = ({
               },
             )}
           </>
-        ) : (
-          <div className="w-full text-center">
-            <p className="text-lg font-semibold">Nie znaleziono zastępstw</p>
-          </div>
         )}
       </div>
     </div>

@@ -3,7 +3,7 @@
 import { normalHours, shortHours } from "@/lib/utils";
 import React, { useEffect } from "react";
 
-export type SettingsContextType = {
+export interface SettingsContextType {
   shortHours: [
     shortHours: boolean,
     setIsShortHours: React.Dispatch<React.SetStateAction<boolean>>,
@@ -12,7 +12,7 @@ export type SettingsContextType = {
     hoursTime: hourType[],
     setHoursTime: React.Dispatch<React.SetStateAction<hourType[]>>,
   ];
-};
+}
 
 export const SettingsContext = React.createContext<SettingsContextType | null>(
   null,

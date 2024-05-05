@@ -52,9 +52,6 @@ const Substitutions: React.FC = () => {
                     <RenderSubstitutions
                       index={index}
                       filteredSubstitutions={filteredSubstitutions}
-                      status={
-                        optivumTimetable?.substitutions?.tables?.length > 0
-                      }
                       time={table.time}
                     />
                   </div>
@@ -62,9 +59,6 @@ const Substitutions: React.FC = () => {
                     <RenderSubstitutionsMobile
                       index={index}
                       filteredSubstitutions={filteredSubstitutions}
-                      status={
-                        optivumTimetable?.substitutions?.tables?.length > 0
-                      }
                       time={table.time}
                     />
                     <SubstitutionsBottomBar

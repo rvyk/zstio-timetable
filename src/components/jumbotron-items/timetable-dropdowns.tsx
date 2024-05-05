@@ -29,7 +29,11 @@ import { TimetableContext } from "../timetable-provider";
 type FilterKeys = "class" | "teacher" | "room";
 
 const TimetableDropdowns: React.FC = () => {
-  const { classes, rooms, teachers } = useContext(TimetableContext)?.list!;
+  const { classes, rooms, teachers } = (
+    useContext(TimetableContext) ?? {
+      list: { classes: [], rooms: [], teachers: [] },
+    }
+  ).list;
   return (
     <div className="hidden md:block">
       {!!classes?.length && (

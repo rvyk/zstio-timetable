@@ -7,12 +7,13 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Room } from "@/types/api";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 
 interface DropdownProps {
-  data: any;
+  data: Room[];
   setIsOpened: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
@@ -22,8 +23,6 @@ const Dropdown: React.FC<DropdownProps> = ({
 }) => {
   const [isOpened, setIsOpened] = useState(false);
   const router = useRouter();
-
-  if (!data) return null;
 
   return (
     <DropdownMenu onOpenChange={() => setIsOpened(!isOpened)} open={isOpened}>
@@ -42,17 +41,17 @@ const Dropdown: React.FC<DropdownProps> = ({
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="mt-2 max-h-60 w-60 overflow-y-scroll rounded-lg border-0 bg-white shadow dark:bg-[#161616]">
-        {data.map((item: any, index: number) => (
+        {data.map((item, index) => (
           <DropdownMenuItem
             key={index}
             onClick={() => {
               setIsModalOpened(false);
-              router.push(item.url || `/room/${item.value}`);
+              router.push(`/room/${item.id}`);
             }}
             className="my-0.5 flex cursor-pointer items-center rounded pl-2 hover:bg-gray-100 dark:hover:bg-[#202020] dark:focus:bg-[#202020]"
           >
             <p className="ml-2 w-full rounded py-1 text-sm font-medium text-gray-900 dark:text-gray-300">
-              {item.name}
+              {item.title}
             </p>
           </DropdownMenuItem>
         ))}

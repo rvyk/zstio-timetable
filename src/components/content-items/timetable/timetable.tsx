@@ -71,7 +71,7 @@ const TimeTable = () => {
     ) || 0;
 
   useEffect(() => {
-    let day = new Date().getDay();
+    const day = new Date().getDay();
     setSelectedDay(day >= 6 || day == 0 ? 0 : day - 1);
   }, [setSelectedDay]);
 

@@ -5,7 +5,7 @@ import { DownloadIcon } from "@radix-ui/react-icons";
 import { useEffect, useState } from "react";
 
 interface BeforeInstallPromptEvent extends Event {
-  readonly platforms: Array<string>;
+  readonly platforms: string[];
   readonly userChoice: Promise<{
     outcome: "accepted" | "dismissed";
     platform: string;
@@ -19,15 +19,22 @@ const PWAButton: React.FC = () => {
     useState<BeforeInstallPromptEvent | null>(null);
 
   useEffect(() => {
-    const handler = (e: any) => {
+    const handler = (e: BeforeInstallPromptEvent) => {
       e.preventDefault();
       setSupportsPWA(true);
       setPromptInstall(e);
     };
-    window.addEventListener("beforeinstallprompt", handler as any);
+
+    window.addEventListener(
+      "beforeinstallprompt",
+      handler as EventListenerOrEventListenerObject,
+    );
 
     return () =>
-      window.removeEventListener("beforeinstallprompt", handler as any);
+      window.removeEventListener(
+        "beforeinstallprompt",
+        handler as EventListenerOrEventListenerObject,
+      );
   }, []);
 
   const install = () => {

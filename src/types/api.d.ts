@@ -1,6 +1,6 @@
 import { TableLesson } from "@wulkanowy/timetable-parser";
 
-export type Room = {
+interface Room {
   title: string;
   id: string;
   lessons: TableLesson[][][];

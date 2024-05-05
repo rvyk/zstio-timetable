@@ -125,7 +125,7 @@ const ResponsiveLookupDialog: React.FC<ResponsiveLookupDialogProps> = ({
               </Button>
             </div>
           </div>
-          <Dropdown data={data} setIsOpened={setIsOpened} />
+          {data && <Dropdown data={data} setIsOpened={setIsOpened} />}
         </div>
 
         <ResponsiveDialogFooter>

@@ -2,9 +2,7 @@
  * ZSTiO Elektronika returns the "valid" date in "16 października, 2023r." or "16.10.2023r" format and the "Generated" date in "yyyy-mm-dd" format, so we should convert them to one format.
  */
 
-const months: {
-  [key: string]: string;
-} = {
+const months: Record<string, string> = {
   stycznia: "01",
   lutego: "02",
   marca: "03",

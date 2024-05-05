@@ -29,7 +29,7 @@ const ShortHoursCalculator: React.FC<{ className?: string }> = ({
           className,
           hoursTime !== normalHours &&
             hoursTime !== shortHours &&
-            "!bg-[#321c21] hover:!bg-[#480e0c] dark:!bg-red-400 dark:hover:!bg-red-500",
+            "!bg-[#321c21] !text-white hover:!bg-[#480e0c] dark:!bg-red-400 dark:hover:!bg-red-500",
         )}
         onClick={() => {
           setIsDrawerOpen(true);

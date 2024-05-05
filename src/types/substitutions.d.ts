@@ -1,4 +1,4 @@
-type Substitution = {
+interface Substitution {
   lesson: string;
   teacher: string;
   branch: string;
@@ -6,15 +6,15 @@ type Substitution = {
   class: string;
   case: string;
   message: string;
-};
+}
 
-type SubstitutionTable = {
+interface SubstitutionTable {
   time: string;
   dayIndex: number;
   zastepstwa: Substitution[];
-};
+}
 
-type SubstitutionsPage = {
+interface SubstitutionsPage {
   timeRange: string;
   tables: SubstitutionTable[];
-};
+}

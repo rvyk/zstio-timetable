@@ -90,13 +90,11 @@ const JumbotronContent: React.FC<JumbotronContentProps> = ({
 interface JumbotronDropdownsProps {
   isIndex: boolean;
   isSubstitution: boolean;
-  optivumTimetable: OptivumTimetable | null;
 }
 
 const JumbotronDropdowns: React.FC<JumbotronDropdownsProps> = ({
   isIndex,
   isSubstitution,
-  optivumTimetable,
 }) => {
   if (isIndex) return <Loading />;
   if (isSubstitution) {

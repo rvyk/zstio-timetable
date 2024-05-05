@@ -26,12 +26,10 @@ const Dropdown: React.FC<DropdownProps> = ({
 
   const router = useRouter();
   const pathname = usePathname();
-  const [lastSelect, setLastSelect] = useState<string | null>(null);
   const [checkedItems, setCheckedItems] = useState<CheckedItemsType>({});
 
   const handleSelect = (name: string, value: string) => {
     const link = `/${name}/${value}`;
-    setLastSelect(link);
     localStorage.setItem("lastSelect", link);
     router.push(link);
     setIsDrawerOpened && setIsDrawerOpened(false);
@@ -124,7 +122,6 @@ const Dropdown: React.FC<DropdownProps> = ({
                         {isSubstitutions && (
                           <>
                             <Checkbox
-                              onChange={() => {}}
                               checked={
                                 !!checkedItems[item.type]?.includes(item.value)
                               }

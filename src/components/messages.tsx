@@ -18,12 +18,12 @@ import {
 type MessageType = "INFO" | "UPDATE" | "WARNING" | "ERROR" | "SILENT";
 type MessageTypeDisplay = "POPUP" | "BANNER";
 
-type TimeRange = {
+interface TimeRange {
   from: string;
   to: string;
-};
+}
 
-type Message = {
+interface Message {
   id: string;
   message?: string;
   published: boolean;
@@ -33,7 +33,7 @@ type Message = {
   toUrl?: string;
   redirectUrl?: string;
   displayTime?: TimeRange;
-};
+}
 
 const MessageType: {
   [key in MessageType]: {

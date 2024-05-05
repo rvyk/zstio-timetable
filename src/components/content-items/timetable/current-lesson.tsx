@@ -21,7 +21,7 @@ function CurrentLesson({
 
   useEffect(() => {
     const timer = setInterval(() => {
-      let { isWithinTimeRange, minutesRemaining } = getCurrentLesson(
+      const { isWithinTimeRange, minutesRemaining } = getCurrentLesson(
         timeFrom,
         timeTo,
       );

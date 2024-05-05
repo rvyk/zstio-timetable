@@ -52,7 +52,12 @@ const ResponsiveDialogContent: React.FC<
     return <DialogContent {...props}>{props?.children}</DialogContent>;
   }
   return (
-    <DrawerContent {...props} onAnimationEnd={null as any}>
+    <DrawerContent
+      {...props}
+      onAnimationEnd={(open) => {
+        return open;
+      }}
+    >
       {props?.children}
     </DrawerContent>
   );

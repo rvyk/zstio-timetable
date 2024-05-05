@@ -19,16 +19,14 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import React, { useContext, useMemo, useState } from "react";
 import { TimetableContext } from "../timetable-provider";
 
-export type CheckedItemsType = {
-  [key: string]: string[];
-};
+export type CheckedItemsType = Record<string, string[]>;
 
 type Names = "branches" | "teachers";
 
 const SubstitutionsDropdowns: React.FC = () => {
   const substitutions = useContext(TimetableContext)?.substitutions;
-  let uniqueTeachers = new Set<string>();
-  let uniqueBranches = new Set<string>();
+  const uniqueTeachers = new Set<string>();
+  const uniqueBranches = new Set<string>();
 
   substitutions?.tables.forEach((table: SubstitutionTable) => {
     table.zastepstwa.forEach((substitution: Substitution) => {
@@ -94,7 +92,7 @@ const SubstitutionDropdown: React.FC<SubstitutionDropdownProps> = ({
   };
 
   const items = useMemo(() => {
-    return item.filter((item: any) =>
+    return item.filter((item) =>
       item.toLowerCase().includes(filter.toLowerCase()),
     );
   }, [item, filter]);
@@ -172,7 +170,7 @@ const SubstitutionDropdown: React.FC<SubstitutionDropdownProps> = ({
           </div>
         </div>
 
-        {items.map((substitution: string, index: number) => (
+        {items.map((substitution, index) => (
           <DropdownMenuCheckboxItem
             key={index}
             onCheckedChange={() => handleCheckbox(name, substitution)}

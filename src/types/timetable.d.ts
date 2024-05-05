@@ -1,6 +1,6 @@
 import { List, TableHour, TableLesson } from "@wulkanowy/timetable-parser";
 
-export type OptivumTimetable = {
+interface OptivumTimetable {
   id: string;
   hours: Record<number, TableHour>;
   lessons: TableLesson[][][];
@@ -12,4 +12,4 @@ export type OptivumTimetable = {
   dayNames: string[];
   list: List;
   substitutions: SubstitutionsPage;
-};
+}

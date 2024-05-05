@@ -17,10 +17,11 @@ const SearchBar = () => {
     const term = e.target.value;
 
     setQuery(term);
-    const classResults = optivumTimetable?.list.classes
-      .filter((cls) => cls.name.toLowerCase().includes(term.toLowerCase()))
-      .slice(0, 8)
-      .map((classes) => ({ ...classes, type: "class" })) ?? [];
+    const classResults =
+      optivumTimetable?.list.classes
+        .filter((cls) => cls.name.toLowerCase().includes(term.toLowerCase()))
+        .slice(0, 8)
+        .map((classes) => ({ ...classes, type: "class" })) ?? [];
 
     const teacherResults =
       optivumTimetable?.list.teachers
@@ -40,7 +41,7 @@ const SearchBar = () => {
   };
 
   return (
-    <div className="mb-1.5 w-full">
+    <div className="mb-1.5 w-screen px-4">
       <div className="relative w-full">
         <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
           <MagnifyingGlassIcon className="h-6 w-6" />

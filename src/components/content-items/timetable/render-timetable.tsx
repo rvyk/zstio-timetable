@@ -57,7 +57,7 @@ const RenderTimeTable: React.FC<TimeTableProps> = ({ maxLessons }) => {
       <TableHeader />
       {Object.entries(hoursTime).length > 1 ? (
         Object.entries(hoursTime)
-          .map(([_, value]) => value)
+          .map(([, value]) => value)
           .splice(0, maxLessons)
           .map((hour: hourType, lessonIndex: number) => {
             const { number: lessonNumber, timeFrom, timeTo } = hour;
@@ -104,8 +104,6 @@ const RenderTimeTable: React.FC<TimeTableProps> = ({ maxLessons }) => {
                           return (
                             <RenderLesson
                               key={`t-${day}-${lessonIndex}-${iterationIndex}`}
-                              lessonIndex={lessonIndex}
-                              day={day}
                               substitution={substitution}
                               sure={sure}
                               possibleSubstitution={possibleSubstitution}
@@ -202,7 +200,7 @@ const RenderTimeTableMobile: React.FC<TimeTableMobileProps> = ({
       <div className="min-w-screen min-h-[calc(100vh-196px)]">
         {Object.entries(hoursTime).length > 1 ? (
           Object.entries(hoursTime)
-            .map(([_, value]) => value)
+            .map(([, value]) => value)
             .splice(0, maxLessons)
             .map((hour: hourType, lessonIndex: number) => {
               const { number: lessonNumber, timeFrom, timeTo } = hour;
@@ -246,8 +244,6 @@ const RenderTimeTableMobile: React.FC<TimeTableMobileProps> = ({
                       return (
                         <RenderLesson
                           key={`mt-${day}-${lessonIndex}-${iterationIndex}`}
-                          lessonIndex={lessonIndex}
-                          day={day}
                           substitution={substitution}
                           sure={sure}
                           possibleSubstitution={possibleSubstitution}
