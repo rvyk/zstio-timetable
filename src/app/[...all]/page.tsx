@@ -16,7 +16,16 @@ export const revalidate = 10800,
 const MainRoute: NextPage<{ params: { all: string[] } }> = async ({
   params,
 }) => {
-  if (!["class", "teacher", "room", "zastepstwa", ""].includes(params.all[0]))
+  if (
+    ![
+      "class",
+      "teacher",
+      "room",
+      "zastepstwa",
+      "",
+      "proxy/cms/messages",
+    ].includes(params.all[0])
+  )
     return notFound();
 
   const timeTable = await fetchOptivumTimetable(params.all[0], params.all[1]);
