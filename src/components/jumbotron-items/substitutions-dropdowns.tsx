@@ -16,7 +16,8 @@ import {
   UsersIcon,
 } from "@heroicons/react/24/outline";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import React, { useMemo, useState } from "react";
+import React, { useContext, useMemo, useState } from "react";
+import { TimetableContext } from "../timetable-provider";
 
 export type CheckedItemsType = {
   [key: string]: string[];
@@ -24,13 +25,12 @@ export type CheckedItemsType = {
 
 type Names = "branches" | "teachers";
 
-const SubstitutionsDropdowns: React.FC<{
-  substitutions: SubstitutionsPage;
-}> = ({ substitutions }) => {
+const SubstitutionsDropdowns: React.FC = () => {
+  const substitutions = useContext(TimetableContext)?.substitutions;
   let uniqueTeachers = new Set<string>();
   let uniqueBranches = new Set<string>();
 
-  substitutions.tables.forEach((table: SubstitutionTable) => {
+  substitutions?.tables.forEach((table: SubstitutionTable) => {
     table.zastepstwa.forEach((substitution: Substitution) => {
       uniqueTeachers.add(substitution.teacher);
       uniqueBranches.add(substitution.branch);

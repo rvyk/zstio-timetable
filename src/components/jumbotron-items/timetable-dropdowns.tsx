@@ -15,15 +15,21 @@ import {
   MapPinIcon,
   UsersIcon,
 } from "@heroicons/react/24/outline";
-import { List, ListItem } from "@wulkanowy/timetable-parser";
+import { ListItem } from "@wulkanowy/timetable-parser";
 import { usePathname, useRouter } from "next/navigation";
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
+import { TimetableContext } from "../timetable-provider";
 
 type FilterKeys = "class" | "teacher" | "room";
 
-const TimetableDropdowns: React.FC<{ timeTableList: List }> = ({
-  timeTableList: { classes, rooms, teachers },
-}) => {
+const TimetableDropdowns: React.FC = () => {
+  const { classes, rooms, teachers } = useContext(TimetableContext)?.list!;
   return (
     <div className="hidden md:block">
       {!!classes?.length && (

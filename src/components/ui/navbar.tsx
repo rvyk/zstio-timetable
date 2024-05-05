@@ -68,8 +68,8 @@ const Navbar: React.FC = () => {
           </div>
         )}
         <PWAButton />
-        <RedirectButton />
         <div>{!isSubstitutions && !isMobile && <RoomLookup />}</div>
+        <RedirectButton />
         <ThemeButton />
       </div>
     </div>

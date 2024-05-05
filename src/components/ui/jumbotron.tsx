@@ -8,6 +8,8 @@ import Image from "next/legacy/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useContext } from "react";
+import SubstitutionsDropdowns from "../jumbotron-items/substitutions-dropdowns";
+import TimetableDropdowns from "../jumbotron-items/timetable-dropdowns";
 import { TimetableContext } from "../timetable-provider";
 
 const Jumbotron = () => {
@@ -97,10 +99,10 @@ const JumbotronDropdowns: React.FC<JumbotronDropdownsProps> = ({
   optivumTimetable,
 }) => {
   if (isIndex) return <Loading />;
-  // if (isSubstitution) {
-  //   return <SubstitutionsDropdowns />;
-  // }
-  // return <TimetableDropdowns />;
+  if (isSubstitution) {
+    return <SubstitutionsDropdowns />;
+  }
+  return <TimetableDropdowns />;
 };
 
 export default Jumbotron;
