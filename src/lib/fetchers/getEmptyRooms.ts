@@ -26,7 +26,7 @@ const fetchEmptyClasses = async (dayIndex: number, lessonIndex: number) => {
         ) {
           emptyRooms.push({
             title: `Z zastępstw: ${sub.class}`,
-            id: `zastepstwa-${sub.class}`,
+            id: `zastepstwa-${sub.teacher}`,
             lessons: [],
           });
         }

@@ -46,7 +46,13 @@ const Dropdown: React.FC<DropdownProps> = ({
             key={index}
             onClick={() => {
               setIsModalOpened(false);
-              router.push(`/room/${item.id}`);
+              if (item.id.includes("zastepstwa-")) {
+                router.push(
+                  `/zastepstwa?${new URLSearchParams({ teacher: item.id.split("-")[1] }).toString()}`,
+                );
+              } else {
+                router.push(`/room/${item.id}`);
+              }
             }}
             className="my-0.5 flex cursor-pointer items-center rounded pl-2 hover:bg-gray-100 dark:hover:bg-[#202020] dark:focus:bg-[#202020]"
           >
