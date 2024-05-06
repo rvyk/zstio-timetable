@@ -98,13 +98,19 @@ const ResponsiveLookupDialog: React.FC<ResponsiveLookupDialogProps> = ({
                 <div className="w-full text-center">
                   <input
                     type="number"
+                    autoFocus={true}
                     value={userInput}
                     onChange={(e) => setUserInput(e.currentTarget.value)}
                     onBlur={(e) => {
                       set(+e.currentTarget.value);
-                      setUserInput(selectedLesson.toString());
+                      setUserInput(
+                        Math.max(
+                          1,
+                          Math.min(14, +e.currentTarget.value),
+                        ).toString(),
+                      );
                     }}
-                    className="w-20 bg-transparent text-center text-6xl font-bold"
+                    className="w-20 bg-transparent text-center text-6xl font-bold outline-none"
                   />
                 </div>
                 <div className="text-[0.70rem] uppercase text-muted-foreground">

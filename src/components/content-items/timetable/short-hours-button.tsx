@@ -39,8 +39,8 @@ const ShortHoursButton: React.FC = () => {
 
   return (
     <>
-      <div className="flex">
-        <div className="relative">
+      <div className="relative">
+        <div className="h-ful flex">
           {tooltips.map((tooltip, index) => (
             <Tooltip key={index}>
               <TooltipTrigger asChild>
@@ -50,7 +50,7 @@ const ShortHoursButton: React.FC = () => {
                     handleButton(tooltip.value);
                   }}
                   className={cn(
-                    "border border-gray-200 bg-transparent px-4 py-2 text-sm font-medium text-gray-900 transition-all hover:bg-gray-200 focus:z-10 focus:ring-0 dark:border-none dark:bg-[#171717] dark:text-white dark:hover:bg-[#191919] dark:hover:text-white dark:focus:text-white",
+                    "h-[41.6px] border border-gray-200 bg-transparent px-4 py-2 text-sm font-medium text-gray-900 transition-all hover:bg-gray-200 focus:z-10 focus:ring-0 dark:border-none dark:bg-[#171717] dark:text-white dark:hover:bg-[#191919] dark:hover:text-white dark:focus:text-white",
                     index === 0 ? "rounded-l-lg" : "rounded-r-lg",
                   )}
                 >
@@ -62,19 +62,17 @@ const ShortHoursButton: React.FC = () => {
               </TooltipContent>
             </Tooltip>
           ))}
-          <div
-            className={cn(
-              "absolute top-0 h-full w-[50%] cursor-default bg-[#321c21] px-4 py-2 text-sm font-medium text-gray-50 transition-all hover:bg-[#480e0c] hover:text-gray-200 focus:text-gray-200 dark:border-none dark:bg-red-400 dark:text-white dark:hover:bg-red-500 dark:hover:text-white dark:focus:text-white",
-              isShortHours
-                ? "translate-x-[100%] transform rounded-r-lg"
-                : "rounded-l-lg",
-              hoursTime !== normalHours &&
-                hoursTime !== shortHours &&
-                "!hidden",
-            )}
-          >
-            {isShortHours ? "30'" : "45'"}
-          </div>
+        </div>
+        <div
+          className={cn(
+            "absolute top-0 z-40 flex h-full w-[50%] cursor-default items-center justify-center bg-[#321c21] px-4 py-2 text-sm font-medium text-gray-50 transition-all hover:bg-[#480e0c] hover:text-gray-200 focus:text-gray-200 dark:border-none dark:bg-red-400 dark:text-white dark:hover:bg-red-500 dark:hover:text-white dark:focus:text-white",
+            isShortHours
+              ? "translate-x-[100%] transform rounded-r-lg"
+              : "rounded-l-lg",
+            hoursTime !== normalHours && hoursTime !== shortHours && "!hidden",
+          )}
+        >
+          {isShortHours ? "30'" : "45'"}
         </div>
       </div>
     </>

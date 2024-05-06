@@ -83,7 +83,10 @@ const RenderSubstitutions: React.FC<RenderSubstitutionsProps> = ({
       <TableFooter>
         <TableRow reverseColor={index % 2 != 0}>
           <TableCell scope="row" colSpan={7} className="font-semibold">
-            <Link href={process.env.NEXT_PUBLIC_SUBSTITUTIONS_URL as string}>
+            <Link
+              href={process.env.NEXT_PUBLIC_SUBSTITUTIONS_URL as string}
+              className="hover:underline"
+            >
               Źródło danych
             </Link>
           </TableCell>

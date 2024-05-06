@@ -9,6 +9,7 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
+import Link from "next/link";
 import React, { useState } from "react";
 import Footer from "../footer";
 
@@ -99,6 +100,16 @@ const SubstitutionsBottomBar: React.FC<BottomBarProps> = ({
                 ))}
               </div>
               <DrawerFooter>
+                {process.env.NEXT_PUBLIC_SUBSTITUTIONS_URL && (
+                  <Link
+                    prefetch={false}
+                    href={process.env.NEXT_PUBLIC_SUBSTITUTIONS_URL}
+                    target="_blank"
+                    className="text-center font-semibold text-gray-900 dark:text-gray-300"
+                  >
+                    Źródło danych
+                  </Link>
+                )}
                 <Footer />
                 <div className="h-12"></div>
               </DrawerFooter>

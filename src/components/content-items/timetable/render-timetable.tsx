@@ -156,6 +156,7 @@ const RenderTimeTable: React.FC<TimeTableProps> = ({ maxLessons }) => {
               prefetch={false}
               href={`${process.env.NEXT_PUBLIC_TIMETABLE_URL}/plany/${optivumTimetable?.id}.html`}
               target="_blank"
+              className="hover:underline"
             >
               Źródło danych
             </Link>
