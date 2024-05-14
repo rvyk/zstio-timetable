@@ -4,15 +4,17 @@ import Messages from "@/components/messages";
 import SettingsProvider from "@/components/setting-provider";
 import TimetableProvider from "@/components/timetable-provider";
 import Jumbotron from "@/components/ui/jumbotron";
-import Navbar from "@/components/ui/navbar";
+const Navbar = dynamic(() => import("@/components/ui/navbar"), {
+  ssr: false,
+});
+
 import fetchOptivumList from "@/lib/fetchers/fetchOptivumList";
 import fetchOptivumTimetable from "@/lib/fetchers/fetchOptivumTimetable";
 import { Metadata, NextPage } from "next";
+import dynamic from "next/dynamic";
 import { notFound } from "next/navigation";
 
-export const revalidate = 10800,
-  dynamic = "force-static";
-
+export const revalidate = 10800;
 const MainRoute: NextPage<{ params: { all: string[] } }> = async ({
   params,
 }) => {

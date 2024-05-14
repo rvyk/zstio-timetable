@@ -3,7 +3,6 @@ import {
   TimeTableSubstitutions,
 } from "@/components/content-items/timetable/helpers";
 import RenderLesson from "@/components/content-items/timetable/render-lesson";
-import ShortHoursButton from "@/components/content-items/timetable/short-hours-button";
 import ShortHoursCalculator from "@/components/content-items/timetable/short-hours-calculator";
 import {
   SettingsContext,
@@ -20,9 +19,16 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { days, getCurrentLesson } from "@/lib/utils";
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useContext } from "react";
 import CurrentLesson from "./current-lesson";
+const ShortHoursButton = dynamic(
+  () => import("@/components/content-items/timetable/short-hours-button"),
+  {
+    ssr: false,
+  },
+);
 
 interface TimeTableProps {
   maxLessons: number;

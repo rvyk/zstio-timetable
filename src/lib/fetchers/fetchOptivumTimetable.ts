@@ -3,6 +3,7 @@
 import fetchOptivumList from "@/lib/fetchers/fetchOptivumList";
 import { OptivumTimetable } from "@/types/timetable";
 import { Table } from "@wulkanowy/timetable-parser";
+import { convertTextDate } from "../date";
 import fetchSubstitutions from "./fetchSubstitutions";
 
 const fetchOptivumTimetable = async (
@@ -33,7 +34,7 @@ const fetchOptivumTimetable = async (
     type:
       { class: "Oddziały", teacher: "Nauczyciele", room: "Klasy" }[type] ||
       "Brak danych",
-    validDate: timeTableData.getVersionInfo(), //TODO: convert data format
+    validDate: convertTextDate(timeTableData.getVersionInfo()),
     days: timeTableData.getDays(),
     dayNames: timeTableData.getDayNames(),
     list: await fetchOptivumList(),
