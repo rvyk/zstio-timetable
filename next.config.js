@@ -29,6 +29,9 @@ const nextConfig = {
 
     return rewrites;
   },
+  experimental: {
+    missingSuspenseWithCSRBailout: false,
+  },
 };
 
 module.exports = withPWA(nextConfig);
