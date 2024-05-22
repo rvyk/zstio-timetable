@@ -10,6 +10,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import Link from "next/link";
+import { Suspense } from "react";
 
 // type Substitution = Record<string, string>;
 
@@ -28,7 +29,9 @@ const RenderSubstitutions: React.FC<RenderSubstitutionsProps> = ({
     <Table className="hidden justify-center md:flex">
       <TableCaption className="flex-col !items-start justify-center">
         {time}
+        <Suspense>
         <Filters />
+        </Suspense>
       </TableCaption>
       <TableHeader isSubstitutions={true} />
       {!!filteredSubstitutions.length ? (

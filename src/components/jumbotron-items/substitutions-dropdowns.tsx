@@ -16,7 +16,7 @@ import {
   UsersIcon,
 } from "@heroicons/react/24/outline";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import React, { useContext, useMemo, useState } from "react";
+import React, { Suspense, useContext, useMemo, useState } from "react";
 import { TimetableContext } from "../timetable-provider";
 
 export type CheckedItemsType = Record<string, string[]>;
@@ -42,21 +42,23 @@ const SubstitutionsDropdowns: React.FC = () => {
 
   return (
     <>
-      {!!uniqueData.branches.length && (
-        <SubstitutionDropdown
-          item={uniqueData.branches}
-          icon={<AcademicCapIcon />}
-          name="branches"
-        />
-      )}
+      <Suspense>
+        {!!uniqueData.branches.length && (
+          <SubstitutionDropdown
+            item={uniqueData.branches}
+            icon={<AcademicCapIcon />}
+            name="branches"
+          />
+        )}
 
-      {!!uniqueData.teachers.length && (
-        <SubstitutionDropdown
-          item={uniqueData.teachers}
-          icon={<UsersIcon />}
-          name="teachers"
-        />
-      )}
+        {!!uniqueData.teachers.length && (
+          <SubstitutionDropdown
+            item={uniqueData.teachers}
+            icon={<UsersIcon />}
+            name="teachers"
+          />
+        )}
+      </Suspense>
     </>
   );
 };
