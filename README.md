@@ -1,4 +1,4 @@
-![App screenshot](/public/og-image.png)
+![App screenshot](/src/media/og-image.png)
 
 # Timetable ZSTiO
 
