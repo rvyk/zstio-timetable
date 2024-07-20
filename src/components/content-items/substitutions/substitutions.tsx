@@ -70,9 +70,10 @@ const Substitutions: React.FC = () => {
             },
           )
         ) : (
-          <div className="flex h-[calc(100vh-60px)] flex-col items-center justify-center text-center md:mb-16 md:h-fit">
-            <p className="font-bold">Brak zastepstwa</p>
-            <p>{optivumTimetable?.substitutions?.timeRange}</p>
+          <div className="flex h-[calc(100vh-60px)] flex-col items-center justify-center text-center md:mb-16 md:hidden md:h-fit">
+            <p className="text-xl font-bold text-gray-500 transition-all dark:text-gray-200">
+              {optivumTimetable?.substitutions.heading}
+            </p>
           </div>
         )}
       </>

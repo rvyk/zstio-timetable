@@ -8,6 +8,7 @@ const fetchSubstitutions = async (): Promise<SubstitutionsPage> => {
   const response = await fetch(process.env.NEXT_PUBLIC_SUBSTITUTIONS_URL);
   const $ = load(await response.text());
   const timeRange = $("h2").text().trim();
+  const heading = $("h1").text().trim();
   const tables: SubstitutionTable[] = [];
 
   $("table").each((_index, table) => {
@@ -47,6 +48,7 @@ const fetchSubstitutions = async (): Promise<SubstitutionsPage> => {
   });
 
   return {
+    heading,
     timeRange,
     tables,
   };

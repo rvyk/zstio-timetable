@@ -15,6 +15,7 @@ interface SubstitutionTable {
 }
 
 interface SubstitutionsPage {
+  heading: string;
   timeRange: string;
   tables: SubstitutionTable[];
 }
