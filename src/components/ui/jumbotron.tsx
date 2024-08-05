@@ -23,7 +23,7 @@ const Jumbotron = () => {
   if (isMobile) return null;
 
   return (
-    <div className="relative mx-auto max-w-screen-xl px-4 py-8 text-center">
+    <div className="relative mx-auto max-w-screen-xl px-4 text-center">
       <div className="-ml-0 mb-4 flex flex-col items-center justify-center sm:-ml-16 sm:mb-0 sm:flex-row">
         <Link
           prefetch={false}
@@ -44,8 +44,12 @@ const Jumbotron = () => {
           <span className="font-extrabold">ZSTiO</span>
         </h1>
       </div>
-      <JumbotronContent {...{ isIndex, isSubstitution, optivumTimetable }} />
-      <JumbotronDropdowns {...{ isIndex, isSubstitution, optivumTimetable }} />
+      <div className="grid gap-5">
+        <JumbotronContent {...{ isIndex, isSubstitution, optivumTimetable }} />
+        <JumbotronDropdowns
+          {...{ isIndex, isSubstitution, optivumTimetable }}
+        />
+      </div>
     </div>
   );
 };
@@ -70,18 +74,19 @@ const JumbotronContent: React.FC<JumbotronContentProps> = ({
 
   const timeTableText =
     !isSubstitution && optivumTimetable?.title
-      ? `${optivumTimetable?.type} /`
+      ? `${optivumTimetable?.type}`
       : `Nie znaleziono pasującego planu lekcji`;
 
   return (
-    <div className="mb-5 hidden flex-wrap items-center justify-center md:flex ">
-      <p className="mr-1 text-xl font-normal text-gray-500 transition-all dark:text-gray-400 lg:text-2xl">
+    <div className="hidden flex-wrap items-center justify-center gap-1 text-xl text-gray-500 transition-all dark:text-gray-400 md:flex lg:text-2xl">
+      <p className="font-normal">
         {!isSubstitution ? timeTableText : substitutionsText}
       </p>
       {!isSubstitution && (
-        <p className="text-xl font-bold text-gray-500 transition-all dark:text-gray-400 lg:text-2xl">
-          {optivumTimetable?.title}
-        </p>
+        <>
+          <p>/</p>
+          <p className="font-bold">{optivumTimetable?.title}</p>
+        </>
       )}
     </div>
   );

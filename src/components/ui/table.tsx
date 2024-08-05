@@ -13,7 +13,7 @@ interface TableProps {
 }
 
 const Table: React.FC<TableProps> = ({ children, className }) => (
-  <div className={cn("relative mb-8 w-full", className)}>
+  <div className={cn("relative w-full", className)}>
     <div className="w-full overflow-x-auto shadow-md md:w-[90%] md:rounded-xl">
       <table className="w-full text-left text-sm text-gray-500 transition-all duration-200 dark:text-gray-300">
         {children}

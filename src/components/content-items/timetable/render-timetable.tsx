@@ -45,20 +45,23 @@ const RenderTimeTable: React.FC<TimeTableProps> = ({ maxLessons }) => {
     .hoursTime;
 
   return (
-    <Table className="hidden justify-center md:flex">
-      <TableCaption>
+    <Table className="hidden w-screen justify-center md:flex">
+      <TableCaption className="gap-2">
         <div className="hidden md:block ">
           <ShortHoursCalculator className="dark:!bg-[#171717] dark:hover:!bg-[#202020]" />
         </div>
-        <div className="mr-2 inline-flex rounded-md shadow-sm" role="group">
+        <div className="inline-flex rounded-md shadow-sm" role="group">
           <ShortHoursButton />
         </div>
-        <p className="mr-1 text-lg font-normal text-gray-500 transition-all dark:text-gray-300 lg:text-xl">
-          {optivumTimetable?.type} /
-        </p>
-        <p className="text-lg font-bold text-gray-500 transition-all dark:text-gray-300 lg:text-xl">
-          {optivumTimetable?.title}
-        </p>
+        <div className="inline-flex gap-1">
+          <p className="text-lg font-normal text-gray-500 transition-all dark:text-gray-300 lg:text-xl">
+            {optivumTimetable?.type}
+          </p>
+          <p>/</p>
+          <p className="text-lg font-bold text-gray-500 transition-all dark:text-gray-300 lg:text-xl">
+            {optivumTimetable?.title}
+          </p>
+        </div>
       </TableCaption>
       <TableHeader />
       {Object.entries(hoursTime).length > 1 ? (
@@ -214,8 +217,8 @@ const RenderTimeTableMobile: React.FC<TimeTableMobileProps> = ({
 
               return (
                 <ListRow key={lessonIndex} reverseColor={lessonIndex % 2 == 0}>
-                  <ListSmallItem>
-                    <span className="mb-1 block text-center font-bold">
+                  <ListSmallItem className="gap-1">
+                    <span className="block text-center font-bold">
                       {lessonNumber}
                     </span>
                     {getCurrentLesson(timeFrom, timeTo).isWithinTimeRange &&

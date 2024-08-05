@@ -31,8 +31,8 @@ const Navbar: React.FC = () => {
   return (
     <div className="relative z-30 flex justify-between rounded-b-lg bg-[#ffffff] p-2 shadow-sm transition-all dark:bg-[#202020] md:absolute md:right-2 md:top-2 md:!bg-transparent md:p-0 md:shadow-none">
       {isMobile && (
-        <div className="flex items-center">
-          <div className="relative mr-2 h-11 w-11">
+        <div className="flex items-center gap-2">
+          <div className="relative h-11 w-11">
             <Link prefetch={false} href="https://zstiojar.edu.pl">
               <Image
                 alt="logo"
@@ -49,27 +49,26 @@ const Navbar: React.FC = () => {
         </div>
       )}
 
-      <div className="flex items-center justify-center">
+      <div className="flex items-center justify-center gap-2">
         {!isSubstitutions && (
-          <div className="">
-            <NavigationMenu>
-              <NavigationMenuList>
-                <div className="flex flex-row">
-                  <NavigationMenuItem>
-                    {isMobile && <MoreButtons />}
-                    <NavigationMenuContent className="flex flex-col items-center justify-around rounded py-1.5">
+          <NavigationMenu>
+            <NavigationMenuList>
+              <div className="flex flex-row">
+                <NavigationMenuItem>
+                  {isMobile && <MoreButtons />}
+                  <NavigationMenuContent className="flex flex-col items-center justify-around rounded py-1.5">
+                    <div className="space-y-1">
                       <RoomLookup />
-                      <div className="h-1"></div>
                       <ShortHoursCalculator />
-                    </NavigationMenuContent>
-                  </NavigationMenuItem>
-                </div>
-              </NavigationMenuList>
-            </NavigationMenu>
-          </div>
+                    </div>
+                  </NavigationMenuContent>
+                </NavigationMenuItem>
+              </div>
+            </NavigationMenuList>
+          </NavigationMenu>
         )}
         <PWAButton />
-        <div>{!isSubstitutions && !isMobile && <RoomLookup />}</div>
+        {!isSubstitutions && !isMobile && <RoomLookup />}
         <RedirectButton />
         <ThemeButton />
       </div>

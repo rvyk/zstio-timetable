@@ -31,7 +31,7 @@ const buttonVariants = cva(
         sm: "h-8 rounded-md px-3 text-xs",
         lg: "h-10 rounded-md px-8",
         icon: "h-9 w-9",
-        navbar: "p-3 mr-2 text-xs",
+        navbar: "p-3 text-xs",
         dropdown: "mx-2 sm:my-0 my-2 px-4 py-2.5",
         filter: "px-2 py-1 mr-2",
       },

@@ -36,9 +36,11 @@ const MainRoute: NextPage<{ params: { all: string[] } }> = async ({
       <SettingsProvider>
         <Navbar />
         {process.env.NEXT_PUBLIC_CMS && <Messages />}
-        <Jumbotron />
-        <Content />
-        <Footer renderInMobile={false} />
+        <div className="grid gap-8">
+          <Jumbotron />
+          <Content />
+          <Footer renderInMobile={false} />
+        </div>
       </SettingsProvider>
     </TimetableProvider>
   );

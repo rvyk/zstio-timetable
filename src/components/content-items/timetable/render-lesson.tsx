@@ -23,9 +23,9 @@ const RenderLesson: React.FC<RenderLessonProps> = ({
 }) => {
   return (
     <div className="flex flex-col">
-      <div className="flex flex-row">
+      <div className="flex flex-row gap-1">
         <div
-          className={`mr-1 flex flex-col font-semibold ${
+          className={`flex flex-col font-semibold ${
             substitution && sure && "line-through opacity-60"
           }`}
         >
@@ -34,7 +34,7 @@ const RenderLesson: React.FC<RenderLessonProps> = ({
 
         {lesson?.groupName && (
           <p
-            className={`mr-1 flex items-center ${
+            className={`flex items-center ${
               substitution && sure && "line-through opacity-60"
             }`}
           >
@@ -46,7 +46,7 @@ const RenderLesson: React.FC<RenderLessonProps> = ({
           <Link
             prefetch={false}
             href={`/class/${lesson?.classId}`}
-            className={`mr-1 flex items-center hover:underline ${
+            className={`flex items-center hover:underline ${
               substitution && sure && "line-through opacity-60"
             }`}
           >
@@ -58,7 +58,7 @@ const RenderLesson: React.FC<RenderLessonProps> = ({
           <Link
             prefetch={false}
             href={`/teacher/${lesson?.teacherId}`}
-            className={`mr-1 flex items-center hover:underline ${
+            className={`flex items-center hover:underline ${
               substitution && sure && "line-through opacity-60"
             }`}
           >
@@ -69,7 +69,7 @@ const RenderLesson: React.FC<RenderLessonProps> = ({
           <Link
             prefetch={false}
             href={`/room/${lesson?.roomId}`}
-            className={`mr-1 flex items-center hover:underline ${
+            className={`flex items-center hover:underline ${
               substitution && sure && "line-through opacity-60"
             }`}
           >

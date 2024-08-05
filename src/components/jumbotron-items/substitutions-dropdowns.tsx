@@ -41,7 +41,7 @@ const SubstitutionsDropdowns: React.FC = () => {
   };
 
   return (
-    <>
+    <div className="block">
       <Suspense>
         {!!uniqueData.branches.length && (
           <SubstitutionDropdown
@@ -59,7 +59,7 @@ const SubstitutionsDropdowns: React.FC = () => {
           />
         )}
       </Suspense>
-    </>
+    </div>
   );
 };
 

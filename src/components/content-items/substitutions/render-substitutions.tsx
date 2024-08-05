@@ -26,11 +26,11 @@ const RenderSubstitutions: React.FC<RenderSubstitutionsProps> = ({
   time,
 }) => {
   return (
-    <Table className="hidden justify-center md:flex">
+    <Table className="hidden w-screen justify-center md:flex">
       <TableCaption className="flex-col !items-start justify-center">
         {time}
         <Suspense>
-        <Filters />
+          <Filters />
         </Suspense>
       </TableCaption>
       <TableHeader isSubstitutions={true} />
