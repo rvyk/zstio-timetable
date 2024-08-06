@@ -36,7 +36,7 @@ const MainRoute: NextPage<{ params: { all: string[] } }> = async ({
       <SettingsProvider>
         <Navbar />
         {process.env.NEXT_PUBLIC_CMS && <Messages />}
-        <div className="grid gap-8">
+        <div className="grid gap-8 md:py-8">
           <Jumbotron />
           <Content />
           <Footer renderInMobile={false} />

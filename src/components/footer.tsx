@@ -11,7 +11,7 @@ const Footer: React.FC<{ renderInMobile?: boolean }> = ({
 
   if (!renderInMobile && isMobile) return null;
   return (
-    <footer className="mt-2 flex w-full items-center justify-center pb-8 md:mt-0">
+    <footer className="flex w-full items-center justify-center">
       <div className="mx-auto w-[90%] rounded-lg bg-[#2B161B] p-4 shadow dark:bg-[#202020] sm:w-auto">
         <span className="block text-center text-sm text-[#ffffff] dark:text-gray-400">
           © {new Date().getFullYear()}
