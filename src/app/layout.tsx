@@ -1,3 +1,4 @@
+import Notifications from "@/components/notifications";
 import { ThemeProvider } from "@/components/theme-provider";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import "@/styles/globals.css";
@@ -24,6 +25,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
         <ThemeProvider attribute="class">
           <TooltipProvider>{children}</TooltipProvider>
         </ThemeProvider>
+        <Notifications />
       </body>
     </html>
   );

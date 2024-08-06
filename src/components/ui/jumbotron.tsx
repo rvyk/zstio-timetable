@@ -82,10 +82,10 @@ const JumbotronContent: React.FC<JumbotronContentProps> = ({
       <p className="font-normal">
         {!isSubstitution ? timeTableText : substitutionsText}
       </p>
-      {!isSubstitution && (
+      {!isSubstitution && optivumTimetable?.title && (
         <>
           <p>/</p>
-          <p className="font-bold">{optivumTimetable?.title}</p>
+          <p className="font-bold">{optivumTimetable.title}</p>
         </>
       )}
     </div>

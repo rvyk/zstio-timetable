@@ -18,6 +18,7 @@ import Image from "next/legacy/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import ShortHoursButton from "../content-items/timetable/short-hours-button";
+import SubscribeButton from "../navbar-buttons/subscribe";
 import ThemeButton from "../navbar-buttons/theme";
 
 const Navbar: React.FC = () => {
@@ -58,6 +59,7 @@ const Navbar: React.FC = () => {
                   {isMobile && <MoreButtons />}
                   <NavigationMenuContent className="flex flex-col items-center justify-around rounded py-1.5">
                     <div className="space-y-1">
+                      <SubscribeButton />
                       <RoomLookup />
                       <ShortHoursCalculator />
                     </div>
@@ -68,6 +70,7 @@ const Navbar: React.FC = () => {
           </NavigationMenu>
         )}
         <PWAButton />
+        {!isMobile && <SubscribeButton />}
         {!isSubstitutions && !isMobile && <RoomLookup />}
         <RedirectButton />
         <ThemeButton />
