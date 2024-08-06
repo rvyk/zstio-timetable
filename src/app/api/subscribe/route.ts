@@ -1,5 +1,13 @@
+import db from "@/lib/firestore";
+import {
+  addDoc,
+  collection,
+  deleteDoc,
+  doc,
+  getDocs,
+} from "@firebase/firestore";
 import { NextResponse } from "next/server";
-import webpush from "web-push";
+import webpush, { WebPushError } from "web-push";
 
 webpush.setVapidDetails(
   "https://discord.gg/5XCb2JzW https://discord.gg/DFadgeRr",
@@ -7,38 +15,55 @@ webpush.setVapidDetails(
   process.env.PRIVATE_VAPID_KEY as string,
 );
 
-const subscriptions: webpush.PushSubscription[] = [];
+// export async function GET() {
+//   try {
+//     sendNotification({
+//       title: "Welcome to the Notification Demo",
+//       options: {
+//         body: "You will now receive notifications from this website.",
+//         icon: "/favicon.ico",
+//       },
+//     });
 
-export function GET() {
+//     return NextResponse.json({
+//       success: true,
+//       subscriptions: (await getDocs(collection(db, "subscribers"))).docs.map(
+//         (doc) => doc.data() as webpush.PushSubscription,
+//       ),
+//     });
+//   } catch (error) {
+//     return NextResponse.json(error);
+//   }
+// }
+
+export async function POST(req: Request) {
   try {
-    sendNotification(
-      subscriptions,
-      JSON.stringify({ title: "Hello", message: "World" }),
-    );
-    return NextResponse.json({ success: true, subscriptions });
+    const subscription = (await req.json()) as webpush.PushSubscription;
+    const ref = await addDoc(collection(db, "subscribers"), subscription);
+    return NextResponse.json({ success: true, id: ref.id });
   } catch (error) {
     return NextResponse.json(error);
+    Notification;
   }
 }
 
-export async function POST(req: Request) {
-  const subscription = (await req.json()) as webpush.PushSubscription;
-  subscriptions.push(subscription);
-  return NextResponse.json({ success: true });
-}
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const sendNotification = async (dataToSend: {
+  title: string;
+  options: NotificationOptions;
+}) => {
+  const querySnapshot = await getDocs(collection(db, "subscribers"));
 
-function sendNotification(
-  subscriptions: webpush.PushSubscription[],
-  dataToSend: string | Buffer | null,
-) {
-  subscriptions.forEach((subscription) => {
+  querySnapshot.forEach((subscription) => {
     webpush
-      .sendNotification(subscription, dataToSend)
-      .then(() => {
-        console.log("Notification sent to: ", subscription.endpoint);
-      })
+      .sendNotification(
+        subscription.data() as webpush.PushSubscription,
+        JSON.stringify(dataToSend),
+      )
       .catch((error) => {
-        console.error("Error sending notification, reason: ", error);
+        if (error instanceof WebPushError && error.statusCode === 410) {
+          deleteDoc(doc(db, "subscribers", subscription.id));
+        }
       });
   });
-}
+};

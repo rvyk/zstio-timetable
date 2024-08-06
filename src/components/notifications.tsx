@@ -6,7 +6,7 @@ const Notifications: React.FC = () => {
   useEffect(() => {
     if ("serviceWorker" in navigator) {
       navigator.serviceWorker
-        .register("/service-worker.js")
+        .register("/notifications-sw.js")
         .then((registration) => {
           console.log(
             "Service Worker registered with scope:",

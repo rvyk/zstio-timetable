@@ -10,11 +10,12 @@ const withPWA = require("next-pwa")({
 
 const nextConfig = {
   rewrites: async () => {
-    const { NEXT_PUBLIC_TIMETABLE_URL, NEXT_PUBLIC_CMS } = process.env;
+    const { NEXT_PUBLIC_TIMETABLE_URL, NEXT_PUBLIC_CMS, NEXT_PUBLIC_HOST } =
+      process.env;
 
-    if (!NEXT_PUBLIC_TIMETABLE_URL) {
+    if (!NEXT_PUBLIC_TIMETABLE_URL || !NEXT_PUBLIC_HOST) {
       throw new Error(
-        "Environment variable NEXT_PUBLIC_TIMETABLE_URL must be defined",
+        "Environment variables NEXT_PUBLIC_HOST an NEXT_PUBLIC_TIMETABLE_URL must be defined",
       );
     }
 
