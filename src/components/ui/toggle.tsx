@@ -15,7 +15,7 @@ const toggleVariants = cva(
         outline:
           "border border-input bg-transparent shadow-sm hover:bg-accent hover:text-accent-foreground",
         roomLookup:
-          "flex transition-all items-center font-medium text-gray-700 bg-white border border-gray-200 rounded-lg hover:bg-[#321c21] hover:text-gray-100 dark:bg-[#313131] dark:text-gray-200 dark:border-[#202020] dark:data-[state=on]:bg-[#171717] data-[state=on]:bg-[#321c21] data-[state=on]:text-gray-50 dark:hover:border-[#171717] dark:hover:text-white dark:hover:bg-[#171717] cursor-pointer",
+          "flex transition-colors items-center font-medium bg-white border border-gray-200 rounded-lg hover:bg-accent hover:text-accent-foreground dark:bg-[#313131] dark:text-gray-200 dark:border-[#202020] dark:data-[state=on]:bg-[#171717] data-[state=on]:bg-[#321c21] data-[state=on]:text-gray-50 dark:hover:border-[#171717] dark:hover:text-white dark:hover:bg-[#171717] cursor-pointer",
       },
       size: {
         default: "h-9 px-3",

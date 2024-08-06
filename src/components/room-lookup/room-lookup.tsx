@@ -94,7 +94,7 @@ const ResponsiveLookupDialog: React.FC<ResponsiveLookupDialogProps> = ({
               >
                 <MinusIcon className="h-4 w-4" />
               </Button>
-              <div className="mb-2 flex w-full flex-col items-center justify-center text-center">
+              <div className="flex w-full flex-col items-center justify-center text-center">
                 <div className="w-full text-center">
                   <input
                     type="number"
