@@ -15,7 +15,7 @@ const nextConfig = {
 
     if (!NEXT_PUBLIC_TIMETABLE_URL || !NEXT_PUBLIC_HOST) {
       throw new Error(
-        "Environment variable NEXT_PUBLIC_TIMETABLE_URL and NEXT_PUBLIC_HOST must be defined",
+        "Environment variables NEXT_PUBLIC_HOST an NEXT_PUBLIC_TIMETABLE_URL must be defined",
       );
     }
 

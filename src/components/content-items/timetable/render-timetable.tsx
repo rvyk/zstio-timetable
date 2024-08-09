@@ -57,10 +57,14 @@ const RenderTimeTable: React.FC<TimeTableProps> = ({ maxLessons }) => {
           <p className="text-lg font-normal text-gray-500 transition-all dark:text-gray-300 lg:text-xl">
             {optivumTimetable?.type}
           </p>
-          <p>/</p>
-          <p className="text-lg font-bold text-gray-500 transition-all dark:text-gray-300 lg:text-xl">
-            {optivumTimetable?.title}
-          </p>
+          {optivumTimetable?.title && (
+            <>
+              <p>/</p>
+              <p className="text-lg font-bold text-gray-500 transition-all dark:text-gray-300 lg:text-xl">
+                {optivumTimetable.title}
+              </p>
+            </>
+          )}
         </div>
       </TableCaption>
       <TableHeader />

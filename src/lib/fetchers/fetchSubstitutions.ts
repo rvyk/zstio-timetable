@@ -1,6 +1,7 @@
 "use server";
 
 import { load } from "cheerio";
+import { notify } from "../notifications";
 
 const fetchSubstitutions = async (): Promise<SubstitutionsPage> => {
   if (!process.env.NEXT_PUBLIC_SUBSTITUTIONS_URL)
@@ -10,6 +11,8 @@ const fetchSubstitutions = async (): Promise<SubstitutionsPage> => {
   const timeRange = $("h2").text().trim();
   const heading = $("h1").text().trim();
   const tables: SubstitutionTable[] = [];
+
+  notify("substitution", timeRange);
 
   $("table").each((_index, table) => {
     const rows = $(table).find("tr");

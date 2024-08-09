@@ -4,6 +4,7 @@ import fetchOptivumList from "@/lib/fetchers/fetchOptivumList";
 import { OptivumTimetable } from "@/types/timetable";
 import { Table } from "@wulkanowy/timetable-parser";
 import { convertTextDate } from "../date";
+import { notify } from "../notifications";
 import fetchSubstitutions from "./fetchSubstitutions";
 
 const fetchOptivumTimetable = async (
@@ -15,7 +16,6 @@ const fetchOptivumTimetable = async (
     teacher: `n${index}`,
     room: `s${index}`,
   };
-
   const id = idMap[type] || "";
 
   const res = await fetch(
@@ -25,11 +25,15 @@ const fetchOptivumTimetable = async (
 
   const timeTableData = new Table(data);
 
+  const genDate = timeTableData.getGeneratedDate();
+
+  if (genDate) notify("timetable", genDate);
+
   return {
     id,
     hours: timeTableData.getHours(),
     lessons: timeTableData.getDays(),
-    generatedDate: timeTableData.getGeneratedDate(),
+    generatedDate: genDate,
     title: timeTableData.getTitle(),
     type:
       { class: "Oddziały", teacher: "Nauczyciele", room: "Klasy" }[type] ||
