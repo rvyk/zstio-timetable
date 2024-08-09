@@ -4,6 +4,8 @@ import fetchOptivumList from "@/lib/fetchers/fetchOptivumList";
 import { OptivumTimetable } from "@/types/timetable";
 import { Table } from "@wulkanowy/timetable-parser";
 import { convertTextDate } from "../date";
+import { getLastTimetableDate, setLastTimetableDate } from "../getLastDates";
+import { sendNotification } from "../notifications";
 import fetchSubstitutions from "./fetchSubstitutions";
 
 const fetchOptivumTimetable = async (
@@ -25,11 +27,26 @@ const fetchOptivumTimetable = async (
 
   const timeTableData = new Table(data);
 
+  const genDate = timeTableData.getGeneratedDate();
+
+  if (genDate != null) {
+    if ((await getLastTimetableDate()) != genDate) {
+      sendNotification({
+        title: "Nowy plan lekcji",
+        options: {
+          body: `Nowy plan lekcji z datą ${genDate} jest już dostępny!`,
+          tag: genDate,
+        },
+      });
+      setLastTimetableDate(genDate);
+    }
+  }
+
   return {
     id,
     hours: timeTableData.getHours(),
     lessons: timeTableData.getDays(),
-    generatedDate: timeTableData.getGeneratedDate(),
+    generatedDate: genDate,
     title: timeTableData.getTitle(),
     type:
       { class: "Oddziały", teacher: "Nauczyciele", room: "Klasy" }[type] ||

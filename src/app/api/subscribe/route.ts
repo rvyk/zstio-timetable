@@ -1,13 +1,7 @@
 import db from "@/lib/firestore";
-import {
-  addDoc,
-  collection,
-  deleteDoc,
-  doc,
-  getDocs,
-} from "@firebase/firestore";
+import { addDoc, collection } from "@firebase/firestore";
 import { NextResponse } from "next/server";
-import webpush, { WebPushError } from "web-push";
+import webpush from "web-push";
 
 webpush.setVapidDetails(
   "https://discord.gg/5XCb2JzW https://discord.gg/DFadgeRr",
@@ -27,9 +21,6 @@ webpush.setVapidDetails(
 
 //     return NextResponse.json({
 //       success: true,
-//       subscriptions: (await getDocs(collection(db, "subscribers"))).docs.map(
-//         (doc) => doc.data() as webpush.PushSubscription,
-//       ),
 //     });
 //   } catch (error) {
 //     return NextResponse.json(error);
@@ -46,24 +37,3 @@ export async function POST(req: Request) {
     Notification;
   }
 }
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const sendNotification = async (dataToSend: {
-  title: string;
-  options: NotificationOptions;
-}) => {
-  const querySnapshot = await getDocs(collection(db, "subscribers"));
-
-  querySnapshot.forEach((subscription) => {
-    webpush
-      .sendNotification(
-        subscription.data() as webpush.PushSubscription,
-        JSON.stringify(dataToSend),
-      )
-      .catch((error) => {
-        if (error instanceof WebPushError && error.statusCode === 410) {
-          deleteDoc(doc(db, "subscribers", subscription.id));
-        }
-      });
-  });
-};

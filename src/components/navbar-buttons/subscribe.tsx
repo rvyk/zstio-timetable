@@ -32,10 +32,7 @@ const SubscribeButton: React.FC = () => {
   };
 
   const checkPermission = (permission?: NotificationPermission) => {
-    if (permission === "granted") {
-      return subscribeUser();
-    }
-    if (Notification.permission === "granted") {
+    if (permission === "granted" || Notification.permission === "granted") {
       return subscribeUser();
     } else if (Notification.permission !== "denied") {
       Notification.requestPermission().then(checkPermission);

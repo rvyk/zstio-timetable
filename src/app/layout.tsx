@@ -39,7 +39,6 @@ export async function generateMetadata({
 }: {
   params: { all: string[] };
 }): Promise<Metadata> {
-  console.log(ogimage.src);
   const timeTable =
     params.all?.length > 1
       ? await fetchOptivumTimetable(params.all[0], params.all[1]).catch()
@@ -54,7 +53,7 @@ export async function generateMetadata({
     description:
       "W prosty sposób sprawdź plan zajęć oraz zastępstwa różnych klas, nauczycieli i sal.",
     openGraph: {
-      images: [ogimage.src],
+      images: [`${ogimage.src}?text=${timeTable?.title}`],
     },
   };
 }
