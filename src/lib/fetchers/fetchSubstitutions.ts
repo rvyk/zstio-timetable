@@ -1,11 +1,7 @@
 "use server";
 
 import { load } from "cheerio";
-import {
-  getLastSubstitutionDate,
-  setLastSubstitutionDate,
-} from "../getLastDates";
-import { sendNotification } from "../notifications";
+import { notify } from "../notifications";
 
 const fetchSubstitutions = async (): Promise<SubstitutionsPage> => {
   if (!process.env.NEXT_PUBLIC_SUBSTITUTIONS_URL)
@@ -13,18 +9,10 @@ const fetchSubstitutions = async (): Promise<SubstitutionsPage> => {
   const response = await fetch(process.env.NEXT_PUBLIC_SUBSTITUTIONS_URL);
   const $ = load(await response.text());
   const timeRange = $("h2").text().trim();
-  if ((await getLastSubstitutionDate()) != timeRange) {
-    sendNotification({
-      title: "Aktualizacja zastepstw",
-      options: {
-        body: `Nowe zastepstwa: "${timeRange}" dostępne na planie lekcji!`,
-        tag: timeRange,
-      },
-    });
-    setLastSubstitutionDate(timeRange);
-  }
   const heading = $("h1").text().trim();
   const tables: SubstitutionTable[] = [];
+
+  notify("substitution", timeRange);
 
   $("table").each((_index, table) => {
     const rows = $(table).find("tr");
