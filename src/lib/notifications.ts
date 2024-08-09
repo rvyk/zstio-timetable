@@ -19,6 +19,7 @@ export const notify = async (
   type: "timetable" | "substitution",
   date: string,
 ) => {
+  if (process.env.NODE_ENV === "development") return;
   if (
     (type == "timetable" && (await getLastTimetableDate()) != date) ||
     (type == "substitution" && (await getLastSubstitutionDate()) != date)
