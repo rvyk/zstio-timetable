@@ -33,7 +33,7 @@ const TableCaption: React.FC<TableCaptionProps> = ({ children, className }) => {
   const isSubstitutions = pathname === "/zastepstwa";
   const optivumTimetable = useContext(TimetableContext);
 
-  const hasNoTimetable = !optivumTimetable?.days?.length;
+  const hasNoTimetable = !optivumTimetable?.lessons?.length;
   const hasNoSubstitutions = optivumTimetable?.substitutions?.tables?.every(
     (table) => table.zastepstwa.length === 0,
   );

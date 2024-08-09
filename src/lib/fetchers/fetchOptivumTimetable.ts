@@ -39,7 +39,6 @@ const fetchOptivumTimetable = async (
       { class: "Oddziały", teacher: "Nauczyciele", room: "Klasy" }[type] ||
       "Brak danych",
     validDate: convertTextDate(timeTableData.getVersionInfo()),
-    days: timeTableData.getDays(),
     dayNames: timeTableData.getDayNames(),
     list: await fetchOptivumList(),
     substitutions: await fetchSubstitutions(),

@@ -8,7 +8,6 @@ interface OptivumTimetable {
   title: string;
   type: string;
   validDate: string;
-  days: TableLesson[][][];
   dayNames: string[];
   list: List;
   substitutions: SubstitutionsPage;
