@@ -14,9 +14,11 @@ import { NextPage } from "next";
 import dynamic from "next/dynamic";
 
 export const revalidate = 10800;
+
 const MainRoute: NextPage<{ params: { all: string[] } }> = async ({
   params,
 }) => {
+  if (params.all[0] == "favicon.ico") return null;
   const timeTable = await fetchOptivumTimetable(params.all[0], params.all[1]);
   return (
     <TimetableProvider value={timeTable}>

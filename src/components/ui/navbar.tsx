@@ -1,23 +1,19 @@
 "use client";
 
 import ShortHoursCalculator from "@/components/content-items/timetable/short-hours-calculator";
-import MoreButtons from "@/components/navbar-buttons/more-buttons";
 import PWAButton from "@/components/navbar-buttons/pwa";
 import RedirectButton from "@/components/navbar-buttons/redirect";
 import RoomLookup from "@/components/navbar-buttons/room-lookup";
 
-import {
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuItem,
-  NavigationMenuList,
-} from "@/components/ui/navigation-menu";
 import useBetterMediaQuery from "@/lib/useMediaQueryClient";
 import zstioLogo72 from "@/media/icon-72x72.png";
+import { Menu, Transition } from "@headlessui/react";
 import Image from "next/legacy/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { Fragment } from "react";
 import ShortHoursButton from "../content-items/timetable/short-hours-button";
+import MoreButtons from "../navbar-buttons/more-buttons";
 import SubscribeButton from "../navbar-buttons/subscribe";
 import ThemeButton from "../navbar-buttons/theme";
 
@@ -50,24 +46,37 @@ const Navbar: React.FC = () => {
         </div>
       )}
 
-      <div className="flex items-center justify-center gap-2">
+      <div className="relative flex items-center justify-center gap-2">
         {!isSubstitutions && (
-          <NavigationMenu>
-            <NavigationMenuList>
-              <div className="flex flex-row">
-                <NavigationMenuItem>
-                  {isMobile && <MoreButtons />}
-                  <NavigationMenuContent className="flex flex-col items-center justify-around rounded py-1.5">
-                    <div className="space-y-1">
+          <Menu as="div" className="w-full text-left">
+            {({ open }) => (
+              <>
+                {isMobile && (
+                  <Menu.Button as="div">
+                    <MoreButtons />
+                  </Menu.Button>
+                )}
+                <Transition
+                  show={open}
+                  as={Fragment}
+                  enter="transition ease-out duration-100"
+                  enterFrom="transform opacity-0 scale-95"
+                  enterTo="transform opacity-100 scale-100"
+                  leave="transition ease-in duration-75"
+                  leaveFrom="transform opacity-100 scale-100"
+                  leaveTo="transform opacity-0 scale-95"
+                >
+                  <Menu.Items className="absolute mt-2.5 max-h-48 w-fit -translate-x-1 overflow-y-scroll rounded-lg border-0 bg-white p-1 shadow dark:bg-[#131313]">
+                    <div className="flex w-fit flex-col space-y-1">
                       <SubscribeButton />
                       <RoomLookup />
                       <ShortHoursCalculator />
                     </div>
-                  </NavigationMenuContent>
-                </NavigationMenuItem>
-              </div>
-            </NavigationMenuList>
-          </NavigationMenu>
+                  </Menu.Items>
+                </Transition>
+              </>
+            )}
+          </Menu>
         )}
         <PWAButton />
         {!isMobile && <SubscribeButton />}
