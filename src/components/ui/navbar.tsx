@@ -1,6 +1,5 @@
 "use client";
 
-import ShortHoursCalculator from "@/components/content-items/timetable/short-hours-calculator";
 import PWAButton from "@/components/navbar-buttons/pwa";
 import RedirectButton from "@/components/navbar-buttons/redirect";
 import RoomLookup from "@/components/navbar-buttons/room-lookup";
@@ -17,6 +16,32 @@ import CalendarButton from "../navbar-buttons/calendar";
 import MoreButtons from "../navbar-buttons/more-buttons";
 import SubscribeButton from "../navbar-buttons/subscribe";
 import ThemeButton from "../navbar-buttons/theme";
+
+const buttons = [
+  {
+    component: ThemeButton,
+  },
+  {
+    component: RedirectButton,
+  },
+  {
+    component: RoomLookup,
+    hiddenInSubstitutions: true,
+    inMobileDropdown: true,
+  },
+  {
+    component: SubscribeButton, //ik hidden in substitutions on mobile
+    inMobileDropdown: true,
+  },
+  {
+    component: CalendarButton,
+    hiddenInSubstitutions: true,
+    inMobileDropdown: true,
+  },
+  {
+    component: PWAButton,
+  },
+];
 
 const Navbar: React.FC = () => {
   const pathname = usePathname();
@@ -69,9 +94,12 @@ const Navbar: React.FC = () => {
                 >
                   <Menu.Items className="absolute mt-2.5 max-h-48 w-fit -translate-x-1 overflow-y-scroll rounded-lg border-0 bg-white p-1 shadow dark:bg-[#131313]">
                     <div className="flex w-fit flex-col space-y-1">
-                      <SubscribeButton />
-                      <RoomLookup />
-                      <ShortHoursCalculator />
+                      {buttons
+                        .filter((b) => b.inMobileDropdown === true)
+                        .reverse()
+                        .map((b, i) => (
+                          <b.component key={i} />
+                        ))}
                     </div>
                   </Menu.Items>
                 </Transition>
@@ -79,12 +107,22 @@ const Navbar: React.FC = () => {
             )}
           </Menu>
         )}
-        <PWAButton />
-        {!isMobile && <CalendarButton />}
-        {!isMobile && <SubscribeButton />}
-        {!isSubstitutions && !isMobile && <RoomLookup />}
-        <RedirectButton />
-        <ThemeButton />
+        {buttons
+          .filter((b) => {
+            if (isMobile) {
+              return !b?.inMobileDropdown;
+            }
+
+            if (isSubstitutions) {
+              return !b.hiddenInSubstitutions;
+            }
+
+            return true;
+          })
+          .reverse()
+          .map((b, i) => (
+            <b.component key={i} />
+          ))}
       </div>
     </div>
   );
