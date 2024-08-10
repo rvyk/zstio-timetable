@@ -13,6 +13,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Fragment } from "react";
 import ShortHoursButton from "../content-items/timetable/short-hours-button";
+import CalendarButton from "../navbar-buttons/calendar";
 import MoreButtons from "../navbar-buttons/more-buttons";
 import SubscribeButton from "../navbar-buttons/subscribe";
 import ThemeButton from "../navbar-buttons/theme";
@@ -79,6 +80,7 @@ const Navbar: React.FC = () => {
           </Menu>
         )}
         <PWAButton />
+        {!isMobile && <CalendarButton />}
         {!isMobile && <SubscribeButton />}
         {!isSubstitutions && !isMobile && <RoomLookup />}
         <RedirectButton />
