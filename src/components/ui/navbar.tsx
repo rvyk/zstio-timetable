@@ -12,6 +12,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Fragment } from "react";
 import ShortHoursButton from "../content-items/timetable/short-hours-button";
+import ShortHoursCalculator from "../content-items/timetable/short-hours-calculator";
 import CalendarButton from "../navbar-buttons/calendar";
 import MoreButtons from "../navbar-buttons/more-buttons";
 import SubscribeButton from "../navbar-buttons/subscribe";
@@ -28,6 +29,12 @@ const buttons = [
     component: RoomLookup,
     hiddenInSubstitutions: true,
     inMobileDropdown: true,
+  },
+  {
+    component: ShortHoursCalculator,
+    onlyOnMobile: true,
+    inMobileDropdown: true,
+    hiddenInSubstitutions: true,
   },
   {
     component: SubscribeButton, //ik hidden in substitutions on mobile
@@ -111,6 +118,8 @@ const Navbar: React.FC = () => {
           .filter((b) => {
             if (isMobile) {
               return !b?.inMobileDropdown;
+            } else {
+              if (b?.onlyOnMobile) return false;
             }
 
             if (isSubstitutions) {

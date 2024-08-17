@@ -2,7 +2,7 @@
 
 import ButtonWrapper from "@/components/navbar-buttons/wrapper";
 import { getIcs } from "@/lib/calendar";
-import { CalendarDaysIcon } from "@heroicons/react/24/outline";
+import { DocumentArrowDownIcon } from "@heroicons/react/24/outline";
 import { useCallback, useContext } from "react";
 import { TimetableContext } from "../timetable-provider";
 
@@ -29,12 +29,12 @@ const CalendarButton: React.FC = () => {
   }, [optivumTimetable?.lessons, optivumTimetable?.title]);
 
   return (
-    <ButtonWrapper tooltipText="Dodaj do kalendarza">
+    <ButtonWrapper tooltipText="Pobierz do kalendarza">
       <a
         download={`${optivumTimetable?.title ?? "plan"}.ics`}
         href={getLinkUrl()}
       >
-        <CalendarDaysIcon className="h-4 w-4" />
+        <DocumentArrowDownIcon className="h-4 w-4" />
       </a>
     </ButtonWrapper>
   );
