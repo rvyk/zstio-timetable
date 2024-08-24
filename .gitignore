@@ -23,3 +23,5 @@ public/teachers.json
 cypress/screenshots/
 
 certificates
+# Sentry Config File
+.env.sentry-build-plugin

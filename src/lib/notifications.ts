@@ -9,17 +9,34 @@ import {
   setLastTimetableDate,
 } from "./getLastDates";
 
-webpush.setVapidDetails(
-  "https://discord.gg/5XCb2JzW",
-  process.env.NEXT_PUBLIC_VAPID_KEY as string,
-  process.env.PRIVATE_VAPID_KEY as string,
-);
+if (process.env.NEXT_PUBLIC_VAPID_KEY && process.env.PRIVATE_VAPID_KEY) {
+  webpush.setVapidDetails(
+    "https://discord.gg/5XCb2JzW",
+    process.env.NEXT_PUBLIC_VAPID_KEY as string,
+    process.env.PRIVATE_VAPID_KEY as string,
+  );
+}
 
 export const notify = async (
   type: "timetable" | "substitution",
   date: string,
 ) => {
-  if (process.env.NODE_ENV === "development") return;
+  const isDevelopment = process.env.NODE_ENV === "development";
+  const missingEnvVars = [
+    process.env.NEXT_PUBLIC_VAPID_KEY,
+    process.env.PRIVATE_VAPID_KEY,
+    process.env.FIREBASE_API_KEY,
+    process.env.FIREBASE_AUTH_DOMAIN,
+    process.env.FIREBASE_PROJECT_ID,
+    process.env.FIREBASE_STORAGE_BUCKET,
+    process.env.FIREBASE_MESSAGING_SENDER_ID,
+    process.env.FIREBASE_APP_ID,
+  ].some((envVar) => !envVar);
+
+  if (isDevelopment || missingEnvVars) {
+    return;
+  }
+
   if (
     (type == "timetable" && (await getLastTimetableDate()) != date) ||
     (type == "substitution" && (await getLastSubstitutionDate()) != date)
