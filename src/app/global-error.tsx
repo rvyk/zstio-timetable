@@ -7,13 +7,15 @@ import TimetableProvider from "@/components/timetable-provider";
 import Jumbotron from "@/components/ui/jumbotron";
 import Navbar from "@/components/ui/navbar";
 import { OptivumTimetable } from "@/types/timetable";
-import { NextPage, NextPageContext } from "next";
+import * as Sentry from "@sentry/nextjs";
+import Error from "next/error";
+import { useEffect } from "react";
 
-interface ErrorProps {
-  statusCode?: number;
-}
+export default function GlobalError({ error }: { error: Error }) {
+  useEffect(() => {
+    Sentry.captureException(error);
+  }, [error]);
 
-const Error: NextPage<ErrorProps> = ({ statusCode }) => {
   return (
     <TimetableProvider value={{} as OptivumTimetable}>
       <SettingsProvider>
@@ -23,9 +25,7 @@ const Error: NextPage<ErrorProps> = ({ statusCode }) => {
 
         <div className="mb-5 flex flex-col flex-wrap items-center justify-center">
           <p className="mr-1 text-xl font-semibold text-gray-600 dark:text-gray-300 lg:text-2xl">
-            {statusCode
-              ? `Wystąpił błąd (${statusCode}) po stronie serwera`
-              : "Wystąpił problem po stronie klienta"}
+            Wystąpił problem...
           </p>
           <p className="text-gray-600 dark:text-gray-300 lg:text-lg">
             Spróbuj odświeżyć stronę lub zrób zrzut ekranu konsoli (klawisz F12)
@@ -36,11 +36,4 @@ const Error: NextPage<ErrorProps> = ({ statusCode }) => {
       </SettingsProvider>
     </TimetableProvider>
   );
-};
-
-Error.getInitialProps = ({ res, err }: NextPageContext) => {
-  const statusCode = res ? res.statusCode : err ? err.statusCode : 404;
-  return { statusCode };
-};
-
-export default Error;
+}
