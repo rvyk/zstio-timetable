@@ -1,42 +1,31 @@
 "use client";
 
 import ButtonWrapper from "@/components/navbar-buttons/wrapper";
-import { getIcs } from "@/lib/calendar";
 import { DocumentArrowDownIcon } from "@heroicons/react/24/outline";
-import { useCallback, useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { TimetableContext } from "../timetable-provider";
 
 const CalendarButton: React.FC = () => {
   const optivumTimetable = useContext(TimetableContext);
+  const [url, setUrl] = useState<string | null>();
 
-  const getLinkUrl = useCallback(() => {
-    if (!optivumTimetable?.lessons) return;
+  useEffect(() => {
+    if (!optivumTimetable?.icalFile) return;
 
-    const { error, value } = getIcs(optivumTimetable?.lessons);
+    const blob = new Blob([optivumTimetable.icalFile], {
+      type: "text/calendar;charset=utf-8",
+    });
+    setUrl(URL.createObjectURL(blob));
+  }, [optivumTimetable?.icalFile]);
 
-    if (error) {
-      console.error(error);
-      return;
-    }
-
-    if (value) {
-      return URL.createObjectURL(
-        new File([value], `${optivumTimetable.title}.ics`, {
-          type: "text/calendar",
-        }),
-      );
-    }
-  }, [optivumTimetable?.lessons, optivumTimetable?.title]);
+  if (!url) return null;
 
   return (
-    <ButtonWrapper tooltipText="Pobierz do kalendarza">
-      <a
-        download={`${optivumTimetable?.title ?? "plan"}.ics`}
-        href={getLinkUrl()}
-      >
+    <a href={url} download={`${optivumTimetable?.title ?? "plan"}.ics`}>
+      <ButtonWrapper tooltipText="Dodaj do kalendarza">
         <DocumentArrowDownIcon className="h-4 w-4" />
-      </a>
-    </ButtonWrapper>
+      </ButtonWrapper>
+    </a>
   );
 };
 

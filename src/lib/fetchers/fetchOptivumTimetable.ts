@@ -3,6 +3,7 @@
 import fetchOptivumList from "@/lib/fetchers/fetchOptivumList";
 import { OptivumTimetable } from "@/types/timetable";
 import { Table } from "@wulkanowy/timetable-parser";
+import { getIcs } from "../calendar";
 import { convertTextDate } from "../date";
 import { notify } from "../notifications";
 import fetchSubstitutions from "./fetchSubstitutions";
@@ -29,6 +30,8 @@ const fetchOptivumTimetable = async (
 
   if (genDate) notify("timetable", genDate);
 
+  const { value: icalFile = "" } = getIcs(timeTableData.getDays());
+
   return {
     id,
     hours: timeTableData.getHours(),
@@ -42,6 +45,7 @@ const fetchOptivumTimetable = async (
     dayNames: timeTableData.getDayNames(),
     list: await fetchOptivumList(),
     substitutions: await fetchSubstitutions(),
+    icalFile,
   };
 };
 

@@ -11,4 +11,5 @@ interface OptivumTimetable {
   dayNames: string[];
   list: List;
   substitutions: SubstitutionsPage;
+  icalFile: string;
 }
