@@ -1,5 +1,6 @@
 "use client";
 
+import { subscribe } from "@/actions/notifications";
 import ButtonWrapper from "@/components/navbar-buttons/wrapper";
 import { BellAlertIcon, BellSlashIcon } from "@heroicons/react/24/outline";
 import { useEffect, useState } from "react";
@@ -14,7 +15,7 @@ const SubscribeButton: React.FC = () => {
         const subscription = await registration.pushManager.getSubscription();
         setIsSubscribe(subscription != null);
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     };
     checkSubscription();
@@ -27,7 +28,7 @@ const SubscribeButton: React.FC = () => {
       await subscription?.unsubscribe();
       setIsSubscribe(false);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
@@ -46,18 +47,12 @@ const SubscribeButton: React.FC = () => {
         userVisibleOnly: true,
         applicationServerKey: process.env.NEXT_PUBLIC_VAPID_KEY,
       });
-      const res = await fetch("/api/subscribe", {
-        method: "POST",
-        body: JSON.stringify(subscription),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      if ((await res.json()).success) {
+      const success = await subscribe(subscription);
+      if (success) {
         setIsSubscribe(true);
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   }
 

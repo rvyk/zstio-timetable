@@ -14,7 +14,7 @@ const Notifications: React.FC = () => {
           );
         })
         .catch((error) => {
-          console.log("Service Worker registration failed:", error);
+          console.error("Service Worker registration failed:", error);
         });
     } else {
       console.log("Service Worker is not supported in this browser.");
