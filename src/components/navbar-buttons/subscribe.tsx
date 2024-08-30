@@ -33,7 +33,7 @@ const SubscribeButton: React.FC = () => {
   };
 
   const checkPermission = (permission?: NotificationPermission) => {
-    if (!Notification)
+    if (typeof Notification === "undefined")
       return window.alert(
         "NotificationAPI is not supported in this browser (try install app on home screen)",
       );
