@@ -13,7 +13,7 @@ import fetchOptivumTimetable from "@/lib/fetchers/fetchOptivumTimetable";
 import { NextPage } from "next";
 import dynamic from "next/dynamic";
 
-export const revalidate = 10800;
+export const revalidate = 3600;
 
 const MainRoute: NextPage<{ params: { all: string[] } }> = async ({
   params,
