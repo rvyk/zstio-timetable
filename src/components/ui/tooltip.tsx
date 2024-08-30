@@ -3,8 +3,8 @@
 import * as TooltipPrimitive from "@radix-ui/react-tooltip";
 import * as React from "react";
 
+import useBetterMediaQuery from "@/lib/useMediaQueryClient";
 import { cn } from "@/lib/utils";
-import { useMediaQuery } from "@uidotdev/usehooks";
 
 const TooltipProvider = TooltipPrimitive.Provider;
 
@@ -16,7 +16,7 @@ const TooltipContent = React.forwardRef<
   React.ElementRef<typeof TooltipPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof TooltipPrimitive.Content>
 >(({ className, sideOffset = 4, ...props }, ref) => {
-  const isNotPhone = useMediaQuery("(max-width: 768px)");
+  const isNotPhone = useBetterMediaQuery("(max-width: 768px)");
   if (isNotPhone) return null;
 
   return (
