@@ -81,34 +81,37 @@ const BottomBar = () => {
               </div>
             </div>
           </DrawerTrigger>
-          <DrawerContent className="!focus:outline-none border-none text-gray-900 !outline-none dark:text-white">
-            <div className="mx-auto w-full max-w-sm">
-              <DrawerHeader className="flex w-full flex-col overflow-scroll transition-all duration-300">
-                <DrawerTitle className="flex items-center justify-center">
-                  <p className="mr-1 text-xl font-normal text-gray-900 transition-all dark:text-gray-300">
-                    {optivumTimetable?.type} /
-                  </p>
-                  <p className="overflow-hidden text-ellipsis text-xl font-bold text-gray-900 transition-all dark:text-gray-300">
-                    {optivumTimetable?.title}
-                  </p>
-                </DrawerTitle>
-              </DrawerHeader>
+          <DrawerContent className="!focus:outline-none h-[calc(100vh-16%)] border-none text-gray-900 !outline-none dark:text-white">
+            <div className="mx-auto flex h-full w-full max-w-xl flex-col justify-between">
+              <div>
+                <DrawerHeader className="flex w-full flex-col overflow-scroll transition-all duration-300">
+                  <DrawerTitle className="flex items-center justify-center">
+                    <p className="mr-1 text-xl font-normal text-gray-900 transition-all dark:text-gray-300">
+                      {optivumTimetable?.type} /
+                    </p>
+                    <p className="overflow-hidden text-ellipsis text-xl font-bold text-gray-900 transition-all dark:text-gray-300">
+                      {optivumTimetable?.title}
+                    </p>
+                  </DrawerTitle>
+                </DrawerHeader>
 
-              <div className="flex w-full flex-col items-center justify-center px-4">
-                <SearchBar />
-                {dropdowns?.map((dropdown) => (
-                  <div key={`dropdown-container-${dropdown.title}`}>
-                    {!!dropdown.data?.length && (
-                      <Dropdown
-                        setIsDrawerOpened={setIsDrawerOpened}
-                        key={`dropdown-${dropdown.title}`}
-                        title={dropdown.title}
-                        results={dropdown.data}
-                      />
-                    )}
-                  </div>
-                ))}
+                <div className="flex w-full flex-col items-center justify-center px-4">
+                  <SearchBar />
+                  {dropdowns?.map((dropdown) => (
+                    <div key={`dropdown-container-${dropdown.title}`}>
+                      {!!dropdown.data?.length && (
+                        <Dropdown
+                          setIsDrawerOpened={setIsDrawerOpened}
+                          key={`dropdown-${dropdown.title}`}
+                          title={dropdown.title}
+                          results={dropdown.data}
+                        />
+                      )}
+                    </div>
+                  ))}
+                </div>
               </div>
+
               <DrawerFooter>
                 <div className="flex w-full flex-col items-center justify-center text-center text-gray-900 dark:text-gray-300">
                   {optivumTimetable?.generatedDate && (

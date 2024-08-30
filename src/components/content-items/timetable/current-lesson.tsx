@@ -1,6 +1,7 @@
 "use client";
 
 import { cn, getCurrentLesson } from "@/lib/utils";
+import { useIsClient } from "@uidotdev/usehooks";
 import { useEffect, useState } from "react";
 
 function CurrentLesson({
@@ -12,6 +13,7 @@ function CurrentLesson({
   timeTo: string;
   className?: string;
 }) {
+  const isClient = useIsClient();
   const [minutesRemaining, setMinutesRemaining] = useState(
     getCurrentLesson(timeFrom, timeTo).minutesRemaining,
   );
@@ -32,12 +34,13 @@ function CurrentLesson({
     return () => clearInterval(timer);
   }, [timeFrom, timeTo]);
 
-  if (!isWithinTimeRange || minutesRemaining <= 0) return null;
+  if (!isWithinTimeRange || minutesRemaining <= 0 || !isClient) return null;
+
   return (
     <>
       <div
         className={cn(
-          "flex h-fit w-fit flex-col items-center justify-center rounded border border-blue-400 bg-blue-100 px-2.5 py-0.5  text-xs font-medium text-blue-800 dark:border-red-400 dark:bg-red-100 dark:text-red-800",
+          "flex h-fit w-fit flex-col items-center justify-center rounded border border-blue-400 bg-blue-100 px-2.5 py-0.5 text-xs font-medium text-blue-800 dark:border-red-400 dark:bg-red-100 dark:text-red-800",
           className,
         )}
       >
