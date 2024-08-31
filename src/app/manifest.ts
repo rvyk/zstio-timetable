@@ -7,6 +7,7 @@ import zstioLogo152 from "@/media/icon-152x152.png";
 import zstioLogo192 from "@/media/icon-192x192.png";
 import zstioLogo72 from "@/media/icon-72x72.png";
 import zstioLogo96 from "@/media/icon-96x96.png";
+import zstioLogoMonochrome from "@/media/icon-monochrome.png";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
@@ -19,6 +20,12 @@ export default function manifest(): MetadataRoute.Manifest {
     background_color: defaults.themeColor,
     theme_color: defaults.themeColor,
     icons: [
+      {
+        src: zstioLogoMonochrome.src,
+        sizes: "583x583",
+        type: "image/png",
+        purpose: "monochrome",
+      },
       {
         src: zstioLogo1024.src,
         sizes: "1024x1024",
