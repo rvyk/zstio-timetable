@@ -2,7 +2,6 @@ import defaults from "@/../app.config";
 import { MetadataRoute } from "next";
 
 import zstioLogo512 from "@/media/icon-512x512.png";
-import zstioLogoMonochrome from "@/media/icon-monochrome.png";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
@@ -15,12 +14,6 @@ export default function manifest(): MetadataRoute.Manifest {
     background_color: defaults.themeColor,
     theme_color: defaults.themeColor,
     icons: [
-      {
-        src: zstioLogoMonochrome.src,
-        sizes: "512x512",
-        type: "image/png",
-        purpose: "monochrome",
-      },
       {
         src: zstioLogo512.src,
         sizes: "512x512",
