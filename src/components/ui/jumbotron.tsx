@@ -20,7 +20,7 @@ const Jumbotron = () => {
 
   const optivumTimetable = useContext(TimetableContext);
 
-  if (isMobile) return null;
+  if (isMobile && !isIndex) return null;
 
   return (
     <div className="relative mx-auto max-w-screen-xl px-4 text-center">

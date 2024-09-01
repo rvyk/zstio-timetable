@@ -37,7 +37,7 @@ const buttons = [
     hiddenInSubstitutions: true,
   },
   {
-    component: SubscribeButton, //ik hidden in substitutions on mobile
+    component: SubscribeButton,
     inMobileDropdown: true,
   },
   {
@@ -47,6 +47,7 @@ const buttons = [
   },
   {
     component: PWAButton,
+    inMobileDropdown: true,
   },
 ];
 
@@ -99,7 +100,7 @@ const Navbar: React.FC = () => {
                   leaveFrom="transform opacity-100 scale-100"
                   leaveTo="transform opacity-0 scale-95"
                 >
-                  <Menu.Items className="absolute mt-2.5 max-h-48 w-fit -translate-x-1 overflow-y-scroll rounded-lg border-0 bg-white p-1 shadow dark:bg-[#131313]">
+                  <Menu.Items className="absolute mt-2.5 h-fit w-fit -translate-x-1 overflow-y-scroll rounded-lg border-0 bg-white p-1 shadow dark:bg-[#131313]">
                     <div className="flex w-fit flex-col space-y-1">
                       {buttons
                         .filter((b) => b.inMobileDropdown === true)
