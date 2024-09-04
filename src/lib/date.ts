@@ -18,26 +18,21 @@ const months: Record<string, string> = {
 };
 
 export const convertTextDate = (inputDate: string): string => {
-  const regexes = [
-    /(\d{1,2}\.?) (\w+) (\d{4})/,
-    /(\d{1,2})\.(\d{1,2})\.(\d{4})/,
-  ];
-  if (regexes[0].test(inputDate)) {
-    const matchResult = inputDate.match(regexes[0]);
-    if (matchResult) {
-      const [, day, month, year] = matchResult;
-      return `${year}-${
-        months[month.toLowerCase().padStart(2, "0")]
-      }-${day.padStart(2, "0").replace(".", "")}`;
-    }
-  } else if (regexes[1].test(inputDate)) {
-    const matchResult = inputDate.match(regexes[1]);
-    if (matchResult) {
-      const [, day, month, year] = matchResult;
-      return `${year}-${month}-${day}`;
+  inputDate = inputDate.replace(/r\./, "").trim();
+
+  for (const [monthName, monthNumber] of Object.entries(months)) {
+    if (inputDate.includes(monthName)) {
+      const [day, year] = inputDate.replace(monthName, "").trim().split(/\s+/);
+      return `${year}-${monthNumber}-${day.padStart(2, "0")}`;
     }
   }
-  // const dateParts = inputDate.split(" ");
-  // if(dateParts.length === 3 && dateParts[1].length > 2) {}
+
+  const regex = /(\d{1,2})\.(\d{1,2})\.(\d{4})/;
+  const matchResult = inputDate.match(regex);
+  if (matchResult) {
+    const [, day, month, year] = matchResult;
+    return `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`;
+  }
+
   return inputDate;
 };
