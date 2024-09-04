@@ -34,7 +34,7 @@ interface TimeTableProps {
   maxLessons: number;
 }
 
-interface TimeTableMobileProps extends TimeTableProps {
+interface TimeTableMobileProps {
   selectedDay: number;
   setSelectedDay: React.Dispatch<React.SetStateAction<number>>;
 }
@@ -47,7 +47,7 @@ const RenderTimeTable: React.FC<TimeTableProps> = ({ maxLessons }) => {
   return (
     <Table className="hidden w-screen justify-center md:flex">
       <TableCaption className="gap-2">
-        <div className="hidden md:block ">
+        <div className="hidden md:block">
           <ShortHoursCalculator className="dark:!bg-[#171717] dark:hover:!bg-[#202020]" />
         </div>
         <div className="inline-flex rounded-md shadow-sm" role="group">
@@ -181,13 +181,25 @@ const RenderTimeTable: React.FC<TimeTableProps> = ({ maxLessons }) => {
 };
 
 const RenderTimeTableMobile: React.FC<TimeTableMobileProps> = ({
-  maxLessons,
   selectedDay,
   setSelectedDay,
 }) => {
   const optivumTimetable = useContext(TimetableContext);
   const [hoursTime] = (useContext(SettingsContext) as SettingsContextType)
     .hoursTime;
+
+  if (!Array.isArray(optivumTimetable?.lessons[selectedDay])) return null;
+
+  let lastValidIndex = optivumTimetable.lessons[selectedDay].length - 1;
+  while (
+    lastValidIndex >= 0 &&
+    optivumTimetable.lessons[selectedDay][lastValidIndex].length === 0
+  ) {
+    lastValidIndex--;
+  }
+
+  const newArrayLength = lastValidIndex + 1;
+
   return (
     <div className="mb-20" vaul-drawer-wrapper="">
       <div className="w-full py-2.5">
@@ -212,10 +224,10 @@ const RenderTimeTableMobile: React.FC<TimeTableMobileProps> = ({
       </div>
 
       <div className="min-w-screen min-h-[calc(100vh-196px)]">
-        {Object.entries(hoursTime).length > 1 ? (
+        {Object.entries(hoursTime).length > 0 && newArrayLength > 0 ? (
           Object.entries(hoursTime)
             .map(([, value]) => value)
-            .splice(0, maxLessons)
+            .slice(0, newArrayLength)
             .map((hour: hourType, lessonIndex: number) => {
               const { number: lessonNumber, timeFrom, timeTo } = hour;
 

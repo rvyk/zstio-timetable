@@ -98,9 +98,7 @@ const TimeTable = () => {
     <>
       {isMobile ? (
         <>
-          <RenderTimeTableMobile
-            {...{ maxLessons, selectedDay, setSelectedDay }}
-          />
+          <RenderTimeTableMobile {...{ selectedDay, setSelectedDay }} />
           <BottomBar />
         </>
       ) : (
