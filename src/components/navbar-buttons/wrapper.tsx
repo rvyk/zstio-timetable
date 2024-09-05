@@ -22,7 +22,7 @@ const ButtonWrapper: React.FC<ButtonWrapperProps> = ({
 }) => {
   return (
     <Tooltip>
-      <TooltipTrigger>
+      <TooltipTrigger aria-label={tooltipText}>
         <Button
           variant="navbar"
           size="navbar"
