@@ -1,3 +1,4 @@
+import { Sidebar } from "@/components/sidebar";
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
@@ -27,8 +28,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="pl">
-      <body className={`${poppins.className} antialiased`}>{children}</body>
+    <html
+      lang="pl"
+      style={{
+        colorScheme: "dark",
+      }}
+      className="dark"
+    >
+      <body className={`${poppins.className} bg-background antialiased`}>
+        <Sidebar />
+        {children}
+      </body>
     </html>
   );
 }

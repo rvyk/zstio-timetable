@@ -23,9 +23,9 @@ const config: Config = {
         star: "rgb(var(--star))",
       },
       borderRadius: {
-        lg: "var(--radius)",
-        md: "calc(var(--radius) - 2px)",
-        sm: "calc(var(--radius) - 4px)",
+        lg: "16px",
+        md: "12px",
+        sm: "8px",
       },
     },
   },
