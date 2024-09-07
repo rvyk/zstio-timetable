@@ -2,26 +2,30 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: 254, 255, 254; /* #FEFFFE */
+    --foreground: 246, 243, 244; /* #F6F3F4 */
+
+    --accent: 254, 255, 254; /* #FEFFFE */
+    --accent-secondary: 254, 255, 254; /* #FEFFFE */
+    --accent-table: 239, 9, 51; /* #EF0933 */
+
+    --primary: 42, 23, 27; /* #2A171B */
+    --lines: 42, 23, 27; /* #2A171B */
+    --star: 255, 184, 0; /* #FFB800 */
+
+    --radius: 0.5rem;
   }
-}
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
-}
+  .dark {
+    --background: 16, 16, 16; /* #101010 */
+    --foreground: 14, 14, 14; /* #0E0E0E */
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
+    --accent: 21, 21, 21; /* #151515 */
+    --accent-secondary: 32, 32, 32; /* #202020 */
+
+    --primary: 250, 250, 250; /* #FAFAFA */
+    --lines: 28, 28, 28; /* #1C1C1C */
   }
 }
