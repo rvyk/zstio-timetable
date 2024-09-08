@@ -15,10 +15,10 @@ import { useRef, useState } from "react";
 
 export const Sidebar: React.FC = () => {
   return (
-    <div className="h-screen max-w-sm border-r border-accent/10 bg-foreground pr-1.5 dark:border-primary/10">
+    <div className="h-screen w-full max-w-xs border-r border-accent/10 bg-foreground pr-1.5 dark:border-primary/10">
       <div className="mr-3 flex h-full w-full flex-col justify-between space-y-16 overflow-y-auto overflow-x-hidden p-6 pr-3.5">
         <div className="grid gap-9">
-          <div className="inline-flex h-11 w-full items-center gap-x-3 rounded-sm border border-accent/10 bg-accent-secondary p-3 dark:border-primary/10">
+          <div className="inline-flex h-12 w-full items-center gap-x-3 rounded-sm border border-accent/10 bg-accent-secondary p-3 dark:border-primary/10">
             <Search className="text-primary/70" size={20} strokeWidth={2.5} />
             <input
               type="text"
@@ -47,7 +47,7 @@ const SidebarDropdowns: React.FC = () => {
   return (
     <div className="grid gap-5">
       <Dropdown title="Ulubione" icon={StarIcon} />
-      <hr className="h-px w-full border border-accent/10 dark:border-primary/10" />
+      <hr className="h-px w-full border border-primary/10" />
       <Dropdown title="Oddziały" icon={GraduationCap} />
       <Dropdown title="Nauczyciele" icon={Users} />
       <Dropdown title="Sale" icon={MapPin} />
@@ -82,14 +82,14 @@ const Dropdown: React.FC<{
         <div
           className={cn(
             isOpen && "!opacity-100",
-            "absolute -left-2 -top-1.5 z-10 h-[calc(100%+12px)] w-[calc(100%+16px)] rounded-md bg-accent-secondary opacity-0 transition-all group-hover:opacity-100",
+            "absolute -left-2 -top-1.5 z-10 h-[calc(100%+12px)] w-[calc(100%+16px)] rounded-md bg-accent/90 opacity-0 transition-all group-hover:opacity-100",
           )}
         ></div>
         <div className="relative z-20 inline-flex w-full items-center justify-between">
           <div className="inline-flex items-center gap-x-3.5">
-            <div className="grid h-10 w-10 place-content-center rounded-sm border border-primary/10 bg-accent transition-all group-hover:bg-primary group-hover:dark:bg-accent">
+            <div className="grid h-10 w-10 place-content-center rounded-sm border border-primary/10 bg-accent transition-all group-hover:bg-primary/5 group-hover:dark:bg-accent">
               <Icon
-                className="text-primary/80 transition-all group-hover:text-accent/90 group-hover:dark:text-primary/90"
+                className="text-primary/80 transition-all group-hover:text-primary/90"
                 size={20}
                 strokeWidth={2.5}
               />
@@ -116,12 +116,12 @@ const Dropdown: React.FC<{
           "relative -ml-2 w-[calc(100%+16px)] overflow-hidden transition-[max-height] duration-300",
         )}
       >
-        <div className="mt-4 grid gap-2 rounded-md bg-accent-secondary p-4">
+        <div className="mt-4 grid gap-2 rounded-md bg-accent/90 p-4">
           {Array.from({ length: 18 }).map((_, i) => (
             <Link
               href="/"
               key={i}
-              className="rounded-md border border-transparent py-2.5 pl-6 pr-3 text-sm font-medium text-primary transition-all hover:border-primary/10 hover:bg-primary/5 hover:dark:bg-primary/10"
+              className="rounded-md border border-transparent py-3 pl-6 pr-3 text-sm font-semibold text-primary transition-all hover:border-primary/5 hover:bg-primary/5 hover:dark:bg-primary/5"
             >
               3TP
             </Link>
@@ -129,7 +129,7 @@ const Dropdown: React.FC<{
           <hr className="my-4 h-px w-full border border-accent/10 dark:border-primary/10" />
           <button
             onClick={handleClick}
-            className="rounded-md border border-transparent py-3 text-center text-sm font-medium text-primary dark:border-primary/10 dark:bg-primary/10"
+            className="rounded-md border border-primary/5 bg-primary/5 py-3 text-center text-sm font-semibold text-primary dark:border-primary/10 dark:bg-primary/10"
           >
             Zwiń listę
           </button>

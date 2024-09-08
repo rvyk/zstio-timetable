@@ -1,4 +1,7 @@
 import { Sidebar } from "@/components/sidebar";
+import { ThemeProvider } from "@/components/theme-provider";
+import { Topbar } from "@/components/topbar";
+import { cn } from "@/lib/utils";
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
@@ -28,16 +31,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="pl"
-      style={{
-        colorScheme: "dark",
-      }}
-      className="dark"
-    >
-      <body className={`${poppins.className} bg-background antialiased`}>
-        <Sidebar />
-        {children}
+    <html lang="pl" suppressHydrationWarning>
+      <body className={cn(poppins.className, "flex bg-background antialiased")}>
+        <ThemeProvider attribute="class" disableTransitionOnChange>
+          <Sidebar />
+          <div className="flex w-full flex-col">
+            <Topbar />
+            {children}
+          </div>
+        </ThemeProvider>
       </body>
     </html>
   );
