@@ -1,5 +1,6 @@
 "use client";
 
+import { useTimetableStore } from "@/hooks/useTimetable";
 import { cn } from "@/lib/utils";
 import logo_zstio from "@/resources/logo-zstio.png";
 import {
@@ -17,8 +18,10 @@ import { useIsClient } from "usehooks-ts";
 import { Button } from "./ui/button";
 
 export const Topbar: React.FC = () => {
+  const timetable = useTimetableStore((state) => state.timetable);
+
   return (
-    <div className="flex w-full justify-between p-8">
+    <div className="flex w-full justify-between">
       <div className="grid gap-3">
         <Link
           href="https://zstiojar.edu.pl"
@@ -37,7 +40,7 @@ export const Topbar: React.FC = () => {
         <div className="grid">
           <div className="inline-flex items-center gap-x-4">
             <h1 className="text-4.2xl font-semibold text-primary dark:text-primary/90">
-              Plan oddziału 3TP
+              Plan oddziału {timetable?.title}
             </h1>
             <StarIcon size={24} strokeWidth={2.5} className="stroke-star" />
           </div>

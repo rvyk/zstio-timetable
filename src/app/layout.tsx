@@ -35,7 +35,7 @@ export default function RootLayout({
       <body className={cn(poppins.className, "flex bg-background antialiased")}>
         <ThemeProvider attribute="class" disableTransitionOnChange>
           <Sidebar />
-          <div className="flex w-full flex-col">
+          <div className="flex w-full flex-col p-8">
             <Topbar />
             {children}
           </div>
