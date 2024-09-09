@@ -1,8 +1,10 @@
 "use client";
 
-import { useTimetableStore } from "@/hooks/useTimetable";
+import { handleFavorite } from "@/lib/handle-favorites";
 import { cn } from "@/lib/utils";
 import logo_zstio from "@/resources/logo-zstio.png";
+import { useFavoritesStore } from "@/stores/favorites-store";
+import { OptivumTimetable } from "@/types/optivum";
 import {
   ArrowLeftFromLine,
   Menu,
@@ -14,11 +16,21 @@ import {
 import { useTheme } from "next-themes";
 import Image from "next/image";
 import Link from "next/link";
+import React from "react";
 import { useIsClient } from "usehooks-ts";
 import { Button } from "./ui/button";
 
-export const Topbar: React.FC = () => {
-  const timetable = useTimetableStore((state) => state.timetable);
+export const Topbar: React.FC<{
+  timetable: OptivumTimetable;
+}> = ({ timetable }) => {
+  const { favorites } = useFavoritesStore();
+  const isClient = useIsClient();
+
+  const translates = {
+    class: "oddziału",
+    teacher: "nauczyciela",
+    room: "sali",
+  };
 
   return (
     <div className="flex w-full justify-between">
@@ -37,23 +49,77 @@ export const Topbar: React.FC = () => {
             <p className="text-base font-medium">Wróć na stronę szkoły</p>
           </div>
         </Link>
-        <div className="grid">
+        <div className="grid gap-1">
           <div className="inline-flex items-center gap-x-4">
-            <h1 className="text-4.2xl font-semibold text-primary dark:text-primary/90">
-              Plan oddziału {timetable?.title}
+            <h1 className="text-4.2xl font-semibold text-primary/90">
+              {timetable.title ? (
+                <React.Fragment>
+                  Rozkład zajęć {translates[timetable.type]}{" "}
+                  <span className="font-semibold">
+                    {timetable?.title.length > 16
+                      ? `${timetable.title.slice(0, 16)}...`
+                      : timetable.title}
+                  </span>
+                </React.Fragment>
+              ) : (
+                "Nie znaleziono planu zajęć"
+              )}
             </h1>
-            <StarIcon size={24} strokeWidth={2.5} className="stroke-star" />
+            {timetable.title && isClient && (
+              <button onClick={handleFavorite} className="focus:outline-none">
+                <StarIcon
+                  size={24}
+                  strokeWidth={2.5}
+                  className={cn(
+                    favorites.some((c) => c.name === timetable.title)
+                      ? "!fill-star !drop-shadow-[0_0_5.6px_rgba(255,196,46,0.35)]"
+                      : "hover:fill-star",
+                    "fill-transparent stroke-star drop-shadow-none transition-all",
+                  )}
+                />
+              </button>
+            )}
           </div>
-          <p className="text-base font-medium text-primary/70">
-            Wygenerowano:{" "}
-            <span className="font-semibold text-primary/90">2024-09-02</span>,
-            Obowiązuje od:{" "}
-            <span className="font-semibold text-primary/90">2024-09-02</span>
-          </p>
+          <Dates {...{ timetable }} />
         </div>
       </div>
       <TopbarButtons />
     </div>
+  );
+};
+
+const Dates: React.FC<{
+  timetable: OptivumTimetable;
+}> = ({ timetable }) => {
+  return (
+    <p className="text-base font-medium text-primary/70">
+      {[
+        timetable.generatedDate && (
+          <React.Fragment key="generatedDate">
+            Wygenerowano:{" "}
+            <span className="font-semibold text-primary/90">
+              {timetable.generatedDate}
+            </span>
+          </React.Fragment>
+        ),
+        timetable.validDate && (
+          <React.Fragment key="validDate">
+            Obowiązuje od:{" "}
+            <span className="font-semibold text-primary/90">
+              {timetable.validDate}
+            </span>
+          </React.Fragment>
+        ),
+      ]
+        .filter((item): item is JSX.Element => Boolean(item))
+        .reduce<(string | JSX.Element)[]>((acc, curr, index, array) => {
+          if (index < array.length - 1) {
+            return [...acc, curr, ", "];
+          } else {
+            return [...acc, curr];
+          }
+        }, [])}
+    </p>
   );
 };
 

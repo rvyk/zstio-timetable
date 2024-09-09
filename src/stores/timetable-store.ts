@@ -1,12 +1,12 @@
 import { OptivumTimetable } from "@/types/optivum";
 import { create } from "zustand";
 
-interface TimetableState {
+interface TimetableStore {
   timetable: OptivumTimetable | null;
   setTimetable: (timetable: OptivumTimetable) => void;
 }
 
-export const useTimetableStore = create<TimetableState>((set) => ({
+export const useTimetableStore = create<TimetableStore>((set) => ({
   timetable: null,
   setTimetable: (timetable) => set({ timetable }),
 }));

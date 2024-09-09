@@ -1,6 +1,5 @@
 import { Sidebar } from "@/components/sidebar";
 import { ThemeProvider } from "@/components/theme-provider";
-import { Topbar } from "@/components/topbar";
 import { cn } from "@/lib/utils";
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
@@ -35,10 +34,7 @@ export default function RootLayout({
       <body className={cn(poppins.className, "flex bg-background antialiased")}>
         <ThemeProvider attribute="class" disableTransitionOnChange>
           <Sidebar />
-          <div className="flex w-full flex-col p-8">
-            <Topbar />
-            {children}
-          </div>
+          {children}
         </ThemeProvider>
       </body>
     </html>

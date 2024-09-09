@@ -1,9 +1,11 @@
-import SyncTimetableWithStore from "@/components/sync-timetable-with-store";
+import Controller from "@/components/controller";
+import { Topbar } from "@/components/topbar";
 import fetchOptivumList from "@/lib/fetchers/optivum-list";
 import fetchOptivumTimetable from "@/lib/fetchers/optivum-timetable";
 import { OptivumTimetable } from "@/types/optivum";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import React from "react";
 
 export const revalidate = 3600;
 
@@ -20,15 +22,18 @@ const TimetablePage = async ({ params }: { params: { all: string[] } }) => {
     param2,
   );
 
-  if (!timetable) {
-    return <div>No timetable available.</div>;
-  }
+  // if (!timetable.title) {
+  //   return <div>No timetable available.</div>;
+  // }
 
   return (
-    <>
-      <SyncTimetableWithStore timetable={timetable} />
-      <div></div>
-    </>
+    <React.Fragment>
+      <Controller timetable={timetable} />
+      <div className="flex w-full flex-col p-8">
+        <Topbar {...{ timetable }} />
+        {/* <Timetable /> */}
+      </div>
+    </React.Fragment>
   );
 };
 
@@ -36,6 +41,7 @@ export async function generateStaticParams() {
   const { classes, rooms, teachers } = await fetchOptivumList();
 
   return [
+    { all: [] },
     ...classes.map((c) => ({ all: ["class", c.value] })),
     ...(rooms ?? []).map((r) => ({ all: ["room", r.value] })),
     ...(teachers ?? []).map((t) => ({ all: ["teacher", t.value] })),

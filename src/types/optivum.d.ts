@@ -1,5 +1,11 @@
 import { List, TableHour } from "@majusss/timetable-parser";
 
+declare module "@majusss/timetable-parser" {
+  export interface ListItem {
+    type?: string;
+  }
+}
+
 interface OptivumTimetable {
   id: string;
   hours: Record<number, TableHour>;

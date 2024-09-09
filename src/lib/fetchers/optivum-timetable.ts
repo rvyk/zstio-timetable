@@ -2,6 +2,8 @@
 
 import { OptivumTimetable } from "@/types/optivum";
 import { Table } from "@majusss/timetable-parser";
+import moment from "moment";
+import "moment/locale/pl";
 import fetchOptivumList from "./optivum-list";
 
 const fetchOptivumTimetable = async (
@@ -25,7 +27,9 @@ const fetchOptivumTimetable = async (
     id,
     hours: timeTableData.getHours(),
     lessons: timeTableData.getDays(),
-    generatedDate: timeTableData.getGeneratedDate(),
+    generatedDate: moment(timeTableData.getGeneratedDate())
+      .locale("pl")
+      .format("DD MMMM YYYY[r.]"),
     title: timeTableData.getTitle(),
     type: type as OptivumTimetable["type"],
     validDate: timeTableData.getVersionInfo(),
