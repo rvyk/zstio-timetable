@@ -1,13 +1,17 @@
 "use server";
 
-import { TimetableList } from "@majusss/timetable-parser";
+import { List, TimetableList } from "@majusss/timetable-parser";
 
-const fetchOptivumList = async () => {
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_TIMETABLE_URL}/lista.html`,
-  );
-  const data = await res.text();
-  return new TimetableList(data).getList();
+export const fetchOptivumList = async (): Promise<List> => {
+  const url = `${process.env.NEXT_PUBLIC_TIMETABLE_URL}/lista.html`;
+
+  try {
+    const response = await fetch(url);
+    const data = await response.text();
+
+    return new TimetableList(data).getList();
+  } catch (error) {
+    console.error("Failed to fetch Optivum list:", error);
+    return { classes: [], rooms: [], teachers: [] };
+  }
 };
-
-export default fetchOptivumList;

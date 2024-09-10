@@ -20,11 +20,17 @@ import React from "react";
 import { useIsClient } from "usehooks-ts";
 import { Button } from "./ui/button";
 
-export const Topbar: React.FC<{
-  timetable: OptivumTimetable;
-}> = ({ timetable }) => {
+export const Topbar: React.FC<{ timetable: OptivumTimetable }> = ({
+  timetable,
+}) => {
   const { favorites } = useFavoritesStore();
   const isClient = useIsClient();
+
+  const timetableTitle = timetable?.title;
+  const shortenedTitle =
+    timetableTitle && timetableTitle.length > 16
+      ? `${timetableTitle.slice(0, 16)}...`
+      : timetableTitle;
 
   const translates = {
     class: "oddziału",
@@ -32,46 +38,31 @@ export const Topbar: React.FC<{
     room: "sali",
   };
 
+  const isFavorite = favorites.some((c) => c.name === timetableTitle);
+
   return (
     <div className="flex w-full justify-between">
       <div className="grid gap-3">
-        <Link
-          href="https://zstiojar.edu.pl"
-          className="group inline-flex w-fit items-center gap-x-4"
-        >
-          <Image
-            src={logo_zstio}
-            alt="Logo szkoły ZSTiO"
-            className="aspect-square w-10"
-          />
-          <div className="inline-flex gap-x-2 text-primary/70 transition-colors group-hover:text-primary/90">
-            <ArrowLeftFromLine size={20} strokeWidth={2.5} />
-            <p className="text-base font-medium">Wróć na stronę szkoły</p>
-          </div>
-        </Link>
+        <SchoolLink />
         <div className="grid gap-1">
           <div className="inline-flex items-center gap-x-4">
             <h1 className="text-4.2xl font-semibold text-primary/90">
-              {timetable.title ? (
-                <React.Fragment>
+              {timetableTitle ? (
+                <>
                   Rozkład zajęć {translates[timetable.type]}{" "}
-                  <span className="font-semibold">
-                    {timetable?.title.length > 16
-                      ? `${timetable.title.slice(0, 16)}...`
-                      : timetable.title}
-                  </span>
-                </React.Fragment>
+                  <span className="font-semibold">{shortenedTitle}</span>
+                </>
               ) : (
                 "Nie znaleziono planu zajęć"
               )}
             </h1>
-            {timetable.title && isClient && (
+            {timetableTitle && isClient && (
               <button onClick={handleFavorite} className="focus:outline-none">
                 <StarIcon
                   size={24}
                   strokeWidth={2.5}
                   className={cn(
-                    favorites.some((c) => c.name === timetable.title)
+                    isFavorite
                       ? "!fill-star !drop-shadow-[0_0_5.6px_rgba(255,196,46,0.35)]"
                       : "hover:fill-star",
                     "fill-transparent stroke-star drop-shadow-none transition-all",
@@ -80,13 +71,30 @@ export const Topbar: React.FC<{
               </button>
             )}
           </div>
-          <Dates {...{ timetable }} />
+          <Dates timetable={timetable} />
         </div>
       </div>
       <TopbarButtons />
     </div>
   );
 };
+
+const SchoolLink: React.FC = () => (
+  <Link
+    href="https://zstiojar.edu.pl"
+    className="group inline-flex w-fit items-center gap-x-4"
+  >
+    <Image
+      src={logo_zstio}
+      alt="Logo szkoły ZSTiO"
+      className="aspect-square w-10"
+    />
+    <div className="inline-flex gap-x-2 text-primary/70 transition-colors group-hover:text-primary/90">
+      <ArrowLeftFromLine size={20} strokeWidth={2.5} />
+      <p className="text-base font-medium">Wróć na stronę szkoły</p>
+    </div>
+  </Link>
+);
 
 const Dates: React.FC<{
   timetable: OptivumTimetable;

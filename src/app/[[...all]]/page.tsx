@@ -1,7 +1,7 @@
 import Controller from "@/components/controller";
 import { Topbar } from "@/components/topbar";
-import fetchOptivumList from "@/lib/fetchers/optivum-list";
-import fetchOptivumTimetable from "@/lib/fetchers/optivum-timetable";
+import { fetchOptivumList } from "@/lib/fetchers/optivum-list";
+import { fetchOptivumTimetable } from "@/lib/fetchers/optivum-timetable";
 import { OptivumTimetable } from "@/types/optivum";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
@@ -13,23 +13,15 @@ export const generateMetadata = async ({
   params,
 }: {
   params: { all: string[] };
-}) => {
-  if (!params.all) {
-    return {
-      title: "Wczytywanie...",
-    };
+}): Promise<{ title: string }> => {
+  if (!params.all || params.all.length < 2) {
+    return { title: "Wczytywanie..." };
   }
 
-  const [param1, param2] = params?.all;
+  const [param1, param2] = params.all;
+  const timetable = await fetchOptivumTimetable(param1, param2);
 
-  const timetable: OptivumTimetable = await fetchOptivumTimetable(
-    param1,
-    param2,
-  );
-
-  return {
-    title: timetable.title,
-  };
+  return { title: timetable.title };
 };
 
 const TimetablePage = async ({ params }: { params: { all: string[] } }) => {

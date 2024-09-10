@@ -4,18 +4,18 @@ import { OptivumTimetable } from "@/types/optivum";
 import { Table } from "@majusss/timetable-parser";
 import moment from "moment";
 import "moment/locale/pl";
-import fetchOptivumList from "./optivum-list";
+import { fetchOptivumList } from "./optivum-list";
 
-const fetchOptivumTimetable = async (
+export const fetchOptivumTimetable = async (
   type: string,
   index: string,
 ): Promise<OptivumTimetable> => {
-  const idMap: Record<string, string> = {
-    class: `o${index}`,
-    teacher: `n${index}`,
-    room: `s${index}`,
-  };
-  const id = idMap[type] || "";
+  const id =
+    {
+      class: `o${index}`,
+      teacher: `n${index}`,
+      room: `s${index}`,
+    }[type] || "";
 
   const data = await fetch(
     `${process.env.NEXT_PUBLIC_TIMETABLE_URL}/plany/${id}.html`,
@@ -37,5 +37,3 @@ const fetchOptivumTimetable = async (
     list: await fetchOptivumList(),
   };
 };
-
-export default fetchOptivumTimetable;
