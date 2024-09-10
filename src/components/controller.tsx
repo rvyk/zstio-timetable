@@ -3,6 +3,7 @@
 import { useTimetableStore } from "@/stores/timetable-store";
 import { OptivumTimetable } from "@/types/optivum";
 import { List } from "@majusss/timetable-parser";
+import { setCookie } from "cookies-next";
 import { usePathname, useRouter } from "next/navigation";
 import { useCallback, useEffect } from "react";
 
@@ -39,7 +40,12 @@ const Controller = ({ timetable }: { timetable: OptivumTimetable }) => {
       const maxNumber = timeTableList[propertyName]?.length || 0;
 
       if (changeTo >= 1 && changeTo <= maxNumber) {
-        router.push(`/${data}/${changeTo}`, { scroll: false });
+        const link = `/${data}/${changeTo}`;
+
+        router.push(link, { scroll: false });
+        setCookie("lastVisited", link, {
+          path: "/",
+        });
       }
     },
     [pathname, router],

@@ -9,6 +9,29 @@ import React from "react";
 
 export const revalidate = 3600;
 
+export const generateMetadata = async ({
+  params,
+}: {
+  params: { all: string[] };
+}) => {
+  if (!params.all) {
+    return {
+      title: "Wczytywanie...",
+    };
+  }
+
+  const [param1, param2] = params?.all;
+
+  const timetable: OptivumTimetable = await fetchOptivumTimetable(
+    param1,
+    param2,
+  );
+
+  return {
+    title: timetable.title,
+  };
+};
+
 const TimetablePage = async ({ params }: { params: { all: string[] } }) => {
   if (!params?.all) {
     const redirectTo = cookies().get("lastVisited")?.value ?? "/class/1";
@@ -21,10 +44,6 @@ const TimetablePage = async ({ params }: { params: { all: string[] } }) => {
     param1,
     param2,
   );
-
-  // if (!timetable.title) {
-  //   return <div>No timetable available.</div>;
-  // }
 
   return (
     <React.Fragment>
