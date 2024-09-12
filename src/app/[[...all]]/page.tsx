@@ -1,4 +1,5 @@
 import Controller from "@/components/controller";
+import { Timetable } from "@/components/timetable";
 import { Topbar } from "@/components/topbar";
 import { fetchOptivumList } from "@/lib/fetchers/optivum-list";
 import { fetchOptivumTimetable } from "@/lib/fetchers/optivum-timetable";
@@ -40,9 +41,9 @@ const TimetablePage = async ({ params }: { params: { all: string[] } }) => {
   return (
     <React.Fragment>
       <Controller timetable={timetable} />
-      <div className="flex w-full flex-col p-8">
+      <div className="flex h-full w-full flex-col gap-y-6 overflow-hidden p-8">
         <Topbar {...{ timetable }} />
-        {/* <Timetable /> */}
+        <Timetable {...{ timetable }} />
       </div>
     </React.Fragment>
   );

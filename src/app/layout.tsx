@@ -31,7 +31,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pl" suppressHydrationWarning>
-      <body className={cn(poppins.className, "flex bg-background antialiased")}>
+      <body
+        className={cn(
+          poppins.className,
+          "flex h-screen bg-background antialiased",
+        )}
+      >
         <ThemeProvider attribute="class" disableTransitionOnChange>
           <Sidebar />
           {children}

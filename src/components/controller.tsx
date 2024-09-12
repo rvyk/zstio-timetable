@@ -52,8 +52,10 @@ const Controller = ({ timetable }: { timetable: OptivumTimetable }) => {
   );
 
   useEffect(() => {
-    const listener = (e: KeyboardEvent) =>
+    const listener = (e: KeyboardEvent) => {
+      e.preventDefault();
       handleArrowKey(timetable?.list || { classes: [] }, e.key);
+    };
 
     window.addEventListener("keydown", listener);
     return () => window.removeEventListener("keydown", listener);
