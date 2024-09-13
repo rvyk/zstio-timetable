@@ -102,14 +102,15 @@ const Dates: React.FC<{
   return (
     <p className="text-base font-medium text-primary/70">
       {[
-        timetable.generatedDate && (
-          <React.Fragment key="generatedDate">
-            Wygenerowano:{" "}
-            <span className="font-semibold text-primary/90">
-              {timetable.generatedDate}
-            </span>
-          </React.Fragment>
-        ),
+        timetable.generatedDate &&
+          timetable.generatedDate != "Invalid date" && (
+            <React.Fragment key="generatedDate">
+              Wygenerowano:{" "}
+              <span className="font-semibold text-primary/90">
+                {timetable.generatedDate}
+              </span>
+            </React.Fragment>
+          ),
         timetable.validDate && (
           <React.Fragment key="validDate">
             Obowiązuje od:{" "}

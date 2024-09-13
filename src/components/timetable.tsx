@@ -10,6 +10,10 @@ export const Timetable: React.FC<{
   //       ...(timetable?.lessons ?? []).map((day) => day.length),
   //     ) || 0;
 
+  if (timetable.lessons.some((innerArray) => innerArray.length === 0)) {
+    return null;
+  }
+
   return (
     <div className="h-fit w-full overflow-hidden rounded-md border border-lines bg-foreground">
       <div className="h-full w-full overflow-auto">
