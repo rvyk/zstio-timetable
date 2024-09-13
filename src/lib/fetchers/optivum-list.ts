@@ -3,7 +3,9 @@
 import { List, TimetableList } from "@majusss/timetable-parser";
 
 export const fetchOptivumList = async (): Promise<List> => {
-  const url = `${process.env.NEXT_PUBLIC_TIMETABLE_URL}/lista.html`;
+  const baseUrl =
+    process.env.NEXT_PUBLIC_TIMETABLE_URL?.replace(/\/+$/, "") || "";
+  const url = `${baseUrl}/lista.html`;
 
   try {
     const response = await fetch(url);
@@ -12,6 +14,6 @@ export const fetchOptivumList = async (): Promise<List> => {
     return new TimetableList(data).getList();
   } catch (error) {
     console.error("Failed to fetch Optivum list:", error);
-    return { classes: [], rooms: [], teachers: [] };
+    return {} as List;
   }
 };

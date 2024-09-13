@@ -17,23 +17,29 @@ export const fetchOptivumTimetable = async (
       room: `s${index}`,
     }[type] || "";
 
-  const data = await fetch(
-    `${process.env.NEXT_PUBLIC_TIMETABLE_URL}/plany/${id}.html`,
-  ).then((res) => res.text());
+  try {
+    const baseUrl =
+      process.env.NEXT_PUBLIC_TIMETABLE_URL?.replace(/\/+$/, "") || "";
+    const url = `${baseUrl}/plany/${id}.html`;
 
-  const timeTableData = new Table(data);
+    const data = await fetch(url).then((res) => res.text());
+    const timeTableData = new Table(data);
 
-  return {
-    id,
-    hours: timeTableData.getHours(),
-    lessons: timeTableData.getDays(),
-    generatedDate: moment(timeTableData.getGeneratedDate())
-      .locale("pl")
-      .format("DD MMMM YYYY[r.]"),
-    title: timeTableData.getTitle(),
-    type: type as OptivumTimetable["type"],
-    validDate: timeTableData.getVersionInfo(),
-    dayNames: timeTableData.getDayNames(),
-    list: await fetchOptivumList(),
-  };
+    return {
+      id,
+      hours: timeTableData.getHours(),
+      lessons: timeTableData.getDays(),
+      generatedDate: moment(timeTableData.getGeneratedDate())
+        .locale("pl")
+        .format("DD MMMM YYYY[r.]"),
+      title: timeTableData.getTitle(),
+      type: type as OptivumTimetable["type"],
+      validDate: timeTableData.getVersionInfo(),
+      dayNames: timeTableData.getDayNames(),
+      list: await fetchOptivumList(),
+    };
+  } catch (error) {
+    console.error("Failed to fetch Optivum timetable:", error);
+    return {} as OptivumTimetable;
+  }
 };
