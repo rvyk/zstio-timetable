@@ -53,8 +53,10 @@ const Controller = ({ timetable }: { timetable: OptivumTimetable }) => {
 
   useEffect(() => {
     const listener = (e: KeyboardEvent) => {
-      // e.preventDefault(); // Prevent scrolling
-      handleArrowKey(timetable?.list || { classes: [] }, e.key);
+      if (["ArrowLeft", "ArrowRight"].includes(e.key)) {
+        e.preventDefault();
+        handleArrowKey(timetable?.list || { classes: [] }, e.key);
+      }
     };
 
     window.addEventListener("keydown", listener);
