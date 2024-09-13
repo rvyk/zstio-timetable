@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   },
   description:
     "W prosty sposób sprawdź plan zajęć i zastępstwa dla różnych klas, nauczycieli oraz sal w Zespole Szkół Technicznych i Ogólnokształcących im. Stefana Banacha w Jarosławiu.",
-  metadataBase: new URL(process.env.APP_URL as string),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL as string),
 
   alternates: {
     canonical: "./",

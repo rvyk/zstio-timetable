@@ -53,7 +53,7 @@ const Controller = ({ timetable }: { timetable: OptivumTimetable }) => {
 
   useEffect(() => {
     const listener = (e: KeyboardEvent) => {
-      e.preventDefault();
+      // e.preventDefault(); // Prevent scrolling
       handleArrowKey(timetable?.list || { classes: [] }, e.key);
     };
 
