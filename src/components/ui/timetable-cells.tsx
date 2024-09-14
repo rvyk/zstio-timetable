@@ -7,10 +7,12 @@ import { TableHour, TableLesson } from "@majusss/timetable-parser";
 import Link from "next/link";
 import { useIsClient } from "usehooks-ts";
 import { Button } from "./button";
+import { Skeleton } from "./skeleton";
 
 export const TableHourCell: React.FC<{
   hour: TableHour;
 }> = ({ hour }) => {
+  const isClient = useIsClient();
   const isShortLessons = useSettingsStore((state) => state.isShortLessons);
   const shortHour = shortHours.find((sh) => sh.number === hour.number);
 
@@ -21,9 +23,13 @@ export const TableHourCell: React.FC<{
   return (
     <td className="flex min-h-16 w-full flex-col items-center justify-center">
       <h2 className="text-xl font-semibold text-primary/90">{hour.number}</h2>
-      <p className="text-sm font-medium text-primary/70">
-        {timeFrom}-{timeTo}
-      </p>
+      {isClient ? (
+        <p className="text-sm font-medium text-primary/70">
+          {timeFrom}-{timeTo}
+        </p>
+      ) : (
+        <Skeleton className="h-3.5 w-24" />
+      )}
     </td>
   );
 };
@@ -58,7 +64,7 @@ export const ShortLessonSwitcherCell: React.FC = () => {
 
   return (
     <th className="flex h-16 min-w-32 items-center justify-center">
-      {isClient && (
+      {isClient ? (
         <div className="relative h-10">
           <div className="flex h-10">
             {["45'", "30'"].map((value, index) => (
@@ -86,6 +92,8 @@ export const ShortLessonSwitcherCell: React.FC = () => {
             {isShortLessons ? "30'" : "45'"}
           </div>
         </div>
+      ) : (
+        <Skeleton className="h-10 w-28 rounded-sm" />
       )}
     </th>
   );

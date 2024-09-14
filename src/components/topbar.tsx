@@ -1,12 +1,15 @@
 "use client";
 
+import { translationDict } from "@/constants/translates";
 import { handleFavorite } from "@/lib/handle-favorites";
 import { cn } from "@/lib/utils";
 import logo_zstio from "@/resources/logo-zstio.png";
 import { useFavoritesStore } from "@/stores/favorites-store";
+import { useSettingsWithoutStore } from "@/stores/settings-store";
 import { OptivumTimetable } from "@/types/optivum";
 import {
   ArrowLeftFromLine,
+  Fullscreen,
   Menu,
   MoonIcon,
   Repeat2,
@@ -32,12 +35,6 @@ export const Topbar: React.FC<{ timetable: OptivumTimetable }> = ({
       ? `${timetableTitle.slice(0, 16)}...`
       : timetableTitle;
 
-  const translates = {
-    class: "oddziału",
-    teacher: "nauczyciela",
-    room: "sali",
-  };
-
   const isFavorite = favorites.some((c) => c.name === timetableTitle);
 
   return (
@@ -49,7 +46,7 @@ export const Topbar: React.FC<{ timetable: OptivumTimetable }> = ({
             <h1 className="text-3xl font-semibold text-primary/90 xl:text-4.2xl">
               {timetableTitle ? (
                 <>
-                  Rozkład zajęć {translates[timetable.type]}{" "}
+                  Rozkład zajęć {translationDict[timetable.type]}{" "}
                   <span className="font-semibold">{shortenedTitle}</span>
                 </>
               ) : (
@@ -134,6 +131,10 @@ const Dates: React.FC<{
 
 const TopbarButtons: React.FC = () => {
   const { theme, setTheme, resolvedTheme, systemTheme } = useTheme();
+  const toggleFullscreenMode = useSettingsWithoutStore(
+    (state) => state.toggleFullscreenMode,
+  );
+
   const isClient = useIsClient();
 
   const toggleTheme = () => {
@@ -146,6 +147,12 @@ const TopbarButtons: React.FC = () => {
   };
 
   const buttons = [
+    {
+      icon: Fullscreen,
+      href: null,
+      action: toggleFullscreenMode,
+      show: true,
+    },
     {
       icon: theme === "dark" && isClient ? SunMedium : MoonIcon,
       href: null,

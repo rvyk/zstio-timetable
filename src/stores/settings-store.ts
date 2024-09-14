@@ -18,3 +18,16 @@ export const useSettingsStore = create<TimetableSettingsStore>()(
     },
   ),
 );
+
+interface useSettingsWithoutStore {
+  isFullscreenMode: boolean;
+  toggleFullscreenMode: () => void;
+}
+
+export const useSettingsWithoutStore = create<useSettingsWithoutStore>(
+  (set) => ({
+    isFullscreenMode: false,
+    toggleFullscreenMode: () =>
+      set((state) => ({ isFullscreenMode: !state.isFullscreenMode })),
+  }),
+);

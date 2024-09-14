@@ -33,3 +33,14 @@ export const getDayNumberForNextWeek = (dayName: string): string => {
 
   return targetDate.getDate().toString().padStart(2, "0");
 };
+
+export const simulateKeyPress = (key: string, keyCode: number) => {
+  const event = new KeyboardEvent("keydown", {
+    key,
+    code: key,
+    keyCode,
+    which: keyCode,
+    bubbles: true,
+  });
+  document.dispatchEvent(event);
+};
