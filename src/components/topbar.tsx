@@ -41,7 +41,7 @@ export const Topbar: React.FC<{ timetable: OptivumTimetable }> = ({
   const isFavorite = favorites.some((c) => c.name === timetableTitle);
 
   return (
-    <div className="flex w-full justify-between">
+    <div className="flex w-full justify-between gap-x-4">
       <div className="grid gap-3">
         <SchoolLink />
         <div className="grid gap-1">
@@ -89,7 +89,7 @@ const SchoolLink: React.FC = () => (
       alt="Logo szkoły ZSTiO"
       className="aspect-square w-10"
     />
-    <div className="inline-flex gap-x-2 text-primary/70 transition-colors group-hover:text-primary/90">
+    <div className="inline-flex items-center gap-x-2 text-primary/70 transition-colors group-hover:text-primary/90">
       <ArrowLeftFromLine size={20} strokeWidth={2.5} />
       <p className="text-base font-medium">Wróć na stronę szkoły</p>
     </div>

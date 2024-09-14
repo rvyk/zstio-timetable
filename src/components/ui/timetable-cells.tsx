@@ -56,37 +56,37 @@ export const ShortLessonSwitcherCell: React.FC = () => {
   const isClient = useIsClient();
   const { isShortLessons, toggleShortLessons } = useSettingsStore();
 
-  if (!isClient) return null;
-
   return (
     <th className="flex h-16 min-w-32 items-center justify-center">
-      <div className="relative h-10">
-        <div className="flex h-10">
-          {["45'", "30'"].map((value, index) => (
-            <Button
-              variant="icon"
-              key={value}
-              onClick={toggleShortLessons}
-              className={cn(
-                index === 0 ? "!rounded-l-sm" : "!rounded-r-sm",
-                "rounded-none bg-accent font-semibold text-primary/90 hover:bg-primary/5 hover:text-primary",
-              )}
-            >
-              {value}
-            </Button>
-          ))}
+      {isClient && (
+        <div className="relative h-10">
+          <div className="flex h-10">
+            {["45'", "30'"].map((value, index) => (
+              <Button
+                variant="icon"
+                key={value}
+                onClick={toggleShortLessons}
+                className={cn(
+                  index === 0 ? "!rounded-l-sm" : "!rounded-r-sm",
+                  "rounded-none bg-accent font-semibold text-primary/90 hover:bg-primary/5 hover:text-primary",
+                )}
+              >
+                {value}
+              </Button>
+            ))}
+          </div>
+          <div
+            className={cn(
+              isShortLessons
+                ? "translate-x-[100%] transform rounded-r-sm"
+                : "rounded-l-sm",
+              "absolute top-0 z-40 flex h-10 w-[50%] cursor-default items-center justify-center bg-primary px-4 py-2 text-sm font-semibold text-accent/90 transition-all dark:bg-accent-table dark:text-primary/90",
+            )}
+          >
+            {isShortLessons ? "30'" : "45'"}
+          </div>
         </div>
-        <div
-          className={cn(
-            isShortLessons
-              ? "translate-x-[100%] transform rounded-r-sm"
-              : "rounded-l-sm",
-            "absolute top-0 z-40 flex h-10 w-[50%] cursor-default items-center justify-center bg-primary px-4 py-2 text-sm font-semibold text-accent/90 transition-all dark:bg-accent-table dark:text-primary/90",
-          )}
-        >
-          {isShortLessons ? "30'" : "45'"}
-        </div>
-      </div>
+      )}
     </th>
   );
 };
