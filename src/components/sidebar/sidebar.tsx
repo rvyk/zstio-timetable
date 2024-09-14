@@ -13,11 +13,11 @@ export const Sidebar: React.FC = () => {
   return (
     <div className="h-screen w-full max-w-xs border-r border-lines bg-foreground dark:border-primary/10">
       <div className="mr-3 flex h-full w-full flex-col justify-between space-y-16 overflow-y-auto overflow-x-hidden px-4 py-6">
-        <div className="grid gap-9">
+        <div className="grid gap-10">
           <Search />
           <SidebarDropdowns />
         </div>
-        <p className="text-sm font-semibold text-primary/90">
+        <p className="mx-2 text-sm font-semibold text-primary/90">
           Źródło danych <br />
           <Link
             href={process.env.NEXT_PUBLIC_TIMETABLE_URL!}

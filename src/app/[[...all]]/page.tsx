@@ -1,6 +1,6 @@
 import Controller from "@/components/controller";
-import { Timetable } from "@/components/timetable";
-import { Topbar } from "@/components/topbar";
+import { Timetable } from "@/components/timetable/timetable";
+import { Topbar } from "@/components/topbar/topbar";
 import { fetchOptivumList } from "@/lib/fetchers/optivum-list";
 import { fetchOptivumTimetable } from "@/lib/fetchers/optivum-timetable";
 import { OptivumTimetable } from "@/types/optivum";

@@ -1,17 +1,17 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import {
-  ShortLessonSwitcherCell,
-  TableHeader,
-  TableHourCell,
-  TableLessonCell,
-} from "@/components/ui/timetable-cells";
 import { translationDict } from "@/constants/translates";
 import { cn, simulateKeyPress } from "@/lib/utils";
 import { useSettingsWithoutStore } from "@/stores/settings-store";
 import { OptivumTimetable } from "@/types/optivum";
 import { ArrowLeft, ArrowRight, Shrink } from "lucide-react";
+import {
+  ShortLessonSwitcherCell,
+  TableHeaderCell,
+  TableHourCell,
+} from "./cells";
+import { TableLessonCell } from "./lessons";
 
 export const Timetable: React.FC<{
   timetable: OptivumTimetable;
@@ -39,7 +39,7 @@ export const Timetable: React.FC<{
             <tr className="divide-x divide-lines border-b border-lines">
               <ShortLessonSwitcherCell />
               {timetable?.dayNames.map((dayName) => (
-                <TableHeader key={dayName} dayName={dayName} />
+                <TableHeaderCell key={dayName} dayName={dayName} />
               ))}
             </tr>
           </thead>

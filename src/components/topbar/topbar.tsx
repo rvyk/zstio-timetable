@@ -5,23 +5,13 @@ import { handleFavorite } from "@/lib/handle-favorites";
 import { cn } from "@/lib/utils";
 import logo_zstio from "@/resources/logo-zstio.png";
 import { useFavoritesStore } from "@/stores/favorites-store";
-import { useSettingsWithoutStore } from "@/stores/settings-store";
 import { OptivumTimetable } from "@/types/optivum";
-import {
-  ArrowLeftFromLine,
-  Fullscreen,
-  Menu,
-  MoonIcon,
-  Repeat2,
-  StarIcon,
-  SunMedium,
-} from "lucide-react";
-import { useTheme } from "next-themes";
+import { ArrowLeftFromLine, StarIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import { useIsClient } from "usehooks-ts";
-import { Button } from "./ui/button";
+import { TopbarButtons } from "./buttons";
 
 export const Topbar: React.FC<{ timetable: OptivumTimetable }> = ({
   timetable,
@@ -132,74 +122,5 @@ const Dates: React.FC<{
           }
         }, [])}
     </p>
-  );
-};
-
-const TopbarButtons: React.FC = () => {
-  const { theme, setTheme, resolvedTheme, systemTheme } = useTheme();
-  const toggleFullscreenMode = useSettingsWithoutStore(
-    (state) => state.toggleFullscreenMode,
-  );
-
-  const isClient = useIsClient();
-
-  const toggleTheme = () => {
-    if (theme === "system") {
-      setTheme(systemTheme === "light" ? "dark" : "light");
-      return;
-    }
-    const newTheme = theme === "light" ? "dark" : "light";
-    setTheme(newTheme);
-  };
-
-  const buttons = [
-    {
-      icon: Fullscreen,
-      href: null,
-      action: toggleFullscreenMode,
-      show: true,
-    },
-    {
-      icon: theme === "dark" && isClient ? SunMedium : MoonIcon,
-      href: null,
-      action: toggleTheme,
-      show: resolvedTheme || !isClient,
-    },
-    {
-      icon: Repeat2,
-      href: "/zastepstwa",
-      action: null,
-      show: true,
-    },
-    {
-      icon: Menu,
-      href: null,
-      action: () => {},
-      show: true,
-    },
-  ];
-
-  return (
-    <div className="inline-flex gap-2.5">
-      {buttons.map((button, index) => (
-        <Button
-          aria-label="Przycisk nawigacyjny"
-          key={index}
-          variant="icon"
-          size="icon"
-          className={cn(!button.show && "hidden")}
-          onClick={button.action ?? (() => {})}
-          asChild={button.href !== null}
-        >
-          {button.href !== null ? (
-            <Link aria-label="Link nawigacyjny" href={button.href}>
-              <button.icon size={20} strokeWidth={2.5} />
-            </Link>
-          ) : (
-            <button.icon size={20} strokeWidth={2.5} />
-          )}
-        </Button>
-      ))}
-    </div>
   );
 };

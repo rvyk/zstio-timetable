@@ -1,6 +1,7 @@
+import { searchHandleKeyDown } from "@/lib/easter-egg";
 import { useTimetableStore } from "@/stores/timetable-store";
 import { ListItem } from "@majusss/timetable-parser";
-import { SearchIcon } from "lucide-react";
+import { SearchIcon, XIcon } from "lucide-react";
 import { useState } from "react";
 import { DropdownContent } from "./dropdown";
 
@@ -8,8 +9,11 @@ export const Search: React.FC = () => {
   const timetable = useTimetableStore((state) => state.timetable);
   const [filteredData, setFilteredData] = useState<ListItem[]>([]);
   const [showEasterEgg, setShowEasterEgg] = useState(false);
+  const [value, setValue] = useState("");
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setValue(e.target.value);
+
     const query = e.target.value.toLowerCase();
     if (!query) {
       setFilteredData([]);
@@ -38,41 +42,33 @@ export const Search: React.FC = () => {
     setFilteredData(result);
   };
 
-  const calculateHash = async (text: string) => {
-    const encoder = new TextEncoder();
-    const data = encoder.encode(text);
-    const hashBuffer = await crypto.subtle.digest("SHA-256", data);
-    const hashArray = Array.from(new Uint8Array(hashBuffer));
-    const hashHex = hashArray
-      .map((b) => b.toString(16).padStart(2, "0"))
-      .join("");
-    return hashHex;
-  };
-
-  const handleKeyDown = async (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
-      const input = e.currentTarget.value;
-      const targetHash =
-        "542bcfea6d679456c73c545f17c7f7beeac763a68157eff4d3291473348b6d5c";
-      const inputHash = await calculateHash(input);
-
-      if (inputHash === targetHash) {
-        setShowEasterEgg(true);
-      }
-    }
+  const handleClearSearch = () => {
+    setValue("");
+    setFilteredData([]);
   };
 
   return (
     <div className="grid">
-      <div className="inline-flex h-12 w-full items-center gap-x-3 rounded-md border border-primary/10 bg-accent-secondary p-3 dark:border-primary/10">
-        <SearchIcon className="text-primary/70" size={20} strokeWidth={2.5} />
-        <input
-          onChange={handleSearch}
-          onKeyDown={handleKeyDown}
-          type="text"
-          className="w-full bg-transparent text-sm font-medium text-primary/90 placeholder:text-primary/70 focus:outline-none"
-          placeholder="Szukaj..."
-        />
+      <div className="inline-flex h-12 w-full items-center justify-between rounded-md border border-primary/10 bg-accent-secondary p-3 dark:border-primary/10">
+        <div className="mr-2 flex w-full items-center gap-x-3">
+          <SearchIcon className="text-primary/70" size={20} strokeWidth={2.5} />
+          <input
+            value={value}
+            onChange={handleSearch}
+            onKeyDown={(e) => searchHandleKeyDown(e, setShowEasterEgg)}
+            type="text"
+            className="w-full bg-transparent text-sm font-medium text-primary/90 placeholder:text-primary/70 focus:outline-none"
+            placeholder="Szukaj..."
+          />
+        </div>
+        {value && (
+          <button
+            onClick={handleClearSearch}
+            className="text-primary/70 hover:text-primary/90"
+          >
+            <XIcon size={20} strokeWidth={2.5} />
+          </button>
+        )}
       </div>
       {filteredData.length > 0 && (
         <DropdownContent type="search" data={filteredData} />
