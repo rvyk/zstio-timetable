@@ -44,9 +44,9 @@ export const Topbar: React.FC<{ timetable: OptivumTimetable }> = ({
     <div className="flex w-full justify-between gap-x-4">
       <div className="grid gap-3">
         <SchoolLink />
-        <div className="grid gap-1">
+        <div className="grid gap-2.5">
           <div className="inline-flex items-center gap-x-4">
-            <h1 className="text-4.2xl font-semibold text-primary/90">
+            <h1 className="text-3xl font-semibold text-primary/90 xl:text-4.2xl">
               {timetableTitle ? (
                 <>
                   Rozkład zajęć {translates[timetable.type]}{" "}
@@ -100,7 +100,7 @@ const Dates: React.FC<{
   timetable: OptivumTimetable;
 }> = ({ timetable }) => {
   return (
-    <p className="text-base font-medium text-primary/70">
+    <p className="text-sm font-medium text-primary/70 xl:text-base">
       {[
         timetable.generatedDate &&
           timetable.generatedDate != "Invalid date" && (

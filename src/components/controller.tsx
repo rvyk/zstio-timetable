@@ -12,6 +12,13 @@ const Controller = ({ timetable }: { timetable: OptivumTimetable }) => {
   const pathname = usePathname();
   const router = useRouter();
 
+  const navigateTo = (link: string) => {
+    router.push(link);
+    setCookie("lastVisited", link, {
+      path: "/",
+    });
+  };
+
   const handleArrowKey = useCallback(
     (timeTableList: List, key: string) => {
       const data = pathname.split("/")[1];
@@ -40,12 +47,33 @@ const Controller = ({ timetable }: { timetable: OptivumTimetable }) => {
       const maxNumber = timeTableList[propertyName]?.length || 0;
 
       if (changeTo >= 1 && changeTo <= maxNumber) {
-        const link = `/${data}/${changeTo}`;
-
-        router.push(link, { scroll: false });
-        setCookie("lastVisited", link, {
-          path: "/",
-        });
+        navigateTo(`/${data}/${changeTo}`);
+      } else if (changeTo < 1) {
+        switch (data) {
+          case "class":
+            if (timeTableList?.rooms)
+              navigateTo(`/room/${timeTableList.rooms.length}`);
+            break;
+          case "teacher":
+            navigateTo(`/class/${timeTableList.classes.length}`);
+            break;
+          case "room":
+            if (timeTableList?.teachers)
+              navigateTo(`/teacher/${timeTableList.teachers.length}`);
+            break;
+        }
+      } else if (changeTo > maxNumber) {
+        switch (data) {
+          case "class":
+            if (timeTableList?.teachers) navigateTo("/teacher/1");
+            break;
+          case "teacher":
+            if (timeTableList.rooms) navigateTo("/room/1");
+            break;
+          case "room":
+            navigateTo("/class/1");
+            break;
+        }
       }
     },
     [pathname, router],
@@ -55,7 +83,12 @@ const Controller = ({ timetable }: { timetable: OptivumTimetable }) => {
     const listener = (e: KeyboardEvent) => {
       if (["ArrowLeft", "ArrowRight"].includes(e.key)) {
         e.preventDefault();
-        handleArrowKey(timetable?.list || { classes: [] }, e.key);
+        handleArrowKey(
+          timetable?.list || {
+            classes: [],
+          },
+          e.key,
+        );
       }
     };
 
