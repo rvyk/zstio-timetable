@@ -31,7 +31,7 @@ export const Timetable: React.FC<{
               .map((hour, lessonIndex) => (
                 <tr
                   key={lessonIndex}
-                  className="divide-x divide-lines border-b border-lines last:border-none"
+                  className="divide-x divide-lines border-b border-lines last:border-none odd:bg-accent/50 odd:dark:bg-background"
                 >
                   <TableHourCell hour={hour} />
                   {timetable?.lessons.map((day, dayIndex) => (

@@ -39,7 +39,7 @@ export const Search: React.FC = () => {
 
   return (
     <div className="grid">
-      <div className="inline-flex h-12 w-full items-center gap-x-3 rounded-sm border border-primary/10 bg-accent-secondary p-3 dark:border-primary/10">
+      <div className="inline-flex h-12 w-full items-center gap-x-3 rounded-md border border-primary/10 bg-accent-secondary p-3 dark:border-primary/10">
         <SearchIcon className="text-primary/70" size={20} strokeWidth={2.5} />
         <input
           onChange={handleSearch}

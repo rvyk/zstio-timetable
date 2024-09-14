@@ -11,7 +11,7 @@ import { Search } from "./search";
 
 export const Sidebar: React.FC = () => {
   return (
-    <div className="h-screen w-full max-w-xs border-r border-accent/10 bg-foreground dark:border-primary/10">
+    <div className="h-screen w-full max-w-xs border-r border-lines bg-foreground dark:border-primary/10">
       <div className="mr-3 flex h-full w-full flex-col justify-between space-y-16 overflow-y-auto overflow-x-hidden px-4 py-6">
         <div className="grid gap-9">
           <Search />
