@@ -14,6 +14,6 @@ export const fetchOptivumList = async (): Promise<List> => {
     return new TimetableList(data).getList();
   } catch (error) {
     console.error("Failed to fetch Optivum list:", error);
-    return {} as List;
+    return { classes: [] };
   }
 };

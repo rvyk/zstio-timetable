@@ -1,15 +1,26 @@
-import { getDayNumberForNextWeek } from "@/lib/utils";
+"use client";
+
+import { shortHours } from "@/constants/hours";
+import { cn, getDayNumberForNextWeek } from "@/lib/utils";
+import { useTimetableSettings } from "@/stores/timetable-store";
 import { TableHour, TableLesson } from "@majusss/timetable-parser";
 import Link from "next/link";
+import { useIsClient } from "usehooks-ts";
+import { Button } from "./button";
 
 export const TableHourCell: React.FC<{
   hour: TableHour;
 }> = ({ hour }) => {
-  const { number, timeFrom, timeTo } = hour;
+  const isShortLessons = useTimetableSettings((state) => state.isShortLessons);
+  const shortHour = shortHours.find((sh) => sh.number === hour.number);
+
+  const timeFrom =
+    isShortLessons && shortHour ? shortHour.timeFrom : hour.timeFrom;
+  const timeTo = isShortLessons && shortHour ? shortHour.timeTo : hour.timeTo;
 
   return (
     <td className="flex min-h-16 w-full flex-col items-center justify-center">
-      <h2 className="text-xl font-semibold text-primary/90">{number}</h2>
+      <h2 className="text-xl font-semibold text-primary/90">{hour.number}</h2>
       <p className="text-sm font-medium text-primary/70">
         {timeFrom}-{timeTo}
       </p>
@@ -37,6 +48,45 @@ export const TableHeader: React.FC<{ dayName: string }> = ({ dayName }) => {
         <h2 className="text-3xl font-semibold text-primary/90">{dayNumber}</h2>
         <p className="text-xl font-semibold text-primary/90">{dayName}</p>
       </div>
+    </th>
+  );
+};
+
+export const ShortLessonSwitcherCell: React.FC = () => {
+  const isClient = useIsClient();
+  const { isShortLessons, toggleShortLessons } = useTimetableSettings();
+
+  return (
+    <th className="flex h-16 min-w-32 items-center justify-center">
+      {isClient && (
+        <div className="relative h-10">
+          <div className="flex h-10">
+            {["45'", "30'"].map((value, index) => (
+              <Button
+                variant="icon"
+                key={index}
+                onClick={toggleShortLessons}
+                className={cn(
+                  index === 0 ? "!rounded-l-sm" : "!rounded-r-sm",
+                  "rounded-none bg-accent font-semibold text-primary/90 hover:bg-primary/5 hover:text-primary",
+                )}
+              >
+                {value}
+              </Button>
+            ))}
+          </div>
+          <div
+            className={cn(
+              "absolute top-0 z-40 flex h-10 w-[50%] cursor-default items-center justify-center bg-primary px-4 py-2 text-sm font-semibold text-accent/90 transition-all dark:bg-accent-table dark:text-primary/90",
+              isShortLessons
+                ? "translate-x-[100%] transform rounded-r-sm"
+                : "rounded-l-sm",
+            )}
+          >
+            {isShortLessons ? "30'" : "45'"}
+          </div>
+        </div>
+      )}
     </th>
   );
 };

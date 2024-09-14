@@ -1,15 +1,14 @@
 import { OptivumTimetable } from "@/types/optivum";
-import { TableHeader, TableHourCell, TableLessonCell } from "./ui/table";
+import {
+  ShortLessonSwitcherCell,
+  TableHeader,
+  TableHourCell,
+  TableLessonCell,
+} from "./ui/timetable-cells";
 
 export const Timetable: React.FC<{
   timetable: OptivumTimetable;
 }> = ({ timetable }) => {
-  //   const maxLessons =
-  //     Math.max(
-  //       Object.entries(timetable?.hours || {}).length,
-  //       ...(timetable?.lessons ?? []).map((day) => day.length),
-  //     ) || 0;
-
   if (timetable.lessons.some((innerArray) => innerArray.length === 0)) {
     return null;
   }
@@ -20,15 +19,14 @@ export const Timetable: React.FC<{
         <table className="w-full">
           <thead>
             <tr className="divide-x divide-lines border-b border-lines">
-              {/* TODO: ADD SUPPORT FOR SWITCHER / CREATE A SWITCHER COMPONENT */}
-              <th className="min-w-32">SWITCHER</th>
+              <ShortLessonSwitcherCell />
               {timetable?.dayNames.map((dayName) => (
                 <TableHeader key={dayName} dayName={dayName} />
               ))}
             </tr>
           </thead>
           <tbody>
-            {Object.entries(timetable?.hours || {})
+            {Object.entries(timetable?.hours)
               .map(([, value]) => value)
               .map((hour, lessonIndex) => (
                 <tr
