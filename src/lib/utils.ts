@@ -1,3 +1,4 @@
+import { daysOfWeek } from "@/constants/days-of-week";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -5,21 +6,19 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-const daysOfWeek: { [key: string]: number } = {
-  Poniedziałek: 1,
-  Wtorek: 2,
-  Środa: 3,
-  Czwartek: 4,
-  Piątek: 5,
-  Sobota: 6,
-  Niedziela: 0,
-};
-
 // TODO: CREATE TESTS FOR THIS FUNCTION
 export const getDayNumberForNextWeek = (dayName: string): string => {
   const today = new Date();
   const todayDayOfWeek = today.getDay();
-  const targetDayOfWeek = daysOfWeek[dayName];
+  const targetDay = daysOfWeek.find(
+    (day) => day.long === dayName || day.short === dayName,
+  );
+
+  if (!targetDay) {
+    throw new Error(`Nieznany dzień: ${dayName}`);
+  }
+
+  const targetDayOfWeek = targetDay.index + 1;
 
   const daysUntilTarget = (targetDayOfWeek - todayDayOfWeek + 7) % 7;
 
