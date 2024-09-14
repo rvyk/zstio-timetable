@@ -49,7 +49,7 @@ export const Timetable: React.FC<{
               .map((hour, lessonIndex) => (
                 <tr
                   key={lessonIndex}
-                  className="divide-x divide-lines border-b border-lines last:border-none odd:bg-accent/50 odd:dark:bg-background"
+                  className="divide-x divide-lines border-b border-lines odd:bg-accent/50 odd:dark:bg-background"
                 >
                   <TableHourCell hour={hour} />
                   {timetable?.lessons.map((day, dayIndex) => (
@@ -83,6 +83,7 @@ const FullScreenControlls: React.FC<{
     <div className="fixed bottom-4 left-0 right-0 z-50 grid w-full place-content-center">
       <div className="flex items-center justify-center gap-x-4 opacity-20 hover:opacity-100">
         <Button
+          aria-label="Poprzednia klasa/nauczyciel/sala"
           variant="icon"
           size="icon"
           onClick={() => simulateKeyPress("ArrowLeft", 37)}
@@ -101,11 +102,17 @@ const FullScreenControlls: React.FC<{
             )}
           </h1>
 
-          <Button variant="icon" size="icon" onClick={toggleFullscreenMode}>
+          <Button
+            aria-label="Wyjdź z trybu pełnoekranowego"
+            variant="icon"
+            size="icon"
+            onClick={toggleFullscreenMode}
+          >
             <Shrink size={20} strokeWidth={2.5} />
           </Button>
         </div>
         <Button
+          aria-label="Następna klasa/nauczyciel/sala"
           variant="icon"
           size="icon"
           onClick={() => simulateKeyPress("ArrowRight", 39)}

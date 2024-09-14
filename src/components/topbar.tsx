@@ -54,7 +54,13 @@ export const Topbar: React.FC<{ timetable: OptivumTimetable }> = ({
               )}
             </h1>
             {timetableTitle && isClient && (
-              <button onClick={handleFavorite} className="focus:outline-none">
+              <button
+                aria-label={
+                  isFavorite ? "Usuń z ulubionych" : "Dodaj do ulubionych"
+                }
+                onClick={handleFavorite}
+                className="focus:outline-none"
+              >
                 <StarIcon
                   size={24}
                   strokeWidth={2.5}
@@ -177,6 +183,7 @@ const TopbarButtons: React.FC = () => {
     <div className="inline-flex gap-2.5">
       {buttons.map((button, index) => (
         <Button
+          aria-label="Przycisk nawigacyjny"
           key={index}
           variant="icon"
           size="icon"
@@ -185,7 +192,7 @@ const TopbarButtons: React.FC = () => {
           asChild={button.href !== null}
         >
           {button.href !== null ? (
-            <Link href={button.href}>
+            <Link aria-label="Link nawigacyjny" href={button.href}>
               <button.icon size={20} strokeWidth={2.5} />
             </Link>
           ) : (

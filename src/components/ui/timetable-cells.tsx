@@ -69,6 +69,7 @@ export const ShortLessonSwitcherCell: React.FC = () => {
           <div className="flex h-10">
             {["45'", "30'"].map((value, index) => (
               <Button
+                aria-label="Przełącz długość lekcji"
                 variant="icon"
                 key={value}
                 onClick={toggleShortLessons}
@@ -115,7 +116,7 @@ const LessonItem: React.FC<{ lesson: TableLesson }> = ({ lesson }) => {
           </span>
         )}
       </h2>
-      <div className="text-sm font-medium text-primary/70">
+      <div className="inline-flex gap-x-2 text-sm font-medium text-primary/70">
         <LessonLink id={lesson.classId} name={lesson.className} type="class" />
         <LessonLink
           id={lesson.teacherId}
@@ -135,7 +136,7 @@ const LessonLink: React.FC<{ id?: string; name?: string; type: string }> = ({
 }) => {
   return id && name ? (
     <Link className="hover:underline" href={`/${type}/${id}`}>
-      {name}{" "}
+      {name}
     </Link>
   ) : null;
 };
