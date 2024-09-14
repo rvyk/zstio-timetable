@@ -1,5 +1,5 @@
 import { TableLesson } from "@majusss/timetable-parser";
-import Link from "next/link";
+import { LinkWithCookie } from "../link";
 
 export const TableLessonCell: React.FC<{
   day: TableLesson[][];
@@ -46,9 +46,15 @@ const LessonLink: React.FC<{ id?: string; name?: string; type: string }> = ({
   name,
   type,
 }) => {
+  const link = `/${type}/${id}`;
+
   return id && name ? (
-    <Link className="hover:underline" href={`/${type}/${id}`}>
+    <LinkWithCookie
+      aria-label={`Przejdź do ${link}`}
+      className="hover:underline"
+      href={link}
+    >
       {name}
-    </Link>
+    </LinkWithCookie>
   ) : null;
 };

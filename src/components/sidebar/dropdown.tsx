@@ -5,11 +5,10 @@ import {
 } from "@/components/ui/accordion";
 import { cn } from "@/lib/utils";
 import { ListItem } from "@majusss/timetable-parser";
-import { setCookie } from "cookies-next";
 import { ChevronDown, LucideIcon } from "lucide-react";
-import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useIsClient } from "usehooks-ts";
+import { LinkWithCookie } from "../link";
 
 export const Dropdown: React.FC<{
   type: string;
@@ -62,12 +61,6 @@ export const DropdownContent: React.FC<{
 }> = ({ type, data }) => {
   const pathname = usePathname();
 
-  const handleClick = (link: string) => {
-    setCookie("lastVisited", link, {
-      path: "/",
-    });
-  };
-
   return (
     <div className="mt-4 grid gap-2 rounded-md bg-accent/90 p-4">
       {data?.length ? (
@@ -75,9 +68,9 @@ export const DropdownContent: React.FC<{
           const link = `/${item?.type ? item.type : type}/${item.value}`;
 
           return (
-            <Link
+            <LinkWithCookie
+              aria-label={`Przejdź do ${item.name}`}
               href={link}
-              onClick={() => handleClick(link)}
               key={i}
               className={cn(
                 pathname == link &&
@@ -86,7 +79,7 @@ export const DropdownContent: React.FC<{
               )}
             >
               {item.name}
-            </Link>
+            </LinkWithCookie>
           );
         })
       ) : (
