@@ -20,7 +20,7 @@ export const TableHourCell: React.FC<{
   const timeTo = isShortLessons && shortHour ? shortHour.timeTo : hour.timeTo;
 
   return (
-    <td className="flex min-h-16 w-full flex-col items-center justify-center">
+    <td className="flex h-full min-h-16 w-full flex-col items-center justify-center py-3">
       <h2 className="text-xl font-semibold text-primary/90">{hour.number}</h2>
       {isClient ? (
         <p className="text-sm font-medium text-primary/70">
@@ -37,7 +37,7 @@ export const TableHeaderCell: React.FC<{ dayName: string }> = ({ dayName }) => {
   const dayNumber = getDayNumberForNextWeek(dayName);
 
   return (
-    <th className="min-w-72 text-left">
+    <th className="text-left">
       <div className="inline-flex items-center gap-x-3 px-4 py-3">
         <h2 className="text-3xl font-semibold text-primary/90">{dayNumber}</h2>
         <p className="text-xl font-semibold text-primary/90">{dayName}</p>
@@ -51,7 +51,7 @@ export const ShortLessonSwitcherCell: React.FC = () => {
   const { isShortLessons, toggleShortLessons } = useSettingsStore();
 
   return (
-    <th className="flex h-16 min-w-32 items-center justify-center">
+    <th className="flex h-16 items-center justify-center px-2">
       {isClient ? (
         <div className="relative h-10">
           <div className="flex h-10">

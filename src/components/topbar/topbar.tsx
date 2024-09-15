@@ -19,31 +19,25 @@ export const Topbar: React.FC<{ timetable: OptivumTimetable }> = ({
   const { favorites } = useFavoritesStore();
   const isClient = useIsClient();
 
-  const timetableTitle = timetable?.title;
-  const shortenedTitle =
-    timetableTitle && timetableTitle.length > 16
-      ? `${timetableTitle.slice(0, 16)}...`
-      : timetableTitle;
-
-  const isFavorite = favorites.some((c) => c.name === timetableTitle);
+  const isFavorite = favorites.some((c) => c.name === timetable?.title);
 
   return (
     <div className="flex w-full justify-between gap-x-4">
-      <div className="grid gap-3">
+      <div className="grid gap-2">
         <SchoolLink />
-        <div className="grid gap-2.5">
+        <div className="grid gap-1.5">
           <div className="inline-flex items-center gap-x-4">
-            <h1 className="text-3xl font-semibold text-primary/90 xl:text-4.2xl">
-              {timetableTitle ? (
-                <>
+            <h1 className="max-w-2xl truncate text-ellipsis text-3xl font-semibold leading-tight text-primary/90 xl:text-4.2xl">
+              {timetable?.title ? (
+                <React.Fragment>
                   Rozkład zajęć {translationDict[timetable.type]}{" "}
-                  <span className="font-semibold">{shortenedTitle}</span>
-                </>
+                  <span className="font-semibold">{timetable?.title}</span>
+                </React.Fragment>
               ) : (
                 "Nie znaleziono planu zajęć"
               )}
             </h1>
-            {timetableTitle && isClient && (
+            {timetable?.title && isClient && (
               <button
                 aria-label={
                   isFavorite ? "Usuń z ulubionych" : "Dodaj do ulubionych"
@@ -92,6 +86,16 @@ const SchoolLink: React.FC = () => (
 const Dates: React.FC<{
   timetable: OptivumTimetable;
 }> = ({ timetable }) => {
+  if (timetable?.lessons.some((innerArray) => innerArray.length === 0)) {
+    return (
+      <p className="text-base font-medium text-primary/50">
+        Szukany plan zajęć{" "}
+        <span className="font-semibold text-primary/90">({timetable?.id})</span>{" "}
+        nie mógł zostać znaleziony.
+      </p>
+    );
+  }
+
   return (
     <p className="text-sm font-medium text-primary/70 xl:text-base">
       {[

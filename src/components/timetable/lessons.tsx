@@ -14,12 +14,8 @@ export const TableLessonCell: React.FC<{
 
 const LessonItem: React.FC<{ lesson: TableLesson }> = ({ lesson }) => {
   return (
-    <div
-      className={
-        lesson.groupName ? "flex w-full items-center justify-between" : "grid"
-      }
-    >
-      <h2 className="text-base font-semibold text-primary/90">
+    <div className="flex w-full items-center justify-between gap-x-4">
+      <h2 className="whitespace-nowrap text-base font-semibold text-primary/90">
         {lesson.subject}
         {lesson.groupName && (
           <span className="text-sm font-medium text-primary/70">
@@ -28,7 +24,7 @@ const LessonItem: React.FC<{ lesson: TableLesson }> = ({ lesson }) => {
           </span>
         )}
       </h2>
-      <div className="inline-flex gap-x-2 text-sm font-medium text-primary/70">
+      <div className="inline-flex gap-x-1.5 text-sm font-medium text-primary/70">
         <LessonLink id={lesson.classId} name={lesson.className} type="class" />
         <LessonLink
           id={lesson.teacherId}
