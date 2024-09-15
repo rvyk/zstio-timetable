@@ -24,6 +24,8 @@ export const Dropdown: React.FC<{
     room: "Sale",
   };
 
+  if (data?.length == 0 && type != "favorites") return null;
+
   return (
     <AccordionItem value={type}>
       <AccordionTrigger className="group relative">
