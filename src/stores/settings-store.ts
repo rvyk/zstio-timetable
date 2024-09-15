@@ -20,12 +20,19 @@ export const useSettingsStore = create<TimetableSettingsStore>()(
 );
 
 interface useSettingsWithoutStore {
+  isSettingsPanelOpen: boolean;
+  toggleSettingsPanel: () => void;
+
   isFullscreenMode: boolean;
   toggleFullscreenMode: () => void;
 }
 
 export const useSettingsWithoutStore = create<useSettingsWithoutStore>(
   (set) => ({
+    isSettingsPanelOpen: false,
+    toggleSettingsPanel: () =>
+      set((state) => ({ isSettingsPanelOpen: !state.isSettingsPanelOpen })),
+
     isFullscreenMode: false,
     toggleFullscreenMode: () =>
       set((state) => ({ isFullscreenMode: !state.isFullscreenMode })),

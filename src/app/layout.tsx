@@ -1,3 +1,4 @@
+import { SettingsPanel } from "@/components/settings-panel/settings-panel";
 import { Sidebar } from "@/components/sidebar/sidebar";
 import { ThemeProvider } from "@/components/theme-provider";
 import { cn } from "@/lib/utils";
@@ -40,6 +41,7 @@ export default function RootLayout({
         <ThemeProvider attribute="class" disableTransitionOnChange>
           <Sidebar />
           {children}
+          <SettingsPanel />
         </ThemeProvider>
       </body>
     </html>

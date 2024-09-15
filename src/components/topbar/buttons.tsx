@@ -18,6 +18,9 @@ export const TopbarButtons: React.FC = () => {
   const toggleFullscreenMode = useSettingsWithoutStore(
     (state) => state.toggleFullscreenMode,
   );
+  const toggleSettingsPanel = useSettingsWithoutStore(
+    (state) => state.toggleSettingsPanel,
+  );
 
   const toggleTheme = () => {
     if (theme === "system") {
@@ -50,7 +53,7 @@ export const TopbarButtons: React.FC = () => {
     {
       icon: MenuIcon,
       href: null,
-      action: () => {},
+      action: toggleSettingsPanel,
       show: true,
     },
   ];
