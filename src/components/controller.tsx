@@ -5,7 +5,7 @@ import { useTimetableStore } from "@/stores/timetable-store";
 import { OptivumTimetable } from "@/types/optivum";
 import { List } from "@majusss/timetable-parser";
 import { setCookie } from "cookies-next";
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useCallback, useEffect } from "react";
 
 const Controller = ({ timetable }: { timetable: OptivumTimetable }) => {
@@ -13,88 +13,99 @@ const Controller = ({ timetable }: { timetable: OptivumTimetable }) => {
   const toggleFullscreenMode = useSettingsWithoutStore(
     (state) => state.toggleFullscreenMode,
   );
-  const pathname = usePathname();
+
   const router = useRouter();
 
-  const navigateTo = (link: string) => {
-    router.push(link);
-    setCookie("lastVisited", link, {
-      path: "/",
-    });
-  };
+  const navigateTo = useCallback(
+    (link: string) => {
+      router.push(link);
+      setCookie("lastVisited", link, {
+        path: "/",
+      });
+    },
+    [router],
+  );
 
   const handleArrowKey = useCallback(
-    (timeTableList: List, key: string) => {
-      const data = pathname.split("/")[1];
-      const currentNumber = parseInt(pathname.split("/").pop() || "0");
+    (increment: boolean) => {
+      const timeTableList = timetable.list ?? { classes: [] };
 
-      if (!data || isNaN(currentNumber)) return;
+      const type = timetable.type;
+      const currentNumber = timetable.id.slice(1);
 
-      const changeTo =
-        key === "ArrowRight"
-          ? currentNumber + 1
-          : key === "ArrowLeft"
-            ? currentNumber - 1
-            : null;
+      if (!type) return;
 
-      if (changeTo === null) return;
-
-      const dataToPropertyMap: Record<string, keyof List> = {
+      const typePropertyName = {
         class: "classes",
-        room: "rooms",
         teacher: "teachers",
-      };
+        room: "rooms",
+      }[type];
 
-      const propertyName = dataToPropertyMap[data];
-      if (!propertyName) return;
+      if (!typePropertyName) return;
 
-      const maxNumber = timeTableList[propertyName]?.length || 0;
+      const currentIndex = timeTableList[
+        typePropertyName as keyof List
+      ]?.findIndex((val) => val.value == currentNumber);
 
-      if (changeTo >= 1 && changeTo <= maxNumber) {
-        navigateTo(`/${data}/${changeTo}`);
-      } else if (changeTo < 1) {
-        switch (data) {
+      if (currentIndex == undefined) return;
+
+      const nextIndex = increment ? currentIndex + 1 : currentIndex - 1;
+
+      if (nextIndex == timeTableList[typePropertyName as keyof List]?.length) {
+        switch (type) {
           case "class":
-            if (timeTableList?.rooms)
-              navigateTo(`/room/${timeTableList.rooms.length}`);
+            navigateTo(`/teacher/${timeTableList.classes[0].value}`);
             break;
           case "teacher":
-            navigateTo(`/class/${timeTableList.classes.length}`);
+            if (timeTableList.teachers)
+              navigateTo(`/room/${timeTableList.teachers[0].value}`);
             break;
           case "room":
-            if (timeTableList?.teachers)
-              navigateTo(`/teacher/${timeTableList.teachers.length}`);
+            if (timeTableList.rooms)
+              navigateTo(`/class/${timeTableList.rooms[0].value}`);
             break;
         }
-      } else if (changeTo > maxNumber) {
-        switch (data) {
+        return;
+      }
+
+      if (nextIndex == -1) {
+        switch (type) {
           case "class":
-            if (timeTableList?.teachers) navigateTo("/teacher/1");
+            if (timeTableList.rooms)
+              navigateTo(
+                `/room/${timeTableList.rooms[timeTableList.rooms.length - 1].value}`,
+              );
             break;
           case "teacher":
-            if (timeTableList.rooms) navigateTo("/room/1");
+            if (timeTableList.classes)
+              navigateTo(
+                `/class/${timeTableList.classes[timeTableList.classes.length - 1].value}`,
+              );
             break;
           case "room":
-            navigateTo("/class/1");
+            if (timeTableList.teachers)
+              navigateTo(
+                `/teacher/${timeTableList.teachers[timeTableList.teachers.length - 1].value}`,
+              );
             break;
         }
       }
-    },
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [pathname, router],
+      const nextValue =
+        timeTableList[typePropertyName as keyof List]?.[nextIndex]?.value;
+
+      if (!nextValue) return;
+
+      navigateTo(`/${type}/${nextValue}`);
+    },
+    [navigateTo, timetable.id, timetable.list, timetable.type],
   );
 
   useEffect(() => {
     const listener = (e: KeyboardEvent) => {
       if (["ArrowLeft", "ArrowRight"].includes(e.key)) {
         e.preventDefault();
-        handleArrowKey(
-          timetable?.list || {
-            classes: [],
-          },
-          e.key,
-        );
+        handleArrowKey(e.key == "ArrowRight");
       }
 
       if (["F11", "f"].includes(e.key)) {
