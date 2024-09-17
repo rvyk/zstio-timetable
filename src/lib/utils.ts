@@ -44,3 +44,39 @@ export const simulateKeyPress = (key: string, keyCode: number) => {
   });
   document.dispatchEvent(event);
 };
+
+//TODO: REFACTOR THIS FUNCTION
+export const getCurrentLesson = (
+  timeFrom: string,
+  timeTo: string,
+): { isWithinTimeRange: boolean; timeRemaining: string } => {
+  const now = new Date();
+  const [fromHour, fromMinutes] = timeFrom.split(":").map(Number);
+  const [toHour, toMinutes] = timeTo.split(":").map(Number);
+
+  const isAfterFromTime =
+    now.getHours() > fromHour ||
+    (now.getHours() === fromHour && now.getMinutes() >= fromMinutes);
+  const isBeforeToTime =
+    now.getHours() < toHour ||
+    (now.getHours() === toHour && now.getMinutes() < toMinutes);
+
+  const isWithinTimeRange = isAfterFromTime && isBeforeToTime;
+  let timeRemaining = "00:00";
+
+  if (isWithinTimeRange) {
+    const endTime = new Date();
+    endTime.setHours(toHour, toMinutes, 0, 0);
+
+    const timeDifference = endTime.getTime() - now.getTime();
+    const totalSecondsRemaining = Math.floor(timeDifference / 1000);
+    const minutes = Math.floor(totalSecondsRemaining / 60);
+    const seconds = totalSecondsRemaining % 60;
+
+    const formattedMinutes = String(minutes).padStart(2, "0");
+    const formattedSeconds = String(seconds).padStart(2, "0");
+    timeRemaining = `${formattedMinutes}:${formattedSeconds}`;
+  }
+
+  return { isWithinTimeRange, timeRemaining };
+};
