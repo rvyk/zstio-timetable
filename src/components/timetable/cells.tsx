@@ -2,7 +2,6 @@
 
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { shortHours } from "@/constants/hours";
 import { cn, getDayNumberForNextWeek } from "@/lib/utils";
 import { useSettingsStore } from "@/stores/settings-store";
 import { TableHour } from "@majusss/timetable-parser";
@@ -14,18 +13,9 @@ export const TableHourCell: React.FC<{
   timeRemaining: number;
 }> = ({ hour, isCurrent, timeRemaining }) => {
   const isClient = useIsClient();
-  const isShortLessons = useSettingsStore((state) => state.isShortLessons);
 
   const minutesRemaining = Math.floor(timeRemaining / 60);
   const secondsRemaining = (timeRemaining % 60).toString().padStart(2, "0");
-
-  //TODO: REFACTOR THIS COMPONENT
-
-  const shortHour = shortHours.find((sh) => sh.number === hour.number);
-
-  const timeFrom =
-    isShortLessons && shortHour ? shortHour.timeFrom : hour.timeFrom;
-  const timeTo = isShortLessons && shortHour ? shortHour.timeTo : hour.timeTo;
 
   return (
     <td className="relative flex h-full min-h-16 w-full flex-col items-center justify-center py-3">
@@ -36,7 +26,7 @@ export const TableHourCell: React.FC<{
       {isClient ? (
         <div className="grid gap-2">
           <p className="text-sm font-medium text-primary/70">
-            {timeFrom}-{timeTo}
+            {hour.timeFrom}-{hour.timeTo}
           </p>
           {isCurrent && (
             <p className="mx-auto rounded-sm border border-accent-table bg-accent-table/10 px-2 py-0.5 text-center text-sm font-medium text-primary/90">
