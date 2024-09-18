@@ -15,11 +15,11 @@ export const fetchOptivumTimetable = async (
       class: `o${index}`,
       teacher: `n${index}`,
       room: `s${index}`,
-    }[type] || "";
+    }[type] ?? "";
 
   try {
     const baseUrl =
-      process.env.NEXT_PUBLIC_TIMETABLE_URL?.replace(/\/+$/, "") || "";
+      process.env.NEXT_PUBLIC_TIMETABLE_URL?.replace(/\/+$/, "") ?? "";
     const url = `${baseUrl}/plany/${id}.html`;
 
     const data = await fetch(url).then((res) => res.text());

@@ -19,7 +19,7 @@ export const Topbar: React.FC<{ timetable: OptivumTimetable }> = ({
   const { favorites } = useFavoritesStore();
   const isClient = useIsClient();
 
-  const isFavorite = favorites.some((c) => c.name === timetable?.title);
+  const isFavorite = favorites.some((c) => c.name === timetable.title);
 
   return (
     <div className="flex w-full justify-between gap-x-4">
@@ -28,16 +28,16 @@ export const Topbar: React.FC<{ timetable: OptivumTimetable }> = ({
         <div className="grid gap-1.5">
           <div className="inline-flex items-center gap-x-4">
             <h1 className="max-w-2xl truncate text-ellipsis text-3xl font-semibold leading-tight text-primary/90 xl:text-4.2xl">
-              {timetable?.title ? (
+              {timetable.title ? (
                 <React.Fragment>
                   Rozkład zajęć {translationDict[timetable.type]}{" "}
-                  <span className="font-semibold">{timetable?.title}</span>
+                  <span className="font-semibold">{timetable.title}</span>
                 </React.Fragment>
               ) : (
                 "Nie znaleziono planu zajęć"
               )}
             </h1>
-            {timetable?.title && isClient && (
+            {timetable.title && isClient && (
               <button
                 aria-label={
                   isFavorite ? "Usuń z ulubionych" : "Dodaj do ulubionych"
@@ -86,11 +86,11 @@ const SchoolLink: React.FC = () => (
 const Dates: React.FC<{
   timetable: OptivumTimetable;
 }> = ({ timetable }) => {
-  if (timetable?.lessons.some((innerArray) => innerArray.length === 0)) {
+  if (timetable.lessons.some((innerArray) => innerArray.length === 0)) {
     return (
       <p className="text-base font-medium text-primary/50">
         Szukany plan zajęć{" "}
-        <span className="font-semibold text-primary/90">({timetable?.id})</span>{" "}
+        <span className="font-semibold text-primary/90">({timetable.id})</span>{" "}
         nie mógł zostać znaleziony.
       </p>
     );

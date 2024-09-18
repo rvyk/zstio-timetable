@@ -35,7 +35,7 @@ export const Sidebar: React.FC = () => {
 const SidebarDropdowns: React.FC = () => {
   const { timetable } = useTimetableStore();
   const favorites = useFavoritesStore((state) => state.getFavorites());
-  const { classes, teachers, rooms } = timetable?.list || {};
+  const { classes, teachers, rooms } = timetable?.list ?? {};
 
   const dropdownItems = [
     { type: "favorites", icon: StarIcon, data: favorites },

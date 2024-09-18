@@ -66,8 +66,8 @@ export const DropdownContent: React.FC<{
   return (
     <div className="mt-4 grid gap-2 rounded-md bg-accent/90 p-4">
       {data?.length ? (
-        data?.map((item, i) => {
-          const link = `/${item?.type ? item.type : type}/${item.value}`;
+        data.map((item, i) => {
+          const link = `/${item.type ? item.type : type}/${item.value}`;
 
           return (
             <LinkWithCookie

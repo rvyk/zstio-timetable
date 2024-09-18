@@ -23,8 +23,9 @@ import { TableLessonCell } from "./lessons";
 export const Timetable: React.FC<{
   timetable: OptivumTimetable;
 }> = ({ timetable }) => {
-  const isFullscreenMode =
-    useSettingsWithoutStore((state) => state.isFullscreenMode) ?? false;
+  const isFullscreenMode = useSettingsWithoutStore(
+    (state) => state.isFullscreenMode,
+  );
   const isShortLessons = useSettingsStore((state) => state.isShortLessons);
 
   const [currentTime, setCurrentTime] = useState<number>(() => {
@@ -51,7 +52,7 @@ export const Timetable: React.FC<{
       const end = parseTime(value.timeTo);
       return currentTime >= start && currentTime < end;
     });
-  }, [timetable.hours, currentTime]);
+  }, [currentTime, isShortLessons, timetable.hours]);
 
   return (
     <div
@@ -63,12 +64,12 @@ export const Timetable: React.FC<{
       )}
     >
       <div className="h-full w-full overflow-auto">
-        {timetable?.lessons.some((innerArray) => innerArray.length > 0) ? (
+        {timetable.lessons.some((innerArray) => innerArray.length > 0) ? (
           <table className="w-full">
             <thead>
               <tr className="divide-x divide-lines border-b border-lines">
                 <ShortLessonSwitcherCell />
-                {timetable?.dayNames.map((dayName) => (
+                {timetable.dayNames.map((dayName) => (
                   <TableHeaderCell key={dayName} dayName={dayName} />
                 ))}
               </tr>
@@ -89,7 +90,7 @@ export const Timetable: React.FC<{
                       isCurrent={lessonIndex === currentLessonIndex}
                       timeRemaining={parseTime(hour.timeTo) - currentTime}
                     />
-                    {timetable?.lessons.map((day, dayIndex) => (
+                    {timetable.lessons.map((day, dayIndex) => (
                       <TableLessonCell
                         key={dayIndex}
                         day={day}

@@ -28,12 +28,10 @@ const Controller = ({ timetable }: { timetable: OptivumTimetable }) => {
 
   const handleArrowKey = useCallback(
     (increment: boolean) => {
-      const timeTableList = timetable.list ?? { classes: [] };
+      const timeTableList = timetable.list;
 
       const type = timetable.type;
       const currentNumber = timetable.id.slice(1);
-
-      if (!type) return;
 
       const typePropertyName = {
         class: "classes",
@@ -77,10 +75,9 @@ const Controller = ({ timetable }: { timetable: OptivumTimetable }) => {
               );
             break;
           case "teacher":
-            if (timeTableList.classes)
-              navigateTo(
-                `/class/${timeTableList.classes[timeTableList.classes.length - 1].value}`,
-              );
+            navigateTo(
+              `/class/${timeTableList.classes[timeTableList.classes.length - 1].value}`,
+            );
             break;
           case "room":
             if (timeTableList.teachers)
@@ -116,7 +113,7 @@ const Controller = ({ timetable }: { timetable: OptivumTimetable }) => {
 
     window.addEventListener("keydown", listener);
     return () => window.removeEventListener("keydown", listener);
-  }, [handleArrowKey, timetable?.list, toggleFullscreenMode]);
+  }, [handleArrowKey, timetable.list, toggleFullscreenMode]);
 
   useEffect(() => {
     setTimetable(timetable);

@@ -15,7 +15,7 @@ export const generateMetadata = async ({
 }: {
   params: { all: string[] };
 }): Promise<{ title: string }> => {
-  if (!params.all || params.all.length < 2) {
+  if (params.all.length < 2) {
     return { title: "Wczytywanie..." };
   }
 
@@ -26,12 +26,12 @@ export const generateMetadata = async ({
 };
 
 const TimetablePage = async ({ params }: { params: { all: string[] } }) => {
-  if (!params?.all) {
+  if (!params.all.length) {
     const redirectTo = cookies().get("lastVisited")?.value ?? "/class/1";
     redirect(redirectTo);
   }
 
-  const [param1, param2] = params?.all;
+  const [param1, param2] = params.all;
 
   const timetable: OptivumTimetable = await fetchOptivumTimetable(
     param1,

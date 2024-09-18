@@ -42,7 +42,7 @@ export const TopbarButtons: React.FC = () => {
       icon: theme === "dark" && isClient ? SunMediumIcon : MoonIcon,
       href: null,
       action: toggleTheme,
-      show: resolvedTheme || !isClient,
+      show: resolvedTheme ?? !isClient,
     },
     {
       icon: Repeat2Icon,
