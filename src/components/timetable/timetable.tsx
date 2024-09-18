@@ -2,13 +2,13 @@
 
 import { Button } from "@/components/ui/button";
 import { translationDict } from "@/constants/translates";
-import { cn, simulateKeyPress } from "@/lib/utils";
+import { cn, parseTime, simulateKeyPress } from "@/lib/utils";
 import logo_zstio_high from "@/resources/logo-zstio-high.png";
 import { useSettingsWithoutStore } from "@/stores/settings-store";
 import { OptivumTimetable } from "@/types/optivum";
 import { ArrowLeft, ArrowRight, Shrink } from "lucide-react";
 import Image from "next/image";
-import React from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   ShortLessonSwitcherCell,
   TableHeaderCell,
@@ -21,6 +21,30 @@ export const Timetable: React.FC<{
 }> = ({ timetable }) => {
   const isFullscreenMode =
     useSettingsWithoutStore((state) => state.isFullscreenMode) ?? false;
+
+  const [currentTime, setCurrentTime] = useState<number>(() => {
+    const now = new Date();
+    return now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds();
+  });
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const now = new Date();
+      setCurrentTime(
+        now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds(),
+      );
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  const currentLessonIndex = useMemo(() => {
+    return Object.entries(timetable.hours || {}).findIndex(([, value]) => {
+      const start = parseTime(value.timeFrom);
+      const end = parseTime(value.timeTo);
+      return currentTime >= start && currentTime < end;
+    });
+  }, [timetable.hours, currentTime]);
 
   return (
     <div
@@ -43,7 +67,7 @@ export const Timetable: React.FC<{
               </tr>
             </thead>
             <tbody>
-              {Object.entries(timetable?.hours)
+              {Object.entries(timetable.hours)
                 .map(([, value]) => value)
                 .map((hour, lessonIndex) => (
                   <tr
@@ -53,7 +77,11 @@ export const Timetable: React.FC<{
                       "divide-x divide-lines border-b border-lines odd:bg-accent/50 odd:dark:bg-background",
                     )}
                   >
-                    <TableHourCell hour={hour} />
+                    <TableHourCell
+                      hour={hour}
+                      isCurrent={lessonIndex === currentLessonIndex}
+                      timeRemaining={parseTime(hour.timeTo) - currentTime}
+                    />
                     {timetable?.lessons.map((day, dayIndex) => (
                       <TableLessonCell
                         key={dayIndex}

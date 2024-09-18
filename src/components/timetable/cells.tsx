@@ -3,17 +3,21 @@
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { shortHours } from "@/constants/hours";
-import { cn, getCurrentLesson, getDayNumberForNextWeek } from "@/lib/utils";
+import { cn, getDayNumberForNextWeek } from "@/lib/utils";
 import { useSettingsStore } from "@/stores/settings-store";
 import { TableHour } from "@majusss/timetable-parser";
-import { useEffect, useState } from "react";
 import { useIsClient } from "usehooks-ts";
 
 export const TableHourCell: React.FC<{
   hour: TableHour;
-}> = ({ hour }) => {
+  isCurrent: boolean;
+  timeRemaining: number;
+}> = ({ hour, isCurrent, timeRemaining }) => {
   const isClient = useIsClient();
   const isShortLessons = useSettingsStore((state) => state.isShortLessons);
+
+  const minutesRemaining = Math.floor(timeRemaining / 60);
+  const secondsRemaining = (timeRemaining % 60).toString().padStart(2, "0");
 
   //TODO: REFACTOR THIS COMPONENT
 
@@ -23,29 +27,9 @@ export const TableHourCell: React.FC<{
     isShortLessons && shortHour ? shortHour.timeFrom : hour.timeFrom;
   const timeTo = isShortLessons && shortHour ? shortHour.timeTo : hour.timeTo;
 
-  const [isWithinTimeRange, setIsWithinTimeRange] = useState(
-    getCurrentLesson(timeFrom, timeTo).isWithinTimeRange,
-  );
-  const [timeRemaining, setTimeRemaining] = useState(
-    getCurrentLesson(timeFrom, timeTo).timeRemaining,
-  );
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      const { isWithinTimeRange, timeRemaining } = getCurrentLesson(
-        timeFrom,
-        timeTo,
-      );
-      setTimeRemaining(timeRemaining);
-      setIsWithinTimeRange(isWithinTimeRange);
-    }, 1000);
-
-    return () => clearInterval(timer);
-  }, [timeFrom, timeTo]);
-
   return (
     <td className="relative flex h-full min-h-16 w-full flex-col items-center justify-center py-3">
-      {isWithinTimeRange && (
+      {isCurrent && (
         <div className="absolute left-0 h-[calc(100%-1.5rem)] w-1 rounded-r-lg bg-accent-table"></div>
       )}
       <h2 className="text-xl font-semibold text-primary/90">{hour.number}</h2>
@@ -54,9 +38,9 @@ export const TableHourCell: React.FC<{
           <p className="text-sm font-medium text-primary/70">
             {timeFrom}-{timeTo}
           </p>
-          {!!timeRemaining && timeRemaining != "00:00" && (
+          {isCurrent && (
             <p className="mx-auto rounded-sm border border-accent-table bg-accent-table/10 px-2 py-0.5 text-center text-sm font-medium text-primary/90">
-              {timeRemaining}
+              {`${minutesRemaining}:${secondsRemaining}`}
             </p>
           )}
         </div>
