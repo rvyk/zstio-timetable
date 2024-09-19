@@ -54,6 +54,12 @@ export const Timetable: React.FC<{
     });
   }, [currentTime, isShortLessons, timetable.hours]);
 
+  const maxLessons =
+    Math.max(
+      Object.entries(timetable.hours).length,
+      ...timetable.lessons.map((day) => day.length),
+    ) || 0;
+
   return (
     <div
       className={cn(
@@ -76,6 +82,7 @@ export const Timetable: React.FC<{
             </thead>
             <tbody>
               {Object.entries(isShortLessons ? shortHours : timetable.hours)
+                .slice(0, maxLessons)
                 .map(([, value]) => value)
                 .map((hour, lessonIndex) => (
                   <tr
