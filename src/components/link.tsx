@@ -8,6 +8,7 @@ export const LinkWithCookie: React.FC<
   const handleClick = (link: string) => {
     setCookie("lastVisited", link, {
       path: "/",
+      expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
     });
   };
 
