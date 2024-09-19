@@ -15,12 +15,11 @@ export const generateMetadata = async ({
 }: {
   params: { all: [string?, string?] } | Record<string, never>;
 }): Promise<{ title: string }> => {
-  if (!("all" in params)) return { title: "Wczytywanie..." };
+  if (!("all" in params) || !params.all[0] || !params.all[1]) {
+    return { title: "" };
+  }
 
-  const [param1, param2] = params.all;
-
-  if (!param1 || !param2) return { title: "Wczytywanie..." };
-
+  const [param1, param2] = params.all as [string, string];
   const timetable = await fetchOptivumTimetable(param1, param2);
 
   return { title: timetable.title };
@@ -31,18 +30,12 @@ const TimetablePage = async ({
 }: {
   params: { all: [string?, string?] } | Record<string, never>;
 }) => {
-  if (!("all" in params)) {
+  if (!("all" in params) || !params.all[0] || !params.all[1]) {
     const redirectTo = cookies().get("lastVisited")?.value ?? "/class/1";
     redirect(redirectTo);
   }
 
-  const [param1, param2] = params.all;
-
-  if (!param1 || !param2) {
-    const redirectTo = cookies().get("lastVisited")?.value ?? "/class/1";
-    redirect(redirectTo);
-  }
-
+  const [param1, param2] = params.all as [string, string];
   const timetable: OptivumTimetable = await fetchOptivumTimetable(
     param1,
     param2,

@@ -6,8 +6,7 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-// TODO: CREATE TESTS FOR THIS FUNCTION
-export const getDayNumberForNextWeek = (dayName: string): string => {
+export const getDayNumberForNextWeek = (dayName: string): number => {
   const today = new Date();
   const todayDayOfWeek = today.getDay();
   const targetDay = daysOfWeek.find(
@@ -15,7 +14,7 @@ export const getDayNumberForNextWeek = (dayName: string): string => {
   );
 
   if (!targetDay) {
-    throw new Error(`Nieznany dzień: ${dayName}`);
+    return 0;
   }
 
   const targetDayOfWeek = targetDay.index + 1;
@@ -31,7 +30,7 @@ export const getDayNumberForNextWeek = (dayName: string): string => {
     targetDate.setDate(today.getDate() - (todayDayOfWeek - targetDayOfWeek));
   }
 
-  return targetDate.getDate().toString().padStart(2, "0");
+  return Number(targetDate.getDate().toString().padStart(2, "0"));
 };
 
 export const simulateKeyPress = (key: string, keyCode: number) => {
