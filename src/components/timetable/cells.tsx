@@ -14,7 +14,9 @@ export const TableHourCell: React.FC<{
 }> = ({ hour, isCurrent, timeRemaining }) => {
   const isClient = useIsClient();
 
-  const minutesRemaining = Math.floor(timeRemaining / 60);
+  const minutesRemaining = Math.floor(timeRemaining / 60)
+    .toString()
+    .padStart(2, "0");
   const secondsRemaining = (timeRemaining % 60).toString().padStart(2, "0");
 
   return (
@@ -29,7 +31,7 @@ export const TableHourCell: React.FC<{
             {hour.timeFrom}-{hour.timeTo}
           </p>
           {isCurrent && (
-            <p className="mx-auto rounded-sm border border-accent-table bg-accent-table/10 px-2 py-0.5 text-center text-sm font-medium text-primary/90">
+            <p className="mx-auto rounded-sm border border-accent-table bg-accent-table px-2 py-0.5 text-center text-sm font-medium text-accent/90 dark:bg-accent-table/10 dark:text-primary/90">
               {`${minutesRemaining}:${secondsRemaining}`}
             </p>
           )}
@@ -43,12 +45,27 @@ export const TableHourCell: React.FC<{
 
 export const TableHeaderCell: React.FC<{ dayName: string }> = ({ dayName }) => {
   const dayNumber = getDayNumberForNextWeek(dayName);
+  const isCurrentDay = new Date().getDate() == dayNumber;
 
   return (
-    <th className="text-left">
-      <div className="inline-flex items-center gap-x-3 px-4 py-3">
-        <h2 className="text-3xl font-semibold text-primary/90">{dayNumber}</h2>
-        <p className="text-xl font-semibold text-primary/90">{dayName}</p>
+    <th className="relative text-left">
+      <div
+        className={cn(
+          isCurrentDay ? "gap-x-5" : "gap-x-3",
+          "inline-flex items-center px-4 py-3",
+        )}
+      >
+        <h2
+          className={cn(
+            isCurrentDay
+              ? "-mx-2.5 -my-1 rounded-sm bg-accent-table px-2.5 py-1 text-accent/90 dark:text-primary/90"
+              : "text-primary/90",
+            "text-3xl font-semibold",
+          )}
+        >
+          {dayNumber}
+        </h2>
+        <h3 className="text-xl font-semibold text-primary/90">{dayName}</h3>
       </div>
     </th>
   );
@@ -83,7 +100,7 @@ export const ShortLessonSwitcherCell: React.FC = () => {
               isShortLessons
                 ? "translate-x-[100%] transform rounded-r-sm"
                 : "rounded-l-sm",
-              "absolute top-0 z-40 flex h-10 w-[50%] cursor-default items-center justify-center bg-primary px-4 py-2 text-sm font-semibold text-accent/90 transition-all dark:bg-accent-table dark:text-primary/90",
+              "absolute top-0 z-40 flex h-10 w-[50%] cursor-default items-center justify-center bg-accent-table px-4 py-2 text-sm font-semibold text-accent/90 transition-all dark:text-primary/90",
             )}
           >
             {isShortLessons ? "30'" : "45'"}
