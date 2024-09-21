@@ -12,7 +12,7 @@ import {
 import { OptivumTimetable } from "@/types/optivum";
 import { ArrowLeft, ArrowRight, Shrink } from "lucide-react";
 import Image from "next/image";
-import React, { useEffect, useMemo, useState } from "react";
+import { FC, useEffect, useMemo, useState } from "react";
 import {
   ShortLessonSwitcherCell,
   TableHeaderCell,
@@ -20,15 +20,17 @@ import {
 } from "./cells";
 import { TableLessonCell } from "./lessons";
 
-export const Timetable: React.FC<{
+interface TimetableProps {
   timetable: OptivumTimetable;
-}> = ({ timetable }) => {
+}
+
+export const Timetable: FC<TimetableProps> = ({ timetable }) => {
   const isFullscreenMode = useSettingsWithoutStore(
     (state) => state.isFullscreenMode,
   );
   const isShortLessons = useSettingsStore((state) => state.isShortLessons);
 
-  const [currentTime, setCurrentTime] = useState<number>(() => {
+  const [currentTime, setCurrentTime] = useState(() => {
     const now = new Date();
     return now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds();
   });
@@ -45,9 +47,8 @@ export const Timetable: React.FC<{
   }, []);
 
   const currentLessonIndex = useMemo(() => {
-    return Object.entries(
-      isShortLessons ? shortHours : timetable.hours,
-    ).findIndex(([, value]) => {
+    const hours = isShortLessons ? shortHours : timetable.hours;
+    return Object.entries(hours).findIndex(([, value]) => {
       const start = parseTime(value.timeFrom);
       const end = parseTime(value.timeTo);
       return currentTime >= start && currentTime < end;
@@ -57,11 +58,16 @@ export const Timetable: React.FC<{
   const maxLessons = useMemo(() => {
     return (
       Math.max(
-        Object.entries(timetable.hours).length,
+        Object.keys(timetable.hours).length,
         ...timetable.lessons.map((day) => day.length),
       ) || 0
     );
   }, [timetable]);
+
+  const hasLessons = useMemo(
+    () => timetable.lessons.some((innerArray) => innerArray.length > 0),
+    [timetable.lessons],
+  );
 
   return (
     <div
@@ -73,7 +79,7 @@ export const Timetable: React.FC<{
       )}
     >
       <div className="h-full w-full overflow-auto">
-        {timetable.lessons.some((innerArray) => innerArray.length > 0) ? (
+        {hasLessons ? (
           <table className="w-full">
             <thead>
               <tr className="divide-x divide-lines border-b border-lines">
@@ -84,9 +90,8 @@ export const Timetable: React.FC<{
               </tr>
             </thead>
             <tbody>
-              {Object.entries(isShortLessons ? shortHours : timetable.hours)
+              {Object.values(isShortLessons ? shortHours : timetable.hours)
                 .slice(0, maxLessons)
-                .map(([, value]) => value)
                 .map((hour, lessonIndex) => (
                   <tr
                     key={lessonIndex}
@@ -112,17 +117,22 @@ export const Timetable: React.FC<{
             </tbody>
           </table>
         ) : (
-          isFullscreenMode && <NotFoundTimetable {...{ timetable }} />
+          isFullscreenMode && <NotFoundTimetable id={timetable.id} />
         )}
       </div>
-      {isFullscreenMode && <FullScreenControlls {...{ timetable }} />}
+      {isFullscreenMode && (
+        <FullScreenControls title={timetable.title} type={timetable.type} />
+      )}
     </div>
   );
 };
 
-const FullScreenControlls: React.FC<{
-  timetable: OptivumTimetable;
-}> = ({ timetable: { title, type } }) => {
+interface FullScreenControlsProps {
+  title: string;
+  type: OptivumTimetable["type"];
+}
+
+const FullScreenControls: FC<FullScreenControlsProps> = ({ title, type }) => {
   const toggleFullscreenMode = useSettingsWithoutStore(
     (state) => state.toggleFullscreenMode,
   );
@@ -141,15 +151,14 @@ const FullScreenControlls: React.FC<{
         <div className="flex h-14 min-w-96 items-center justify-between gap-x-2 rounded-md border border-lines bg-accent pl-4 pr-2 dark:border-primary/10">
           <h1 className="max-w-xs truncate text-ellipsis text-lg font-medium text-primary/90">
             {title ? (
-              <React.Fragment>
+              <>
                 Rozkład zajęć {translationDict[type]}{" "}
                 <span className="font-semibold">{title}</span>
-              </React.Fragment>
+              </>
             ) : (
               "Nie znaleziono planu zajęć"
             )}
           </h1>
-
           <Button
             aria-label="Wyjdź z trybu pełnoekranowego"
             variant="icon"
@@ -172,9 +181,11 @@ const FullScreenControlls: React.FC<{
   );
 };
 
-const NotFoundTimetable: React.FC<{
-  timetable: OptivumTimetable;
-}> = ({ timetable: { id } }) => {
+interface NotFoundTimetableProps {
+  id: string;
+}
+
+const NotFoundTimetable: FC<NotFoundTimetableProps> = ({ id }) => {
   return (
     <div className="flex h-full flex-col items-center justify-center">
       <Image

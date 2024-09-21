@@ -3,15 +3,16 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useSubstitutionsStore } from "@/stores/substitutions-store";
 import { SubstitutionListItem } from "@/types/optivum";
 import { ListItem } from "@majusss/timetable-parser";
 import { ChevronDown, LucideIcon } from "lucide-react";
 import { usePathname } from "next/navigation";
+import { FC } from "react";
 import { useIsClient } from "usehooks-ts";
 import { LinkWithCookie } from "../link";
-import { Button, buttonVariants } from "../ui/button";
 
 const translates = {
   favorites: "Ulubione",
@@ -20,9 +21,9 @@ const translates = {
   room: "Sale",
 };
 
-function isListItem(item: DataItem): item is ListItem {
+const isListItem = (item: DataItem): item is ListItem => {
   return "value" in item;
-}
+};
 
 type DataItem = SubstitutionListItem | ListItem;
 
@@ -32,11 +33,7 @@ export interface DropdownProps {
   data?: DataItem[];
 }
 
-export const Dropdown: React.FC<DropdownProps> = ({
-  type,
-  icon: Icon,
-  data,
-}) => {
+export const Dropdown: FC<DropdownProps> = ({ type, icon: Icon, data }) => {
   const isClient = useIsClient();
 
   if (!data || data.length === 0) {
@@ -74,7 +71,7 @@ export const Dropdown: React.FC<DropdownProps> = ({
   );
 };
 
-export const DropdownContent: React.FC<{
+export const DropdownContent: FC<{
   type: DropdownProps["type"];
   data?: DataItem[];
 }> = ({ type, data }) => {
@@ -102,10 +99,7 @@ interface ListItemComponentProps {
   type: DropdownProps["type"];
 }
 
-const ListItemComponent: React.FC<ListItemComponentProps> = ({
-  item,
-  type,
-}) => {
+const ListItemComponent: FC<ListItemComponentProps> = ({ item, type }) => {
   const pathname = usePathname();
   const link = `/${item.type ? item.type : type}/${item.value}`;
 
@@ -128,9 +122,9 @@ interface SubstitutionListItemComponentProps {
   item: SubstitutionListItem;
 }
 
-const SubstitutionListItemComponent: React.FC<
-  SubstitutionListItemComponentProps
-> = ({ item }) => {
+const SubstitutionListItemComponent: FC<SubstitutionListItemComponentProps> = ({
+  item,
+}) => {
   const { handleFilterChange, filters } = useSubstitutionsStore();
   const itemType = item.type as "teacher" | "class";
 

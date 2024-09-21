@@ -1,3 +1,5 @@
+import { Dispatch, KeyboardEvent, SetStateAction } from "react";
+
 const calculateHash = async (text: string) => {
   const encoder = new TextEncoder();
   const data = encoder.encode(text);
@@ -10,8 +12,8 @@ const calculateHash = async (text: string) => {
 };
 
 export const searchHandleKeyDown = async (
-  e: React.KeyboardEvent<HTMLInputElement>,
-  setShowEasterEgg: React.Dispatch<React.SetStateAction<boolean>>,
+  e: KeyboardEvent<HTMLInputElement>,
+  setShowEasterEgg: Dispatch<SetStateAction<boolean>>,
 ) => {
   if (e.key === "Enter") {
     const input = e.currentTarget.value;

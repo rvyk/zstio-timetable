@@ -9,17 +9,35 @@ import { OptivumTimetable } from "@/types/optivum";
 import { ArrowLeftFromLine, StarIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
+import { FC, Fragment, useMemo } from "react";
 import { useIsClient } from "usehooks-ts";
 import { TopbarButtons } from "./buttons";
 
-export const Topbar: React.FC<{ timetable: OptivumTimetable }> = ({
-  timetable,
-}) => {
+interface TopbarProps {
+  timetable: OptivumTimetable;
+}
+
+export const Topbar: FC<TopbarProps> = ({ timetable }) => {
   const { favorites } = useFavoritesStore();
   const isClient = useIsClient();
 
-  const isFavorite = favorites.some((c) => c.name === timetable.title);
+  const isFavorite = useMemo(
+    () => favorites.some((c) => c.name === timetable.title),
+    [favorites, timetable.title],
+  );
+
+  const titleElement = useMemo(
+    () =>
+      timetable.title ? (
+        <>
+          Rozkład zajęć {translationDict[timetable.type]}{" "}
+          <span className="font-semibold">{timetable.title}</span>
+        </>
+      ) : (
+        "Nie znaleziono planu zajęć"
+      ),
+    [timetable.title, timetable.type],
+  );
 
   return (
     <div className="flex w-full justify-between gap-x-4">
@@ -28,14 +46,7 @@ export const Topbar: React.FC<{ timetable: OptivumTimetable }> = ({
         <div className="grid gap-1.5">
           <div className="inline-flex items-center gap-x-4">
             <h1 className="max-w-2xl truncate text-ellipsis text-3xl font-semibold leading-tight text-primary/90 xl:text-4.2xl">
-              {timetable.title ? (
-                <React.Fragment>
-                  Rozkład zajęć {translationDict[timetable.type]}{" "}
-                  <span className="font-semibold">{timetable.title}</span>
-                </React.Fragment>
-              ) : (
-                "Nie znaleziono planu zajęć"
-              )}
+              {titleElement}
             </h1>
             {timetable.title && isClient && (
               <button
@@ -66,7 +77,7 @@ export const Topbar: React.FC<{ timetable: OptivumTimetable }> = ({
   );
 };
 
-const SchoolLink: React.FC = () => (
+const SchoolLink: FC = () => (
   <Link
     href="https://zstiojar.edu.pl"
     className="group inline-flex w-fit items-center gap-x-4"
@@ -83,48 +94,54 @@ const SchoolLink: React.FC = () => (
   </Link>
 );
 
-const Dates: React.FC<{
-  timetable: OptivumTimetable;
-}> = ({ timetable }) => {
-  if (timetable.lessons.some((innerArray) => innerArray.length === 0)) {
-    return (
-      <p className="text-base font-medium text-primary/50">
-        Szukany plan zajęć{" "}
-        <span className="font-semibold text-primary/90">({timetable.id})</span>{" "}
-        nie mógł zostać znaleziony.
-      </p>
-    );
-  }
+const Dates: FC<{ timetable: OptivumTimetable }> = ({ timetable }) => {
+  const hasNoLessons = useMemo(
+    () => timetable.lessons.some((innerArray) => innerArray.length === 0),
+    [timetable.lessons],
+  );
 
-  return (
+  const dateElements = useMemo(() => {
+    if (hasNoLessons) return null;
+
+    const elements = [];
+    if (timetable.generatedDate && timetable.generatedDate !== "Invalid date") {
+      elements.push(
+        <Fragment key="generatedDate">
+          Wygenerowano:{" "}
+          <span className="font-semibold text-primary/90">
+            {timetable.generatedDate}
+          </span>
+        </Fragment>,
+      );
+    }
+    if (timetable.validDate) {
+      elements.push(
+        <Fragment key="validDate">
+          Obowiązuje od:{" "}
+          <span className="font-semibold text-primary/90">
+            {timetable.validDate}
+          </span>
+        </Fragment>,
+      );
+    }
+
+    return elements.reduce<(string | JSX.Element)[]>(
+      (acc, curr, index, array) => {
+        return index < array.length - 1 ? [...acc, curr, ", "] : [...acc, curr];
+      },
+      [],
+    );
+  }, [hasNoLessons, timetable.generatedDate, timetable.validDate]);
+
+  return hasNoLessons ? (
+    <p className="text-base font-medium text-primary/50">
+      Szukany plan zajęć{" "}
+      <span className="font-semibold text-primary/90">({timetable.id})</span>{" "}
+      nie mógł zostać znaleziony.
+    </p>
+  ) : (
     <p className="text-sm font-medium text-primary/70 xl:text-base">
-      {[
-        timetable.generatedDate &&
-          timetable.generatedDate != "Invalid date" && (
-            <React.Fragment key="generatedDate">
-              Wygenerowano:{" "}
-              <span className="font-semibold text-primary/90">
-                {timetable.generatedDate}
-              </span>
-            </React.Fragment>
-          ),
-        timetable.validDate && (
-          <React.Fragment key="validDate">
-            Obowiązuje od:{" "}
-            <span className="font-semibold text-primary/90">
-              {timetable.validDate}
-            </span>
-          </React.Fragment>
-        ),
-      ]
-        .filter((item): item is JSX.Element => Boolean(item))
-        .reduce<(string | JSX.Element)[]>((acc, curr, index, array) => {
-          if (index < array.length - 1) {
-            return [...acc, curr, ", "];
-          } else {
-            return [...acc, curr];
-          }
-        }, [])}
+      {dateElements}
     </p>
   );
 };

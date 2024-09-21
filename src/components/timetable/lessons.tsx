@@ -1,18 +1,28 @@
 import { TableLesson } from "@majusss/timetable-parser";
+import { FC } from "react";
 import { LinkWithCookie } from "../link";
 
-export const TableLessonCell: React.FC<{
+interface TableLessonCellProps {
   day: TableLesson[][];
   lessonIndex: number;
-}> = ({ day, lessonIndex }) => (
-  <td className="px-4 py-3 last:border-0">
-    {day[lessonIndex]?.map((lesson, index) => (
-      <LessonItem key={index} lesson={lesson} />
-    ))}
-  </td>
-);
+}
 
-const LessonItem: React.FC<{ lesson: TableLesson }> = ({ lesson }) => {
+export const TableLessonCell: FC<TableLessonCellProps> = ({
+  day,
+  lessonIndex,
+}) => {
+  const lesson = day[lessonIndex];
+
+  return (
+    <td className="px-4 py-3 last:border-0">
+      {lesson.map((lessonItem, index) => (
+        <LessonItem key={index} lesson={lessonItem} />
+      ))}
+    </td>
+  );
+};
+
+const LessonItem: FC<{ lesson: TableLesson }> = ({ lesson }) => {
   return (
     <div className="flex w-full items-center justify-between gap-x-4">
       <h2 className="whitespace-nowrap text-base font-semibold text-primary/90">
@@ -37,11 +47,13 @@ const LessonItem: React.FC<{ lesson: TableLesson }> = ({ lesson }) => {
   );
 };
 
-const LessonLink: React.FC<{ id?: string; name?: string; type: string }> = ({
-  id,
-  name,
-  type,
-}) => {
+interface LessonLinkProps {
+  id?: string;
+  name?: string;
+  type: string;
+}
+
+const LessonLink: FC<LessonLinkProps> = ({ id, name, type }) => {
   const link = `/${type}/${id}`;
 
   return id && name ? (

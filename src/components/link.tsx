@@ -1,8 +1,8 @@
 import { setCookie } from "cookies-next";
 import Link from "next/link";
-import { AnchorHTMLAttributes } from "react";
+import { AnchorHTMLAttributes, FC } from "react";
 
-export const LinkWithCookie: React.FC<
+export const LinkWithCookie: FC<
   AnchorHTMLAttributes<HTMLAnchorElement> & { href: string }
 > = ({ href, children, ...rest }) => {
   const handleClick = (link: string) => {

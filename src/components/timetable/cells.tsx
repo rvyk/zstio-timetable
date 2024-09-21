@@ -5,19 +5,29 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { cn, getDayNumberForNextWeek } from "@/lib/utils";
 import { useSettingsStore } from "@/stores/settings-store";
 import { TableHour } from "@majusss/timetable-parser";
+import { FC, useMemo } from "react";
 import { useIsClient } from "usehooks-ts";
 
-export const TableHourCell: React.FC<{
+interface TableHourCellProps {
   hour: TableHour;
   isCurrent: boolean;
   timeRemaining: number;
-}> = ({ hour, isCurrent, timeRemaining }) => {
+}
+
+export const TableHourCell: FC<TableHourCellProps> = ({
+  hour,
+  isCurrent,
+  timeRemaining,
+}) => {
   const isClient = useIsClient();
 
-  const minutesRemaining = Math.floor(timeRemaining / 60)
-    .toString()
-    .padStart(2, "0");
-  const secondsRemaining = (timeRemaining % 60).toString().padStart(2, "0");
+  const { minutesRemaining, secondsRemaining } = useMemo(() => {
+    const minutes = Math.floor(timeRemaining / 60)
+      .toString()
+      .padStart(2, "0");
+    const seconds = (timeRemaining % 60).toString().padStart(2, "0");
+    return { minutesRemaining: minutes, secondsRemaining: seconds };
+  }, [timeRemaining]);
 
   return (
     <td className="relative flex h-full min-h-16 w-full flex-col items-center justify-center py-3">
@@ -43,9 +53,16 @@ export const TableHourCell: React.FC<{
   );
 };
 
-export const TableHeaderCell: React.FC<{ dayName: string }> = ({ dayName }) => {
-  const dayNumber = getDayNumberForNextWeek(dayName);
-  const isCurrentDay = new Date().getDate() == dayNumber;
+interface TableHeaderCellProps {
+  dayName: string;
+}
+
+export const TableHeaderCell: FC<TableHeaderCellProps> = ({ dayName }) => {
+  const dayNumber = useMemo(() => getDayNumberForNextWeek(dayName), [dayName]);
+  const isCurrentDay = useMemo(
+    () => new Date().getDate() === dayNumber,
+    [dayNumber],
+  );
 
   return (
     <th className="relative text-left">
@@ -71,7 +88,7 @@ export const TableHeaderCell: React.FC<{ dayName: string }> = ({ dayName }) => {
   );
 };
 
-export const ShortLessonSwitcherCell: React.FC = () => {
+export const ShortLessonSwitcherCell: FC = () => {
   const isClient = useIsClient();
   const { isShortLessons, toggleShortLessons } = useSettingsStore();
 

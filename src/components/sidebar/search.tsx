@@ -4,7 +4,7 @@ import { OptivumTimetable, SubstitutionListItem } from "@/types/optivum";
 import { SubstitutionsPage } from "@majusss/substitutions-parser/dist/types";
 import { ListItem } from "@majusss/timetable-parser";
 import { SearchIcon, XIcon } from "lucide-react";
-import { useCallback, useMemo, useState } from "react";
+import { FC, KeyboardEvent, useCallback, useMemo, useState } from "react";
 import { DropdownContent } from "./dropdown";
 
 const listKeys: Record<string, string> = {
@@ -15,7 +15,7 @@ const listKeys: Record<string, string> = {
 
 const MAX_RESULTS = 5;
 
-export const Search: React.FC<{
+export const Search: FC<{
   timetable?: OptivumTimetable | null;
   substitutions?: SubstitutionsPage | null;
 }> = ({ timetable, substitutions }) => {
@@ -26,12 +26,9 @@ export const Search: React.FC<{
     setValue("");
   }, []);
 
-  const handleKeyDown = useCallback(
-    (e: React.KeyboardEvent<HTMLInputElement>) => {
-      searchHandleKeyDown(e, setShowEasterEgg);
-    },
-    [],
-  );
+  const handleKeyDown = useCallback((e: KeyboardEvent<HTMLInputElement>) => {
+    searchHandleKeyDown(e, setShowEasterEgg);
+  }, []);
 
   const filteredData = useMemo(() => {
     const query = value.toLowerCase().trim();

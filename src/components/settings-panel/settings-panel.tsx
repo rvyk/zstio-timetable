@@ -1,5 +1,6 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import {
   Sheet,
   SheetContent,
@@ -19,7 +20,6 @@ import {
   XIcon,
 } from "lucide-react";
 import Link from "next/link";
-import { Button } from "../ui/button";
 
 export const SettingsPanel = () => {
   const timetable = useTimetableStore((state) => state.timetable);
