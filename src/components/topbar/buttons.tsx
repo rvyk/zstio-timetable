@@ -7,14 +7,17 @@ import {
   MoonIcon,
   Repeat2Icon,
   SunMediumIcon,
+  TableIcon,
 } from "lucide-react";
 import { useTheme } from "next-themes";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useIsClient } from "usehooks-ts";
 
 export const TopbarButtons: React.FC = () => {
   const isClient = useIsClient();
-  const { theme, setTheme, resolvedTheme, systemTheme } = useTheme();
+  const isSubstitutionPage = usePathname() === "/substitutions";
+  const { theme, setTheme, systemTheme } = useTheme();
   const toggleFullscreenMode = useSettingsWithoutStore(
     (state) => state.toggleFullscreenMode,
   );
@@ -33,21 +36,21 @@ export const TopbarButtons: React.FC = () => {
 
   const buttons = [
     {
-      icon: FullscreenIcon,
-      href: null,
-      action: toggleFullscreenMode,
-      show: true,
-    },
-    {
       icon: theme === "dark" && isClient ? SunMediumIcon : MoonIcon,
       href: null,
       action: toggleTheme,
-      show: resolvedTheme ?? !isClient,
+      show: isClient,
     },
     {
-      icon: Repeat2Icon,
-      href: "/zastepstwa",
+      icon: isSubstitutionPage ? TableIcon : Repeat2Icon,
+      href: isSubstitutionPage ? "/" : "/substitutions",
       action: null,
+      show: isClient,
+    },
+    {
+      icon: FullscreenIcon,
+      href: null,
+      action: toggleFullscreenMode,
       show: true,
     },
     {

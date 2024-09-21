@@ -1,7 +1,6 @@
 import { useFavoritesStore } from "@/stores/favorites-store";
 import { useTimetableStore } from "@/stores/timetable-store";
 
-// I know that it can be done more simply by simply taking timetable.id and truncate the first character, possibly to be changed
 export const handleFavorite = () => {
   const timetable = useTimetableStore.getState().timetable;
   const { favorites, addFavorite, removeFavorite } =

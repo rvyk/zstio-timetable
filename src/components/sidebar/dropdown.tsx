@@ -4,17 +4,25 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { cn } from "@/lib/utils";
+import { useSubstitutionsStore } from "@/stores/substitutions-store";
 import { ListItem } from "@majusss/timetable-parser";
 import { ChevronDown, LucideIcon } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useIsClient } from "usehooks-ts";
 import { LinkWithCookie } from "../link";
+import { Button, buttonVariants } from "../ui/button";
 
-export const Dropdown: React.FC<{
-  type: string;
+export interface DropdownProps {
+  type: "class" | "teacher" | "room" | "favorites" | "search";
   icon: LucideIcon;
-  data?: ListItem[] | undefined;
-}> = ({ type, icon: Icon, data }) => {
+  data?: ListItem[] | string[] | undefined;
+}
+
+export const Dropdown: React.FC<DropdownProps> = ({
+  type,
+  icon: Icon,
+  data,
+}) => {
   const isClient = useIsClient();
 
   const translates = {
@@ -58,30 +66,56 @@ export const Dropdown: React.FC<{
 };
 
 export const DropdownContent: React.FC<{
-  type: string;
-  data: ListItem[] | undefined;
+  type: DropdownProps["type"];
+  data: DropdownProps["data"];
 }> = ({ type, data }) => {
   const pathname = usePathname();
+  const { handleFilterChange, filters } = useSubstitutionsStore();
+
+  const selectedItems = filters[type as keyof typeof filters];
 
   return (
     <div className="mt-4 grid gap-2 rounded-md bg-accent/90 p-4">
       {data?.length ? (
         data.map((item, i) => {
+          if (typeof item == "string") {
+            return (
+              <Button
+                variant="sidebarItem"
+                aria-label={`Zaznacz ${item}`}
+                key={i}
+                size="fit"
+                onClick={() =>
+                  handleFilterChange(type as "teacher" | "class", item)
+                }
+                className={cn(
+                  selectedItems.includes(item) &&
+                    buttonVariants({
+                      variant: "sidebarItemActive",
+                      size: "fit",
+                    }),
+                )}
+              >
+                {item}
+              </Button>
+            );
+          }
+
           const link = `/${item.type ? item.type : type}/${item.value}`;
 
           return (
-            <LinkWithCookie
-              aria-label={`Przejdź do ${item.name}`}
-              href={link}
-              key={i}
-              className={cn(
-                pathname == link &&
-                  "!border-primary/5 bg-primary/5 hover:border-primary/10 hover:!bg-primary/10 dark:!bg-primary/5 hover:dark:!bg-primary/10",
-                "rounded-md border border-transparent py-3 pl-6 pr-3 text-sm font-semibold text-primary/80 transition-all hover:border-primary/5 hover:bg-primary/5 dark:font-medium hover:dark:bg-primary/5",
-              )}
-            >
-              {item.name}
-            </LinkWithCookie>
+            <Button key={i} variant="sidebarItem" asChild size="fit">
+              <LinkWithCookie
+                aria-label={`Przejdź do ${item.name}`}
+                href={link}
+                className={cn(
+                  pathname == link &&
+                    buttonVariants({ variant: "sidebarItemActive" }),
+                )}
+              >
+                {item.name}
+              </LinkWithCookie>
+            </Button>
           );
         })
       ) : (

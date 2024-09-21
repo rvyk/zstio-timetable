@@ -54,11 +54,14 @@ export const Timetable: React.FC<{
     });
   }, [currentTime, isShortLessons, timetable.hours]);
 
-  const maxLessons =
-    Math.max(
-      Object.entries(timetable.hours).length,
-      ...timetable.lessons.map((day) => day.length),
-    ) || 0;
+  const maxLessons = useMemo(() => {
+    return (
+      Math.max(
+        Object.entries(timetable.hours).length,
+        ...timetable.lessons.map((day) => day.length),
+      ) || 0
+    );
+  }, [timetable]);
 
   return (
     <div

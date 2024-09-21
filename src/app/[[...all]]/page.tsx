@@ -1,9 +1,8 @@
-import Controller from "@/components/controller";
+import { TimetableController } from "@/components/timetable-controller";
 import { Timetable } from "@/components/timetable/timetable";
 import { Topbar } from "@/components/topbar/topbar";
 import { fetchOptivumList } from "@/lib/fetchers/optivum-list";
 import { fetchOptivumTimetable } from "@/lib/fetchers/optivum-timetable";
-import { OptivumTimetable } from "@/types/optivum";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import React from "react";
@@ -36,14 +35,11 @@ const TimetablePage = async ({
   }
 
   const [param1, param2] = params.all as [string, string];
-  const timetable: OptivumTimetable = await fetchOptivumTimetable(
-    param1,
-    param2,
-  );
+  const timetable = await fetchOptivumTimetable(param1, param2);
 
   return (
     <React.Fragment>
-      <Controller timetable={timetable} />
+      <TimetableController timetable={timetable} />
       <div className="flex h-full w-full flex-col gap-y-6 overflow-hidden p-8">
         <Topbar {...{ timetable }} />
         <Timetable {...{ timetable }} />

@@ -8,7 +8,11 @@ import { setCookie } from "cookies-next";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect } from "react";
 
-const Controller = ({ timetable }: { timetable: OptivumTimetable }) => {
+export const TimetableController = ({
+  timetable,
+}: {
+  timetable: OptivumTimetable;
+}) => {
   const setTimetable = useTimetableStore((state) => state.setTimetable);
   const toggleFullscreenMode = useSettingsWithoutStore(
     (state) => state.toggleFullscreenMode,
@@ -122,5 +126,3 @@ const Controller = ({ timetable }: { timetable: OptivumTimetable }) => {
 
   return null;
 };
-
-export default Controller;
