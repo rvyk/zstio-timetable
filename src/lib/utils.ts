@@ -1,4 +1,5 @@
 import { daysOfWeek } from "@/constants/days-of-week";
+import { SubstitutionsPage } from "@majusss/substitutions-parser/dist/types";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -47,4 +48,17 @@ export const simulateKeyPress = (key: string, keyCode: number) => {
 export const parseTime = (timeStr: string): number => {
   const [hours, minutes] = timeStr.split(":").map(Number);
   return hours * 3600 + minutes * 60;
+};
+
+export const getUniqueSubstitutionList = (
+  type: "teacher" | "class",
+  substitutions: SubstitutionsPage,
+) => {
+  const uniqueNames = Array.from(
+    new Set(
+      substitutions.tables.flatMap((t) => t.substitutions.map((s) => s[type])),
+    ),
+  );
+
+  return uniqueNames.map((name) => ({ name, type }));
 };

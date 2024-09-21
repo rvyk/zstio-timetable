@@ -5,6 +5,7 @@ import {
 } from "@/components/ui/accordion";
 import { cn } from "@/lib/utils";
 import { useSubstitutionsStore } from "@/stores/substitutions-store";
+import { SubstitutionListItem } from "@/types/optivum";
 import { ListItem } from "@majusss/timetable-parser";
 import { ChevronDown, LucideIcon } from "lucide-react";
 import { usePathname } from "next/navigation";
@@ -12,10 +13,23 @@ import { useIsClient } from "usehooks-ts";
 import { LinkWithCookie } from "../link";
 import { Button, buttonVariants } from "../ui/button";
 
+const translates = {
+  favorites: "Ulubione",
+  class: "Klasy",
+  teacher: "Nauczyciele",
+  room: "Sale",
+};
+
+function isListItem(item: DataItem): item is ListItem {
+  return "value" in item;
+}
+
+type DataItem = SubstitutionListItem | ListItem;
+
 export interface DropdownProps {
   type: "class" | "teacher" | "room" | "favorites" | "search";
   icon: LucideIcon;
-  data?: ListItem[] | string[] | undefined;
+  data?: DataItem[];
 }
 
 export const Dropdown: React.FC<DropdownProps> = ({
@@ -25,14 +39,9 @@ export const Dropdown: React.FC<DropdownProps> = ({
 }) => {
   const isClient = useIsClient();
 
-  const translates = {
-    favorites: "Ulubione",
-    class: "Klasy",
-    teacher: "Nauczyciele",
-    room: "Sale",
-  };
-
-  if (data?.length == 0 && type != "favorites") return null;
+  if (!data || data.length === 0) {
+    if (type !== "favorites") return null;
+  }
 
   return (
     <AccordionItem value={type}>
@@ -67,62 +76,85 @@ export const Dropdown: React.FC<DropdownProps> = ({
 
 export const DropdownContent: React.FC<{
   type: DropdownProps["type"];
-  data: DropdownProps["data"];
+  data?: DataItem[];
 }> = ({ type, data }) => {
-  const pathname = usePathname();
-  const { handleFilterChange, filters } = useSubstitutionsStore();
-
-  const selectedItems = filters[type as keyof typeof filters];
-
   return (
     <div className="mt-4 grid gap-2 rounded-md bg-accent/90 p-4">
-      {data?.length ? (
-        data.map((item, i) => {
-          if (typeof item == "string") {
-            return (
-              <Button
-                variant="sidebarItem"
-                aria-label={`Zaznacz ${item}`}
-                key={i}
-                size="fit"
-                onClick={() =>
-                  handleFilterChange(type as "teacher" | "class", item)
-                }
-                className={cn(
-                  selectedItems.includes(item) &&
-                    buttonVariants({
-                      variant: "sidebarItemActive",
-                      size: "fit",
-                    }),
-                )}
-              >
-                {item}
-              </Button>
-            );
-          }
-
-          const link = `/${item.type ? item.type : type}/${item.value}`;
-
-          return (
-            <Button key={i} variant="sidebarItem" asChild size="fit">
-              <LinkWithCookie
-                aria-label={`Przejdź do ${item.name}`}
-                href={link}
-                className={cn(
-                  pathname == link &&
-                    buttonVariants({ variant: "sidebarItemActive" }),
-                )}
-              >
-                {item.name}
-              </LinkWithCookie>
-            </Button>
-          );
-        })
+      {data && data.length > 0 ? (
+        data.map((item) =>
+          isListItem(item) ? (
+            <ListItemComponent key={item.value} item={item} type={type} />
+          ) : (
+            <SubstitutionListItemComponent key={item.name} item={item} />
+          ),
+        )
       ) : (
         <p className="text-center text-sm font-semibold text-primary/70 dark:font-medium">
           Brak danych
         </p>
       )}
     </div>
+  );
+};
+
+interface ListItemComponentProps {
+  item: ListItem;
+  type: DropdownProps["type"];
+}
+
+const ListItemComponent: React.FC<ListItemComponentProps> = ({
+  item,
+  type,
+}) => {
+  const pathname = usePathname();
+  const link = `/${item.type ? item.type : type}/${item.value}`;
+
+  return (
+    <Button key={item.value} variant="sidebarItem" asChild size="fit">
+      <LinkWithCookie
+        aria-label={`Przejdź do ${item.name}`}
+        href={link}
+        className={cn(
+          pathname === link && buttonVariants({ variant: "sidebarItemActive" }),
+        )}
+      >
+        {item.name}
+      </LinkWithCookie>
+    </Button>
+  );
+};
+
+interface SubstitutionListItemComponentProps {
+  item: SubstitutionListItem;
+}
+
+const SubstitutionListItemComponent: React.FC<
+  SubstitutionListItemComponentProps
+> = ({ item }) => {
+  const { handleFilterChange, filters } = useSubstitutionsStore();
+  const itemType = item.type as "teacher" | "class";
+
+  const selectedItems = filters[itemType];
+  const isSelected = selectedItems.some(
+    (selectedItem) => selectedItem.name === item.name,
+  );
+
+  return (
+    <Button
+      variant="sidebarItem"
+      aria-label={`Zaznacz ${item.name}`}
+      key={item.name}
+      size="fit"
+      onClick={() => handleFilterChange(itemType, item)}
+      className={cn(
+        isSelected &&
+          buttonVariants({
+            variant: "sidebarItemActive",
+            size: "fit",
+          }),
+      )}
+    >
+      {item.name}
+    </Button>
   );
 };

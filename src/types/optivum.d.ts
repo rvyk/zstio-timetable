@@ -17,3 +17,8 @@ interface OptivumTimetable {
   dayNames: string[];
   list: List;
 }
+
+interface SubstitutionListItem {
+  name: string;
+  type: string;
+}

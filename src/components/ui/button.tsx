@@ -15,7 +15,7 @@ const buttonVariants = cva(
         sidebarItem:
           "rounded-md border justify-start border-transparent py-3 pl-6 pr-3 text-left text-sm font-semibold text-primary/80 transition-all hover:border-primary/5 hover:bg-primary/5 dark:font-medium hover:dark:bg-primary/5",
         sidebarItemActive:
-          "!border-primary/5 justify-start bg-primary/5 hover:border-primary/10 hover:!bg-primary/10 dark:!bg-primary/5 hover:dark:!bg-primary/10",
+          "!border-primary/5 justify-start bg-primary/5 hover:border-primary/10 hover:!bg-primary/10 dark:!bg-primary/5 hover:dark:!bg-primary/10 font-semibold dark:font-medium",
       },
       size: {
         default: "h-10 px-4 py-2",

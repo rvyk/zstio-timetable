@@ -1,6 +1,7 @@
 "use client";
 
 import { Accordion } from "@/components/ui/accordion";
+import { getUniqueSubstitutionList } from "@/lib/utils";
 import { useFavoritesStore } from "@/stores/favorites-store";
 import { useSubstitutionsStore } from "@/stores/substitutions-store";
 import { useTimetableStore } from "@/stores/timetable-store";
@@ -57,25 +58,24 @@ const SidebarContent: React.FC = () => {
 const SubstitutionSidebarDropdowns: React.FC = () => {
   const substitutions = useSubstitutionsStore((state) => state.substitutions);
 
-  const getUniqueItems = (type: "teacher" | "class") => {
-    return Array.from(
-      new Set(
-        substitutions?.tables
-          .map((t) => t.substitutions.map((s) => s[type]))
-          .flat(),
-      ),
-    );
-  };
+  if (!substitutions) return null;
 
   const dropdownItems = [
-    { type: "teacher", icon: Users, data: getUniqueItems("teacher") },
-    { type: "class", icon: GraduationCap, data: getUniqueItems("class") },
+    {
+      type: "teacher",
+      icon: Users,
+      data: getUniqueSubstitutionList("teacher", substitutions),
+    },
+    {
+      type: "class",
+      icon: GraduationCap,
+      data: getUniqueSubstitutionList("class", substitutions),
+    },
   ];
 
   return (
     <div className="grid gap-10">
-      {/* TODO: Search support for substitutions */}
-      {/* <Search /> */}
+      <Search substitutions={substitutions} />
       <Accordion type="multiple" className="grid w-full gap-5 px-2">
         {dropdownItems.map((item) => (
           <React.Fragment key={item.type}>
@@ -105,7 +105,7 @@ const TimetableSidebarDropdowns: React.FC = () => {
 
   return (
     <div className="grid gap-10">
-      <Search />
+      <Search timetable={timetable} />
       <Accordion type="multiple" className="grid w-full gap-5 px-2">
         {dropdownItems.map((item, index) => (
           <React.Fragment key={item.type}>

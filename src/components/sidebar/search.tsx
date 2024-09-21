@@ -1,51 +1,68 @@
 import { searchHandleKeyDown } from "@/lib/easter-egg";
-import { useTimetableStore } from "@/stores/timetable-store";
+import { getUniqueSubstitutionList } from "@/lib/utils";
+import { OptivumTimetable, SubstitutionListItem } from "@/types/optivum";
+import { SubstitutionsPage } from "@majusss/substitutions-parser/dist/types";
 import { ListItem } from "@majusss/timetable-parser";
 import { SearchIcon, XIcon } from "lucide-react";
-import { useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { DropdownContent } from "./dropdown";
 
-export const Search: React.FC = () => {
-  const timetable = useTimetableStore((state) => state.timetable);
-  const [filteredData, setFilteredData] = useState<ListItem[]>([]);
-  const [showEasterEgg, setShowEasterEgg] = useState(false);
+const listKeys: Record<string, string> = {
+  classes: "class",
+  teachers: "teacher",
+  rooms: "room",
+};
+
+const MAX_RESULTS = 5;
+
+export const Search: React.FC<{
+  timetable?: OptivumTimetable | null;
+  substitutions?: SubstitutionsPage | null;
+}> = ({ timetable, substitutions }) => {
   const [value, setValue] = useState("");
+  const [showEasterEgg, setShowEasterEgg] = useState(false);
 
-  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setValue(e.target.value);
-
-    const query = e.target.value.toLowerCase();
-    if (!query) {
-      setFilteredData([]);
-      return;
-    }
-
-    const maxResults = 5;
-    const result: ListItem[] = [];
-    const listKeys: Record<string, string> = {
-      classes: "class",
-      teachers: "teacher",
-      rooms: "room",
-    };
-
-    for (const key of Object.keys(listKeys)) {
-      const items = timetable?.list[key as keyof typeof timetable.list] ?? [];
-      for (const item of items) {
-        if (item.name.toLowerCase().includes(query)) {
-          result.push({ ...item, type: listKeys[key] });
-          if (result.length >= maxResults) break;
-        }
-      }
-      if (result.length >= maxResults) break;
-    }
-
-    setFilteredData(result);
-  };
-
-  const handleClearSearch = () => {
+  const handleClearSearch = useCallback(() => {
     setValue("");
-    setFilteredData([]);
-  };
+  }, []);
+
+  const handleKeyDown = useCallback(
+    (e: React.KeyboardEvent<HTMLInputElement>) => {
+      searchHandleKeyDown(e, setShowEasterEgg);
+    },
+    [],
+  );
+
+  const filteredData = useMemo(() => {
+    const query = value.toLowerCase().trim();
+    if (!query) return [];
+
+    let results: (ListItem | SubstitutionListItem)[] = [];
+
+    if (timetable) {
+      for (const key of Object.keys(listKeys)) {
+        const items = timetable.list[key as keyof typeof timetable.list] ?? [];
+        const matchingItems = items
+          .filter((item) => item.name.toLowerCase().includes(query))
+          .map((item) => ({ ...item, type: listKeys[key] }));
+        results = results.concat(matchingItems);
+        if (results.length >= MAX_RESULTS) break;
+      }
+    }
+
+    if (substitutions) {
+      const uniqueItems = [
+        ...getUniqueSubstitutionList("teacher", substitutions),
+        ...getUniqueSubstitutionList("class", substitutions),
+      ]
+        .filter((item) => item.name.toLowerCase().includes(query))
+        .slice(0, MAX_RESULTS - results.length);
+
+      results = results.concat(uniqueItems);
+    }
+
+    return results.slice(0, MAX_RESULTS);
+  }, [value, timetable, substitutions]);
 
   return (
     <div className="grid">
@@ -54,8 +71,8 @@ export const Search: React.FC = () => {
           <SearchIcon className="text-primary/70" size={20} strokeWidth={2.5} />
           <input
             value={value}
-            onChange={handleSearch}
-            onKeyDown={(e) => searchHandleKeyDown(e, setShowEasterEgg)}
+            onChange={(e) => setValue(e.target.value)}
+            onKeyDown={handleKeyDown}
             type="text"
             className="w-full bg-transparent text-sm font-medium text-primary/90 placeholder:text-primary/70 focus:outline-none"
             placeholder="Szukaj..."
