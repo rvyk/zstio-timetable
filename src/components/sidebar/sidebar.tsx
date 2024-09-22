@@ -39,8 +39,12 @@ const SidebarContent: FC = memo(() => {
           <Skeleton className="h-12 w-full" />
           <div className="grid gap-5">
             <Skeleton className="h-10 w-full" />
+            {!isSubstitutionPage && (
+              <hr className="h-px w-full border border-primary/10" />
+            )}
             <Skeleton className="h-10 w-full" />
-            <Skeleton className="h-10 w-full" />
+            {!isSubstitutionPage && <Skeleton className="h-10 w-full" />}
+            {!isSubstitutionPage && <Skeleton className="h-10 w-full" />}
           </div>
         </div>
         <div className="grid gap-2">

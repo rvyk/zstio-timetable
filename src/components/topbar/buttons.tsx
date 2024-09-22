@@ -39,15 +39,6 @@ export const TopbarButtons: FC = () => {
     setTheme(currentTheme === "light" ? "dark" : "light");
   }, [currentTheme, setTheme]);
 
-  if (!isClient)
-    return (
-      <div className="inline-flex gap-x-2.5">
-        {Array.from({ length: 4 }).map((_, index) => (
-          <Skeleton className="h-10 w-10" key={index} />
-        ))}
-      </div>
-    );
-
   const buttons = [
     {
       icon: FullscreenIcon,
@@ -80,6 +71,17 @@ export const TopbarButtons: FC = () => {
       ariaLabel: "Otwórz panel ustawień",
     },
   ];
+
+  if (!isClient)
+    return (
+      <div className="inline-flex gap-x-2.5">
+        {Array.from({
+          length: buttons.filter((btn) => !btn.hidden).length,
+        }).map((_, index) => (
+          <Skeleton className="h-10 w-10" key={index} />
+        ))}
+      </div>
+    );
 
   return (
     <div className="inline-flex gap-2.5">
