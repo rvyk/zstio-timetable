@@ -174,7 +174,7 @@ const SubstitutionDetails: FC<SubstitutionDetailsProps> = ({
   substitution,
 }) => (
   <div className="mb-1 grid">
-    <p className="text-sm font-semibold text-accent-table/90 dark:font-medium">
+    <p className="text-sm font-semibold text-accent-table dark:font-medium">
       {substitution.case}
     </p>
     <div className="grid">

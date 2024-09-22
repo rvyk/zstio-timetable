@@ -134,7 +134,8 @@ export const SettingsPanel = () => {
                   key={index}
                   onClick={setting.onClick}
                   className={cn(
-                    setting.active && "bg-primary/10",
+                    setting.active &&
+                      "bg-primary/10 hover:!bg-primary/15 dark:font-medium",
                     "group -m-2 flex gap-4 rounded-md p-2 text-left transition-all hover:bg-primary/10",
                   )}
                 >

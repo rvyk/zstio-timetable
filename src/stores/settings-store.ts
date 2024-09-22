@@ -19,7 +19,7 @@ export const useSettingsStore = create<TimetableSettingsStore>()(
       isSubstitutionShown: true,
       toggleSubstitution: () =>
         set((state) => ({ isSubstitutionShown: !state.isSubstitutionShown })),
-      isNotificationEnabled: true,
+      isNotificationEnabled: false,
       toggleNotification: () =>
         set((state) => ({
           isNotificationEnabled: !state.isNotificationEnabled,
