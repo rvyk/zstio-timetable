@@ -1,22 +1,22 @@
 "use client";
 
-import { parseSubstitutionClass } from "@/lib/utils";
+import { parseSubstitutionClass, sortSubstitutions } from "@/lib/utils";
 import { useSubstitutionsStore } from "@/stores/substitutions-store";
 import {
   Substitution,
-  SubstitutionsPage,
   SubstitutionTable as SubstitutionTableType,
+  SubstitutionsPage,
 } from "@majusss/substitutions-parser/dist/types";
 import { FC } from "react";
 
 const headers = [
   "Lekcja",
-  "Nauczyciel",
   "Oddział",
   "Przedmiot",
+  "Nauczyciel",
   "Sala",
-  "Zastępca",
   "Uwagi",
+  "Zastępca",
 ];
 
 const TableHeader: FC = () => (
@@ -36,17 +36,19 @@ const SubstitutionTable: FC<{
 }> = ({ table }) => {
   const { filters } = useSubstitutionsStore();
 
-  const filteredSubstitutions = table.substitutions.filter((substitution) => {
-    const classMatch =
-      filters.class.length === 0 ||
-      filters.class.some((item) => item.name === substitution.class);
+  const filteredSubstitutions = sortSubstitutions(table.substitutions).filter(
+    (substitution) => {
+      const classMatch =
+        filters.class.length === 0 ||
+        filters.class.some((item) => item.name === substitution.class);
 
-    const teacherMatch =
-      filters.teacher.length === 0 ||
-      filters.teacher.some((item) => item.name === substitution.teacher);
+      const teacherMatch =
+        filters.teacher.length === 0 ||
+        filters.teacher.some((item) => item.name === substitution.teacher);
 
-    return classMatch && teacherMatch;
-  });
+      return classMatch && teacherMatch;
+    },
+  );
 
   return (
     <table className="w-full">
@@ -93,12 +95,13 @@ const SubstitutionRow: FC<{
           {substitution.timeRange}
         </p>
       </td>
-      <td className={cellClassName}>{substitution.teacher}</td>
       <td className={cellClassName}>
         {parseSubstitutionClass(substitution.class)}
       </td>
       <td className={cellClassName}>{substitution.subject}</td>
+      <td className={cellClassName}>{substitution.teacher}</td>
       <td className={cellClassName}>{substitution.room}</td>
+      <td className={cellClassName}>{substitution.case}</td>
       <td className={cellClassName}>
         {substitution.lessonSubstitute?.map((lessonSubstitute, index) => (
           <div key={`${lessonSubstitute.subject}-${index}`}>
@@ -110,7 +113,6 @@ const SubstitutionRow: FC<{
           </div>
         ))}
       </td>
-      <td className={cellClassName}>{substitution.case}</td>
     </tr>
   );
 };

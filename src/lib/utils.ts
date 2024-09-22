@@ -1,5 +1,8 @@
 import { daysOfWeek } from "@/constants/days-of-week";
-import { SubstitutionsPage } from "@majusss/substitutions-parser/dist/types";
+import {
+  Substitution,
+  SubstitutionsPage,
+} from "@majusss/substitutions-parser/dist/types";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -60,7 +63,9 @@ export const getUniqueSubstitutionList = (
     ),
   );
 
-  return uniqueNames.map((name) => ({ name, type }));
+  return uniqueNames
+    .map((name) => ({ name, type }))
+    .sort((a, b) => a.name.localeCompare(b.name));
 };
 
 export const parseSubstitutionClass = (branch: string): string => {
@@ -68,4 +73,10 @@ export const parseSubstitutionClass = (branch: string): string => {
   let result = branch.replace(regex, "$1 ($2)");
   result = result.replace(/\+/g, " + ");
   return result.trim();
+};
+
+export const sortSubstitutions = (substitutions: Substitution[]) => {
+  return substitutions
+    .sort((a, b) => a.class.localeCompare(b.class))
+    .sort((a, b) => a.number - b.number);
 };
