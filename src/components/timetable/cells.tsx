@@ -31,7 +31,7 @@ export const TableHourCell: FC<TableHourCellProps> = ({
 
   return (
     <td className="relative flex h-full min-h-16 w-full flex-col items-center justify-center py-3">
-      {isCurrent && (
+      {isCurrent && isClient && (
         <div className="absolute left-0 h-[calc(100%-1.5rem)] w-1 rounded-r-lg bg-accent-table"></div>
       )}
       <h2 className="text-xl font-semibold text-primary/90">{hour.number}</h2>
@@ -47,7 +47,7 @@ export const TableHourCell: FC<TableHourCellProps> = ({
           )}
         </div>
       ) : (
-        <Skeleton className="h-3.5 w-24" />
+        <Skeleton className="h-4 w-24" />
       )}
     </td>
   );

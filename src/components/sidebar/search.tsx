@@ -67,6 +67,7 @@ export const Search: FC<{
         <div className="mr-2 flex w-full items-center gap-x-3">
           <SearchIcon className="text-primary/70" size={20} strokeWidth={2.5} />
           <input
+            name="search"
             value={value}
             onChange={(e) => setValue(e.target.value)}
             onKeyDown={handleKeyDown}

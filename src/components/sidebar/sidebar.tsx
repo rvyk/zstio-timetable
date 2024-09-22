@@ -10,6 +10,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { FC, Fragment, memo, useMemo } from "react";
 import { useIsClient } from "usehooks-ts";
+import { Skeleton } from "../ui/skeleton";
 import { Dropdown } from "./dropdown";
 import { Search } from "./search";
 
@@ -25,14 +26,29 @@ export const Sidebar: FC = memo(() => {
 Sidebar.displayName = "Sidebar";
 
 const SidebarContent: FC = memo(() => {
+  const isClient = useIsClient();
   const isSubstitutionPage = usePathname() === "/substitutions";
   const sourceLink = isSubstitutionPage
     ? process.env.NEXT_PUBLIC_SUBSTITUTIONS_URL
     : process.env.NEXT_PUBLIC_TIMETABLE_URL;
-  const isClient = useIsClient();
 
-  // TODO: Skeleton loading
-  if (!isClient) return null;
+  if (!isClient)
+    return (
+      <Fragment>
+        <div className="grid gap-10">
+          <Skeleton className="h-12 w-full" />
+          <div className="grid gap-5">
+            <Skeleton className="h-10 w-full" />
+            <Skeleton className="h-10 w-full" />
+            <Skeleton className="h-10 w-full" />
+          </div>
+        </div>
+        <div className="grid gap-2">
+          <Skeleton className="h-3.5 w-24" />
+          <Skeleton className="h-3 w-full" />
+        </div>
+      </Fragment>
+    );
 
   return (
     <>
