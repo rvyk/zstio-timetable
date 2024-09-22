@@ -9,6 +9,7 @@ import { fetchOptivumList } from "@/lib/fetchers/optivum-list";
 import { fetchOptivumTimetable } from "@/lib/fetchers/optivum-timetable";
 
 export const revalidate = 3600;
+export const dynamic = "force-dynamic";
 
 interface PageParams {
   all?: string[];

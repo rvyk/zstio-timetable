@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "fix-depends": "pnpm i --offline --force && pnpm dev"
+    "fix-depends": "pnpm i --offline --force"
   },
   "dependencies": {
     "@majusss/substitutions-parser": "^2.2.0",
