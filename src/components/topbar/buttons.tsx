@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { useSettingsWithoutStore } from "@/stores/settings-store";
+import { getCookie } from "cookies-next";
 import {
   FullscreenIcon,
   MenuIcon,
@@ -11,19 +12,23 @@ import {
 import { useTheme } from "next-themes";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { FC, useCallback } from "react";
+import { FC, useCallback, useMemo } from "react";
 import { useIsClient } from "usehooks-ts";
 import { Skeleton } from "../ui/skeleton";
 
 export const TopbarButtons: FC = () => {
   const isClient = useIsClient();
   const pathname = usePathname();
+
+  const lastVisited = useMemo(() => getCookie("lastVisited") ?? "/", []);
+  const redirectFromSubstitutions = lastVisited as string;
+
   const isSubstitutionPage = pathname === "/substitutions";
 
   const { theme, setTheme, systemTheme } = useTheme();
-  const resolvedTheme = theme === "system" ? systemTheme : theme;
+  const currentTheme = theme === "system" ? systemTheme : theme;
 
-  const toggleFullscreenMode = useSettingsWithoutStore(
+  const toggleFullscreen = useSettingsWithoutStore(
     (state) => state.toggleFullscreenMode,
   );
   const toggleSettingsPanel = useSettingsWithoutStore(
@@ -31,8 +36,8 @@ export const TopbarButtons: FC = () => {
   );
 
   const toggleTheme = useCallback(() => {
-    setTheme(resolvedTheme === "light" ? "dark" : "light");
-  }, [resolvedTheme, setTheme]);
+    setTheme(currentTheme === "light" ? "dark" : "light");
+  }, [currentTheme, setTheme]);
 
   if (!isClient)
     return (
@@ -45,17 +50,17 @@ export const TopbarButtons: FC = () => {
 
   const buttons = [
     {
-      icon: resolvedTheme === "dark" ? SunMediumIcon : MoonIcon,
+      icon: currentTheme === "dark" ? SunMediumIcon : MoonIcon,
       href: null,
       action: toggleTheme,
       ariaLabel:
-        resolvedTheme === "dark"
-          ? "Przełącz na jasny tryb"
-          : "Przełącz na ciemny tryb",
+        currentTheme === "dark"
+          ? "Przełącz na tryb jasny"
+          : "Przełącz na tryb ciemny",
     },
     {
       icon: isSubstitutionPage ? TableIcon : Repeat2Icon,
-      href: isSubstitutionPage ? "/" : "/substitutions",
+      href: isSubstitutionPage ? redirectFromSubstitutions : "/substitutions",
       action: null,
       ariaLabel: isSubstitutionPage
         ? "Przejdź do planu zajęć"
@@ -64,8 +69,8 @@ export const TopbarButtons: FC = () => {
     {
       icon: FullscreenIcon,
       href: null,
-      action: toggleFullscreenMode,
-      ariaLabel: "Przełącz tryb pełnoekranowy",
+      action: toggleFullscreen,
+      ariaLabel: "Przełącz na tryb pełnoekranowy (F/F11)",
     },
     {
       icon: MenuIcon,
