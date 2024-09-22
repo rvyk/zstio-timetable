@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 import logo_zstio from "@/resources/logo-zstio.png";
 import { useFavoritesStore } from "@/stores/favorites-store";
 import { OptivumTimetable } from "@/types/optivum";
+import { SubstitutionsPage } from "@majusss/substitutions-parser/dist/types";
 import { ArrowLeftFromLine, StarIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -14,30 +15,35 @@ import { useIsClient } from "usehooks-ts";
 import { TopbarButtons } from "./buttons";
 
 interface TopbarProps {
-  timetable: OptivumTimetable;
+  timetable?: OptivumTimetable;
+  substitutions?: SubstitutionsPage;
 }
 
-export const Topbar: FC<TopbarProps> = ({ timetable }) => {
+export const Topbar: FC<TopbarProps> = ({ timetable, substitutions }) => {
   const { favorites } = useFavoritesStore();
   const isClient = useIsClient();
 
-  const isFavorite = useMemo(
-    () => favorites.some((c) => c.name === timetable.title),
-    [favorites, timetable.title],
-  );
+  const isSubstitutionsPage = Boolean(substitutions);
 
-  const titleElement = useMemo(
-    () =>
-      timetable.title ? (
+  const isFavorite = useMemo(() => {
+    if (isSubstitutionsPage || !timetable?.title) return false;
+    return favorites.some((c) => c.name === timetable.title);
+  }, [favorites, timetable?.title, isSubstitutionsPage]);
+
+  const titleElement = useMemo(() => {
+    if (isSubstitutionsPage && substitutions) {
+      return substitutions.heading;
+    } else if (timetable?.title) {
+      return (
         <>
           Rozkład zajęć {translationDict[timetable.type]}{" "}
           <span className="font-semibold">{timetable.title}</span>
         </>
-      ) : (
-        "Nie znaleziono planu zajęć"
-      ),
-    [timetable.title, timetable.type],
-  );
+      );
+    } else {
+      return "Nie znaleziono planu zajęć";
+    }
+  }, [isSubstitutionsPage, substitutions, timetable]);
 
   return (
     <div className="flex w-full justify-between gap-x-4">
@@ -48,7 +54,7 @@ export const Topbar: FC<TopbarProps> = ({ timetable }) => {
             <h1 className="max-w-2xl truncate text-ellipsis text-3xl font-semibold leading-tight text-primary/90 xl:text-4.2xl">
               {titleElement}
             </h1>
-            {timetable.title && isClient && (
+            {timetable?.title && isClient && !isSubstitutionsPage && (
               <button
                 aria-label={
                   isFavorite ? "Usuń z ulubionych" : "Dodaj do ulubionych"
@@ -69,7 +75,15 @@ export const Topbar: FC<TopbarProps> = ({ timetable }) => {
               </button>
             )}
           </div>
-          <Dates timetable={timetable} />
+          {isSubstitutionsPage ? (
+            substitutions && (
+              <p className="text-sm font-medium text-primary/70 xl:text-base">
+                {substitutions.timeRange}
+              </p>
+            )
+          ) : (
+            <Dates timetable={timetable} />
+          )}
         </div>
       </div>
       <TopbarButtons />
@@ -94,16 +108,18 @@ const SchoolLink: FC = () => (
   </Link>
 );
 
-const Dates: FC<{ timetable: OptivumTimetable }> = ({ timetable }) => {
+const Dates: FC<{ timetable?: OptivumTimetable }> = ({ timetable }) => {
   const hasNoLessons = useMemo(
-    () => timetable.lessons.some((innerArray) => innerArray.length === 0),
-    [timetable.lessons],
+    () =>
+      timetable?.lessons.some((innerArray) => innerArray.length === 0) ?? true,
+    [timetable?.lessons],
   );
 
   const dateElements = useMemo(() => {
-    if (hasNoLessons) return null;
+    if (hasNoLessons || !timetable) return null;
 
     const elements = [];
+
     if (timetable.generatedDate && timetable.generatedDate !== "Invalid date") {
       elements.push(
         <Fragment key="generatedDate">
@@ -114,6 +130,7 @@ const Dates: FC<{ timetable: OptivumTimetable }> = ({ timetable }) => {
         </Fragment>,
       );
     }
+
     if (timetable.validDate) {
       elements.push(
         <Fragment key="validDate">
@@ -127,19 +144,27 @@ const Dates: FC<{ timetable: OptivumTimetable }> = ({ timetable }) => {
 
     return elements.reduce<(string | JSX.Element)[]>(
       (acc, curr, index, array) => {
-        return index < array.length - 1 ? [...acc, curr, ", "] : [...acc, curr];
+        if (index < array.length - 1) {
+          return [...acc, curr, ", "];
+        } else {
+          return [...acc, curr];
+        }
       },
       [],
     );
-  }, [hasNoLessons, timetable.generatedDate, timetable.validDate]);
+  }, [hasNoLessons, timetable]);
 
-  return hasNoLessons ? (
-    <p className="text-base font-medium text-primary/50">
-      Szukany plan zajęć{" "}
-      <span className="font-semibold text-primary/90">({timetable.id})</span>{" "}
-      nie mógł zostać znaleziony.
-    </p>
-  ) : (
+  if (hasNoLessons) {
+    return (
+      <p className="text-base font-medium text-primary/50">
+        Szukany plan zajęć{" "}
+        <span className="font-semibold text-primary/90">({timetable?.id})</span>{" "}
+        nie mógł zostać znaleziony.
+      </p>
+    );
+  }
+
+  return (
     <p className="text-sm font-medium text-primary/70 xl:text-base">
       {dateElements}
     </p>
