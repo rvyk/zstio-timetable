@@ -3,6 +3,15 @@ import { Topbar } from "@/components/topbar/topbar";
 import { fetchSubstitutions } from "@/lib/fetchers/substitutions";
 import { Fragment } from "react";
 
+export const generateMetadata = async () => {
+  const substitutions = await fetchSubstitutions();
+
+  return {
+    title: substitutions.heading,
+    description: `Sprawdź zastępstwa w ZSTiO na (${substitutions.timeRange})`,
+  };
+};
+
 const SubstitutionPage = async () => {
   const substitutions = await fetchSubstitutions();
 
