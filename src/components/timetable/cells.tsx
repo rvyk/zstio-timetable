@@ -30,7 +30,7 @@ export const TableHourCell: FC<TableHourCellProps> = ({
   }, [timeRemaining]);
 
   return (
-    <td className="relative flex h-full min-h-16 w-full flex-col items-center justify-center py-3">
+    <td className="relative px-4 py-3 text-center">
       {isCurrent && isClient && (
         <div className="absolute left-0 h-[calc(100%-1.5rem)] w-1 rounded-r-lg bg-accent-table"></div>
       )}
