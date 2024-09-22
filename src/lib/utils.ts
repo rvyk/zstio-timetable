@@ -62,3 +62,10 @@ export const getUniqueSubstitutionList = (
 
   return uniqueNames.map((name) => ({ name, type }));
 };
+
+export const parseSubstitutionClass = (branch: string): string => {
+  const regex = /(\w+)\|([^+]+)/g;
+  let result = branch.replace(regex, "$1 ($2)");
+  result = result.replace(/\+/g, " + ");
+  return result.trim();
+};

@@ -82,7 +82,7 @@ export const TableHeaderCell: FC<TableHeaderCellProps> = ({ dayName }) => {
         >
           {dayNumber}
         </h2>
-        <h3 className="text-xl font-semibold text-primary/90">{dayName}</h3>
+        <h3 className="text-lg font-semibold text-primary/90">{dayName}</h3>
       </div>
     </th>
   );

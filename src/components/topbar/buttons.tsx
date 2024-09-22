@@ -50,6 +50,13 @@ export const TopbarButtons: FC = () => {
 
   const buttons = [
     {
+      icon: FullscreenIcon,
+      href: null,
+      action: toggleFullscreen,
+      ariaLabel: "Przełącz na tryb pełnoekranowy (F/F11)",
+      hidden: isSubstitutionPage,
+    },
+    {
       icon: currentTheme === "dark" ? SunMediumIcon : MoonIcon,
       href: null,
       action: toggleTheme,
@@ -67,12 +74,6 @@ export const TopbarButtons: FC = () => {
         : "Przejdź do zastępstw",
     },
     {
-      icon: FullscreenIcon,
-      href: null,
-      action: toggleFullscreen,
-      ariaLabel: "Przełącz na tryb pełnoekranowy (F/F11)",
-    },
-    {
       icon: MenuIcon,
       href: null,
       action: toggleSettingsPanel,
@@ -84,6 +85,9 @@ export const TopbarButtons: FC = () => {
     <div className="inline-flex gap-2.5">
       {buttons.map((button, index) => {
         const IconComponent = button.icon;
+
+        if (button.hidden) return null;
+
         return (
           <Button
             key={index}
