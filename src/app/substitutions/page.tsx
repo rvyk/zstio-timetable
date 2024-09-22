@@ -1,4 +1,3 @@
-import { SubstitutionsController } from "@/components/substitutions-controller";
 import { Substitutions } from "@/components/substitutions/substitutions";
 import { Topbar } from "@/components/topbar/topbar";
 import { fetchSubstitutions } from "@/lib/fetchers/substitutions";
@@ -18,7 +17,6 @@ const SubstitutionPage = async () => {
 
   return (
     <Fragment>
-      <SubstitutionsController substitutions={substitutions} />
       <div className="flex h-full w-full flex-col gap-y-6 overflow-hidden p-8">
         <Topbar substitutions={substitutions} />
         <Substitutions substitutions={substitutions} />

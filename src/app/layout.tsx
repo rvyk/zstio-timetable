@@ -1,6 +1,8 @@
 import { SettingsPanel } from "@/components/settings-panel/settings-panel";
 import { Sidebar } from "@/components/sidebar/sidebar";
+import { SubstitutionsController } from "@/components/substitutions-controller";
 import { ThemeProvider } from "@/components/theme-provider";
+import { fetchSubstitutions } from "@/lib/fetchers/substitutions";
 import { cn } from "@/lib/utils";
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
@@ -26,11 +28,13 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: ReactNode;
 }>) {
+  const substitutions = await fetchSubstitutions();
+
   return (
     <html lang="pl" suppressHydrationWarning>
       <body
@@ -41,6 +45,8 @@ export default function RootLayout({
       >
         <ThemeProvider attribute="class" disableTransitionOnChange>
           <Sidebar />
+          <SubstitutionsController substitutions={substitutions} />
+
           {children}
           <SettingsPanel />
         </ThemeProvider>

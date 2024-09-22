@@ -108,6 +108,7 @@ export const Timetable: FC<TimetableProps> = ({ timetable }) => {
                     {timetable.lessons.map((day, dayIndex) => (
                       <TableLessonCell
                         key={dayIndex}
+                        dayIndex={dayIndex}
                         day={day}
                         lessonIndex={lessonIndex}
                       />
