@@ -4,6 +4,10 @@ import { persist } from "zustand/middleware";
 interface TimetableSettingsStore {
   isShortLessons: boolean;
   toggleShortLessons: () => void;
+  isSubstitutionShown: boolean;
+  toggleSubstitution: () => void;
+  isNotificationEnabled: boolean;
+  toggleNotification: () => void;
 }
 
 export const useSettingsStore = create<TimetableSettingsStore>()(
@@ -12,6 +16,14 @@ export const useSettingsStore = create<TimetableSettingsStore>()(
       isShortLessons: false,
       toggleShortLessons: () =>
         set((state) => ({ isShortLessons: !state.isShortLessons })),
+      isSubstitutionShown: true,
+      toggleSubstitution: () =>
+        set((state) => ({ isSubstitutionShown: !state.isSubstitutionShown })),
+      isNotificationEnabled: true,
+      toggleNotification: () =>
+        set((state) => ({
+          isNotificationEnabled: !state.isNotificationEnabled,
+        })),
     }),
     {
       name: "timetable-settings",

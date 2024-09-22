@@ -8,7 +8,11 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
-import { useSettingsWithoutStore } from "@/stores/settings-store";
+import { cn } from "@/lib/utils";
+import {
+  useSettingsStore,
+  useSettingsWithoutStore,
+} from "@/stores/settings-store";
 import { useTimetableStore } from "@/stores/timetable-store";
 import {
   BellIcon,
@@ -20,16 +24,22 @@ import {
   XIcon,
 } from "lucide-react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 export const SettingsPanel = () => {
   const timetable = useTimetableStore((state) => state.timetable);
+  const isSubstitutionPage = usePathname() === "/substitutions";
   const { toggleSettingsPanel, isSettingsPanelOpen } =
     useSettingsWithoutStore();
+  const savedSettings = useSettingsStore();
 
   const settings = [
     {
       icon: DownloadIcon,
       title: "Zainstaluj aplikację",
+      hidden: false,
+      active: false,
+      onClick: () => {},
       description: (
         <>
           Zainstaluj plan lekcji jako aplikację PWA, aby uzyskać szybki dostęp z
@@ -40,6 +50,9 @@ export const SettingsPanel = () => {
     {
       icon: Repeat2Icon,
       title: "Zastępstwa na planie lekcji",
+      hidden: isSubstitutionPage,
+      active: savedSettings.isSubstitutionShown,
+      onClick: savedSettings.toggleSubstitution,
       description: (
         <>
           Zdecyduj, czy chcesz wyświetlać zastępstwa bezpośrednio na planie
@@ -50,6 +63,9 @@ export const SettingsPanel = () => {
     {
       icon: BellIcon,
       title: "Powiadomienia",
+      hidden: false,
+      active: savedSettings.isNotificationEnabled,
+      onClick: savedSettings.toggleNotification,
       description: (
         <>
           Otrzymuj powiadomienia PUSH o nowym planie lekcji lub o nowych
@@ -60,6 +76,9 @@ export const SettingsPanel = () => {
     {
       icon: CalendarArrowDownIcon,
       title: "Dodaj do kalendarza",
+      hidden: isSubstitutionPage,
+      active: false,
+      onClick: () => {},
       description: (
         <>
           Wyeksportuj obecnie przeglądany plan lekcji ({timetable?.title}), aby
@@ -70,6 +89,9 @@ export const SettingsPanel = () => {
     {
       icon: CalculatorIcon,
       title: "Kalkulator skróconych lekcji",
+      hidden: isSubstitutionPage,
+      active: false,
+      onClick: () => {},
       description: (
         <>
           Oblicz, o której godzinie skończysz lekcje na podstawie skróconego
@@ -80,6 +102,9 @@ export const SettingsPanel = () => {
     {
       icon: Search,
       title: "Wyszukaj wolną salę",
+      hidden: isSubstitutionPage,
+      active: false,
+      onClick: () => {},
       description: (
         <>Znajdź wszystkie wolne sale, według numeru lekcji i dnia tygodnia</>
       ),
@@ -102,24 +127,31 @@ export const SettingsPanel = () => {
             </Button>
           </SheetHeader>
           <div className="grid gap-10 py-4">
-            {settings.map((setting, index) => (
-              <button
-                key={index}
-                className="group -m-2 flex gap-4 rounded-md p-2 text-left transition-all hover:bg-primary/10"
-              >
-                <div className="grid h-10 min-w-10 place-content-center rounded-sm border border-primary/10 bg-primary/5 text-primary/80">
-                  <setting.icon size={18} strokeWidth={2.5} />
-                </div>
-                <div className="grid">
-                  <h2 className="text-base font-semibold text-primary/80">
-                    {setting.title}
-                  </h2>
-                  <p className="text-sm font-medium text-primary/50">
-                    {setting.description}
-                  </p>
-                </div>
-              </button>
-            ))}
+            {settings.map((setting, index) => {
+              if (setting.hidden) return null;
+              return (
+                <button
+                  key={index}
+                  onClick={setting.onClick}
+                  className={cn(
+                    setting.active && "bg-primary/10",
+                    "group -m-2 flex gap-4 rounded-md p-2 text-left transition-all hover:bg-primary/10",
+                  )}
+                >
+                  <div className="grid h-10 min-w-10 place-content-center rounded-sm border border-primary/10 bg-primary/5 text-primary/80">
+                    <setting.icon size={18} strokeWidth={2.5} />
+                  </div>
+                  <div className="grid">
+                    <h2 className="text-base font-semibold text-primary/80">
+                      {setting.title}
+                    </h2>
+                    <p className="text-sm font-medium text-primary/50">
+                      {setting.description}
+                    </p>
+                  </div>
+                </button>
+              );
+            })}
           </div>
         </div>
         <SheetFooter>
