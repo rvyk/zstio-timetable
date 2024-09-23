@@ -1,7 +1,8 @@
 import { Substitutions } from "@/components/substitutions/substitutions";
 import { Topbar } from "@/components/topbar/topbar";
 import { fetchSubstitutions } from "@/lib/fetchers/substitutions";
-import { Fragment } from "react";
+
+export const dynamic = "force-dynamic";
 
 export const generateMetadata = async () => {
   const substitutions = await fetchSubstitutions();
@@ -16,12 +17,10 @@ const SubstitutionPage = async () => {
   const substitutions = await fetchSubstitutions();
 
   return (
-    <Fragment>
-      <div className="flex h-full w-full flex-col gap-y-6 overflow-hidden p-8">
-        <Topbar substitutions={substitutions} />
-        <Substitutions substitutions={substitutions} />
-      </div>
-    </Fragment>
+    <div className="flex h-full w-full flex-col gap-y-6 overflow-hidden p-8">
+      <Topbar substitutions={substitutions} />
+      <Substitutions substitutions={substitutions} />
+    </div>
   );
 };
 

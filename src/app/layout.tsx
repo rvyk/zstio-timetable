@@ -43,10 +43,9 @@ export default async function RootLayout({
           "flex h-screen bg-background antialiased",
         )}
       >
+        <SubstitutionsController substitutions={substitutions} />
         <ThemeProvider attribute="class" disableTransitionOnChange>
           <Sidebar />
-          <SubstitutionsController substitutions={substitutions} />
-
           {children}
           <SettingsPanel />
         </ThemeProvider>
