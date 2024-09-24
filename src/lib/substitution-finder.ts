@@ -13,20 +13,13 @@ export const findSubstitution = (
 
   const substitution =
     todayTable.substitutions.find((substitution) => {
-      if (groupName) {
-        if (substitution.class.includes("|")) {
-          const classArray = substitution.class.split("|");
-          return (
-            classArray[0] == className &&
-            substitution.number == lessonIndex + 1 &&
-            classArray[1] == groupName
-          );
-        } else {
-          return (
-            substitution.class.includes(className) &&
-            substitution.number == lessonIndex + 1
-          );
-        }
+      if (groupName && substitution.class.includes("|")) {
+        const classArray = substitution.class.split("|");
+        return (
+          classArray[0] == className &&
+          substitution.number == lessonIndex + 1 &&
+          classArray[1] == groupName
+        );
       } else {
         return (
           substitution.class.includes(className) &&

@@ -53,15 +53,13 @@ export const LessonItem: FC<LessonItemProps> = ({
   const substitutions = useSubstitutionsStore((state) => state.substitutions);
   const timetable = useTimetableStore((state) => state.timetable);
 
-  const substitution = isSubstitutionShown
-    ? findSubstitution(
-        substitutions?.tables ?? [],
-        dayIndex,
-        timetable?.title ?? "",
-        lessonIndex,
-        lesson.groupName,
-      )
-    : null;
+  const substitution = findSubstitution(
+    substitutions?.tables ?? [],
+    dayIndex,
+    timetable?.title ?? "",
+    lessonIndex,
+    lesson.groupName,
+  );
 
   const hasSubstitutionCase = substitution?.case;
 

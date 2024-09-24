@@ -104,7 +104,9 @@ export const SettingsPanel = () => {
       title: "Wyszukaj wolną salę",
       hidden: isSubstitutionPage,
       active: false,
-      onClick: () => {},
+      onClick: async () => {
+        // console.log(await findEmptyRoom(4, 0));
+      },
       description: (
         <>Znajdź wszystkie wolne sale, według numeru lekcji i dnia tygodnia</>
       ),
