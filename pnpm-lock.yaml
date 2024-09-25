@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@majusss/substitutions-parser':
-        specifier: ^2.2.0
-        version: 2.2.0
+        specifier: ^2.3.0
+        version: 2.3.0
       '@majusss/timetable-parser':
         specifier: ^1.7.0
         version: 1.7.0
@@ -264,8 +264,8 @@ packages:
   '@jridgewell/trace-mapping@0.3.25':
     resolution: {integrity: sha512-vNk6aEwybGtawWmy/PzwnGDOjCkLWSD2wqvjGGAgOAwCGWySYXfYoxt00IJkTF+8Lb57DwOb3Aa0o9CApepiYQ==}
 
-  '@majusss/substitutions-parser@2.2.0':
-    resolution: {integrity: sha512-Iu4YRAEkLEWMhs7tL6Ejm678skIzEBnqI8RXtTVcSx8XR70s9t924eLV1M4XmZ0EO2AW8z/k9kwdRVLJ2Tz3+g==}
+  '@majusss/substitutions-parser@2.3.0':
+    resolution: {integrity: sha512-EvFfZ1SBz/QeFaWfvXgtVtc0+aSFxDu0zpXkmgaF9JTdaoSGbNx9BTDrBheVE/4BoyPQqjmoaaC96JU4YCr4+A==}
 
   '@majusss/timetable-parser@1.7.0':
     resolution: {integrity: sha512-RDast/cTWzxq1OHi6tu1Z3Xl4k2jfYbnHShDgFvGqV7lJG+KYx3sIRziWLtPY+xpnQjDb4+WF8XDILZSV6xF/Q==}
@@ -582,7 +582,7 @@ packages:
     resolution: {integrity: sha512-dRLjCWHYg4oaA77cxO64oO+7JwCwnIzkZPdrrC71jQmQtlhM556pwKo5bUzqvZndkVbeFLIIi+9TC40JNF5hNQ==}
 
   '@types/node@22.5.4':
-    resolution: {integrity: sha512-FDuKUJQm/ju9fT/SeX/6+gBzoPzlVCzfzmGkwKvRHQVxi4BntVbyIwf6a4Xn62mrvndLiml6z/UBXIdEVjQLXg==}
+    resolution: {integrity: sha512-FDuKUJQm/ju9fT/SeX/6+gBzoPzlVCzfzmGkwKvRHQVxi4BntVbyIwf6a4Xn62mrvndLiml6z/UBXIdEVjQLXg==, tarball: https://registry.npmjs.org/@types/node/-/node-22.5.4.tgz}
 
   '@types/prop-types@15.7.12':
     resolution: {integrity: sha512-5zvhXYtRNRluoE/jAp4GVsSduVUzNWKkOZrCDBWYtE7biZywwdC2AcEzg+cSMLFRfVgeAFqpfNabiPjxFddV1Q==}
@@ -2123,15 +2123,15 @@ packages:
     engines: {node: '>= 0.4'}
 
   typescript@5.6.2:
-    resolution: {integrity: sha512-NW8ByodCSNCwZeghjN3o+JX5OFH0Ojg6sadjEKY4huZ52TqbJTJnDo5+Tw98lSy63NZvi4n+ez5m2u5d4PkZyw==}
+    resolution: {integrity: sha512-NW8ByodCSNCwZeghjN3o+JX5OFH0Ojg6sadjEKY4huZ52TqbJTJnDo5+Tw98lSy63NZvi4n+ez5m2u5d4PkZyw==, tarball: https://registry.npmjs.org/typescript/-/typescript-5.6.2.tgz}
     engines: {node: '>=14.17'}
     hasBin: true
 
   unbox-primitive@1.0.2:
     resolution: {integrity: sha512-61pPlCD9h51VoreyJ0BReideM3MDKMKnh6+V9L08331ipq6Q8OFXZYiqP6n/tbHx4s5I9uRhcye6BrbkizkBDw==}
 
-  undici-types@6.19.8:
-    resolution: {integrity: sha512-ve2KP6f/JnbPBFyobGHuerC9g1FYGn/F8n1LWTwNxCEzd6IfqTwUQcNXgEtmmQ6DlRrC1hrSrBnCZPokRrDHjw==}
+  undici-types@5.26.5:
+    resolution: {integrity: sha512-JlCMO+ehdEIKqlFxk6IfVoAUVmgz7cU7zD/h9XZ0qzeosSHmUJVOzSQvvYSYWXkFXC+IfLKSIffhv0sVZup6pA==}
 
   undici@6.19.8:
     resolution: {integrity: sha512-U8uCCl2x9TK3WANvmBavymRzxbfFYG+tAu+fgx3zxQy3qdagQqBLwJVrdyO1TBfUXvfKveMKJZhpvUYoOjM+4g==}
@@ -2386,7 +2386,7 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.0
 
-  '@majusss/substitutions-parser@2.2.0':
+  '@majusss/substitutions-parser@2.3.0':
     dependencies:
       cheerio: 1.0.0
 
@@ -2649,7 +2649,7 @@ snapshots:
 
   '@types/node@22.5.4':
     dependencies:
-      undici-types: 6.19.8
+      undici-types: 5.26.5
 
   '@types/prop-types@15.7.12': {}
 
@@ -4464,7 +4464,7 @@ snapshots:
       has-symbols: 1.0.3
       which-boxed-primitive: 1.0.2
 
-  undici-types@6.19.8: {}
+  undici-types@5.26.5: {}
 
   undici@6.19.8: {}
 
