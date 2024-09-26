@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import { useSettingsStore } from "@/stores/settings-store";
 import { useSubstitutionsStore } from "@/stores/substitutions-store";
 import { useTimetableStore } from "@/stores/timetable-store";
+import { LessonSubstitute } from "@majusss/substitutions-parser";
 import { TableLesson } from "@majusss/timetable-parser";
 import { FC } from "react";
 import { LinkWithCookie } from "../link";
@@ -152,16 +153,9 @@ const LessonLink: FC<LessonLinkProps> = ({ id, name, type }) => {
   ) : null;
 };
 
-interface SubstituteType {
-  subject: string;
-  groupName?: string;
-  teacher?: string;
-  room?: string;
-}
-
 interface SubstitutionType {
   case?: string;
-  lessonSubstitute?: SubstituteType[];
+  lessonSubstitute?: LessonSubstitute[];
 }
 
 interface SubstitutionDetailsProps {
@@ -184,7 +178,7 @@ const SubstitutionDetails: FC<SubstitutionDetailsProps> = ({
 );
 
 interface SubstitutionItemProps {
-  substitute: SubstituteType;
+  substitute: LessonSubstitute;
 }
 
 const SubstitutionItem: FC<SubstitutionItemProps> = ({ substitute }) => (
@@ -194,7 +188,21 @@ const SubstitutionItem: FC<SubstitutionItemProps> = ({ substitute }) => (
       <GroupName groupName={substitute.groupName} />
     </h2>
     <div className="inline-flex gap-x-1.5 text-sm font-medium text-primary/70">
-      {substitute.teacher} {substitute.room}
+      {substitute.teacherId ? (
+        <LessonLink
+          type="teacher"
+          id={substitute.teacherId}
+          name={substitute.teacher}
+        />
+      ) : (
+        <>{substitute.teacher}</>
+      )}
+
+      {substitute.roomId ? (
+        <LessonLink type="room" id={substitute.roomId} name={substitute.room} />
+      ) : (
+        <>{substitute.room}</>
+      )}
     </div>
   </div>
 );

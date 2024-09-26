@@ -1,8 +1,15 @@
-import { List, TableHour } from "@majusss/timetable-parser";
+import { List, TableHour, TableLesson } from "@majusss/timetable-parser";
 
 declare module "@majusss/timetable-parser" {
   export interface ListItem {
     type?: string;
+  }
+}
+
+declare module "@majusss/substitutions-parser" {
+  export interface LessonSubstitute {
+    roomId?: string;
+    teacherId?: string;
   }
 }
 
