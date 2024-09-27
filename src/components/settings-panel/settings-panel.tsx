@@ -9,6 +9,7 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
+import { usePwa } from "@/stores/pwa-hook";
 import {
   useSettingsStore,
   useSettingsWithoutStore,
@@ -33,13 +34,21 @@ export const SettingsPanel = () => {
     useSettingsWithoutStore();
   const savedSettings = useSettingsStore();
 
+  const [prompt, isInstalled] = usePwa();
+
   const settings = [
     {
       icon: DownloadIcon,
       title: "Zainstaluj aplikację",
-      hidden: false,
+      hidden: isInstalled,
       active: false,
-      onClick: () => {},
+      onClick: () => {
+        if (prompt) {
+          prompt.prompt();
+        } else {
+          alert("Nie można zainstalować aplikacji");
+        }
+      },
       description: (
         <>
           Zainstaluj plan lekcji jako aplikację PWA, aby uzyskać szybki dostęp z
