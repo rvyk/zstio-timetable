@@ -1,5 +1,3 @@
-// Sidebar.tsx
-
 "use client";
 
 import { Accordion } from "@/components/ui/accordion";
@@ -70,6 +68,13 @@ export const Sidebar: FC = memo(() => {
 Sidebar.displayName = "Sidebar";
 
 const SidebarContent: FC = memo(() => {
+  const lastUpdatedTimetable = useTimetableStore(
+    (state) => state.timetable,
+  )?.lastUpdated;
+  const lastUpdatedSubstitutions = useSubstitutionsStore(
+    (state) => state.substitutions,
+  )?.lastUpdated;
+
   const { isPreview } = useSidebarContext();
   const isClient = useIsClient();
   const isSubstitutionPage = usePathname() === "/substitutions";
@@ -100,29 +105,46 @@ const SidebarContent: FC = memo(() => {
     );
 
   return (
-    <>
+    <Fragment>
       {isSubstitutionPage ? (
         <SubstitutionSidebarDropdowns />
       ) : (
         <TimetableSidebarDropdowns />
       )}
 
-      <p
-        className={cn(
-          isPreview && "hidden",
-          "mx-2 text-sm font-semibold text-primary/90",
+      <div className="flex flex-col gap-1">
+        {(lastUpdatedSubstitutions ?? lastUpdatedTimetable) && (
+          <p
+            className={cn(
+              isPreview && "hidden",
+              "mx-2 text-sm font-semibold text-primary/90",
+            )}
+          >
+            Ostatnia aktualizacja danych: <br />
+            <span className="break-words text-xs font-medium text-primary/70">
+              {isSubstitutionPage
+                ? lastUpdatedSubstitutions
+                : lastUpdatedTimetable}
+            </span>
+          </p>
         )}
-      >
-        Źródło danych <br />
-        <Link
-          href={sourceLink ?? "#"}
-          target="_blank"
-          className="break-words text-xs font-medium text-primary/70 underline"
+        <p
+          className={cn(
+            isPreview && "hidden",
+            "mx-2 text-sm font-semibold text-primary/90",
+          )}
         >
-          {sourceLink}
-        </Link>
-      </p>
-    </>
+          Źródło danych: <br />
+          <Link
+            href={sourceLink ?? "#"}
+            target="_blank"
+            className="break-words text-xs font-medium text-primary/70 underline"
+          >
+            {sourceLink}
+          </Link>
+        </p>
+      </div>
+    </Fragment>
   );
 });
 SidebarContent.displayName = "SidebarContent";

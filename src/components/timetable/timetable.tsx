@@ -12,7 +12,7 @@ import {
 import { OptivumTimetable } from "@/types/optivum";
 import { ArrowLeft, ArrowRight, Shrink } from "lucide-react";
 import Image from "next/image";
-import { FC, useEffect, useMemo, useState } from "react";
+import { FC, Fragment, useEffect, useMemo, useState } from "react";
 import {
   ShortLessonSwitcherCell,
   TableHeaderCell,
@@ -152,10 +152,10 @@ const FullScreenControls: FC<FullScreenControlsProps> = ({ title, type }) => {
         <div className="flex h-14 min-w-96 items-center justify-between gap-x-2 rounded-md border border-lines bg-accent pl-4 pr-2 dark:border-primary/10">
           <h1 className="max-w-xs truncate text-ellipsis text-lg font-medium text-primary/90">
             {title ? (
-              <>
+              <Fragment>
                 Rozkład zajęć {translationDict[type]}{" "}
                 <span className="font-semibold">{title}</span>
-              </>
+              </Fragment>
             ) : (
               "Nie znaleziono planu zajęć"
             )}

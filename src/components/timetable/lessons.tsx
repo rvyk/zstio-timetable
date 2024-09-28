@@ -195,13 +195,13 @@ const SubstitutionItem: FC<SubstitutionItemProps> = ({ substitute }) => (
           name={substitute.teacher}
         />
       ) : (
-        <>{substitute.teacher}</>
+        <p>{substitute.teacher}</p>
       )}
 
       {substitute.roomId ? (
         <LessonLink type="room" id={substitute.roomId} name={substitute.room} />
       ) : (
-        <>{substitute.room}</>
+        <p>{substitute.room}</p>
       )}
     </div>
   </div>

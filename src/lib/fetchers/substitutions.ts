@@ -2,6 +2,8 @@
 
 import Substitutions from "@majusss/substitutions-parser/dist/substitutions";
 import { SubstitutionsPage } from "@majusss/substitutions-parser/dist/types";
+import moment from "moment";
+import "moment/locale/pl";
 import { fetchOptivumList } from "./optivum-list";
 
 const findRelations = async (
@@ -40,20 +42,25 @@ const findRelations = async (
   return { ...page, tables: newTables };
 };
 
-export const fetchSubstitutions = async () => {
+export const fetchSubstitutions = async (): Promise<SubstitutionsPage> => {
   const url = process.env.NEXT_PUBLIC_SUBSTITUTIONS_URL as string;
 
   try {
-    const response = await fetch(url, {
+    const res = await fetch(url, {
       next: {
         revalidate: 3600,
       },
     });
-    const html = await response.text();
+    const html = await res.text();
 
-    return await findRelations(new Substitutions(html).parseSubstitutionSite());
+    return {
+      ...(await findRelations(new Substitutions(html).parseSubstitutionSite())),
+      lastUpdated: res.headers.has("date")
+        ? moment(res.headers.get("date")).format("DD MMMM YYYY[r.] HH:mm:ss")
+        : "Brak danych",
+    };
   } catch (error) {
     console.error("Failed to fetch Substitutions:", error);
-    return { heading: "", tables: [], timeRange: "" };
+    return { heading: "", tables: [], timeRange: "", lastUpdated: "" };
   }
 };

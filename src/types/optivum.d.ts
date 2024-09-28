@@ -6,10 +6,13 @@ declare module "@majusss/timetable-parser" {
   }
 }
 
-declare module "@majusss/substitutions-parser" {
+declare module "@majusss/substitutions-parser/dist/types" {
   export interface LessonSubstitute {
-    roomId?: string;
     teacherId?: string;
+    roomId?: string;
+  }
+  export interface SubstitutionsPage {
+    lastUpdated: string;
   }
 }
 
@@ -23,6 +26,7 @@ interface OptivumTimetable {
   validDate: string;
   dayNames: string[];
   list: List;
+  lastUpdated: string;
 }
 
 interface SubstitutionListItem {

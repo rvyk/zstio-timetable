@@ -35,10 +35,10 @@ export const Topbar: FC<TopbarProps> = ({ timetable, substitutions }) => {
       return substitutions.heading;
     } else if (timetable?.title) {
       return (
-        <>
+        <Fragment>
           Rozkład zajęć {translationDict[timetable.type]}{" "}
           <span className="font-semibold">{timetable.title}</span>
-        </>
+        </Fragment>
       );
     } else {
       return "Nie znaleziono planu zajęć";

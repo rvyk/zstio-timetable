@@ -52,10 +52,10 @@ export const SettingsPanel = () => {
         }
       },
       description: (
-        <>
+        <p>
           Zainstaluj plan lekcji jako aplikację PWA, aby uzyskać szybki dostęp z
           ekranu głównego
-        </>
+        </p>
       ),
     },
     {
@@ -65,10 +65,10 @@ export const SettingsPanel = () => {
       active: savedSettings.isSubstitutionShown,
       onClick: savedSettings.toggleSubstitution,
       description: (
-        <>
+        <p>
           Zdecyduj, czy chcesz wyświetlać zastępstwa bezpośrednio na planie
           lekcji
-        </>
+        </p>
       ),
     },
     {
@@ -78,10 +78,10 @@ export const SettingsPanel = () => {
       active: savedSettings.isNotificationEnabled,
       onClick: savedSettings.toggleNotification,
       description: (
-        <>
+        <p>
           Otrzymuj powiadomienia PUSH o nowym planie lekcji lub o nowych
           zastępstwach
-        </>
+        </p>
       ),
     },
     {
@@ -91,10 +91,10 @@ export const SettingsPanel = () => {
       active: false,
       onClick: () => {},
       description: (
-        <>
+        <p>
           Wyeksportuj obecnie przeglądany plan lekcji ({timetable?.title}), aby
           łatwo dodać go do swojego ulubionego kalendarza
-        </>
+        </p>
       ),
     },
     {
@@ -104,10 +104,10 @@ export const SettingsPanel = () => {
       active: false,
       onClick: () => {},
       description: (
-        <>
+        <p>
           Oblicz, o której godzinie skończysz lekcje na podstawie skróconego
           czasu ich trwania
-        </>
+        </p>
       ),
     },
     {
@@ -119,7 +119,7 @@ export const SettingsPanel = () => {
         // console.log(await findEmptyRoom(4, 0));
       },
       description: (
-        <>Znajdź wszystkie wolne sale, według numeru lekcji i dnia tygodnia</>
+        <p>Znajdź wszystkie wolne sale, według numeru lekcji i dnia tygodnia</p>
       ),
     },
   ];
@@ -165,9 +165,9 @@ export const SettingsPanel = () => {
                     <h2 className="text-base font-semibold text-primary/80">
                       {setting.title}
                     </h2>
-                    <p className="text-sm font-medium text-primary/50">
+                    <div className="text-sm font-medium text-primary/50">
                       {setting.description}
-                    </p>
+                    </div>
                   </div>
                 </button>
               );
