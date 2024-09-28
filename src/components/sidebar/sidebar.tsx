@@ -9,18 +9,55 @@ import { GraduationCap, MapPin, StarIcon, Users } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { FC, Fragment, memo, useMemo } from "react";
+
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+import { Skeleton } from "@/components/ui/skeleton";
+import { useSettingsWithoutStore } from "@/stores/settings-store";
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { useIsClient } from "usehooks-ts";
-import { Skeleton } from "../ui/skeleton";
 import { Dropdown } from "./dropdown";
 import { Search } from "./search";
 
 export const Sidebar: FC = memo(() => {
+  const { isSidebarOpen, toggleSidebar } = useSettingsWithoutStore();
+
   return (
-    <div className="h-screen w-full max-w-xs border-r border-lines bg-foreground dark:border-primary/10">
-      <div className="mr-3 flex h-full w-full flex-col justify-between space-y-16 overflow-y-auto overflow-x-hidden px-4 py-6">
-        <SidebarContent />
+    <Fragment>
+      <div className="h-screen w-full max-w-xs border-r border-lines bg-foreground dark:border-primary/10 max-xl:hidden">
+        <div className="mr-3 flex h-full w-full flex-col justify-between gap-y-16 overflow-y-auto overflow-x-hidden px-4 py-6">
+          <SidebarContent />
+        </div>
       </div>
-    </div>
+
+      <div className="xl:hidden">
+        <Sheet open={isSidebarOpen} onOpenChange={toggleSidebar}>
+          <SheetTrigger asChild>
+            <button className="h-screen w-24 border-r border-lines bg-foreground dark:border-primary/10"></button>
+          </SheetTrigger>
+          <SheetContent
+            side="left"
+            className="flex flex-col justify-between gap-y-16 overflow-y-auto overflow-x-hidden border-r border-lines px-4 py-6 xl:hidden"
+          >
+            <VisuallyHidden>
+              <SheetTitle>Nawigacja boczna</SheetTitle>
+            </VisuallyHidden>
+            <SidebarContent />
+            <VisuallyHidden>
+              <SheetDescription>
+                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Saepe,
+                sapiente.
+              </SheetDescription>
+            </VisuallyHidden>
+          </SheetContent>
+        </Sheet>
+      </div>
+    </Fragment>
   );
 });
 Sidebar.displayName = "Sidebar";

@@ -5,6 +5,7 @@ import {
 } from "@/components/ui/accordion";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { useSettingsWithoutStore } from "@/stores/settings-store";
 import { useSubstitutionsStore } from "@/stores/substitutions-store";
 import { SubstitutionListItem } from "@/types/optivum";
 import { ListItem } from "@majusss/timetable-parser";
@@ -100,11 +101,19 @@ interface ListItemComponentProps {
 }
 
 const ListItemComponent: FC<ListItemComponentProps> = ({ item, type }) => {
+  const { toggleSidebar, isSidebarOpen } = useSettingsWithoutStore();
+
   const pathname = usePathname();
   const link = `/${item.type ? item.type : type}/${item.value}`;
 
   return (
-    <Button key={item.value} variant="sidebarItem" asChild size="fit">
+    <Button
+      onClick={() => isSidebarOpen && toggleSidebar()}
+      key={item.value}
+      variant="sidebarItem"
+      asChild
+      size="fit"
+    >
       <LinkWithCookie
         aria-label={`Przejdź do ${item.name}`}
         href={link}
@@ -126,6 +135,7 @@ const SubstitutionListItemComponent: FC<SubstitutionListItemComponentProps> = ({
   item,
 }) => {
   const { handleFilterChange, filters } = useSubstitutionsStore();
+
   const itemType = item.type as "teacher" | "class";
 
   const selectedItems = filters[itemType];

@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import {
   Sheet,
   SheetContent,
+  SheetDescription,
   SheetFooter,
   SheetHeader,
   SheetTitle,
@@ -15,6 +16,7 @@ import {
   useSettingsWithoutStore,
 } from "@/stores/settings-store";
 import { useTimetableStore } from "@/stores/timetable-store";
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import {
   BellIcon,
   CalculatorIcon,
@@ -128,6 +130,12 @@ export const SettingsPanel = () => {
         <div className="grid gap-6">
           <SheetHeader>
             <SheetTitle>Dodatkowe funkcje</SheetTitle>
+            <VisuallyHidden>
+              <SheetDescription>
+                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Saepe,
+                sapiente.
+              </SheetDescription>
+            </VisuallyHidden>
             <Button
               onClick={toggleSettingsPanel}
               aria-label="Zamknij panel ustawień"

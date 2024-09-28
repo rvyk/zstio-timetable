@@ -46,47 +46,47 @@ export const Topbar: FC<TopbarProps> = ({ timetable, substitutions }) => {
   }, [isSubstitutionsPage, substitutions, timetable]);
 
   return (
-    <div className="flex w-full justify-between gap-x-4">
-      <div className="grid gap-2">
+    <div className="grid gap-2">
+      <div className="flex w-full justify-between">
         <SchoolLink />
-        <div className="grid gap-1.5">
-          <div className="inline-flex items-center gap-x-4">
-            <h1 className="max-w-2xl truncate text-ellipsis text-3xl font-semibold leading-tight text-primary/90 xl:text-4.2xl">
-              {titleElement}
-            </h1>
-            {timetable?.title && isClient && !isSubstitutionsPage && (
-              <button
-                aria-label={
-                  isFavorite ? "Usuń z ulubionych" : "Dodaj do ulubionych"
-                }
-                onClick={handleFavorite}
-                className="focus:outline-none"
-              >
-                <StarIcon
-                  size={24}
-                  strokeWidth={2.5}
-                  className={cn(
-                    isFavorite
-                      ? "!fill-star !drop-shadow-[0_0_5.6px_rgba(255,196,46,0.35)]"
-                      : "hover:fill-star",
-                    "fill-transparent stroke-star drop-shadow-none transition-all",
-                  )}
-                />
-              </button>
-            )}
-          </div>
-          {isSubstitutionsPage ? (
-            substitutions && (
-              <p className="text-sm font-medium text-primary/70 xl:text-base">
-                {substitutions.timeRange}
-              </p>
-            )
-          ) : (
-            <Dates timetable={timetable} />
+        <TopbarButtons />
+      </div>
+      <div className="grid gap-1.5">
+        <div className="inline-flex items-center gap-x-4">
+          <h1 className="max-w-2xl truncate text-ellipsis text-3xl font-semibold leading-tight text-primary/90 xl:text-4.2xl">
+            {titleElement}
+          </h1>
+          {timetable?.title && isClient && !isSubstitutionsPage && (
+            <button
+              aria-label={
+                isFavorite ? "Usuń z ulubionych" : "Dodaj do ulubionych"
+              }
+              onClick={handleFavorite}
+              className="focus:outline-none"
+            >
+              <StarIcon
+                size={24}
+                strokeWidth={2.5}
+                className={cn(
+                  isFavorite
+                    ? "!fill-star !drop-shadow-[0_0_5.6px_rgba(255,196,46,0.35)]"
+                    : "hover:fill-star",
+                  "fill-transparent stroke-star drop-shadow-none transition-all",
+                )}
+              />
+            </button>
           )}
         </div>
+        {isSubstitutionsPage ? (
+          substitutions && (
+            <p className="text-sm font-medium text-primary/70 xl:text-base">
+              {substitutions.timeRange}
+            </p>
+          )
+        ) : (
+          <Dates timetable={timetable} />
+        )}
       </div>
-      <TopbarButtons />
     </div>
   );
 };
@@ -103,7 +103,7 @@ const SchoolLink: FC = () => (
     />
     <div className="inline-flex items-center gap-x-2 text-primary/70 transition-colors group-hover:text-primary/90">
       <ArrowLeftFromLine size={20} strokeWidth={2.5} />
-      <p className="text-base font-medium">Wróć na stronę szkoły</p>
+      <p className="text-sm font-medium xl:text-base">Wróć na stronę szkoły</p>
     </div>
   </Link>
 );

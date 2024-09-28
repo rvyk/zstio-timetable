@@ -35,6 +35,9 @@ interface useSettingsWithoutStore {
   isSettingsPanelOpen: boolean;
   toggleSettingsPanel: () => void;
 
+  isSidebarOpen: boolean;
+  toggleSidebar: () => void;
+
   isFullscreenMode: boolean;
   toggleFullscreenMode: () => void;
 }
@@ -44,6 +47,10 @@ export const useSettingsWithoutStore = create<useSettingsWithoutStore>(
     isSettingsPanelOpen: false,
     toggleSettingsPanel: () =>
       set((state) => ({ isSettingsPanelOpen: !state.isSettingsPanelOpen })),
+
+    isSidebarOpen: false,
+    toggleSidebar: () =>
+      set((state) => ({ isSidebarOpen: !state.isSidebarOpen })),
 
     isFullscreenMode: false,
     toggleFullscreenMode: () =>

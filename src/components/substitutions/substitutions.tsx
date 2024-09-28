@@ -1,6 +1,6 @@
 "use client";
 
-import { parseSubstitutionClass, sortSubstitutions } from "@/lib/utils";
+import { cn, parseSubstitutionClass, sortSubstitutions } from "@/lib/utils";
 import { useSubstitutionsStore } from "@/stores/substitutions-store";
 import {
   Substitution,
@@ -87,7 +87,7 @@ const SubstitutionRow: FC<{
 
   return (
     <tr className="divide-x divide-lines border-b border-lines last:border-none odd:bg-accent/50 odd:dark:bg-background">
-      <td className="relative flex h-full min-h-16 w-full flex-col items-center justify-center px-4 py-3">
+      <td className="relative px-4 py-3 text-center">
         <h2 className="text-xl font-semibold text-primary/90">
           {substitution.number}
         </h2>
@@ -95,7 +95,7 @@ const SubstitutionRow: FC<{
           {substitution.timeRange}
         </p>
       </td>
-      <td className={cellClassName}>
+      <td className={cn("whitespace-nowrap", cellClassName)}>
         {parseSubstitutionClass(substitution.class)}
       </td>
       <td className={cellClassName}>{substitution.subject}</td>
