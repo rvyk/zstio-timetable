@@ -1,7 +1,9 @@
+// Sidebar.tsx
+
 "use client";
 
 import { Accordion } from "@/components/ui/accordion";
-import { getUniqueSubstitutionList } from "@/lib/utils";
+import { cn, getUniqueSubstitutionList } from "@/lib/utils";
 import { useFavoritesStore } from "@/stores/favorites-store";
 import { useSubstitutionsStore } from "@/stores/substitutions-store";
 import { useTimetableStore } from "@/stores/timetable-store";
@@ -21,6 +23,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useSettingsWithoutStore } from "@/stores/settings-store";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { useIsClient } from "usehooks-ts";
+import SidebarContext, { useSidebarContext } from "./context";
 import { Dropdown } from "./dropdown";
 import { Search } from "./search";
 
@@ -38,7 +41,11 @@ export const Sidebar: FC = memo(() => {
       <div className="xl:hidden">
         <Sheet open={isSidebarOpen} onOpenChange={toggleSidebar}>
           <SheetTrigger asChild>
-            <button className="h-screen w-24 border-r border-lines bg-foreground dark:border-primary/10"></button>
+            <button className="flex h-screen w-24 cursor-pointer flex-col items-center gap-10 border-r border-lines bg-foreground px-4 py-6 dark:border-primary/10">
+              <SidebarContext.Provider value={{ isPreview: true }}>
+                <SidebarContent />
+              </SidebarContext.Provider>
+            </button>
           </SheetTrigger>
           <SheetContent
             side="left"
@@ -63,6 +70,7 @@ export const Sidebar: FC = memo(() => {
 Sidebar.displayName = "Sidebar";
 
 const SidebarContent: FC = memo(() => {
+  const { isPreview } = useSidebarContext();
   const isClient = useIsClient();
   const isSubstitutionPage = usePathname() === "/substitutions";
   const sourceLink = isSubstitutionPage
@@ -72,9 +80,9 @@ const SidebarContent: FC = memo(() => {
   if (!isClient)
     return (
       <Fragment>
-        <div className="grid gap-10">
+        <div className={cn(isPreview && "w-12", "grid gap-10")}>
           <Skeleton className="h-12 w-full" />
-          <div className="grid gap-5">
+          <div className={cn(isPreview && "mx-auto w-10", "grid gap-5")}>
             <Skeleton className="h-10 w-full" />
             {!isSubstitutionPage && (
               <hr className="h-px w-full border border-primary/10" />
@@ -84,7 +92,7 @@ const SidebarContent: FC = memo(() => {
             {!isSubstitutionPage && <Skeleton className="h-10 w-full" />}
           </div>
         </div>
-        <div className="grid gap-2">
+        <div className={cn(isPreview ? "hidden" : "grid", "gap-2")}>
           <Skeleton className="h-3.5 w-24" />
           <Skeleton className="h-3 w-full" />
         </div>
@@ -99,7 +107,12 @@ const SidebarContent: FC = memo(() => {
         <TimetableSidebarDropdowns />
       )}
 
-      <p className="mx-2 text-sm font-semibold text-primary/90">
+      <p
+        className={cn(
+          isPreview && "hidden",
+          "mx-2 text-sm font-semibold text-primary/90",
+        )}
+      >
         Źródło danych <br />
         <Link
           href={sourceLink ?? "#"}

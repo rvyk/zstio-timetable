@@ -1,10 +1,11 @@
 import { searchHandleKeyDown } from "@/lib/easter-egg";
-import { getUniqueSubstitutionList } from "@/lib/utils";
+import { cn, getUniqueSubstitutionList } from "@/lib/utils";
 import { OptivumTimetable, SubstitutionListItem } from "@/types/optivum";
 import { SubstitutionsPage } from "@majusss/substitutions-parser/dist/types";
 import { ListItem } from "@majusss/timetable-parser";
 import { SearchIcon, XIcon } from "lucide-react";
 import { FC, KeyboardEvent, useCallback, useMemo, useState } from "react";
+import { useSidebarContext } from "./context";
 import { DropdownContent } from "./dropdown";
 
 const listKeys: Record<string, string> = {
@@ -19,6 +20,7 @@ export const Search: FC<{
   timetable?: OptivumTimetable | null;
   substitutions?: SubstitutionsPage | null;
 }> = ({ timetable, substitutions }) => {
+  const { isPreview } = useSidebarContext();
   const [value, setValue] = useState("");
   const [showEasterEgg, setShowEasterEgg] = useState(false);
 
@@ -62,8 +64,13 @@ export const Search: FC<{
   }, [value, timetable, substitutions]);
 
   return (
-    <div className="grid">
-      <div className="inline-flex h-12 w-full items-center justify-between rounded-md border border-primary/10 bg-accent-secondary p-3 dark:border-primary/10">
+    <div className={cn(isPreview && "place-content-center", "grid")}>
+      <div
+        className={cn(
+          isPreview ? "w-12" : "w-full",
+          "inline-flex h-12 items-center justify-between rounded-md border border-primary/10 bg-accent-secondary p-3 dark:border-primary/10",
+        )}
+      >
         <div className="mr-2 flex w-full items-center gap-x-3">
           <SearchIcon className="text-primary/70" size={20} strokeWidth={2.5} />
           <input
@@ -72,11 +79,14 @@ export const Search: FC<{
             onChange={(e) => setValue(e.target.value)}
             onKeyDown={handleKeyDown}
             type="text"
-            className="w-full bg-transparent text-sm font-medium text-primary/90 placeholder:text-primary/70 focus:outline-none"
+            className={cn(
+              isPreview && "hidden",
+              "w-full bg-transparent text-sm font-medium text-primary/90 placeholder:text-primary/70 focus:outline-none",
+            )}
             placeholder="Szukaj..."
           />
         </div>
-        {value && (
+        {value && isPreview == false && (
           <button
             onClick={handleClearSearch}
             className="text-primary/70 hover:text-primary/90"

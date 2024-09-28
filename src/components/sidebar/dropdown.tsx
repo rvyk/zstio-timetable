@@ -14,6 +14,7 @@ import { usePathname } from "next/navigation";
 import { FC } from "react";
 import { useIsClient } from "usehooks-ts";
 import { LinkWithCookie } from "../link";
+import { useSidebarContext } from "./context";
 
 const translates = {
   favorites: "Ulubione",
@@ -35,6 +36,7 @@ export interface DropdownProps {
 }
 
 export const Dropdown: FC<DropdownProps> = ({ type, icon: Icon, data }) => {
+  const { isPreview } = useSidebarContext();
   const isClient = useIsClient();
 
   if (!data || data.length === 0) {
@@ -42,25 +44,38 @@ export const Dropdown: FC<DropdownProps> = ({ type, icon: Icon, data }) => {
   }
 
   return (
-    <AccordionItem value={type}>
-      <AccordionTrigger className="group relative">
-        <div className="absolute -left-2 -top-1.5 z-10 h-[calc(100%+12px)] w-[calc(100%+16px)] rounded-md bg-accent/90 opacity-0 transition-all group-hover:opacity-100 group-data-[state=open]:opacity-100"></div>
-        <div className="relative z-20 inline-flex w-full items-center justify-between">
+    <AccordionItem value={type} disabled={isPreview}>
+      <AccordionTrigger
+        asChild={isPreview}
+        className={cn(
+          isPreview && "pointer-events-none select-none",
+          "group -m-2 w-full rounded-md p-2 hover:bg-accent/90 data-[state=open]:bg-accent/90",
+        )}
+      >
+        <div className="inline-flex w-full items-center justify-between rounded-md">
           <div className="inline-flex items-center gap-x-3.5">
-            <div className="grid h-10 w-10 place-content-center rounded-sm border border-primary/10 bg-accent transition-all group-hover:bg-primary/5 group-hover:dark:bg-accent">
+            <div className="grid h-10 w-10 place-content-center rounded-sm border border-primary/10 bg-accent transition-all group-hover:bg-primary/5 group-data-[state=open]:bg-primary/5 group-hover:dark:bg-accent group-data-[state=open]:dark:bg-accent">
               <Icon
                 className="text-primary/80 transition-all group-hover:text-primary/90 group-data-[state=open]:text-primary/90"
                 size={20}
                 strokeWidth={2.5}
               />
             </div>
-            <p className="text-sm font-semibold text-primary/70 group-hover:text-primary/90 group-data-[state=open]:text-primary/90 dark:font-medium">
+            <p
+              className={cn(
+                isPreview && "hidden",
+                "text-sm font-semibold text-primary/70 group-hover:text-primary/90 group-data-[state=open]:text-primary/90 dark:font-medium",
+              )}
+            >
               {translates[type as keyof typeof translates]}{" "}
               {isClient && `(${data?.length})`}
             </p>
           </div>
           <ChevronDown
-            className="text-primary/80 transition-all group-data-[state=open]:rotate-180"
+            className={cn(
+              isPreview && "hidden",
+              "text-primary/80 transition-all group-data-[state=open]:rotate-180",
+            )}
             size={20}
           />
         </div>

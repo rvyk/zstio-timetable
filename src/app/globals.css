@@ -92,3 +92,8 @@
 .dark *::-webkit-scrollbar-thumb:active {
   background-color: rgb(32, 32, 32, 0.8);
 }
+
+::selection {
+  background-color: rgba(var(--accent-table));
+  color: #fafafa;
+}

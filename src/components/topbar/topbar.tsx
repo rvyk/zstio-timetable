@@ -69,8 +69,8 @@ export const Topbar: FC<TopbarProps> = ({ timetable, substitutions }) => {
                 strokeWidth={2.5}
                 className={cn(
                   isFavorite
-                    ? "!fill-star !drop-shadow-[0_0_5.6px_rgba(255,196,46,0.35)]"
-                    : "hover:fill-star",
+                    ? "!fill-star !drop-shadow-[0_0_5.6px_rgba(255,196,46,0.35)] grayscale-0"
+                    : "grayscale hover:fill-star",
                   "fill-transparent stroke-star drop-shadow-none transition-all",
                 )}
               />
