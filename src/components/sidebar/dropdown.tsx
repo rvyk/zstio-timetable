@@ -4,7 +4,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Button, buttonVariants } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+import { cn, parseSubstitutionClass } from "@/lib/utils";
 import { useSettingsWithoutStore } from "@/stores/settings-store";
 import { useSubstitutionsStore } from "@/stores/substitutions-store";
 import { SubstitutionListItem } from "@/types/optivum";
@@ -173,7 +173,7 @@ const SubstitutionListItemComponent: FC<SubstitutionListItemComponentProps> = ({
           }),
       )}
     >
-      {item.name}
+      {itemType == "class" ? parseSubstitutionClass(item.name) : item.name}
     </Button>
   );
 };
