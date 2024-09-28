@@ -22,7 +22,11 @@ export const fetchOptivumTimetable = async (
       process.env.NEXT_PUBLIC_TIMETABLE_URL?.replace(/\/+$/, "") ?? "";
     const url = `${baseUrl}/plany/${id}.html`;
 
-    const data = await fetch(url).then((res) => res.text());
+    const data = await fetch(url, {
+      next: {
+        revalidate: 3600,
+      },
+    }).then((res) => res.text());
     const timeTableData = new Table(data);
 
     return {

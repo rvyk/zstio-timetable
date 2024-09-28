@@ -31,18 +31,16 @@
 *::-webkit-scrollbar {
   width: 6px;
   height: 6px;
-  border-radius: 8px;
-}
-
-::-webkit-scrollbar-corner {
-  background: #ffffff00;
 }
 
 /* Light mode */
 
+*::-webkit-scrollbar-corner {
+  background: rgba(54, 54, 54, 0.5);
+}
+
 *::-webkit-scrollbar-track {
   background-color: rgba(54, 54, 54, 0.5);
-  border-radius: 8px;
 }
 
 *::-webkit-scrollbar-track:hover {
@@ -55,7 +53,6 @@
 
 *::-webkit-scrollbar-thumb {
   background-color: rgb(42, 23, 27, 0.5);
-  border-radius: 8px;
 }
 
 *::-webkit-scrollbar-thumb:hover {
@@ -68,9 +65,12 @@
 
 /* Dark mode */
 
+.dark *::-webkit-scrollbar-corner {
+  background: rgb(66, 66, 66, 1);
+}
+
 .dark *::-webkit-scrollbar-track {
   background-color: rgb(66, 66, 66, 1);
-  border-radius: 8px;
 }
 
 .dark *::-webkit-scrollbar-track:hover {

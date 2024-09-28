@@ -8,7 +8,11 @@ export const fetchOptivumList = async (): Promise<List> => {
   const url = `${baseUrl}/lista.html`;
 
   try {
-    const response = await fetch(url);
+    const response = await fetch(url, {
+      next: {
+        revalidate: 3600,
+      },
+    });
     const data = await response.text();
 
     return new TimetableList(data).getList();

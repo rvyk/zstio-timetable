@@ -1,4 +1,4 @@
-import { Substitutions } from "@/components/substitutions/substitutions";
+import { Substitutions } from "@/components/substitutions";
 import { Topbar } from "@/components/topbar/topbar";
 import { fetchSubstitutions } from "@/lib/fetchers/substitutions";
 

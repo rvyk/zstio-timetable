@@ -13,11 +13,13 @@ const findRelations = async (
       const newLessonSubstitute = substitution.lessonSubstitute?.map(
         (lesson) => {
           const teacherId = list.teachers?.find((teacher) =>
-            teacher.name.includes(lesson.teacher),
+            teacher.name.includes(lesson.teacher ?? ""),
           )?.value;
+
           const roomId = list.rooms?.find((room) =>
             room.name.includes(lesson.room),
           )?.value;
+
           return {
             ...lesson,
             teacherId,
@@ -25,13 +27,16 @@ const findRelations = async (
           };
         },
       );
+
       return {
         ...substitution,
         lessonSubstitute: newLessonSubstitute,
       };
     });
+
     return { ...table, substitutions: newSubstitutions };
   });
+
   return { ...page, tables: newTables };
 };
 
@@ -39,7 +44,11 @@ export const fetchSubstitutions = async () => {
   const url = process.env.NEXT_PUBLIC_SUBSTITUTIONS_URL as string;
 
   try {
-    const response = await fetch(url);
+    const response = await fetch(url, {
+      next: {
+        revalidate: 3600,
+      },
+    });
     const html = await response.text();
 
     return await findRelations(new Substitutions(html).parseSubstitutionSite());

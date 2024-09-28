@@ -47,7 +47,7 @@ export const TableHourCell: FC<TableHourCellProps> = ({
           )}
         </div>
       ) : (
-        <Skeleton className="h-4 w-24" />
+        <Skeleton className="mx-auto h-4 w-24" />
       )}
     </td>
   );

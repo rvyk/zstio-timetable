@@ -71,7 +71,7 @@ export const Topbar: FC<TopbarProps> = ({ timetable, substitutions }) => {
                   isFavorite
                     ? "!fill-star !drop-shadow-[0_0_5.6px_rgba(255,196,46,0.35)] grayscale-0"
                     : "grayscale hover:fill-star",
-                  "fill-transparent stroke-star drop-shadow-none transition-all",
+                  "fill-transparent stroke-star drop-shadow-none transition-all duration-300",
                 )}
               />
             </button>
