@@ -59,6 +59,7 @@ export const TopbarButtons: FC = () => {
     {
       icon: isSubstitutionPage ? TableIcon : Repeat2Icon,
       href: isSubstitutionPage ? redirectFromSubstitutions : "/substitutions",
+      hidden: !process.env.NEXT_PUBLIC_SUBSTITUTIONS_URL,
       action: null,
       ariaLabel: isSubstitutionPage
         ? "Przejdź do planu zajęć"

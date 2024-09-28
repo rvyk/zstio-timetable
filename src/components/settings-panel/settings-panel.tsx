@@ -61,7 +61,7 @@ export const SettingsPanel = () => {
     {
       icon: Repeat2Icon,
       title: "Zastępstwa na planie lekcji",
-      hidden: isSubstitutionPage,
+      hidden: isSubstitutionPage || !process.env.NEXT_PUBLIC_SUBSTITUTIONS_URL,
       active: savedSettings.isSubstitutionShown,
       onClick: savedSettings.toggleSubstitution,
       description: (

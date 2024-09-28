@@ -1,8 +1,8 @@
+import { fetchSubstitutions } from "@/actions/fetchers/substitutions";
 import { SettingsPanel } from "@/components/settings-panel/settings-panel";
 import { Sidebar } from "@/components/sidebar/sidebar";
 import { SubstitutionsController } from "@/components/substitutions-controller";
 import { ThemeProvider } from "@/components/theme-provider";
-import { fetchSubstitutions } from "@/lib/fetchers/substitutions";
 import { cn } from "@/lib/utils";
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";

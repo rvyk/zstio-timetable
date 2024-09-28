@@ -1,4 +1,4 @@
-import { fetchOptivumList } from "@/lib/fetchers/optivum-list";
+import { fetchOptivumList } from "@/actions/fetchers/optivum-list";
 import { MetadataRoute } from "next";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {

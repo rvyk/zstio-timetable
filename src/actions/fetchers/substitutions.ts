@@ -1,8 +1,8 @@
 "use server";
 
+import { parseHeaderDate } from "@/lib/utils";
 import Substitutions from "@majusss/substitutions-parser/dist/substitutions";
 import { SubstitutionsPage } from "@majusss/substitutions-parser/dist/types";
-import { parseHeaderDate } from "../utils";
 import { fetchOptivumList } from "./optivum-list";
 
 const findRelations = async (
@@ -57,7 +57,6 @@ export const fetchSubstitutions = async (): Promise<SubstitutionsPage> => {
       lastUpdated: parseHeaderDate(res),
     };
   } catch (error) {
-    console.error("Failed to fetch Substitutions:", error);
     return { heading: "", tables: [], timeRange: "", lastUpdated: "" };
   }
 };

@@ -1,8 +1,8 @@
 "use server";
 
 import { TableLesson } from "@majusss/timetable-parser";
-import { fetchOptivumList } from "../lib/fetchers/optivum-list";
-import { fetchOptivumTimetable } from "../lib/fetchers/optivum-timetable";
+import { fetchOptivumList } from "./fetchers/optivum-list";
+import { fetchOptivumTimetable } from "./fetchers/optivum-timetable";
 
 interface Room {
   id: string;

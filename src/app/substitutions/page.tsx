@@ -1,6 +1,7 @@
+import { fetchSubstitutions } from "@/actions/fetchers/substitutions";
 import { Substitutions } from "@/components/substitutions";
 import { Topbar } from "@/components/topbar/topbar";
-import { fetchSubstitutions } from "@/lib/fetchers/substitutions";
+import { redirect } from "next/navigation";
 
 export const dynamic = "force-dynamic";
 
@@ -14,6 +15,10 @@ export const generateMetadata = async () => {
 };
 
 const SubstitutionPage = async () => {
+  if (!process.env.NEXT_PUBLIC_SUBSTITUTIONS_URL) {
+    redirect("/");
+  }
+
   const substitutions = await fetchSubstitutions();
 
   return (

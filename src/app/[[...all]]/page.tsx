@@ -2,11 +2,11 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { Fragment } from "react";
 
+import { fetchOptivumList } from "@/actions/fetchers/optivum-list";
+import { fetchOptivumTimetable } from "@/actions/fetchers/optivum-timetable";
 import { TimetableController } from "@/components/timetable-controller";
 import { Timetable } from "@/components/timetable/timetable";
 import { Topbar } from "@/components/topbar/topbar";
-import { fetchOptivumList } from "@/lib/fetchers/optivum-list";
-import { fetchOptivumTimetable } from "@/lib/fetchers/optivum-timetable";
 
 export const dynamic = "force-dynamic";
 

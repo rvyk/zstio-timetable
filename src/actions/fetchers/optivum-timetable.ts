@@ -1,10 +1,10 @@
 "use server";
 
+import { parseHeaderDate } from "@/lib/utils";
 import { OptivumTimetable } from "@/types/optivum";
 import { Table } from "@majusss/timetable-parser";
 import moment from "moment";
 import "moment/locale/pl";
-import { parseHeaderDate } from "../utils";
 import { fetchOptivumList } from "./optivum-list";
 
 export const fetchOptivumTimetable = async (
