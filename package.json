@@ -21,6 +21,7 @@
     "cookies-next": "^4.2.1",
     "lucide-react": "^0.441.0",
     "moment": "^2.30.1",
+    "moment-timezone": "^0.5.45",
     "next": "14.2.13",
     "next-themes": "^0.3.0",
     "react": "^18.3.1",

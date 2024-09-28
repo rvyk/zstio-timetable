@@ -3,6 +3,7 @@
 import Substitutions from "@majusss/substitutions-parser/dist/substitutions";
 import { SubstitutionsPage } from "@majusss/substitutions-parser/dist/types";
 import moment from "moment";
+import "moment-timezone";
 import "moment/locale/pl";
 import { fetchOptivumList } from "./optivum-list";
 
@@ -56,7 +57,9 @@ export const fetchSubstitutions = async (): Promise<SubstitutionsPage> => {
     return {
       ...(await findRelations(new Substitutions(html).parseSubstitutionSite())),
       lastUpdated: res.headers.has("date")
-        ? moment(res.headers.get("date")).format("DD MMMM YYYY[r.] HH:mm:ss")
+        ? moment(res.headers.get("date"))
+            .tz("Europe/Warsaw")
+            .format("DD MMMM YYYY[r.] HH:mm:ss")
         : "Brak danych",
     };
   } catch (error) {
