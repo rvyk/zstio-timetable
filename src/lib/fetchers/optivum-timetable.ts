@@ -25,7 +25,7 @@ export const fetchOptivumTimetable = async (
 
     const res = await fetch(url, {
       next: {
-        revalidate: 3600,
+        revalidate: 900,
       },
     });
 

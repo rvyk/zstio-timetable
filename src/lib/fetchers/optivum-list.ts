@@ -10,7 +10,7 @@ export const fetchOptivumList = async (): Promise<List> => {
   try {
     const response = await fetch(url, {
       next: {
-        revalidate: 3600,
+        revalidate: 900,
       },
     });
     const data = await response.text();

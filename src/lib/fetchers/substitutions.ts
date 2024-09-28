@@ -49,7 +49,7 @@ export const fetchSubstitutions = async (): Promise<SubstitutionsPage> => {
   try {
     const res = await fetch(url, {
       next: {
-        revalidate: 3600,
+        revalidate: 900,
       },
     });
     const html = await res.text();
