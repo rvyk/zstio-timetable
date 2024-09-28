@@ -4,11 +4,22 @@ import {
   SubstitutionsPage,
 } from "@majusss/substitutions-parser/dist/types";
 import { clsx, type ClassValue } from "clsx";
+import moment from "moment";
+import "moment-timezone";
+import "moment/locale/pl";
 import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
+
+export const parseHeaderDate = (res: Response): string => {
+  return res.headers.has("date")
+    ? moment(res.headers.get("date"))
+        .tz("Europe/Warsaw")
+        .format("DD MMMM YYYY[r.] HH:mm:ss")
+    : "Brak danych";
+};
 
 export const getDayNumberForNextWeek = (dayName: string): number => {
   const today = new Date();

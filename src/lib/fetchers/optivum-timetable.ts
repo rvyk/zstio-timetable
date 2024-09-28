@@ -3,8 +3,8 @@
 import { OptivumTimetable } from "@/types/optivum";
 import { Table } from "@majusss/timetable-parser";
 import moment from "moment";
-import "moment-timezone";
 import "moment/locale/pl";
+import { parseHeaderDate } from "../utils";
 import { fetchOptivumList } from "./optivum-list";
 
 export const fetchOptivumTimetable = async (
@@ -44,11 +44,7 @@ export const fetchOptivumTimetable = async (
       validDate: timeTableData.getVersionInfo(),
       dayNames: timeTableData.getDayNames(),
       list: await fetchOptivumList(),
-      lastUpdated: res.headers.has("date")
-        ? moment(res.headers.get("date"))
-            .tz("Europe/Warsaw")
-            .format("DD MMMM YYYY[r.] HH:mm:ss")
-        : "Brak danych",
+      lastUpdated: parseHeaderDate(res),
     };
   } catch (error) {
     console.error("Failed to fetch Optivum timetable:", error);
