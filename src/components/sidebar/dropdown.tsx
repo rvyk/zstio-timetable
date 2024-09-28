@@ -123,8 +123,8 @@ const ListItemComponent: FC<ListItemComponentProps> = ({ item, type }) => {
 
   return (
     <Button
-      onClick={() => isSidebarOpen && toggleSidebar()}
       key={item.value}
+      onClick={() => isSidebarOpen && toggleSidebar()}
       variant="sidebarItem"
       asChild
       size="fit"
