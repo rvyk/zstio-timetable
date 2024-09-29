@@ -1,5 +1,6 @@
 "use client";
 
+import { getCalendar } from "@/actions/getCalendar";
 import { Button } from "@/components/ui/Button";
 import {
   Sheet,
@@ -93,7 +94,39 @@ export const SettingsPanel = () => {
       title: "Dodaj do kalendarza",
       hidden: isSubstitutionPage,
       active: false,
-      onClick: () => {},
+      onClick: async () => {
+        if (!timetable?.lessons) {
+          toast({
+            title: "Nie można wygenerować pliku kalendarza",
+            description:
+              "Brak wydarzeń do wyeksportowania w obecnym planie lekcji",
+            variant: "error",
+          });
+          return;
+        }
+        const calendar = await getCalendar(
+          timetable.lessons,
+          Object.values(timetable.hours),
+        );
+        if (!calendar.value || calendar.error) {
+          toast({
+            title: "Nie można wygenerować pliku kalendarza",
+            description: `Wystąpił błąd podczas generowania pliku kalendarza: ${calendar.error}`,
+            variant: "error",
+          });
+          return;
+        }
+        // TODO: idk if this is the best way to download the file
+        const blob = new Blob([calendar.value], {
+          type: "text/calendar;charset=utf-8",
+        });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `${timetable.title}.ics`;
+        a.click();
+        URL.revokeObjectURL(url);
+      },
       description: (
         <p>
           Wyeksportuj obecnie przeglądany plan lekcji ({timetable?.title}), aby
