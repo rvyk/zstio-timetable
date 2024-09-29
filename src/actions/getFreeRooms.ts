@@ -24,7 +24,7 @@ const combineRooms = async (): Promise<Room[]> => {
   return Promise.all(roomPromises);
 };
 
-export const getEmptyRooms = async (
+export const getFreeRooms = async (
   weekdayIndex: number,
   lessonIndex: number,
 ) => {

@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/Sheet";
 import { usePwa } from "@/hooks/usePWA";
 import { cn } from "@/lib/utils";
+import useModalsStore from "@/stores/modals";
 import { useSettingsStore, useSettingsWithoutStore } from "@/stores/settings";
 import { useTimetableStore } from "@/stores/timetable";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
@@ -27,6 +28,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 export const SettingsPanel = () => {
+  const toggleModal = useModalsStore((state) => state.toggleModal);
   const timetable = useTimetableStore((state) => state.timetable);
   const isSubstitutionPage = usePathname() === "/substitutions";
   const { toggleSettingsPanel, isSettingsPanelOpen } =
@@ -99,7 +101,7 @@ export const SettingsPanel = () => {
       title: "Kalkulator skróconych lekcji",
       hidden: isSubstitutionPage,
       active: false,
-      onClick: () => {},
+      onClick: () => toggleModal("shortenedLessonsCalculator"),
       description: (
         <p>
           Oblicz, o której godzinie skończysz lekcje na podstawie skróconego
@@ -112,9 +114,7 @@ export const SettingsPanel = () => {
       title: "Wyszukaj wolną salę",
       hidden: isSubstitutionPage,
       active: false,
-      onClick: async () => {
-        // console.log(await findEmptyRoom(4, 0));
-      },
+      onClick: () => toggleModal("freeRoomsSearch"),
       description: (
         <p>Znajdź wszystkie wolne sale, według numeru lekcji i dnia tygodnia</p>
       ),

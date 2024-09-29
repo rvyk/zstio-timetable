@@ -4,6 +4,8 @@ import { Fragment } from "react";
 
 import { getOptivumList } from "@/actions/getOptivumList";
 import { getOptivumTimetable } from "@/actions/getOptivumTimetable";
+import { FreeRoomsSearchModal } from "@/components/modals/FreeRoomsSearch";
+import { ShortenedLessonsCalculatorModal } from "@/components/modals/ShortenedLessonsCalculator";
 import { Timetable } from "@/components/timetable/Timetable";
 import { TimetableController } from "@/components/timetable/TimetableController";
 import { Topbar } from "@/components/topbar/Topbar";
@@ -42,6 +44,8 @@ const TimetablePage = async ({ params }: { params: PageParams }) => {
         <Topbar timetable={timetable} />
         <Timetable timetable={timetable} />
       </div>
+      <FreeRoomsSearchModal />
+      <ShortenedLessonsCalculatorModal />
     </Fragment>
   );
 };
