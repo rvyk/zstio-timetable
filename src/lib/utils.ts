@@ -45,7 +45,7 @@ export const getDayNumberForNextWeek = (dayName: string): number => {
     targetDate.setDate(today.getDate() - (todayDayOfWeek - targetDayOfWeek));
   }
 
-  return Number(targetDate.getDate().toString().padStart(2, "0"));
+  return Number(targetDate.getDate());
 };
 
 export const simulateKeyPress = (key: string, keyCode: number) => {

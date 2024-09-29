@@ -80,7 +80,7 @@ export const TableHeaderCell: FC<TableHeaderCellProps> = ({ dayName }) => {
             "text-3xl font-semibold",
           )}
         >
-          {dayNumber}
+          {dayNumber.toString().padStart(2, "0")}
         </h2>
         <h3 className="text-lg font-semibold text-primary/90">{dayName}</h3>
       </div>
