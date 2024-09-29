@@ -11,8 +11,9 @@ import {
   SheetTitle,
 } from "@/components/ui/Sheet";
 import { usePwa } from "@/hooks/usePWA";
-import { toast } from "@/hooks/useToast";
+import { showErrorToast } from "@/hooks/useToast";
 import { adjustShortenedLessons } from "@/lib/adjustShortenedLessons";
+import { downloadFile } from "@/lib/downloadFile";
 import { cn } from "@/lib/utils";
 import useModalsStore from "@/stores/modals";
 import { useSettingsStore, useSettingsWithoutStore } from "@/stores/settings";
@@ -33,12 +34,12 @@ import { usePathname } from "next/navigation";
 export const SettingsPanel = () => {
   const toggleModal = useModalsStore((state) => state.toggleModal);
   const timetable = useTimetableStore((state) => state.timetable);
-  const isSubstitutionPage = usePathname() === "/substitutions";
   const { toggleSettingsPanel, isSettingsPanelOpen } =
     useSettingsWithoutStore();
   const savedSettings = useSettingsStore();
-
   const [prompt, isInstalled] = usePwa();
+
+  const isSubstitutionPage = usePathname() === "/substitutions";
 
   const settings = [
     {
@@ -50,11 +51,10 @@ export const SettingsPanel = () => {
         if (prompt) {
           prompt.prompt();
         } else {
-          toast({
-            title: "Nie można zainstalować aplikacji",
-            description: "Twoja przeglądarka nie obsługuje tej funkcji",
-            variant: "error",
-          });
+          showErrorToast(
+            "Nie można zainstalować aplikacji",
+            "Twoja przeglądarka nie obsługuje tej funkcji",
+          );
         }
       },
       description: (
@@ -96,37 +96,43 @@ export const SettingsPanel = () => {
       hidden: isSubstitutionPage,
       active: false,
       onClick: async () => {
-        if (!timetable?.lessons) {
-          toast({
-            title: "Nie można wygenerować pliku kalendarza",
-            description:
-              "Brak wydarzeń do wyeksportowania w obecnym planie lekcji",
-            variant: "error",
-          });
+        if (!timetable?.lessons || timetable.lessons.length === 0) {
+          showErrorToast(
+            "Nie można wygenerować pliku kalendarza",
+            "Brak wydarzeń do wyeksportowania w obecnym planie lekcji",
+          );
           return;
         }
-        const calendar = await getCalendar(
-          timetable.lessons,
-          Object.values(timetable.hours),
-        );
-        if (!calendar.value || calendar.error) {
-          toast({
-            title: "Nie można wygenerować pliku kalendarza",
-            description: `Wystąpił błąd podczas generowania pliku kalendarza: ${calendar.error}`,
-            variant: "error",
+
+        try {
+          const calendar = await getCalendar(
+            timetable.lessons,
+            Object.values(timetable.hours),
+          );
+
+          if (calendar.error ?? !calendar.value) {
+            console.error(calendar.error);
+
+            showErrorToast(
+              "Nie można wygenerować pliku kalendarza",
+              calendar.error?.message ?? "Wystąpił nieznany błąd",
+            );
+            return;
+          }
+
+          downloadFile({
+            content: calendar.value,
+            mimeType: "text/calendar;charset=utf-8",
+            fileName: `${timetable.title}.ics`,
           });
-          return;
+        } catch (error) {
+          console.error(error);
+
+          showErrorToast(
+            "Nie można wygenerować pliku kalendarza",
+            `Wystąpił błąd podczas generowania pliku kalendarza`,
+          );
         }
-        // TODO: idk if this is the best way to download the file
-        const blob = new Blob([calendar.value], {
-          type: "text/calendar;charset=utf-8",
-        });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = `${timetable.title}.ics`;
-        a.click();
-        URL.revokeObjectURL(url);
       },
       description: (
         <p>

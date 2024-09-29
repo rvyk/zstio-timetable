@@ -13,7 +13,7 @@ export const adjustShortenedLessons = (
   return defaultHours.reduce((adjustedHours: TableHour[], hour) => {
     const hourNumber = Number(hour.number);
 
-    if (hourNumber > startIndex) {
+    if (hourNumber >= startIndex ) {
       const previousHour = adjustedHours[adjustedHours.length - 1];
       const { timeFrom, timeTo } = calculateNewTimes(
         previousHour.timeTo,

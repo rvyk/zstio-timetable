@@ -198,4 +198,12 @@ function useToast() {
   };
 }
 
-export { toast, useToast };
+function showErrorToast(title: string, description: string) {
+  toast({
+    title,
+    description,
+    variant: "error",
+  });
+}
+
+export { showErrorToast, toast, useToast };
