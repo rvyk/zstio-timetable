@@ -2,7 +2,7 @@
 
 import logo_zstio_high from "@/assets/logo-zstio-high.png";
 import { Button } from "@/components/ui/Button";
-import { shortHours } from "@/constants/hours";
+import { SHORT_HOURS } from "@/constants/hours";
 import { translationDict } from "@/constants/translations";
 import { cn, parseTime, simulateKeyPress } from "@/lib/utils";
 import { useSettingsStore, useSettingsWithoutStore } from "@/stores/settings";
@@ -25,7 +25,10 @@ export const Timetable: FC<TimetableProps> = ({ timetable }) => {
   const isFullscreenMode = useSettingsWithoutStore(
     (state) => state.isFullscreenMode,
   );
-  const isShortLessons = useSettingsStore((state) => state.isShortLessons);
+  const lessonType = useSettingsStore((state) => state.lessonType);
+  const customLessonLength = useSettingsStore(
+    (state) => state.customLessonLength,
+  );
 
   const [currentTime, setCurrentTime] = useState(() => {
     const now = new Date();
@@ -43,14 +46,20 @@ export const Timetable: FC<TimetableProps> = ({ timetable }) => {
     return () => clearInterval(interval);
   }, []);
 
+  const hours =
+    lessonType === "custom"
+      ? customLessonLength
+      : lessonType === "short"
+        ? SHORT_HOURS
+        : timetable.hours;
+
   const currentLessonIndex = useMemo(() => {
-    const hours = isShortLessons ? shortHours : timetable.hours;
     return Object.entries(hours).findIndex(([, value]) => {
       const start = parseTime(value.timeFrom);
       const end = parseTime(value.timeTo);
       return currentTime >= start && currentTime < end;
     });
-  }, [currentTime, isShortLessons, timetable.hours]);
+  }, [hours, currentTime]);
 
   const maxLessons = useMemo(() => {
     return (
@@ -87,7 +96,7 @@ export const Timetable: FC<TimetableProps> = ({ timetable }) => {
               </tr>
             </thead>
             <tbody>
-              {Object.values(isShortLessons ? shortHours : timetable.hours)
+              {Object.values(hours)
                 .slice(0, maxLessons)
                 .map((hour, lessonIndex) => (
                   <tr

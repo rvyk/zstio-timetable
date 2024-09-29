@@ -1,9 +1,14 @@
+import { TableHour } from "@majusss/timetable-parser";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
+type LessonType = "normal" | "short" | "custom";
+
 interface TimetableSettingsStore {
-  isShortLessons: boolean;
-  toggleShortLessons: () => void;
+  lessonType: LessonType;
+  setLessonType: (lessonType: LessonType) => void;
+  customLessonLength: TableHour[];
+  enableCustomLessonsLength: (hours: TableHour[]) => void;
   isSubstitutionShown: boolean;
   toggleSubstitution: () => void;
   isNotificationEnabled: boolean;
@@ -13,9 +18,11 @@ interface TimetableSettingsStore {
 export const useSettingsStore = create<TimetableSettingsStore>()(
   persist(
     (set) => ({
-      isShortLessons: false,
-      toggleShortLessons: () =>
-        set((state) => ({ isShortLessons: !state.isShortLessons })),
+      lessonType: "normal",
+      setLessonType: (lessonType) => set({ lessonType }),
+      customLessonLength: [],
+      enableCustomLessonsLength: (hours) =>
+        set({ customLessonLength: hours, lessonType: "custom" }),
       isSubstitutionShown: true,
       toggleSubstitution: () =>
         set((state) => ({ isSubstitutionShown: !state.isSubstitutionShown })),

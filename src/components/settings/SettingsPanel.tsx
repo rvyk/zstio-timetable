@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/Sheet";
 import { usePwa } from "@/hooks/usePWA";
 import { toast } from "@/hooks/useToast";
+import { adjustShortenedLessons } from "@/lib/adjustShortenedLessons";
 import { cn } from "@/lib/utils";
 import useModalsStore from "@/stores/modals";
 import { useSettingsStore, useSettingsWithoutStore } from "@/stores/settings";
@@ -139,7 +140,12 @@ export const SettingsPanel = () => {
       title: "Kalkulator skróconych lekcji",
       hidden: isSubstitutionPage,
       active: false,
-      onClick: () => toggleModal("shortenedLessonsCalculator"),
+      onClick: () => {
+        // toggleModal("shortenedLessonsCalculator");
+        savedSettings.enableCustomLessonsLength(
+          adjustShortenedLessons(6, Object.values(timetable?.hours ?? [])),
+        );
+      },
       description: (
         <p>
           Oblicz, o której godzinie skończysz lekcje na podstawie skróconego

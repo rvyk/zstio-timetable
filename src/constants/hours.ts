@@ -3,7 +3,7 @@ import { TableHour } from "@majusss/timetable-parser";
 /*
     ZSTiO offers a maximum of 14 shortened lessons (30 minutes) in its timetable. If your school requires more, you can customize this feature to better suit your needs.
 */
-export const shortHours: TableHour[] = [
+export const SHORT_HOURS: TableHour[] = [
   {
     number: 1,
     timeFrom: "8:00",
@@ -75,3 +75,12 @@ export const shortHours: TableHour[] = [
     timeTo: "16:15",
   },
 ];
+
+// Break time between lessons in minutes
+export const BREAK_LENGTH = 5;
+
+// Shortened lesson length in minutes
+export const SHORT_LESSON_LENGTH = 30;
+
+// Time format used to recognize and display time
+export const CALCULATED_TIME_FORMAT = "HH:mm";

@@ -90,7 +90,8 @@ export const TableHeaderCell: FC<TableHeaderCellProps> = ({ dayName }) => {
 
 export const ShortLessonSwitcherCell: FC = () => {
   const isClient = useIsClient();
-  const { isShortLessons, toggleShortLessons } = useSettingsStore();
+  const { lessonType, setLessonType } = useSettingsStore();
+  const isShortLessons = lessonType === "short";
 
   return (
     <th className="flex h-16 items-center justify-center px-2">
@@ -102,7 +103,9 @@ export const ShortLessonSwitcherCell: FC = () => {
                 aria-label="Przełącz długość lekcji"
                 variant="icon"
                 key={value}
-                onClick={toggleShortLessons}
+                onClick={() =>
+                  setLessonType(value === "45'" ? "normal" : "short")
+                }
                 className={cn(
                   index === 0 ? "!rounded-l-sm" : "!rounded-r-sm",
                   "rounded-none bg-accent font-semibold text-primary/90 hover:bg-primary/5 hover:text-primary",
@@ -112,16 +115,18 @@ export const ShortLessonSwitcherCell: FC = () => {
               </Button>
             ))}
           </div>
-          <div
-            className={cn(
-              isShortLessons
-                ? "translate-x-[100%] transform rounded-r-sm"
-                : "rounded-l-sm",
-              "absolute top-0 z-40 flex h-10 w-[50%] cursor-default items-center justify-center bg-accent-table px-4 py-2 text-sm font-semibold text-accent/90 transition-all dark:text-primary/90",
-            )}
-          >
-            {isShortLessons ? "30'" : "45'"}
-          </div>
+          {lessonType !== "custom" && (
+            <div
+              className={cn(
+                isShortLessons
+                  ? "translate-x-[100%] transform rounded-r-sm"
+                  : "rounded-l-sm",
+                "absolute top-0 z-40 flex h-10 w-[50%] cursor-default items-center justify-center bg-accent-table px-4 py-2 text-sm font-semibold text-accent/90 transition-all dark:text-primary/90",
+              )}
+            >
+              {isShortLessons ? "30'" : "45'"}
+            </div>
+          )}
         </div>
       ) : (
         <Skeleton className="h-10 w-28 rounded-sm" />
