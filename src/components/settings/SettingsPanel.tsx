@@ -10,6 +10,7 @@ import {
   SheetTitle,
 } from "@/components/ui/Sheet";
 import { usePwa } from "@/hooks/usePWA";
+import { toast } from "@/hooks/useToast";
 import { cn } from "@/lib/utils";
 import useModalsStore from "@/stores/modals";
 import { useSettingsStore, useSettingsWithoutStore } from "@/stores/settings";
@@ -47,7 +48,11 @@ export const SettingsPanel = () => {
         if (prompt) {
           prompt.prompt();
         } else {
-          alert("Nie można zainstalować aplikacji");
+          toast({
+            title: "Nie można zainstalować aplikacji",
+            description: "Twoja przeglądarka nie obsługuje tej funkcji",
+            variant: "error",
+          });
         }
       },
       description: (

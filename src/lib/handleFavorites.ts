@@ -1,5 +1,7 @@
+import { toast } from "@/hooks/useToast";
 import { useFavoritesStore } from "@/stores/favorites";
 import { useTimetableStore } from "@/stores/timetable";
+import { Trash2 } from "lucide-react";
 
 export const handleFavorite = () => {
   const timetable = useTimetableStore.getState().timetable;
@@ -18,6 +20,12 @@ export const handleFavorite = () => {
 
   if (isAlreadyFavorite) {
     removeFavorite(timetable.title);
+    toast({
+      title: "Usunięto z ulubionych",
+      description: `Pomyślne usunięto z ulubionych: ${timetable.title}`,
+      icon: Trash2,
+      iconColor: "#EF0933",
+    });
     return;
   }
 
@@ -30,6 +38,11 @@ export const handleFavorite = () => {
     addFavorite({
       ...favoriteItem,
       type: timetable.type,
+    });
+
+    toast({
+      title: "Dodano do ulubionych",
+      description: `Pomyślnie dodano do ulubionych: ${timetable.title}`,
     });
     return;
   }

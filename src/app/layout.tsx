@@ -3,6 +3,7 @@ import { ThemeProvider } from "@/components/common/ThemeProvider";
 import { SettingsPanel } from "@/components/settings/SettingsPanel";
 import { Sidebar } from "@/components/sidebar/Sidebar";
 import { SubstitutionsController } from "@/components/substitutions/SubstitutionsController";
+import { Toaster } from "@/components/ui/Toaster";
 import { cn } from "@/lib/utils";
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
@@ -45,6 +46,7 @@ export default async function RootLayout({
       >
         <SubstitutionsController substitutions={substitutions} />
         <ThemeProvider attribute="class" disableTransitionOnChange>
+          <Toaster />
           <Sidebar />
           {children}
           <SettingsPanel />
