@@ -1,10 +1,10 @@
 "use client";
 
-import { translationDict } from "@/constants/translates";
-import { handleFavorite } from "@/lib/handle-favorites";
+import logo_zstio from "@/assets/logo-zstio.png";
+import { translationDict } from "@/constants/translations";
+import { handleFavorite } from "@/lib/handleFavorites";
 import { cn } from "@/lib/utils";
-import logo_zstio from "@/resources/logo-zstio.png";
-import { useFavoritesStore } from "@/stores/favorites-store";
+import { useFavoritesStore } from "@/stores/favorites";
 import { OptivumTimetable } from "@/types/optivum";
 import { SubstitutionsPage } from "@majusss/substitutions-parser/dist/types";
 import { ArrowLeftFromLine, StarIcon } from "lucide-react";
@@ -12,7 +12,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { FC, Fragment, useMemo } from "react";
 import { useIsClient } from "usehooks-ts";
-import { TopbarButtons } from "./buttons";
+import { TopbarButtons } from "./Buttons";
 
 interface TopbarProps {
   timetable?: OptivumTimetable;

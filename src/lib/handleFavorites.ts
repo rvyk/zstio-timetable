@@ -1,5 +1,5 @@
-import { useFavoritesStore } from "@/stores/favorites-store";
-import { useTimetableStore } from "@/stores/timetable-store";
+import { useFavoritesStore } from "@/stores/favorites";
+import { useTimetableStore } from "@/stores/timetable";
 
 export const handleFavorite = () => {
   const timetable = useTimetableStore.getState().timetable;

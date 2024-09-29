@@ -1,9 +1,9 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { Skeleton } from "@/components/ui/skeleton";
+import { Button } from "@/components/ui/Button";
+import { Skeleton } from "@/components/ui/Skeleton";
 import { cn, getDayNumberForNextWeek } from "@/lib/utils";
-import { useSettingsStore } from "@/stores/settings-store";
+import { useSettingsStore } from "@/stores/settings";
 import { TableHour } from "@majusss/timetable-parser";
 import { FC, useMemo } from "react";
 import { useIsClient } from "usehooks-ts";

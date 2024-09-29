@@ -1,20 +1,20 @@
+import { LinkWithCookie } from "@/components/common/Link";
 import {
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "@/components/ui/accordion";
-import { Button, buttonVariants } from "@/components/ui/button";
+} from "@/components/ui/Accordion";
+import { Button, buttonVariants } from "@/components/ui/Button";
 import { cn, parseSubstitutionClass } from "@/lib/utils";
-import { useSettingsWithoutStore } from "@/stores/settings-store";
-import { useSubstitutionsStore } from "@/stores/substitutions-store";
+import { useSettingsWithoutStore } from "@/stores/settings";
+import { useSubstitutionsStore } from "@/stores/substitutions";
 import { SubstitutionListItem } from "@/types/optivum";
 import { ListItem } from "@majusss/timetable-parser";
 import { ChevronDown, LucideIcon } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { FC } from "react";
 import { useIsClient } from "usehooks-ts";
-import { LinkWithCookie } from "../link";
-import { useSidebarContext } from "./context";
+import { useSidebarContext } from "./Context";
 
 const translates = {
   favorites: "Ulubione",

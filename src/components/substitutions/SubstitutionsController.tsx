@@ -1,6 +1,6 @@
 "use client";
 
-import { useSubstitutionsStore } from "@/stores/substitutions-store";
+import { useSubstitutionsStore } from "@/stores/substitutions";
 import { SubstitutionsPage } from "@majusss/substitutions-parser/dist/types";
 import { useEffect } from "react";
 

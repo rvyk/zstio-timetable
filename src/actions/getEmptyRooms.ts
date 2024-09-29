@@ -1,8 +1,8 @@
 "use server";
 
 import { TableLesson } from "@majusss/timetable-parser";
-import { fetchOptivumList } from "./fetchers/optivum-list";
-import { fetchOptivumTimetable } from "./fetchers/optivum-timetable";
+import { getOptivumList } from "./getOptivumList";
+import { getOptivumTimetable } from "./getOptivumTimetable";
 
 interface Room {
   id: string;
@@ -11,10 +11,10 @@ interface Room {
 }
 
 const combineRooms = async (): Promise<Room[]> => {
-  const { rooms } = await fetchOptivumList();
+  const { rooms } = await getOptivumList();
   if (!rooms) return [];
   const roomPromises = rooms.map(async (room) => {
-    const { title, lessons } = await fetchOptivumTimetable("room", room.value);
+    const { title, lessons } = await getOptivumTimetable("room", room.value);
     return {
       id: room.value,
       title,
@@ -24,7 +24,7 @@ const combineRooms = async (): Promise<Room[]> => {
   return Promise.all(roomPromises);
 };
 
-export const findEmptyRoom = async (
+export const getEmptyRooms = async (
   weekdayIndex: number,
   lessonIndex: number,
 ) => {

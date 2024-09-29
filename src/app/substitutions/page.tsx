@@ -1,12 +1,12 @@
-import { fetchSubstitutions } from "@/actions/fetchers/substitutions";
-import { Substitutions } from "@/components/substitutions";
-import { Topbar } from "@/components/topbar/topbar";
+import { getSubstitutions } from "@/actions/getSubstitutions";
+import { Substitutions } from "@/components/substitutions/Substitutions";
+import { Topbar } from "@/components/topbar/Topbar";
 import { redirect } from "next/navigation";
 
 export const dynamic = "force-dynamic";
 
 export const generateMetadata = async () => {
-  const substitutions = await fetchSubstitutions();
+  const substitutions = await getSubstitutions();
 
   return {
     title: substitutions.heading,
@@ -19,7 +19,7 @@ const SubstitutionPage = async () => {
     redirect("/");
   }
 
-  const substitutions = await fetchSubstitutions();
+  const substitutions = await getSubstitutions();
 
   return (
     <div className="flex h-full w-full flex-col gap-y-6 overflow-hidden p-8">

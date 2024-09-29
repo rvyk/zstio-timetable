@@ -1,7 +1,7 @@
 "use client";
 
-import { useSettingsWithoutStore } from "@/stores/settings-store";
-import { useTimetableStore } from "@/stores/timetable-store";
+import { useSettingsWithoutStore } from "@/stores/settings";
+import { useTimetableStore } from "@/stores/timetable";
 import { OptivumTimetable } from "@/types/optivum";
 import { List } from "@majusss/timetable-parser";
 import { setCookie } from "cookies-next";

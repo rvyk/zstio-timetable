@@ -1,4 +1,4 @@
-import { daysOfWeek } from "@/constants/days-of-week";
+import { daysOfWeek } from "@/constants/days";
 import {
   Substitution,
   SubstitutionsPage,

@@ -1,8 +1,8 @@
-import { fetchOptivumList } from "@/actions/fetchers/optivum-list";
+import { getOptivumList } from "@/actions/getOptivumList";
 import { MetadataRoute } from "next";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const { classes, rooms, teachers } = await fetchOptivumList();
+  const { classes, rooms, teachers } = await getOptivumList();
 
   const baseUrl = new URL(process.env.NEXT_PUBLIC_APP_URL as string).origin;
 

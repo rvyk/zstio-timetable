@@ -1,5 +1,6 @@
-import { Button } from "@/components/ui/button";
-import { useSettingsWithoutStore } from "@/stores/settings-store";
+import { Button } from "@/components/ui/Button";
+import { Skeleton } from "@/components/ui/Skeleton";
+import { useSettingsWithoutStore } from "@/stores/settings";
 import { getCookie } from "cookies-next";
 import {
   FullscreenIcon,
@@ -14,7 +15,6 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { FC, useCallback, useMemo } from "react";
 import { useIsClient } from "usehooks-ts";
-import { Skeleton } from "../ui/skeleton";
 
 export const TopbarButtons: FC = () => {
   const isClient = useIsClient();

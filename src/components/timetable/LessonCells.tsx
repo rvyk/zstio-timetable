@@ -1,14 +1,14 @@
 "use client";
 
-import { findSubstitution } from "@/lib/substitution-finder";
+import { LinkWithCookie } from "@/components/common/Link";
+import { findSubstitution } from "@/lib/findSubstitution";
 import { cn } from "@/lib/utils";
-import { useSettingsStore } from "@/stores/settings-store";
-import { useSubstitutionsStore } from "@/stores/substitutions-store";
-import { useTimetableStore } from "@/stores/timetable-store";
+import { useSettingsStore } from "@/stores/settings";
+import { useSubstitutionsStore } from "@/stores/substitutions";
+import { useTimetableStore } from "@/stores/timetable";
 import { LessonSubstitute } from "@majusss/substitutions-parser";
 import { TableLesson } from "@majusss/timetable-parser";
 import { FC } from "react";
-import { LinkWithCookie } from "../link";
 
 interface TableLessonCellProps {
   day: TableLesson[][];

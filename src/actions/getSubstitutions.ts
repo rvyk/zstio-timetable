@@ -3,12 +3,12 @@
 import { parseHeaderDate } from "@/lib/utils";
 import Substitutions from "@majusss/substitutions-parser/dist/substitutions";
 import { SubstitutionsPage } from "@majusss/substitutions-parser/dist/types";
-import { fetchOptivumList } from "./optivum-list";
+import { getOptivumList } from "./getOptivumList";
 
 const findRelations = async (
   page: SubstitutionsPage,
 ): Promise<SubstitutionsPage> => {
-  const list = await fetchOptivumList();
+  const list = await getOptivumList();
   const newTables = page.tables.map((table) => {
     const newSubstitutions = table.substitutions.map((substitution) => {
       const newLessonSubstitute = substitution.lessonSubstitute?.map(
@@ -41,7 +41,7 @@ const findRelations = async (
   return { ...page, tables: newTables };
 };
 
-export const fetchSubstitutions = async (): Promise<SubstitutionsPage> => {
+export const getSubstitutions = async (): Promise<SubstitutionsPage> => {
   const url = process.env.NEXT_PUBLIC_SUBSTITUTIONS_URL as string;
 
   try {

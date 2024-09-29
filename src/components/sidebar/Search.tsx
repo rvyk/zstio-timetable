@@ -1,12 +1,12 @@
-import { searchHandleKeyDown } from "@/lib/easter-egg";
+import { searchHandleKeyDown } from "@/lib/easterEgg";
 import { cn, getUniqueSubstitutionList } from "@/lib/utils";
 import { OptivumTimetable, SubstitutionListItem } from "@/types/optivum";
 import { SubstitutionsPage } from "@majusss/substitutions-parser/dist/types";
 import { ListItem } from "@majusss/timetable-parser";
 import { SearchIcon, XIcon } from "lucide-react";
 import { FC, KeyboardEvent, useCallback, useMemo, useState } from "react";
-import { useSidebarContext } from "./context";
-import { DropdownContent } from "./dropdown";
+import { useSidebarContext } from "./Context";
+import { DropdownContent } from "./Dropdown";
 
 const listKeys: Record<string, string> = {
   classes: "class",

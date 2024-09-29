@@ -5,9 +5,9 @@ import { OptivumTimetable } from "@/types/optivum";
 import { Table } from "@majusss/timetable-parser";
 import moment from "moment";
 import "moment/locale/pl";
-import { fetchOptivumList } from "./optivum-list";
+import { getOptivumList } from "./getOptivumList";
 
-export const fetchOptivumTimetable = async (
+export const getOptivumTimetable = async (
   type: string,
   index: string,
 ): Promise<OptivumTimetable> => {
@@ -43,7 +43,7 @@ export const fetchOptivumTimetable = async (
       type: type as OptivumTimetable["type"],
       validDate: timeTableData.getVersionInfo(),
       dayNames: timeTableData.getDayNames(),
-      list: await fetchOptivumList(),
+      list: await getOptivumList(),
       lastUpdated: parseHeaderDate(res),
     };
   } catch (error) {

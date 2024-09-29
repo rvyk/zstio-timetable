@@ -1,14 +1,11 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import logo_zstio_high from "@/assets/logo-zstio-high.png";
+import { Button } from "@/components/ui/Button";
 import { shortHours } from "@/constants/hours";
-import { translationDict } from "@/constants/translates";
+import { translationDict } from "@/constants/translations";
 import { cn, parseTime, simulateKeyPress } from "@/lib/utils";
-import logo_zstio_high from "@/resources/logo-zstio-high.png";
-import {
-  useSettingsStore,
-  useSettingsWithoutStore,
-} from "@/stores/settings-store";
+import { useSettingsStore, useSettingsWithoutStore } from "@/stores/settings";
 import { OptivumTimetable } from "@/types/optivum";
 import { ArrowLeft, ArrowRight, Shrink } from "lucide-react";
 import Image from "next/image";
@@ -17,8 +14,8 @@ import {
   ShortLessonSwitcherCell,
   TableHeaderCell,
   TableHourCell,
-} from "./cells";
-import { TableLessonCell } from "./lessons";
+} from "./Cells";
+import { TableLessonCell } from "./LessonCells";
 
 interface TimetableProps {
   timetable: OptivumTimetable;

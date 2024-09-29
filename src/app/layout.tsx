@@ -1,8 +1,8 @@
-import { fetchSubstitutions } from "@/actions/fetchers/substitutions";
-import { SettingsPanel } from "@/components/settings-panel/settings-panel";
-import { Sidebar } from "@/components/sidebar/sidebar";
-import { SubstitutionsController } from "@/components/substitutions-controller";
-import { ThemeProvider } from "@/components/theme-provider";
+import { getSubstitutions } from "@/actions/getSubstitutions";
+import { ThemeProvider } from "@/components/common/ThemeProvider";
+import { SettingsPanel } from "@/components/settings/SettingsPanel";
+import { Sidebar } from "@/components/sidebar/Sidebar";
+import { SubstitutionsController } from "@/components/substitutions/SubstitutionsController";
 import { cn } from "@/lib/utils";
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
@@ -33,7 +33,7 @@ export default async function RootLayout({
 }: Readonly<{
   children: ReactNode;
 }>) {
-  const substitutions = await fetchSubstitutions();
+  const substitutions = await getSubstitutions();
 
   return (
     <html lang="pl" suppressHydrationWarning>

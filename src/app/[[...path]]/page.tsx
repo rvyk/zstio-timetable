@@ -2,38 +2,38 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { Fragment } from "react";
 
-import { fetchOptivumList } from "@/actions/fetchers/optivum-list";
-import { fetchOptivumTimetable } from "@/actions/fetchers/optivum-timetable";
-import { TimetableController } from "@/components/timetable-controller";
-import { Timetable } from "@/components/timetable/timetable";
-import { Topbar } from "@/components/topbar/topbar";
+import { getOptivumList } from "@/actions/getOptivumList";
+import { getOptivumTimetable } from "@/actions/getOptivumTimetable";
+import { Timetable } from "@/components/timetable/Timetable";
+import { TimetableController } from "@/components/timetable/TimetableController";
+import { Topbar } from "@/components/topbar/Topbar";
 
 export const dynamic = "force-dynamic";
 
 interface PageParams {
-  all?: string[];
+  path?: string[];
 }
 
 export const generateMetadata = async ({ params }: { params: PageParams }) => {
-  const [type, value] = params.all ?? [];
+  const [type, value] = params.path ?? [];
 
   if (!type || !value) {
     return { title: "" };
   }
 
-  const timetable = await fetchOptivumTimetable(type, value);
+  const timetable = await getOptivumTimetable(type, value);
   return { title: timetable.title };
 };
 
 const TimetablePage = async ({ params }: { params: PageParams }) => {
-  const [type, value] = params.all ?? [];
+  const [type, value] = params.path ?? [];
 
   if (!type || !value) {
     const redirectTo = cookies().get("lastVisited")?.value ?? "/class/1";
     redirect(redirectTo);
   }
 
-  const timetable = await fetchOptivumTimetable(type, value);
+  const timetable = await getOptivumTimetable(type, value);
 
   return (
     <Fragment>
@@ -47,12 +47,12 @@ const TimetablePage = async ({ params }: { params: PageParams }) => {
 };
 
 export async function generateStaticParams() {
-  const { classes, rooms, teachers } = await fetchOptivumList();
+  const { classes, rooms, teachers } = await getOptivumList();
 
-  const classParams = classes.map((c) => ({ all: ["class", c.value] }));
-  const roomParams = rooms?.map((r) => ({ all: ["room", r.value] })) ?? [];
+  const classParams = classes.map((c) => ({ path: ["class", c.value] }));
+  const roomParams = rooms?.map((r) => ({ path: ["room", r.value] })) ?? [];
   const teacherParams =
-    teachers?.map((t) => ({ all: ["teacher", t.value] })) ?? [];
+    teachers?.map((t) => ({ path: ["teacher", t.value] })) ?? [];
 
   return [...classParams, ...roomParams, ...teacherParams];
 }

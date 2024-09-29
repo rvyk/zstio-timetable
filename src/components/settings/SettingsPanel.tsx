@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/Button";
 import {
   Sheet,
   SheetContent,
@@ -8,14 +8,11 @@ import {
   SheetFooter,
   SheetHeader,
   SheetTitle,
-} from "@/components/ui/sheet";
+} from "@/components/ui/Sheet";
+import { usePwa } from "@/hooks/usePWA";
 import { cn } from "@/lib/utils";
-import { usePwa } from "@/stores/pwa-hook";
-import {
-  useSettingsStore,
-  useSettingsWithoutStore,
-} from "@/stores/settings-store";
-import { useTimetableStore } from "@/stores/timetable-store";
+import { useSettingsStore, useSettingsWithoutStore } from "@/stores/settings";
+import { useTimetableStore } from "@/stores/timetable";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import {
   BellIcon,

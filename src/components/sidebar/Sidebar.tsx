@@ -1,10 +1,10 @@
 "use client";
 
-import { Accordion } from "@/components/ui/accordion";
+import { Accordion } from "@/components/ui/Accordion";
 import { cn, getUniqueSubstitutionList } from "@/lib/utils";
-import { useFavoritesStore } from "@/stores/favorites-store";
-import { useSubstitutionsStore } from "@/stores/substitutions-store";
-import { useTimetableStore } from "@/stores/timetable-store";
+import { useFavoritesStore } from "@/stores/favorites";
+import { useSubstitutionsStore } from "@/stores/substitutions";
+import { useTimetableStore } from "@/stores/timetable";
 import { GraduationCap, MapPin, StarIcon, Users } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -16,14 +16,14 @@ import {
   SheetDescription,
   SheetTitle,
   SheetTrigger,
-} from "@/components/ui/sheet";
-import { Skeleton } from "@/components/ui/skeleton";
-import { useSettingsWithoutStore } from "@/stores/settings-store";
+} from "@/components/ui/Sheet";
+import { Skeleton } from "@/components/ui/Skeleton";
+import { useSettingsWithoutStore } from "@/stores/settings";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { useIsClient } from "usehooks-ts";
-import SidebarContext, { useSidebarContext } from "./context";
-import { Dropdown } from "./dropdown";
-import { Search } from "./search";
+import SidebarContext, { useSidebarContext } from "./Context";
+import { Dropdown } from "./Dropdown";
+import { Search } from "./Search";
 
 export const Sidebar: FC = memo(() => {
   const { isSidebarOpen, toggleSidebar } = useSettingsWithoutStore();

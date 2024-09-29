@@ -2,7 +2,7 @@
 
 import { List, TimetableList } from "@majusss/timetable-parser";
 
-export const fetchOptivumList = async (): Promise<List> => {
+export const getOptivumList = async (): Promise<List> => {
   const baseUrl =
     process.env.NEXT_PUBLIC_TIMETABLE_URL?.replace(/\/+$/, "") ?? "";
   const url = `${baseUrl}/lista.html`;

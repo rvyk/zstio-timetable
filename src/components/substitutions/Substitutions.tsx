@@ -1,7 +1,7 @@
 "use client";
 
 import { cn, parseSubstitutionClass, sortSubstitutions } from "@/lib/utils";
-import { useSubstitutionsStore } from "@/stores/substitutions-store";
+import { useSubstitutionsStore } from "@/stores/substitutions";
 import {
   Substitution,
   SubstitutionTable as SubstitutionTableType,
