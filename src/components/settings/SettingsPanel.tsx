@@ -145,10 +145,7 @@ export const SettingsPanel = () => {
       title: "Kalkulator skróconych lekcji",
       hidden: isSubstitutionPage,
       active: false,
-      onClick: () => {
-        // toggleModal("shortenedLessonsCalculator");
-        savedSettings.enableCustomLessonsLength(6);
-      },
+      onClick: () => toggleModal("shortenedLessonsCalculator"),
       description: (
         <p>
           Oblicz, o której godzinie skończysz lekcje na podstawie skróconego

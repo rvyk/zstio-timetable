@@ -1,3 +1,4 @@
+import { MAX_RESULTS } from "@/constants/hours";
 import {
   cn,
   getUniqueSubstitutionList,
@@ -17,8 +18,6 @@ const listKeys: Record<string, string> = {
   teachers: "teacher",
   rooms: "room",
 };
-
-const MAX_RESULTS = 5;
 
 export const Search: FC<{
   timetable?: OptivumTimetable | null;
