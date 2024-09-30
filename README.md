@@ -88,6 +88,9 @@ This project is licensed under the MIT License. Feel free to use and modify it a
 
 ## 🌐 Useful Links
 
-- [@rvyk on GitHub](https://github.com/rvyk/)
-- [@majusss on GitHub](https://github.com/majusss)
-- [Live Demo](https://plan.zstiojar.edu.pl/)
+[![portfolio](https://img.shields.io/badge/GitHub-rvyk-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/rvyk/) ![wakatime](https://wakatime.com/badge/user/36446820-2c24-47ad-9fdd-838263034b78/project/c9b72050-b8e0-4f02-b4db-c2185c0b69c4.svg?style=for-the-badge)
+
+[![portfolio](https://img.shields.io/badge/Github-majusss-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/majusss/) ![wakatime](https://wakatime.com/badge/user/63d00a78-aaef-4163-98f0-5695127e3103/project/018b396b-d9dc-4f6e-add4-ffe9bf124fb6.svg?style=for-the-badge)
+
+[![try](https://img.shields.io/badge/TRY_DEV-0A66C2?style=for-the-badge&logoColor=white)](https://dev.rvyk.tech/)
+[![try](https://img.shields.io/badge/TRY_PROD-0A66C2?style=for-the-badge&logoColor=white)](https://plan.zstiojar.edu.pl/)
