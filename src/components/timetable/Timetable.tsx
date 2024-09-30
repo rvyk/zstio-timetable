@@ -4,6 +4,7 @@ import logo_zstio_high from "@/assets/logo-zstio-high.png";
 import { Button } from "@/components/ui/Button";
 import { SHORT_HOURS } from "@/constants/hours";
 import { translationDict } from "@/constants/translations";
+import { adjustShortenedLessons } from "@/lib/adjustShortenedLessons";
 import { cn, parseTime, simulateKeyPress } from "@/lib/utils";
 import { useSettingsStore, useSettingsWithoutStore } from "@/stores/settings";
 import { OptivumTimetable } from "@/types/optivum";
@@ -26,9 +27,7 @@ export const Timetable: FC<TimetableProps> = ({ timetable }) => {
     (state) => state.isFullscreenMode,
   );
   const lessonType = useSettingsStore((state) => state.lessonType);
-  const customLessonLength = useSettingsStore(
-    (state) => state.customLessonLength,
-  );
+  const hoursAdjustIndex = useSettingsStore((state) => state.hoursAdjustIndex);
 
   const [currentTime, setCurrentTime] = useState(() => {
     const now = new Date();
@@ -48,7 +47,7 @@ export const Timetable: FC<TimetableProps> = ({ timetable }) => {
 
   const hours =
     lessonType === "custom"
-      ? customLessonLength
+      ? adjustShortenedLessons(hoursAdjustIndex, Object.values(timetable.hours))
       : lessonType === "short"
         ? SHORT_HOURS
         : timetable.hours;

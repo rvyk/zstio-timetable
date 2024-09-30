@@ -12,7 +12,6 @@ import {
 } from "@/components/ui/Sheet";
 import { usePwa } from "@/hooks/usePWA";
 import { showErrorToast } from "@/hooks/useToast";
-import { adjustShortenedLessons } from "@/lib/adjustShortenedLessons";
 import { downloadFile } from "@/lib/downloadFile";
 import { cn } from "@/lib/utils";
 import useModalsStore from "@/stores/modals";
@@ -148,9 +147,7 @@ export const SettingsPanel = () => {
       active: false,
       onClick: () => {
         // toggleModal("shortenedLessonsCalculator");
-        savedSettings.enableCustomLessonsLength(
-          adjustShortenedLessons(6, Object.values(timetable?.hours ?? [])),
-        );
+        savedSettings.enableCustomLessonsLength(6);
       },
       description: (
         <p>
