@@ -1,5 +1,7 @@
 "use client";
 
+import { Button } from "@/components/ui/Button";
+import { Counter } from "@/components/ui/Counter";
 import {
   Dialog,
   DialogContent,
@@ -9,17 +11,19 @@ import {
   DialogTitle,
 } from "@/components/ui/Dialog";
 import { NORMAL_HOURS } from "@/constants/settings";
+import { toast } from "@/hooks/useToast";
 import { adjustShortenedLessons } from "@/lib/adjustShortenedLessons";
 import useModalsStore from "@/stores/modals";
-import { useSettingsStore } from "@/stores/settings";
+import { useSettingsStore, useSettingsWithoutStore } from "@/stores/settings";
 import { FC, useMemo } from "react";
 import { useCounter } from "usehooks-ts";
-import { Button } from "../ui/Button";
-import { Counter } from "../ui/Counter";
 
 export const ShortenedLessonsCalculatorModal: FC = () => {
   const enableCustomLessonsLength = useSettingsStore(
     (state) => state.enableCustomLessonsLength,
+  );
+  const toggleSettingsPanel = useSettingsWithoutStore(
+    (state) => state.toggleSettingsPanel,
   );
   const counter = useCounter(5);
   const modalState = useModalsStore((state) =>
@@ -47,6 +51,12 @@ export const ShortenedLessonsCalculatorModal: FC = () => {
   const handleSubmit = () => {
     enableCustomLessonsLength(counter.count);
     handleOpenChange(false);
+    toggleSettingsPanel();
+
+    toast({
+      title: "Pomyślnie zastosowano",
+      description: `Od ${counter.count} godziny lekcyjnej zastosowano skrócony czas trwania lekcji`,
+    });
   };
 
   return (
