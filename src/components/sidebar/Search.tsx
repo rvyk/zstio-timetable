@@ -1,9 +1,13 @@
-import { searchHandleKeyDown } from "@/lib/easterEgg";
-import { cn, getUniqueSubstitutionList } from "@/lib/utils";
+import {
+  cn,
+  getUniqueSubstitutionList,
+  setLastVisitedCookie,
+} from "@/lib/utils";
 import { OptivumTimetable, SubstitutionListItem } from "@/types/optivum";
 import { SubstitutionsPage } from "@majusss/substitutions-parser/dist/types";
 import { ListItem } from "@majusss/timetable-parser";
 import { SearchIcon, XIcon } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { FC, KeyboardEvent, useCallback, useMemo, useState } from "react";
 import { useSidebarContext } from "./Context";
 import { DropdownContent } from "./Dropdown";
@@ -21,15 +25,11 @@ export const Search: FC<{
   substitutions?: SubstitutionsPage | null;
 }> = ({ timetable, substitutions }) => {
   const { isPreview } = useSidebarContext();
+  const router = useRouter();
   const [value, setValue] = useState("");
-  const [showEasterEgg, setShowEasterEgg] = useState(false);
 
   const handleClearSearch = useCallback(() => {
     setValue("");
-  }, []);
-
-  const handleKeyDown = useCallback((e: KeyboardEvent<HTMLInputElement>) => {
-    searchHandleKeyDown(e, setShowEasterEgg);
   }, []);
 
   const filteredData = useMemo(() => {
@@ -63,6 +63,20 @@ export const Search: FC<{
     return results.slice(0, MAX_RESULTS);
   }, [value, timetable, substitutions]);
 
+  const handleKeyDown = useCallback(
+    (e: KeyboardEvent<HTMLInputElement>) => {
+      if (e.key === "Enter" && filteredData.length === 1) {
+        const item = filteredData[0];
+        if ("value" in item) {
+          const link = `/${item.type}/${item.value}`;
+          router.push(link);
+          setLastVisitedCookie(link);
+        }
+      }
+    },
+    [filteredData, router],
+  );
+
   return (
     <div className={cn(isPreview && "place-content-center", "grid")}>
       <div
@@ -79,6 +93,7 @@ export const Search: FC<{
             onChange={(e) => setValue(e.target.value)}
             onKeyDown={handleKeyDown}
             type="text"
+            autoComplete="off"
             className={cn(
               isPreview && "hidden",
               "w-full bg-transparent text-sm font-medium text-primary/90 placeholder:text-primary/70 focus:outline-none",
@@ -97,12 +112,6 @@ export const Search: FC<{
       </div>
       {filteredData.length > 0 && (
         <DropdownContent type="search" data={filteredData} />
-      )}
-      {showEasterEgg && (
-        <iframe
-          src="https://dddavit.github.io/subway/"
-          className="fixed left-1/2 top-1/2 z-50 h-[90vh] w-[60vw] -translate-x-1/2 -translate-y-1/2 transform rounded-md"
-        ></iframe>
       )}
     </div>
   );

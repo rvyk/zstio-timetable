@@ -1,4 +1,4 @@
-import { setCookie } from "cookies-next";
+import { setLastVisitedCookie } from "@/lib/utils";
 import Link from "next/link";
 import { AnchorHTMLAttributes, FC } from "react";
 
@@ -9,10 +9,7 @@ export const LinkWithCookie: FC<
     link: string,
     e: React.MouseEvent<HTMLAnchorElement>,
   ) => {
-    setCookie("lastVisited", link, {
-      path: "/",
-      expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
-    });
+    setLastVisitedCookie(link);
 
     if (onClick) {
       onClick(e);

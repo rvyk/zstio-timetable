@@ -1,10 +1,10 @@
 "use client";
 
+import { setLastVisitedCookie } from "@/lib/utils";
 import { useSettingsWithoutStore } from "@/stores/settings";
 import { useTimetableStore } from "@/stores/timetable";
 import { OptivumTimetable } from "@/types/optivum";
 import { List } from "@majusss/timetable-parser";
-import { setCookie } from "cookies-next";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect } from "react";
 
@@ -23,10 +23,7 @@ export const TimetableController = ({
   const navigateTo = useCallback(
     (link: string) => {
       router.push(link);
-      setCookie("lastVisited", link, {
-        path: "/",
-        expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
-      });
+      setLastVisitedCookie(link);
     },
     [router],
   );

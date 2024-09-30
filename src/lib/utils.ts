@@ -4,6 +4,7 @@ import {
   SubstitutionsPage,
 } from "@majusss/substitutions-parser/dist/types";
 import { clsx, type ClassValue } from "clsx";
+import { setCookie } from "cookies-next";
 import moment from "moment";
 import "moment-timezone";
 import "moment/locale/pl";
@@ -12,6 +13,13 @@ import { twMerge } from "tailwind-merge";
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
+
+export const setLastVisitedCookie = (link: string) => {
+  setCookie("lastVisited", link, {
+    path: "/",
+    expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+  });
+};
 
 export const parseHeaderDate = (res: Response): string => {
   return res.headers.has("date")
