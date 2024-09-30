@@ -1,5 +1,6 @@
 "use server";
 
+import { REVALIDATE_TIME } from "@/constants/settings";
 import { List, TimetableList } from "@majusss/timetable-parser";
 
 export const getOptivumList = async (): Promise<List> => {
@@ -10,7 +11,7 @@ export const getOptivumList = async (): Promise<List> => {
   try {
     const response = await fetch(url, {
       next: {
-        revalidate: 900,
+        revalidate: REVALIDATE_TIME,
       },
     });
     const data = await response.text();

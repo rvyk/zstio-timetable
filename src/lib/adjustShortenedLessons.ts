@@ -2,7 +2,7 @@ import {
   BREAK_LENGTH,
   CALCULATED_TIME_FORMAT,
   SHORT_LESSON_LENGTH,
-} from "@/constants/hours";
+} from "@/constants/settings";
 import { TableHour } from "@majusss/timetable-parser";
 import moment from "moment";
 
@@ -13,7 +13,7 @@ export const adjustShortenedLessons = (
   return defaultHours.reduce((adjustedHours: TableHour[], hour) => {
     const hourNumber = Number(hour.number);
 
-    if (hourNumber >= startIndex ) {
+    if (hourNumber >= startIndex) {
       const previousHour = adjustedHours[adjustedHours.length - 1];
       const { timeFrom, timeTo } = calculateNewTimes(
         previousHour.timeTo,

@@ -1,4 +1,4 @@
-import { MAX_LESSONS } from "@/constants/hours";
+import { MAX_LESSONS } from "@/constants/settings";
 import { MinusIcon, PlusIcon } from "lucide-react";
 import { FC } from "react";
 import { useCounter } from "usehooks-ts";

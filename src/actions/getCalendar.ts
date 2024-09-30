@@ -1,5 +1,6 @@
 "use server";
 
+import { REVALIDATE_TIME } from "@/constants/settings";
 import { TableHour, TableLesson } from "@majusss/timetable-parser";
 import * as ics from "ics";
 import { unstable_cache } from "next/cache";
@@ -104,5 +105,5 @@ export const getCalendar = unstable_cache(
   async (days: TableLesson[][][], hours: TableHour[]) =>
     await getIcs(days, hours),
   ["icsCalendar"],
-  { revalidate: 900 },
+  { revalidate: REVALIDATE_TIME },
 );

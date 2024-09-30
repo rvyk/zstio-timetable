@@ -2,7 +2,7 @@
 
 import logo_zstio_high from "@/assets/logo-zstio-high.png";
 import { Button } from "@/components/ui/Button";
-import { SHORT_HOURS } from "@/constants/hours";
+import { SHORT_HOURS } from "@/constants/settings";
 import { translationDict } from "@/constants/translations";
 import { adjustShortenedLessons } from "@/lib/adjustShortenedLessons";
 import { cn, parseTime, simulateKeyPress } from "@/lib/utils";

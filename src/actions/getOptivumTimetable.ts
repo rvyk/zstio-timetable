@@ -1,5 +1,6 @@
 "use server";
 
+import { REVALIDATE_TIME } from "@/constants/settings";
 import { parseHeaderDate } from "@/lib/utils";
 import { OptivumTimetable } from "@/types/optivum";
 import { Table } from "@majusss/timetable-parser";
@@ -25,7 +26,7 @@ export const getOptivumTimetable = async (
 
     const res = await fetch(url, {
       next: {
-        revalidate: 900,
+        revalidate: REVALIDATE_TIME,
       },
     });
 

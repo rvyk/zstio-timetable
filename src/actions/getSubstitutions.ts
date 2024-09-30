@@ -1,5 +1,6 @@
 "use server";
 
+import { REVALIDATE_TIME } from "@/constants/settings";
 import { parseHeaderDate } from "@/lib/utils";
 import Substitutions from "@majusss/substitutions-parser/dist/substitutions";
 import { SubstitutionsPage } from "@majusss/substitutions-parser/dist/types";
@@ -47,7 +48,7 @@ export const getSubstitutions = async (): Promise<SubstitutionsPage> => {
   try {
     const res = await fetch(url, {
       next: {
-        revalidate: 900,
+        revalidate: REVALIDATE_TIME,
       },
     });
     const html = await res.text();

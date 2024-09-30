@@ -1,4 +1,4 @@
-import { MAX_RESULTS } from "@/constants/hours";
+import { MAX_RESULTS } from "@/constants/settings";
 import {
   cn,
   getUniqueSubstitutionList,
