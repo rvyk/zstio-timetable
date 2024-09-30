@@ -8,10 +8,10 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/Dialog";
+import { NORMAL_HOURS } from "@/constants/settings";
 import { adjustShortenedLessons } from "@/lib/adjustShortenedLessons";
 import useModalsStore from "@/stores/modals";
 import { useSettingsStore } from "@/stores/settings";
-import { useTimetableStore } from "@/stores/timetable";
 import { FC, useMemo } from "react";
 import { useCounter } from "usehooks-ts";
 import { Button } from "../ui/Button";
@@ -21,8 +21,7 @@ export const ShortenedLessonsCalculatorModal: FC = () => {
   const enableCustomLessonsLength = useSettingsStore(
     (state) => state.enableCustomLessonsLength,
   );
-  const timetable = useTimetableStore((state) => state.timetable);
-  const counter = useCounter(4);
+  const counter = useCounter(5);
   const modalState = useModalsStore((state) =>
     state.getModalState("shortenedLessonsCalculator"),
   );
@@ -33,14 +32,17 @@ export const ShortenedLessonsCalculatorModal: FC = () => {
   };
 
   const adjustedLessons = useMemo(() => {
-    return adjustShortenedLessons(
-      counter.count,
-      Object.values(timetable?.hours ?? []),
-    );
-  }, [counter.count, timetable?.hours]);
+    return adjustShortenedLessons(counter.count, Object.values(NORMAL_HOURS));
+  }, [counter.count]);
 
-  const shortenedLessons = adjustedLessons.slice(0, counter.count);
-  const normalLessons = adjustedLessons.slice(counter.count);
+  const shortenedLessons = adjustedLessons.slice(
+    counter.count - 4,
+    counter.count - 1,
+  );
+  const normalLessons = adjustedLessons.slice(
+    counter.count - 1,
+    counter.count + 2,
+  );
 
   const handleSubmit = () => {
     enableCustomLessonsLength(counter.count);
@@ -58,7 +60,7 @@ export const ShortenedLessonsCalculatorModal: FC = () => {
           </DialogDescription>
         </DialogHeader>
 
-        <Counter {...counter} minCount={4} />
+        <Counter {...counter} minCount={5} />
 
         <div className="mx-auto grid w-full max-w-48 gap-3.5 text-center">
           {shortenedLessons.length > 0 && (
