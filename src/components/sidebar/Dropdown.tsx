@@ -115,7 +115,10 @@ interface ListItemComponentProps {
   type: DropdownProps["type"];
 }
 
-const ListItemComponent: FC<ListItemComponentProps> = ({ item, type }) => {
+export const ListItemComponent: FC<ListItemComponentProps> = ({
+  item,
+  type,
+}) => {
   const { toggleSidebar, isSidebarOpen } = useSettingsWithoutStore();
 
   const pathname = usePathname();

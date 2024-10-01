@@ -1,5 +1,6 @@
 "use client";
 
+import { getFreeRooms } from "@/actions/getFreeRooms";
 import { Button } from "@/components/ui/Button";
 import { Counter } from "@/components/ui/Counter";
 import {
@@ -11,16 +12,18 @@ import {
   DialogTitle,
 } from "@/components/ui/Dialog";
 import { daysOfWeek } from "@/constants/days";
-import { getDayNumberForNextWeek } from "@/lib/utils";
+import { cn, getDayNumberForNextWeek } from "@/lib/utils";
 import useModalsStore from "@/stores/modals";
 import { useTimetableStore } from "@/stores/timetable";
-import { FC } from "react";
+import { Dispatch, FC, SetStateAction, useState } from "react";
 import { useCounter } from "usehooks-ts";
 
 export const FreeRoomsSearchModal: FC = () => {
+  const [selectedDay, setSelectedDay] = useState<number>(0);
   const modalState = useModalsStore((state) =>
     state.getModalState("freeRoomsSearch"),
   );
+
   const counter = useCounter(1);
   const setModalState = useModalsStore((state) => state.setModalState);
 
@@ -28,9 +31,18 @@ export const FreeRoomsSearchModal: FC = () => {
     setModalState("freeRoomsSearch", { isOpen: open });
   };
 
+  const handleSubmit = async () => {
+    const results = await getFreeRooms(selectedDay, counter.count);
+    handleOpenChange(false);
+    setModalState("freeRoomsResult", {
+      results,
+      isOpen: true,
+    });
+  };
+
   return (
     <Dialog open={modalState?.isOpen} onOpenChange={handleOpenChange}>
-      <DialogContent>
+      <DialogContent className="overflow-hidden">
         <DialogHeader>
           <DialogTitle>Wyszukaj wolną salę</DialogTitle>
           <DialogDescription>
@@ -39,36 +51,64 @@ export const FreeRoomsSearchModal: FC = () => {
           </DialogDescription>
         </DialogHeader>
 
-        <Calendar />
-        <Counter {...counter} minCount={1} />
+        <div className="relative">
+          <div className="grid gap-8 transition-all duration-300">
+            <Calendar {...{ selectedDay, setSelectedDay }} />
+            <Counter {...counter} minCount={1} />
 
-        <DialogFooter>
-          <Button onClick={() => handleOpenChange(false)}>Anuluj</Button>
-          <Button variant="primary">Zastosuj</Button>
-        </DialogFooter>
+            <DialogFooter>
+              <Button onClick={() => handleOpenChange(false)}>Anuluj</Button>
+              <Button variant="primary" onClick={handleSubmit}>
+                Wyszukaj
+              </Button>
+            </DialogFooter>
+          </div>
+          <div></div>
+        </div>
       </DialogContent>
     </Dialog>
   );
 };
 
-const Calendar: FC = () => {
+const Calendar: FC<{
+  selectedDay: number;
+  setSelectedDay: Dispatch<SetStateAction<number>>;
+}> = ({ selectedDay, setSelectedDay }) => {
   const timetable = useTimetableStore((state) => state.timetable);
 
   return (
     <div className="flex justify-between">
       {daysOfWeek.slice(0, timetable?.dayNames.length).map((day) => (
         <div
+          onClick={() => setSelectedDay(day.index)}
           key={day.short}
-          className="w-full overflow-hidden border-y border-primary/10 text-center first:rounded-l-sm first:border-l last:rounded-r-sm last:border-r"
+          className={cn(
+            selectedDay == day.index ? "border-primary/5" : "border-primary/10",
+            "group w-full cursor-pointer overflow-hidden border-y text-center transition-all first:rounded-l-sm first:border-l last:rounded-r-sm last:border-r",
+          )}
         >
-          <div className="w-full bg-primary/10 py-3">
+          <div
+            className={cn(
+              selectedDay == day.index
+                ? "bg-primary/15 dark:bg-primary/5"
+                : "bg-primary/10",
+              "w-full py-3",
+            )}
+          >
             <p className="text-sm font-medium text-primary/90">{day.short}</p>
           </div>
-          <div className="grid py-6">
-            <h2 className="text-2xl font-semibold text-primary/90">
+          <div
+            className={cn(
+              selectedDay == day.index
+                ? "bg-accent-table text-accent-secondary group-hover:bg-accent-table/90 dark:text-primary"
+                : "text-primary group-hover:bg-primary/5",
+              "grid py-5 transition-all",
+            )}
+          >
+            <h2 className="text-2xl font-semibold opacity-90">
               {getDayNumberForNextWeek(day.long).day}
             </h2>
-            <h3 className="text-sm font-medium capitalize text-primary/70">
+            <h3 className="text-sm font-medium capitalize opacity-70">
               {getDayNumberForNextWeek(day.long).month}
             </h3>
           </div>

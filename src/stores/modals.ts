@@ -1,8 +1,10 @@
+import { Room } from "@/actions/getFreeRooms";
 import { create } from "zustand";
 
 type ModalName =
   | "shortenedLessonsCalculator"
   | "freeRoomsSearch"
+  | "freeRoomsResult"
   | "errorDisplay";
 
 interface ShortenedLessonsCalculatorState {
@@ -14,6 +16,11 @@ interface FreeRoomsSearchState {
   //   selectedRoom?: string;
 }
 
+interface FreeRoomsResultState {
+  results: Room[];
+  isOpen: boolean;
+}
+
 interface ErrorDisplayState {
   isOpen: boolean;
   //   errorMessage?: string;
@@ -22,6 +29,7 @@ interface ErrorDisplayState {
 interface ModalsState {
   shortenedLessonsCalculator: ShortenedLessonsCalculatorState;
   freeRoomsSearch: FreeRoomsSearchState;
+  freeRoomsResult: FreeRoomsResultState;
   errorDisplay: ErrorDisplayState;
 }
 

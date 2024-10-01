@@ -6,7 +6,7 @@ import { unstable_cache } from "next/cache";
 import { getOptivumList } from "./getOptivumList";
 import { getOptivumTimetable } from "./getOptivumTimetable";
 
-interface Room {
+export interface Room {
   id: string;
   title: string;
   lessons: TableLesson[][][];
