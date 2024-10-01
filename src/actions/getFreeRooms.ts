@@ -35,7 +35,7 @@ export const getFreeRooms = async (
   })();
 
   const emptyRooms = rooms.filter(
-    (room) => !room.lessons[weekdayIndex][lessonIndex]?.length,
+    (room) => !room.lessons[weekdayIndex][lessonIndex - 1]?.length,
   );
 
   return emptyRooms;

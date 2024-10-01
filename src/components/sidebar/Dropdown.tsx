@@ -113,21 +113,28 @@ export const DropdownContent: FC<{
 interface ListItemComponentProps {
   item: ListItem;
   type: DropdownProps["type"];
+  onClick?: () => void;
 }
 
 export const ListItemComponent: FC<ListItemComponentProps> = ({
   item,
   type,
+  onClick,
 }) => {
   const { toggleSidebar, isSidebarOpen } = useSettingsWithoutStore();
 
   const pathname = usePathname();
   const link = `/${item.type ? item.type : type}/${item.value}`;
 
+  const handleButton = () => {
+    isSidebarOpen && toggleSidebar();
+    onClick && onClick();
+  };
+
   return (
     <Button
       key={item.value}
-      onClick={() => isSidebarOpen && toggleSidebar()}
+      onClick={handleButton}
       variant="sidebarItem"
       asChild
       size="fit"

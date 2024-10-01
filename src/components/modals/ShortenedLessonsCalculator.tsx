@@ -25,11 +25,11 @@ export const ShortenedLessonsCalculatorModal: FC = () => {
   const toggleSettingsPanel = useSettingsWithoutStore(
     (state) => state.toggleSettingsPanel,
   );
-  const counter = useCounter(5);
+  const setModalState = useModalsStore((state) => state.setModalState);
   const modalState = useModalsStore((state) =>
     state.getModalState("shortenedLessonsCalculator"),
   );
-  const setModalState = useModalsStore((state) => state.setModalState);
+  const counter = useCounter(5);
 
   const handleOpenChange = (open: boolean) => {
     setModalState("shortenedLessonsCalculator", { isOpen: open });
@@ -102,7 +102,9 @@ export const ShortenedLessonsCalculatorModal: FC = () => {
           )}
         </div>
         <DialogFooter>
-          <Button onClick={() => handleOpenChange(false)}>Anuluj</Button>
+          <Button onClick={() => handleOpenChange(false)} variant="secondary">
+            Anuluj
+          </Button>
           <Button variant="primary" onClick={handleSubmit}>
             Zastosuj
           </Button>

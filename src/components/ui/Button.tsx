@@ -13,6 +13,8 @@ const buttonVariants = cva(
           "bg-primary hover:bg-primary/90 dark:bg-accent border border-primary/10 text-accent/90 dark:text-primary/80 hover:dark:bg-primary/10 hover:text-accent/90 hover:dark:text-primary/90",
         primary:
           "bg-accent-table border border-accent-table/10 text-accent/90 dark:text-primary/90 hover:bg-accent-table/90",
+        secondary:
+          "text-primary/90 bg-primary/10 border border-primary/10 hover:bg-primary/20 dark:bg-accent hover:dark:bg-primary/10",
         icon: "bg-primary hover:bg-primary/90 dark:bg-accent border border-primary/10 text-accent/90 dark:text-primary/80 rounded-md hover:dark:bg-primary/10 hover:text-accent/90 hover:dark:text-primary/90",
         sidebarItem:
           "rounded-md border justify-start border-transparent py-3 pl-6 pr-3 text-left text-sm font-semibold text-primary/80 transition-all hover:border-primary/5 hover:bg-primary/5 dark:font-medium hover:dark:bg-primary/5",

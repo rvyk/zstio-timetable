@@ -23,9 +23,8 @@ export const FreeRoomsSearchModal: FC = () => {
   const modalState = useModalsStore((state) =>
     state.getModalState("freeRoomsSearch"),
   );
-
-  const counter = useCounter(1);
   const setModalState = useModalsStore((state) => state.setModalState);
+  const counter = useCounter(1);
 
   const handleOpenChange = (open: boolean) => {
     setModalState("freeRoomsSearch", { isOpen: open });
@@ -57,7 +56,12 @@ export const FreeRoomsSearchModal: FC = () => {
             <Counter {...counter} minCount={1} />
 
             <DialogFooter>
-              <Button onClick={() => handleOpenChange(false)}>Anuluj</Button>
+              <Button
+                onClick={() => handleOpenChange(false)}
+                variant="secondary"
+              >
+                Anuluj
+              </Button>
               <Button variant="primary" onClick={handleSubmit}>
                 Wyszukaj
               </Button>
