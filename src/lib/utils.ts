@@ -29,7 +29,12 @@ export const parseHeaderDate = (res: Response): string => {
     : "Brak danych";
 };
 
-export const getDayNumberForNextWeek = (dayName: string): number => {
+export const getDayNumberForNextWeek = (
+  dayName: string,
+): {
+  day: number;
+  month: string;
+} => {
   const today = new Date();
   const todayDayOfWeek = today.getDay();
   const targetDay = daysOfWeek.find(
@@ -37,7 +42,11 @@ export const getDayNumberForNextWeek = (dayName: string): number => {
   );
 
   if (!targetDay) {
-    return 0;
+    console.log("Day not found");
+    return {
+      day: today.getDate(),
+      month: moment(today.getMonth() + 1).format("MMMM"),
+    };
   }
 
   const targetDayOfWeek = targetDay.index + 1;
@@ -53,7 +62,10 @@ export const getDayNumberForNextWeek = (dayName: string): number => {
     targetDate.setDate(today.getDate() - (todayDayOfWeek - targetDayOfWeek));
   }
 
-  return Number(targetDate.getDate());
+  return {
+    day: targetDate.getDate(),
+    month: moment(targetDate).format("MMM") + ".",
+  };
 };
 
 export const simulateKeyPress = (key: string, keyCode: number) => {

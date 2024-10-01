@@ -61,7 +61,7 @@ export const ShortenedLessonsCalculatorModal: FC = () => {
 
   return (
     <Dialog open={modalState?.isOpen} onOpenChange={handleOpenChange}>
-      <DialogContent className="gap-8">
+      <DialogContent>
         <DialogHeader>
           <DialogTitle>Kalkulator skróconych lekcji</DialogTitle>
           <DialogDescription>

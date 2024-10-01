@@ -60,7 +60,7 @@ interface TableHeaderCellProps {
 export const TableHeaderCell: FC<TableHeaderCellProps> = ({ dayName }) => {
   const dayNumber = useMemo(() => getDayNumberForNextWeek(dayName), [dayName]);
   const isCurrentDay = useMemo(
-    () => new Date().getDate() === dayNumber,
+    () => new Date().getDate() === dayNumber.day,
     [dayNumber],
   );
 
@@ -80,7 +80,7 @@ export const TableHeaderCell: FC<TableHeaderCellProps> = ({ dayName }) => {
             "text-3xl font-semibold",
           )}
         >
-          {dayNumber.toString().padStart(2, "0")}
+          {dayNumber.day.toString().padStart(2, "0")}
         </h2>
         <h3 className="text-lg font-semibold text-primary/90">{dayName}</h3>
       </div>
