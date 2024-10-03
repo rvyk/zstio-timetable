@@ -15,11 +15,12 @@ import { daysOfWeek } from "@/constants/days";
 import { cn, getDayNumberForNextWeek } from "@/lib/utils";
 import useModalsStore from "@/stores/modals";
 import { useTimetableStore } from "@/stores/timetable";
-import { Dispatch, FC, SetStateAction, useState } from "react";
+import { Dispatch, FC, SetStateAction, useState, useTransition } from "react";
 import { useCounter } from "usehooks-ts";
 
 export const FreeRoomsSearchModal: FC = () => {
   const [selectedDay, setSelectedDay] = useState<number>(0);
+  const [isPending, startTransition] = useTransition();
   const modalState = useModalsStore((state) =>
     state.getModalState("freeRoomsSearch"),
   );
@@ -31,11 +32,13 @@ export const FreeRoomsSearchModal: FC = () => {
   };
 
   const handleSubmit = async () => {
-    const results = await getFreeRooms(selectedDay, counter.count);
-    handleOpenChange(false);
-    setModalState("freeRoomsResult", {
-      results,
-      isOpen: true,
+    startTransition(async () => {
+      const results = await getFreeRooms(selectedDay, counter.count - 1);
+      handleOpenChange(false);
+      setModalState("freeRoomsResult", {
+        results,
+        isOpen: true,
+      });
     });
   };
 
@@ -62,7 +65,11 @@ export const FreeRoomsSearchModal: FC = () => {
               >
                 Anuluj
               </Button>
-              <Button variant="primary" onClick={handleSubmit}>
+              <Button
+                disabled={isPending}
+                variant="primary"
+                onClick={handleSubmit}
+              >
                 Wyszukaj
               </Button>
             </DialogFooter>
