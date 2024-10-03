@@ -17,14 +17,14 @@ const buttonVariants = cva(
           "text-primary/90 bg-primary/10 border border-primary/10 hover:bg-primary/20 dark:bg-accent hover:dark:bg-primary/10",
         icon: "bg-primary hover:bg-primary/90 dark:bg-accent border border-primary/10 text-accent/90 dark:text-primary/80 rounded-md hover:dark:bg-primary/10 hover:text-accent/90 hover:dark:text-primary/90",
         sidebarItem:
-          "rounded-md border justify-start border-transparent py-3 pl-6 pr-3 text-left text-sm font-semibold text-primary/80 transition-all hover:border-primary/5 hover:bg-primary/5 dark:font-medium hover:dark:bg-primary/5",
+          "rounded-md border justify-start border-transparent py-3 pl-6 pr-3 text-left text-xs sm:text-sm font-semibold text-primary/80 transition-all md:hover:border-primary/5 md:hover:bg-primary/5 dark:font-medium md:hover:dark:bg-primary/5",
         sidebarItemActive:
-          "!border-primary/5 justify-start bg-primary/5 hover:border-primary/10 hover:!bg-primary/10 dark:!bg-primary/5 hover:dark:!bg-primary/10 font-semibold dark:font-medium",
+          "!border-primary/5 justify-start bg-primary/5 md:hover:border-primary/10 text-xs sm:text-sm md:hover:!bg-primary/10 dark:!bg-primary/5 md:hover:dark:!bg-primary/10 font-semibold dark:font-medium",
       },
       size: {
         default: "h-10 px-4 py-2",
         fit: "h-fit",
-        icon: "h-10 w-10",
+        icon: "sm:h-10 sm:w-10 h-9 w-9",
       },
     },
     defaultVariants: {

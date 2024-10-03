@@ -41,7 +41,7 @@ export default async function RootLayout({
       <body
         className={cn(
           poppins.className,
-          "flex h-screen bg-background antialiased",
+          "flex h-screen bg-foreground antialiased md:bg-background",
         )}
       >
         <SubstitutionsController substitutions={substitutions} />

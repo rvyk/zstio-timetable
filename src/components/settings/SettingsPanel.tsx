@@ -195,18 +195,18 @@ export const SettingsPanel = () => {
                   onClick={setting.onClick}
                   className={cn(
                     setting.active &&
-                      "bg-primary/10 hover:!bg-primary/15 dark:font-medium",
-                    "group -m-2 flex gap-4 rounded-md p-2 text-left transition-all hover:bg-primary/10",
+                      "bg-primary/10 dark:font-medium md:hover:!bg-primary/15",
+                    "group -m-2 flex gap-4 rounded-md p-2 text-left transition-all md:hover:bg-primary/10",
                   )}
                 >
                   <div className="grid h-10 min-w-10 place-content-center rounded-sm border border-primary/10 bg-primary/5 text-primary/80">
                     <setting.icon size={18} strokeWidth={2.5} />
                   </div>
                   <div className="grid">
-                    <h2 className="text-base font-semibold text-primary/80">
+                    <h2 className="text-sm font-semibold text-primary/80 sm:text-base">
                       {setting.title}
                     </h2>
-                    <div className="text-sm font-medium text-primary/50">
+                    <div className="text-xs font-medium text-primary/50 sm:text-sm">
                       {setting.description}
                     </div>
                   </div>

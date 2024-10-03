@@ -30,8 +30,12 @@ export const Counter: FC<
       </Button>
 
       <div className="grid gap-1 text-center">
-        <h2 className="text-6xl font-semibold text-primary/90">{count}</h2>
-        <p className="text-sm font-medium text-primary/70">Numer lekcji</p>
+        <h2 className="text-5xl font-semibold text-primary/90 sm:text-6xl">
+          {count}
+        </h2>
+        <p className="text-xs font-medium text-primary/70 sm:text-sm">
+          Numer lekcji
+        </p>
       </div>
 
       <Button

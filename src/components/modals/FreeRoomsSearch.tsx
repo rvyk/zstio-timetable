@@ -53,28 +53,22 @@ export const FreeRoomsSearchModal: FC = () => {
           </DialogDescription>
         </DialogHeader>
 
-        <div className="relative">
-          <div className="grid gap-8 transition-all duration-300">
-            <Calendar {...{ selectedDay, setSelectedDay }} />
-            <Counter {...counter} minCount={1} />
+        <div className="grid gap-8 transition-all duration-300">
+          <Calendar {...{ selectedDay, setSelectedDay }} />
+          <Counter {...counter} minCount={1} />
 
-            <DialogFooter>
-              <Button
-                onClick={() => handleOpenChange(false)}
-                variant="secondary"
-              >
-                Anuluj
-              </Button>
-              <Button
-                disabled={isPending}
-                variant="primary"
-                onClick={handleSubmit}
-              >
-                Wyszukaj
-              </Button>
-            </DialogFooter>
-          </div>
-          <div></div>
+          <DialogFooter>
+            <Button onClick={() => handleOpenChange(false)} variant="secondary">
+              Anuluj
+            </Button>
+            <Button
+              disabled={isPending}
+              variant="primary"
+              onClick={handleSubmit}
+            >
+              Wyszukaj
+            </Button>
+          </DialogFooter>
         </div>
       </DialogContent>
     </Dialog>
@@ -106,7 +100,9 @@ const Calendar: FC<{
               "w-full py-3",
             )}
           >
-            <p className="text-sm font-medium text-primary/90">{day.short}</p>
+            <p className="text-xs font-medium text-primary/90 sm:text-sm">
+              {day.short}
+            </p>
           </div>
           <div
             className={cn(
@@ -116,10 +112,10 @@ const Calendar: FC<{
               "grid py-5 transition-all",
             )}
           >
-            <h2 className="text-2xl font-semibold opacity-90">
+            <h2 className="text-xl font-semibold opacity-90 sm:text-2xl">
               {getDayNumberForNextWeek(day.long).day}
             </h2>
-            <h3 className="text-sm font-medium capitalize opacity-70">
+            <h3 className="text-xs font-medium capitalize opacity-70 sm:text-sm">
               {getDayNumberForNextWeek(day.long).month}
             </h3>
           </div>

@@ -14,18 +14,23 @@ interface TableLessonCellProps {
   day: TableLesson[][];
   dayIndex: number;
   lessonIndex: number;
+  selectedDayIndex: number;
 }
 
 export const TableLessonCell: FC<TableLessonCellProps> = ({
   day,
   dayIndex,
   lessonIndex,
+  selectedDayIndex,
 }) => {
-  const lessons = day[lessonIndex];
-
   return (
-    <td className="px-4 py-3 last:border-0">
-      {lessons.map((lessonItem, index) => (
+    <td
+      className={cn(
+        dayIndex != selectedDayIndex && "max-md:hidden",
+        "py-3 last:border-0 max-md:px-2 md:px-4",
+      )}
+    >
+      {day[lessonIndex].map((lessonItem, index) => (
         <LessonItem
           key={index}
           lesson={lessonItem}
@@ -86,10 +91,10 @@ const LessonHeader: FC<LessonHeaderProps> = ({ lesson, isStrikethrough }) => (
   <div
     className={cn(
       isStrikethrough && "line-through opacity-50",
-      "flex w-full items-center justify-between gap-x-4",
+      "flex w-full items-center gap-x-1.5 md:justify-between md:gap-x-4",
     )}
   >
-    <h2 className="whitespace-nowrap text-base font-semibold text-primary/90">
+    <h2 className="whitespace-nowrap text-sm font-semibold text-primary/90 sm:text-base">
       {lesson.subject}
       <GroupName groupName={lesson.groupName} />
     </h2>
@@ -182,7 +187,7 @@ interface SubstitutionItemProps {
 }
 
 const SubstitutionItem: FC<SubstitutionItemProps> = ({ substitute }) => (
-  <div className="flex justify-between">
+  <div className="flex max-md:gap-x-1.5 md:justify-between">
     <h2 className="whitespace-nowrap text-sm font-semibold text-primary/90">
       *{substitute.subject}
       <GroupName groupName={substitute.groupName} />

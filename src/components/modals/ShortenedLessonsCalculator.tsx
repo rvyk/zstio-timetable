@@ -76,7 +76,7 @@ export const ShortenedLessonsCalculatorModal: FC = () => {
           {shortenedLessons.length > 0 && (
             <div className="grid gap-2">
               <p className="text-xs font-medium text-primary/50">NORMALNE</p>
-              <div className="text-base font-medium text-primary/90">
+              <div className="text-sm font-medium text-primary/90 sm:text-base">
                 {shortenedLessons.map((lesson) => (
                   <h3 key={lesson.number}>
                     {lesson.number}. {lesson.timeFrom} - {lesson.timeTo}
@@ -90,7 +90,7 @@ export const ShortenedLessonsCalculatorModal: FC = () => {
           )}
           {normalLessons.length > 0 && (
             <div className="grid gap-2">
-              <div className="text-base font-medium text-primary/90">
+              <div className="text-sm font-medium text-primary/90 sm:text-base">
                 {normalLessons.map((lesson) => (
                   <h3 key={lesson.number}>
                     {lesson.number}. {lesson.timeFrom} - {lesson.timeTo}

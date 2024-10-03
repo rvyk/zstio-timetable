@@ -30,13 +30,13 @@ export const Sidebar: FC = memo(() => {
 
   return (
     <Fragment>
-      <div className="h-screen w-full max-w-xs border-r border-lines bg-foreground dark:border-primary/10 max-xl:hidden">
+      <div className="h-screen w-full max-w-xs border-r border-lines bg-foreground dark:border-primary/10 max-xl:hidden max-md:hidden">
         <div className="mr-3 flex h-full w-full flex-col justify-between gap-y-16 overflow-y-auto overflow-x-hidden px-4 py-6">
           <SidebarContent />
         </div>
       </div>
 
-      <div className="xl:hidden">
+      <div className="max-md:hidden xl:hidden">
         <Sheet open={isSidebarOpen} onOpenChange={toggleSidebar}>
           <SheetTrigger asChild>
             <button className="flex h-screen w-24 cursor-pointer flex-col items-center gap-10 border-r border-lines bg-foreground px-4 py-6 dark:border-primary/10">
@@ -67,7 +67,7 @@ export const Sidebar: FC = memo(() => {
 });
 Sidebar.displayName = "Sidebar";
 
-const SidebarContent: FC = memo(() => {
+export const SidebarContent: FC = memo(() => {
   const lastUpdatedTimetable = useTimetableStore(
     (state) => state.timetable,
   )?.lastUpdated;
@@ -119,7 +119,7 @@ const SidebarContent: FC = memo(() => {
           <p
             className={cn(
               isPreview && "hidden",
-              "mx-2 text-sm font-semibold text-primary/90",
+              "mx-2 text-xs font-semibold text-primary/90 sm:text-sm",
             )}
           >
             Ostatnia aktualizacja danych: <br />
@@ -133,7 +133,7 @@ const SidebarContent: FC = memo(() => {
         <p
           className={cn(
             isPreview && "hidden",
-            "mx-2 text-sm font-semibold text-primary/90",
+            "mx-2 text-xs font-semibold text-primary/90 sm:text-sm",
           )}
         >
           Źródło danych: <br />

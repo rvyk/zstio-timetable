@@ -46,6 +46,7 @@ export const TopbarButtons: FC = () => {
       action: toggleFullscreen,
       ariaLabel: "Przełącz na tryb pełnoekranowy (F/F11)",
       hidden: isSubstitutionPage,
+      classNames: "max-md:hidden",
     },
     {
       icon: currentTheme === "dark" ? SunMediumIcon : MoonIcon,
@@ -99,13 +100,14 @@ export const TopbarButtons: FC = () => {
             size="icon"
             onClick={button.action ?? undefined}
             asChild={Boolean(button.href)}
+            className={button.classNames}
           >
             {button.href ? (
               <Link href={button.href}>
-                <IconComponent size={20} strokeWidth={2.5} />
+                <IconComponent strokeWidth={2.5} className="size-4 sm:size-5" />
               </Link>
             ) : (
-              <IconComponent size={20} strokeWidth={2.5} />
+              <IconComponent strokeWidth={2.5} className="size-4 sm:size-5" />
             )}
           </Button>
         );

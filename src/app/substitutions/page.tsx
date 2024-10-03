@@ -1,4 +1,5 @@
 import { getSubstitutions } from "@/actions/getSubstitutions";
+import { BottomBar } from "@/components/common/BottomBar";
 import { Substitutions } from "@/components/substitutions/Substitutions";
 import { Topbar } from "@/components/topbar/Topbar";
 import { redirect } from "next/navigation";
@@ -22,9 +23,10 @@ const SubstitutionPage = async () => {
   const substitutions = await getSubstitutions();
 
   return (
-    <div className="flex h-full w-full flex-col gap-y-6 overflow-hidden p-8">
+    <div className="flex h-full w-full flex-col gap-y-3 overflow-hidden md:gap-y-6 md:p-8">
       <Topbar substitutions={substitutions} />
       <Substitutions substitutions={substitutions} />
+      <BottomBar substitutions={substitutions} />
     </div>
   );
 };

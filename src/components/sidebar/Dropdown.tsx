@@ -54,17 +54,16 @@ export const Dropdown: FC<DropdownProps> = ({ type, icon: Icon, data }) => {
       >
         <div className="inline-flex w-full items-center justify-between rounded-md">
           <div className="inline-flex items-center gap-x-3.5">
-            <div className="grid h-10 w-10 place-content-center rounded-sm border border-primary/10 bg-accent transition-all group-hover:bg-primary/5 group-data-[state=open]:bg-primary/5 group-hover:dark:bg-accent group-data-[state=open]:dark:bg-accent">
+            <div className="grid h-9 w-9 place-content-center rounded-sm border border-primary/10 bg-accent transition-all group-hover:bg-primary/5 group-data-[state=open]:bg-primary/5 group-hover:dark:bg-accent group-data-[state=open]:dark:bg-accent sm:h-10 sm:w-10">
               <Icon
-                className="text-primary/80 transition-all group-hover:text-primary/90 group-data-[state=open]:text-primary/90"
-                size={20}
+                className="size-4 text-primary/80 transition-all group-hover:text-primary/90 group-data-[state=open]:text-primary/90 sm:size-5"
                 strokeWidth={2.5}
               />
             </div>
             <p
               className={cn(
                 isPreview && "hidden",
-                "text-sm font-semibold text-primary/70 group-hover:text-primary/90 group-data-[state=open]:text-primary/90 dark:font-medium",
+                "text-xs font-semibold text-primary/70 group-hover:text-primary/90 group-data-[state=open]:text-primary/90 dark:font-medium sm:text-sm",
               )}
             >
               {translates[type as keyof typeof translates]}{" "}
@@ -74,9 +73,8 @@ export const Dropdown: FC<DropdownProps> = ({ type, icon: Icon, data }) => {
           <ChevronDown
             className={cn(
               isPreview && "hidden",
-              "text-primary/80 transition-all group-data-[state=open]:rotate-180",
+              "size-4 text-primary/80 transition-all group-data-[state=open]:rotate-180 sm:size-5",
             )}
-            size={20}
           />
         </div>
       </AccordionTrigger>
@@ -92,7 +90,7 @@ export const DropdownContent: FC<{
   data?: DataItem[];
 }> = ({ type, data }) => {
   return (
-    <div className="mt-4 grid gap-2 rounded-md bg-accent/90 p-4">
+    <div className="mt-4 grid gap-2 rounded-md bg-primary/[0.03] p-4 dark:bg-accent/90 md:bg-accent/90">
       {data && data.length > 0 ? (
         data.map((item) =>
           isListItem(item) ? (
@@ -102,7 +100,7 @@ export const DropdownContent: FC<{
           ),
         )
       ) : (
-        <p className="text-center text-sm font-semibold text-primary/70 dark:font-medium">
+        <p className="text-center text-xs font-semibold text-primary/70 dark:font-medium sm:text-sm">
           Brak danych
         </p>
       )}

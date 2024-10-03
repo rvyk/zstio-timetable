@@ -24,7 +24,9 @@ const TableHeader: FC = () => (
     <tr className="divide-x divide-lines border-b border-lines">
       {headers.map((header) => (
         <th key={header} className="relative px-4 py-3 text-center">
-          <h3 className="text-lg font-semibold text-primary/90">{header}</h3>
+          <h3 className="text-sm font-semibold text-primary/90 sm:text-lg">
+            {header}
+          </h3>
         </th>
       ))}
     </tr>
@@ -52,7 +54,7 @@ const SubstitutionTable: FC<{
 
   return (
     <table className="w-full">
-      <caption className="border-b border-lines bg-accent/50 p-4 text-left text-lg font-semibold text-primary/90 dark:bg-background dark:font-medium">
+      <caption className="border-b border-lines bg-accent/50 p-4 text-left text-sm font-semibold text-primary/90 dark:bg-background sm:text-lg">
         {table.time}
       </caption>
       <TableHeader />
@@ -69,7 +71,15 @@ export const Substitutions: FC<{ substitutions: SubstitutionsPage }> = ({
   substitutions,
 }) => {
   return (
-    <div className="h-fit w-full overflow-hidden rounded-md border border-lines bg-foreground transition-all">
+    <div className="h-fit w-full overflow-hidden border-y border-lines bg-foreground transition-all max-md:mb-20 md:rounded-md md:border">
+      <div className="border-b border-lines px-2 py-3 text-center text-base text-primary dark:bg-background sm:text-lg md:hidden">
+        <h2 className="text-lg font-semibold opacity-90">
+          {substitutions.heading}
+        </h2>
+        <p className="text-sm font-medium opacity-70">
+          {substitutions.timeRange}
+        </p>
+      </div>
       <div className="h-full w-full overflow-auto">
         {substitutions.tables.map((table, index) => (
           <SubstitutionTable key={index} table={table} />
@@ -83,15 +93,15 @@ const SubstitutionRow: FC<{
   substitution: Substitution;
 }> = ({ substitution }) => {
   const cellClassName =
-    "px-4 py-3 text-base font-medium text-primary/90 last:border-0";
+    "px-4 py-3 text-sm sm:text-base font-medium text-primary/90 last:border-0";
 
   return (
     <tr className="divide-x divide-lines border-b border-lines last:border-none odd:bg-accent/50 odd:dark:bg-background">
       <td className="relative px-4 py-3 text-center">
-        <h2 className="text-xl font-semibold text-primary/90">
+        <h2 className="text-lg font-semibold text-primary/90 sm:text-xl">
           {substitution.number}
         </h2>
-        <p className="whitespace-nowrap text-sm font-medium text-primary/70">
+        <p className="whitespace-nowrap text-xs font-medium text-primary/70 sm:text-sm">
           {substitution.timeRange}
         </p>
       </td>
