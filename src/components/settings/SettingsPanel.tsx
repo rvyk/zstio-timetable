@@ -156,7 +156,7 @@ export const SettingsPanel = () => {
     {
       icon: Search,
       title: "Wyszukaj wolną salę",
-      hidden: isSubstitutionPage,
+      hidden: isSubstitutionPage || timetable?.list.rooms?.length === 0,
       active: false,
       onClick: () => toggleModal("freeRoomsSearch"),
       description: (
