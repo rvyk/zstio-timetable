@@ -61,6 +61,7 @@ export const FreeRoomsResultModal: FC = () => {
                   value: result.id,
                 }}
                 type="room"
+                favoriteStar={false}
               />
             ))}
           </div>

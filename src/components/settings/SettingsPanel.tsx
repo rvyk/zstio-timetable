@@ -79,7 +79,7 @@ export const SettingsPanel = () => {
     {
       icon: BellIcon,
       title: "Powiadomienia",
-      hidden: false,
+      hidden: true,
       active: savedSettings.isNotificationEnabled,
       onClick: savedSettings.toggleNotification,
       description: (

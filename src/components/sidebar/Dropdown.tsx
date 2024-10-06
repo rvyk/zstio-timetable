@@ -119,11 +119,9 @@ interface ListItemComponentProps {
   onClick?: () => void;
 }
 
-export const ListItemComponent: FC<ListItemComponentProps> = ({
-  item,
-  type,
-  onClick,
-}) => {
+export const ListItemComponent: FC<
+  ListItemComponentProps & { favoriteStar?: boolean }
+> = ({ item, type, onClick, favoriteStar = true }) => {
   const { toggleSidebar, isSidebarOpen } = useSettingsWithoutStore();
 
   const pathname = usePathname();
@@ -145,13 +143,15 @@ export const ListItemComponent: FC<ListItemComponentProps> = ({
         )}
       >
         {item.name}
-        <FavoriteStar
-          item={{
-            ...item,
-            type: item.type ?? type,
-          }}
-          small
-        />
+        {favoriteStar && (
+          <FavoriteStar
+            item={{
+              ...item,
+              type: item.type ?? type,
+            }}
+            small
+          />
+        )}
       </LinkWithCookie>
     </Button>
   );
