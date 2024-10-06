@@ -1,5 +1,14 @@
 "use client";
 
+import { SidebarContent } from "@/components/sidebar/Sidebar";
+import { Button } from "@/components/ui/Button";
+import {
+  Drawer,
+  DrawerContent,
+  DrawerDescription,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/Drawer";
 import { translationDict } from "@/constants/translations";
 import { simulateKeyPress } from "@/lib/utils";
 import { OptivumTimetable } from "@/types/optivum";
@@ -7,15 +16,6 @@ import { SubstitutionsPage } from "@majusss/substitutions-parser/dist/types";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { FC, MouseEvent, useMemo } from "react";
-import { SidebarContent } from "../sidebar/Sidebar";
-import { Button } from "../ui/Button";
-import {
-  Drawer,
-  DrawerContent,
-  DrawerDescription,
-  DrawerTitle,
-  DrawerTrigger,
-} from "../ui/Drawer";
 
 interface TopbarProps {
   timetable?: OptivumTimetable;

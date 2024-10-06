@@ -95,7 +95,7 @@ export const Search: FC<{
             autoComplete="off"
             className={cn(
               isPreview && "hidden",
-              "w-full bg-transparent text-sm font-medium text-primary/90 placeholder:text-primary/70 focus:outline-none",
+              "w-full bg-transparent text-xs font-medium text-primary/90 placeholder:text-primary/70 focus:outline-none sm:text-sm",
             )}
             placeholder="Szukaj..."
           />

@@ -14,6 +14,7 @@ import { ChevronDown, LucideIcon } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { FC } from "react";
 import { useIsClient } from "usehooks-ts";
+import { FavoriteStar } from "../common/FavoriteStar";
 import { useSidebarContext } from "./Context";
 
 const translates = {
@@ -92,9 +93,13 @@ export const DropdownContent: FC<{
   return (
     <div className="mt-4 grid gap-2 rounded-md bg-primary/[0.03] p-4 dark:bg-accent/90 md:bg-accent/90">
       {data && data.length > 0 ? (
-        data.map((item) =>
+        data.map((item, i) =>
           isListItem(item) ? (
-            <ListItemComponent key={item.value} item={item} type={type} />
+            <ListItemComponent
+              key={`${item.value}-${i}-${item.name}`}
+              item={item}
+              type={type}
+            />
           ) : (
             <SubstitutionListItemComponent key={item.name} item={item} />
           ),
@@ -130,21 +135,23 @@ export const ListItemComponent: FC<ListItemComponentProps> = ({
   };
 
   return (
-    <Button
-      key={item.value}
-      onClick={handleButton}
-      variant="sidebarItem"
-      asChild
-      size="fit"
-    >
+    <Button onClick={handleButton} variant="sidebarItem" asChild size="fit">
       <LinkWithCookie
         aria-label={`Przejdź do ${item.name}`}
         href={link}
         className={cn(
           pathname === link && buttonVariants({ variant: "sidebarItemActive" }),
+          "flex w-full justify-between gap-x-2",
         )}
       >
         {item.name}
+        <FavoriteStar
+          item={{
+            ...item,
+            type: item.type ?? type,
+          }}
+          small
+        />
       </LinkWithCookie>
     </Button>
   );
@@ -170,7 +177,6 @@ const SubstitutionListItemComponent: FC<SubstitutionListItemComponentProps> = ({
     <Button
       variant="sidebarItem"
       aria-label={`Zaznacz ${item.name}`}
-      key={item.name}
       size="fit"
       onClick={() => handleFilterChange(itemType, item)}
       className={cn(

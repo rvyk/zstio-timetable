@@ -21,7 +21,6 @@ const config: Config = {
         },
         primary: "rgb(var(--primary))",
         lines: "rgb(var(--lines))",
-        star: "rgb(var(--star))",
       },
       borderRadius: {
         lg: "16px",

@@ -1,18 +1,16 @@
 "use client";
 
 import logo_zstio from "@/assets/logo-zstio.png";
+import { ShortLessonSwitcherCell } from "@/components/timetable/Cells";
 import { translationDict } from "@/constants/translations";
-import { handleFavorite } from "@/lib/handleFavorites";
-import { cn } from "@/lib/utils";
-import { useFavoritesStore } from "@/stores/favorites";
 import { OptivumTimetable } from "@/types/optivum";
 import { SubstitutionsPage } from "@majusss/substitutions-parser/dist/types";
-import { ArrowLeftFromLine, StarIcon } from "lucide-react";
+import { ArrowLeftFromLine } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { FC, Fragment, useMemo } from "react";
 import { useIsClient } from "usehooks-ts";
-import { ShortLessonSwitcherCell } from "../timetable/Cells";
+import { FavoriteStar } from "../common/FavoriteStar";
 import { TopbarButtons } from "./Buttons";
 
 interface TopbarProps {
@@ -21,15 +19,8 @@ interface TopbarProps {
 }
 
 export const Topbar: FC<TopbarProps> = ({ timetable, substitutions }) => {
-  const { favorites } = useFavoritesStore();
   const isClient = useIsClient();
-
   const isSubstitutionsPage = Boolean(substitutions);
-
-  const isFavorite = useMemo(() => {
-    if (isSubstitutionsPage || !timetable?.title) return false;
-    return favorites.some((c) => c.name === timetable.title);
-  }, [favorites, timetable?.title, isSubstitutionsPage]);
 
   const titleElement = useMemo(() => {
     if (isSubstitutionsPage && substitutions) {
@@ -65,24 +56,13 @@ export const Topbar: FC<TopbarProps> = ({ timetable, substitutions }) => {
             {titleElement}
           </h1>
           {timetable?.title && isClient && !isSubstitutionsPage && (
-            <button
-              aria-label={
-                isFavorite ? "Usuń z ulubionych" : "Dodaj do ulubionych"
-              }
-              onClick={handleFavorite}
-              className="focus:outline-none"
-            >
-              <StarIcon
-                size={24}
-                strokeWidth={2.5}
-                className={cn(
-                  isFavorite
-                    ? "!fill-star !drop-shadow-[0_0_5.6px_rgba(255,196,46,0.35)] grayscale-0"
-                    : "grayscale hover:fill-star",
-                  "fill-transparent stroke-star drop-shadow-none transition-all duration-300",
-                )}
-              />
-            </button>
+            <FavoriteStar
+              item={{
+                name: timetable.title,
+                value: timetable.id.substring(1),
+                type: timetable.type,
+              }}
+            />
           )}
         </div>
         {isSubstitutionsPage ? (
