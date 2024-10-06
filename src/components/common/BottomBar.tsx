@@ -69,7 +69,7 @@ export const BottomBar: FC<TopbarProps> = ({ timetable, substitutions }) => {
                 variant="icon"
                 size="icon"
                 onClick={(e) => handleArrowKey(e, false)}
-                className="aspect-square h-12 w-12"
+                className="aspect-square h-10 w-10"
               >
                 <ArrowLeft size={20} strokeWidth={2.5} />
               </Button>
@@ -85,7 +85,7 @@ export const BottomBar: FC<TopbarProps> = ({ timetable, substitutions }) => {
                 variant="icon"
                 size="icon"
                 onClick={(e) => handleArrowKey(e, true)}
-                className="aspect-square h-12 w-12"
+                className="aspect-square h-10 w-10"
               >
                 <ArrowRight size={20} strokeWidth={2.5} />
               </Button>

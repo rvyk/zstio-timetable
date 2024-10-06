@@ -42,7 +42,7 @@ const TimetablePage = async ({ params }: { params: PageParams }) => {
   return (
     <Fragment>
       <TimetableController timetable={timetable} />
-      <div className="flex h-full w-full flex-col gap-y-3 overflow-hidden md:gap-y-6 md:p-8">
+      <div className="flex h-full w-full flex-col gap-y-3 max-md:overflow-y-auto md:gap-y-6 md:overflow-hidden md:p-8">
         <Topbar timetable={timetable} />
         <Timetable timetable={timetable} />
         <BottomBar timetable={timetable} />

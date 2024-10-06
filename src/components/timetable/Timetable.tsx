@@ -82,66 +82,64 @@ export const Timetable: FC<TimetableProps> = ({ timetable }) => {
         isFullscreenMode
           ? "fixed left-0 top-0 z-40 h-full min-h-screen w-screen rounded-none"
           : "h-fit w-full md:rounded-md",
-        "overflow-hidden border-lines bg-foreground transition-all max-md:mb-20 md:border",
+        "border-lines bg-foreground transition-all max-md:mb-20 md:overflow-hidden md:border",
       )}
     >
-      <div className="h-full max-md:overflow-auto">
-        <div className="flex justify-between divide-x divide-lines border-y border-lines md:hidden">
-          {timetable.dayNames.map((dayName) => (
-            <TableHeaderMobileCell
-              key={dayName}
-              dayName={dayName}
-              {...{ selectedDayIndex, setSelectedDayIndex }}
-            />
-          ))}
-        </div>
+      <div className="sticky top-0 z-20 flex justify-between divide-x divide-lines border-y border-lines bg-foreground md:hidden">
+        {timetable.dayNames.map((dayName) => (
+          <TableHeaderMobileCell
+            key={dayName}
+            dayName={dayName}
+            {...{ selectedDayIndex, setSelectedDayIndex }}
+          />
+        ))}
+      </div>
 
-        <div className="h-full w-full md:overflow-auto">
-          {hasLessons ? (
-            <table className="w-full">
-              <thead className="max-md:hidden">
-                <tr className="divide-x divide-lines border-b border-lines">
-                  <th>
-                    <ShortLessonSwitcherCell />
-                  </th>
-                  {timetable.dayNames.map((dayName) => (
-                    <TableHeaderCell key={dayName} dayName={dayName} />
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {Object.values(hours)
-                  .slice(0, maxLessons)
-                  .map((hour, hourIndex) => (
-                    <tr
-                      key={hourIndex}
-                      className={cn(
-                        isFullscreenMode ? "" : "md:last:border-none",
-                        "divide-lines border-b border-lines odd:bg-accent/50 odd:dark:bg-background md:divide-x",
-                      )}
-                    >
-                      <TableHourCell
-                        hour={hour}
-                        isCurrent={hourIndex === currentLessonIndex}
-                        timeRemaining={parseTime(hour.timeTo) - currentTime}
+      <div className="h-full w-full md:overflow-auto">
+        {hasLessons ? (
+          <table className="w-full">
+            <thead className="max-md:hidden">
+              <tr className="divide-x divide-lines border-b border-lines">
+                <th>
+                  <ShortLessonSwitcherCell />
+                </th>
+                {timetable.dayNames.map((dayName) => (
+                  <TableHeaderCell key={dayName} dayName={dayName} />
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {Object.values(hours)
+                .slice(0, maxLessons)
+                .map((hour, hourIndex) => (
+                  <tr
+                    key={hourIndex}
+                    className={cn(
+                      isFullscreenMode ? "" : "md:last:border-none",
+                      "divide-lines border-b border-lines odd:bg-accent/50 odd:dark:bg-background md:divide-x",
+                    )}
+                  >
+                    <TableHourCell
+                      hour={hour}
+                      isCurrent={hourIndex === currentLessonIndex}
+                      timeRemaining={parseTime(hour.timeTo) - currentTime}
+                    />
+                    {timetable.lessons.map((day, dayIndex) => (
+                      <TableLessonCell
+                        key={dayIndex}
+                        dayIndex={dayIndex}
+                        day={day}
+                        lessonIndex={hourIndex}
+                        selectedDayIndex={selectedDayIndex}
                       />
-                      {timetable.lessons.map((day, dayIndex) => (
-                        <TableLessonCell
-                          key={dayIndex}
-                          dayIndex={dayIndex}
-                          day={day}
-                          lessonIndex={hourIndex}
-                          selectedDayIndex={selectedDayIndex}
-                        />
-                      ))}
-                    </tr>
-                  ))}
-              </tbody>
-            </table>
-          ) : (
-            isFullscreenMode && <NotFoundTimetable id={timetable.id} />
-          )}
-        </div>
+                    ))}
+                  </tr>
+                ))}
+            </tbody>
+          </table>
+        ) : (
+          isFullscreenMode && <NotFoundTimetable id={timetable.id} />
+        )}
       </div>
       {isFullscreenMode && (
         <FullScreenControls title={timetable.title} type={timetable.type} />

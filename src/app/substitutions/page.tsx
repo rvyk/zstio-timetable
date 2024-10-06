@@ -23,7 +23,7 @@ const SubstitutionPage = async () => {
   const substitutions = await getSubstitutions();
 
   return (
-    <div className="flex h-full w-full flex-col gap-y-3 overflow-hidden md:gap-y-6 md:p-8">
+    <div className="flex h-full w-full flex-col gap-y-3 overflow-y-auto md:gap-y-6 md:overflow-hidden md:p-8">
       <Topbar substitutions={substitutions} />
       <Substitutions substitutions={substitutions} />
       <BottomBar substitutions={substitutions} />
