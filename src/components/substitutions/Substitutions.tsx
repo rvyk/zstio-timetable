@@ -72,7 +72,7 @@ export const Substitutions: FC<{ substitutions: SubstitutionsPage }> = ({
 }) => {
   return (
     <div className="h-fit w-full border-y border-lines bg-foreground transition-all max-md:mb-20 md:overflow-hidden md:rounded-md md:border">
-      <div className="sticky top-0 z-20 border-b border-lines px-2 py-3 text-center text-base text-primary dark:bg-background sm:text-lg md:hidden">
+      <div className="sticky top-0 z-20 border-b border-lines bg-foreground px-2 py-3 text-center text-base text-primary dark:bg-background sm:text-lg md:hidden">
         <h2 className="text-lg font-semibold opacity-90">
           {substitutions.heading}
         </h2>
