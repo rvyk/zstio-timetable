@@ -1,58 +1,83 @@
-/** @type {import('next').NextConfig} */
-
 import { withSentryConfig } from "@sentry/nextjs";
-import withPWAConfig from "next-pwa";
 
-// PWA configuration
-const withPWA = withPWAConfig({
-  dest: "public",
-  register: true,
-  skipWaiting: true,
-  disable: process.env.NODE_ENV === "development",
-});
-
-// Next.js configuration
+/** @type {import('next').NextConfig} */
 const nextConfig = {
-  rewrites: async () => {
-    const { NEXT_PUBLIC_TIMETABLE_URL, NEXT_PUBLIC_CMS, NEXT_PUBLIC_HOST } =
-      process.env;
+  output: "standalone",
 
-    if (!NEXT_PUBLIC_TIMETABLE_URL || !NEXT_PUBLIC_HOST) {
+  async rewrites() {
+    return [
+      {
+        source: "/zastepstwa",
+        destination: "/substitutions",
+      },
+    ];
+  },
+
+  webpack: (config) => {
+    checkEnvVariables(["NEXT_PUBLIC_TIMETABLE_URL", "NEXT_PUBLIC_APP_URL"]);
+
+    return config;
+  },
+};
+
+const checkEnvVariables = (envVars) => {
+  envVars.forEach((envVar) => {
+    const value = process.env[envVar];
+
+    if (!value) {
       throw new Error(
-        "Environment variables NEXT_PUBLIC_HOST and NEXT_PUBLIC_TIMETABLE_URL must be defined",
+        `Error: Missing required environment variable: ${envVar}`,
       );
     }
 
-    const rewrites = [];
-
-    if (NEXT_PUBLIC_CMS) {
-      rewrites.push({
-        source: "/proxy/cms/:path",
-        destination: `${NEXT_PUBLIC_CMS}/api/:path`,
-      });
+    if (envVar.endsWith("_URL")) {
+      try {
+        new URL(value);
+      } catch {
+        throw new Error(
+          `Error: Environment variable ${envVar} is not a valid URL: ${value}`,
+        );
+      }
     }
-
-    return rewrites;
-  },
+  });
 };
 
-// Apply the PWA configuration
-const configuredNextConfig = withPWA(nextConfig);
+export default withSentryConfig(nextConfig, {
+  // For all available options, see:
+  // https://github.com/getsentry/sentry-webpack-plugin#options
 
-// Sentry configuration
-const sentryConfig = {
   org: "majrvy",
   project: "zstio-timetable",
+
+  // Only print logs for uploading source maps in CI
   silent: !process.env.CI,
+
+  // For all available options, see:
+  // https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/
+
+  // Upload a larger set of source maps for prettier stack traces (increases build time)
   widenClientFileUpload: true,
+
+  // Automatically annotate React components to show their full name in breadcrumbs and session replay
   reactComponentAnnotation: {
     enabled: true,
   },
+
+  // Route browser requests to Sentry through a Next.js rewrite to circumvent ad-blockers.
+  // This can increase your server load as well as your hosting bill.
+  // Note: Check that the configured route will not match with your Next.js middleware, otherwise reporting of client-
+  // side errors will fail.
+  tunnelRoute: "/monitoring",
+
+  // Hides source maps from generated client bundles
   hideSourceMaps: true,
+
+  // Automatically tree-shake Sentry logger statements to reduce bundle size
   disableLogger: true,
+
+  // Enables automatic instrumentation of Vercel Cron Monitors. (Does not yet work with App Router route handlers.)
+  // See the following for more information:
+  // https://docs.sentry.io/product/crons/
+  // https://vercel.com/docs/cron-jobs
   automaticVercelMonitors: true,
-};
-
-const finalConfig = withSentryConfig(configuredNextConfig, sentryConfig);
-
-export default finalConfig;
+});

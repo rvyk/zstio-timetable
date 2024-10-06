@@ -1,234 +1,116 @@
+import { daysOfWeek } from "@/constants/days";
+import {
+  Substitution,
+  SubstitutionsPage,
+} from "@majusss/substitutions-parser/dist/types";
 import { clsx, type ClassValue } from "clsx";
+import { setCookie } from "cookies-next";
+import moment from "moment";
+import "moment-timezone";
+import "moment/locale/pl";
 import { twMerge } from "tailwind-merge";
 
-export const cn = (...inputs: ClassValue[]) => {
+export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
+}
+
+export const setLastVisitedCookie = (link: string) => {
+  setCookie("lastVisited", link, {
+    path: "/",
+    expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+  });
 };
 
-export const days = [
-  { long: "Poniedziałek", short: "Pon.", index: 0 },
-  { long: "Wtorek", short: "Wt.", index: 1 },
-  { long: "Środa", short: "Śr.", index: 2 },
-  { long: "Czwartek", short: "Czw.", index: 3 },
-  { long: "Piątek", short: "Pt.", index: 4 },
-];
+export const parseHeaderDate = (res: Response): string => {
+  return res.headers.has("date")
+    ? moment(res.headers.get("date"))
+        .tz("Europe/Warsaw")
+        .format("DD MMMM YYYY[r.] HH:mm:ss")
+    : "Brak danych";
+};
 
-export const cases = [
-  "Uczniowie przychodzą później",
-  "Przeniesiona",
-  "Okienko dla uczniów",
-  "Uczniowie zwolnieni do domu",
-];
+export const getDayNumberForNextWeek = (
+  dayName: string,
+): {
+  day: number;
+  month: string;
+  monthNumber: number;
+} => {
+  const today = new Date();
+  const todayDayOfWeek = today.getDay();
+  const targetDay = daysOfWeek.find(
+    (day) => day.long === dayName || day.short === dayName,
+  );
 
-export const normalHours: hourType[] = [
-  {
-    number: 1,
-    timeFrom: "8:00",
-    timeTo: "8:45",
-  },
-  {
-    number: 2,
-    timeFrom: "8:50",
-    timeTo: "9:35",
-  },
-  {
-    number: 3,
-    timeFrom: "9:40",
-    timeTo: "10:25",
-  },
-  {
-    number: 4,
-    timeFrom: "10:40",
-    timeTo: "11:25",
-  },
-  {
-    number: 5,
-    timeFrom: "11:30",
-    timeTo: "12:15",
-  },
-  {
-    number: 6,
-    timeFrom: "12:20",
-    timeTo: "13:05",
-  },
-  {
-    number: 7,
-    timeFrom: "13:10",
-    timeTo: "13:55",
-  },
-  {
-    number: 8,
-    timeFrom: "14:00",
-    timeTo: "14:45",
-  },
-  {
-    number: 9,
-    timeFrom: "14:50",
-    timeTo: "15:35",
-  },
-  {
-    number: 10,
-    timeFrom: "15:40",
-    timeTo: "16:25",
-  },
-  {
-    number: 11,
-    timeFrom: "16:35",
-    timeTo: "17:20",
-  },
-  {
-    number: 12,
-    timeFrom: "17:25",
-    timeTo: "18:10",
-  },
-  {
-    number: 13,
-    timeFrom: "18:15",
-    timeTo: "19:00",
-  },
-  {
-    number: 14,
-    timeFrom: "19:05",
-    timeTo: "19:50",
-  },
-];
-
-export const shortHours: hourType[] = [
-  {
-    number: 1,
-    timeFrom: "8:00",
-    timeTo: "8:30",
-  },
-  {
-    number: 2,
-    timeFrom: "8:35",
-    timeTo: "9:05",
-  },
-  {
-    number: 3,
-    timeFrom: "9:10",
-    timeTo: "9:40",
-  },
-  {
-    number: 4,
-    timeFrom: "9:45",
-    timeTo: "10:15",
-  },
-  {
-    number: 5,
-    timeFrom: "10:30",
-    timeTo: "11:00",
-  },
-  {
-    number: 6,
-    timeFrom: "11:05",
-    timeTo: "11:35",
-  },
-  {
-    number: 7,
-    timeFrom: "11:40",
-    timeTo: "12:10",
-  },
-  {
-    number: 8,
-    timeFrom: "12:15",
-    timeTo: "12:45",
-  },
-  {
-    number: 9,
-    timeFrom: "12:50",
-    timeTo: "13:20",
-  },
-  {
-    number: 10,
-    timeFrom: "13:25",
-    timeTo: "13:55",
-  },
-  {
-    number: 11,
-    timeFrom: "14:00",
-    timeTo: "14:30",
-  },
-  {
-    number: 12,
-    timeFrom: "14:35",
-    timeTo: "15:05",
-  },
-  {
-    number: 13,
-    timeFrom: "15:10",
-    timeTo: "15:40",
-  },
-  {
-    number: 14,
-    timeFrom: "15:45",
-    timeTo: "16:15",
-  },
-];
-
-export const adjustShortenedLessons = (
-  startIndex: number,
-  defaultHours: hourType[],
-): hourType[] => {
-  const adjustedShortenedLessons: hourType[] = [];
-
-  for (let i = 0; i < defaultHours.length; i++) {
-    const hour = defaultHours[i];
-    const previousHour =
-      adjustedShortenedLessons[i - 1] || defaultHours[i - 1] || null;
-
-    if (Number(hour.number) > startIndex) {
-      const newHour: hourType = {
-        number: hour.number,
-        timeFrom: addMinutes(previousHour.timeTo, 5),
-        timeTo: addMinutes(previousHour.timeTo, 35),
-      };
-      adjustedShortenedLessons.push(newHour);
-    } else {
-      adjustedShortenedLessons.push(hour);
-    }
+  if (!targetDay) {
+    console.log("Day not found");
+    return {
+      day: today.getDate(),
+      month: moment(today.getMonth() + 1).format("MMMM"),
+      monthNumber: today.getMonth() + 1,
+    };
   }
 
-  return adjustedShortenedLessons;
-};
+  const targetDayOfWeek = targetDay.index + 1;
 
-const addMinutes = (time: string, minutes: number): string => {
-  const [hours, minutesPart] = time.split(":");
-  const totalMinutes = parseInt(hours) * 60 + parseInt(minutesPart) + minutes;
-  const adjustedHours = Math.floor(totalMinutes / 60)
-    .toString()
-    .padStart(2, "0");
-  const adjustedMinutes = (totalMinutes % 60).toString().padStart(2, "0");
-  return `${adjustedHours}:${adjustedMinutes}`;
-};
+  const daysUntilTarget = (targetDayOfWeek - todayDayOfWeek + 7) % 7;
 
-export const getCurrentLesson = (
-  timeFrom: string,
-  timeTo: string,
-): { isWithinTimeRange: boolean; minutesRemaining: number } => {
-  const currentHour = new Date().getHours();
-  const currentMinutes = new Date().getMinutes();
+  const targetDate = new Date(today);
+  targetDate.setDate(today.getDate() + daysUntilTarget);
 
-  const [fromHour, fromMinutes] = timeFrom?.split(":");
-  const [toHour, toMinutes] = timeTo?.split(":");
-  let minutesRemaining = 0,
-    isWithinTimeRange = false;
-  const isAfterFromTime =
-    currentHour > Number(fromHour) ||
-    (currentHour === Number(fromHour) && currentMinutes >= Number(fromMinutes));
-  const isBeforeToTime =
-    currentHour < Number(toHour) ||
-    (currentHour === Number(toHour) && currentMinutes < Number(toMinutes));
-  isWithinTimeRange = isAfterFromTime && isBeforeToTime;
-
-  if (isWithinTimeRange) {
-    const endTime = new Date();
-    endTime.setHours(Number(toHour), Number(toMinutes), 0);
-    const timeDifference = endTime.getTime() - new Date().getTime();
-    minutesRemaining = Math.ceil(
-      (timeDifference % (1000 * 60 * 60)) / (1000 * 60),
-    );
+  if (daysUntilTarget === 0 && todayDayOfWeek === targetDayOfWeek) {
+    targetDate.setDate(today.getDate());
+  } else if (targetDayOfWeek < todayDayOfWeek) {
+    targetDate.setDate(today.getDate() - (todayDayOfWeek - targetDayOfWeek));
   }
 
-  return { isWithinTimeRange, minutesRemaining };
+  return {
+    day: targetDate.getDate(),
+    month: moment(targetDate).format("MMM") + ".",
+    monthNumber: targetDate.getMonth() + 1,
+  };
+};
+
+export const simulateKeyPress = (key: string, keyCode: number) => {
+  const event = new KeyboardEvent("keydown", {
+    key,
+    code: key,
+    keyCode,
+    which: keyCode,
+    bubbles: true,
+  });
+  document.dispatchEvent(event);
+};
+
+export const parseTime = (timeStr: string): number => {
+  const [hours, minutes] = timeStr.split(":").map(Number);
+  return hours * 3600 + minutes * 60;
+};
+
+export const getUniqueSubstitutionList = (
+  type: "teacher" | "class",
+  substitutions: SubstitutionsPage,
+) => {
+  const uniqueNames = Array.from(
+    new Set(
+      substitutions.tables.flatMap((t) => t.substitutions.map((s) => s[type])),
+    ),
+  );
+
+  return uniqueNames
+    .map((name) => ({ name, type }))
+    .sort((a, b) => a.name.localeCompare(b.name));
+};
+
+export const parseSubstitutionClass = (branch: string): string => {
+  const regex = /(\w+)\|([^+]+)/g;
+  let result = branch.replace(regex, "$1 ($2)");
+  result = result.replace(/\+/g, " + ");
+  return result.trim();
+};
+
+export const sortSubstitutions = (substitutions: Substitution[]) => {
+  return substitutions
+    .sort((a, b) => a.class.localeCompare(b.class))
+    .sort((a, b) => a.number - b.number);
 };

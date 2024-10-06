@@ -1,21 +1,19 @@
-import defaults from "@/../app.config";
 import { MetadataRoute } from "next";
-
-import zstioLogo512 from "@/media/icon-512x512.png";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: defaults.title,
-    short_name: defaults.title,
-    description: defaults.description,
+    name: "Plan lekcji ZSTiO",
+    short_name: "ZSTiO",
+    description:
+      "W prosty sposób sprawdź plan zajęć i zastępstwa dla różnych klas, nauczycieli oraz sal w Zespole Szkół Technicznych i Ogólnokształcących im. Stefana Banacha w Jarosławiu.",
     start_url: "/",
     display: "standalone",
     orientation: "portrait",
-    background_color: defaults.themeColor,
-    theme_color: defaults.themeColor,
+    background_color: "#F22121",
+    theme_color: "#F22121",
     icons: [
       {
-        src: zstioLogo512.src,
+        src: "/icon-512x512.png",
         sizes: "512x512",
         type: "image/png",
         purpose: "any",
