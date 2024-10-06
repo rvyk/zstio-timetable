@@ -5,7 +5,7 @@ type ModalName =
   | "shortenedLessonsCalculator"
   | "freeRoomsSearch"
   | "freeRoomsResult"
-  | "errorDisplay";
+  | "announcement";
 
 interface ShortenedLessonsCalculatorState {
   isOpen: boolean;
@@ -13,7 +13,6 @@ interface ShortenedLessonsCalculatorState {
 
 interface FreeRoomsSearchState {
   isOpen: boolean;
-  //   selectedRoom?: string;
 }
 
 interface FreeRoomsResultState {
@@ -21,16 +20,15 @@ interface FreeRoomsResultState {
   isOpen: boolean;
 }
 
-interface ErrorDisplayState {
+interface AnnouncementState {
   isOpen: boolean;
-  //   errorMessage?: string;
 }
 
 interface ModalsState {
   shortenedLessonsCalculator: ShortenedLessonsCalculatorState;
   freeRoomsSearch: FreeRoomsSearchState;
   freeRoomsResult: FreeRoomsResultState;
-  errorDisplay: ErrorDisplayState;
+  announcement: AnnouncementState;
 }
 
 interface ModalsStore {

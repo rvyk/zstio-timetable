@@ -9,12 +9,6 @@ export const handleFavorite = (item: ListItem) => {
 
   if (!item.name) return;
 
-  // const map = {
-  //   class: "classes",
-  //   teacher: "teachers",
-  //   room: "rooms",
-  // } as const;
-
   const isAlreadyFavorite = favorites.some((c) => c.name === item.name);
 
   if (isAlreadyFavorite) {
@@ -28,11 +22,6 @@ export const handleFavorite = (item: ListItem) => {
     return;
   }
 
-  // const currentSelectionObject = timetable.list[map[timetable.type]];
-  // const favoriteItem = currentSelectionObject?.find(
-  //   (c) => c.name === timetable.title,
-  // );
-
   addFavorite({
     ...item,
   });
@@ -41,5 +30,4 @@ export const handleFavorite = (item: ListItem) => {
     title: "Dodano do ulubionych",
     description: `Pomyślnie dodano do ulubionych: ${item.name}`,
   });
-  return;
 };

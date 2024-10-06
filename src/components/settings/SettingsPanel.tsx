@@ -38,7 +38,9 @@ export const SettingsPanel = () => {
   const savedSettings = useSettingsStore();
   const [prompt, isInstalled] = usePwa();
 
-  const isSubstitutionPage = usePathname() === "/substitutions";
+  const isSubstitutionPage = ["/substitutions", "/zastepstwa"].includes(
+    usePathname(),
+  );
 
   const settings = [
     {

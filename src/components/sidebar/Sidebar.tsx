@@ -77,7 +77,10 @@ export const SidebarContent: FC = memo(() => {
 
   const { isPreview } = useSidebarContext();
   const isClient = useIsClient();
-  const isSubstitutionPage = usePathname() === "/substitutions";
+  const isSubstitutionPage = ["/substitutions", "/zastepstwa"].includes(
+    usePathname(),
+  );
+
   const sourceLink = isSubstitutionPage
     ? process.env.NEXT_PUBLIC_SUBSTITUTIONS_URL
     : process.env.NEXT_PUBLIC_TIMETABLE_URL;

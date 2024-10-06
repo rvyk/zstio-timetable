@@ -23,7 +23,9 @@ export const TopbarButtons: FC = () => {
   const lastVisited = useMemo(() => getCookie("lastVisited") ?? "/", []);
   const redirectFromSubstitutions = lastVisited as string;
 
-  const isSubstitutionPage = pathname === "/substitutions";
+  const isSubstitutionPage = ["/substitutions", "/zastepstwa"].includes(
+    pathname,
+  );
 
   const { theme, setTheme, systemTheme } = useTheme();
   const currentTheme = theme === "system" ? systemTheme : theme;
