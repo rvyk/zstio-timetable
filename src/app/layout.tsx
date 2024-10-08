@@ -1,6 +1,5 @@
 import { getSubstitutions } from "@/actions/getSubstitutions";
 import { ThemeProvider } from "@/components/common/ThemeProvider";
-import { AnnouncementModal } from "@/components/modals/Announcement";
 import { SettingsPanel } from "@/components/settings/SettingsPanel";
 import { Sidebar } from "@/components/sidebar/Sidebar";
 import { SubstitutionsController } from "@/components/substitutions/SubstitutionsController";
@@ -51,7 +50,7 @@ export default async function RootLayout({
           <Sidebar />
           {children}
           <SettingsPanel />
-          <AnnouncementModal />
+          {/* <AnnouncementModal /> */}
         </ThemeProvider>
       </body>
     </html>
