@@ -6,7 +6,7 @@ import { daysOfWeek } from "@/constants/days";
 import { cn, getDayNumberForNextWeek } from "@/lib/utils";
 import { useSettingsStore } from "@/stores/settings";
 import { TableHour } from "@majusss/timetable-parser";
-import { Dispatch, FC, SetStateAction, useMemo } from "react";
+import { FC, useMemo } from "react";
 import { useIsClient } from "usehooks-ts";
 
 interface TableHourCellProps {
@@ -59,7 +59,7 @@ export const TableHourCell: FC<TableHourCellProps> = ({
 interface TableHeaderCellProps {
   dayName: string;
   selectedDayIndex?: number;
-  setSelectedDayIndex?: Dispatch<SetStateAction<number>>;
+  setSelectedDayIndex?: (selectedDayIndex: number) => void;
 }
 
 export const TableHeaderMobileCell: FC<TableHeaderCellProps> = ({

@@ -24,12 +24,14 @@ interface TimetableProps {
 }
 
 export const Timetable: FC<TimetableProps> = ({ timetable }) => {
-  const [selectedDayIndex, setSelectedDayIndex] = useState<number>(0);
   const isFullscreenMode = useSettingsWithoutStore(
     (state) => state.isFullscreenMode,
   );
   const lessonType = useSettingsStore((state) => state.lessonType);
   const hoursAdjustIndex = useSettingsStore((state) => state.hoursAdjustIndex);
+  const [selectedDayIndex, setSelectedDayIndex] = useSettingsWithoutStore(
+    (state) => [state.selectedDayIndex, state.setSelectedDayIndex],
+  );
 
   const [currentTime, setCurrentTime] = useState(() => {
     const now = new Date();
@@ -89,8 +91,11 @@ export const Timetable: FC<TimetableProps> = ({ timetable }) => {
         {timetable.dayNames.map((dayName) => (
           <TableHeaderMobileCell
             key={dayName}
-            dayName={dayName}
-            {...{ selectedDayIndex, setSelectedDayIndex }}
+            {...{
+              dayName,
+              selectedDayIndex,
+              setSelectedDayIndex,
+            }}
           />
         ))}
       </div>
