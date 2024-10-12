@@ -65,7 +65,9 @@ export const useSettingsWithoutStore = create<useSettingsWithoutStore>(
     toggleFullscreenMode: () =>
       set((state) => ({ isFullscreenMode: !state.isFullscreenMode })),
 
-    selectedDayIndex: new Date().getDay() - 1,
+    selectedDayIndex: [0, 6].includes(new Date().getDay())
+      ? 0
+      : new Date().getDay() - 1,
     setSelectedDayIndex: (selectedDayIndex) => set({ selectedDayIndex }),
   }),
 );
