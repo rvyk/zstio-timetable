@@ -58,7 +58,15 @@ export const BottomBar: FC<TopbarProps> = ({ timetable, substitutions }) => {
   };
 
   return (
-    <Drawer>
+    <Drawer
+      /*
+        Testing needed: a known problem is scrolling the page after opening the bottom drawer on iOS
+        https://github.com/shadcn-ui/ui/issues/3943
+      */
+      onOpenChange={(isOpen) => {
+        if (isOpen) window.scrollTo(0, 0);
+      }}
+    >
       <DrawerTrigger asChild>
         <div className="fixed bottom-0 flex h-20 w-full flex-col rounded-t-md border border-primary/10 bg-background dark:bg-foreground md:hidden">
           <div className="absolute left-0 right-0 top-1 mx-auto h-2 w-[100px] rounded-full bg-primary/10" />

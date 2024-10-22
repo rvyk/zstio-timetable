@@ -1,9 +1,15 @@
 import { withSentryConfig } from "@sentry/nextjs";
 import type { NextConfig } from "next";
 
-/** @type {import('next').NextConfig} */
 const nextConfig: NextConfig = {
   output: "standalone",
+
+  experimental: {
+    staleTimes: {
+      dynamic: 30,
+      static: 60,
+    },
+  },
 
   async rewrites() {
     return [
