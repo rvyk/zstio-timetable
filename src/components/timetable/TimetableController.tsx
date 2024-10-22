@@ -107,7 +107,7 @@ export const TimetableController = ({
         handleArrowKey(e.key == "ArrowRight");
       }
 
-      if (["F11", "f"].includes(e.key)) {
+      if (["F11", "f", "F"].includes(e.key)) {
         e.preventDefault();
         toggleFullscreenMode();
       }

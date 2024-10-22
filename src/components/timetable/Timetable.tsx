@@ -29,8 +29,11 @@ export const Timetable: FC<TimetableProps> = ({ timetable }) => {
   );
   const lessonType = useSettingsStore((state) => state.lessonType);
   const hoursAdjustIndex = useSettingsStore((state) => state.hoursAdjustIndex);
-  const [selectedDayIndex, setSelectedDayIndex] = useSettingsWithoutStore(
-    (state) => [state.selectedDayIndex, state.setSelectedDayIndex],
+  const selectedDayIndex = useSettingsWithoutStore(
+    (state) => state.selectedDayIndex,
+  );
+  const setSelectedDayIndex = useSettingsWithoutStore(
+    (state) => state.setSelectedDayIndex,
   );
 
   const [currentTime, setCurrentTime] = useState(() => {
@@ -78,6 +81,12 @@ export const Timetable: FC<TimetableProps> = ({ timetable }) => {
     [timetable.lessons],
   );
 
+  const handleDayChange = (newIndex: number) => {
+    if (selectedDayIndex !== newIndex) {
+      setSelectedDayIndex(newIndex);
+    }
+  };
+
   return (
     <div
       className={cn(
@@ -91,11 +100,9 @@ export const Timetable: FC<TimetableProps> = ({ timetable }) => {
         {timetable.dayNames.map((dayName) => (
           <TableHeaderMobileCell
             key={dayName}
-            {...{
-              dayName,
-              selectedDayIndex,
-              setSelectedDayIndex,
-            }}
+            dayName={dayName}
+            selectedDayIndex={selectedDayIndex}
+            setSelectedDayIndex={handleDayChange}
           />
         ))}
       </div>

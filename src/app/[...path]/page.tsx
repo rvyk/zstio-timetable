@@ -1,7 +1,3 @@
-import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
-import { Fragment } from "react";
-
 import { getOptivumList } from "@/actions/getOptivumList";
 import { getOptivumTimetable } from "@/actions/getOptivumTimetable";
 import { BottomBar } from "@/components/common/BottomBar";
@@ -11,14 +7,16 @@ import { ShortenedLessonsCalculatorModal } from "@/components/modals/ShortenedLe
 import { Timetable } from "@/components/timetable/Timetable";
 import { TimetableController } from "@/components/timetable/TimetableController";
 import { Topbar } from "@/components/topbar/Topbar";
-
-export const dynamic = "force-dynamic";
+import { Fragment } from "react";
 
 interface PageParams {
   path?: string[];
 }
 
-export const generateMetadata = async ({ params }: { params: PageParams }) => {
+export const generateMetadata = async (props: {
+  params: Promise<PageParams>;
+}) => {
+  const params = await props.params;
   const [type, value] = params.path ?? [];
 
   if (!type || !value) {
@@ -26,16 +24,13 @@ export const generateMetadata = async ({ params }: { params: PageParams }) => {
   }
 
   const timetable = await getOptivumTimetable(type, value);
+
   return { title: timetable.title };
 };
 
-const TimetablePage = async ({ params }: { params: PageParams }) => {
+const TimetablePage = async (props: { params: Promise<PageParams> }) => {
+  const params = await props.params;
   const [type, value] = params.path ?? [];
-
-  if (!type || !value) {
-    const redirectTo = cookies().get("lastVisited")?.value ?? "/class/1";
-    redirect(redirectTo);
-  }
 
   const timetable = await getOptivumTimetable(type, value);
 

@@ -4,8 +4,6 @@ import { Substitutions } from "@/components/substitutions/Substitutions";
 import { Topbar } from "@/components/topbar/Topbar";
 import { redirect } from "next/navigation";
 
-export const dynamic = "force-dynamic";
-
 export const generateMetadata = async () => {
   const substitutions = await getSubstitutions();
 

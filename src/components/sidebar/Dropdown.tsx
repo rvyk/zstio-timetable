@@ -128,8 +128,10 @@ export const ListItemComponent: FC<
   const link = `/${item.type ? item.type : type}/${item.value}`;
 
   const handleButton = () => {
-    isSidebarOpen && toggleSidebar();
-    onClick && onClick();
+    if (isSidebarOpen) {
+      toggleSidebar();
+    }
+    onClick?.();
   };
 
   return (

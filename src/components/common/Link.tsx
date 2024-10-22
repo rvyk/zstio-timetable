@@ -17,7 +17,12 @@ export const LinkWithCookie: FC<
   };
 
   return (
-    <Link href={href} onClick={(e) => handleClick(href, e)} {...rest}>
+    <Link
+      href={href}
+      onClick={(e) => handleClick(href, e)}
+      prefetch={false}
+      {...rest}
+    >
       {children}
     </Link>
   );

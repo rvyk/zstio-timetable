@@ -10,6 +10,8 @@ import { Poppins } from "next/font/google";
 import { ReactNode } from "react";
 import "./globals.css";
 
+export const fetchCache = "default-cache";
+
 const poppins = Poppins({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700", "800"],

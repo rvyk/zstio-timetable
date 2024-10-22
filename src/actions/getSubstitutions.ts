@@ -58,6 +58,7 @@ export const getSubstitutions = async (): Promise<SubstitutionsPage> => {
       lastUpdated: parseHeaderDate(res),
     };
   } catch (error) {
+    console.error("Error while fetching substitutions", error);
     return { heading: "", tables: [], timeRange: "", lastUpdated: "" };
   }
 };

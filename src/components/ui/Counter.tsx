@@ -10,11 +10,15 @@ export const Counter: FC<
   }
 > = ({ count, increment, decrement, minCount }) => {
   const handleDecrement = () => {
-    count > minCount && decrement();
+    if (count > minCount) {
+      decrement();
+    }
   };
 
   const handleIncrement = () => {
-    count < MAX_LESSONS && increment();
+    if (count < MAX_LESSONS) {
+      increment();
+    }
   };
 
   return (
