@@ -99,7 +99,7 @@ const SchoolLink: FC = () => (
 const Dates: FC<{ timetable?: OptivumTimetable }> = ({ timetable }) => {
   const hasNoLessons = useMemo(
     () =>
-      timetable?.lessons.some((innerArray) => innerArray.length === 0) ?? true,
+      timetable?.lessons?.some((innerArray) => innerArray.length === 0) ?? true,
     [timetable?.lessons],
   );
 

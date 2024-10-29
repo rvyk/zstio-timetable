@@ -19,7 +19,7 @@ declare module "@majusss/substitutions-parser/dist/types" {
 interface OptivumTimetable {
   id: string;
   hours: Record<number, TableHour>;
-  lessons: TableLesson[][][];
+  lessons?: TableLesson[][][];
   generatedDate: string | null;
   title: string;
   type: "class" | "teacher" | "room";

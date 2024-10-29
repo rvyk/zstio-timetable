@@ -71,13 +71,13 @@ export const Timetable: FC<TimetableProps> = ({ timetable }) => {
     return (
       Math.max(
         Object.keys(timetable.hours).length,
-        ...timetable.lessons.map((day) => day.length),
+        ...(timetable.lessons?.map((day) => day.length) ?? []),
       ) || 0
     );
   }, [timetable]);
 
   const hasLessons = useMemo(
-    () => timetable.lessons.some((innerArray) => innerArray.length > 0),
+    () => timetable.lessons?.some((innerArray) => innerArray.length > 0),
     [timetable.lessons],
   );
 
@@ -136,7 +136,7 @@ export const Timetable: FC<TimetableProps> = ({ timetable }) => {
                       isCurrent={hourIndex === currentLessonIndex}
                       timeRemaining={parseTime(hour.timeTo) - currentTime}
                     />
-                    {timetable.lessons.map((day, dayIndex) => (
+                    {timetable.lessons?.map((day, dayIndex) => (
                       <TableLessonCell
                         key={dayIndex}
                         dayIndex={dayIndex}

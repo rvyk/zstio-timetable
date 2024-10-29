@@ -9,20 +9,23 @@ import { getOptivumTimetable } from "./getOptivumTimetable";
 export interface Room {
   id: string;
   title: string;
-  lessons: TableLesson[][][];
+  lessons?: TableLesson[][][];
 }
 
 const combineRooms = async (): Promise<Room[]> => {
   const { rooms } = await getOptivumList();
   if (!rooms) return [];
+
   const roomPromises = rooms.map(async (room) => {
     const { title, lessons } = await getOptivumTimetable("room", room.value);
+
     return {
       id: room.value,
       title,
       lessons,
     };
   });
+
   return Promise.all(roomPromises);
 };
 
@@ -35,7 +38,7 @@ export const getFreeRooms = async (
   })();
 
   const emptyRooms = rooms.filter(
-    (room) => !room.lessons[weekdayIndex][lessonIndex]?.length,
+    (room) => !room.lessons?.[weekdayIndex][lessonIndex]?.length,
   );
 
   return emptyRooms;
