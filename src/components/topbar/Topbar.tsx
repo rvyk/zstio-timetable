@@ -1,6 +1,7 @@
 "use client";
 
 import logo_zstio from "@/assets/logo-zstio.png";
+import { FavoriteStar } from "@/components/common/FavoriteStar";
 import { ShortLessonSwitcherCell } from "@/components/timetable/Cells";
 import { translationDict } from "@/constants/translations";
 import { OptivumTimetable } from "@/types/optivum";
@@ -10,7 +11,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { FC, Fragment, useMemo } from "react";
 import { useIsClient } from "usehooks-ts";
-import { FavoriteStar } from "../common/FavoriteStar";
 import { TopbarButtons } from "./Buttons";
 
 interface TopbarProps {

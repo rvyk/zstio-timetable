@@ -5,12 +5,12 @@ import { Button } from "@/components/ui/Button";
 import { SHORT_HOURS } from "@/constants/settings";
 import { translationDict } from "@/constants/translations";
 import { adjustShortenedLessons } from "@/lib/adjustShortenedLessons";
-import { cn, parseTime, simulateKeyPress } from "@/lib/utils";
+import { cn, simulateKeyPress } from "@/lib/utils";
 import { useSettingsStore, useSettingsWithoutStore } from "@/stores/settings";
 import { OptivumTimetable } from "@/types/optivum";
 import { ArrowLeft, ArrowRight, Shrink } from "lucide-react";
 import Image from "next/image";
-import { FC, Fragment, useEffect, useMemo, useState } from "react";
+import { FC, Fragment, useMemo } from "react";
 import {
   ShortLessonSwitcherCell,
   TableHeaderCell,
@@ -36,36 +36,15 @@ export const Timetable: FC<TimetableProps> = ({ timetable }) => {
     (state) => state.setSelectedDayIndex,
   );
 
-  const [currentTime, setCurrentTime] = useState(() => {
-    const now = new Date();
-    return now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds();
-  });
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      const now = new Date();
-      setCurrentTime(
-        now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds(),
+  const hours = useMemo(() => {
+    if (lessonType === "custom") {
+      return adjustShortenedLessons(
+        hoursAdjustIndex,
+        Object.values(timetable.hours),
       );
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, []);
-
-  const hours =
-    lessonType === "custom"
-      ? adjustShortenedLessons(hoursAdjustIndex, Object.values(timetable.hours))
-      : lessonType === "short"
-        ? SHORT_HOURS
-        : timetable.hours;
-
-  const currentLessonIndex = useMemo(() => {
-    return Object.entries(hours).findIndex(([, value]) => {
-      const start = parseTime(value.timeFrom);
-      const end = parseTime(value.timeTo);
-      return currentTime >= start && currentTime < end;
-    });
-  }, [hours, currentTime]);
+    }
+    return lessonType === "short" ? SHORT_HOURS : timetable.hours;
+  }, [lessonType, hoursAdjustIndex, timetable.hours]);
 
   const maxLessons = useMemo(() => {
     return (
@@ -131,11 +110,7 @@ export const Timetable: FC<TimetableProps> = ({ timetable }) => {
                       "divide-lines border-b border-lines odd:bg-accent/50 odd:dark:bg-background md:divide-x",
                     )}
                   >
-                    <TableHourCell
-                      hour={hour}
-                      isCurrent={hourIndex === currentLessonIndex}
-                      timeRemaining={parseTime(hour.timeTo) - currentTime}
-                    />
+                    <TableHourCell hour={hour} />
                     {timetable.lessons?.map((day, dayIndex) => (
                       <TableLessonCell
                         key={dayIndex}

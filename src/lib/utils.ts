@@ -32,7 +32,7 @@ export const parseHeaderDate = (res: Response): string => {
 export const getDayNumberForNextWeek = (
   dayName: string,
 ): {
-  day: number;
+  dayNumber: number;
   month: string;
   monthNumber: number;
 } => {
@@ -43,9 +43,10 @@ export const getDayNumberForNextWeek = (
   );
 
   if (!targetDay) {
-    console.log("Day not found");
+    console.error("Day not found");
+
     return {
-      day: today.getDate(),
+      dayNumber: today.getDate(),
       month: moment(today.getMonth() + 1).format("MMMM"),
       monthNumber: today.getMonth() + 1,
     };
@@ -65,8 +66,8 @@ export const getDayNumberForNextWeek = (
   }
 
   return {
-    day: targetDate.getDate(),
-    month: moment(targetDate).format("MMM") + ".",
+    dayNumber: targetDate.getDate(),
+    month: moment(targetDate).format("MMMM") + ".",
     monthNumber: targetDate.getMonth() + 1,
   };
 };
@@ -79,6 +80,7 @@ export const simulateKeyPress = (key: string, keyCode: number) => {
     which: keyCode,
     bubbles: true,
   });
+
   document.dispatchEvent(event);
 };
 

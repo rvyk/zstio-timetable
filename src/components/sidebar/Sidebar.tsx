@@ -1,15 +1,6 @@
 "use client";
 
 import { Accordion } from "@/components/ui/Accordion";
-import { cn, getUniqueSubstitutionList } from "@/lib/utils";
-import { useFavoritesStore } from "@/stores/favorites";
-import { useSubstitutionsStore } from "@/stores/substitutions";
-import { useTimetableStore } from "@/stores/timetable";
-import { GraduationCap, MapPin, StarIcon, Users } from "lucide-react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { FC, Fragment, memo, useMemo } from "react";
-
 import {
   Sheet,
   SheetContent,
@@ -18,14 +9,22 @@ import {
   SheetTrigger,
 } from "@/components/ui/Sheet";
 import { Skeleton } from "@/components/ui/Skeleton";
+import { cn, getUniqueSubstitutionList } from "@/lib/utils";
+import { useFavoritesStore } from "@/stores/favorites";
 import { useSettingsWithoutStore } from "@/stores/settings";
+import { useSubstitutionsStore } from "@/stores/substitutions";
+import { useTimetableStore } from "@/stores/timetable";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
+import { GraduationCap, MapPin, StarIcon, Users } from "lucide-react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { FC, Fragment, useMemo } from "react";
 import { useIsClient } from "usehooks-ts";
 import SidebarContext, { useSidebarContext } from "./Context";
 import { Dropdown } from "./Dropdown";
 import { Search } from "./Search";
 
-export const Sidebar: FC = memo(() => {
+export const Sidebar: FC = () => {
   const { isSidebarOpen, toggleSidebar } = useSettingsWithoutStore();
 
   return (
@@ -64,10 +63,9 @@ export const Sidebar: FC = memo(() => {
       </div>
     </Fragment>
   );
-});
-Sidebar.displayName = "Sidebar";
+};
 
-export const SidebarContent: FC = memo(() => {
+export const SidebarContent: FC = () => {
   const lastUpdatedTimetable = useTimetableStore(
     (state) => state.timetable,
   )?.lastUpdated;
@@ -151,10 +149,9 @@ export const SidebarContent: FC = memo(() => {
       </div>
     </Fragment>
   );
-});
-SidebarContent.displayName = "SidebarContent";
+};
 
-const SubstitutionSidebarDropdowns: FC = memo(() => {
+const SubstitutionSidebarDropdowns: FC = () => {
   const substitutions = useSubstitutionsStore((state) => state.substitutions);
 
   const dropdownItems = useMemo(() => {
@@ -190,10 +187,9 @@ const SubstitutionSidebarDropdowns: FC = memo(() => {
       </Accordion>
     </div>
   );
-});
-SubstitutionSidebarDropdowns.displayName = "SubstitutionSidebarDropdowns";
+};
 
-const TimetableSidebarDropdowns: FC = memo(() => {
+const TimetableSidebarDropdowns: FC = () => {
   const { timetable } = useTimetableStore();
   const favorites = useFavoritesStore((state) => state.getFavorites());
   const { classes, teachers, rooms } = timetable?.list ?? {};
@@ -222,5 +218,4 @@ const TimetableSidebarDropdowns: FC = memo(() => {
       </Accordion>
     </div>
   );
-});
-TimetableSidebarDropdowns.displayName = "TimetableSidebarDropdowns";
+};

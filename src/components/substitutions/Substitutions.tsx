@@ -33,9 +33,11 @@ const TableHeader: FC = () => (
   </thead>
 );
 
-const SubstitutionTable: FC<{
+interface SubstitutionTableProps {
   table: SubstitutionTableType;
-}> = ({ table }) => {
+}
+
+const SubstitutionTable: FC<SubstitutionTableProps> = ({ table }) => {
   const { filters } = useSubstitutionsStore();
 
   const filteredSubstitutions = sortSubstitutions(table.substitutions).filter(
@@ -67,9 +69,11 @@ const SubstitutionTable: FC<{
   );
 };
 
-export const Substitutions: FC<{ substitutions: SubstitutionsPage }> = ({
-  substitutions,
-}) => {
+interface SubstitutionProps {
+  substitutions: SubstitutionsPage;
+}
+
+export const Substitutions: FC<SubstitutionProps> = ({ substitutions }) => {
   return (
     <div className="h-fit w-full border-y border-lines bg-foreground transition-all max-md:mb-20 md:overflow-hidden md:rounded-md md:border">
       <div className="sticky top-0 z-20 border-b border-lines bg-foreground px-2 py-3 text-center text-base text-primary dark:bg-background sm:text-lg md:hidden">
@@ -89,9 +93,11 @@ export const Substitutions: FC<{ substitutions: SubstitutionsPage }> = ({
   );
 };
 
-const SubstitutionRow: FC<{
+interface SubstitutionRowProps {
   substitution: Substitution;
-}> = ({ substitution }) => {
+}
+
+const SubstitutionRow: FC<SubstitutionRowProps> = ({ substitution }) => {
   const cellClassName =
     "px-4 py-3 text-sm sm:text-base font-medium text-primary/90 last:border-0";
 

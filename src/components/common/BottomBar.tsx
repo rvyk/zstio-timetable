@@ -53,6 +53,7 @@ export const BottomBar: FC<TopbarProps> = ({ timetable, substitutions }) => {
   ) => {
     e.preventDefault();
     e.stopPropagation();
+
     const key = increment ? "ArrowRight" : "ArrowLeft";
     simulateKeyPress(key, key === "ArrowRight" ? 39 : 37);
   };
@@ -103,7 +104,7 @@ export const BottomBar: FC<TopbarProps> = ({ timetable, substitutions }) => {
       </DrawerTrigger>
       <DrawerContent className="md:hidden">
         <VisuallyHidden>
-          <DrawerTitle> Przeglądaj plan zajęć </DrawerTitle>
+          <DrawerTitle>Przeglądaj plan zajęć</DrawerTitle>
           <DrawerDescription>
             Lorem ipsum dolor sit amet consectetur, adipisicing elit. Saepe,
             sapiente.

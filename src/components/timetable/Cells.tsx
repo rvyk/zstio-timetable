@@ -3,24 +3,38 @@
 import { Button } from "@/components/ui/Button";
 import { Skeleton } from "@/components/ui/Skeleton";
 import { daysOfWeek } from "@/constants/days";
-import { cn, getDayNumberForNextWeek } from "@/lib/utils";
+import { cn, getDayNumberForNextWeek, parseTime } from "@/lib/utils";
 import { useSettingsStore } from "@/stores/settings";
 import { TableHour } from "@majusss/timetable-parser";
-import { FC, useMemo } from "react";
+import { FC, useEffect, useMemo, useState } from "react";
 import { useIsClient } from "usehooks-ts";
 
 interface TableHourCellProps {
   hour: TableHour;
-  isCurrent: boolean;
-  timeRemaining: number;
 }
 
-export const TableHourCell: FC<TableHourCellProps> = ({
-  hour,
-  isCurrent,
-  timeRemaining,
-}) => {
+export const TableHourCell: FC<TableHourCellProps> = ({ hour }) => {
   const isClient = useIsClient();
+  const [currentTime, setCurrentTime] = useState(() => {
+    const now = new Date();
+    return now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds();
+  });
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const now = new Date();
+      setCurrentTime(
+        now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds(),
+      );
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  const start = useMemo(() => parseTime(hour.timeFrom), [hour.timeFrom]);
+  const end = useMemo(() => parseTime(hour.timeTo), [hour.timeTo]);
+  const isCurrent = currentTime >= start && currentTime < end;
+  const timeRemaining = isCurrent ? end - currentTime : 0;
 
   const { minutesRemaining, secondsRemaining } = useMemo(() => {
     const minutes = Math.floor(timeRemaining / 60)
@@ -84,7 +98,7 @@ export const TableHeaderMobileCell: FC<TableHeaderCellProps> = ({
     >
       <h2 className="text-sm font-semibold opacity-90">{dayObject.short}</h2>
       <h3 className="text-xs font-semibold opacity-70">
-        {dayNumber.day.toString().padStart(2, "0")}.
+        {dayNumber.dayNumber.toString().padStart(2, "0")}.
         {dayNumber.monthNumber.toString().padStart(2, "0")}
       </h3>
     </button>
@@ -92,10 +106,10 @@ export const TableHeaderMobileCell: FC<TableHeaderCellProps> = ({
 };
 
 export const TableHeaderCell: FC<TableHeaderCellProps> = ({ dayName }) => {
-  const dayNumber = useMemo(() => getDayNumberForNextWeek(dayName), [dayName]);
+  const day = useMemo(() => getDayNumberForNextWeek(dayName), [dayName]);
   const isCurrentDay = useMemo(
-    () => new Date().getDate() === dayNumber.day,
-    [dayNumber],
+    () => new Date().getDate() === day.dayNumber,
+    [day],
   );
 
   return (
@@ -114,7 +128,7 @@ export const TableHeaderCell: FC<TableHeaderCellProps> = ({ dayName }) => {
             "text-3xl font-semibold",
           )}
         >
-          {dayNumber.day.toString().padStart(2, "0")}
+          {day.dayNumber.toString().padStart(2, "0")}
         </h2>
         <h3 className="text-lg font-semibold text-primary/90">{dayName}</h3>
       </div>

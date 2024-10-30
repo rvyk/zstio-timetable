@@ -86,10 +86,12 @@ export const Dropdown: FC<DropdownProps> = ({ type, icon: Icon, data }) => {
   );
 };
 
-export const DropdownContent: FC<{
+interface DropdownContentProps {
   type: DropdownProps["type"];
   data?: DataItem[];
-}> = ({ type, data }) => {
+}
+
+export const DropdownContent: FC<DropdownContentProps> = ({ type, data }) => {
   return (
     <div className="mt-4 grid gap-2 rounded-md bg-primary/[0.03] p-4 dark:bg-accent/90 md:bg-accent/90">
       {data && data.length > 0 ? (

@@ -1,16 +1,10 @@
 "use server";
 
 import { REVALIDATE_TIME } from "@/constants/settings";
-import { TableLesson } from "@majusss/timetable-parser";
+import { Room } from "@/types/optivum";
 import { unstable_cache } from "next/cache";
 import { getOptivumList } from "./getOptivumList";
 import { getOptivumTimetable } from "./getOptivumTimetable";
-
-export interface Room {
-  id: string;
-  title: string;
-  lessons?: TableLesson[][][];
-}
 
 const combineRooms = async (): Promise<Room[]> => {
   const { rooms } = await getOptivumList();

@@ -7,10 +7,12 @@ import { ListItem } from "@majusss/timetable-parser";
 import { StarIcon } from "lucide-react";
 import { FC, useMemo } from "react";
 
-export const FavoriteStar: FC<{
+interface FavoriteStarProps {
   item: ListItem;
   small?: boolean;
-}> = ({ item, small }) => {
+}
+
+export const FavoriteStar: FC<FavoriteStarProps> = ({ item, small }) => {
   const { favorites } = useFavoritesStore();
 
   const isFavorite = useMemo(() => {

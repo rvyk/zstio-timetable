@@ -16,6 +16,12 @@ declare module "@majusss/substitutions-parser/dist/types" {
   }
 }
 
+interface Room {
+  id: string;
+  title: string;
+  lessons?: TableLesson[][][];
+}
+
 interface OptivumTimetable {
   id: string;
   hours: Record<number, TableHour>;

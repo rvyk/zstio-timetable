@@ -1,4 +1,4 @@
-import { Room } from "@/actions/getFreeRooms";
+import { Room } from "@/types/optivum";
 import { create } from "zustand";
 
 type ModalName =

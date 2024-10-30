@@ -19,10 +19,12 @@ const listKeys: Record<string, string> = {
   rooms: "room",
 };
 
-export const Search: FC<{
+interface SearchProps {
   timetable?: OptivumTimetable | null;
   substitutions?: SubstitutionsPage | null;
-}> = ({ timetable, substitutions }) => {
+}
+
+export const Search: FC<SearchProps> = ({ timetable, substitutions }) => {
   const { isPreview } = useSidebarContext();
   const router = useRouter();
   const [value, setValue] = useState("");

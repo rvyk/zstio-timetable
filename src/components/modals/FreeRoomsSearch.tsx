@@ -113,7 +113,7 @@ const Calendar: FC<{
             )}
           >
             <h2 className="text-xl font-semibold opacity-90 sm:text-2xl">
-              {getDayNumberForNextWeek(day.long).day}
+              {getDayNumberForNextWeek(day.long).dayNumber}
             </h2>
             <h3 className="text-xs font-medium capitalize opacity-70 sm:text-sm">
               {getDayNumberForNextWeek(day.long).month}
