@@ -1,23 +1,39 @@
 ![App screenshot](src/assets/zstio-og.png)
 
-# ZSTiO Timetable
+[Polska wersja](README.pl.md) / English version
 
-A modern, refreshed version of the [school timetable](https://www.zstio-elektronika.pl/plan/index.html) for [Zespół Szkół Technicznych i Ogólnokształcących](https://zstiojar.edu.pl/), built with the latest web technologies. This project simplifies access to class schedules by automatically scraping and parsing data using [@majusss/timetable-parser-js](https://github.com/majusss/timetable-parser-js). Special thanks to [Marioneq4958](https://github.com/marioneq4958) for the layout inspiration.
+# ✨ ZSTiO Timetable 🚀
 
-## 🎯 Key Features
+A modern and refreshed timetable application for Zespół Szkół Technicznych i Ogólnokształcących (ZSTiO), built with cutting-edge web technologies. This intuitive application simplifies access to class schedules and substitutions, providing a seamless experience for students, teachers, and staff.
 
-- **Universal Timetable:** Easily adaptable to any school that uses UONET-generated schedules. Just update the `NEXT_PUBLIC_TIMETABLE_URL` in the `.env.local` file with the URL of your school's timetable.
-- **Custom Substitutions:** Allows you to manually adjust substitution data for your specific requirements.
-- **Responsive Design:** Optimized for both desktop and mobile, ensuring the timetable is accessible on any device.
+## 🚀 Key Features
 
-## 🚀 Tech Stack
+- **Universal Compatibility 🌍:** Adaptable to any school using UONET timetables. Simply configure the `NEXT_PUBLIC_TIMETABLE_URL` environment variable.
+- **Seamless Substitution Integration 🔄:** View substitutions directly within the timetable, with options for manual adjustments (requires `NEXT_PUBLIC_SUBSTITUTIONS_URL`).
+- **Personalized Favorites ⭐:** Save your frequently accessed classes, teachers, and rooms for instant access.
+- **Effortless Free Room Search 🔎:** Quickly find available rooms by day and lesson number.
+- **Smart Shortened Lesson Calculator ⏱️:** Dynamically adjusts the timetable to reflect shortened lesson durations.
+- **Convenient Calendar Export (ICS) 📅:** Download your timetable in ICS format for seamless integration with your favorite calendar applications.
+- **Responsive Design for All Devices 📱💻:** Access your timetable on the go or from your desktop with a consistent and user-friendly interface.
+- **Elegant Dark Mode 🌙:** Switch between light and dark themes for optimal viewing comfort.
+- **Offline Access with PWA Support 🔌:** Install the application as a Progressive Web App for blazing-fast loading and offline access.
+- **Robust Error Tracking (Sentry) ⚠️:** Integrated with Sentry for proactive error monitoring and enhanced application stability.
+- **Streamlined Deployment with Docker 🐳:** Leverage the provided Dockerfile for effortless deployment and a consistent environment.
 
-- **[Next.js](https://nextjs.org/):** A powerful React framework for building server-side rendered applications.
-- **[TypeScript](https://www.typescriptlang.org/):** A superset of JavaScript that enables static typing and error checking during development.
-- **[Tailwind CSS](https://tailwindcss.com/):** A utility-first CSS framework that allows rapid UI development with a focus on customization.
-- **[shadcn/ui](https://ui.shadcn.com/):** A feature-rich UI library providing ready-to-use React components to streamline frontend development.
+## 💻 Tech Stack
 
-## ⚙️ Setup Guide
+- **Next.js:** The React framework for production.
+- **TypeScript:** For type safety and improved developer experience.
+- **Tailwind CSS:** Rapidly build modern user interfaces.
+- **shadcn/ui:** Beautiful and accessible UI components.
+- **@majusss/timetable-parser-js:** Efficient data scraping and parsing.
+- **@majusss/substitutions-parser:** Handles substitution data with ease.
+- **Zustand:** Lightweight and performant state management.
+- **Next Themes:** Effortless theme switching.
+- **Sentry:** Real-time error tracking and performance monitoring.
+- **Docker:** Containerization for simplified deployment.
+
+## Installation and Setup
 
 1. **Clone the repository:**
 
@@ -34,57 +50,42 @@ A modern, refreshed version of the [school timetable](https://www.zstio-elektron
 
 3. **Configure environment variables:**
 
-   - Create a `.env.local` file in the project root.
-   - Set the `NEXT_PUBLIC_TIMETABLE_URL` to the URL of your school's timetable.
-   - Set the `NEXT_PUBLIC_APP_URL` to the base URL where your application will be hosted (e.g., your local development environment or production domain).
+   Create a `.env.local` file based on `.env.example` and set the following:
 
-   ```bash
-   NEXT_PUBLIC_TIMETABLE_URL="http://www.zstio-elektronika.pl/plan/"
-   NEXT_PUBLIC_APP_URL="http://localhost:3000/"
-   ```
+   - **`NEXT_PUBLIC_TIMETABLE_URL` (required):** The URL of your school's UONET timetable.
+   - **`NEXT_PUBLIC_APP_URL` (required):** The base URL of your application.
+   - **`NEXT_PUBLIC_SUBSTITUTIONS_URL` (optional):** The URL of the substitutions page. Leave blank if not used.
+   - **`SENTRY_AUTH_TOKEN` (optional):** Your Sentry authentication token.
 
-   > The `NEXT_PUBLIC_APP_URL` variable is important for defining the base URL of your application, which can be used for links, API calls, and other server-side features in both development and production.
-
-4. **Run the development server:**
+4. **Development Server:**
 
    ```bash
    pnpm dev
    ```
 
-   Visit [http://localhost:3000](http://localhost:3000) to view the app.
+   Access the application at `http://localhost:3000`.
 
-5. **Build for production (recommended with Docker):**
+5. **Production Build (Docker Recommended):**
 
-   To ensure the application runs smoothly in production, it is recommended to use Docker for building and deploying. This helps maintain consistency between environments and simplifies the deployment process.
-
-   **Steps to build and run with Docker:**
-
-   1. **Build the Docker image:**
-
-      ```bash
-      docker build -t zstio-timetable-docker .
-      ```
-
-   2. **Run the Docker container:**
-      ```bash
-      docker run -p 3000:3000 zstio-timetable-docker
-      ```
-
-   This will build the application and run it inside a Docker container, making it easy to deploy across different platforms or environments.
-
-6. **Build for production (alternative method):**
    ```bash
-   pnpm build
+   docker build -t zstio-timetable-docker .
+   docker run -p 3000:3000 zstio-timetable-docker
    ```
 
-## 🙌 Credits
+6. **Production Build (Alternative):**
 
-- **[@majusss/timetable-parser](https://github.com/majusss/timetable-parser-js):** For data scraping and parsing functionality.
-- **[Marioneq4958](https://github.com/marioneq4958):** For layout inspiration.
+   ```bash
+   pnpm build
+   pnpm start
+   ```
 
-## 📄 License
+## Contributing
 
-This project is licensed under the MIT License. Feel free to use and modify it as per your needs.
+Contributions are welcome! Please open an issue or submit a pull request.
+
+## License
+
+MIT License. See the [LICENSE](LICENSE) file for details.
 
 ## 🌐 Useful Links
 
@@ -92,5 +93,5 @@ This project is licensed under the MIT License. Feel free to use and modify it a
 
 [![portfolio](https://img.shields.io/badge/Github-majusss-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/majusss/) ![wakatime](https://wakatime.com/badge/user/63d00a78-aaef-4163-98f0-5695127e3103/project/018b396b-d9dc-4f6e-add4-ffe9bf124fb6.svg?style=for-the-badge)
 
-[![try](https://img.shields.io/badge/TRY_DEV-0A66C2?style=for-the-badge&logoColor=white)](https://dev.rvyk.tech/)
-[![try](https://img.shields.io/badge/TRY_PROD-0A66C2?style=for-the-badge&logoColor=white)](https://plan.zstiojar.edu.pl/)
+[![try](https://img.shields.io/badge/TRY_DEVELOPMENT-0A66C2?style=for-the-badge&logoColor=white)](https://dev.rvyk.tech/)
+[![try](https://img.shields.io/badge/TRY_PRODUCTION-0A66C2?style=for-the-badge&logoColor=white)](https://plan.zstiojar.edu.pl/)
