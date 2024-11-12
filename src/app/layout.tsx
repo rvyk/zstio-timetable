@@ -5,7 +5,7 @@ import { Sidebar } from "@/components/sidebar/Sidebar";
 import { SubstitutionsController } from "@/components/substitutions/SubstitutionsController";
 import { Toaster } from "@/components/ui/Toaster";
 import { cn } from "@/lib/utils";
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Poppins } from "next/font/google";
 import { ReactNode } from "react";
 import "./globals.css";
@@ -29,6 +29,12 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "./",
   },
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
 };
 
 export default async function RootLayout({
