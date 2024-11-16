@@ -9,7 +9,7 @@ export const generateMetadata = async () => {
 
   return {
     title: substitutions.heading,
-    description: `Sprawdź zastępstwa w ZSTiO na (${substitutions.timeRange})`,
+    description: `Sprawdź zastępstwa w ${SCHOOL_SHORT} na (${substitutions.timeRange})`,
   };
 };
 

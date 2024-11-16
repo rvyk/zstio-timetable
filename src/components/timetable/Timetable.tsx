@@ -1,6 +1,6 @@
 "use client";
 
-import logo_zstio_high from "@/assets/logo-zstio-high.png";
+import school_logo_high from "@/assets/school-logo-high.png";
 import { Button } from "@/components/ui/Button";
 import { SHORT_HOURS } from "@/constants/settings";
 import { translationDict } from "@/constants/translations";
@@ -197,8 +197,8 @@ const NotFoundTimetable: FC<NotFoundTimetableProps> = ({ id }) => {
   return (
     <div className="flex h-full flex-col items-center justify-center">
       <Image
-        src={logo_zstio_high}
-        alt="Logo szkoły ZSTiO"
+        src={school_logo_high}
+        alt={`Logo szkoły ${SCHOOL_SHORT}`}
         className="aspect-square w-24"
       />
       <div className="grid gap-1 text-center">

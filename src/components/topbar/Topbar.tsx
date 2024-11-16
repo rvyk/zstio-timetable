@@ -1,6 +1,6 @@
 "use client";
 
-import logo_zstio from "@/assets/logo-zstio.png";
+import school_logo from "@/assets/school-logo.png";
 import { FavoriteStar } from "@/components/common/FavoriteStar";
 import { ShortLessonSwitcherCell } from "@/components/timetable/Cells";
 import { translationDict } from "@/constants/translations";
@@ -12,6 +12,7 @@ import Link from "next/link";
 import { FC, Fragment, useMemo } from "react";
 import { useIsClient } from "usehooks-ts";
 import { TopbarButtons } from "./Buttons";
+import { SCHOOL_WEBSITE, SCHOOL_SHORT } from "@/constants/school";
 
 interface TopbarProps {
   timetable?: OptivumTimetable;
@@ -81,12 +82,12 @@ export const Topbar: FC<TopbarProps> = ({ timetable, substitutions }) => {
 
 const SchoolLink: FC = () => (
   <Link
-    href="https://zstiojar.edu.pl"
+    href={SCHOOL_WEBSITE}
     className="group inline-flex w-fit items-center gap-x-4"
   >
     <Image
-      src={logo_zstio}
-      alt="Logo szkoły ZSTiO"
+      src={school_logo}
+      alt={`Logo szkoły ${SCHOOL_SHORT}`}
       className="aspect-square w-10"
     />
     <div className="inline-flex items-center gap-x-2 text-primary/70 transition-colors group-hover:text-primary/90 max-md:hidden">
