@@ -18,6 +18,7 @@ import {
   TableHourCell,
 } from "./Cells";
 import { TableLessonCell } from "./LessonCells";
+import { SCHOOL_SHORT } from "@/constants/school";
 
 interface TimetableProps {
   timetable: OptivumTimetable;

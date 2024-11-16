@@ -2,6 +2,7 @@ import { getSubstitutions } from "@/actions/getSubstitutions";
 import { BottomBar } from "@/components/common/BottomBar";
 import { Substitutions } from "@/components/substitutions/Substitutions";
 import { Topbar } from "@/components/topbar/Topbar";
+import { SCHOOL_SHORT } from "@/constants/school";
 import { redirect } from "next/navigation";
 
 export const generateMetadata = async () => {
