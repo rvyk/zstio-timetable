@@ -1,5 +1,6 @@
 "use server";
 
+import { SCHOOL_SHORT } from "@/constants/school";
 import { REVALIDATE_TIME } from "@/constants/settings";
 import { TableHour, TableLesson } from "@majusss/timetable-parser";
 import * as ics from "ics";
@@ -55,7 +56,7 @@ const createEvent = (
     .join(" ");
 
   const categories = [
-    "ZSTiO",
+    SCHOOL_SHORT,
     ...(className ? [className] : []),
     ...(groupName ? [groupName] : []),
   ];

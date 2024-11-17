@@ -1,11 +1,12 @@
+import { SCHOOL_SHORT, SCHOOL_NAME_ACCUSATIVE } from "@/constants/school";
 import { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "Plan lekcji ZSTiO",
-    short_name: "Plan lekcji ZSTiO",
+    name: `Plan lekcji ${SCHOOL_SHORT}`,
+    short_name: `Plan lekcji ${SCHOOL_SHORT}`,
     description:
-      "W prosty sposób sprawdź plan zajęć i zastępstwa dla różnych klas, nauczycieli oraz sal w Zespole Szkół Technicznych i Ogólnokształcących im. Stefana Banacha w Jarosławiu.",
+      `W prosty sposób sprawdź plan zajęć i zastępstwa dla różnych klas, nauczycieli oraz sal w ${SCHOOL_NAME_ACCUSATIVE}.`,
     start_url: "/",
     display: "standalone",
     orientation: "portrait",
