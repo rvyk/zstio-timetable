@@ -47,7 +47,7 @@ export const getDayNumberForNextWeek = (
 
     return {
       dayNumber: today.getDate(),
-      month: moment(today.getMonth() + 1).format("MMMM"),
+      month: moment(today.getMonth() + 1).format("MMM"),
       monthNumber: today.getMonth() + 1,
     };
   }
@@ -67,7 +67,7 @@ export const getDayNumberForNextWeek = (
 
   return {
     dayNumber: targetDate.getDate(),
-    month: moment(targetDate).format("MMMM") + ".",
+    month: moment(targetDate).format("MMM") + ".",
     monthNumber: targetDate.getMonth() + 1,
   };
 };
