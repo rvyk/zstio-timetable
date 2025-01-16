@@ -2,7 +2,7 @@ import { withSentryConfig } from "@sentry/nextjs";
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  output: "standalone",
+  output: process.env.DOCKERIZED === "true" ? "standalone" : undefined,
 
   experimental: {
     staleTimes: {
@@ -48,8 +48,6 @@ const checkEnvVariables = (envVars: string[]) => {
     }
   });
 };
-
-// export default nextConfig;
 
 const sentryConfig = {
   org: "majrvy",
