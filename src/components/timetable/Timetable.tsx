@@ -46,6 +46,11 @@ export const Timetable: FC<TimetableProps> = ({ timetable }) => {
     );
   }, [timetable]);
 
+  const hasLessons = useMemo(
+    () => timetable.lessons?.some((innerArray) => innerArray.length > 0),
+    [timetable.lessons],
+  );
+
   const handleDayChange = (newIndex: number) => {
     if (selectedDayIndex !== newIndex) {
       setSelectedDayIndex(newIndex);
@@ -66,39 +71,41 @@ export const Timetable: FC<TimetableProps> = ({ timetable }) => {
       </div>
 
       <div className="h-full w-full md:overflow-auto">
-        <table className="w-full">
-          <thead className="max-md:hidden">
-            <tr className="divide-x divide-lines border-b border-lines">
-              <th>
-                <ShortLessonSwitcherCell />
-              </th>
-              {timetable.dayNames.map((dayName) => (
-                <TableHeaderCell key={dayName} dayName={dayName} />
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {Object.values(hours)
-              .slice(0, maxLessons)
-              .map((hour, hourIndex) => (
-                <tr
-                  key={hourIndex}
-                  className="divide-lines border-b border-lines odd:bg-accent/50 odd:dark:bg-background md:divide-x md:last:border-none"
-                >
-                  <TableHourCell hour={hour} />
-                  {timetable.lessons?.map((day, dayIndex) => (
-                    <TableLessonCell
-                      key={dayIndex}
-                      dayIndex={dayIndex}
-                      day={day}
-                      lessonIndex={hourIndex}
-                      selectedDayIndex={selectedDayIndex}
-                    />
-                  ))}
-                </tr>
-              ))}
-          </tbody>
-        </table>
+        {hasLessons && (
+          <table className="w-full">
+            <thead className="max-md:hidden">
+              <tr className="divide-x divide-lines border-b border-lines">
+                <th>
+                  <ShortLessonSwitcherCell />
+                </th>
+                {timetable.dayNames.map((dayName) => (
+                  <TableHeaderCell key={dayName} dayName={dayName} />
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {Object.values(hours)
+                .slice(0, maxLessons)
+                .map((hour, hourIndex) => (
+                  <tr
+                    key={hourIndex}
+                    className="divide-lines border-b border-lines odd:bg-accent/50 odd:dark:bg-background md:divide-x md:last:border-none"
+                  >
+                    <TableHourCell hour={hour} />
+                    {timetable.lessons?.map((day, dayIndex) => (
+                      <TableLessonCell
+                        key={dayIndex}
+                        dayIndex={dayIndex}
+                        day={day}
+                        lessonIndex={hourIndex}
+                        selectedDayIndex={selectedDayIndex}
+                      />
+                    ))}
+                  </tr>
+                ))}
+            </tbody>
+          </table>
+        )}
       </div>
     </div>
   );
