@@ -3,7 +3,6 @@ import { Skeleton } from "@/components/ui/Skeleton";
 import { useSettingsWithoutStore } from "@/stores/settings";
 import { getCookie } from "cookies-next";
 import {
-  FullscreenIcon,
   MenuIcon,
   MoonIcon,
   Repeat2Icon,
@@ -30,9 +29,6 @@ export const TopbarButtons: FC = () => {
   const { theme, setTheme, systemTheme } = useTheme();
   const currentTheme = theme === "system" ? systemTheme : theme;
 
-  const toggleFullscreen = useSettingsWithoutStore(
-    (state) => state.toggleFullscreenMode,
-  );
   const toggleSettingsPanel = useSettingsWithoutStore(
     (state) => state.toggleSettingsPanel,
   );
@@ -42,14 +38,6 @@ export const TopbarButtons: FC = () => {
   }, [currentTheme, setTheme]);
 
   const buttons = [
-    {
-      icon: FullscreenIcon,
-      href: null,
-      action: toggleFullscreen,
-      ariaLabel: "Przełącz na tryb pełnoekranowy (F/F11)",
-      hidden: isSubstitutionPage,
-      classNames: "max-md:hidden",
-    },
     {
       icon: currentTheme === "dark" ? SunMediumIcon : MoonIcon,
       href: null,
@@ -102,7 +90,6 @@ export const TopbarButtons: FC = () => {
             size="icon"
             onClick={button.action ?? undefined}
             asChild={Boolean(button.href)}
-            className={button.classNames}
           >
             {button.href ? (
               <Link href={button.href}>

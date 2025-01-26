@@ -44,9 +44,6 @@ interface useSettingsWithoutStore {
   isSidebarOpen: boolean;
   toggleSidebar: () => void;
 
-  isFullscreenMode: boolean;
-  toggleFullscreenMode: () => void;
-
   selectedDayIndex: number;
   setSelectedDayIndex: (selectedDayIndex: number) => void;
 }
@@ -60,10 +57,6 @@ export const useSettingsWithoutStore = create<useSettingsWithoutStore>(
     isSidebarOpen: false,
     toggleSidebar: () =>
       set((state) => ({ isSidebarOpen: !state.isSidebarOpen })),
-
-    isFullscreenMode: false,
-    toggleFullscreenMode: () =>
-      set((state) => ({ isFullscreenMode: !state.isFullscreenMode })),
 
     selectedDayIndex: [0, 6].includes(new Date().getDay())
       ? 0

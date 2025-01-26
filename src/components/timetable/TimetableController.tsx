@@ -1,7 +1,6 @@
 "use client";
 
 import { setLastVisitedCookie } from "@/lib/utils";
-import { useSettingsWithoutStore } from "@/stores/settings";
 import { useTimetableStore } from "@/stores/timetable";
 import { OptivumTimetable } from "@/types/optivum";
 import { List } from "@majusss/timetable-parser";
@@ -14,10 +13,6 @@ export const TimetableController = ({
   timetable: OptivumTimetable;
 }) => {
   const setTimetable = useTimetableStore((state) => state.setTimetable);
-  const toggleFullscreenMode = useSettingsWithoutStore(
-    (state) => state.toggleFullscreenMode,
-  );
-
   const router = useRouter();
 
   const navigateTo = useCallback(
@@ -106,16 +101,11 @@ export const TimetableController = ({
         e.preventDefault();
         handleArrowKey(e.key == "ArrowRight");
       }
-
-      if (["F11", "f", "F"].includes(e.key)) {
-        e.preventDefault();
-        toggleFullscreenMode();
-      }
     };
 
     window.addEventListener("keydown", listener);
     return () => window.removeEventListener("keydown", listener);
-  }, [handleArrowKey, timetable.list, toggleFullscreenMode]);
+  }, [handleArrowKey, timetable.list]);
 
   useEffect(() => {
     setTimetable(timetable);
