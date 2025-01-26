@@ -1,4 +1,4 @@
-import { daysOfWeek } from "@/constants/days";
+import { DAYS_OF_WEEK } from "@/constants/days";
 import {
   Substitution,
   SubstitutionsPage,
@@ -38,7 +38,7 @@ export const getDayNumberForNextWeek = (
 } => {
   const today = new Date();
   const todayDayOfWeek = today.getDay();
-  const targetDay = daysOfWeek.find(
+  const targetDay = DAYS_OF_WEEK.find(
     (day) => day.long === dayName || day.short === dayName,
   );
 

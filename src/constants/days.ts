@@ -1,4 +1,4 @@
-export const daysOfWeek = [
+export const DAYS_OF_WEEK = [
   { long: "Poniedziałek", short: "Pon.", index: 0 },
   { long: "Wtorek", short: "Wt.", index: 1 },
   { long: "Środa", short: "Śr.", index: 2 },

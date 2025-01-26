@@ -3,7 +3,8 @@
 import school_logo from "@/assets/school-logo.png";
 import { FavoriteStar } from "@/components/common/FavoriteStar";
 import { ShortLessonSwitcherCell } from "@/components/timetable/Cells";
-import { translationDict } from "@/constants/translations";
+import { SCHOOL_SHORT, SCHOOL_WEBSITE } from "@/constants/school";
+import { TRANSLATION_DICT } from "@/constants/translations";
 import { OptivumTimetable } from "@/types/optivum";
 import { SubstitutionsPage } from "@majusss/substitutions-parser/dist/types";
 import { ArrowLeftFromLine } from "lucide-react";
@@ -12,7 +13,6 @@ import Link from "next/link";
 import { FC, Fragment, useMemo } from "react";
 import { useIsClient } from "usehooks-ts";
 import { TopbarButtons } from "./Buttons";
-import { SCHOOL_WEBSITE, SCHOOL_SHORT } from "@/constants/school";
 
 interface TopbarProps {
   timetable?: OptivumTimetable;
@@ -29,7 +29,7 @@ export const Topbar: FC<TopbarProps> = ({ timetable, substitutions }) => {
     } else if (timetable?.title) {
       return (
         <Fragment>
-          Rozkład zajęć {translationDict[timetable.type]}{" "}
+          Rozkład zajęć {TRANSLATION_DICT[timetable.type]}{" "}
           <span className="font-semibold">{timetable.title}</span>
         </Fragment>
       );

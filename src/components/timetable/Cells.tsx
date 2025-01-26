@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/Button";
 import { Skeleton } from "@/components/ui/Skeleton";
-import { daysOfWeek } from "@/constants/days";
+import { DAYS_OF_WEEK } from "@/constants/days";
 import { cn, getDayNumberForNextWeek, parseTime } from "@/lib/utils";
 import { useSettingsStore } from "@/stores/settings";
 import { TableHour } from "@majusss/timetable-parser";
@@ -83,7 +83,7 @@ export const TableHeaderMobileCell: FC<TableHeaderCellProps> = ({
 }) => {
   const dayNumber = useMemo(() => getDayNumberForNextWeek(dayName), [dayName]);
 
-  const dayObject = daysOfWeek.find((day) => day.long === dayName);
+  const dayObject = DAYS_OF_WEEK.find((day) => day.long === dayName);
 
   if (!dayObject) return null;
 

@@ -11,7 +11,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/Dialog";
-import { daysOfWeek } from "@/constants/days";
+import { DAYS_OF_WEEK } from "@/constants/days";
 import { cn, getDayNumberForNextWeek } from "@/lib/utils";
 import useModalsStore from "@/stores/modals";
 import { useTimetableStore } from "@/stores/timetable";
@@ -83,7 +83,7 @@ const Calendar: FC<{
 
   return (
     <div className="flex justify-between">
-      {daysOfWeek.slice(0, timetable?.dayNames.length).map((day) => (
+      {DAYS_OF_WEEK.slice(0, timetable?.dayNames.length).map((day) => (
         <div
           onClick={() => setSelectedDay(day.index)}
           key={day.short}

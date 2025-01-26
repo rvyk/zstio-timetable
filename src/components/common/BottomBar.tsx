@@ -9,7 +9,7 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/Drawer";
-import { translationDict } from "@/constants/translations";
+import { TRANSLATION_DICT } from "@/constants/translations";
 import { simulateKeyPress } from "@/lib/utils";
 import { OptivumTimetable } from "@/types/optivum";
 import { SubstitutionsPage } from "@majusss/substitutions-parser/dist/types";
@@ -38,7 +38,7 @@ export const BottomBar: FC<TopbarProps> = ({ timetable, substitutions }) => {
             {isSubstitutionsPage && substitutions
               ? "Kliknij, aby zobaczyć szczegóły"
               : timetable?.type &&
-                `Rozkład zajęć ${translationDict[timetable.type]}`}
+                `Rozkład zajęć ${TRANSLATION_DICT[timetable.type]}`}
           </p>
         </div>
       );
