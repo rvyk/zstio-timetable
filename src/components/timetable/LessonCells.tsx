@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 import { useSettingsStore } from "@/stores/settings";
 import { useSubstitutionsStore } from "@/stores/substitutions";
 import { useTimetableStore } from "@/stores/timetable";
+import { LessonChange, TimetableDiffMatrix } from "@/types/optivum";
 import { LessonSubstitute } from "@majusss/substitutions-parser";
 import { TableLesson } from "@majusss/timetable-parser";
 import { FC } from "react";
@@ -15,6 +16,7 @@ interface TableLessonCellProps {
   dayIndex: number;
   lessonIndex: number;
   selectedDayIndex: number;
+  diffs?: TimetableDiffMatrix;
 }
 
 export const TableLessonCell: FC<TableLessonCellProps> = ({
@@ -22,6 +24,7 @@ export const TableLessonCell: FC<TableLessonCellProps> = ({
   dayIndex,
   lessonIndex,
   selectedDayIndex,
+  diffs,
 }) => {
   return (
     <td
@@ -36,6 +39,7 @@ export const TableLessonCell: FC<TableLessonCellProps> = ({
           lesson={lessonItem}
           dayIndex={dayIndex}
           lessonIndex={lessonIndex}
+          diff={diffs?.[dayIndex]?.[lessonIndex]?.[index]}
         />
       ))}
     </td>
@@ -46,12 +50,14 @@ interface LessonItemProps {
   lesson: TableLesson;
   dayIndex: number;
   lessonIndex: number;
+  diff?: Partial<LessonChange>;
 }
 
 export const LessonItem: FC<LessonItemProps> = ({
   lesson,
   dayIndex,
   lessonIndex,
+  diff,
 }) => {
   const isSubstitutionShown = useSettingsStore(
     (state) => state.isSubstitutionShown,
@@ -73,6 +79,7 @@ export const LessonItem: FC<LessonItemProps> = ({
     <div className="grid w-full">
       <LessonHeader
         lesson={lesson}
+        diff={diff}
         isStrikethrough={Boolean(hasSubstitutionCase && isSubstitutionShown)}
       />
       {isSubstitutionShown && substitution && (
@@ -85,9 +92,14 @@ export const LessonItem: FC<LessonItemProps> = ({
 interface LessonHeaderProps {
   lesson: TableLesson;
   isStrikethrough: boolean;
+  diff?: Partial<LessonChange>;
 }
 
-const LessonHeader: FC<LessonHeaderProps> = ({ lesson, isStrikethrough }) => (
+const LessonHeader: FC<LessonHeaderProps> = ({
+  lesson,
+  isStrikethrough,
+  diff,
+}) => (
   <div
     className={cn(
       isStrikethrough && "line-through opacity-50",
@@ -95,32 +107,59 @@ const LessonHeader: FC<LessonHeaderProps> = ({ lesson, isStrikethrough }) => (
     )}
   >
     <h2 className="whitespace-nowrap text-sm font-semibold text-primary/90 sm:text-base">
-      {lesson.subject}
-      <GroupName groupName={lesson.groupName} />
+      {diff?.subject ? (
+        <>
+          <span className="line-through opacity-50">
+            {diff.subject.oldValue}
+          </span>{" "}
+          {lesson.subject}
+        </>
+      ) : (
+        lesson.subject
+      )}
+      <GroupName
+        groupName={lesson.groupName}
+        oldGroupName={diff?.groupName?.oldValue}
+      />
     </h2>
     <LessonLinks
       classId={lesson.classId}
       className={lesson.className}
       teacherId={lesson.teacherId}
       teacherName={lesson.teacher}
+      oldTeacherName={diff?.teacher?.oldValue}
       roomId={lesson.roomId}
       roomName={lesson.room}
+      oldRoomName={diff?.room?.oldValue}
     />
   </div>
 );
 
-const GroupName: FC<{ groupName?: string }> = ({ groupName }) =>
-  groupName ? (
-    <span className="text-sm font-medium text-primary/70"> ({groupName})</span>
-  ) : null;
+const GroupName: FC<{ groupName?: string; oldGroupName?: string }> = ({
+  groupName,
+  oldGroupName,
+}) => {
+  if (!groupName && !oldGroupName) return null;
+
+  return (
+    <span className="text-sm font-medium text-primary/70">
+      {oldGroupName && (
+        <span className="line-through opacity-50"> ({oldGroupName})</span>
+      )}{" "}
+      {groupName && `(${groupName})`}
+    </span>
+  );
+};
 
 interface LessonLinksProps {
   classId?: string;
   className?: string;
   teacherId?: string;
   teacherName?: string;
+  oldTeacherName?: string;
   roomId?: string;
   roomName?: string;
+  oldRoomName?: string;
 }
 
 const LessonLinks: FC<LessonLinksProps> = ({
@@ -128,34 +167,47 @@ const LessonLinks: FC<LessonLinksProps> = ({
   className,
   teacherId,
   teacherName,
+  oldTeacherName,
   roomId,
   roomName,
+  oldRoomName,
 }) => (
   <div className="inline-flex gap-x-1.5 text-sm font-medium text-primary/70">
     <LessonLink id={classId} name={className} type="class" />
-    <LessonLink id={teacherId} name={teacherName} type="teacher" />
-    <LessonLink id={roomId} name={roomName} type="room" />
+    <LessonLink
+      id={teacherId}
+      name={teacherName}
+      oldName={oldTeacherName}
+      type="teacher"
+    />
+    <LessonLink id={roomId} name={roomName} oldName={oldRoomName} type="room" />
   </div>
 );
 
 interface LessonLinkProps {
   id?: string;
   name?: string;
+  oldName?: string;
   type: string;
 }
 
-const LessonLink: FC<LessonLinkProps> = ({ id, name, type }) => {
+const LessonLink: FC<LessonLinkProps> = ({ id, name, oldName, type }) => {
   const link = `/${type}/${id}`;
 
-  return id && name ? (
-    <LinkWithCookie
-      aria-label={`Przejdź do ${link}`}
-      className="hover:underline"
-      href={link}
-    >
-      {name}
-    </LinkWithCookie>
-  ) : null;
+  if (!id || (!name && !oldName)) return null;
+
+  return (
+    <span>
+      {oldName && <span className="line-through opacity-50">{oldName}</span>}{" "}
+      <LinkWithCookie
+        aria-label={`Przejdź do ${link}`}
+        className="hover:underline"
+        href={link}
+      >
+        {name}
+      </LinkWithCookie>
+    </span>
+  );
 };
 
 interface SubstitutionType {
