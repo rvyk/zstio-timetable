@@ -17,6 +17,7 @@ interface TableLessonCellProps {
   lessonIndex: number;
   selectedDayIndex: number;
   diffs?: TimetableDiffMatrix;
+  isNewReliable: boolean;
 }
 
 export const TableLessonCell: FC<TableLessonCellProps> = ({
@@ -25,6 +26,7 @@ export const TableLessonCell: FC<TableLessonCellProps> = ({
   lessonIndex,
   selectedDayIndex,
   diffs,
+  isNewReliable,
 }) => {
   return (
     <td
@@ -40,6 +42,7 @@ export const TableLessonCell: FC<TableLessonCellProps> = ({
           dayIndex={dayIndex}
           lessonIndex={lessonIndex}
           diff={diffs?.[dayIndex]?.[lessonIndex]?.[index]}
+          isNewReliable={isNewReliable}
         />
       ))}
     </td>
@@ -51,6 +54,7 @@ interface LessonItemProps {
   dayIndex: number;
   lessonIndex: number;
   diff?: Partial<LessonChange>;
+  isNewReliable: boolean;
 }
 
 export const LessonItem: FC<LessonItemProps> = ({
@@ -58,10 +62,15 @@ export const LessonItem: FC<LessonItemProps> = ({
   dayIndex,
   lessonIndex,
   diff,
+  isNewReliable,
 }) => {
   const isSubstitutionShown = useSettingsStore(
     (state) => state.isSubstitutionShown,
   );
+  const isShowDiffsEnabled = useSettingsStore(
+    (state) => state.isShowDiffsEnabled,
+  );
+  if (!isShowDiffsEnabled) diff = undefined;
   const substitutions = useSubstitutionsStore((state) => state.substitutions);
   const timetable = useTimetableStore((state) => state.timetable);
 
@@ -81,6 +90,7 @@ export const LessonItem: FC<LessonItemProps> = ({
         lesson={lesson}
         diff={diff}
         isStrikethrough={Boolean(hasSubstitutionCase && isSubstitutionShown)}
+        isNewReliable={isNewReliable}
       />
       {isSubstitutionShown && substitution && (
         <SubstitutionDetails substitution={substitution} />
@@ -93,47 +103,77 @@ interface LessonHeaderProps {
   lesson: TableLesson;
   isStrikethrough: boolean;
   diff?: Partial<LessonChange>;
+  isNewReliable: boolean;
 }
 
 const LessonHeader: FC<LessonHeaderProps> = ({
   lesson,
   isStrikethrough,
   diff,
-}) => (
-  <div
-    className={cn(
-      isStrikethrough && "line-through opacity-50",
-      "flex w-full items-center gap-x-1.5 md:justify-between md:gap-x-4",
-    )}
-  >
-    <h2 className="whitespace-nowrap text-sm font-semibold text-primary/90 sm:text-base">
-      {diff?.subject ? (
-        <>
-          <span className="line-through opacity-50">
-            {diff.subject.oldValue}
-          </span>{" "}
-          {lesson.subject}
-        </>
-      ) : (
-        lesson.subject
+  isNewReliable,
+}) => {
+  const getValue = (field: keyof LessonChange) => {
+    if (!diff) return lesson[field];
+    return isNewReliable
+      ? (diff[field]?.newValue ?? lesson[field])
+      : diff[field]?.oldValue
+        ? lesson[field]
+        : lesson[field];
+  };
+
+  const getOldValue = (field: keyof LessonChange) => {
+    if (!diff) return undefined;
+    return isNewReliable
+      ? diff[field]?.newValue
+        ? lesson[field]
+        : undefined
+      : diff[field]?.oldValue;
+  };
+
+  const currentSubject = getValue("subject");
+  const oldSubject = getOldValue("subject");
+  const currentGroup = getValue("groupName");
+  const oldGroup = getOldValue("groupName");
+  const currentTeacher = getValue("teacher");
+  const oldTeacher = getOldValue("teacher");
+  const currentRoom = getValue("room");
+  const oldRoom = getOldValue("room");
+
+  return (
+    <div
+      className={cn(
+        isStrikethrough && "line-through opacity-50",
+        "flex w-full items-center gap-x-1.5 md:justify-between md:gap-x-4",
       )}
-      <GroupName
-        groupName={lesson.groupName}
-        oldGroupName={diff?.groupName?.oldValue}
+    >
+      <h2 className="whitespace-nowrap text-sm font-semibold text-primary/90 sm:text-base">
+        {diff?.subject ? (
+          <>
+            {oldSubject && (
+              <span className="line-through opacity-50">{oldSubject}</span>
+            )}
+            {oldSubject && " "}
+            <span>{currentSubject}</span>
+          </>
+        ) : (
+          lesson.subject
+        )}
+        <GroupName groupName={currentGroup} oldGroupName={oldGroup} />
+      </h2>
+      <LessonLinks
+        teacherId={lesson.teacherId}
+        teacherName={currentTeacher}
+        oldTeacherName={oldTeacher}
+        roomId={lesson.roomId}
+        roomName={currentRoom}
+        oldRoomName={oldRoom}
+        isNewReliable={isNewReliable}
+        hasTeacherDiff={!!diff?.teacher}
+        hasRoomDiff={!!diff?.room}
       />
-    </h2>
-    <LessonLinks
-      classId={lesson.classId}
-      className={lesson.className}
-      teacherId={lesson.teacherId}
-      teacherName={lesson.teacher}
-      oldTeacherName={diff?.teacher?.oldValue}
-      roomId={lesson.roomId}
-      roomName={lesson.room}
-      oldRoomName={diff?.room?.oldValue}
-    />
-  </div>
-);
+    </div>
+  );
+};
 
 const GroupName: FC<{ groupName?: string; oldGroupName?: string }> = ({
   groupName,
@@ -145,67 +185,104 @@ const GroupName: FC<{ groupName?: string; oldGroupName?: string }> = ({
     <span className="text-sm font-medium text-primary/70">
       {oldGroupName && (
         <span className="line-through opacity-50"> ({oldGroupName})</span>
-      )}{" "}
+      )}
+      {oldGroupName && " "}
       {groupName && `(${groupName})`}
     </span>
   );
 };
 
 interface LessonLinksProps {
-  classId?: string;
-  className?: string;
   teacherId?: string;
   teacherName?: string;
   oldTeacherName?: string;
   roomId?: string;
   roomName?: string;
   oldRoomName?: string;
+  isNewReliable: boolean;
+  hasTeacherDiff: boolean;
+  hasRoomDiff: boolean;
 }
 
 const LessonLinks: FC<LessonLinksProps> = ({
-  classId,
-  className,
   teacherId,
   teacherName,
   oldTeacherName,
   roomId,
   roomName,
   oldRoomName,
-}) => (
-  <div className="inline-flex gap-x-1.5 text-sm font-medium text-primary/70">
-    <LessonLink id={classId} name={className} type="class" />
-    <LessonLink
-      id={teacherId}
-      name={teacherName}
-      oldName={oldTeacherName}
-      type="teacher"
-    />
-    <LessonLink id={roomId} name={roomName} oldName={oldRoomName} type="room" />
-  </div>
-);
+  isNewReliable,
+  hasTeacherDiff,
+  hasRoomDiff,
+}) => {
+  const shouldShowTeacherOld = hasTeacherDiff && oldTeacherName;
+  const shouldShowRoomOld = hasRoomDiff && oldRoomName;
+
+  return (
+    <div className="inline-flex gap-x-1.5 text-sm font-medium text-primary/70">
+      <LessonLink
+        id={teacherId}
+        name={teacherName}
+        oldName={shouldShowTeacherOld ? oldTeacherName : undefined}
+        type="teacher"
+        isNewReliable={isNewReliable}
+        hasDiff={hasTeacherDiff}
+      />
+      <LessonLink
+        id={roomId}
+        name={roomName}
+        oldName={shouldShowRoomOld ? oldRoomName : undefined}
+        type="room"
+        isNewReliable={isNewReliable}
+        hasDiff={hasRoomDiff}
+      />
+    </div>
+  );
+};
 
 interface LessonLinkProps {
   id?: string;
   name?: string;
   oldName?: string;
   type: string;
+  isNewReliable?: boolean;
+  hasDiff?: boolean;
 }
 
-const LessonLink: FC<LessonLinkProps> = ({ id, name, oldName, type }) => {
+const LessonLink: FC<LessonLinkProps> = ({
+  id,
+  name,
+  oldName,
+  type,
+  isNewReliable,
+  hasDiff,
+}) => {
   const link = `/${type}/${id}`;
+  const shouldReverse = type === "teacher" && isNewReliable && hasDiff;
+
+  const formatName = (name?: string) =>
+    shouldReverse ? name?.split(" ").reverse().join(" ") : name;
+
+  const displayName = formatName(name);
+  const displayOldName = formatName(oldName);
 
   if (!id || (!name && !oldName)) return null;
 
   return (
     <span>
-      {oldName && <span className="line-through opacity-50">{oldName}</span>}{" "}
-      <LinkWithCookie
-        aria-label={`Przejdź do ${link}`}
-        className="hover:underline"
-        href={link}
-      >
-        {name}
-      </LinkWithCookie>
+      {displayOldName && (
+        <span className="line-through opacity-50">{displayOldName}</span>
+      )}
+      {displayOldName && " "}
+      {name && (
+        <LinkWithCookie
+          aria-label={`Przejdź do ${link}`}
+          className={cn(hasDiff && "font-semibold", "hover:underline")}
+          href={link}
+        >
+          {displayName}
+        </LinkWithCookie>
+      )}
     </span>
   );
 };

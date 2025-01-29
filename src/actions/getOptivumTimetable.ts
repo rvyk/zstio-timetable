@@ -3,22 +3,45 @@
 import { REVALIDATE_TIME } from "@/constants/settings";
 import db from "@/lib/redis";
 import { parseHeaderDate } from "@/lib/utils";
-import {
-  OptivumTimetable,
-  TimetableDiff,
-  TimetableDiffMatrix,
-} from "@/types/optivum";
+import { OptivumTimetable, TimetableDiffMatrix } from "@/types/optivum";
 import { Table, TableLesson } from "@majusss/timetable-parser";
-import { diff } from "deep-diff";
+import deepDiff, { diff } from "deep-diff";
 import moment from "moment";
 import "moment/locale/pl";
 import { getOptivumList } from "./getOptivumList";
 
-export const getOptivumTimetable = async (
+const processDiffs = (
+  diffs: deepDiff.Diff<OptivumTimetable, OptivumTimetable>[],
+): TimetableDiffMatrix => {
+  const timetableDiffs: TimetableDiffMatrix = [];
+
+  for (const difference of diffs) {
+    const { kind, path } = difference;
+    if (!path || path[0] !== "lessons") continue;
+
+    const [day, lesson, group, type] = path.slice(1);
+    if (typeof type !== "string") continue;
+
+    if (!timetableDiffs[day]) timetableDiffs[day] = [];
+    if (!timetableDiffs[day][lesson]) timetableDiffs[day][lesson] = [];
+    if (!timetableDiffs[day][lesson][group])
+      timetableDiffs[day][lesson][group] = {};
+
+    timetableDiffs[day][lesson][group][type as keyof TableLesson] = {
+      kind,
+      newValue: "rhs" in difference ? String(difference.rhs) : undefined,
+      oldValue: "lhs" in difference ? String(difference.lhs) : undefined,
+    };
+  }
+
+  return timetableDiffs;
+};
+
+const getTimetableData = async (
   type: string,
   index: string,
-  getFuture: boolean = false,
-): Promise<OptivumTimetable> => {
+  getFuture: boolean,
+) => {
   const id =
     {
       class: `o${index}`,
@@ -26,75 +49,111 @@ export const getOptivumTimetable = async (
       room: `s${index}`,
     }[type] ?? "";
 
+  const baseUrl =
+    process.env.NEXT_PUBLIC_TIMETABLE_URL?.replace(/\/+$/, "") ?? "";
+  const url = `${getFuture ? baseUrl.replace(/[^/]+$/, "nowy-plan") : baseUrl}/plany/${id}.html`;
+
+  const res = await fetch(url, { next: { revalidate: REVALIDATE_TIME } });
+  const data = await res.text();
+  const timeTableData = new Table(data);
+
+  return {
+    id,
+    hours: timeTableData.getHours(),
+    lessons: timeTableData.getDays(),
+    generatedDate: moment(timeTableData.getGeneratedDate())
+      .locale("pl")
+      .format("DD MMMM YYYY[r.]"),
+    title: timeTableData.getTitle(),
+    type: type as OptivumTimetable["type"],
+    validDate: timeTableData.getVersionInfo(),
+    dayNames: timeTableData.getDayNames(),
+    list: await getOptivumList(),
+    lastUpdated: parseHeaderDate(res),
+    lastModified: res.headers.get("last-modified")
+      ? new Date(res.headers.get("last-modified")!).getTime()
+      : -1,
+  };
+};
+
+export const getOptivumTimetable = async (
+  type: string,
+  index: string,
+  getFuture: boolean = false,
+): Promise<OptivumTimetable> => {
   try {
-    const baseUrl =
-      process.env.NEXT_PUBLIC_TIMETABLE_URL?.replace(/\/+$/, "") ?? "";
-    const url = `${getFuture ? baseUrl.replace(/[^/]+$/, "nowy-plan") : baseUrl}/plany/${id}.html`;
+    const { id, lastUpdated, lastModified, ...finalData } =
+      await getTimetableData(type, index, getFuture);
 
-    const res = await fetch(url, {
-      next: {
-        revalidate: REVALIDATE_TIME,
-      },
-    });
+    if (getFuture) {
+      return {
+        id,
+        ...finalData,
+        lastUpdated,
+        lastModified,
+        isNewReliable: false,
+      };
+    }
 
-    const data = await res.text();
-    const timeTableData = new Table(data);
+    const [futureData, old] = await Promise.all([
+      getOptivumTimetable(type, index, true),
+      db.get(`timetable:${id}`),
+    ]);
 
-    const finalData = {
-      id,
-      hours: timeTableData.getHours(),
-      lessons: timeTableData.getDays(),
-      generatedDate: moment(timeTableData.getGeneratedDate())
-        .locale("pl")
-        .format("DD MMMM YYYY[r.]"),
-      title: timeTableData.getTitle(),
-      type: type as OptivumTimetable["type"],
-      validDate: timeTableData.getVersionInfo(),
-      dayNames: timeTableData.getDayNames(),
-      list: await getOptivumList(),
-    };
+    if (!old) {
+      await db.set(
+        `timetable:${id}`,
+        JSON.stringify({
+          ...finalData,
+          lastModified,
+        }),
+      );
+    }
 
-    const old = await db.get(`timetable:${id}`);
+    const futureDiffs = diff(finalData as OptivumTimetable, futureData);
+    if (futureDiffs) {
+      return {
+        id,
+        ...finalData,
+        lastUpdated,
+        lastModified,
+        diffs: processDiffs(futureDiffs),
+        isNewReliable: true,
+      };
+    }
 
     if (old) {
       const oldData = JSON.parse(old) as OptivumTimetable;
-      const diffs = diff(oldData, finalData);
-      if (diffs) {
-        const timetableDiffs: TimetableDiffMatrix = [];
-        for (const diff of diffs) {
-          const { kind, path } = diff;
-          const isLessons = path?.shift() === "lessons";
-          if (!isLessons) continue;
-          const type = path.pop();
-          if (typeof type != "string") continue;
-          const [day, lesson, group] = path;
+      if (lastModified !== -1 && oldData.lastModified !== lastModified) {
+        await db.set(
+          `timetable:${id}`,
+          JSON.stringify({
+            ...finalData,
+            lastModified,
+          }),
+        );
+      }
 
-          if (!timetableDiffs[day]) timetableDiffs[day] = [];
-          if (!timetableDiffs[day][lesson]) timetableDiffs[day][lesson] = [];
-          if (!timetableDiffs[day][lesson][group])
-            timetableDiffs[day][lesson][group] = {};
-
-          console.log(timetableDiffs);
-
-          timetableDiffs[day][lesson][group][type as keyof TableLesson] = {
-            kind,
-            newValue: "rhs" in diff ? String(diff.rhs) : undefined,
-            oldValue: "lhs" in diff ? String(diff.lhs) : undefined,
-          } as TimetableDiff;
-        }
+      const oldDiffs = diff(oldData, finalData as OptivumTimetable);
+      if (oldDiffs) {
         return {
-          lastUpdated: parseHeaderDate(res),
-          diffs: timetableDiffs,
+          id,
           ...finalData,
+          lastUpdated,
+          lastModified,
+          diffs: processDiffs(oldDiffs),
+          isNewReliable: false,
         };
       }
     }
 
-    // db.set(`timetable:${id}`, JSON.stringify(finalData));
-
     return {
-      lastUpdated: parseHeaderDate(res),
+      id,
       ...finalData,
+      lastUpdated,
+      lastModified,
+      diffs: [],
+      isNewReliable: false,
     };
   } catch (error) {
     console.error("Failed to fetch Optivum timetable:", error);

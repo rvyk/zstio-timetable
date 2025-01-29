@@ -23,7 +23,6 @@ interface Room {
 }
 
 interface TimetableDiff {
-  type: string;
   kind: "N" | "D" | "E" | "A";
   newValue?: string;
   oldValue?: string;
@@ -47,6 +46,8 @@ interface OptivumTimetable {
   list: List;
   lastUpdated: string;
   diffs?: TimetableDiffMatrix;
+  isNewReliable: boolean;
+  lastModified: number;
 }
 
 interface SubstitutionListItem {
