@@ -97,7 +97,11 @@ export const SettingsPanel = () => {
       },
       description: (
         <p>
-          Porównaj aktualny plan lekcji z nowym planem, aby zobaczyć różnice
+          Porównaj aktualny plan lekcji z{" "}
+          {timetable?.isNewReliable
+            ? "nowym planem (/nowy-plan)"
+            : "starym planem"}
+          , aby zobaczyć różnice
         </p>
       ),
     },
