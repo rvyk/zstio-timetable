@@ -110,23 +110,50 @@ const Dates: FC<{ timetable?: OptivumTimetable }> = ({ timetable }) => {
     const elements = [];
 
     if (timetable.generatedDate && timetable.generatedDate !== "Invalid date") {
+      const { generatedDate, diffs } = timetable;
+
+      const oldValue = diffs?.isNewReliable
+        ? generatedDate
+        : diffs?.generatedDate?.oldValue;
+      const newValue = diffs?.generatedDate
+        ? diffs.isNewReliable
+          ? diffs.generatedDate.newValue
+          : generatedDate
+        : generatedDate;
+
       elements.push(
         <Fragment key="generatedDate">
           Wygenerowano:{" "}
-          <span className="font-semibold text-primary/90">
-            {timetable.generatedDate}
-          </span>
+          {diffs?.generatedDate && (
+            <>
+              <span className="line-through opacity-50">{oldValue}</span>{" "}
+            </>
+          )}
+          <span className="font-semibold text-primary/90">{newValue}</span>
         </Fragment>,
       );
     }
 
-    if (timetable.validDate) {
+    if (timetable.validDate && timetable.validDate !== "Invalid date") {
+      const { validDate, diffs } = timetable;
+      const oldValue = diffs?.isNewReliable
+        ? validDate
+        : diffs?.validDate?.oldValue;
+      const newValue = diffs?.validDate
+        ? diffs.isNewReliable
+          ? diffs.validDate.newValue
+          : validDate
+        : validDate;
+
       elements.push(
         <Fragment key="validDate">
           Obowiązuje od:{" "}
-          <span className="font-semibold text-primary/90">
-            {timetable.validDate}
-          </span>
+          {diffs?.validDate && (
+            <>
+              <span className="line-through opacity-50">{oldValue}</span>{" "}
+            </>
+          )}
+          <span className="font-semibold text-primary/90">{newValue}</span>
         </Fragment>,
       );
     }
@@ -148,7 +175,7 @@ const Dates: FC<{ timetable?: OptivumTimetable }> = ({ timetable }) => {
       <p className="text-base font-medium text-primary/50">
         Szukany plan zajęć{" "}
         <span className="font-semibold text-primary/90">({timetable?.id})</span>{" "}
-        nie mógł zostać znaleziony.
+        nie został znaleziony.
       </p>
     );
   }

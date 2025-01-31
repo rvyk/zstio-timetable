@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 import { useSettingsStore } from "@/stores/settings";
 import { useSubstitutionsStore } from "@/stores/substitutions";
 import { useTimetableStore } from "@/stores/timetable";
-import { LessonChange, TimetableDiffMatrix } from "@/types/optivum";
+import { LessonChange, TimetableDiffsProp } from "@/types/optivum";
 import { LessonSubstitute } from "@majusss/substitutions-parser";
 import { TableLesson } from "@majusss/timetable-parser";
 import { FC } from "react";
@@ -16,8 +16,7 @@ interface TableLessonCellProps {
   dayIndex: number;
   lessonIndex: number;
   selectedDayIndex: number;
-  diffs?: TimetableDiffMatrix;
-  isNewReliable: boolean;
+  diffs?: TimetableDiffsProp;
 }
 
 export const TableLessonCell: FC<TableLessonCellProps> = ({
@@ -26,7 +25,6 @@ export const TableLessonCell: FC<TableLessonCellProps> = ({
   lessonIndex,
   selectedDayIndex,
   diffs,
-  isNewReliable,
 }) => {
   return (
     <td
@@ -41,8 +39,8 @@ export const TableLessonCell: FC<TableLessonCellProps> = ({
           lesson={lessonItem}
           dayIndex={dayIndex}
           lessonIndex={lessonIndex}
-          diff={diffs?.[dayIndex]?.[lessonIndex]?.[index]}
-          isNewReliable={isNewReliable}
+          diff={diffs?.lessons[dayIndex]?.[lessonIndex]?.[index]}
+          isNewReliable={diffs?.isNewReliable ?? false}
         />
       ))}
     </td>

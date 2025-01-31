@@ -32,7 +32,12 @@ type LessonChange = {
   [K in keyof TableLesson]?: TimetableDiff;
 };
 
-type TimetableDiffMatrix = Array<Array<Array<Partial<LessonChange>>>>;
+type TimetableDiffsProp = {
+  isNewReliable: boolean;
+  validDate?: TimetableDiff;
+  generatedDate?: TimetableDiff;
+  lessons: Array<Array<Array<Partial<LessonChange>>>>;
+};
 
 interface OptivumTimetable {
   id: string;
@@ -45,8 +50,7 @@ interface OptivumTimetable {
   dayNames: string[];
   list: List;
   lastUpdated: string;
-  diffs?: TimetableDiffMatrix;
-  isNewReliable: boolean;
+  diffs?: TimetableDiffsProp;
   lastModified: number;
 }
 

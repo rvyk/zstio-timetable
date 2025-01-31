@@ -101,7 +101,6 @@ export const Timetable: FC<TimetableProps> = ({ timetable }) => {
                         lessonIndex={hourIndex}
                         selectedDayIndex={selectedDayIndex}
                         diffs={diffs}
-                        isNewReliable={timetable.isNewReliable}
                       />
                     ))}
                   </tr>

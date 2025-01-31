@@ -98,7 +98,7 @@ export const SettingsPanel = () => {
       description: (
         <p>
           Porównaj aktualny plan lekcji z{" "}
-          {timetable?.isNewReliable
+          {timetable?.diffs?.isNewReliable
             ? "nowym planem (/nowy-plan)"
             : "starym planem"}
           , aby zobaczyć różnice
