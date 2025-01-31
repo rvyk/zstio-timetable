@@ -1,4 +1,4 @@
-![App screenshot](src/assets/zstio-og.png)
+![App screenshot](src/assets/school-og.png)
 
 [Polska wersja](README.pl.md) / English version
 
