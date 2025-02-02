@@ -1,5 +1,8 @@
 import { TableHour } from "@majusss/timetable-parser";
 
+/** Prefix to the new timetable, in order to compare it with the current one, e.g. `https://www.zstio-elektronika.pl/plan/plany/o1.html` -> `https://www.zstio-elektronika.pl/nowy-plan/plany/o1.html` */
+export const NEW_TIMETABLE_PREFIX = "nowy-plan";
+
 /** Time after Next.js will invalidate the cache */
 export const REVALIDATE_TIME = 900;
 

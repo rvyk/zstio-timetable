@@ -1,7 +1,7 @@
 "use server";
 
-import { REVALIDATE_TIME } from "@/constants/settings";
-import db from "@/lib/redis";
+import { NEW_TIMETABLE_PREFIX, REVALIDATE_TIME } from "@/constants/settings";
+import db, { isRedisConnected } from "@/lib/redis";
 import { parseHeaderDate } from "@/lib/utils";
 import { OptivumTimetable, TimetableDiffsProp } from "@/types/optivum";
 import { Table, TableLesson } from "@majusss/timetable-parser";
@@ -82,7 +82,7 @@ const getTimetableData = async (
 
   const baseUrl =
     process.env.NEXT_PUBLIC_TIMETABLE_URL?.replace(/\/+$/, "") ?? "";
-  const url = `${getFuture ? baseUrl.replace(/[^/]+$/, "nowy-plan") : baseUrl}/plany/${id}.html`;
+  const url = `${getFuture ? baseUrl.replace(/[^/]+$/, `${NEW_TIMETABLE_PREFIX}`) : baseUrl}/plany/${id}.html`;
 
   const res = await fetch(url, { next: { revalidate: REVALIDATE_TIME } });
   const data = await res.text();
@@ -117,6 +117,16 @@ export const getOptivumTimetable = async (
       await getTimetableData(type, index, getFuture);
 
     if (getFuture) {
+      return {
+        id,
+        ...finalData,
+        lastUpdated,
+        lastModified,
+      };
+    }
+
+    const isConnected = await isRedisConnected();
+    if (!isConnected || !db) {
       return {
         id,
         ...finalData,

@@ -10,6 +10,7 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/Sheet";
+import { NEW_TIMETABLE_PREFIX } from "@/constants/settings";
 import { usePwa } from "@/hooks/usePWA";
 import { showErrorToast } from "@/hooks/useToast";
 import { downloadFile } from "@/lib/downloadFile";
@@ -99,7 +100,7 @@ export const SettingsPanel = () => {
         <p>
           Porównaj aktualny plan lekcji z{" "}
           {timetable?.diffs?.isNewReliable
-            ? "nowym planem (/nowy-plan)"
+            ? `nowym planem (/${NEW_TIMETABLE_PREFIX})`
             : "starym planem"}
           , aby zobaczyć różnice
         </p>

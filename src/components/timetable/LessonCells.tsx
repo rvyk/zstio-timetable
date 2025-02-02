@@ -185,7 +185,7 @@ const GroupName: FC<{ groupName?: string; oldGroupName?: string }> = ({
         <span className="line-through opacity-50"> ({oldGroupName})</span>
       )}
       {oldGroupName && " "}
-      {groupName && `(${groupName})`}
+      {groupName && ` (${groupName})`}
     </span>
   );
 };
@@ -316,8 +316,7 @@ interface SubstitutionItemProps {
 const SubstitutionItem: FC<SubstitutionItemProps> = ({ substitute }) => (
   <div className="flex max-md:gap-x-1.5 md:justify-between">
     <h2 className="whitespace-nowrap text-sm font-semibold text-primary/90">
-      *{substitute.subject}
-      <GroupName groupName={substitute.groupName} />
+      *{substitute.subject} <GroupName groupName={substitute.groupName} />
     </h2>
     <div className="inline-flex gap-x-1.5 text-sm font-medium text-primary/70">
       {substitute.teacherId ? (
