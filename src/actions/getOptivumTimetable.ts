@@ -14,7 +14,6 @@ const processDiffs = (
   diffs: deepDiff.Diff<OptivumTimetable, OptivumTimetable>[],
   isNewReliable: boolean,
 ): TimetableDiffsProp => {
-  // console.log(diffs);
   const lessonDiffs: TimetableDiffsProp["lessons"] = [];
 
   let generatedDateDiff = undefined;
@@ -57,8 +56,6 @@ const processDiffs = (
         continue;
     }
   }
-
-  // console.log(JSON.stringify(lessonDiffs, null, 2));
 
   return {
     isNewReliable,

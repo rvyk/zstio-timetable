@@ -88,7 +88,10 @@ export const SettingsPanel = () => {
     {
       icon: Blend,
       title: "Porównaj plany lekcji",
-      hidden: isSubstitutionPage || !process.env.NEXT_PUBLIC_SUBSTITUTIONS_URL,
+      hidden:
+        isSubstitutionPage ||
+        !timetable?.diffs ||
+        !timetable.diffs.lessons.length,
       active: savedSettings.isShowDiffsEnabled,
       onClick: () => {
         savedSettings.toggleShowDiffs();
@@ -101,7 +104,7 @@ export const SettingsPanel = () => {
           Porównaj aktualny plan lekcji z{" "}
           {timetable?.diffs?.isNewReliable
             ? `nowym planem (/${NEW_TIMETABLE_PREFIX})`
-            : "starym planem"}
+            : "poprzednim planem"}
           , aby zobaczyć różnice
         </p>
       ),
