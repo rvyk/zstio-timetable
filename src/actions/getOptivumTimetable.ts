@@ -38,6 +38,21 @@ const processDiffs = (
         };
         continue;
       case "lessons":
+        if("item" in difference) {
+          const [day, lesson,] = path;
+  
+          if (!lessonDiffs[day]) lessonDiffs[day] = [];
+          if (!lessonDiffs[day][lesson]) lessonDiffs[day][lesson] = [];
+          if (!lessonDiffs[day][lesson][0])
+            lessonDiffs[day][lesson][0] = {};
+  
+          lessonDiffs[day][lesson][0]["subject"] = {
+            kind: difference.item.kind,
+            newValue: "rhs" in difference.item ? ("subject" in difference.item.rhs ? String(difference.item.rhs.subject) : undefined) : undefined,
+            oldValue: "lhs" in difference.item ? ("subject" in difference.item.lhs ? String(difference.item.lhs.subject) : undefined) : undefined,
+          };
+          continue;
+        }
         const [day, lesson, group, type] = path;
         if (typeof type !== "string") continue;
 
@@ -122,6 +137,19 @@ export const getOptivumTimetable = async (
       };
     }
 
+    const futureData = await getOptivumTimetable(type, index, true);
+    const futureDiffs = diff(finalData as OptivumTimetable, futureData);
+
+    if (futureDiffs) {
+      return {
+        id,
+        ...finalData,
+        lastUpdated,
+        lastModified,
+        diffs: processDiffs(futureDiffs, true),
+      };
+    }
+
     const isConnected = await isRedisConnected();
     if (!isConnected || !db) {
       return {
@@ -132,10 +160,7 @@ export const getOptivumTimetable = async (
       };
     }
 
-    const [futureData, old] = await Promise.all([
-      getOptivumTimetable(type, index, true),
-      db.get(`timetable:${id}`),
-    ]);
+    const old = await db.get(`timetable:${id}`);
 
     if (!old) {
       await db.set(
@@ -145,17 +170,6 @@ export const getOptivumTimetable = async (
           lastModified,
         }),
       );
-    }
-
-    const futureDiffs = diff(finalData as OptivumTimetable, futureData);
-    if (futureDiffs) {
-      return {
-        id,
-        ...finalData,
-        lastUpdated,
-        lastModified,
-        diffs: processDiffs(futureDiffs, true),
-      };
     }
 
     if (old) {

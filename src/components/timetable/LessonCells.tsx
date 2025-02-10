@@ -33,7 +33,7 @@ export const TableLessonCell: FC<TableLessonCellProps> = ({
         "py-3 last:border-0 max-md:px-2 md:px-4",
       )}
     >
-      {day[lessonIndex].map((lessonItem, index) => (
+      {day[lessonIndex]?.map((lessonItem, index) => (
         <LessonItem
           key={index}
           lesson={lessonItem}
@@ -140,7 +140,7 @@ const LessonHeader: FC<LessonHeaderProps> = ({
   return (
     <div
       className={cn(
-        isStrikethrough && "line-through opacity-50",
+        (diff?.subject?.kind == "D" || isStrikethrough) && "line-through opacity-50",
         "flex w-full items-center gap-x-1.5 md:justify-between md:gap-x-4",
       )}
     >
@@ -272,7 +272,7 @@ const LessonLink: FC<LessonLinkProps> = ({
         <span className="line-through opacity-50">{displayOldName}</span>
       )}
       {displayOldName && " "}
-      {name && (
+      {name ? (
         <LinkWithCookie
           aria-label={`Przejdź do ${link}`}
           className={cn(hasDiff && "font-semibold", "hover:underline")}
@@ -280,7 +280,13 @@ const LessonLink: FC<LessonLinkProps> = ({
         >
           {displayName}
         </LinkWithCookie>
-      )}
+      ) : (<LinkWithCookie
+          aria-label={`Przejdź do ${link}`}
+          className={cn(hasDiff && "font-semibold", "hover:underline")}
+          href={link}
+        >
+          {displayOldName}
+        </LinkWithCookie>)}
     </span>
   );
 };

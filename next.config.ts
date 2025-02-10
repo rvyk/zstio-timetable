@@ -9,6 +9,7 @@ const nextConfig: NextConfig = {
       dynamic: 30,
       static: 60,
     },
+    reactCompiler: true,
   },
 
   async rewrites() {
