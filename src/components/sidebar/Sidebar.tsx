@@ -123,7 +123,7 @@ export const SidebarContent: FC = () => {
               "mx-2 text-xs font-semibold text-primary/90 sm:text-sm",
             )}
           >
-            Ostatnia aktualizacja danych: <br />
+            Ostatnia walidacja danych: <br />
             <span className="break-words text-xs font-medium text-primary/70">
               {isSubstitutionPage
                 ? lastUpdatedSubstitutions

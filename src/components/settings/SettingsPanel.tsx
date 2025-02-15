@@ -10,6 +10,7 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/Sheet";
+import { NEW_TIMETABLE_PREFIX } from "@/constants/settings";
 import { usePwa } from "@/hooks/usePWA";
 import { showErrorToast } from "@/hooks/useToast";
 import { downloadFile } from "@/lib/downloadFile";
@@ -20,6 +21,7 @@ import { useTimetableStore } from "@/stores/timetable";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import {
   BellIcon,
+  Blend,
   CalculatorIcon,
   CalendarArrowDownIcon,
   DownloadIcon,
@@ -70,11 +72,40 @@ export const SettingsPanel = () => {
       title: "Zastępstwa na planie lekcji",
       hidden: isSubstitutionPage || !process.env.NEXT_PUBLIC_SUBSTITUTIONS_URL,
       active: savedSettings.isSubstitutionShown,
-      onClick: savedSettings.toggleSubstitution,
+      onClick: () => {
+        savedSettings.toggleSubstitution();
+        if (savedSettings.isShowDiffsEnabled) {
+          savedSettings.toggleShowDiffs();
+        }
+      },
       description: (
         <p>
           Zdecyduj, czy chcesz wyświetlać zastępstwa bezpośrednio na planie
           lekcji
+        </p>
+      ),
+    },
+    {
+      icon: Blend,
+      title: "Porównaj plany lekcji",
+      hidden:
+        isSubstitutionPage ||
+        !timetable?.diffs ||
+        !timetable.diffs.lessons.length,
+      active: savedSettings.isShowDiffsEnabled,
+      onClick: () => {
+        savedSettings.toggleShowDiffs();
+        if (savedSettings.isSubstitutionShown) {
+          savedSettings.toggleSubstitution();
+        }
+      },
+      description: (
+        <p>
+          Porównaj aktualny plan lekcji z{" "}
+          {timetable?.diffs?.isNewReliable
+            ? `nowym planem (/${NEW_TIMETABLE_PREFIX})`
+            : "poprzednim planem"}
+          , aby zobaczyć różnice
         </p>
       ),
     },

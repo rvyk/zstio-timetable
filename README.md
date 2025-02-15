@@ -10,6 +10,7 @@ A modern and refreshed timetable application for Zespół Szkół Technicznych i
 
 - **Universal Compatibility 🌍:** Adaptable to any school using UONET timetables. Simply configure the `NEXT_PUBLIC_TIMETABLE_URL` environment variable.
 - **Seamless Substitution Integration 🔄:** View substitutions directly within the timetable, with options for manual adjustments (requires `NEXT_PUBLIC_SUBSTITUTIONS_URL`).
+- **Timetable Comparison 📊:** Compare current timetable with new versions (/nowy-plan, configure in `/src/constants/settings.ts (NEW_TIMETABLE_PREFIX)`) to track changes when updates are available (requires `REDIS_URL`).
 - **Personalized Favorites ⭐:** Save your frequently accessed classes, teachers, and rooms for instant access.
 - **Effortless Free Room Search 🔎:** Quickly find available rooms by day and lesson number.
 - **Smart Shortened Lesson Calculator ⏱️:** Dynamically adjusts the timetable to reflect shortened lesson durations.
@@ -55,7 +56,10 @@ A modern and refreshed timetable application for Zespół Szkół Technicznych i
    - **`NEXT_PUBLIC_TIMETABLE_URL` (required):** The URL of your school's UONET timetable.
    - **`NEXT_PUBLIC_APP_URL` (required):** The base URL of your application.
    - **`NEXT_PUBLIC_SUBSTITUTIONS_URL` (optional):** The URL of the substitutions page. Leave blank if not used.
-   - **`SENTRY_AUTH_TOKEN` (optional):** Your Sentry authentication token.
+   - **`REDIS_URL` (optional):** Redis database connection string for comparing timetables.
+   - **`SENTRY_AUTH_TOKEN` (optional):** Your Sentry authentication token for error tracking.
+   - **`DOCKERIZED` (optional):** Set to "true" when running in Docker to enable standalone output mode.
+   - **`SENTRY_SUPPRESS_TURBOPACK_WARNING` (optional):** Set to 1 to suppress Sentry warnings related to Turbopack in development mode.
 
 4. **Development Server:**
 

@@ -10,6 +10,7 @@ Nowoczesna i odświeżona aplikacja planu lekcji dla Zespołu Szkół Techniczny
 
 - **Uniwersalna Kompatybilność 🌍:** Przystosowana do każdej szkoły korzystającej z planów UONET. Wystarczy skonfigurować zmienną środowiskową `NEXT_PUBLIC_TIMETABLE_URL`.
 - **Łatwa Integracja Zastępstw 🔄:** Przeglądaj zastępstwa bezpośrednio w planie lekcji, z możliwością ręcznych modyfikacji (wymaga `NEXT_PUBLIC_SUBSTITUTIONS_URL`).
+- **Porównywanie Planów 📊:** Porównuj aktualny plan lekcji z nowymi wersjami (/nowy-plan, do konfiguracji w `/src/constants/settings.ts (NEW_TIMETABLE_PREFIX)`), aby śledzić zmiany, gdy dostępne są aktualizacje (wymaga `REDIS_URL`).
 - **Ulubione ⭐:** Zapisz najczęściej przeglądane klasy, nauczycieli i sale, aby mieć do nich szybki dostęp.
 - **Wygodne Wyszukiwanie Wolnych Sal 🔎:** Szybko sprawdź dostępne sale według dnia i numeru lekcji.
 - **Inteligentne Skrócone Lekcje ⏱️:** Automatyczna adaptacja planu do skróconych godzin lekcyjnych.
@@ -55,7 +56,10 @@ Nowoczesna i odświeżona aplikacja planu lekcji dla Zespołu Szkół Techniczny
    - **`NEXT_PUBLIC_TIMETABLE_URL` (wymagane):** URL do planu lekcji Twojej szkoły (UONET).
    - **`NEXT_PUBLIC_APP_URL` (wymagane):** Podstawowy URL aplikacji.
    - **`NEXT_PUBLIC_SUBSTITUTIONS_URL` (opcjonalne):** URL strony z zastępstwami. Pozostaw puste, jeśli nie jest używane.
-   - **`SENTRY_AUTH_TOKEN` (opcjonalne):** Token autoryzacji Sentry.
+   - **`REDIS_URL` (opcjonalne):** String połączenia z bazą danych Redis do porównywania planów lekcji.
+   - **`SENTRY_AUTH_TOKEN` (opcjonalne):** Token autoryzacji Sentry do śledzenia błędów.
+   - **`DOCKERIZED` (opcjonalne):** Ustaw na "true" podczas uruchamiania w Dockerze, aby włączyć tryb standalone.
+   - **`SENTRY_SUPPRESS_TURBOPACK_WARNING` (opcjonalne):** Ustaw na 1, aby wyciszyć ostrzeżenia Sentry związane z Turbopack w trybie deweloperskim.
 
 4. **Serwer Deweloperski:**
 

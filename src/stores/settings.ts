@@ -12,6 +12,8 @@ interface TimetableSettingsStore {
   toggleSubstitution: () => void;
   isNotificationEnabled: boolean;
   toggleNotification: () => void;
+  isShowDiffsEnabled: boolean;
+  toggleShowDiffs: () => void;
 }
 
 export const useSettingsStore = create<TimetableSettingsStore>()(
@@ -30,6 +32,9 @@ export const useSettingsStore = create<TimetableSettingsStore>()(
         set((state) => ({
           isNotificationEnabled: !state.isNotificationEnabled,
         })),
+      isShowDiffsEnabled: false,
+      toggleShowDiffs: () =>
+        set((state) => ({ isShowDiffsEnabled: !state.isShowDiffsEnabled })),
     }),
     {
       name: "timetable-settings",

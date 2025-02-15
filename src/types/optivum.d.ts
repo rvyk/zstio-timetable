@@ -22,6 +22,23 @@ interface Room {
   lessons?: TableLesson[][][];
 }
 
+interface TimetableDiff {
+  kind: "N" | "D" | "E" | "A";
+  newValue?: string;
+  oldValue?: string;
+}
+
+type LessonChange = {
+  [K in keyof TableLesson]?: TimetableDiff;
+};
+
+type TimetableDiffsProp = {
+  isNewReliable: boolean;
+  validDate?: TimetableDiff;
+  generatedDate?: TimetableDiff;
+  lessons: Array<Array<Array<Partial<LessonChange>>>>;
+};
+
 interface OptivumTimetable {
   id: string;
   hours: Record<number, TableHour>;
@@ -33,6 +50,8 @@ interface OptivumTimetable {
   dayNames: string[];
   list: List;
   lastUpdated: string;
+  diffs?: TimetableDiffsProp;
+  lastModified: number;
 }
 
 interface SubstitutionListItem {
