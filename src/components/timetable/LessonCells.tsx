@@ -6,10 +6,10 @@ import { cn } from "@/lib/utils";
 import { useSettingsStore } from "@/stores/settings";
 import { useSubstitutionsStore } from "@/stores/substitutions";
 import { useTimetableStore } from "@/stores/timetable";
-import { LessonChange, TimetableDiffsProp } from "@/types/optivum";
 import { LessonSubstitute } from "@majusss/substitutions-parser";
 import { TableLesson } from "@majusss/timetable-parser";
 import { FC } from "react";
+import { DiffManager, TeacherNameFormatter, TimetableDiffsProp, LessonChange } from "@/lib/diffManager";
 
 interface TableLessonCellProps {
   day: TableLesson[][];
@@ -55,7 +55,7 @@ interface LessonItemProps {
   isNewReliable: boolean;
 }
 
-export const LessonItem: FC<LessonItemProps> = ({
+const LessonItem: FC<LessonItemProps> = ({
   lesson,
   dayIndex,
   lessonIndex,
@@ -110,55 +110,35 @@ const LessonHeader: FC<LessonHeaderProps> = ({
   diff,
   isNewReliable,
 }) => {
-  const getValue = (field: keyof LessonChange) => {
-    if (!diff) return lesson[field];
-    return isNewReliable
-      ? (diff[field]?.newValue ?? lesson[field])
-      : diff[field]?.oldValue
-        ? lesson[field]
-        : lesson[field];
-  };
+  const diffManager = new DiffManager(lesson, isNewReliable, diff);
 
-  const getOldValue = (field: keyof LessonChange) => {
-    if (!diff) return undefined;
-    return isNewReliable
-      ? diff[field]?.newValue
-        ? lesson[field]
-        : undefined
-      : diff[field]?.oldValue;
-  };
-
-  const currentSubject = getValue("subject");
-  const oldSubject = getOldValue("subject");
-  const currentGroup = getValue("groupName");
-  const oldGroup = getOldValue("groupName");
-  const currentTeacher = getValue("teacher");
-  const oldTeacher = getOldValue("teacher");
-  const currentRoom = getValue("room");
-  const oldRoom = getOldValue("room");
+  const currentSubject = diffManager.getValue("subject");
+  const oldSubject = diffManager.getOldValue("subject");
+  const currentGroup = diffManager.getValue("groupName");
+  const oldGroup = diffManager.getOldValue("groupName");
+  const currentTeacher = diffManager.getValue("teacher");
+  const oldTeacher = diffManager.getOldValue("teacher");
+  const currentRoom = diffManager.getValue("room");
+  const oldRoom = diffManager.getOldValue("room");
 
   return (
     <div
       className={cn(
-        (diff?.subject?.kind == "D" || isStrikethrough) && "line-through opacity-50",
+        (diff?.subject?.kind === "D" || isStrikethrough) && "line-through opacity-50",
         "flex w-full items-center gap-x-1.5 md:justify-between md:gap-x-4",
       )}
     >
       <h2 className="whitespace-nowrap text-sm font-semibold text-primary/90 sm:text-base">
-        {diff?.subject ? (
-          <>
-            {oldSubject && (
-              <span className="line-through opacity-50">{oldSubject}</span>
-            )}
-            {oldSubject && " "}
-            <span>{currentSubject}</span>
-          </>
-        ) : (
-          lesson.subject
-        )}
+        <SubjectDisplay 
+          currentSubject={currentSubject} 
+          oldSubject={oldSubject} 
+          hasDiff={!!diff?.subject} 
+        />
         <GroupName groupName={currentGroup} oldGroupName={oldGroup} />
       </h2>
       <LessonLinks
+        classId={lesson.classId}
+        className={lesson.className}
         teacherId={lesson.teacherId}
         teacherName={currentTeacher}
         oldTeacherName={oldTeacher}
@@ -170,6 +150,32 @@ const LessonHeader: FC<LessonHeaderProps> = ({
         hasRoomDiff={!!diff?.room}
       />
     </div>
+  );
+};
+
+interface SubjectDisplayProps {
+  currentSubject?: string;
+  oldSubject?: string;
+  hasDiff: boolean;
+}
+
+const SubjectDisplay: FC<SubjectDisplayProps> = ({
+  currentSubject,
+  oldSubject,
+  hasDiff
+}) => {
+  if (!hasDiff) {
+    return <>{currentSubject}</>;
+  }
+
+  return (
+    <>
+      {oldSubject && (
+        <span className="line-through opacity-50">{oldSubject}</span>
+      )}
+      {oldSubject && " "}
+      <span>{currentSubject}</span>
+    </>
   );
 };
 
@@ -191,6 +197,8 @@ const GroupName: FC<{ groupName?: string; oldGroupName?: string }> = ({
 };
 
 interface LessonLinksProps {
+  classId?: string;
+  className?: string;
   teacherId?: string;
   teacherName?: string;
   oldTeacherName?: string;
@@ -203,6 +211,8 @@ interface LessonLinksProps {
 }
 
 const LessonLinks: FC<LessonLinksProps> = ({
+  classId,
+  className,
   teacherId,
   teacherName,
   oldTeacherName,
@@ -218,6 +228,11 @@ const LessonLinks: FC<LessonLinksProps> = ({
 
   return (
     <div className="inline-flex gap-x-1.5 text-sm font-medium text-primary/70">
+      <LessonLink 
+        id={classId} 
+        name={className} 
+        type="class" 
+      />
       <LessonLink
         id={teacherId}
         name={teacherName}
@@ -255,16 +270,12 @@ const LessonLink: FC<LessonLinkProps> = ({
   isNewReliable,
   hasDiff,
 }) => {
-  const link = `/${type}/${id}`;
-  const shouldReverse = type === "teacher" && isNewReliable && hasDiff;
-
-  const formatName = (name?: string) =>
-    shouldReverse ? name?.split(" ").reverse().join(" ") : name;
-
-  const displayName = formatName(name);
-  const displayOldName = formatName(oldName);
-
   if (!id || (!name && !oldName)) return null;
+
+  const shouldReverse = type === "teacher" && isNewReliable && hasDiff;
+  
+  const displayName = TeacherNameFormatter.formatName(name, shouldReverse);
+  const displayOldName = TeacherNameFormatter.formatName(oldName, shouldReverse);
 
   return (
     <span>
@@ -272,21 +283,13 @@ const LessonLink: FC<LessonLinkProps> = ({
         <span className="line-through opacity-50">{displayOldName}</span>
       )}
       {displayOldName && " "}
-      {name ? (
-        <LinkWithCookie
-          aria-label={`Przejdź do ${link}`}
-          className={cn(hasDiff && "font-semibold", "hover:underline")}
-          href={link}
-        >
-          {displayName}
-        </LinkWithCookie>
-      ) : (<LinkWithCookie
-          aria-label={`Przejdź do ${link}`}
-          className={cn(hasDiff && "font-semibold", "hover:underline")}
-          href={link}
-        >
-          {displayOldName}
-        </LinkWithCookie>)}
+      <LinkWithCookie
+        aria-label={`Przejdź do ${type}/${id}`}
+        className={cn(hasDiff && "font-semibold", "hover:underline")}
+        href={`/${type}/${id}`}
+      >
+        {displayName ?? displayOldName}
+      </LinkWithCookie>
     </span>
   );
 };
@@ -322,7 +325,8 @@ interface SubstitutionItemProps {
 const SubstitutionItem: FC<SubstitutionItemProps> = ({ substitute }) => (
   <div className="flex max-md:gap-x-1.5 md:justify-between">
     <h2 className="whitespace-nowrap text-sm font-semibold text-primary/90">
-      *{substitute.subject} <GroupName groupName={substitute.groupName} />
+      *{substitute.subject}
+      <GroupName groupName={substitute.groupName} />
     </h2>
     <div className="inline-flex gap-x-1.5 text-sm font-medium text-primary/70">
       {substitute.teacherId ? (
