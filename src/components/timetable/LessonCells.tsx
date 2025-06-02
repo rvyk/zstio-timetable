@@ -9,12 +9,14 @@ import { useTimetableStore } from "@/stores/timetable";
 import { LessonSubstitute } from "@majusss/substitutions-parser";
 import { TableLesson } from "@majusss/timetable-parser";
 import { FC } from "react";
+import { DiffManager, TeacherNameFormatter, TimetableDiffsProp, LessonChange } from "@/lib/diffManager";
 
 interface TableLessonCellProps {
   day: TableLesson[][];
   dayIndex: number;
   lessonIndex: number;
   selectedDayIndex: number;
+  diffs?: TimetableDiffsProp;
 }
 
 export const TableLessonCell: FC<TableLessonCellProps> = ({
@@ -22,6 +24,7 @@ export const TableLessonCell: FC<TableLessonCellProps> = ({
   dayIndex,
   lessonIndex,
   selectedDayIndex,
+  diffs,
 }) => {
   return (
     <td
@@ -30,12 +33,13 @@ export const TableLessonCell: FC<TableLessonCellProps> = ({
         "py-3 last:border-0 max-md:px-2 md:px-4",
       )}
     >
-      {day[lessonIndex].map((lessonItem, index) => (
+      {day[lessonIndex]?.map((lessonItem, index) => (
         <LessonItem
           key={index}
           lesson={lessonItem}
           dayIndex={dayIndex}
           lessonIndex={lessonIndex}
+          diff={diffs?.lessons[dayIndex]?.[lessonIndex]?.[index]}
         />
       ))}
     </td>
@@ -46,16 +50,22 @@ interface LessonItemProps {
   lesson: TableLesson;
   dayIndex: number;
   lessonIndex: number;
+  diff?: Partial<LessonChange>;
 }
 
-export const LessonItem: FC<LessonItemProps> = ({
+const LessonItem: FC<LessonItemProps> = ({
   lesson,
   dayIndex,
   lessonIndex,
+  diff,
 }) => {
   const isSubstitutionShown = useSettingsStore(
     (state) => state.isSubstitutionShown,
   );
+  const isShowDiffsEnabled = useSettingsStore(
+    (state) => state.isShowDiffsEnabled,
+  );
+  if (!isShowDiffsEnabled) diff = undefined;
   const substitutions = useSubstitutionsStore((state) => state.substitutions);
   const timetable = useTimetableStore((state) => state.timetable);
 
@@ -73,6 +83,7 @@ export const LessonItem: FC<LessonItemProps> = ({
     <div className="grid w-full">
       <LessonHeader
         lesson={lesson}
+        diff={diff}
         isStrikethrough={Boolean(hasSubstitutionCase && isSubstitutionShown)}
       />
       {isSubstitutionShown && substitution && (
@@ -85,42 +96,109 @@ export const LessonItem: FC<LessonItemProps> = ({
 interface LessonHeaderProps {
   lesson: TableLesson;
   isStrikethrough: boolean;
+  diff?: Partial<LessonChange>;}
+
+const LessonHeader: FC<LessonHeaderProps> = ({
+  lesson,
+  isStrikethrough,
+  diff,
+}) => {
+  const diffManager = new DiffManager(lesson, diff);
+
+  const currentSubject = diffManager.getValue("subject");
+  const oldSubject = diffManager.getOldValue("subject");
+  const currentGroup = diffManager.getValue("groupName");
+  const oldGroup = diffManager.getOldValue("groupName");
+  const currentTeacher = diffManager.getValue("teacher");
+  const oldTeacher = diffManager.getOldValue("teacher");
+  const currentRoom = diffManager.getValue("room");
+  const oldRoom = diffManager.getOldValue("room");
+
+  return (
+    <div
+      className={cn(
+        (diff?.subject?.kind === "D" || isStrikethrough) && "line-through opacity-50",
+        "flex w-full items-center gap-x-1.5 md:justify-between md:gap-x-4",
+      )}
+    >
+      <h2 className="whitespace-nowrap text-sm font-semibold text-primary/90 sm:text-base">
+        <SubjectDisplay 
+          currentSubject={currentSubject} 
+          oldSubject={oldSubject} 
+          hasDiff={!!diff?.subject} 
+        />
+        <GroupName groupName={currentGroup} oldGroupName={oldGroup} />
+      </h2>
+      <LessonLinks
+        classId={lesson.classId}
+        className={lesson.className}
+        teacherId={lesson.teacherId}
+        teacherName={currentTeacher}
+        oldTeacherName={oldTeacher}
+        roomId={lesson.roomId}
+        roomName={currentRoom}
+        oldRoomName={oldRoom}
+        hasTeacherDiff={!!diff?.teacher}
+        hasRoomDiff={!!diff?.room}
+      />
+    </div>
+  );
+};
+
+interface SubjectDisplayProps {
+  currentSubject?: string;
+  oldSubject?: string;
+  hasDiff: boolean;
 }
 
-const LessonHeader: FC<LessonHeaderProps> = ({ lesson, isStrikethrough }) => (
-  <div
-    className={cn(
-      isStrikethrough && "line-through opacity-50",
-      "flex w-full items-center gap-x-1.5 md:justify-between md:gap-x-4",
-    )}
-  >
-    <h2 className="whitespace-nowrap text-sm font-semibold text-primary/90 sm:text-base">
-      {lesson.subject}
-      <GroupName groupName={lesson.groupName} />
-    </h2>
-    <LessonLinks
-      classId={lesson.classId}
-      className={lesson.className}
-      teacherId={lesson.teacherId}
-      teacherName={lesson.teacher}
-      roomId={lesson.roomId}
-      roomName={lesson.room}
-    />
-  </div>
-);
+const SubjectDisplay: FC<SubjectDisplayProps> = ({
+  currentSubject,
+  oldSubject,
+  hasDiff
+}) => {
+  if (!hasDiff) {
+    return <>{currentSubject}</>;
+  }
 
-const GroupName: FC<{ groupName?: string }> = ({ groupName }) =>
-  groupName ? (
-    <span className="text-sm font-medium text-primary/70"> ({groupName})</span>
-  ) : null;
+  return (
+    <>
+      {oldSubject && (
+        <span className="line-through opacity-50">{oldSubject}</span>
+      )}
+      {oldSubject && " "}
+      <span>{currentSubject}</span>
+    </>
+  );
+};
+
+const GroupName: FC<{ groupName?: string; oldGroupName?: string }> = ({
+  groupName,
+  oldGroupName,
+}) => {
+  if (!groupName && !oldGroupName) return null;
+
+  return (
+    <span className="text-sm font-medium text-primary/70">
+      {oldGroupName && (
+        <span className="line-through opacity-50"> ({oldGroupName})</span>
+      )}
+      {oldGroupName && " "}
+      {groupName && ` (${groupName})`}
+    </span>
+  );
+};
 
 interface LessonLinksProps {
   classId?: string;
   className?: string;
   teacherId?: string;
   teacherName?: string;
+  oldTeacherName?: string;
   roomId?: string;
   roomName?: string;
+  oldRoomName?: string;
+  hasTeacherDiff: boolean;
+  hasRoomDiff: boolean;
 }
 
 const LessonLinks: FC<LessonLinksProps> = ({
@@ -128,34 +206,78 @@ const LessonLinks: FC<LessonLinksProps> = ({
   className,
   teacherId,
   teacherName,
+  oldTeacherName,
   roomId,
   roomName,
-}) => (
-  <div className="inline-flex gap-x-1.5 text-sm font-medium text-primary/70">
-    <LessonLink id={classId} name={className} type="class" />
-    <LessonLink id={teacherId} name={teacherName} type="teacher" />
-    <LessonLink id={roomId} name={roomName} type="room" />
-  </div>
-);
+  oldRoomName,
+  hasTeacherDiff,
+  hasRoomDiff,
+}) => {
+  const shouldShowTeacherOld = hasTeacherDiff && oldTeacherName;
+  const shouldShowRoomOld = hasRoomDiff && oldRoomName;
+
+  return (
+    <div className="inline-flex gap-x-1.5 text-sm font-medium text-primary/70">
+      <LessonLink 
+        id={classId} 
+        name={className} 
+        type="class" 
+      />
+      <LessonLink
+        id={teacherId}
+        name={teacherName}
+        oldName={shouldShowTeacherOld ? oldTeacherName : undefined}
+        type="teacher"
+        hasDiff={hasTeacherDiff}
+      />
+      <LessonLink
+        id={roomId}
+        name={roomName}
+        oldName={shouldShowRoomOld ? oldRoomName : undefined}
+        type="room"
+        hasDiff={hasRoomDiff}
+      />
+    </div>
+  );
+};
 
 interface LessonLinkProps {
   id?: string;
   name?: string;
+  oldName?: string;
   type: string;
+  hasDiff?: boolean;
 }
 
-const LessonLink: FC<LessonLinkProps> = ({ id, name, type }) => {
-  const link = `/${type}/${id}`;
+const LessonLink: FC<LessonLinkProps> = ({
+  id,
+  name,
+  oldName,
+  type,
+  hasDiff,
+}) => {
+  if (!id || (!name && !oldName)) return null;
 
-  return id && name ? (
-    <LinkWithCookie
-      aria-label={`Przejdź do ${link}`}
-      className="hover:underline"
-      href={link}
-    >
-      {name}
-    </LinkWithCookie>
-  ) : null;
+  const shouldReverse = type === "teacher" && hasDiff;
+  
+  const displayName = TeacherNameFormatter.formatName(name, shouldReverse);
+  const displayOldName = TeacherNameFormatter.formatName(oldName, shouldReverse);
+
+  return (
+    <span>
+      {displayOldName && (
+        <span className="line-through opacity-50">{displayOldName}</span>
+      )}
+      {displayOldName && " "}
+      <LinkWithCookie
+        aria-label={`Przejdź do ${type}/${id}`}
+        className={cn(hasDiff && "font-semibold", "hover:underline")}
+        href={`/${type}/${id}`}
+      >
+        {displayName ?? displayOldName}
+      </LinkWithCookie>
+    </span>
+  );
 };
 
 interface SubstitutionType {

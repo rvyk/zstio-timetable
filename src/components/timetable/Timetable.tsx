@@ -18,6 +18,7 @@ interface TimetableProps {
 }
 
 export const Timetable: FC<TimetableProps> = ({ timetable }) => {
+  const diffs = timetable.diffs;
   const lessonType = useSettingsStore((state) => state.lessonType);
   const hoursAdjustIndex = useSettingsStore((state) => state.hoursAdjustIndex);
   const selectedDayIndex = useSettingsWithoutStore(
@@ -99,6 +100,7 @@ export const Timetable: FC<TimetableProps> = ({ timetable }) => {
                         day={day}
                         lessonIndex={hourIndex}
                         selectedDayIndex={selectedDayIndex}
+                        diffs={diffs}
                       />
                     ))}
                   </tr>

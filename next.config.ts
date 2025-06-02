@@ -9,6 +9,7 @@ const nextConfig: NextConfig = {
       dynamic: 30,
       static: 60,
     },
+    reactCompiler: true,
   },
 
   async rewrites() {
@@ -60,6 +61,9 @@ const sentryConfig = {
   disableLogger: true,
   automaticVercelMonitors: false,
   telemetry: false,
+  sourcemaps: {
+    deleteSourcemapsAfterUpload: true
+  }
 };
 
 export default withSentryConfig(nextConfig, sentryConfig);
