@@ -33,7 +33,6 @@ type LessonChange = {
 };
 
 type TimetableDiffsProp = {
-  isNewReliable: boolean;
   validDate?: TimetableDiff;
   generatedDate?: TimetableDiff;
   lessons: Array<Array<Array<Partial<LessonChange>>>>;

@@ -13,6 +13,7 @@ import Link from "next/link";
 import { FC, Fragment, useMemo } from "react";
 import { useIsClient } from "usehooks-ts";
 import { TopbarButtons } from "./Buttons";
+import { useSettingsStore } from "@/stores/settings";
 
 interface TopbarProps {
   timetable?: OptivumTimetable;
@@ -98,6 +99,7 @@ const SchoolLink: FC = () => (
 );
 
 const Dates: FC<{ timetable?: OptivumTimetable }> = ({ timetable }) => {
+  const savedSettings = useSettingsStore();
   const hasNoLessons = useMemo(
     () =>
       timetable?.lessons?.some((innerArray) => innerArray.length === 0) ?? true,
@@ -112,19 +114,13 @@ const Dates: FC<{ timetable?: OptivumTimetable }> = ({ timetable }) => {
     if (timetable.generatedDate && timetable.generatedDate !== "Invalid date") {
       const { generatedDate, diffs } = timetable;
 
-      const oldValue = diffs?.isNewReliable
-        ? generatedDate
-        : diffs?.generatedDate?.oldValue;
-      const newValue = diffs?.generatedDate
-        ? diffs.isNewReliable
-          ? diffs.generatedDate.newValue
-          : generatedDate
-        : generatedDate;
+      const oldValue = diffs?.generatedDate?.oldValue;
+      const newValue = diffs?.generatedDate?.newValue ?? generatedDate;
 
       elements.push(
         <Fragment key="generatedDate">
           Wygenerowano:{" "}
-          {diffs?.generatedDate && (
+          {savedSettings.isShowDiffsEnabled && diffs?.generatedDate && (
             <>
               <span className="line-through opacity-50">{oldValue}</span>{" "}
             </>
@@ -136,19 +132,13 @@ const Dates: FC<{ timetable?: OptivumTimetable }> = ({ timetable }) => {
 
     if (timetable.validDate && timetable.validDate !== "Invalid date") {
       const { validDate, diffs } = timetable;
-      const oldValue = diffs?.isNewReliable
-        ? validDate
-        : diffs?.validDate?.oldValue;
-      const newValue = diffs?.validDate
-        ? diffs.isNewReliable
-          ? diffs.validDate.newValue
-          : validDate
-        : validDate;
+      const oldValue = diffs?.validDate?.oldValue;
+      const newValue = diffs?.validDate?.newValue ?? validDate;
 
       elements.push(
         <Fragment key="validDate">
           Obowiązuje od:{" "}
-          {diffs?.validDate && (
+          {savedSettings.isShowDiffsEnabled && diffs?.validDate && (
             <>
               <span className="line-through opacity-50">{oldValue}</span>{" "}
             </>
@@ -168,7 +158,7 @@ const Dates: FC<{ timetable?: OptivumTimetable }> = ({ timetable }) => {
       },
       [],
     );
-  }, [hasNoLessons, timetable]);
+  }, [hasNoLessons, timetable, savedSettings.isShowDiffsEnabled]);
 
   if (hasNoLessons) {
     return (

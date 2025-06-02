@@ -61,6 +61,9 @@ const sentryConfig = {
   disableLogger: true,
   automaticVercelMonitors: false,
   telemetry: false,
+  sourcemaps: {
+    deleteSourcemapsAfterUpload: true
+  }
 };
 
 export default withSentryConfig(nextConfig, sentryConfig);

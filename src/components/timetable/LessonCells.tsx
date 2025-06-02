@@ -40,7 +40,6 @@ export const TableLessonCell: FC<TableLessonCellProps> = ({
           dayIndex={dayIndex}
           lessonIndex={lessonIndex}
           diff={diffs?.lessons[dayIndex]?.[lessonIndex]?.[index]}
-          isNewReliable={diffs?.isNewReliable ?? false}
         />
       ))}
     </td>
@@ -52,7 +51,6 @@ interface LessonItemProps {
   dayIndex: number;
   lessonIndex: number;
   diff?: Partial<LessonChange>;
-  isNewReliable: boolean;
 }
 
 const LessonItem: FC<LessonItemProps> = ({
@@ -60,7 +58,6 @@ const LessonItem: FC<LessonItemProps> = ({
   dayIndex,
   lessonIndex,
   diff,
-  isNewReliable,
 }) => {
   const isSubstitutionShown = useSettingsStore(
     (state) => state.isSubstitutionShown,
@@ -88,7 +85,6 @@ const LessonItem: FC<LessonItemProps> = ({
         lesson={lesson}
         diff={diff}
         isStrikethrough={Boolean(hasSubstitutionCase && isSubstitutionShown)}
-        isNewReliable={isNewReliable}
       />
       {isSubstitutionShown && substitution && (
         <SubstitutionDetails substitution={substitution} />
@@ -100,17 +96,14 @@ const LessonItem: FC<LessonItemProps> = ({
 interface LessonHeaderProps {
   lesson: TableLesson;
   isStrikethrough: boolean;
-  diff?: Partial<LessonChange>;
-  isNewReliable: boolean;
-}
+  diff?: Partial<LessonChange>;}
 
 const LessonHeader: FC<LessonHeaderProps> = ({
   lesson,
   isStrikethrough,
   diff,
-  isNewReliable,
 }) => {
-  const diffManager = new DiffManager(lesson, isNewReliable, diff);
+  const diffManager = new DiffManager(lesson, diff);
 
   const currentSubject = diffManager.getValue("subject");
   const oldSubject = diffManager.getOldValue("subject");
@@ -145,7 +138,6 @@ const LessonHeader: FC<LessonHeaderProps> = ({
         roomId={lesson.roomId}
         roomName={currentRoom}
         oldRoomName={oldRoom}
-        isNewReliable={isNewReliable}
         hasTeacherDiff={!!diff?.teacher}
         hasRoomDiff={!!diff?.room}
       />
@@ -205,7 +197,6 @@ interface LessonLinksProps {
   roomId?: string;
   roomName?: string;
   oldRoomName?: string;
-  isNewReliable: boolean;
   hasTeacherDiff: boolean;
   hasRoomDiff: boolean;
 }
@@ -219,7 +210,6 @@ const LessonLinks: FC<LessonLinksProps> = ({
   roomId,
   roomName,
   oldRoomName,
-  isNewReliable,
   hasTeacherDiff,
   hasRoomDiff,
 }) => {
@@ -238,7 +228,6 @@ const LessonLinks: FC<LessonLinksProps> = ({
         name={teacherName}
         oldName={shouldShowTeacherOld ? oldTeacherName : undefined}
         type="teacher"
-        isNewReliable={isNewReliable}
         hasDiff={hasTeacherDiff}
       />
       <LessonLink
@@ -246,7 +235,6 @@ const LessonLinks: FC<LessonLinksProps> = ({
         name={roomName}
         oldName={shouldShowRoomOld ? oldRoomName : undefined}
         type="room"
-        isNewReliable={isNewReliable}
         hasDiff={hasRoomDiff}
       />
     </div>
@@ -258,7 +246,6 @@ interface LessonLinkProps {
   name?: string;
   oldName?: string;
   type: string;
-  isNewReliable?: boolean;
   hasDiff?: boolean;
 }
 
@@ -267,12 +254,11 @@ const LessonLink: FC<LessonLinkProps> = ({
   name,
   oldName,
   type,
-  isNewReliable,
   hasDiff,
 }) => {
   if (!id || (!name && !oldName)) return null;
 
-  const shouldReverse = type === "teacher" && isNewReliable && hasDiff;
+  const shouldReverse = type === "teacher" && hasDiff;
   
   const displayName = TeacherNameFormatter.formatName(name, shouldReverse);
   const displayOldName = TeacherNameFormatter.formatName(oldName, shouldReverse);

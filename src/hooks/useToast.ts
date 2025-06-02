@@ -161,7 +161,7 @@ function toast({ ...props }: Toast) {
   dispatch({
     type: "ADD_TOAST",
     toast: {
-      icon: props.icon ? props.icon : icons[props.variant ?? "success"],
+      icon: props.icon ?? icons[props.variant ?? "success"],
       iconColor: props.iconColor,
       ...props,
       id,

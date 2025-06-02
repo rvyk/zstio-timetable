@@ -10,7 +10,6 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/Sheet";
-import { NEW_TIMETABLE_PREFIX } from "@/constants/settings";
 import { usePwa } from "@/hooks/usePWA";
 import { showErrorToast } from "@/hooks/useToast";
 import { downloadFile } from "@/lib/downloadFile";
@@ -92,7 +91,7 @@ export const SettingsPanel = () => {
         isSubstitutionPage ||
         !timetable?.diffs ||
         !timetable.diffs.lessons.length,
-      active: savedSettings.isShowDiffsEnabled,
+      active: savedSettings.isShowDiffsEnabled && (timetable?.diffs?.lessons.length ?? 0) > 0,
       onClick: () => {
         savedSettings.toggleShowDiffs();
         if (savedSettings.isSubstitutionShown) {
@@ -101,11 +100,7 @@ export const SettingsPanel = () => {
       },
       description: (
         <p>
-          Porównaj aktualny plan lekcji z{" "}
-          {timetable?.diffs?.isNewReliable
-            ? `nowym planem (/${NEW_TIMETABLE_PREFIX})`
-            : "poprzednim planem"}
-          , aby zobaczyć różnice
+          Porównaj aktualny plan lekcji z poprzednim planem, aby zobaczyć różnice
         </p>
       ),
     },

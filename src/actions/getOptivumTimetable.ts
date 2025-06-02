@@ -1,6 +1,6 @@
 "use server";
 
-import { NEW_TIMETABLE_PREFIX, REVALIDATE_TIME } from "@/constants/settings";
+import {  REVALIDATE_TIME } from "@/constants/settings";
 import db, { isRedisConnected } from "@/lib/redis";
 import { parseHeaderDate } from "@/lib/utils";
 import { OptivumTimetable, TimetableDiffsProp } from "@/types/optivum";
@@ -11,8 +11,7 @@ import "moment/locale/pl";
 import { getOptivumList } from "./getOptivumList";
 
 const processDiffs = (
-  diffs: deepDiff.Diff<OptivumTimetable, OptivumTimetable>[],
-  isNewReliable: boolean,
+  diffs: deepDiff.Diff<OptivumTimetable, OptivumTimetable>[]
 ): TimetableDiffsProp => {
   const lessonDiffs: TimetableDiffsProp["lessons"] = [];
 
@@ -73,7 +72,6 @@ const processDiffs = (
   }
 
   return {
-    isNewReliable,
     generatedDate: generatedDateDiff,
     validDate: validDateDiff,
     lessons: lessonDiffs,
@@ -83,7 +81,6 @@ const processDiffs = (
 const getTimetableData = async (
   type: string,
   index: string,
-  getFuture: boolean,
 ) => {
   const id =
     {
@@ -94,7 +91,7 @@ const getTimetableData = async (
 
   const baseUrl =
     process.env.NEXT_PUBLIC_TIMETABLE_URL?.replace(/\/+$/, "") ?? "";
-  const url = `${getFuture ? baseUrl.replace(/[^/]+$/, `${NEW_TIMETABLE_PREFIX}`) : baseUrl}/plany/${id}.html`;
+  const url = `${baseUrl}/plany/${id}.html`;
 
   const res = await fetch(url, { next: { revalidate: REVALIDATE_TIME } });
   const data = await res.text();
@@ -122,35 +119,16 @@ const getTimetableData = async (
 export const getOptivumTimetable = async (
   type: string,
   index: string,
-  getFuture: boolean = false,
 ): Promise<OptivumTimetable> => {
+  console.log(
+    `Fetching Optivum timetable for type: ${type}, index: ${index}`,
+  );
   try {
     const { id, lastUpdated, lastModified, ...finalData } =
-      await getTimetableData(type, index, getFuture);
-
-    if (getFuture) {
-      return {
-        id,
-        ...finalData,
-        lastUpdated,
-        lastModified,
-      };
-    }
-
-    const futureData = await getOptivumTimetable(type, index, true);
-    const futureDiffs = diff(finalData as OptivumTimetable, futureData);
-
-    if (futureDiffs) {
-      return {
-        id,
-        ...finalData,
-        lastUpdated,
-        lastModified,
-        diffs: processDiffs(futureDiffs, true),
-      };
-    }
+      await getTimetableData(type, index);
 
     const isConnected = await isRedisConnected();
+    console.log("Redis connection status:", isConnected);
     if (!isConnected || !db) {
       return {
         id,
@@ -163,6 +141,7 @@ export const getOptivumTimetable = async (
     const old = await db.get(`timetable:${id}`);
 
     if (!old) {
+      console.log("No old timetable data found, saving new data.");
       await db.set(
         `timetable:${id}`,
         JSON.stringify({
@@ -175,6 +154,7 @@ export const getOptivumTimetable = async (
     if (old) {
       const oldData = JSON.parse(old) as OptivumTimetable;
       if (lastModified !== -1 && oldData.lastModified !== lastModified) {
+        console.log("Timetable data has changed, updating in Redis.");
         await db.set(
           `timetable:${id}`,
           JSON.stringify({
@@ -191,7 +171,7 @@ export const getOptivumTimetable = async (
           ...finalData,
           lastUpdated,
           lastModified,
-          diffs: processDiffs(oldDiffs, false),
+          diffs: processDiffs(oldDiffs),
         };
       }
     }
