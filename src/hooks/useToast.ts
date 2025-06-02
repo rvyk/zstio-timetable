@@ -4,7 +4,7 @@
 import * as React from "react";
 
 import type { ToastActionElement, ToastProps } from "@/components/ui/Toast";
-import { CircleCheck, CircleX, LucideIcon } from "lucide-react";
+import { CircleCheck, CircleX, InfoIcon, LucideIcon } from "lucide-react";
 
 const TOAST_LIMIT = 3;
 const TOAST_REMOVE_DELAY = 1000000;
@@ -149,6 +149,7 @@ function toast({ ...props }: Toast) {
   const icons = {
     success: CircleCheck,
     error: CircleX,
+    hint: InfoIcon,
   };
 
   const update = (props: ToasterToast) =>
@@ -161,7 +162,7 @@ function toast({ ...props }: Toast) {
   dispatch({
     type: "ADD_TOAST",
     toast: {
-      icon: props.icon ?? icons[props.variant ?? "success"],
+      icon: props.icon ?? icons[props.variant as keyof typeof icons],
       iconColor: props.iconColor,
       ...props,
       id,
@@ -207,4 +208,12 @@ function showErrorToast(title: string, description: string) {
   });
 }
 
-export { showErrorToast, toast, useToast };
+function showHintToast(title: string, description: string) {
+  toast({
+    title,
+    description,
+    variant: "hint",
+  });
+}
+
+export { showErrorToast, showHintToast, toast, useToast };

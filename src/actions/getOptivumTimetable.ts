@@ -1,6 +1,6 @@
 "use server";
 
-import {  REVALIDATE_TIME } from "@/constants/settings";
+import { REVALIDATE_TIME } from "@/constants/settings";
 import db, { isRedisConnected } from "@/lib/redis";
 import { parseHeaderDate } from "@/lib/utils";
 import { OptivumTimetable, TimetableDiffsProp } from "@/types/optivum";
@@ -9,9 +9,10 @@ import deepDiff, { diff } from "deep-diff";
 import moment from "moment";
 import "moment/locale/pl";
 import { getOptivumList } from "./getOptivumList";
+import { sendNotification } from "./notifications";
 
 const processDiffs = (
-  diffs: deepDiff.Diff<OptivumTimetable, OptivumTimetable>[]
+  diffs: deepDiff.Diff<OptivumTimetable, OptivumTimetable>[],
 ): TimetableDiffsProp => {
   const lessonDiffs: TimetableDiffsProp["lessons"] = [];
 
@@ -37,18 +38,27 @@ const processDiffs = (
         };
         continue;
       case "lessons":
-        if("item" in difference) {
-          const [day, lesson,] = path;
-  
+        if ("item" in difference) {
+          const [day, lesson] = path;
+
           if (!lessonDiffs[day]) lessonDiffs[day] = [];
           if (!lessonDiffs[day][lesson]) lessonDiffs[day][lesson] = [];
-          if (!lessonDiffs[day][lesson][0])
-            lessonDiffs[day][lesson][0] = {};
-  
+          if (!lessonDiffs[day][lesson][0]) lessonDiffs[day][lesson][0] = {};
+
           lessonDiffs[day][lesson][0]["subject"] = {
             kind: difference.item.kind,
-            newValue: "rhs" in difference.item ? ("subject" in difference.item.rhs ? String(difference.item.rhs.subject) : undefined) : undefined,
-            oldValue: "lhs" in difference.item ? ("subject" in difference.item.lhs ? String(difference.item.lhs.subject) : undefined) : undefined,
+            newValue:
+              "rhs" in difference.item
+                ? "subject" in difference.item.rhs
+                  ? String(difference.item.rhs.subject)
+                  : undefined
+                : undefined,
+            oldValue:
+              "lhs" in difference.item
+                ? "subject" in difference.item.lhs
+                  ? String(difference.item.lhs.subject)
+                  : undefined
+                : undefined,
           };
           continue;
         }
@@ -78,10 +88,7 @@ const processDiffs = (
   };
 };
 
-const getTimetableData = async (
-  type: string,
-  index: string,
-) => {
+const getTimetableData = async (type: string, index: string) => {
   const id =
     {
       class: `o${index}`,
@@ -120,15 +127,11 @@ export const getOptivumTimetable = async (
   type: string,
   index: string,
 ): Promise<OptivumTimetable> => {
-  console.log(
-    `Fetching Optivum timetable for type: ${type}, index: ${index}`,
-  );
   try {
     const { id, lastUpdated, lastModified, ...finalData } =
       await getTimetableData(type, index);
 
     const isConnected = await isRedisConnected();
-    console.log("Redis connection status:", isConnected);
     if (!isConnected || !db) {
       return {
         id,
@@ -138,10 +141,20 @@ export const getOptivumTimetable = async (
       };
     }
 
+    const latestNotificationDate = await db.get("latestNotificationDate");
+
+    if (latestNotificationDate != finalData.generatedDate) {
+      await db.set("latestNotificationDate", finalData.generatedDate);
+
+      await sendNotification({
+        title: "Nowy plan lekcji!",
+        message: `Sprawdź swój zaktualizowany plan lekcji z dnia ${finalData.generatedDate}.`,
+      });
+    }
+
     const old = await db.get(`timetable:${id}`);
 
     if (!old) {
-      console.log("No old timetable data found, saving new data.");
       await db.set(
         `timetable:${id}`,
         JSON.stringify({
@@ -154,7 +167,6 @@ export const getOptivumTimetable = async (
     if (old) {
       const oldData = JSON.parse(old) as OptivumTimetable;
       if (lastModified !== -1 && oldData.lastModified !== lastModified) {
-        console.log("Timetable data has changed, updating in Redis.");
         await db.set(
           `timetable:${id}`,
           JSON.stringify({

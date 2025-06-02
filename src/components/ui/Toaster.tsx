@@ -17,6 +17,7 @@ export function Toaster() {
   const iconStyles = {
     success: "text-green-500",
     error: "text-red-200",
+    hint: "text-white",
   };
 
   return (
@@ -38,7 +39,7 @@ export function Toaster() {
                   color={iconColor}
                   className={cn(
                     "aspect-square h-5 min-w-5",
-                    iconStyles[props.variant ?? "success"],
+                    iconStyles[props.variant as keyof typeof iconStyles],
                   )}
                 />
               )}

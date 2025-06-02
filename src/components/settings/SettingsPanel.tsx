@@ -1,6 +1,7 @@
 "use client";
 
 import { getCalendar } from "@/actions/getCalendar";
+import { subscribeUser } from "@/actions/notifications";
 import { Button } from "@/components/ui/Button";
 import {
   Sheet,
@@ -11,7 +12,7 @@ import {
   SheetTitle,
 } from "@/components/ui/Sheet";
 import { usePwa } from "@/hooks/usePWA";
-import { showErrorToast } from "@/hooks/useToast";
+import { showErrorToast, showHintToast } from "@/hooks/useToast";
 import { downloadFile } from "@/lib/downloadFile";
 import { cn } from "@/lib/utils";
 import useModalsStore from "@/stores/modals";
@@ -31,25 +32,111 @@ import {
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
+import { useEffect, useState } from "react";
+
+function urlBase64ToUint8Array(base64String: string) {
+  const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
+  const base64 = (base64String + padding).replace(/-/g, "+").replace(/_/g, "/");
+
+  const rawData = window.atob(base64);
+  const outputArray = new Uint8Array(rawData.length);
+
+  for (let i = 0; i < rawData.length; ++i) {
+    outputArray[i] = rawData.charCodeAt(i);
+  }
+  return outputArray;
+}
+
 export const SettingsPanel = () => {
   const toggleModal = useModalsStore((state) => state.toggleModal);
   const timetable = useTimetableStore((state) => state.timetable);
   const { toggleSettingsPanel, isSettingsPanelOpen } =
     useSettingsWithoutStore();
   const savedSettings = useSettingsStore();
-  const [prompt, isInstalled] = usePwa();
 
   const isSubstitutionPage = ["/substitutions", "/zastepstwa"].includes(
     usePathname(),
   );
 
+  // PWA START
+  const [prompt, isInstalled] = usePwa();
+
+  const [isIOS, setIsIOS] = useState(false);
+  const [isStandalone, setIsStandalone] = useState(false);
+
+  useEffect(() => {
+    setIsIOS(
+      /iPad|iPhone|iPod/.test(navigator.userAgent) &&
+        // idk MSStream https://nextjs.org/docs/app/guides/progressive-web-apps#2-implementing-web-push-notifications
+        !(window as unknown as { MSStream: undefined | unknown }).MSStream,
+    );
+
+    setIsStandalone(window.matchMedia("(display-mode: standalone)").matches);
+  }, []);
+  // PWA END
+
+  // NOTIFICATIONS START
+  const [isNotificationsSupported, setIsNotificationsSupported] =
+    useState(false);
+  const [subscription, setSubscription] = useState<PushSubscription | null>(
+    null,
+  );
+
+  useEffect(() => {
+    if ("serviceWorker" in navigator && "PushManager" in window) {
+      setIsNotificationsSupported(true);
+      registerServiceWorker();
+    }
+  }, []);
+
+  async function registerServiceWorker() {
+    const registration = await navigator.serviceWorker.register("/sw.js", {
+      scope: "/",
+      updateViaCache: "none",
+    });
+    const sub = await registration.pushManager.getSubscription();
+    setSubscription(sub);
+  }
+
+  async function subscribeToPush() {
+    const registration = await navigator.serviceWorker.ready;
+    const sub = await registration.pushManager.subscribe({
+      userVisibleOnly: true,
+      applicationServerKey: urlBase64ToUint8Array(
+        process.env.NEXT_PUBLIC_VAPID_KEY!,
+      ),
+    });
+    setSubscription(sub);
+    const serializedSub = JSON.parse(JSON.stringify(sub));
+
+    const result = await subscribeUser(serializedSub);
+
+    if (!result.success) {
+      showErrorToast("Błąd subskrypcji", "Nie można zapisać subskrypcji");
+      return;
+    }
+  }
+
+  async function unsubscribeFromPush() {
+    await subscription?.unsubscribe();
+    setSubscription(null);
+  }
+  // NOTIFICATIONS END
+
   const settings = [
     {
       icon: DownloadIcon,
       title: "Zainstaluj aplikację",
-      hidden: isInstalled,
+      hidden: isInstalled || isStandalone,
       active: false,
       onClick: () => {
+        if (isIOS) {
+          showHintToast(
+            "Zainstaluj aplikację",
+            "Aby zainstalować aplikację, otwórz menu udostępniania i wybierz 'Dodaj do ekranu głównego'",
+          );
+          return;
+        }
         if (prompt) {
           prompt.prompt();
         } else {
@@ -65,6 +152,20 @@ export const SettingsPanel = () => {
           ekranu głównego
         </p>
       ),
+    },
+    {
+      icon: BellIcon,
+      title: "Powiadomienia",
+      hidden: !isNotificationsSupported && process.env.NEXT_PUBLIC_VAPID_KEY,
+      active: savedSettings.isNotificationEnabled,
+      onClick: async () => {
+        if (savedSettings.isNotificationEnabled) {
+          await unsubscribeFromPush();
+        } else {
+          await subscribeToPush();
+        }
+        savedSettings.toggleNotification();
+      },
     },
     {
       icon: Repeat2Icon,
@@ -91,7 +192,9 @@ export const SettingsPanel = () => {
         isSubstitutionPage ||
         !timetable?.diffs ||
         !timetable.diffs.lessons.length,
-      active: savedSettings.isShowDiffsEnabled && (timetable?.diffs?.lessons.length ?? 0) > 0,
+      active:
+        savedSettings.isShowDiffsEnabled &&
+        (timetable?.diffs?.lessons.length ?? 0) > 0,
       onClick: () => {
         savedSettings.toggleShowDiffs();
         if (savedSettings.isSubstitutionShown) {
@@ -100,7 +203,8 @@ export const SettingsPanel = () => {
       },
       description: (
         <p>
-          Porównaj aktualny plan lekcji z poprzednim planem, aby zobaczyć różnice
+          Porównaj aktualny plan lekcji z poprzednim planem, aby zobaczyć
+          różnice
         </p>
       ),
     },

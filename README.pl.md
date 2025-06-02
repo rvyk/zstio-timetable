@@ -97,5 +97,4 @@ Licencja MIT. Zobacz plik [LICENSE](LICENSE) po szczegóły.
 
 [![portfolio](https://img.shields.io/badge/Github-majusss-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/majusss/) ![wakatime](https://wakatime.com/badge/user/63d00a78-aaef-4163-98f0-5695127e3103/project/018b396b-d9dc-4f6e-add4-ffe9bf124fb6.svg?style=for-the-badge)
 
-[![try](https://img.shields.io/badge/TRY_DEVELOPMENT-0A66C2?style=for-the-badge&logoColor=white)](https://dev.rvyk.tech/)
 [![try](https://img.shields.io/badge/TRY_PRODUCTION-0A66C2?style=for-the-badge&logoColor=white)](https://plan.zstiojar.edu.pl/)
