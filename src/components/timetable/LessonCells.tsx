@@ -1,6 +1,12 @@
 "use client";
 
 import { LinkWithCookie } from "@/components/common/Link";
+import {
+  DiffManager,
+  LessonChange,
+  TeacherNameFormatter,
+  TimetableDiffsProp,
+} from "@/lib/diffManager";
 import { findSubstitution } from "@/lib/findSubstitution";
 import { cn } from "@/lib/utils";
 import { useSettingsStore } from "@/stores/settings";
@@ -9,7 +15,6 @@ import { useTimetableStore } from "@/stores/timetable";
 import { LessonSubstitute } from "@majusss/substitutions-parser";
 import { TableLesson } from "@majusss/timetable-parser";
 import { FC } from "react";
-import { DiffManager, TeacherNameFormatter, TimetableDiffsProp, LessonChange } from "@/lib/diffManager";
 
 interface TableLessonCellProps {
   day: TableLesson[][];
@@ -96,7 +101,8 @@ const LessonItem: FC<LessonItemProps> = ({
 interface LessonHeaderProps {
   lesson: TableLesson;
   isStrikethrough: boolean;
-  diff?: Partial<LessonChange>;}
+  diff?: Partial<LessonChange>;
+}
 
 const LessonHeader: FC<LessonHeaderProps> = ({
   lesson,
@@ -117,15 +123,16 @@ const LessonHeader: FC<LessonHeaderProps> = ({
   return (
     <div
       className={cn(
-        (diff?.subject?.kind === "D" || isStrikethrough) && "line-through opacity-50",
+        (diff?.subject?.kind === "D" || isStrikethrough) &&
+          "line-through opacity-50",
         "flex w-full items-center gap-x-1.5 md:justify-between md:gap-x-4",
       )}
     >
       <h2 className="whitespace-nowrap text-sm font-semibold text-primary/90 sm:text-base">
-        <SubjectDisplay 
-          currentSubject={currentSubject} 
-          oldSubject={oldSubject} 
-          hasDiff={!!diff?.subject} 
+        <SubjectDisplay
+          currentSubject={currentSubject}
+          oldSubject={oldSubject}
+          hasDiff={!!diff?.subject}
         />
         <GroupName groupName={currentGroup} oldGroupName={oldGroup} />
       </h2>
@@ -154,7 +161,7 @@ interface SubjectDisplayProps {
 const SubjectDisplay: FC<SubjectDisplayProps> = ({
   currentSubject,
   oldSubject,
-  hasDiff
+  hasDiff,
 }) => {
   if (!hasDiff) {
     return <>{currentSubject}</>;
@@ -218,11 +225,7 @@ const LessonLinks: FC<LessonLinksProps> = ({
 
   return (
     <div className="inline-flex gap-x-1.5 text-sm font-medium text-primary/70">
-      <LessonLink 
-        id={classId} 
-        name={className} 
-        type="class" 
-      />
+      <LessonLink id={classId} name={className} type="class" />
       <LessonLink
         id={teacherId}
         name={teacherName}
@@ -256,12 +259,15 @@ const LessonLink: FC<LessonLinkProps> = ({
   type,
   hasDiff,
 }) => {
-  if (!id || (!name && !oldName)) return null;
+  if (!name && !oldName) return null;
 
   const shouldReverse = type === "teacher" && hasDiff;
-  
+
   const displayName = TeacherNameFormatter.formatName(name, shouldReverse);
-  const displayOldName = TeacherNameFormatter.formatName(oldName, shouldReverse);
+  const displayOldName = TeacherNameFormatter.formatName(
+    oldName,
+    shouldReverse,
+  );
 
   return (
     <span>
@@ -269,13 +275,17 @@ const LessonLink: FC<LessonLinkProps> = ({
         <span className="line-through opacity-50">{displayOldName}</span>
       )}
       {displayOldName && " "}
-      <LinkWithCookie
-        aria-label={`Przejdź do ${type}/${id}`}
-        className={cn(hasDiff && "font-semibold", "hover:underline")}
-        href={`/${type}/${id}`}
-      >
-        {displayName ?? displayOldName}
-      </LinkWithCookie>
+      {id ? (
+        <LinkWithCookie
+          aria-label={`Przejdź do ${type}/${id}`}
+          className={cn(hasDiff && "font-semibold", "hover:underline")}
+          href={`/${type}/${id}`}
+        >
+          {displayName ?? displayOldName}
+        </LinkWithCookie>
+      ) : (
+        <span>{displayName ?? displayOldName}</span>
+      )}
     </span>
   );
 };

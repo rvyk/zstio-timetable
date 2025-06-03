@@ -143,7 +143,10 @@ export const getOptivumTimetable = async (
 
     const latestNotificationDate = await db.get("latestNotificationDate");
 
-    if (latestNotificationDate != finalData.generatedDate) {
+    if (
+      latestNotificationDate != finalData.generatedDate &&
+      finalData.generatedDate !== "Invalid date"
+    ) {
       await db.set("latestNotificationDate", finalData.generatedDate);
 
       await sendNotification({

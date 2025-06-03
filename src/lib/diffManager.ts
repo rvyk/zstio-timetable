@@ -31,7 +31,7 @@ export class DiffManager {
     }
 
     const diffValue = this.diff[field] as DiffValue;
-    
+
     return this.getValueForOldReliable(field, diffValue);
   }
 
@@ -42,11 +42,13 @@ export class DiffManager {
 
     const diffValue = this.diff[field] as DiffValue | undefined;
 
-    
     return diffValue?.oldValue ?? this.lesson[field];
   }
 
-  private getValueForOldReliable(field: DiffField, diffValue?: DiffValue): string | undefined {
+  private getValueForOldReliable(
+    field: DiffField,
+    diffValue?: DiffValue,
+  ): string | undefined {
     if (!diffValue?.oldValue) {
       return this.lesson[field];
     }
@@ -55,7 +57,10 @@ export class DiffManager {
 }
 
 export class TeacherNameFormatter {
-  static formatName(name?: string, shouldReverse: boolean = false): string | undefined {
+  static formatName(
+    name?: string,
+    shouldReverse: boolean = false,
+  ): string | undefined {
     if (!name) return undefined;
     return shouldReverse ? name.split(" ").reverse().join(" ") : name;
   }
