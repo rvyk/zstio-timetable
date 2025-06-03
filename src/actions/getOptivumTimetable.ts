@@ -141,13 +141,13 @@ export const getOptivumTimetable = async (
       };
     }
 
-    const latestNotificationDate = await db.get("latestNotificationDate");
+    const savedLastModifiedUnix = await db.get("lastUpdated");
 
     if (
-      latestNotificationDate != finalData.generatedDate &&
-      finalData.generatedDate !== "Invalid date"
+      parseInt(savedLastModifiedUnix ?? "0") < moment(lastModified).unix() &&
+      lastUpdated !== "Invalid date"
     ) {
-      await db.set("latestNotificationDate", finalData.generatedDate);
+      await db.set("lastUpdated", moment(lastModified).unix());
 
       await sendNotification({
         title: "Nowy plan lekcji!",
