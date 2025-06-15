@@ -156,6 +156,12 @@ export const SettingsPanel = () => {
     {
       icon: BellIcon,
       title: "Powiadomienia",
+      description: (
+        <p>
+          Otrzymuj powiadomienia PUSH o nowym planie lekcji lub o nowych
+          zastępstwach
+        </p>
+      ),
       hidden: !isNotificationsSupported && process.env.NEXT_PUBLIC_VAPID_KEY,
       active: savedSettings.isNotificationEnabled,
       onClick: async () => {
@@ -205,19 +211,6 @@ export const SettingsPanel = () => {
         <p>
           Porównaj aktualny plan lekcji z poprzednim planem, aby zobaczyć
           różnice
-        </p>
-      ),
-    },
-    {
-      icon: BellIcon,
-      title: "Powiadomienia",
-      hidden: true,
-      active: savedSettings.isNotificationEnabled,
-      onClick: savedSettings.toggleNotification,
-      description: (
-        <p>
-          Otrzymuj powiadomienia PUSH o nowym planie lekcji lub o nowych
-          zastępstwach
         </p>
       ),
     },

@@ -151,7 +151,7 @@ export const getOptivumTimetable = async (
 
       await sendNotification({
         title: "Nowy plan lekcji!",
-        message: `Sprawdź swój zaktualizowany plan lekcji z dnia ${finalData.generatedDate}.`,
+        message: `Sprawdź swój zaktualizowany plan lekcji z dnia ${finalData.generatedDate}. (new: ${moment(lastModified).unix()}, old: ${savedLastModifiedUnix})`,
       });
     }
 

@@ -134,7 +134,11 @@ const LessonHeader: FC<LessonHeaderProps> = ({
           oldSubject={oldSubject}
           hasDiff={!!diff?.subject}
         />
-        <GroupName groupName={currentGroup} oldGroupName={oldGroup} />
+        <GroupName
+          groupName={currentGroup}
+          oldGroupName={oldGroup}
+          hasDiff={!!diff?.groupName}
+        />
       </h2>
       <LessonLinks
         classId={lesson.classId}
@@ -178,18 +182,19 @@ const SubjectDisplay: FC<SubjectDisplayProps> = ({
   );
 };
 
-const GroupName: FC<{ groupName?: string; oldGroupName?: string }> = ({
-  groupName,
-  oldGroupName,
-}) => {
+const GroupName: FC<{
+  groupName?: string;
+  oldGroupName?: string;
+  hasDiff: boolean;
+}> = ({ groupName, oldGroupName, hasDiff }) => {
   if (!groupName && !oldGroupName) return null;
 
   return (
     <span className="text-sm font-medium text-primary/70">
-      {oldGroupName && (
+      {hasDiff && oldGroupName && (
         <span className="line-through opacity-50"> ({oldGroupName})</span>
       )}
-      {oldGroupName && " "}
+      {hasDiff && oldGroupName && " "}
       {groupName && ` (${groupName})`}
     </span>
   );
@@ -322,7 +327,7 @@ const SubstitutionItem: FC<SubstitutionItemProps> = ({ substitute }) => (
   <div className="flex max-md:gap-x-1.5 md:justify-between">
     <h2 className="whitespace-nowrap text-sm font-semibold text-primary/90">
       *{substitute.subject}
-      <GroupName groupName={substitute.groupName} />
+      <GroupName groupName={substitute.groupName} hasDiff={false} />
     </h2>
     <div className="inline-flex gap-x-1.5 text-sm font-medium text-primary/70">
       {substitute.teacherId ? (
