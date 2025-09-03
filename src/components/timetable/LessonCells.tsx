@@ -155,6 +155,10 @@ const LessonLink: FC<LessonLinkProps> = ({ id, name, type }) => {
     >
       {name}
     </LinkWithCookie>
+  ) : !id && name ? (
+    <p>
+      {name}
+    </p>
   ) : null;
 };
 
