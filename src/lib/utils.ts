@@ -1,8 +1,4 @@
 import { DAYS_OF_WEEK } from "@/constants/days";
-import {
-  Substitution,
-  SubstitutionsPage,
-} from "@majusss/substitutions-parser/dist/types";
 import { clsx, type ClassValue } from "clsx";
 import { setCookie } from "cookies-next";
 import moment from "moment";
@@ -89,30 +85,3 @@ export const parseTime = (timeStr: string): number => {
   return hours * 3600 + minutes * 60;
 };
 
-export const getUniqueSubstitutionList = (
-  type: "teacher" | "class",
-  substitutions: SubstitutionsPage,
-) => {
-  const uniqueNames = Array.from(
-    new Set(
-      substitutions.tables.flatMap((t) => t.substitutions.map((s) => s[type])),
-    ),
-  );
-
-  return uniqueNames
-    .map((name) => ({ name, type }))
-    .sort((a, b) => a.name.localeCompare(b.name));
-};
-
-export const parseSubstitutionClass = (branch: string): string => {
-  const regex = /(\w+)\|([^+]+)/g;
-  let result = branch.replace(regex, "$1 ($2)");
-  result = result.replace(/\+/g, " + ");
-  return result.trim();
-};
-
-export const sortSubstitutions = (substitutions: Substitution[]) => {
-  return substitutions
-    .sort((a, b) => a.class.localeCompare(b.class))
-    .sort((a, b) => a.number - b.number);
-};

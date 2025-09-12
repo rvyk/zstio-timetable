@@ -5,10 +5,8 @@ import {
   AccordionTrigger,
 } from "@/components/ui/Accordion";
 import { Button, buttonVariants } from "@/components/ui/Button";
-import { cn, parseSubstitutionClass } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import { useSettingsWithoutStore } from "@/stores/settings";
-import { useSubstitutionsStore } from "@/stores/substitutions";
-import { SubstitutionListItem } from "@/types/optivum";
 import { ListItem } from "@majusss/timetable-parser";
 import { ChevronDown, LucideIcon } from "lucide-react";
 import { usePathname } from "next/navigation";
@@ -24,16 +22,10 @@ const translates = {
   room: "Sale",
 };
 
-const isListItem = (item: DataItem): item is ListItem => {
-  return "value" in item;
-};
-
-type DataItem = SubstitutionListItem | ListItem;
-
 export interface DropdownProps {
   type: "class" | "teacher" | "room" | "favorites" | "search";
   icon: LucideIcon;
-  data?: DataItem[];
+  data?: ListItem[];
 }
 
 export const Dropdown: FC<DropdownProps> = ({ type, icon: Icon, data }) => {
@@ -88,24 +80,20 @@ export const Dropdown: FC<DropdownProps> = ({ type, icon: Icon, data }) => {
 
 interface DropdownContentProps {
   type: DropdownProps["type"];
-  data?: DataItem[];
+  data?: ListItem[];
 }
 
 export const DropdownContent: FC<DropdownContentProps> = ({ type, data }) => {
   return (
     <div className="mt-4 grid gap-2 rounded-md bg-primary/[0.03] p-4 dark:bg-accent/90 md:bg-accent/90">
       {data && data.length > 0 ? (
-        data.map((item, i) =>
-          isListItem(item) ? (
-            <ListItemComponent
-              key={`${item.value}-${i}-${item.name}`}
-              item={item}
-              type={type}
-            />
-          ) : (
-            <SubstitutionListItemComponent key={item.name} item={item} />
-          ),
-        )
+        data.map((item, i) => (
+          <ListItemComponent
+            key={`${item.value}-${i}-${item.name}`}
+            item={item}
+            type={type}
+          />
+        ))
       ) : (
         <p className="text-center text-xs font-semibold text-primary/70 dark:font-medium sm:text-sm">
           Brak danych
@@ -161,37 +149,3 @@ export const ListItemComponent: FC<
   );
 };
 
-interface SubstitutionListItemComponentProps {
-  item: SubstitutionListItem;
-}
-
-const SubstitutionListItemComponent: FC<SubstitutionListItemComponentProps> = ({
-  item,
-}) => {
-  const { handleFilterChange, filters } = useSubstitutionsStore();
-
-  const itemType = item.type as "teacher" | "class";
-
-  const selectedItems = filters[itemType];
-  const isSelected = selectedItems.some(
-    (selectedItem) => selectedItem.name === item.name,
-  );
-
-  return (
-    <Button
-      variant="sidebarItem"
-      aria-label={`Zaznacz ${item.name}`}
-      size="fit"
-      onClick={() => handleFilterChange(itemType, item)}
-      className={cn(
-        isSelected &&
-          buttonVariants({
-            variant: "sidebarItemActive",
-            size: "fit",
-          }),
-      )}
-    >
-      {itemType == "class" ? parseSubstitutionClass(item.name) : item.name}
-    </Button>
-  );
-};

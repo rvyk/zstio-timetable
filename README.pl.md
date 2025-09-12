@@ -4,12 +4,11 @@ Polska wersja / [English version](README.md)
 
 # ✨ ZSTiO Timetable 🚀
 
-Nowoczesna i odświeżona aplikacja planu lekcji dla Zespołu Szkół Technicznych i Ogólnokształcących (ZSTiO), stworzona z wykorzystaniem najnowszych technologii webowych. Ta intuicyjna aplikacja ułatwia dostęp do planów zajęć i zastępstw, oferując bezproblemową obsługę dla uczniów, nauczycieli i pracowników.
+Nowoczesna i odświeżona aplikacja planu lekcji dla Zespołu Szkół Technicznych i Ogólnokształcących (ZSTiO), stworzona z wykorzystaniem najnowszych technologii webowych. Ta intuicyjna aplikacja ułatwia dostęp do planów zajęć, oferując bezproblemową obsługę dla uczniów, nauczycieli i pracowników.
 
 ## 🚀 Najważniejsze Funkcje
 
 - **Uniwersalna Kompatybilność 🌍:** Przystosowana do każdej szkoły korzystającej z planów UONET. Wystarczy skonfigurować zmienną środowiskową `NEXT_PUBLIC_TIMETABLE_URL`.
-- **Łatwa Integracja Zastępstw 🔄:** Przeglądaj zastępstwa bezpośrednio w planie lekcji, z możliwością ręcznych modyfikacji (wymaga `NEXT_PUBLIC_SUBSTITUTIONS_URL`).
 - **Ulubione ⭐:** Zapisz najczęściej przeglądane klasy, nauczycieli i sale, aby mieć do nich szybki dostęp.
 - **Wygodne Wyszukiwanie Wolnych Sal 🔎:** Szybko sprawdź dostępne sale według dnia i numeru lekcji.
 - **Inteligentne Skrócone Lekcje ⏱️:** Automatyczna adaptacja planu do skróconych godzin lekcyjnych.
@@ -27,7 +26,6 @@ Nowoczesna i odświeżona aplikacja planu lekcji dla Zespołu Szkół Techniczny
 - **Tailwind CSS:** Szybkie tworzenie nowoczesnych interfejsów użytkownika.
 - **shadcn/ui:** Piękne i dostępne komponenty interfejsu.
 - **@majusss/timetable-parser-js:** Wydajne przetwarzanie danych i parsing.
-- **@majusss/substitutions-parser:** Łatwe zarządzanie danymi zastępstw.
 - **Zustand:** Lekki i wydajny system zarządzania stanem.
 - **Next Themes:** Proste przełączanie motywów.
 - **Sentry:** Śledzenie błędów i monitorowanie wydajności w czasie rzeczywistym.
@@ -54,7 +52,6 @@ Nowoczesna i odświeżona aplikacja planu lekcji dla Zespołu Szkół Techniczny
 
    - **`NEXT_PUBLIC_TIMETABLE_URL` (wymagane):** URL do planu lekcji Twojej szkoły (UONET).
    - **`NEXT_PUBLIC_APP_URL` (wymagane):** Podstawowy URL aplikacji.
-   - **`NEXT_PUBLIC_SUBSTITUTIONS_URL` (opcjonalne):** URL strony z zastępstwami. Pozostaw puste, jeśli nie jest używane.
    - **`SENTRY_AUTH_TOKEN` (opcjonalne):** Token autoryzacji Sentry.
 
 4. **Serwer Deweloperski:**

@@ -23,12 +23,10 @@ import {
   CalculatorIcon,
   CalendarArrowDownIcon,
   DownloadIcon,
-  Repeat2Icon,
   Search,
   XIcon,
 } from "lucide-react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 
 export const SettingsPanel = () => {
   const toggleModal = useModalsStore((state) => state.toggleModal);
@@ -37,10 +35,6 @@ export const SettingsPanel = () => {
     useSettingsWithoutStore();
   const savedSettings = useSettingsStore();
   const [prompt, isInstalled] = usePwa();
-
-  const isSubstitutionPage = ["/substitutions", "/zastepstwa"].includes(
-    usePathname(),
-  );
 
   const settings = [
     {
@@ -66,19 +60,6 @@ export const SettingsPanel = () => {
       ),
     },
     {
-      icon: Repeat2Icon,
-      title: "Zastępstwa na planie lekcji",
-      hidden: isSubstitutionPage || !process.env.NEXT_PUBLIC_SUBSTITUTIONS_URL,
-      active: savedSettings.isSubstitutionShown,
-      onClick: savedSettings.toggleSubstitution,
-      description: (
-        <p>
-          Zdecyduj, czy chcesz wyświetlać zastępstwa bezpośrednio na planie
-          lekcji
-        </p>
-      ),
-    },
-    {
       icon: BellIcon,
       title: "Powiadomienia",
       hidden: true,
@@ -86,15 +67,14 @@ export const SettingsPanel = () => {
       onClick: savedSettings.toggleNotification,
       description: (
         <p>
-          Otrzymuj powiadomienia PUSH o nowym planie lekcji lub o nowych
-          zastępstwach
+          Otrzymuj powiadomienia PUSH o nowym planie lekcji
         </p>
       ),
     },
     {
       icon: CalendarArrowDownIcon,
       title: "Dodaj do kalendarza",
-      hidden: isSubstitutionPage,
+      hidden: false,
       active: false,
       onClick: async () => {
         if (!timetable?.lessons || timetable.lessons.length === 0) {
@@ -145,7 +125,7 @@ export const SettingsPanel = () => {
     {
       icon: CalculatorIcon,
       title: "Kalkulator skróconych lekcji",
-      hidden: isSubstitutionPage,
+      hidden: false,
       active: false,
       onClick: () => toggleModal("shortenedLessonsCalculator"),
       description: (
@@ -158,7 +138,7 @@ export const SettingsPanel = () => {
     {
       icon: Search,
       title: "Wyszukaj wolną salę",
-      hidden: isSubstitutionPage || timetable?.list.rooms?.length === 0,
+      hidden: timetable?.list.rooms?.length === 0,
       active: false,
       onClick: () => toggleModal("freeRoomsSearch"),
       description: (

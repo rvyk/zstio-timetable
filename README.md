@@ -4,12 +4,11 @@
 
 # ✨ ZSTiO Timetable 🚀
 
-A modern and refreshed timetable application for Zespół Szkół Technicznych i Ogólnokształcących (ZSTiO), built with cutting-edge web technologies. This intuitive application simplifies access to class schedules and substitutions, providing a seamless experience for students, teachers, and staff.
+A modern and refreshed timetable application for Zespół Szkół Technicznych i Ogólnokształcących (ZSTiO), built with cutting-edge web technologies. This intuitive application simplifies access to class schedules, providing a seamless experience for students, teachers, and staff.
 
 ## 🚀 Key Features
 
 - **Universal Compatibility 🌍:** Adaptable to any school using UONET timetables. Simply configure the `NEXT_PUBLIC_TIMETABLE_URL` environment variable.
-- **Seamless Substitution Integration 🔄:** View substitutions directly within the timetable, with options for manual adjustments (requires `NEXT_PUBLIC_SUBSTITUTIONS_URL`).
 - **Personalized Favorites ⭐:** Save your frequently accessed classes, teachers, and rooms for instant access.
 - **Effortless Free Room Search 🔎:** Quickly find available rooms by day and lesson number.
 - **Smart Shortened Lesson Calculator ⏱️:** Dynamically adjusts the timetable to reflect shortened lesson durations.
@@ -27,7 +26,6 @@ A modern and refreshed timetable application for Zespół Szkół Technicznych i
 - **Tailwind CSS:** Rapidly build modern user interfaces.
 - **shadcn/ui:** Beautiful and accessible UI components.
 - **@majusss/timetable-parser-js:** Efficient data scraping and parsing.
-- **@majusss/substitutions-parser:** Handles substitution data with ease.
 - **Zustand:** Lightweight and performant state management.
 - **Next Themes:** Effortless theme switching.
 - **Sentry:** Real-time error tracking and performance monitoring.
@@ -54,7 +52,6 @@ A modern and refreshed timetable application for Zespół Szkół Technicznych i
 
    - **`NEXT_PUBLIC_TIMETABLE_URL` (required):** The URL of your school's UONET timetable.
    - **`NEXT_PUBLIC_APP_URL` (required):** The base URL of your application.
-   - **`NEXT_PUBLIC_SUBSTITUTIONS_URL` (optional):** The URL of the substitutions page. Leave blank if not used.
    - **`SENTRY_AUTH_TOKEN` (optional):** Your Sentry authentication token.
 
 4. **Development Server:**

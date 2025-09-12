@@ -34,12 +34,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "yearly",
       priority: 1,
     },
-    {
-      url: `${baseUrl}/substitutions`,
-      lastModified: new Date(),
-      changeFrequency: "yearly",
-      priority: 1,
-    },
     ...classUrls,
     ...teacherUrls,
     ...roomUrls,

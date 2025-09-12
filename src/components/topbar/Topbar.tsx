@@ -6,7 +6,6 @@ import { ShortLessonSwitcherCell } from "@/components/timetable/Cells";
 import { SCHOOL_SHORT, SCHOOL_WEBSITE } from "@/constants/school";
 import { TRANSLATION_DICT } from "@/constants/translations";
 import { OptivumTimetable } from "@/types/optivum";
-import { SubstitutionsPage } from "@majusss/substitutions-parser/dist/types";
 import { ArrowLeftFromLine } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -16,17 +15,13 @@ import { TopbarButtons } from "./Buttons";
 
 interface TopbarProps {
   timetable?: OptivumTimetable;
-  substitutions?: SubstitutionsPage;
 }
 
-export const Topbar: FC<TopbarProps> = ({ timetable, substitutions }) => {
+export const Topbar: FC<TopbarProps> = ({ timetable }) => {
   const isClient = useIsClient();
-  const isSubstitutionsPage = Boolean(substitutions);
 
   const titleElement = useMemo(() => {
-    if (isSubstitutionsPage && substitutions) {
-      return substitutions.heading;
-    } else if (timetable?.title) {
+    if (timetable?.title) {
       return (
         <Fragment>
           Rozkład zajęć {TRANSLATION_DICT[timetable.type]}{" "}
@@ -36,18 +31,16 @@ export const Topbar: FC<TopbarProps> = ({ timetable, substitutions }) => {
     } else {
       return "Nie znaleziono planu zajęć";
     }
-  }, [isSubstitutionsPage, substitutions, timetable]);
+  }, [timetable]);
 
   return (
     <div className="grid gap-2 max-md:px-3 max-md:pt-3">
       <div className="flex w-full justify-between max-md:items-center">
         <div className="flex gap-x-2 max-md:items-center">
           <SchoolLink />
-          {!isSubstitutionsPage && (
-            <div className="md:hidden">
-              <ShortLessonSwitcherCell />
-            </div>
-          )}
+          <div className="md:hidden">
+            <ShortLessonSwitcherCell />
+          </div>
         </div>
         <TopbarButtons />
       </div>
@@ -56,7 +49,7 @@ export const Topbar: FC<TopbarProps> = ({ timetable, substitutions }) => {
           <h1 className="max-w-2xl truncate text-ellipsis text-3xl font-semibold leading-tight text-primary/90 xl:text-4.2xl">
             {titleElement}
           </h1>
-          {timetable?.title && isClient && !isSubstitutionsPage && (
+          {timetable?.title && isClient && (
             <FavoriteStar
               item={{
                 name: timetable.title,
@@ -66,15 +59,7 @@ export const Topbar: FC<TopbarProps> = ({ timetable, substitutions }) => {
             />
           )}
         </div>
-        {isSubstitutionsPage ? (
-          substitutions && (
-            <p className="text-sm font-medium text-primary/70 xl:text-base">
-              {substitutions.timeRange}
-            </p>
-          )
-        ) : (
-          <Dates timetable={timetable} />
-        )}
+        <Dates timetable={timetable} />
       </div>
     </div>
   );

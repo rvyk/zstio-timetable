@@ -8,8 +8,6 @@ interface TimetableSettingsStore {
   setLessonType: (lessonType: LessonType) => void;
   hoursAdjustIndex: number;
   enableCustomLessonsLength: (hoursAdjustIndex: number) => void;
-  isSubstitutionShown: boolean;
-  toggleSubstitution: () => void;
   isNotificationEnabled: boolean;
   toggleNotification: () => void;
 }
@@ -22,9 +20,6 @@ export const useSettingsStore = create<TimetableSettingsStore>()(
       hoursAdjustIndex: 7,
       enableCustomLessonsLength: (hoursAdjustIndex) =>
         set({ hoursAdjustIndex, lessonType: "custom" }),
-      isSubstitutionShown: true,
-      toggleSubstitution: () =>
-        set((state) => ({ isSubstitutionShown: !state.isSubstitutionShown })),
       isNotificationEnabled: false,
       toggleNotification: () =>
         set((state) => ({

@@ -9,15 +9,13 @@ import {
   SheetTrigger,
 } from "@/components/ui/Sheet";
 import { Skeleton } from "@/components/ui/Skeleton";
-import { cn, getUniqueSubstitutionList } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import { useFavoritesStore } from "@/stores/favorites";
 import { useSettingsWithoutStore } from "@/stores/settings";
-import { useSubstitutionsStore } from "@/stores/substitutions";
 import { useTimetableStore } from "@/stores/timetable";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { GraduationCap, MapPin, StarIcon, Users } from "lucide-react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { FC, Fragment, useMemo } from "react";
 import { useIsClient } from "usehooks-ts";
 import SidebarContext, { useSidebarContext } from "./Context";
@@ -69,19 +67,11 @@ export const SidebarContent: FC = () => {
   const lastUpdatedTimetable = useTimetableStore(
     (state) => state.timetable,
   )?.lastUpdated;
-  const lastUpdatedSubstitutions = useSubstitutionsStore(
-    (state) => state.substitutions,
-  )?.lastUpdated;
 
   const { isPreview } = useSidebarContext();
   const isClient = useIsClient();
-  const isSubstitutionPage = ["/substitutions", "/zastepstwa"].includes(
-    usePathname(),
-  );
 
-  const sourceLink = isSubstitutionPage
-    ? process.env.NEXT_PUBLIC_SUBSTITUTIONS_URL
-    : process.env.NEXT_PUBLIC_TIMETABLE_URL;
+  const sourceLink = process.env.NEXT_PUBLIC_TIMETABLE_URL;
 
   if (!isClient)
     return (
@@ -90,12 +80,10 @@ export const SidebarContent: FC = () => {
           <Skeleton className="h-12 w-full" />
           <div className={cn(isPreview && "mx-auto w-10", "grid gap-5")}>
             <Skeleton className="h-10 w-full" />
-            {!isSubstitutionPage && (
-              <hr className="h-px w-full border border-primary/10" />
-            )}
+            <hr className="h-px w-full border border-primary/10" />
             <Skeleton className="h-10 w-full" />
-            {!isSubstitutionPage && <Skeleton className="h-10 w-full" />}
-            {!isSubstitutionPage && <Skeleton className="h-10 w-full" />}
+            <Skeleton className="h-10 w-full" />
+            <Skeleton className="h-10 w-full" />
           </div>
         </div>
         <div className={cn(isPreview ? "hidden" : "grid", "gap-2")}>
@@ -109,14 +97,10 @@ export const SidebarContent: FC = () => {
 
   return (
     <Fragment>
-      {isSubstitutionPage ? (
-        <SubstitutionSidebarDropdowns />
-      ) : (
-        <TimetableSidebarDropdowns />
-      )}
+      <TimetableSidebarDropdowns />
 
       <div className="flex flex-col gap-1">
-        {(lastUpdatedSubstitutions ?? lastUpdatedTimetable) && (
+        {lastUpdatedTimetable && (
           <p
             className={cn(
               isPreview && "hidden",
@@ -125,9 +109,7 @@ export const SidebarContent: FC = () => {
           >
             Ostatnia aktualizacja danych: <br />
             <span className="break-words text-xs font-medium text-primary/70">
-              {isSubstitutionPage
-                ? lastUpdatedSubstitutions
-                : lastUpdatedTimetable}
+              {lastUpdatedTimetable}
             </span>
           </p>
         )}
@@ -148,44 +130,6 @@ export const SidebarContent: FC = () => {
         </p>
       </div>
     </Fragment>
-  );
-};
-
-const SubstitutionSidebarDropdowns: FC = () => {
-  const substitutions = useSubstitutionsStore((state) => state.substitutions);
-
-  const dropdownItems = useMemo(() => {
-    if (!substitutions) return [];
-    return [
-      {
-        type: "teacher" as const,
-        icon: Users,
-        data: getUniqueSubstitutionList("teacher", substitutions),
-      },
-      {
-        type: "class" as const,
-        icon: GraduationCap,
-        data: getUniqueSubstitutionList("class", substitutions),
-      },
-    ];
-  }, [substitutions]);
-
-  if (!substitutions) return null;
-
-  return (
-    <div className="grid gap-10">
-      <Search substitutions={substitutions} />
-      <Accordion type="multiple" className="grid w-full gap-5 px-2">
-        {dropdownItems.map((item) => (
-          <Dropdown
-            key={item.type}
-            type={item.type}
-            icon={item.icon}
-            data={item.data}
-          />
-        ))}
-      </Accordion>
-    </div>
   );
 };
 

@@ -1,11 +1,6 @@
 import { MAX_RESULTS } from "@/constants/settings";
-import {
-  cn,
-  getUniqueSubstitutionList,
-  setLastVisitedCookie,
-} from "@/lib/utils";
-import { OptivumTimetable, SubstitutionListItem } from "@/types/optivum";
-import { SubstitutionsPage } from "@majusss/substitutions-parser/dist/types";
+import { cn, setLastVisitedCookie } from "@/lib/utils";
+import { OptivumTimetable } from "@/types/optivum";
 import { ListItem } from "@majusss/timetable-parser";
 import { SearchIcon, XIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -21,10 +16,9 @@ const listKeys: Record<string, string> = {
 
 interface SearchProps {
   timetable?: OptivumTimetable | null;
-  substitutions?: SubstitutionsPage | null;
 }
 
-export const Search: FC<SearchProps> = ({ timetable, substitutions }) => {
+export const Search: FC<SearchProps> = ({ timetable }) => {
   const { isPreview } = useSidebarContext();
   const router = useRouter();
   const [value, setValue] = useState("");
@@ -37,7 +31,7 @@ export const Search: FC<SearchProps> = ({ timetable, substitutions }) => {
     const query = value.toLowerCase().trim();
     if (!query) return [];
 
-    let results: (ListItem | SubstitutionListItem)[] = [];
+    let results: ListItem[] = [];
 
     if (timetable) {
       for (const key of Object.keys(listKeys)) {
@@ -50,19 +44,8 @@ export const Search: FC<SearchProps> = ({ timetable, substitutions }) => {
       }
     }
 
-    if (substitutions) {
-      const uniqueItems = [
-        ...getUniqueSubstitutionList("teacher", substitutions),
-        ...getUniqueSubstitutionList("class", substitutions),
-      ]
-        .filter((item) => item.name.toLowerCase().includes(query))
-        .slice(0, MAX_RESULTS - results.length);
-
-      results = results.concat(uniqueItems);
-    }
-
     return results.slice(0, MAX_RESULTS);
-  }, [value, timetable, substitutions]);
+  }, [value, timetable]);
 
   const handleKeyDown = useCallback(
     (e: KeyboardEvent<HTMLInputElement>) => {
