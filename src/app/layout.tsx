@@ -1,8 +1,6 @@
-import { getSubstitutions } from "@/actions/getSubstitutions";
 import { ThemeProvider } from "@/components/common/ThemeProvider";
 import { SettingsPanel } from "@/components/settings/SettingsPanel";
 import { Sidebar } from "@/components/sidebar/Sidebar";
-import { SubstitutionsController } from "@/components/substitutions/SubstitutionsController";
 import { Toaster } from "@/components/ui/Toaster";
 import { cn } from "@/lib/utils";
 import type { Metadata, Viewport } from "next";
@@ -24,7 +22,7 @@ export const metadata: Metadata = {
     default: `${SCHOOL_SHORT} - Plan lekcji`,
   },
   description:
-    `W prosty sposób sprawdź plan zajęć i zastępstwa dla różnych klas, nauczycieli oraz sal w ${SCHOOL_NAME_ACCUSATIVE}.`,
+    `W prosty sposób sprawdź plan zajęć dla różnych klas, nauczycieli oraz sal w ${SCHOOL_NAME_ACCUSATIVE}.`,
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL as string),
 
   alternates: {
@@ -38,13 +36,11 @@ export const viewport: Viewport = {
   maximumScale: 1,
 };
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: Readonly<{
   children: ReactNode;
 }>) {
-  const substitutions = await getSubstitutions();
-
   return (
     <html lang="pl" suppressHydrationWarning>
       <body
@@ -53,7 +49,6 @@ export default async function RootLayout({
           "flex h-screen bg-foreground antialiased md:bg-background",
         )}
       >
-        <SubstitutionsController substitutions={substitutions} />
         <ThemeProvider attribute="class" disableTransitionOnChange>
           <Toaster />
           <Sidebar />

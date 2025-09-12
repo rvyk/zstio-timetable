@@ -10,7 +10,6 @@
     "fix-depends": "pnpm i --offline --force"
   },
   "dependencies": {
-    "@majusss/substitutions-parser": "^2.4.0",
     "@majusss/timetable-parser": "^1.7.0",
     "@radix-ui/react-accordion": "^1.2.2",
     "@radix-ui/react-dialog": "^1.1.4",

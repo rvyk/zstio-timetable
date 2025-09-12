@@ -11,20 +11,19 @@ const nextConfig: NextConfig = {
     },
   },
 
-  async rewrites() {
-    return [
-      {
-        source: "/zastepstwa",
-        destination: "/substitutions",
-      },
-    ];
-  },
-
   webpack: (config) => {
     checkEnvVariables(["NEXT_PUBLIC_TIMETABLE_URL", "NEXT_PUBLIC_APP_URL"]);
 
     return config;
   },
+
+  redirects: async () => [
+    {
+      source: "/substitutions/:path*",
+      destination: "/",
+      permanent: true,
+    },
+  ],
 };
 
 const checkEnvVariables = (envVars: string[]) => {

@@ -1,12 +1,7 @@
 "use client";
 
 import { LinkWithCookie } from "@/components/common/Link";
-import { findSubstitution } from "@/lib/findSubstitution";
 import { cn } from "@/lib/utils";
-import { useSettingsStore } from "@/stores/settings";
-import { useSubstitutionsStore } from "@/stores/substitutions";
-import { useTimetableStore } from "@/stores/timetable";
-import { LessonSubstitute } from "@majusss/substitutions-parser";
 import { TableLesson } from "@majusss/timetable-parser";
 import { FC } from "react";
 
@@ -31,12 +26,7 @@ export const TableLessonCell: FC<TableLessonCellProps> = ({
       )}
     >
       {day[lessonIndex].map((lessonItem, index) => (
-        <LessonItem
-          key={index}
-          lesson={lessonItem}
-          dayIndex={dayIndex}
-          lessonIndex={lessonIndex}
-        />
+        <LessonItem key={index} lesson={lessonItem} />
       ))}
     </td>
   );
@@ -44,40 +34,12 @@ export const TableLessonCell: FC<TableLessonCellProps> = ({
 
 interface LessonItemProps {
   lesson: TableLesson;
-  dayIndex: number;
-  lessonIndex: number;
 }
 
-export const LessonItem: FC<LessonItemProps> = ({
-  lesson,
-  dayIndex,
-  lessonIndex,
-}) => {
-  const isSubstitutionShown = useSettingsStore(
-    (state) => state.isSubstitutionShown,
-  );
-  const substitutions = useSubstitutionsStore((state) => state.substitutions);
-  const timetable = useTimetableStore((state) => state.timetable);
-
-  const substitution = findSubstitution(
-    substitutions?.tables ?? [],
-    dayIndex,
-    timetable?.title ?? "",
-    lessonIndex,
-    lesson.groupName,
-  );
-
-  const hasSubstitutionCase = substitution?.case;
-
+export const LessonItem: FC<LessonItemProps> = ({ lesson }) => {
   return (
     <div className="grid w-full">
-      <LessonHeader
-        lesson={lesson}
-        isStrikethrough={Boolean(hasSubstitutionCase && isSubstitutionShown)}
-      />
-      {isSubstitutionShown && substitution && (
-        <SubstitutionDetails substitution={substitution} />
-      )}
+      <LessonHeader lesson={lesson} isStrikethrough={false} />
     </div>
   );
 };
@@ -162,56 +124,3 @@ const LessonLink: FC<LessonLinkProps> = ({ id, name, type }) => {
   ) : null;
 };
 
-interface SubstitutionType {
-  case?: string;
-  lessonSubstitute?: LessonSubstitute[];
-}
-
-interface SubstitutionDetailsProps {
-  substitution: SubstitutionType;
-}
-
-const SubstitutionDetails: FC<SubstitutionDetailsProps> = ({
-  substitution,
-}) => (
-  <div className="mb-1 grid">
-    <p className="text-sm font-semibold text-accent-table dark:font-medium">
-      {substitution.case}
-    </p>
-    <div className="grid">
-      {substitution.lessonSubstitute?.map((substitute, index) => (
-        <SubstitutionItem key={index} substitute={substitute} />
-      ))}
-    </div>
-  </div>
-);
-
-interface SubstitutionItemProps {
-  substitute: LessonSubstitute;
-}
-
-const SubstitutionItem: FC<SubstitutionItemProps> = ({ substitute }) => (
-  <div className="flex max-md:gap-x-1.5 md:justify-between">
-    <h2 className="whitespace-nowrap text-sm font-semibold text-primary/90">
-      *{substitute.subject}
-      <GroupName groupName={substitute.groupName} />
-    </h2>
-    <div className="inline-flex gap-x-1.5 text-sm font-medium text-primary/70">
-      {substitute.teacherId ? (
-        <LessonLink
-          type="teacher"
-          id={substitute.teacherId}
-          name={substitute.teacher}
-        />
-      ) : (
-        <p>{substitute.teacher}</p>
-      )}
-
-      {substitute.roomId ? (
-        <LessonLink type="room" id={substitute.roomId} name={substitute.room} />
-      ) : (
-        <p>{substitute.room}</p>
-      )}
-    </div>
-  </div>
-);
