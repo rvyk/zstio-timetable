@@ -16,6 +16,14 @@ const nextConfig: NextConfig = {
 
     return config;
   },
+
+  redirects: async () => [
+    {
+      source: "/substitutions/:path*",
+      destination: "/",
+      permanent: true,
+    },
+  ],
 };
 
 const checkEnvVariables = (envVars: string[]) => {
