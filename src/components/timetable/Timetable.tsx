@@ -4,7 +4,7 @@ import { SHORT_HOURS } from "@/constants/settings";
 import { adjustShortenedLessons } from "@/lib/adjustShortenedLessons";
 import { useSettingsStore, useSettingsWithoutStore } from "@/stores/settings";
 import { OptivumTimetable } from "@/types/optivum";
-import { FC, useMemo } from "react";
+import { FC, useMemo, useRef } from "react";
 import {
   ShortLessonSwitcherCell,
   TableHeaderCell,
@@ -57,8 +57,29 @@ export const Timetable: FC<TimetableProps> = ({ timetable }) => {
     }
   };
 
+  const touchStartX = useRef<number | null>(null);
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+  };
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (touchStartX.current === null) return;
+    const diff = e.changedTouches[0].clientX - touchStartX.current;
+    if (Math.abs(diff) > 50) {
+      const increment = diff < 0 ? 1 : -1;
+      const totalDays = timetable.dayNames.length;
+      const nextIndex =
+        (selectedDayIndex + increment + totalDays) % totalDays;
+      handleDayChange(nextIndex);
+    }
+    touchStartX.current = null;
+  };
+
   return (
-    <div className="h-fit w-full border-lines bg-foreground transition-all max-md:mb-20 md:overflow-hidden md:rounded-md md:border">
+    <div
+      className="h-fit w-full border-lines bg-foreground transition-all max-md:mb-20 md:overflow-hidden md:rounded-md md:border"
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
+    >
       <div className="sticky top-0 z-20 flex justify-between divide-x divide-lines border-y border-lines bg-foreground md:hidden">
         {timetable.dayNames.map((dayName) => (
           <TableHeaderMobileCell
