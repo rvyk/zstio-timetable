@@ -44,6 +44,9 @@ export const Topbar: FC<TopbarProps> = ({ timetable }) => {
         </div>
         <TopbarButtons />
       </div>
+      <div className="md:hidden">
+        <Dates timetable={timetable} />
+      </div>
       <div className="grid gap-1.5 max-md:hidden">
         <div className="inline-flex items-center gap-x-4">
           <h1 className="max-w-2xl truncate text-ellipsis text-3xl font-semibold leading-tight text-primary/90 xl:text-4.2xl">

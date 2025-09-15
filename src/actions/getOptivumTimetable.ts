@@ -6,6 +6,7 @@ import { OptivumTimetable } from "@/types/optivum";
 import { Table } from "@majusss/timetable-parser";
 import moment from "moment";
 import "moment/locale/pl";
+import parser from "any-date-parser";
 import { getOptivumList } from "./getOptivumList";
 
 export const getOptivumTimetable = async (
@@ -33,16 +34,28 @@ export const getOptivumTimetable = async (
     const data = await res.text();
     const timeTableData = new Table(data);
 
+    const generatedRaw = timeTableData.getGeneratedDate() ?? "";
+    const generatedParsed = parser.fromString(generatedRaw, "pl");
+    const generatedDate = generatedParsed.isValid()
+      ? moment(generatedParsed)
+          .locale("pl")
+          .format("D MMMM YYYY[r.]")
+      : null;
+
+    const validRaw = timeTableData.getVersionInfo();
+    const validParsed = parser.fromString(validRaw, "pl");
+    const validDate = validParsed.isValid()
+      ? moment(validParsed).locale("pl").format("D MMMM YYYY[r.]")
+      : null;
+
     return {
       id,
       hours: timeTableData.getHours(),
       lessons: timeTableData.getDays(),
-      generatedDate: moment(timeTableData.getGeneratedDate())
-        .locale("pl")
-        .format("DD MMMM YYYY[r.]"),
+      generatedDate,
       title: timeTableData.getTitle(),
       type: type as OptivumTimetable["type"],
-      validDate: timeTableData.getVersionInfo(),
+      validDate,
       dayNames: timeTableData.getDayNames(),
       list: await getOptivumList(),
       lastUpdated: parseHeaderDate(res),
