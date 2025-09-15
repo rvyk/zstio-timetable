@@ -11,9 +11,13 @@ import { useIsClient } from "usehooks-ts";
 
 interface TableHourCellProps {
   hour: TableHour;
+  isCurrentDay?: boolean;
 }
 
-export const TableHourCell: FC<TableHourCellProps> = ({ hour }) => {
+export const TableHourCell: FC<TableHourCellProps> = ({
+  hour,
+  isCurrentDay = true,
+}) => {
   const isClient = useIsClient();
   const [currentTime, setCurrentTime] = useState(() => {
     const now = new Date();
@@ -34,7 +38,8 @@ export const TableHourCell: FC<TableHourCellProps> = ({ hour }) => {
   const start = useMemo(() => parseTime(hour.timeFrom), [hour.timeFrom]);
   const end = useMemo(() => parseTime(hour.timeTo), [hour.timeTo]);
   const isCurrent = currentTime >= start && currentTime < end;
-  const timeRemaining = isCurrent ? end - currentTime : 0;
+  const shouldShow = isCurrent && isCurrentDay;
+  const timeRemaining = shouldShow ? end - currentTime : 0;
 
   const { minutesRemaining, secondsRemaining } = useMemo(() => {
     const minutes = Math.floor(timeRemaining / 60)
@@ -46,7 +51,7 @@ export const TableHourCell: FC<TableHourCellProps> = ({ hour }) => {
 
   return (
     <td className="relative px-4 py-3 text-center max-md:w-32">
-      {isCurrent && isClient && (
+      {shouldShow && isClient && (
         <div className="absolute left-0 h-[calc(100%-1.5rem)] w-1 rounded-r-lg bg-accent-table"></div>
       )}
       <h2 className="text-lg font-semibold text-primary/90 sm:text-xl">
@@ -57,7 +62,7 @@ export const TableHourCell: FC<TableHourCellProps> = ({ hour }) => {
           <p className="text-xs font-medium text-primary/70 sm:text-sm">
             {hour.timeFrom}-{hour.timeTo}
           </p>
-          {isCurrent && (
+          {shouldShow && (
             <p className="mx-auto rounded-sm border border-accent-table bg-accent-table px-2 py-0.5 text-center text-sm font-medium text-accent/90 dark:bg-accent-table/10 dark:text-primary/90">
               {`${minutesRemaining}:${secondsRemaining}`}
             </p>
