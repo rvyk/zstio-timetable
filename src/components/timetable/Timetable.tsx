@@ -51,6 +51,8 @@ export const Timetable: FC<TimetableProps> = ({ timetable }) => {
     [timetable.lessons],
   );
 
+  const todayIndex = useMemo(() => (new Date().getDay() + 6) % 7, []);
+
   const handleDayChange = (newIndex: number) => {
     if (selectedDayIndex !== newIndex) {
       setSelectedDayIndex(newIndex);
@@ -108,7 +110,10 @@ export const Timetable: FC<TimetableProps> = ({ timetable }) => {
                         key={hourIndex}
                         className="border-b border-lines odd:bg-accent/50 odd:dark:bg-background"
                       >
-                        <TableHourCell hour={hour} />
+                        <TableHourCell
+                          hour={hour}
+                          isCurrentDay={dayIndex === todayIndex}
+                        />
                         <td className="py-3 last:border-0 max-md:px-2 md:px-4">
                           {(timetable.lessons?.[dayIndex]?.[hourIndex] ?? []).map(
                             (lessonItem, index) => (
