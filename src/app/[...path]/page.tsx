@@ -32,9 +32,10 @@ const isTimetableType = (
 export const generateMetadata = async ({
   params,
 }: {
-  params: PageParams;
+  params: Promise<PageParams>;
 }): Promise<Metadata> => {
-  const [type, value] = params.path ?? [];
+  const resolvedParams = await params;
+  const [type, value] = resolvedParams.path ?? [];
 
   if (!isTimetableType(type) || !value) {
     return { title: "" };
@@ -45,14 +46,19 @@ export const generateMetadata = async ({
   return { title: timetable.title };
 };
 
-const TimetablePage = async ({ params }: { params: PageParams }) => {
-  const [type, value] = params.path ?? [];
+const TimetablePage = async ({
+  params,
+}: {
+  params: Promise<PageParams>;
+}) => {
+  const resolvedParams = await params;
+  const [type, value] = resolvedParams.path ?? [];
 
   if (!isTimetableType(type) || !value) {
     notFound();
   }
 
-  const cookieStore = cookies();
+  const cookieStore = await cookies();
   const requestedDataSource = cookieStore.get(DATA_SOURCE_COOKIE_NAME)?.value;
 
   const timetable = await getOptivumTimetable(

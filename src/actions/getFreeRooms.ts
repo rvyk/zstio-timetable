@@ -47,7 +47,7 @@ export const getFreeRooms = async (weekdayIndex: number, lessonIndex: number) =>
     return [];
   }
 
-  const cookieStore = cookies();
+  const cookieStore = await cookies();
   const requestedSource = cookieStore.get(DATA_SOURCE_COOKIE_NAME)?.value;
   const activeSource = await getActiveDataSource(requestedSource);
 
