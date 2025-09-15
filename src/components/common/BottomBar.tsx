@@ -9,6 +9,7 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/Drawer";
+import { TimetableDates } from "@/components/common/TimetableDates";
 import { TRANSLATION_DICT } from "@/constants/translations";
 import { simulateKeyPress } from "@/lib/utils";
 import { OptivumTimetable } from "@/types/optivum";
@@ -16,11 +17,11 @@ import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { FC, MouseEvent, useMemo } from "react";
 
-interface TopbarProps {
+interface BottomBarProps {
   timetable?: OptivumTimetable;
 }
 
-export const BottomBar: FC<TopbarProps> = ({ timetable }) => {
+export const BottomBar: FC<BottomBarProps> = ({ timetable }) => {
   const titleElement = useMemo(() => {
     if (timetable) {
       return (
@@ -28,9 +29,13 @@ export const BottomBar: FC<TopbarProps> = ({ timetable }) => {
           <h2 className="mx-auto max-w-52 truncate text-ellipsis text-base font-semibold leading-tight opacity-90">
             {timetable.title}
           </h2>
-            <p className="mx-auto max-w-72 truncate text-ellipsis text-sm font-medium leading-tight opacity-70">
-              {`Rozkład zajęć ${TRANSLATION_DICT[timetable.type]}`}
-            </p>
+          <p className="mx-auto max-w-72 truncate text-ellipsis text-sm font-medium leading-tight opacity-70">
+            {`Rozkład zajęć ${TRANSLATION_DICT[timetable.type]}`}
+          </p>
+          <TimetableDates
+            timetable={timetable}
+            className="mx-auto max-w-72 truncate text-ellipsis text-xs"
+          />
         </div>
       );
     } else {
