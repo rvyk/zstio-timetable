@@ -5,6 +5,7 @@ import { adjustShortenedLessons } from "@/lib/adjustShortenedLessons";
 import { useSettingsStore, useSettingsWithoutStore } from "@/stores/settings";
 import { OptivumTimetable } from "@/types/optivum";
 import { FC, useMemo, useRef } from "react";
+import { CalendarX2 } from "lucide-react";
 import {
   ShortLessonSwitcherCell,
   TableHeaderCell,
@@ -47,7 +48,10 @@ export const Timetable: FC<TimetableProps> = ({ timetable }) => {
   }, [timetable]);
 
   const hasLessons = useMemo(
-    () => timetable.lessons?.some((innerArray) => innerArray.length > 0),
+    () =>
+      timetable.lessons?.some((day) =>
+        day.some((hourLessons) => hourLessons.length > 0),
+      ),
     [timetable.lessons],
   );
 
@@ -77,7 +81,7 @@ export const Timetable: FC<TimetableProps> = ({ timetable }) => {
   };
 
   return (
-    <div className="h-fit w-full border-lines bg-foreground transition-all max-md:mb-20 md:overflow-hidden md:rounded-md md:border">
+    <div className="flex w-full flex-1 flex-col border-lines bg-foreground transition-all max-md:mb-20 md:overflow-hidden md:rounded-md md:border">
       <div className="sticky top-0 z-20 flex justify-between divide-x divide-lines border-y border-lines bg-foreground md:hidden">
         {timetable.dayNames.map((dayName) => (
           <TableHeaderMobileCell
@@ -90,49 +94,65 @@ export const Timetable: FC<TimetableProps> = ({ timetable }) => {
       </div>
 
       {/* Mobile timetable with sliding animation */}
-      {hasLessons && (
+      <div
+        className="md:hidden flex-1 overflow-hidden"
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+      >
         <div
-          className="md:hidden overflow-hidden"
-          onTouchStart={handleTouchStart}
-          onTouchEnd={handleTouchEnd}
+          className="flex h-full w-full transition-transform duration-300"
+          style={{ transform: `translateX(-${selectedDayIndex * 100}%)` }}
         >
-          <div
-            className="flex w-full transition-transform duration-300"
-            style={{ transform: `translateX(-${selectedDayIndex * 100}%)` }}
-          >
-            {timetable.dayNames.map((_, dayIndex) => (
-              <table key={dayIndex} className="w-full flex-shrink-0">
-                <tbody>
-                  {Object.values(hours)
-                    .slice(0, maxLessons)
-                    .map((hour, hourIndex) => (
-                      <tr
-                        key={hourIndex}
-                        className="border-b border-lines odd:bg-accent/50 odd:dark:bg-background"
-                      >
-                        <TableHourCell
-                          hour={hour}
-                          isCurrentDay={dayIndex === todayIndex}
-                        />
-                        <td className="py-3 last:border-0 max-md:px-2 md:px-4">
-                          {(timetable.lessons?.[dayIndex]?.[hourIndex] ?? []).map(
-                            (lessonItem, index) => (
-                              <LessonItem key={index} lesson={lessonItem} />
-                            ),
-                          )}
-                        </td>
-                      </tr>
-                    ))}
-                </tbody>
-              </table>
-            ))}
-          </div>
+          {timetable.dayNames.map((_, dayIndex) => {
+            const dayLessons = timetable.lessons?.[dayIndex] ?? [];
+            const dayHasLessons = dayLessons.some(
+              (hourLessons) => hourLessons.length > 0,
+            );
+            return (
+              <div key={dayIndex} className="flex h-full w-full flex-shrink-0 flex-col">
+                {dayHasLessons ? (
+                  <table className="w-full">
+                    <tbody>
+                      {Object.values(hours)
+                        .slice(0, maxLessons)
+                        .map((hour, hourIndex) => (
+                          <tr
+                            key={hourIndex}
+                            className="border-b border-lines odd:bg-accent/50 odd:dark:bg-background"
+                          >
+                            <TableHourCell
+                              hour={hour}
+                              isCurrentDay={dayIndex === todayIndex}
+                            />
+                            <td className="py-3 last:border-0 max-md:px-2 md:px-4">
+                              {(timetable.lessons?.[dayIndex]?.[hourIndex] ?? []).map(
+                                (lessonItem, index) => (
+                                  <LessonItem key={index} lesson={lessonItem} />
+                                ),
+                              )}
+                            </td>
+                          </tr>
+                        ))}
+                    </tbody>
+                  </table>
+                ) : (
+                  <div className="flex h-full w-full flex-col items-center justify-center gap-2 p-4 text-center text-muted-foreground">
+                    <CalendarX2 className="h-10 w-10 text-primary/70 dark:text-primary/80" />
+                    <h2 className="text-lg font-semibold">Brak planu zajęć</h2>
+                    <p className="text-sm">
+                      Na ten dzień nie wprowadzono planu zajęć
+                    </p>
+                  </div>
+                )}
+              </div>
+            );
+          })}
         </div>
-      )}
+      </div>
 
       {/* Desktop timetable */}
       <div className="h-full w-full max-md:hidden md:overflow-auto">
-        {hasLessons && (
+        {hasLessons ? (
           <table className="w-full">
             <thead className="max-md:hidden">
               <tr className="divide-x divide-lines border-b border-lines">
@@ -166,6 +186,12 @@ export const Timetable: FC<TimetableProps> = ({ timetable }) => {
                 ))}
             </tbody>
           </table>
+        ) : (
+          <div className="flex h-full w-full flex-col items-center justify-center gap-2 p-4 text-center text-muted-foreground">
+            <CalendarX2 className="h-10 w-10 text-primary/70 dark:text-primary/80" />
+            <h2 className="text-lg font-semibold">Brak planu zajęć</h2>
+            <p className="text-sm">Na ten tydzień nie wprowadzono planu zajęć</p>
+          </div>
         )}
       </div>
     </div>
