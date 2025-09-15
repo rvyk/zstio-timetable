@@ -4,7 +4,8 @@ import { SHORT_HOURS } from "@/constants/settings";
 import { adjustShortenedLessons } from "@/lib/adjustShortenedLessons";
 import { useSettingsStore, useSettingsWithoutStore } from "@/stores/settings";
 import { OptivumTimetable } from "@/types/optivum";
-import { FC, useMemo, useRef, useState } from "react";
+import { FC, useEffect, useMemo, useRef, useState } from "react";
+import clsx from "clsx";
 import {
   ShortLessonSwitcherCell,
   TableHeaderCell,
@@ -29,7 +30,7 @@ export const Timetable: FC<TimetableProps> = ({ timetable }) => {
   const totalDays = timetable.dayNames.length;
 
   const [currentSlide, setCurrentSlide] = useState(selectedDayIndex + 1);
-  const slideRef = useRef<HTMLDivElement>(null);
+  const [transitionEnabled, setTransitionEnabled] = useState(true);
 
   const hours = useMemo(() => {
     if (lessonType === "custom") {
@@ -80,26 +81,22 @@ export const Timetable: FC<TimetableProps> = ({ timetable }) => {
   };
 
   const handleTransitionEnd = () => {
-    const node = slideRef.current;
-    if (!node) return;
     if (currentSlide === 0) {
-      node.style.transition = "none";
+      setTransitionEnabled(false);
       setCurrentSlide(totalDays);
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          node.style.transition = "";
-        });
-      });
     } else if (currentSlide === totalDays + 1) {
-      node.style.transition = "none";
+      setTransitionEnabled(false);
       setCurrentSlide(1);
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          node.style.transition = "";
-        });
-      });
     }
   };
+
+  useEffect(() => {
+    if (!transitionEnabled) {
+      requestAnimationFrame(() => {
+        setTransitionEnabled(true);
+      });
+    }
+  }, [transitionEnabled]);
 
   const touchStartX = useRef<number | null>(null);
   const handleTouchStart = (e: React.TouchEvent) => {
@@ -136,8 +133,9 @@ export const Timetable: FC<TimetableProps> = ({ timetable }) => {
           onTouchEnd={handleTouchEnd}
         >
           <div
-            ref={slideRef}
-            className="flex w-full transition-transform duration-300"
+            className={clsx("flex w-full", {
+              "transition-transform duration-300": transitionEnabled,
+            })}
             style={{ transform: `translateX(-${currentSlide * 100}%)` }}
             onTransitionEnd={handleTransitionEnd}
           >
