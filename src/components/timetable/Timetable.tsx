@@ -5,6 +5,7 @@ import { adjustShortenedLessons } from "@/lib/adjustShortenedLessons";
 import { useSettingsStore, useSettingsWithoutStore } from "@/stores/settings";
 import { OptivumTimetable } from "@/types/optivum";
 import { FC, useMemo, useRef } from "react";
+import { CalendarX2 } from "lucide-react";
 import {
   ShortLessonSwitcherCell,
   TableHeaderCell,
@@ -135,9 +136,11 @@ export const Timetable: FC<TimetableProps> = ({ timetable }) => {
                     </tbody>
                   </table>
                 ) : (
-                  <div className="flex h-full w-full items-center justify-center p-4">
-                    <p className="text-center text-muted-foreground">
-                      Brak wprowadzonego planu zajęć na ten dzień
+                  <div className="flex h-full w-full flex-col items-center justify-center gap-2 p-4 text-center text-muted-foreground">
+                    <CalendarX2 className="h-10 w-10 text-primary/70 dark:text-primary/80" />
+                    <h2 className="text-lg font-semibold">Brak planu zajęć</h2>
+                    <p className="text-sm">
+                      Na ten dzień nie wprowadzono planu zajęć
                     </p>
                   </div>
                 )}
