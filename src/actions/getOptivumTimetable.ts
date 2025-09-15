@@ -8,6 +8,7 @@ import moment from "moment";
 import "moment/locale/pl";
 import parser from "any-date-parser";
 import { getOptivumList } from "./getOptivumList";
+import { env } from "@/env";
 
 export const getOptivumTimetable = async (
   type: string,
@@ -22,7 +23,7 @@ export const getOptivumTimetable = async (
 
   try {
     const baseUrl =
-      process.env.NEXT_PUBLIC_TIMETABLE_URL?.replace(/\/+$/, "") ?? "";
+      env.NEXT_PUBLIC_TIMETABLE_URL.replace(/\/+$/, "");
     const url = `${baseUrl}/plany/${id}.html`;
 
     const res = await fetch(url, {

@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
 import { OptivumTimetable } from "@/types/optivum";
-import { FC, Fragment, useMemo } from "react";
+import { FC, Fragment, JSX, useMemo } from "react";
 
 interface TimetableDatesProps {
   timetable?: OptivumTimetable;

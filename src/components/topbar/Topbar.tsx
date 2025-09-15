@@ -76,10 +76,7 @@ const SchoolLink: FC = () => (
       alt={`Logo szkoły ${SCHOOL_SHORT}`}
       className="aspect-square w-10"
     />
-    <div className="inline-flex items-center gap-x-2 text-primary/70 transition-colors group-hover:text-primary/90 max-md:hidden">
-      <ArrowLeftFromLine size={20} strokeWidth={2.5} />
-      <p className="text-sm font-medium xl:text-base">Wróć na stronę szkoły</p>
-    </div>
+    <p className="text-sm font-medium xl:text-base text-primary/70 hover:text-primary/90 max-md:hidden transition-colors">Wróć na stronę szkoły</p>
   </Link>
 );
 

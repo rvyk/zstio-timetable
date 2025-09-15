@@ -8,6 +8,7 @@ import { Poppins } from "next/font/google";
 import { ReactNode } from "react";
 import "./globals.css";
 import { SCHOOL_SHORT, SCHOOL_NAME_ACCUSATIVE } from "@/constants/school";
+import { env } from "@/env";
 
 export const fetchCache = "default-cache";
 
@@ -23,7 +24,7 @@ export const metadata: Metadata = {
   },
   description:
     `W prosty sposób sprawdź plan zajęć dla różnych klas, nauczycieli oraz sal w ${SCHOOL_NAME_ACCUSATIVE}.`,
-  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL as string),
+  metadataBase: new URL(env.NEXT_PUBLIC_APP_URL as string),
 
   alternates: {
     canonical: "./",

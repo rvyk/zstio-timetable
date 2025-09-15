@@ -1,11 +1,12 @@
 "use server";
 
 import { REVALIDATE_TIME } from "@/constants/settings";
+import { env } from "@/env";
 import { List, TimetableList } from "@majusss/timetable-parser";
 
 export const getOptivumList = async (): Promise<List> => {
   const baseUrl =
-    process.env.NEXT_PUBLIC_TIMETABLE_URL?.replace(/\/+$/, "") ?? "";
+    env.NEXT_PUBLIC_TIMETABLE_URL.replace(/\/+$/, "");
   const url = `${baseUrl}/lista.html`;
 
   try {

@@ -2,6 +2,7 @@
 
 import { SCHOOL_SHORT } from "@/constants/school";
 import { REVALIDATE_TIME } from "@/constants/settings";
+import { env } from "@/env";
 import { TableHour, TableLesson } from "@majusss/timetable-parser";
 import * as ics from "ics";
 import { unstable_cache } from "next/cache";
@@ -71,7 +72,7 @@ const createEvent = (
     ],
     title,
     description,
-    url: process.env.NEXT_PUBLIC_APP_URL,
+    url: env.NEXT_PUBLIC_APP_URL,
     location: room ? `Sala: ${room}` : undefined,
     duration: { minutes: 45 },
     alarms: [

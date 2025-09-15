@@ -1,59 +1,23 @@
 import { withSentryConfig } from "@sentry/nextjs";
 import type { NextConfig } from "next";
+import "./src/env";
 
 const nextConfig: NextConfig = {
   output: process.env.DOCKERIZED === "true" ? "standalone" : undefined,
 
-  experimental: {
-    staleTimes: {
-      dynamic: 30,
-      static: 60,
-    },
-  },
-
-  webpack: (config) => {
-    checkEnvVariables(["NEXT_PUBLIC_TIMETABLE_URL", "NEXT_PUBLIC_APP_URL"]);
-
-    return config;
-  },
-
   redirects: async () => [
     {
-      source: "/substitutions/:path*",
+      source: "/zastepstwa/:path*",
       destination: "/",
-      permanent: true,
+      permanent: false,
     },
   ],
-};
-
-const checkEnvVariables = (envVars: string[]) => {
-  envVars.forEach((envVar) => {
-    const value = process.env[envVar];
-
-    if (!value) {
-      throw new Error(
-        `Error: Missing required environment variable: ${envVar}`,
-      );
-    }
-
-    if (envVar.endsWith("_URL")) {
-      try {
-        new URL(value);
-      } catch {
-        throw new Error(
-          `Error: Environment variable ${envVar} is not a valid URL: ${value}`,
-        );
-      }
-    }
-  });
 };
 
 const sentryConfig = {
   org: "majrvy",
   project: "zstio-timetable",
-
   silent: !process.env.CI,
-
   widenClientFileUpload: true,
   hideSourceMaps: true,
   disableLogger: true,

@@ -115,7 +115,7 @@ export const ListItemComponent: FC<
   const { toggleSidebar, isSidebarOpen } = useSettingsWithoutStore();
 
   const pathname = usePathname();
-  const link = `/${item.type ? item.type : type}/${item.value}`;
+  const link = `/${item.type ?? type}/${item.value}`;
 
   const handleButton = () => {
     if (isSidebarOpen) {

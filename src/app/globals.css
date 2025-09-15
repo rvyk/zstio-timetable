@@ -1,29 +1,58 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:where(.dark, .dark *));
 
 @layer base {
   :root {
     --background: 254 255 254; /* #FEFFFE */
     --foreground: 246 243 244; /* #F6F3F4 */
 
-    --accent: 254 255 254; /* #FEFFFE */
+    --accent: 254 255 254;      /* #FEFFFE */
     --accent-secondary: 254 255 254; /* #FEFFFE */
-    --accent-table: 239 9 51; /* #EF0933 */
+    --accent-table: 239 9 51;   /* #EF0933 */
 
-    --primary: 42 23 27; /* #2A171B */
-    --lines: 208 201 203; /* #D0C9CB */
+    --primary: 42 23 27;        /* #2A171B */
+    --lines: 208 201 203;       /* #D0C9CB */
   }
 
   .dark {
-    --background: 16 16 16; /* #101010 */
-    --foreground: 14 14 14; /* #0E0E0E */
+    --background: 16 16 16;     /* #101010 */
+    --foreground: 14 14 14;     /* #0E0E0E */
 
-    --accent: 21 21 21; /* #151515 */
+    --accent: 21 21 21;         /* #151515 */
     --accent-secondary: 32 32 32; /* #202020 */
 
-    --primary: 250 250 250; /* #FAFAFA */
-    --lines: 28 28 28; /* #1C1C1C */
+    --primary: 250 250 250;     /* #FAFAFA */
+    --lines: 28 28 28;          /* #1C1C1C */
+  }
+}
+
+@theme {
+  --color-background: rgb(var(--background));
+  --color-foreground: rgb(var(--foreground));
+  --color-accent: rgb(var(--accent));
+  --color-accent-secondary: rgb(var(--accent-secondary));
+  --color-accent-table: rgb(var(--accent-table));
+  --color-primary: rgb(var(--primary));
+  --color-lines: rgb(var(--lines));
+
+  --radius-lg: 16px;
+  --radius-md: 12px;
+  --radius-sm: 8px;
+
+  --text-4_2xl: 2.5rem;
+
+  --animate-accordion-down: accordion-down 0.2s ease-out;
+  --animate-accordion-up: accordion-up 0.2s ease-out;
+
+  @keyframes accordion-down {
+    from { height: 0 }
+    to   { height: var(--radix-accordion-content-height) }
+  }
+  @keyframes accordion-up {
+    from { height: var(--radix-accordion-content-height) }
+    to   { height: 0 }
   }
 }
 
@@ -31,68 +60,51 @@
   width: 6px;
   height: 6px;
 }
-
-/* Light mode */
-
 *::-webkit-scrollbar-corner {
   background: rgba(54, 54, 54, 0.5);
 }
-
 *::-webkit-scrollbar-track {
   background-color: rgba(54, 54, 54, 0.5);
 }
-
 *::-webkit-scrollbar-track:hover {
   background-color: rgba(54, 54, 54, 0.7);
 }
-
 *::-webkit-scrollbar-track:active {
   background-color: rgba(54, 54, 54, 0.8);
 }
-
 *::-webkit-scrollbar-thumb {
-  background-color: rgb(42, 23, 27, 0.5);
+  background-color: rgba(42, 23, 27, 0.5);
 }
-
 *::-webkit-scrollbar-thumb:hover {
-  background-color: rgb(42, 23, 27, 0.7);
+  background-color: rgba(42, 23, 27, 0.7);
 }
-
 *::-webkit-scrollbar-thumb:active {
-  background-color: rgb(42, 23, 27, 1);
+  background-color: rgb(42, 23, 27);
 }
-
-/* Dark mode */
 
 .dark *::-webkit-scrollbar-corner {
-  background: rgb(66, 66, 66, 1);
+  background: rgb(66, 66, 66);
 }
-
 .dark *::-webkit-scrollbar-track {
-  background-color: rgb(66, 66, 66, 1);
+  background-color: rgb(66, 66, 66);
 }
-
 .dark *::-webkit-scrollbar-track:hover {
-  background-color: rgb(66, 66, 66, 0.7);
+  background-color: rgba(66, 66, 66, 0.7);
 }
-
 .dark *::-webkit-scrollbar-track:active {
-  background-color: rgb(66, 66, 66, 0.5);
+  background-color: rgba(66, 66, 66, 0.5);
 }
-
 .dark *::-webkit-scrollbar-thumb {
-  background-color: rgb(32, 32, 32, 0.5);
+  background-color: rgba(32, 32, 32, 0.5);
 }
-
 .dark *::-webkit-scrollbar-thumb:hover {
-  background-color: rgb(32, 32, 32, 0.7);
+  background-color: rgba(32, 32, 32, 0.7);
 }
-
 .dark *::-webkit-scrollbar-thumb:active {
-  background-color: rgb(32, 32, 32, 0.8);
+  background-color: rgba(32, 32, 32, 0.8);
 }
 
 ::selection {
-  background-color: rgba(var(--accent-table));
+  background-color: rgb(var(--accent-table));
   color: #fafafa;
 }

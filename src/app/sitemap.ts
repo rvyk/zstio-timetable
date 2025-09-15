@@ -1,10 +1,11 @@
 import { getOptivumList } from "@/actions/getOptivumList";
+import { env } from "@/env";
 import { MetadataRoute } from "next";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const { classes, rooms, teachers } = await getOptivumList();
 
-  const baseUrl = new URL(process.env.NEXT_PUBLIC_APP_URL as string).origin;
+  const baseUrl = new URL(env.NEXT_PUBLIC_APP_URL as string).origin;
 
   const classUrls = classes.map((c) => ({
     url: `${baseUrl}/class/${c.value}`,

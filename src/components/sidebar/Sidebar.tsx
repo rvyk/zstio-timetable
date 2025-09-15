@@ -22,6 +22,7 @@ import { useIsClient } from "usehooks-ts";
 import SidebarContext, { useSidebarContext } from "./Context";
 import { Dropdown } from "./Dropdown";
 import { Search } from "./Search";
+import { env } from "@/env";
 
 export const Sidebar: FC = () => {
   const { isSidebarOpen, toggleSidebar } = useSettingsWithoutStore();
@@ -76,7 +77,7 @@ export const SidebarContent: FC<SidebarContentProps> = ({
   const { isPreview } = useSidebarContext();
   const isClient = useIsClient();
 
-  const sourceLink = process.env.NEXT_PUBLIC_TIMETABLE_URL;
+  const sourceLink = env.NEXT_PUBLIC_TIMETABLE_URL;
 
   if (!isClient)
     return (
@@ -133,7 +134,7 @@ export const SidebarContent: FC<SidebarContentProps> = ({
         >
           Źródło danych: <br />
           <Link
-            href={sourceLink ?? "#"}
+            href={sourceLink}
             target="_blank"
             className="break-words text-xs font-medium text-primary/70 underline"
           >
