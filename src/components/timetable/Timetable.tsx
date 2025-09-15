@@ -47,7 +47,10 @@ export const Timetable: FC<TimetableProps> = ({ timetable }) => {
   }, [timetable]);
 
   const hasLessons = useMemo(
-    () => timetable.lessons?.some((innerArray) => innerArray.length > 0),
+    () =>
+      timetable.lessons?.some((day) =>
+        day.some((hourLessons) => hourLessons.length > 0),
+      ),
     [timetable.lessons],
   );
 
@@ -101,9 +104,12 @@ export const Timetable: FC<TimetableProps> = ({ timetable }) => {
         >
           {timetable.dayNames.map((_, dayIndex) => {
             const dayLessons = timetable.lessons?.[dayIndex] ?? [];
+            const dayHasLessons = dayLessons.some(
+              (hourLessons) => hourLessons.length > 0,
+            );
             return (
               <div key={dayIndex} className="flex h-full w-full flex-shrink-0 flex-col">
-                {dayLessons.length > 0 ? (
+                {dayHasLessons ? (
                   <table className="w-full">
                     <tbody>
                       {Object.values(hours)
