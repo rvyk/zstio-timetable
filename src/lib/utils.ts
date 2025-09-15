@@ -33,33 +33,27 @@ export const getDayNumberForNextWeek = (
   monthNumber: number;
 } => {
   const today = new Date();
-  const todayDayOfWeek = today.getDay();
+  // JavaScript's getDay is 0 for Sunday, but our DAYS_OF_WEEK starts from Monday (index 0)
+  const todayIndex = (today.getDay() + 6) % 7;
+
   const targetDay = DAYS_OF_WEEK.find(
     (day) => day.long === dayName || day.short === dayName,
   );
 
   if (!targetDay) {
     console.error("Day not found");
-
     return {
       dayNumber: today.getDate(),
-      month: moment(today.getMonth() + 1).format("MMM"),
+      month: moment(today).format("MMM"),
       monthNumber: today.getMonth() + 1,
     };
   }
 
-  const targetDayOfWeek = targetDay.index + 1;
-
-  const daysUntilTarget = (targetDayOfWeek - todayDayOfWeek + 7) % 7;
+  let diff = targetDay.index - todayIndex;
+  if (diff < 0) diff += 7; // always choose a future date
 
   const targetDate = new Date(today);
-  targetDate.setDate(today.getDate() + daysUntilTarget);
-
-  if (daysUntilTarget === 0 && todayDayOfWeek === targetDayOfWeek) {
-    targetDate.setDate(today.getDate());
-  } else if (targetDayOfWeek < todayDayOfWeek) {
-    targetDate.setDate(today.getDate() - (todayDayOfWeek - targetDayOfWeek));
-  }
+  targetDate.setDate(today.getDate() + diff);
 
   return {
     dayNumber: targetDate.getDate(),

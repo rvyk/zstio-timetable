@@ -52,8 +52,7 @@ export const Sidebar: FC = () => {
             <SidebarContent />
             <VisuallyHidden>
               <SheetDescription>
-                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Saepe,
-                sapiente.
+                Lista wszystkich klas, nauczycieli i sal dostępnych w planie.
               </SheetDescription>
             </VisuallyHidden>
           </SheetContent>

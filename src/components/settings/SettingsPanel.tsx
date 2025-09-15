@@ -155,8 +155,8 @@ export const SettingsPanel = () => {
             <SheetTitle>Dodatkowe funkcje</SheetTitle>
             <VisuallyHidden>
               <SheetDescription>
-                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Saepe,
-                sapiente.
+                Panel z dodatkowymi funkcjami planu — umożliwia wyszukiwanie sal
+                i zmianę ustawień.
               </SheetDescription>
             </VisuallyHidden>
             <Button
