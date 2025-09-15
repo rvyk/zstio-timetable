@@ -152,7 +152,7 @@ export const Timetable: FC<TimetableProps> = ({ timetable }) => {
 
       {/* Desktop timetable */}
       <div className="h-full w-full max-md:hidden md:overflow-auto">
-        {hasLessons && (
+        {hasLessons ? (
           <table className="w-full">
             <thead className="max-md:hidden">
               <tr className="divide-x divide-lines border-b border-lines">
@@ -186,6 +186,12 @@ export const Timetable: FC<TimetableProps> = ({ timetable }) => {
                 ))}
             </tbody>
           </table>
+        ) : (
+          <div className="flex h-full w-full flex-col items-center justify-center gap-2 p-4 text-center text-muted-foreground">
+            <CalendarX2 className="h-10 w-10 text-primary/70 dark:text-primary/80" />
+            <h2 className="text-lg font-semibold">Brak planu zajęć</h2>
+            <p className="text-sm">Na ten tydzień nie wprowadzono planu zajęć</p>
+          </div>
         )}
       </div>
     </div>
