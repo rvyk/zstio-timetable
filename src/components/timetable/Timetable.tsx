@@ -3,7 +3,7 @@
 import { SHORT_HOURS } from "@/constants/settings";
 import { adjustShortenedLessons } from "@/lib/adjustShortenedLessons";
 import { useSettingsStore, useSettingsWithoutStore } from "@/stores/settings";
-import { OptivumTimetable } from "@/types/optivum";
+import type { OptivumTimetable } from "@/types/optivum";
 import { CalendarX2 } from "lucide-react";
 import { FC, useMemo, useRef } from "react";
 import {
@@ -17,6 +17,16 @@ import { LessonItem, TableLessonCell } from "./LessonCells";
 interface TimetableProps {
   timetable: OptivumTimetable;
 }
+
+const SWIPE_THRESHOLD = 50;
+
+const NoLessons: FC<{ description: string }> = ({ description }) => (
+  <div className="text-muted-foreground flex h-full w-full flex-col items-center justify-center gap-2 p-4 text-center">
+    <CalendarX2 className="h-10 w-10 text-primary/70 dark:text-primary/80" />
+    <h2 className="text-lg font-semibold">Brak planu zajęć</h2>
+    <p className="text-sm">{description}</p>
+  </div>
+);
 
 export const Timetable: FC<TimetableProps> = ({ timetable }) => {
   const lessonType = useSettingsStore((state) => state.lessonType);
@@ -38,24 +48,27 @@ export const Timetable: FC<TimetableProps> = ({ timetable }) => {
     return lessonType === "short" ? SHORT_HOURS : timetable.hours;
   }, [lessonType, hoursAdjustIndex, timetable.hours]);
 
+  const lessons = useMemo(() => timetable.lessons ?? [], [timetable.lessons]);
+
   const maxLessons = useMemo(() => {
-    return (
-      Math.max(
-        Object.keys(timetable.hours).length,
-        ...(timetable.lessons?.map((day) => day.length) ?? []),
-      ) || 0
-    );
-  }, [timetable]);
+    const lessonCounts = lessons.map((day) => day.length);
+    const hourCount = Object.keys(timetable.hours).length;
+
+    return Math.max(hourCount, ...lessonCounts, 0);
+  }, [lessons, timetable.hours]);
 
   const hasLessons = useMemo(
-    () =>
-      timetable.lessons?.some((day) =>
-        day.some((hourLessons) => hourLessons.length > 0),
-      ),
-    [timetable.lessons],
+    () => lessons.some((day) => day.some((hourLessons) => hourLessons.length > 0)),
+    [lessons],
   );
 
   const todayIndex = useMemo(() => (new Date().getDay() + 6) % 7, []);
+  const dayNames = timetable.dayNames;
+  const hoursList = useMemo(() => Object.values(hours), [hours]);
+  const visibleHours = useMemo(
+    () => hoursList.slice(0, maxLessons),
+    [hoursList, maxLessons],
+  );
 
   const handleDayChange = (newIndex: number) => {
     if (selectedDayIndex !== newIndex) {
@@ -70,9 +83,9 @@ export const Timetable: FC<TimetableProps> = ({ timetable }) => {
   const handleTouchEnd = (e: React.TouchEvent) => {
     if (touchStartX.current === null) return;
     const diff = e.changedTouches[0].clientX - touchStartX.current;
-    if (Math.abs(diff) > 50) {
+    if (Math.abs(diff) > SWIPE_THRESHOLD) {
       const increment = diff < 0 ? 1 : -1;
-      const totalDays = timetable.dayNames.length;
+      const totalDays = dayNames.length;
       const nextIndex = (selectedDayIndex + increment + totalDays) % totalDays;
       handleDayChange(nextIndex);
     }
@@ -82,7 +95,7 @@ export const Timetable: FC<TimetableProps> = ({ timetable }) => {
   return (
     <div className="border-lines bg-foreground flex w-full flex-1 flex-col transition-all max-md:mb-20 md:overflow-hidden md:rounded-md md:border">
       <div className="divide-lines border-lines bg-foreground sticky top-0 z-20 flex justify-between divide-x border-y md:hidden">
-        {timetable.dayNames.map((dayName) => (
+        {dayNames.map((dayName) => (
           <TableHeaderMobileCell
             key={dayName}
             dayName={dayName}
@@ -101,8 +114,8 @@ export const Timetable: FC<TimetableProps> = ({ timetable }) => {
           className="flex h-full w-full transition-transform duration-300"
           style={{ transform: `translateX(-${selectedDayIndex * 100}%)` }}
         >
-          {timetable.dayNames.map((_, dayIndex) => {
-            const dayLessons = timetable.lessons?.[dayIndex] ?? [];
+          {dayNames.map((_, dayIndex) => {
+            const dayLessons = lessons[dayIndex] ?? [];
             const dayHasLessons = dayLessons.some(
               (hourLessons) => hourLessons.length > 0,
             );
@@ -114,36 +127,28 @@ export const Timetable: FC<TimetableProps> = ({ timetable }) => {
                 {dayHasLessons ? (
                   <table className="w-full">
                     <tbody>
-                      {Object.values(hours)
-                        .slice(0, maxLessons)
-                        .map((hour, hourIndex) => (
-                          <tr
-                            key={hourIndex}
-                            className="border-lines odd:bg-accent/50 odd:dark:bg-background border-b"
-                          >
-                            <TableHourCell
-                              hour={hour}
-                              isCurrentDay={dayIndex === todayIndex}
-                            />
-                            <td className="py-3 last:border-0 max-md:px-2 md:px-4">
-                              {(
-                                timetable.lessons?.[dayIndex]?.[hourIndex] ?? []
-                              ).map((lessonItem, index) => (
+                      {visibleHours.map((hour, hourIndex) => (
+                        <tr
+                          key={hourIndex}
+                          className="border-lines odd:bg-accent/50 odd:dark:bg-background border-b"
+                        >
+                          <TableHourCell
+                            hour={hour}
+                            isCurrentDay={dayIndex === todayIndex}
+                          />
+                          <td className="py-3 last:border-0 max-md:px-2 md:px-4">
+                            {(lessons[dayIndex]?.[hourIndex] ?? []).map(
+                              (lessonItem, index) => (
                                 <LessonItem key={index} lesson={lessonItem} />
-                              ))}
-                            </td>
-                          </tr>
-                        ))}
+                              ),
+                            )}
+                          </td>
+                        </tr>
+                      ))}
                     </tbody>
                   </table>
                 ) : (
-                  <div className="text-muted-foreground flex h-full w-full flex-col items-center justify-center gap-2 p-4 text-center">
-                    <CalendarX2 className="text-primary/70 dark:text-primary/80 h-10 w-10" />
-                    <h2 className="text-lg font-semibold">Brak planu zajęć</h2>
-                    <p className="text-sm">
-                      Na ten dzień nie wprowadzono planu zajęć
-                    </p>
-                  </div>
+                  <NoLessons description="Na ten dzień nie wprowadzono planu zajęć" />
                 )}
               </div>
             );
@@ -159,41 +164,33 @@ export const Timetable: FC<TimetableProps> = ({ timetable }) => {
                 <th>
                   <ShortLessonSwitcherCell />
                 </th>
-                {timetable.dayNames.map((dayName) => (
+                {dayNames.map((dayName) => (
                   <TableHeaderCell key={dayName} dayName={dayName} />
                 ))}
               </tr>
             </thead>
             <tbody>
-              {Object.values(hours)
-                .slice(0, maxLessons)
-                .map((hour, hourIndex) => (
-                  <tr
-                    key={hourIndex}
-                    className="divide-lines border-lines odd:bg-accent/50 odd:dark:bg-background border-b md:divide-x md:last:border-none"
-                  >
-                    <TableHourCell hour={hour} />
-                    {timetable.lessons?.map((day, dayIndex) => (
-                      <TableLessonCell
-                        key={dayIndex}
-                        dayIndex={dayIndex}
-                        day={day}
-                        lessonIndex={hourIndex}
-                        selectedDayIndex={selectedDayIndex}
-                      />
-                    ))}
-                  </tr>
-                ))}
+              {visibleHours.map((hour, hourIndex) => (
+                <tr
+                  key={hourIndex}
+                  className="divide-lines border-lines odd:bg-accent/50 odd:dark:bg-background border-b md:divide-x md:last:border-none"
+                >
+                  <TableHourCell hour={hour} />
+                  {lessons.map((day, dayIndex) => (
+                    <TableLessonCell
+                      key={dayIndex}
+                      dayIndex={dayIndex}
+                      day={day}
+                      lessonIndex={hourIndex}
+                      selectedDayIndex={selectedDayIndex}
+                    />
+                  ))}
+                </tr>
+              ))}
             </tbody>
           </table>
         ) : (
-          <div className="text-muted-foreground flex h-full w-full flex-col items-center justify-center gap-2 p-4 text-center">
-            <CalendarX2 className="text-primary/70 dark:text-primary/80 h-10 w-10" />
-            <h2 className="text-lg font-semibold">Brak planu zajęć</h2>
-            <p className="text-sm">
-              Na ten tydzień nie wprowadzono planu zajęć
-            </p>
-          </div>
+          <NoLessons description="Na ten tydzień nie wprowadzono planu zajęć" />
         )}
       </div>
     </div>

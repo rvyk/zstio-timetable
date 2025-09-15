@@ -23,7 +23,7 @@ export const metadata: Metadata = {
     default: `${SCHOOL_SHORT} - Plan lekcji`,
   },
   description: `W prosty sposób sprawdź plan zajęć dla różnych klas, nauczycieli oraz sal w ${SCHOOL_NAME_ACCUSATIVE}.`,
-  metadataBase: new URL(env.NEXT_PUBLIC_APP_URL as string),
+  metadataBase: new URL(env.NEXT_PUBLIC_APP_URL),
 
   alternates: {
     canonical: "./",
@@ -46,7 +46,7 @@ export default function RootLayout({
       <body
         className={cn(
           poppins.className,
-          "bg-foreground md:bg-background flex h-screen antialiased",
+          "flex h-screen antialiased bg-foreground md:bg-background",
         )}
       >
         <ThemeProvider attribute="class" disableTransitionOnChange>
@@ -54,7 +54,6 @@ export default function RootLayout({
           <Sidebar />
           {children}
           <SettingsPanel />
-          {/* <AnnouncementModal /> */}
         </ThemeProvider>
       </body>
     </html>
