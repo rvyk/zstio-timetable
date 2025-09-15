@@ -9,7 +9,6 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/Drawer";
-import { TimetableDates } from "@/components/common/TimetableDates";
 import { TRANSLATION_DICT } from "@/constants/translations";
 import { simulateKeyPress } from "@/lib/utils";
 import { OptivumTimetable } from "@/types/optivum";
@@ -32,10 +31,6 @@ export const BottomBar: FC<BottomBarProps> = ({ timetable }) => {
           <p className="mx-auto max-w-72 truncate text-ellipsis text-sm font-medium leading-tight opacity-70">
             {`Rozkład zajęć ${TRANSLATION_DICT[timetable.type]}`}
           </p>
-          <TimetableDates
-            timetable={timetable}
-            className="mx-auto max-w-72 truncate text-ellipsis text-xs"
-          />
         </div>
       );
     } else {
@@ -103,7 +98,7 @@ export const BottomBar: FC<BottomBarProps> = ({ timetable }) => {
           </DrawerDescription>
         </VisuallyHidden>
         <div className="flex h-full flex-col justify-between gap-y-16">
-          <SidebarContent />
+          <SidebarContent showTimetableDates />
         </div>
       </DrawerContent>
     </Drawer>

@@ -1,5 +1,6 @@
 "use client";
 
+import { TimetableDates } from "@/components/common/TimetableDates";
 import { Accordion } from "@/components/ui/Accordion";
 import {
   Sheet,
@@ -62,10 +63,15 @@ export const Sidebar: FC = () => {
   );
 };
 
-export const SidebarContent: FC = () => {
-  const lastUpdatedTimetable = useTimetableStore(
-    (state) => state.timetable,
-  )?.lastUpdated;
+interface SidebarContentProps {
+  showTimetableDates?: boolean;
+}
+
+export const SidebarContent: FC<SidebarContentProps> = ({
+  showTimetableDates,
+}) => {
+  const timetable = useTimetableStore((state) => state.timetable);
+  const lastUpdatedTimetable = timetable?.lastUpdated;
 
   const { isPreview } = useSidebarContext();
   const isClient = useIsClient();
@@ -99,6 +105,12 @@ export const SidebarContent: FC = () => {
       <TimetableSidebarDropdowns />
 
       <div className="flex flex-col gap-1">
+        {showTimetableDates && (
+          <TimetableDates
+            timetable={timetable ?? undefined}
+            className={cn(isPreview && "hidden", "mx-2 text-xs sm:text-sm")}
+          />
+        )}
         {lastUpdatedTimetable && (
           <p
             className={cn(
