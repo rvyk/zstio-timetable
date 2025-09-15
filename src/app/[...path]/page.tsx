@@ -7,20 +7,36 @@ import { ShortenedLessonsCalculatorModal } from "@/components/modals/ShortenedLe
 import { Timetable } from "@/components/timetable/Timetable";
 import { TimetableController } from "@/components/timetable/TimetableController";
 import { Topbar } from "@/components/topbar/Topbar";
+import { DATA_SOURCE_COOKIE_NAME } from "@/lib/dataSource";
 import { cookies } from "next/headers";
+import { notFound } from "next/navigation";
 import { Fragment } from "react";
+import type { Metadata } from "next";
+import type { OptivumTimetable } from "@/types/optivum";
 
 interface PageParams {
   path?: string[];
 }
 
-export const generateMetadata = async (props: {
-  params: Promise<PageParams>;
-}) => {
-  const params = await props.params;
+const TIMETABLE_TYPES: readonly OptivumTimetable["type"][] = [
+  "class",
+  "teacher",
+  "room",
+] as const;
+
+const isTimetableType = (
+  value: string | undefined,
+): value is OptivumTimetable["type"] =>
+  TIMETABLE_TYPES.includes(value as OptivumTimetable["type"]);
+
+export const generateMetadata = async ({
+  params,
+}: {
+  params: PageParams;
+}): Promise<Metadata> => {
   const [type, value] = params.path ?? [];
 
-  if (!type || !value) {
+  if (!isTimetableType(type) || !value) {
     return { title: "" };
   }
 
@@ -29,13 +45,21 @@ export const generateMetadata = async (props: {
   return { title: timetable.title };
 };
 
-const TimetablePage = async (props: { params: Promise<PageParams> }) => {
-  const dataSource =
-    (await cookies()).get("selectedDataSource")?.value ?? "default";
-  const params = await props.params;
+const TimetablePage = async ({ params }: { params: PageParams }) => {
   const [type, value] = params.path ?? [];
 
-  const timetable = await getOptivumTimetable(type, value, dataSource);
+  if (!isTimetableType(type) || !value) {
+    notFound();
+  }
+
+  const cookieStore = cookies();
+  const requestedDataSource = cookieStore.get(DATA_SOURCE_COOKIE_NAME)?.value;
+
+  const timetable = await getOptivumTimetable(
+    type,
+    value,
+    requestedDataSource,
+  );
 
   return (
     <Fragment>

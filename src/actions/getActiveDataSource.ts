@@ -1,19 +1,32 @@
 "use server";
 
 import { env } from "@/env";
-import { parseEnvDataSources } from "@/lib/dataSource";
+import { normalizeDataSourceUrl, parseEnvDataSources } from "@/lib/dataSource";
 
 export const getActiveDataSource = async (
-  dataSource: string = "default",
+  requestedSource?: string,
 ): Promise<string> => {
-  const sources = parseEnvDataSources();
-  const urls = new Set(sources.map((s) => s.url));
+  const sanitizedRequest =
+    requestedSource && requestedSource !== "default"
+      ? normalizeDataSourceUrl(requestedSource)
+      : null;
 
-  if (dataSource && urls.has(dataSource)) return dataSource;
+  const sources = parseEnvDataSources();
+
+  if (sanitizedRequest) {
+    const matchedSource = sources.find((source) => source.url === sanitizedRequest);
+    if (matchedSource) {
+      return matchedSource.url;
+    }
+  }
 
   if (sources.length > 0) {
     return sources[0].url;
   }
 
-  return env.NEXT_PUBLIC_TIMETABLE_URL ?? "";
+  return (
+    normalizeDataSourceUrl(env.NEXT_PUBLIC_TIMETABLE_URL ?? "") ??
+    sanitizedRequest ??
+    ""
+  );
 };

@@ -10,6 +10,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/Sheet";
 import { Skeleton } from "@/components/ui/Skeleton";
+import { DATA_SOURCE_COOKIE_NAME } from "@/lib/dataSource";
 import { cn } from "@/lib/utils";
 import { initDataSources, useDataSourceStore } from "@/stores/dataSource";
 import { useFavoritesStore } from "@/stores/favorites";
@@ -35,7 +36,7 @@ export const Sidebar: FC = () => {
 
   return (
     <Fragment>
-      <div className="border-lines bg-foreground dark:border-primary/10 h-screen w-full max-w-xs border-r max-xl:hidden max-md:hidden">
+      <div className="border-lines dark:border-primary/10 bg-foreground h-screen w-full max-w-xs border-r max-xl:hidden max-md:hidden">
         <div className="mr-3 flex h-full w-full flex-col justify-between gap-y-16 overflow-x-hidden overflow-y-auto px-4 py-6">
           <SidebarContent />
         </div>
@@ -44,7 +45,7 @@ export const Sidebar: FC = () => {
       <div className="max-md:hidden xl:hidden">
         <Sheet open={isSidebarOpen} onOpenChange={toggleSidebar}>
           <SheetTrigger asChild>
-            <div className="border-lines bg-foreground dark:border-primary/10 flex h-screen w-24 cursor-pointer flex-col items-center gap-10 border-r px-4 py-6">
+            <div className="border-lines dark:border-primary/10 bg-foreground flex h-screen w-24 cursor-pointer flex-col items-center gap-10 border-r px-4 py-6">
               <SidebarContext.Provider value={{ isPreview: true }}>
                 <SidebarContent />
               </SidebarContext.Provider>
@@ -84,7 +85,7 @@ export const SidebarContent: FC<SidebarContentProps> = ({
   const isClient = useIsClient();
 
   useEffect(() => {
-    if (typeof window !== "undefined") initDataSources();
+    initDataSources();
   }, []);
 
   const { selectedDataSource, availableDataSources, setSelectedDataSource } =
@@ -98,7 +99,7 @@ export const SidebarContent: FC<SidebarContentProps> = ({
     if (url === selectedDataSource) return;
     try {
       setIsLoading(true);
-      document.cookie = `selectedDataSource=${encodeURIComponent(url)}; path=/; max-age=${60 * 60 * 24 * 365}; SameSite=Lax`;
+      document.cookie = `${DATA_SOURCE_COOKIE_NAME}=${encodeURIComponent(url)}; path=/; max-age=${60 * 60 * 24 * 365}; SameSite=Lax`;
       setSelectedDataSource(url);
       router.refresh();
     } finally {
@@ -171,9 +172,10 @@ export const SidebarContent: FC<SidebarContentProps> = ({
               onClick={() => setIsOpen(!isOpen)}
               disabled={isLoading}
               className={cn(
-                "group text-primary/70 hover:text-primary/90 hover:bg-accent/30 border-primary/10 flex w-full items-center justify-between gap-2 rounded-lg border px-2 py-1.5 text-xs font-medium transition-all duration-200",
+                "group flex w-full items-center justify-between gap-2 rounded-lg border px-2 py-1.5 text-xs font-medium transition-all duration-200",
+                "border-primary/10 text-primary/70 hover:bg-accent/30 hover:text-primary/90",
                 isLoading && "cursor-not-allowed opacity-50",
-                isOpen && "bg-accent/40 border-primary/20 text-primary/90",
+                isOpen && "border-primary/20 bg-accent/40 text-primary/90",
               )}
             >
               <span className="ml-0 truncate text-left">
@@ -196,16 +198,16 @@ export const SidebarContent: FC<SidebarContentProps> = ({
                   onClick={() => setIsOpen(false)}
                 />
 
-                <div className="bg-foreground/95 border-primary/20 absolute right-0 bottom-full left-0 z-20 mb-1 overflow-hidden rounded-lg border shadow-lg backdrop-blur-sm transition-all duration-200">
+                <div className="absolute inset-x-0 bottom-full z-20 mb-1 overflow-hidden rounded-lg border border-primary/20 bg-foreground/95 shadow-lg backdrop-blur-sm transition-all duration-200">
                   <div className="py-1">
                     {availableDataSources.map((source) => (
                       <button
                         key={source.url}
                         onClick={() => handleSourceChange(source.url)}
                         className={cn(
-                          "hover:bg-accent/50 w-full px-3 py-2 text-left text-xs transition-colors duration-150",
+                          "w-full px-3 py-2 text-left text-xs transition-colors duration-150 hover:bg-accent/50",
                           selectedDataSource === source.url &&
-                            "bg-accent/40 text-primary/95 font-medium",
+                            "bg-accent/40 font-medium text-primary/95",
                         )}
                       >
                         <div className="flex items-center gap-2">

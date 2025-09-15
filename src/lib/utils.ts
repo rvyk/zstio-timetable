@@ -18,11 +18,17 @@ export const setLastVisitedCookie = (link: string) => {
 };
 
 export const parseHeaderDate = (res: Response): string => {
-  return res.headers.has("date")
-    ? moment(res.headers.get("date"))
-        .tz("Europe/Warsaw")
-        .format("DD MMMM YYYY[r.] HH:mm:ss")
-    : "Brak danych";
+  const headerDate = res.headers.get("date");
+  if (!headerDate) {
+    return "Brak danych";
+  }
+
+  const parsedDate = moment(headerDate);
+  if (!parsedDate.isValid()) {
+    return "Brak danych";
+  }
+
+  return parsedDate.tz("Europe/Warsaw").format("DD MMMM YYYY[r.] HH:mm:ss");
 };
 
 export const getDayNumberForNextWeek = (
