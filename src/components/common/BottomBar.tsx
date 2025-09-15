@@ -16,11 +16,11 @@ import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { FC, MouseEvent, useMemo } from "react";
 
-interface TopbarProps {
+interface BottomBarProps {
   timetable?: OptivumTimetable;
 }
 
-export const BottomBar: FC<TopbarProps> = ({ timetable }) => {
+export const BottomBar: FC<BottomBarProps> = ({ timetable }) => {
   const titleElement = useMemo(() => {
     if (timetable) {
       return (
@@ -28,9 +28,9 @@ export const BottomBar: FC<TopbarProps> = ({ timetable }) => {
           <h2 className="mx-auto max-w-52 truncate text-ellipsis text-base font-semibold leading-tight opacity-90">
             {timetable.title}
           </h2>
-            <p className="mx-auto max-w-72 truncate text-ellipsis text-sm font-medium leading-tight opacity-70">
-              {`Rozkład zajęć ${TRANSLATION_DICT[timetable.type]}`}
-            </p>
+          <p className="mx-auto max-w-72 truncate text-ellipsis text-sm font-medium leading-tight opacity-70">
+            {`Rozkład zajęć ${TRANSLATION_DICT[timetable.type]}`}
+          </p>
         </div>
       );
     } else {
@@ -98,7 +98,7 @@ export const BottomBar: FC<TopbarProps> = ({ timetable }) => {
           </DrawerDescription>
         </VisuallyHidden>
         <div className="flex h-full flex-col justify-between gap-y-16">
-          <SidebarContent />
+          <SidebarContent showTimetableDates />
         </div>
       </DrawerContent>
     </Drawer>

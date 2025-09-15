@@ -19,7 +19,7 @@ interface OptivumTimetable {
   generatedDate: string | null;
   title: string;
   type: "class" | "teacher" | "room";
-  validDate: string;
+  validDate: string | null;
   dayNames: string[];
   list: List;
   lastUpdated: string;
