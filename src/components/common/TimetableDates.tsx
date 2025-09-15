@@ -14,7 +14,8 @@ export const TimetableDates: FC<TimetableDatesProps> = ({
   stackOnMobile,
 }) => {
   const hasNoLessons = useMemo(
-    () => timetable?.lessons?.some((innerArray) => innerArray.length === 0) ?? true,
+    () =>
+      timetable?.lessons?.some((innerArray) => innerArray.length === 0) ?? true,
     [timetable?.lessons],
   );
 
@@ -26,8 +27,10 @@ export const TimetableDates: FC<TimetableDatesProps> = ({
     if (timetable.generatedDate && timetable.generatedDate !== "Invalid date") {
       arr.push(
         <Fragment key="generatedDate">
-          Wygenerowano:{" "}
-          <span className="font-semibold text-primary/90">
+          <span className="max-md:text-primary/90 max-md:font-semibold">
+            Wygenerowano:{" "}
+          </span>
+          <span className="md:text-primary/90 md:font-semibold">
             {timetable.generatedDate}
           </span>
         </Fragment>,
@@ -37,8 +40,10 @@ export const TimetableDates: FC<TimetableDatesProps> = ({
     if (timetable.validDate) {
       arr.push(
         <Fragment key="validDate">
-          Obowiązuje od:{" "}
-          <span className="font-semibold text-primary/90">
+          <span className="max-md:text-primary/90 max-md:font-semibold">
+            Obowiązuje od:{" "}
+          </span>
+          <span className="md:text-primary/90 md:font-semibold">
             {timetable.validDate}
           </span>
         </Fragment>,
@@ -50,16 +55,21 @@ export const TimetableDates: FC<TimetableDatesProps> = ({
 
   if (hasNoLessons) {
     return (
-      <p className={cn("text-base font-medium text-primary/50", className)}>
+      <p className={cn("text-primary/50 text-base font-medium", className)}>
         Szukany plan zajęć{" "}
-        <span className="font-semibold text-primary/90">({timetable?.id})</span>{" "}
+        <span className="text-primary/90 font-semibold">({timetable?.id})</span>{" "}
         nie mógł zostać znaleziony.
       </p>
     );
   }
 
   return (
-    <p className={cn("text-sm font-medium text-primary/70 xl:text-base", className)}>
+    <p
+      className={cn(
+        "text-primary/70 text-sm font-medium xl:text-base",
+        className,
+      )}
+    >
       {elements.map((el, idx) =>
         stackOnMobile ? (
           <span key={idx} className="block sm:inline">
@@ -78,4 +88,3 @@ export const TimetableDates: FC<TimetableDatesProps> = ({
     </p>
   );
 };
-
