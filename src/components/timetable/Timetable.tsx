@@ -4,7 +4,7 @@ import { SHORT_HOURS } from "@/constants/settings";
 import { adjustShortenedLessons } from "@/lib/adjustShortenedLessons";
 import { useSettingsStore, useSettingsWithoutStore } from "@/stores/settings";
 import { OptivumTimetable } from "@/types/optivum";
-import { FC, useMemo, useRef } from "react";
+import { FC, useMemo, useRef, useState } from "react";
 import {
   ShortLessonSwitcherCell,
   TableHeaderCell,
@@ -26,6 +26,10 @@ export const Timetable: FC<TimetableProps> = ({ timetable }) => {
   const setSelectedDayIndex = useSettingsWithoutStore(
     (state) => state.setSelectedDayIndex,
   );
+  const totalDays = timetable.dayNames.length;
+
+  const [currentSlide, setCurrentSlide] = useState(selectedDayIndex + 1);
+  const slideRef = useRef<HTMLDivElement>(null);
 
   const hours = useMemo(() => {
     if (lessonType === "custom") {
@@ -53,9 +57,47 @@ export const Timetable: FC<TimetableProps> = ({ timetable }) => {
 
   const todayIndex = useMemo(() => (new Date().getDay() + 6) % 7, []);
 
+  const extendedDayIndices = useMemo(
+    () => [
+      totalDays - 1,
+      ...Array.from({ length: totalDays }, (_, i) => i),
+      0,
+    ],
+    [totalDays],
+  );
+
   const handleDayChange = (newIndex: number) => {
     if (selectedDayIndex !== newIndex) {
       setSelectedDayIndex(newIndex);
+      setCurrentSlide(newIndex + 1);
+    }
+  };
+
+  const handleSwipe = (increment: number) => {
+    const nextIndex = (selectedDayIndex + increment + totalDays) % totalDays;
+    setSelectedDayIndex(nextIndex);
+    setCurrentSlide((prev) => prev + increment);
+  };
+
+  const handleTransitionEnd = () => {
+    const node = slideRef.current;
+    if (!node) return;
+    if (currentSlide === 0) {
+      node.style.transition = "none";
+      setCurrentSlide(totalDays);
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          node.style.transition = "";
+        });
+      });
+    } else if (currentSlide === totalDays + 1) {
+      node.style.transition = "none";
+      setCurrentSlide(1);
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          node.style.transition = "";
+        });
+      });
     }
   };
 
@@ -68,10 +110,7 @@ export const Timetable: FC<TimetableProps> = ({ timetable }) => {
     const diff = e.changedTouches[0].clientX - touchStartX.current;
     if (Math.abs(diff) > 50) {
       const increment = diff < 0 ? 1 : -1;
-      const totalDays = timetable.dayNames.length;
-      const nextIndex =
-        (selectedDayIndex + increment + totalDays) % totalDays;
-      handleDayChange(nextIndex);
+      handleSwipe(increment);
     }
     touchStartX.current = null;
   };
@@ -97,11 +136,13 @@ export const Timetable: FC<TimetableProps> = ({ timetable }) => {
           onTouchEnd={handleTouchEnd}
         >
           <div
+            ref={slideRef}
             className="flex w-full transition-transform duration-300"
-            style={{ transform: `translateX(-${selectedDayIndex * 100}%)` }}
+            style={{ transform: `translateX(-${currentSlide * 100}%)` }}
+            onTransitionEnd={handleTransitionEnd}
           >
-            {timetable.dayNames.map((_, dayIndex) => (
-              <table key={dayIndex} className="w-full flex-shrink-0">
+            {extendedDayIndices.map((dayIndex, idx) => (
+              <table key={idx} className="w-full flex-shrink-0">
                 <tbody>
                   {Object.values(hours)
                     .slice(0, maxLessons)
