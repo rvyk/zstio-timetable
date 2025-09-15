@@ -9,6 +9,7 @@ Nowoczesna i odświeżona aplikacja planu lekcji dla Zespołu Szkół Techniczny
 ## 🚀 Najważniejsze Funkcje
 
 - **Uniwersalna Kompatybilność 🌍:** Przystosowana do każdej szkoły korzystającej z planów UONET. Wystarczy skonfigurować zmienną środowiskową `NEXT_PUBLIC_TIMETABLE_URL`.
+- **Obsługa Wielu Źródeł Danych 🔄:** Konfiguruj wiele źródeł planów lekcji i płynnie przełączaj się między nimi.
 - **Ulubione ⭐:** Zapisz najczęściej przeglądane klasy, nauczycieli i sale, aby mieć do nich szybki dostęp.
 - **Wygodne Wyszukiwanie Wolnych Sal 🔎:** Szybko sprawdź dostępne sale według dnia i numeru lekcji.
 - **Inteligentne Skrócone Lekcje ⏱️:** Automatyczna adaptacja planu do skróconych godzin lekcyjnych.
@@ -49,8 +50,8 @@ Nowoczesna i odświeżona aplikacja planu lekcji dla Zespołu Szkół Techniczny
 3. **Skonfiguruj zmienne środowiskowe:**
 
    Utwórz plik `.env.local` na podstawie `.env.example` i ustaw:
-
    - **`NEXT_PUBLIC_TIMETABLE_URL` (wymagane):** URL do planu lekcji Twojej szkoły (UONET).
+   - **`NEXT_PUBLIC_TIMETABLES_URL` (opcjonalne):** Konfiguruj wiele źródeł planów lekcji oddzielonych spacjami.
    - **`NEXT_PUBLIC_APP_URL` (wymagane):** Podstawowy URL aplikacji.
    - **`SENTRY_AUTH_TOKEN` (opcjonalne):** Token autoryzacji Sentry.
 
