@@ -5,21 +5,26 @@ import { FC, Fragment, useMemo } from "react";
 interface TimetableDatesProps {
   timetable?: OptivumTimetable;
   className?: string;
+  stackOnMobile?: boolean;
 }
 
-export const TimetableDates: FC<TimetableDatesProps> = ({ timetable, className }) => {
+export const TimetableDates: FC<TimetableDatesProps> = ({
+  timetable,
+  className,
+  stackOnMobile,
+}) => {
   const hasNoLessons = useMemo(
     () => timetable?.lessons?.some((innerArray) => innerArray.length === 0) ?? true,
     [timetable?.lessons],
   );
 
-  const dateElements = useMemo(() => {
-    if (hasNoLessons || !timetable) return null;
+  const elements = useMemo(() => {
+    if (hasNoLessons || !timetable) return [] as JSX.Element[];
 
-    const elements = [] as (string | JSX.Element)[];
+    const arr: JSX.Element[] = [];
 
     if (timetable.generatedDate && timetable.generatedDate !== "Invalid date") {
-      elements.push(
+      arr.push(
         <Fragment key="generatedDate">
           Wygenerowano:{" "}
           <span className="font-semibold text-primary/90">
@@ -30,7 +35,7 @@ export const TimetableDates: FC<TimetableDatesProps> = ({ timetable, className }
     }
 
     if (timetable.validDate) {
-      elements.push(
+      arr.push(
         <Fragment key="validDate">
           Obowiązuje od:{" "}
           <span className="font-semibold text-primary/90">
@@ -40,12 +45,7 @@ export const TimetableDates: FC<TimetableDatesProps> = ({ timetable, className }
       );
     }
 
-    return elements.reduce<(string | JSX.Element)[]>((acc, curr, index, array) => {
-      if (index < array.length - 1) {
-        return [...acc, curr, ", "];
-      }
-      return [...acc, curr];
-    }, []);
+    return arr;
   }, [hasNoLessons, timetable]);
 
   if (hasNoLessons) {
@@ -60,7 +60,21 @@ export const TimetableDates: FC<TimetableDatesProps> = ({ timetable, className }
 
   return (
     <p className={cn("text-sm font-medium text-primary/70 xl:text-base", className)}>
-      {dateElements}
+      {elements.map((el, idx) =>
+        stackOnMobile ? (
+          <span key={idx} className="block sm:inline">
+            {el}
+            {idx < elements.length - 1 && (
+              <span className="hidden sm:inline">, </span>
+            )}
+          </span>
+        ) : (
+          <Fragment key={idx}>
+            {el}
+            {idx < elements.length - 1 && ", "}
+          </Fragment>
+        ),
+      )}
     </p>
   );
 };

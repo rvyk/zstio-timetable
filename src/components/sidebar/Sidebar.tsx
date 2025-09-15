@@ -108,6 +108,7 @@ export const SidebarContent: FC<SidebarContentProps> = ({
         {showTimetableDates && (
           <TimetableDates
             timetable={timetable ?? undefined}
+            stackOnMobile
             className={cn(isPreview && "hidden", "mx-2 text-xs sm:text-sm")}
           />
         )}
