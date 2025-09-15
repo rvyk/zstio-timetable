@@ -11,26 +11,32 @@ import {
 } from "@/components/ui/Sheet";
 import { Skeleton } from "@/components/ui/Skeleton";
 import { cn } from "@/lib/utils";
+import { initDataSources, useDataSourceStore } from "@/stores/dataSource";
 import { useFavoritesStore } from "@/stores/favorites";
 import { useSettingsWithoutStore } from "@/stores/settings";
 import { useTimetableStore } from "@/stores/timetable";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
-import { GraduationCap, MapPin, StarIcon, Users } from "lucide-react";
-import Link from "next/link";
-import { FC, Fragment, useMemo } from "react";
+import {
+  ChevronDown,
+  GraduationCap,
+  MapPin,
+  StarIcon,
+  Users,
+} from "lucide-react";
+import { useRouter } from "next/navigation";
+import { FC, Fragment, useEffect, useMemo, useState } from "react";
 import { useIsClient } from "usehooks-ts";
 import SidebarContext, { useSidebarContext } from "./Context";
 import { Dropdown } from "./Dropdown";
 import { Search } from "./Search";
-import { env } from "@/env";
 
 export const Sidebar: FC = () => {
   const { isSidebarOpen, toggleSidebar } = useSettingsWithoutStore();
 
   return (
     <Fragment>
-      <div className="h-screen w-full max-w-xs border-r border-lines bg-foreground dark:border-primary/10 max-xl:hidden max-md:hidden">
-        <div className="mr-3 flex h-full w-full flex-col justify-between gap-y-16 overflow-y-auto overflow-x-hidden px-4 py-6">
+      <div className="border-lines bg-foreground dark:border-primary/10 h-screen w-full max-w-xs border-r max-xl:hidden max-md:hidden">
+        <div className="mr-3 flex h-full w-full flex-col justify-between gap-y-16 overflow-x-hidden overflow-y-auto px-4 py-6">
           <SidebarContent />
         </div>
       </div>
@@ -38,15 +44,15 @@ export const Sidebar: FC = () => {
       <div className="max-md:hidden xl:hidden">
         <Sheet open={isSidebarOpen} onOpenChange={toggleSidebar}>
           <SheetTrigger asChild>
-            <button className="flex h-screen w-24 cursor-pointer flex-col items-center gap-10 border-r border-lines bg-foreground px-4 py-6 dark:border-primary/10">
+            <div className="border-lines bg-foreground dark:border-primary/10 flex h-screen w-24 cursor-pointer flex-col items-center gap-10 border-r px-4 py-6">
               <SidebarContext.Provider value={{ isPreview: true }}>
                 <SidebarContent />
               </SidebarContext.Provider>
-            </button>
+            </div>
           </SheetTrigger>
           <SheetContent
             side="left"
-            className="flex flex-col justify-between gap-y-16 overflow-y-auto overflow-x-hidden border-r border-lines px-4 py-6 xl:hidden"
+            className="border-lines flex flex-col justify-between gap-y-16 overflow-x-hidden overflow-y-auto border-r px-4 py-6 xl:hidden"
           >
             <VisuallyHidden>
               <SheetTitle>Nawigacja boczna</SheetTitle>
@@ -77,7 +83,34 @@ export const SidebarContent: FC<SidebarContentProps> = ({
   const { isPreview } = useSidebarContext();
   const isClient = useIsClient();
 
-  const sourceLink = env.NEXT_PUBLIC_TIMETABLE_URL;
+  useEffect(() => {
+    if (typeof window !== "undefined") initDataSources();
+  }, []);
+
+  const { selectedDataSource, availableDataSources, setSelectedDataSource } =
+    useDataSourceStore();
+
+  const [isOpen, setIsOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
+
+  const handleSourceChange = async (url: string) => {
+    if (url === selectedDataSource) return;
+    try {
+      setIsLoading(true);
+      document.cookie = `selectedDataSource=${encodeURIComponent(url)}; path=/; max-age=${60 * 60 * 24 * 365}; SameSite=Lax`;
+      setSelectedDataSource(url);
+      router.refresh();
+    } finally {
+      setIsLoading(false);
+      setIsOpen(false);
+    }
+  };
+
+  const selectedSource = useMemo(
+    () => availableDataSources.find((s) => s.url === selectedDataSource),
+    [availableDataSources, selectedDataSource],
+  );
 
   if (!isClient)
     return (
@@ -86,7 +119,7 @@ export const SidebarContent: FC<SidebarContentProps> = ({
           <Skeleton className="h-12 w-full" />
           <div className={cn(isPreview && "mx-auto w-10", "grid gap-5")}>
             <Skeleton className="h-10 w-full" />
-            <hr className="h-px w-full border border-primary/10" />
+            <hr className="border-primary/10 h-px w-full border" />
             <Skeleton className="h-10 w-full" />
             <Skeleton className="h-10 w-full" />
             <Skeleton className="h-10 w-full" />
@@ -117,30 +150,90 @@ export const SidebarContent: FC<SidebarContentProps> = ({
           <p
             className={cn(
               isPreview && "hidden",
-              "mx-2 text-xs font-semibold text-primary/90 sm:text-sm",
+              "text-primary/90 mx-2 text-xs font-semibold sm:text-sm",
             )}
           >
             Ostatnia aktualizacja danych: <br />
-            <span className="break-words text-xs font-medium text-primary/70">
+            <span className="text-primary/70 text-xs font-medium break-words">
               {lastUpdatedTimetable}
             </span>
           </p>
         )}
-        <p
+        <div
           className={cn(
             isPreview && "hidden",
-            "mx-2 text-xs font-semibold text-primary/90 sm:text-sm",
+            "text-primary/90 text-xs font-medium sm:text-sm",
           )}
         >
-          Źródło danych: <br />
-          <Link
-            href={sourceLink}
-            target="_blank"
-            className="break-words text-xs font-medium text-primary/70 underline"
-          >
-            {sourceLink}
-          </Link>
-        </p>
+          <div className="mx-2 mb-1">Źródło danych:</div>
+          <div className={cn("relative")}>
+            <button
+              onClick={() => setIsOpen(!isOpen)}
+              disabled={isLoading}
+              className={cn(
+                "group text-primary/70 hover:text-primary/90 hover:bg-accent/30 border-primary/10 flex w-full items-center justify-between gap-2 rounded-lg border px-2 py-1.5 text-xs font-medium transition-all duration-200",
+                isLoading && "cursor-not-allowed opacity-50",
+                isOpen && "bg-accent/40 border-primary/20 text-primary/90",
+              )}
+            >
+              <span className="ml-0 truncate text-left">
+                {isLoading
+                  ? "Ładowanie..."
+                  : (selectedSource?.name ?? "Nieznane źródło")}
+              </span>
+              <ChevronDown
+                className={cn(
+                  "h-3.5 w-3.5 flex-shrink-0 transition-transform duration-200",
+                  isOpen && "rotate-180",
+                )}
+              />
+            </button>
+
+            {isOpen && (
+              <Fragment>
+                <div
+                  className="fixed inset-0 z-10"
+                  onClick={() => setIsOpen(false)}
+                />
+
+                <div className="bg-foreground/95 border-primary/20 absolute right-0 bottom-full left-0 z-20 mb-1 overflow-hidden rounded-lg border shadow-lg backdrop-blur-sm transition-all duration-200">
+                  <div className="py-1">
+                    {availableDataSources.map((source) => (
+                      <button
+                        key={source.url}
+                        onClick={() => handleSourceChange(source.url)}
+                        className={cn(
+                          "hover:bg-accent/50 w-full px-3 py-2 text-left text-xs transition-colors duration-150",
+                          selectedDataSource === source.url &&
+                            "bg-accent/40 text-primary/95 font-medium",
+                        )}
+                      >
+                        <div className="flex items-center gap-2">
+                          <div
+                            className={cn(
+                              "h-1.5 w-1.5 flex-shrink-0 rounded-full transition-colors",
+                              selectedDataSource === source.url
+                                ? "bg-green-500"
+                                : "bg-primary/30",
+                            )}
+                          />
+                          <div className="min-w-0 flex-1">
+                            <div className="text-primary/90 truncate font-medium">
+                              {source.name}
+                            </div>
+                            <div className="text-primary/60 mt-0.5 truncate text-[10px]">
+                              {source.url}
+                            </div>
+                          </div>
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </Fragment>
+            )}
+          </div>
+        </div>
       </div>
     </Fragment>
   );
@@ -168,7 +261,7 @@ const TimetableSidebarDropdowns: FC = () => {
           <Fragment key={item.type}>
             <Dropdown type={item.type} icon={item.icon} data={item.data} />
             {index === 0 && (
-              <hr className="h-px w-full border border-primary/10" />
+              <hr className="border-primary/10 h-px w-full border" />
             )}
           </Fragment>
         ))}

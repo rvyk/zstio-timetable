@@ -7,6 +7,7 @@ import { ShortenedLessonsCalculatorModal } from "@/components/modals/ShortenedLe
 import { Timetable } from "@/components/timetable/Timetable";
 import { TimetableController } from "@/components/timetable/TimetableController";
 import { Topbar } from "@/components/topbar/Topbar";
+import { cookies } from "next/headers";
 import { Fragment } from "react";
 
 interface PageParams {
@@ -29,10 +30,12 @@ export const generateMetadata = async (props: {
 };
 
 const TimetablePage = async (props: { params: Promise<PageParams> }) => {
+  const dataSource =
+    (await cookies()).get("selectedDataSource")?.value ?? "default";
   const params = await props.params;
   const [type, value] = params.path ?? [];
 
-  const timetable = await getOptivumTimetable(type, value);
+  const timetable = await getOptivumTimetable(type, value, dataSource);
 
   return (
     <Fragment>

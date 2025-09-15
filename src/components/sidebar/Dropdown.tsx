@@ -42,21 +42,21 @@ export const Dropdown: FC<DropdownProps> = ({ type, icon: Icon, data }) => {
         asChild={isPreview}
         className={cn(
           isPreview && "pointer-events-none select-none",
-          "group -m-2 w-full rounded-md p-2 hover:bg-accent/90 data-[state=open]:bg-accent/90",
+          "group hover:bg-accent/90 data-[state=open]:bg-accent/90 -m-2 w-full rounded-md p-2",
         )}
       >
         <div className="inline-flex w-full items-center justify-between rounded-md">
           <div className="inline-flex items-center gap-x-3.5">
-            <div className="grid h-9 w-9 place-content-center rounded-sm border border-primary/10 bg-accent transition-all group-hover:bg-primary/5 group-data-[state=open]:bg-primary/5 group-hover:dark:bg-accent group-data-[state=open]:dark:bg-accent sm:h-10 sm:w-10">
+            <div className="border-primary/10 bg-accent group-hover:bg-primary/5 group-data-[state=open]:bg-primary/5 group-hover:dark:bg-accent group-data-[state=open]:dark:bg-accent grid h-9 w-9 place-content-center rounded-sm border transition-all sm:h-10 sm:w-10">
               <Icon
-                className="size-4 text-primary/80 transition-all group-hover:text-primary/90 group-data-[state=open]:text-primary/90 sm:size-5"
+                className="text-primary/80 group-hover:text-primary/90 group-data-[state=open]:text-primary/90 size-4 transition-all sm:size-5"
                 strokeWidth={2.5}
               />
             </div>
             <p
               className={cn(
                 isPreview && "hidden",
-                "text-xs font-semibold text-primary/70 group-hover:text-primary/90 group-data-[state=open]:text-primary/90 dark:font-medium sm:text-sm",
+                "text-primary/70 group-hover:text-primary/90 group-data-[state=open]:text-primary/90 text-xs font-semibold sm:text-sm dark:font-medium",
               )}
             >
               {translates[type as keyof typeof translates]}{" "}
@@ -66,7 +66,7 @@ export const Dropdown: FC<DropdownProps> = ({ type, icon: Icon, data }) => {
           <ChevronDown
             className={cn(
               isPreview && "hidden",
-              "size-4 text-primary/80 transition-all group-data-[state=open]:rotate-180 sm:size-5",
+              "text-primary/80 size-4 transition-all group-data-[state=open]:rotate-180 sm:size-5",
             )}
           />
         </div>
@@ -85,7 +85,7 @@ interface DropdownContentProps {
 
 export const DropdownContent: FC<DropdownContentProps> = ({ type, data }) => {
   return (
-    <div className="mt-4 grid gap-2 rounded-md bg-primary/[0.03] p-4 dark:bg-accent/90 md:bg-accent/90">
+    <div className="bg-primary/[0.03] dark:bg-accent/90 md:bg-accent/90 mt-4 grid gap-2 rounded-md p-4">
       {data && data.length > 0 ? (
         data.map((item, i) => (
           <ListItemComponent
@@ -95,7 +95,7 @@ export const DropdownContent: FC<DropdownContentProps> = ({ type, data }) => {
           />
         ))
       ) : (
-        <p className="text-center text-xs font-semibold text-primary/70 dark:font-medium sm:text-sm">
+        <p className="text-primary/70 text-center text-xs font-semibold sm:text-sm dark:font-medium">
           Brak danych
         </p>
       )}
@@ -131,7 +131,7 @@ export const ListItemComponent: FC<
         href={link}
         className={cn(
           pathname === link && buttonVariants({ variant: "sidebarItemActive" }),
-          "flex w-full justify-between gap-x-2",
+          "flex w-full !justify-between gap-x-2",
         )}
       >
         {item.name}
@@ -148,4 +148,3 @@ export const ListItemComponent: FC<
     </Button>
   );
 };
-

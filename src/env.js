@@ -9,15 +9,18 @@ export const env = createEnv({
   },
 
   client: {
-    NEXT_PUBLIC_TIMETABLE_URL: z.string().url(),
+    NEXT_PUBLIC_TIMETABLE_URL: z.string().url().optional(),
+    NEXT_PUBLIC_TIMETABLES_URL: z.string().optional(),
     NEXT_PUBLIC_APP_URL: z.string().url(),
   },
 
   runtimeEnv: {
     NEXT_PUBLIC_TIMETABLE_URL: process.env.NEXT_PUBLIC_TIMETABLE_URL,
+    NEXT_PUBLIC_TIMETABLES_URL: process.env.NEXT_PUBLIC_TIMETABLES_URL,
     NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
     SENTRY_AUTH_TOKEN: process.env.SENTRY_AUTH_TOKEN,
     DOCKERIZED: process.env.DOCKERIZED,
-    SENTRY_SUPPRESS_TURBOPACK_WARNING: process.env.SENTRY_SUPPRESS_TURBOPACK_WARNING,
+    SENTRY_SUPPRESS_TURBOPACK_WARNING:
+      process.env.SENTRY_SUPPRESS_TURBOPACK_WARNING,
   },
 });

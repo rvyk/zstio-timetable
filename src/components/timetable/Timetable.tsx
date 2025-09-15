@@ -4,8 +4,8 @@ import { SHORT_HOURS } from "@/constants/settings";
 import { adjustShortenedLessons } from "@/lib/adjustShortenedLessons";
 import { useSettingsStore, useSettingsWithoutStore } from "@/stores/settings";
 import { OptivumTimetable } from "@/types/optivum";
-import { FC, useMemo, useRef } from "react";
 import { CalendarX2 } from "lucide-react";
+import { FC, useMemo, useRef } from "react";
 import {
   ShortLessonSwitcherCell,
   TableHeaderCell,
@@ -73,16 +73,15 @@ export const Timetable: FC<TimetableProps> = ({ timetable }) => {
     if (Math.abs(diff) > 50) {
       const increment = diff < 0 ? 1 : -1;
       const totalDays = timetable.dayNames.length;
-      const nextIndex =
-        (selectedDayIndex + increment + totalDays) % totalDays;
+      const nextIndex = (selectedDayIndex + increment + totalDays) % totalDays;
       handleDayChange(nextIndex);
     }
     touchStartX.current = null;
   };
 
   return (
-    <div className="flex w-full flex-1 flex-col border-lines bg-foreground transition-all max-md:mb-20 md:overflow-hidden md:rounded-md md:border">
-      <div className="sticky top-0 z-20 flex justify-between divide-x divide-lines border-y border-lines bg-foreground md:hidden">
+    <div className="border-lines bg-foreground flex w-full flex-1 flex-col transition-all max-md:mb-20 md:overflow-hidden md:rounded-md md:border">
+      <div className="divide-lines border-lines bg-foreground sticky top-0 z-20 flex justify-between divide-x border-y md:hidden">
         {timetable.dayNames.map((dayName) => (
           <TableHeaderMobileCell
             key={dayName}
@@ -93,9 +92,8 @@ export const Timetable: FC<TimetableProps> = ({ timetable }) => {
         ))}
       </div>
 
-      {/* Mobile timetable with sliding animation */}
       <div
-        className="md:hidden flex-1 overflow-hidden"
+        className="flex-1 overflow-hidden md:hidden"
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
       >
@@ -109,7 +107,10 @@ export const Timetable: FC<TimetableProps> = ({ timetable }) => {
               (hourLessons) => hourLessons.length > 0,
             );
             return (
-              <div key={dayIndex} className="flex h-full w-full flex-shrink-0 flex-col">
+              <div
+                key={dayIndex}
+                className="flex h-full w-full flex-shrink-0 flex-col"
+              >
                 {dayHasLessons ? (
                   <table className="w-full">
                     <tbody>
@@ -118,26 +119,26 @@ export const Timetable: FC<TimetableProps> = ({ timetable }) => {
                         .map((hour, hourIndex) => (
                           <tr
                             key={hourIndex}
-                            className="border-b border-lines odd:bg-accent/50 odd:dark:bg-background"
+                            className="border-lines odd:bg-accent/50 odd:dark:bg-background border-b"
                           >
                             <TableHourCell
                               hour={hour}
                               isCurrentDay={dayIndex === todayIndex}
                             />
                             <td className="py-3 last:border-0 max-md:px-2 md:px-4">
-                              {(timetable.lessons?.[dayIndex]?.[hourIndex] ?? []).map(
-                                (lessonItem, index) => (
-                                  <LessonItem key={index} lesson={lessonItem} />
-                                ),
-                              )}
+                              {(
+                                timetable.lessons?.[dayIndex]?.[hourIndex] ?? []
+                              ).map((lessonItem, index) => (
+                                <LessonItem key={index} lesson={lessonItem} />
+                              ))}
                             </td>
                           </tr>
                         ))}
                     </tbody>
                   </table>
                 ) : (
-                  <div className="flex h-full w-full flex-col items-center justify-center gap-2 p-4 text-center text-muted-foreground">
-                    <CalendarX2 className="h-10 w-10 text-primary/70 dark:text-primary/80" />
+                  <div className="text-muted-foreground flex h-full w-full flex-col items-center justify-center gap-2 p-4 text-center">
+                    <CalendarX2 className="text-primary/70 dark:text-primary/80 h-10 w-10" />
                     <h2 className="text-lg font-semibold">Brak planu zajęć</h2>
                     <p className="text-sm">
                       Na ten dzień nie wprowadzono planu zajęć
@@ -150,12 +151,11 @@ export const Timetable: FC<TimetableProps> = ({ timetable }) => {
         </div>
       </div>
 
-      {/* Desktop timetable */}
       <div className="h-full w-full max-md:hidden md:overflow-auto">
         {hasLessons ? (
           <table className="w-full">
             <thead className="max-md:hidden">
-              <tr className="divide-x divide-lines border-b border-lines">
+              <tr className="divide-lines border-lines divide-x border-b">
                 <th>
                   <ShortLessonSwitcherCell />
                 </th>
@@ -170,7 +170,7 @@ export const Timetable: FC<TimetableProps> = ({ timetable }) => {
                 .map((hour, hourIndex) => (
                   <tr
                     key={hourIndex}
-                    className="divide-lines border-b border-lines odd:bg-accent/50 odd:dark:bg-background md:divide-x md:last:border-none"
+                    className="divide-lines border-lines odd:bg-accent/50 odd:dark:bg-background border-b md:divide-x md:last:border-none"
                   >
                     <TableHourCell hour={hour} />
                     {timetable.lessons?.map((day, dayIndex) => (
@@ -187,10 +187,12 @@ export const Timetable: FC<TimetableProps> = ({ timetable }) => {
             </tbody>
           </table>
         ) : (
-          <div className="flex h-full w-full flex-col items-center justify-center gap-2 p-4 text-center text-muted-foreground">
-            <CalendarX2 className="h-10 w-10 text-primary/70 dark:text-primary/80" />
+          <div className="text-muted-foreground flex h-full w-full flex-col items-center justify-center gap-2 p-4 text-center">
+            <CalendarX2 className="text-primary/70 dark:text-primary/80 h-10 w-10" />
             <h2 className="text-lg font-semibold">Brak planu zajęć</h2>
-            <p className="text-sm">Na ten tydzień nie wprowadzono planu zajęć</p>
+            <p className="text-sm">
+              Na ten tydzień nie wprowadzono planu zajęć
+            </p>
           </div>
         )}
       </div>

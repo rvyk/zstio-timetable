@@ -12,8 +12,10 @@ import {
 } from "@/components/ui/Sheet";
 import { usePwa } from "@/hooks/usePWA";
 import { showErrorToast } from "@/hooks/useToast";
+import { isOriginalDataSource } from "@/lib/dataSource";
 import { downloadFile } from "@/lib/downloadFile";
 import { cn } from "@/lib/utils";
+import { useDataSourceStore } from "@/stores/dataSource";
 import useModalsStore from "@/stores/modals";
 import { useSettingsStore, useSettingsWithoutStore } from "@/stores/settings";
 import { useTimetableStore } from "@/stores/timetable";
@@ -31,10 +33,13 @@ import Link from "next/link";
 export const SettingsPanel = () => {
   const toggleModal = useModalsStore((state) => state.toggleModal);
   const timetable = useTimetableStore((state) => state.timetable);
+  const { selectedDataSource } = useDataSourceStore();
   const { toggleSettingsPanel, isSettingsPanelOpen } =
     useSettingsWithoutStore();
   const savedSettings = useSettingsStore();
   const [prompt, isInstalled] = usePwa();
+
+  const isOriginalSource = isOriginalDataSource(selectedDataSource);
 
   const settings = [
     {
@@ -65,16 +70,12 @@ export const SettingsPanel = () => {
       hidden: true,
       active: savedSettings.isNotificationEnabled,
       onClick: savedSettings.toggleNotification,
-      description: (
-        <p>
-          Otrzymuj powiadomienia PUSH o nowym planie lekcji
-        </p>
-      ),
+      description: <p>Otrzymuj powiadomienia PUSH o nowym planie lekcji</p>,
     },
     {
       icon: CalendarArrowDownIcon,
       title: "Dodaj do kalendarza",
-      hidden: false,
+      hidden: !isOriginalSource,
       active: false,
       onClick: async () => {
         if (!timetable?.lessons || timetable.lessons.length === 0) {
@@ -138,7 +139,7 @@ export const SettingsPanel = () => {
     {
       icon: Search,
       title: "Wyszukaj wolną salę",
-      hidden: timetable?.list.rooms?.length === 0,
+      hidden: !isOriginalSource || timetable?.list.rooms?.length === 0,
       active: false,
       onClick: () => toggleModal("freeRoomsSearch"),
       description: (
@@ -177,18 +178,18 @@ export const SettingsPanel = () => {
                   onClick={setting.onClick}
                   className={cn(
                     setting.active &&
-                      "bg-primary/10 dark:font-medium md:hover:!bg-primary/15",
-                    "group -m-2 flex gap-4 rounded-md p-2 text-left transition-all md:hover:bg-primary/10",
+                      "bg-primary/10 md:hover:!bg-primary/15 dark:font-medium",
+                    "group md:hover:bg-primary/10 -m-2 flex gap-4 rounded-md p-2 text-left transition-all",
                   )}
                 >
-                  <div className="grid h-10 min-w-10 place-content-center rounded-sm border border-primary/10 bg-primary/5 text-primary/80">
+                  <div className="border-primary/10 bg-primary/5 text-primary/80 grid h-10 min-w-10 place-content-center rounded-sm border">
                     <setting.icon size={18} strokeWidth={2.5} />
                   </div>
                   <div className="grid">
-                    <h2 className="text-sm font-semibold text-primary/80 sm:text-base">
+                    <h2 className="text-primary/80 text-sm font-semibold sm:text-base">
                       {setting.title}
                     </h2>
-                    <div className="text-xs font-medium text-primary/50 sm:text-sm">
+                    <div className="text-primary/50 text-xs font-medium sm:text-sm">
                       {setting.description}
                     </div>
                   </div>

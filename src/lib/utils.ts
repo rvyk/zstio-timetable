@@ -33,7 +33,6 @@ export const getDayNumberForNextWeek = (
   monthNumber: number;
 } => {
   const today = new Date();
-  // JavaScript's getDay is 0 for Sunday, but our DAYS_OF_WEEK starts from Monday (index 0)
   const todayIndex = (today.getDay() + 6) % 7;
 
   const targetDay = DAYS_OF_WEEK.find(
@@ -50,7 +49,7 @@ export const getDayNumberForNextWeek = (
   }
 
   let diff = targetDay.index - todayIndex;
-  if (diff < 0) diff += 7; // always choose a future date
+  if (diff < 0) diff += 7;
 
   const targetDate = new Date(today);
   targetDate.setDate(today.getDate() + diff);
@@ -78,4 +77,3 @@ export const parseTime = (timeStr: string): number => {
   const [hours, minutes] = timeStr.split(":").map(Number);
   return hours * 3600 + minutes * 60;
 };
-

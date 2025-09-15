@@ -4,15 +4,16 @@ import { REVALIDATE_TIME } from "@/constants/settings";
 import { parseHeaderDate } from "@/lib/utils";
 import { OptivumTimetable } from "@/types/optivum";
 import { Table } from "@majusss/timetable-parser";
+import parser from "any-date-parser";
 import moment from "moment";
 import "moment/locale/pl";
-import parser from "any-date-parser";
+import { getActiveDataSource } from "./getActiveDataSource";
 import { getOptivumList } from "./getOptivumList";
-import { env } from "@/env";
 
 export const getOptivumTimetable = async (
   type: string,
   index: string,
+  dataSource: string = "default",
 ): Promise<OptivumTimetable> => {
   const id =
     {
@@ -22,8 +23,7 @@ export const getOptivumTimetable = async (
     }[type] ?? "";
 
   try {
-    const baseUrl =
-      env.NEXT_PUBLIC_TIMETABLE_URL.replace(/\/+$/, "");
+    const baseUrl = (await getActiveDataSource(dataSource)).replace(/\/+$/, "");
     const url = `${baseUrl}/plany/${id}.html`;
 
     const res = await fetch(url, {
@@ -38,9 +38,7 @@ export const getOptivumTimetable = async (
     const generatedRaw = timeTableData.getGeneratedDate() ?? "";
     const generatedParsed = parser.fromString(generatedRaw, "pl");
     const generatedDate = generatedParsed.isValid()
-      ? moment(generatedParsed)
-          .locale("pl")
-          .format("D MMMM YYYY[r.]")
+      ? moment(generatedParsed).locale("pl").format("D MMMM YYYY[r.]")
       : null;
 
     const validRaw = timeTableData.getVersionInfo();
@@ -58,7 +56,7 @@ export const getOptivumTimetable = async (
       type: type as OptivumTimetable["type"],
       validDate,
       dayNames: timeTableData.getDayNames(),
-      list: await getOptivumList(),
+      list: await getOptivumList(dataSource),
       lastUpdated: parseHeaderDate(res),
     };
   } catch (error) {
