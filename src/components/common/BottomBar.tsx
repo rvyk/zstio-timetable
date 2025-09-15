@@ -93,8 +93,8 @@ export const BottomBar: FC<TopbarProps> = ({ timetable }) => {
         <VisuallyHidden>
           <DrawerTitle>Przeglądaj plan zajęć</DrawerTitle>
           <DrawerDescription>
-            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Saepe,
-            sapiente.
+            Wybierz klasę, nauczyciela lub salę, aby zobaczyć odpowiedni plan
+            zajęć.
           </DrawerDescription>
         </VisuallyHidden>
         <div className="flex h-full flex-col justify-between gap-y-16">

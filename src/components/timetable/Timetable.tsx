@@ -4,14 +4,14 @@ import { SHORT_HOURS } from "@/constants/settings";
 import { adjustShortenedLessons } from "@/lib/adjustShortenedLessons";
 import { useSettingsStore, useSettingsWithoutStore } from "@/stores/settings";
 import { OptivumTimetable } from "@/types/optivum";
-import { FC, useMemo } from "react";
+import { FC, useMemo, useRef } from "react";
 import {
   ShortLessonSwitcherCell,
   TableHeaderCell,
   TableHeaderMobileCell,
   TableHourCell,
 } from "./Cells";
-import { TableLessonCell } from "./LessonCells";
+import { LessonItem, TableLessonCell } from "./LessonCells";
 
 interface TimetableProps {
   timetable: OptivumTimetable;
@@ -57,6 +57,23 @@ export const Timetable: FC<TimetableProps> = ({ timetable }) => {
     }
   };
 
+  const touchStartX = useRef<number | null>(null);
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+  };
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (touchStartX.current === null) return;
+    const diff = e.changedTouches[0].clientX - touchStartX.current;
+    if (Math.abs(diff) > 50) {
+      const increment = diff < 0 ? 1 : -1;
+      const totalDays = timetable.dayNames.length;
+      const nextIndex =
+        (selectedDayIndex + increment + totalDays) % totalDays;
+      handleDayChange(nextIndex);
+    }
+    touchStartX.current = null;
+  };
+
   return (
     <div className="h-fit w-full border-lines bg-foreground transition-all max-md:mb-20 md:overflow-hidden md:rounded-md md:border">
       <div className="sticky top-0 z-20 flex justify-between divide-x divide-lines border-y border-lines bg-foreground md:hidden">
@@ -70,7 +87,46 @@ export const Timetable: FC<TimetableProps> = ({ timetable }) => {
         ))}
       </div>
 
-      <div className="h-full w-full md:overflow-auto">
+      {/* Mobile timetable with sliding animation */}
+      {hasLessons && (
+        <div
+          className="md:hidden overflow-hidden"
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
+        >
+          <div
+            className="flex w-full transition-transform duration-300"
+            style={{ transform: `translateX(-${selectedDayIndex * 100}%)` }}
+          >
+            {timetable.dayNames.map((_, dayIndex) => (
+              <table key={dayIndex} className="w-full flex-shrink-0">
+                <tbody>
+                  {Object.values(hours)
+                    .slice(0, maxLessons)
+                    .map((hour, hourIndex) => (
+                      <tr
+                        key={hourIndex}
+                        className="border-b border-lines odd:bg-accent/50 odd:dark:bg-background"
+                      >
+                        <TableHourCell hour={hour} />
+                        <td className="py-3 last:border-0 max-md:px-2 md:px-4">
+                          {(timetable.lessons?.[dayIndex]?.[hourIndex] ?? []).map(
+                            (lessonItem, index) => (
+                              <LessonItem key={index} lesson={lessonItem} />
+                            ),
+                          )}
+                        </td>
+                      </tr>
+                    ))}
+                </tbody>
+              </table>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Desktop timetable */}
+      <div className="h-full w-full max-md:hidden md:overflow-auto">
         {hasLessons && (
           <table className="w-full">
             <thead className="max-md:hidden">
