@@ -9,6 +9,7 @@ A modern and refreshed timetable application for Zespół Szkół Technicznych i
 ## 🚀 Key Features
 
 - **Universal Compatibility 🌍:** Adaptable to any school using UONET timetables. Simply configure the `NEXT_PUBLIC_TIMETABLE_URL` environment variable.
+- **Multiple Data Sources Support 🔄:** Configure multiple timetable sources and switch between them seamlessly.
 - **Personalized Favorites ⭐:** Save your frequently accessed classes, teachers, and rooms for instant access.
 - **Effortless Free Room Search 🔎:** Quickly find available rooms by day and lesson number.
 - **Smart Shortened Lesson Calculator ⏱️:** Dynamically adjusts the timetable to reflect shortened lesson durations.
@@ -49,8 +50,8 @@ A modern and refreshed timetable application for Zespół Szkół Technicznych i
 3. **Configure environment variables:**
 
    Create a `.env.local` file based on `.env.example` and set the following:
-
    - **`NEXT_PUBLIC_TIMETABLE_URL` (required):** The URL of your school's UONET timetable.
+   - **`NEXT_PUBLIC_TIMETABLES_URL` (optional):** Configure multiple timetable sources separated by spaces.
    - **`NEXT_PUBLIC_APP_URL` (required):** The base URL of your application.
    - **`SENTRY_AUTH_TOKEN` (optional):** Your Sentry authentication token.
 

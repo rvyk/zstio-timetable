@@ -7,7 +7,6 @@ import { ShortLessonSwitcherCell } from "@/components/timetable/Cells";
 import { SCHOOL_SHORT, SCHOOL_WEBSITE } from "@/constants/school";
 import { TRANSLATION_DICT } from "@/constants/translations";
 import { OptivumTimetable } from "@/types/optivum";
-import { ArrowLeftFromLine } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { FC, Fragment, useMemo } from "react";
@@ -47,7 +46,7 @@ export const Topbar: FC<TopbarProps> = ({ timetable }) => {
       </div>
       <div className="grid gap-1.5 max-md:hidden">
         <div className="inline-flex items-center gap-x-4">
-          <h1 className="max-w-2xl truncate text-ellipsis text-3xl font-semibold leading-tight text-primary/90 xl:text-4.2xl">
+          <h1 className="text-primary/90 xl:text-4.2xl max-w-2xl truncate text-3xl leading-tight font-semibold text-ellipsis">
             {titleElement}
           </h1>
           {timetable?.title && isClient && (
@@ -76,7 +75,8 @@ const SchoolLink: FC = () => (
       alt={`Logo szkoły ${SCHOOL_SHORT}`}
       className="aspect-square w-10"
     />
-    <p className="text-sm font-medium xl:text-base text-primary/70 hover:text-primary/90 max-md:hidden transition-colors">Wróć na stronę szkoły</p>
+    <p className="text-primary/70 hover:text-primary/90 text-sm font-medium transition-colors max-md:hidden xl:text-base">
+      Wróć na stronę szkoły
+    </p>
   </Link>
 );
-
