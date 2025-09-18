@@ -1,6 +1,6 @@
 "use client";
 
-import { prettyNameFromUrl, isOriginalDataSource } from "@/lib/dataSource";
+import { isOriginalDataSource, prettyNameFromUrl } from "@/lib/dataSource";
 import { cn } from "@/lib/utils";
 import { useDataSourceStore } from "@/stores/dataSource";
 import { AlertTriangle } from "lucide-react";
@@ -32,21 +32,21 @@ export const DataSourceBanner = () => {
   return (
     <div
       className={cn(
-        "w-full rounded-xl border border-primary/10 bg-primary/5 px-4 py-3 shadow-sm",
+        "border-primary/10 bg-primary/5 w-full rounded-b-xl border px-4 py-3 md:rounded-xl",
         "text-primary/80",
       )}
     >
       <div className="flex items-start gap-3">
-        <div className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-primary/10 text-primary/70">
+        <div className="bg-accent-table text-accent/90 dark:text-primary/90 grid h-10 w-10 shrink-0 place-items-center rounded-full">
           <AlertTriangle className="h-5 w-5" strokeWidth={2.5} />
         </div>
-        <div className="grid gap-1 text-sm leading-relaxed">
-          <p className="font-semibold text-primary/90">
+        <div className="grid leading-relaxed">
+          <p className="text-primary/90 text-sm font-semibold sm:text-base">
             Korzystasz z alternatywnego źródła planu lekcji.
           </p>
-          <p className="text-primary/70">
-            Aktualne dane pochodzą z „{selectedSourceName ?? selectedDataSource}”.
-            Wybierz Główny Plan lekcji, aby wrócić do standardowego źródła.
+          <p className="text-primary/70 text-xs sm:text-sm">
+            Aktualne dane pochodzą z „{selectedSourceName ?? selectedDataSource}
+            ”. Wybierz Główny Plan lekcji, aby wrócić do standardowego źródła.
           </p>
         </div>
       </div>
