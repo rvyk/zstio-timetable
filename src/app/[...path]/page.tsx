@@ -1,6 +1,7 @@
 import { getOptivumList } from "@/actions/getOptivumList";
 import { getOptivumTimetable } from "@/actions/getOptivumTimetable";
 import { BottomBar } from "@/components/common/BottomBar";
+import { DataSourceBanner } from "@/components/common/DataSourceBanner";
 import { FreeRoomsResultModal } from "@/components/modals/FreeRoomsResult";
 import { FreeRoomsSearchModal } from "@/components/modals/FreeRoomsSearch";
 import { ShortenedLessonsCalculatorModal } from "@/components/modals/ShortenedLessonsCalculator";
@@ -71,6 +72,7 @@ const TimetablePage = async ({
     <Fragment>
       <TimetableController timetable={timetable} />
       <div className="flex h-full w-full flex-col gap-y-3 max-md:overflow-y-auto md:gap-y-6 md:overflow-hidden md:p-8">
+        <DataSourceBanner />
         <Topbar timetable={timetable} />
         <Timetable timetable={timetable} />
         <BottomBar timetable={timetable} />
