@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef } from "react";
 
 const DOUBLE_TAP_DELAY = 300;
+const MOBILE_VIEW_QUERY = "(max-width: 768px)";
 
 export const TimetableController = ({
   timetable,
@@ -113,7 +114,10 @@ export const TimetableController = ({
 
   useEffect(() => {
     const handlePointerUp = (event: PointerEvent) => {
-      if (!["mouse", "touch"].includes(event.pointerType)) return;
+      if (event.pointerType !== "touch") return;
+
+      const isMobileView = window.matchMedia(MOBILE_VIEW_QUERY).matches;
+      if (!isMobileView) return;
 
       const target = event.target as HTMLElement | null;
       if (target?.closest("button, a, input, textarea, select, label")) {

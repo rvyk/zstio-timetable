@@ -50,20 +50,20 @@ export const TableHourCell: FC<TableHourCellProps> = ({
   }, [timeRemaining]);
 
   return (
-    <td className="relative select-none px-4 py-3 text-center max-md:w-32">
+    <td className="relative px-4 py-3 text-center max-md:w-32 max-md:select-none">
       {shouldShow && isClient && (
         <div className="absolute left-0 h-[calc(100%-1.5rem)] w-1 rounded-r-lg bg-accent-table"></div>
       )}
-      <h2 className="select-none text-lg font-semibold text-primary/90 sm:text-xl">
+      <h2 className="text-lg font-semibold text-primary/90 sm:text-xl">
         {hour.number}
       </h2>
       {isClient ? (
-        <div className="grid select-none gap-2">
-          <p className="select-none text-xs font-medium text-primary/70 sm:text-sm">
+        <div className="grid gap-2">
+          <p className="text-xs font-medium text-primary/70 sm:text-sm">
             {hour.timeFrom}-{hour.timeTo}
           </p>
           {shouldShow && (
-            <p className="mx-auto select-none rounded-sm border border-accent-table bg-accent-table px-2 py-0.5 text-center text-sm font-medium text-accent/90 dark:bg-accent-table/10 dark:text-primary/90">
+            <p className="mx-auto rounded-sm border border-accent-table bg-accent-table px-2 py-0.5 text-center text-sm font-medium text-accent/90 dark:bg-accent-table/10 dark:text-primary/90">
               {`${minutesRemaining}:${secondsRemaining}`}
             </p>
           )}
@@ -98,11 +98,11 @@ export const TableHeaderMobileCell: FC<TableHeaderCellProps> = ({
       className={cn(
         selectedDayIndex == dayObject.index &&
           "bg-accent-table text-accent-secondary group-hover:bg-accent-table/90 dark:text-primary",
-        "flex w-full select-none flex-col items-center justify-center px-4 py-3 text-center",
+        "flex w-full flex-col items-center justify-center px-4 py-3 text-center max-md:select-none",
       )}
     >
-      <h2 className="select-none text-sm font-semibold opacity-90">{dayObject.short}</h2>
-      <h3 className="select-none text-xs font-semibold opacity-70">
+      <h2 className="text-sm font-semibold opacity-90">{dayObject.short}</h2>
+      <h3 className="text-xs font-semibold opacity-70">
         {dayNumber.dayNumber.toString().padStart(2, "0")}.
         {dayNumber.monthNumber.toString().padStart(2, "0")}
       </h3>
@@ -118,7 +118,7 @@ export const TableHeaderCell: FC<TableHeaderCellProps> = ({ dayName }) => {
   );
 
   return (
-    <th className="relative select-none text-left">
+    <th className="relative text-left max-md:select-none">
       <div
         className={cn(
           isCurrentDay ? "gap-x-5" : "gap-x-3",
@@ -130,12 +130,12 @@ export const TableHeaderCell: FC<TableHeaderCellProps> = ({ dayName }) => {
             isCurrentDay
               ? "-mx-2.5 -my-1 rounded-sm bg-accent-table px-2.5 py-1 text-accent/90 dark:text-primary/90"
               : "text-primary/90",
-            "select-none text-3xl font-semibold",
+            "text-3xl font-semibold",
           )}
         >
           {day.dayNumber.toString().padStart(2, "0")}
         </h2>
-        <h3 className="select-none text-lg font-semibold text-primary/90">{dayName}</h3>
+        <h3 className="text-lg font-semibold text-primary/90">{dayName}</h3>
       </div>
     </th>
   );
