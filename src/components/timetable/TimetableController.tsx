@@ -5,7 +5,10 @@ import { useTimetableStore } from "@/stores/timetable";
 import { OptivumTimetable } from "@/types/optivum";
 import { List } from "@majusss/timetable-parser";
 import { useRouter } from "next/navigation";
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useRef } from "react";
+
+const DOUBLE_TAP_DELAY = 300;
+const MOBILE_VIEW_QUERY = "(max-width: 768px)";
 
 export const TimetableController = ({
   timetable,
@@ -106,6 +109,36 @@ export const TimetableController = ({
     window.addEventListener("keydown", listener);
     return () => window.removeEventListener("keydown", listener);
   }, [handleArrowKey, timetable.list]);
+
+  const lastTapTimestamp = useRef(0);
+
+  useEffect(() => {
+    const handlePointerUp = (event: PointerEvent) => {
+      if (event.pointerType !== "touch") return;
+
+      const isMobileView = window.matchMedia(MOBILE_VIEW_QUERY).matches;
+      if (!isMobileView) return;
+
+      const target = event.target as HTMLElement | null;
+      if (target?.closest("button, a, input, textarea, select, label")) {
+        lastTapTimestamp.current = Date.now();
+        return;
+      }
+
+      const now = Date.now();
+
+      if (now - lastTapTimestamp.current < DOUBLE_TAP_DELAY) {
+        const isRightSide = event.clientX >= window.innerWidth / 2;
+        handleArrowKey(isRightSide);
+        lastTapTimestamp.current = 0;
+      } else {
+        lastTapTimestamp.current = now;
+      }
+    };
+
+    window.addEventListener("pointerup", handlePointerUp);
+    return () => window.removeEventListener("pointerup", handlePointerUp);
+  }, [handleArrowKey]);
 
   useEffect(() => {
     setTimetable(timetable);

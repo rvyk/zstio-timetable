@@ -50,7 +50,7 @@ export const TableHourCell: FC<TableHourCellProps> = ({
   }, [timeRemaining]);
 
   return (
-    <td className="relative px-4 py-3 text-center max-md:w-32">
+    <td className="relative px-4 py-3 text-center max-md:w-32 max-md:select-none">
       {shouldShow && isClient && (
         <div className="absolute left-0 h-[calc(100%-1.5rem)] w-1 rounded-r-lg bg-accent-table"></div>
       )}
@@ -98,7 +98,7 @@ export const TableHeaderMobileCell: FC<TableHeaderCellProps> = ({
       className={cn(
         selectedDayIndex == dayObject.index &&
           "bg-accent-table text-accent-secondary group-hover:bg-accent-table/90 dark:text-primary",
-        "flex w-full flex-col items-center justify-center px-4 py-3 text-center",
+        "flex w-full flex-col items-center justify-center px-4 py-3 text-center max-md:select-none",
       )}
     >
       <h2 className="text-sm font-semibold opacity-90">{dayObject.short}</h2>
@@ -118,7 +118,7 @@ export const TableHeaderCell: FC<TableHeaderCellProps> = ({ dayName }) => {
   );
 
   return (
-    <th className="relative text-left">
+    <th className="relative text-left max-md:select-none">
       <div
         className={cn(
           isCurrentDay ? "gap-x-5" : "gap-x-3",
