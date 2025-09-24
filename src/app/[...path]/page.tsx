@@ -10,7 +10,7 @@ import { TimetableController } from "@/components/timetable/TimetableController"
 import { Topbar } from "@/components/topbar/Topbar";
 import { DATA_SOURCE_COOKIE_NAME } from "@/lib/dataSource";
 import { cookies } from "next/headers";
-import { notFound } from "next/navigation";
+import { redirect } from "next/navigation";
 import { Fragment } from "react";
 import type { Metadata } from "next";
 import type { OptivumTimetable } from "@/types/optivum";
@@ -55,11 +55,16 @@ const TimetablePage = async ({
   const resolvedParams = await params;
   const [type, value] = resolvedParams.path ?? [];
 
+  const cookieStore = await cookies();
+  const lastVisited = cookieStore.get("lastVisited")?.value ?? "";
+
+  const validPattern = /^\/(class|teacher|room)\/\d+$/;
+  const redirectTo = validPattern.test(lastVisited) ? lastVisited : "/class/1";
+
   if (!isTimetableType(type) || !value) {
-    notFound();
+    redirect(redirectTo);
   }
 
-  const cookieStore = await cookies();
   const requestedDataSource = cookieStore.get(DATA_SOURCE_COOKIE_NAME)?.value;
 
   const timetable = await getOptivumTimetable(
