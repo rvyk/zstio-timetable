@@ -2,6 +2,7 @@
 
 import { SHORT_HOURS } from "@/constants/settings";
 import { adjustShortenedLessons } from "@/lib/adjustShortenedLessons";
+import { cn } from "@/lib/utils";
 import { useSettingsStore, useSettingsWithoutStore } from "@/stores/settings";
 import type { OptivumTimetable } from "@/types/optivum";
 import { CalendarX2 } from "lucide-react";
@@ -22,7 +23,7 @@ const SWIPE_THRESHOLD = 50;
 
 const NoLessons: FC<{ description: string }> = ({ description }) => (
   <div className="text-muted-foreground flex h-full w-full flex-col items-center justify-center gap-2 p-4 text-center">
-    <CalendarX2 className="h-10 w-10 text-primary/70 dark:text-primary/80" />
+    <CalendarX2 className="text-primary/70 dark:text-primary/80 h-10 w-10" />
     <h2 className="text-lg font-semibold">Brak planu zajęć</h2>
     <p className="text-sm">{description}</p>
   </div>
@@ -58,7 +59,8 @@ export const Timetable: FC<TimetableProps> = ({ timetable }) => {
   }, [lessons, timetable.hours]);
 
   const hasLessons = useMemo(
-    () => lessons.some((day) => day.some((hourLessons) => hourLessons.length > 0)),
+    () =>
+      lessons.some((day) => day.some((hourLessons) => hourLessons.length > 0)),
     [lessons],
   );
 
@@ -93,7 +95,12 @@ export const Timetable: FC<TimetableProps> = ({ timetable }) => {
   };
 
   return (
-    <div className="border-lines bg-foreground flex w-full flex-1 flex-col transition-all max-md:mb-20 md:overflow-hidden md:rounded-md md:border">
+    <div
+      className={cn(
+        hasLessons ? "" : "flex-1",
+        "border-lines bg-foreground flex w-full flex-col transition-all max-md:mb-20 md:overflow-hidden md:rounded-md md:border",
+      )}
+    >
       <div className="divide-lines border-lines bg-foreground sticky top-0 z-20 flex justify-between divide-x border-y md:hidden">
         {dayNames.map((dayName) => (
           <TableHeaderMobileCell
