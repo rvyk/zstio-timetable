@@ -165,14 +165,18 @@ export const Timetable: FC<TimetableProps> = ({ timetable }) => {
 
       <div className="h-full w-full max-md:hidden md:overflow-auto print:block print:overflow-visible">
         {hasLessons ? (
-          <table className="w-full print:text-black">
+          <table className="w-full print:text-black print:timetable-print-table">
             <thead className="max-md:hidden">
               <tr className="divide-lines border-lines divide-x border-b">
                 <th>
                   <ShortLessonSwitcherCell />
                 </th>
-                {dayNames.map((dayName) => (
-                  <TableHeaderCell key={dayName} dayName={dayName} />
+                {dayNames.map((dayName, dayIndex) => (
+                  <TableHeaderCell
+                    key={dayName}
+                    dayName={dayName}
+                    dayIndex={dayIndex}
+                  />
                 ))}
               </tr>
             </thead>

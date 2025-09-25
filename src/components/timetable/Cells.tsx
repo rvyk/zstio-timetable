@@ -77,6 +77,7 @@ export const TableHourCell: FC<TableHourCellProps> = ({
 
 interface TableHeaderCellProps {
   dayName: string;
+  dayIndex?: number;
   selectedDayIndex?: number;
   setSelectedDayIndex?: (selectedDayIndex: number) => void;
 }
@@ -110,7 +111,10 @@ export const TableHeaderMobileCell: FC<TableHeaderCellProps> = ({
   );
 };
 
-export const TableHeaderCell: FC<TableHeaderCellProps> = ({ dayName }) => {
+export const TableHeaderCell: FC<TableHeaderCellProps> = ({
+  dayName,
+  dayIndex = 0,
+}) => {
   const day = useMemo(() => getDayNumberForNextWeek(dayName), [dayName]);
   const isCurrentDay = useMemo(
     () => new Date().getDate() === day.dayNumber,
@@ -118,11 +122,18 @@ export const TableHeaderCell: FC<TableHeaderCellProps> = ({ dayName }) => {
   );
 
   return (
-    <th className="relative text-left max-md:select-none">
+    <th
+      className={cn(
+        "relative text-left max-md:select-none",
+        "timetable-day-column",
+        "print:table-cell",
+      )}
+      data-day-index={dayIndex}
+    >
       <div
         className={cn(
           isCurrentDay ? "gap-x-5" : "gap-x-3",
-          "inline-flex items-center px-4 py-3",
+          "inline-flex items-center px-4 py-3 print:px-3 print:py-2",
         )}
       >
         <h2
@@ -135,7 +146,9 @@ export const TableHeaderCell: FC<TableHeaderCellProps> = ({ dayName }) => {
         >
           {day.dayNumber.toString().padStart(2, "0")}
         </h2>
-        <h3 className="text-lg font-semibold text-primary/90">{dayName}</h3>
+        <h3 className="text-lg font-semibold text-primary/90">
+          {dayName}
+        </h3>
       </div>
     </th>
   );

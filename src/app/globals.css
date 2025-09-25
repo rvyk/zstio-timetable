@@ -139,4 +139,50 @@
     color: inherit !important;
     text-decoration: none !important;
   }
+
+  .timetable-print-table {
+    border-collapse: collapse;
+    background-color: #ffffff !important;
+    font-size: 0.95rem;
+  }
+
+  .timetable-print-table thead th {
+    background-color: rgba(15, 23, 42, 0.05) !important;
+    color: #111827 !important;
+    font-size: 0.75rem !important;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .timetable-print-table th,
+  .timetable-print-table td {
+    border: 1px solid rgba(17, 24, 39, 0.12) !important;
+    padding: 0.75rem !important;
+    vertical-align: top;
+  }
+
+  .timetable-print-table tbody tr:nth-child(odd) td {
+    background-color: rgba(17, 24, 39, 0.04) !important;
+  }
+
+  body[data-print-mode="day"] .timetable-day-column {
+    display: none !important;
+  }
+
+  body[data-print-mode="day"][data-print-day="0"]
+    .timetable-day-column[data-day-index="0"],
+  body[data-print-mode="day"][data-print-day="1"]
+    .timetable-day-column[data-day-index="1"],
+  body[data-print-mode="day"][data-print-day="2"]
+    .timetable-day-column[data-day-index="2"],
+  body[data-print-mode="day"][data-print-day="3"]
+    .timetable-day-column[data-day-index="3"],
+  body[data-print-mode="day"][data-print-day="4"]
+    .timetable-day-column[data-day-index="4"],
+  body[data-print-mode="day"][data-print-day="5"]
+    .timetable-day-column[data-day-index="5"],
+  body[data-print-mode="day"][data-print-day="6"]
+    .timetable-day-column[data-day-index="6"] {
+    display: table-cell !important;
+  }
 }

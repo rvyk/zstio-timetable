@@ -22,8 +22,10 @@ export const TableLessonCell: FC<TableLessonCellProps> = ({
     <td
       className={cn(
         dayIndex != selectedDayIndex && "max-md:hidden",
-        "py-3 last:border-0 max-md:px-2 md:px-4",
+        "timetable-day-column",
+        "py-3 last:border-0 max-md:px-2 md:px-4 print:table-cell print:align-top print:px-3 print:py-2",
       )}
+      data-day-index={dayIndex}
     >
       {day[lessonIndex].map((lessonItem, index) => (
         <LessonItem key={index} lesson={lessonItem} />

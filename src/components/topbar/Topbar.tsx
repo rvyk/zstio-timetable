@@ -4,12 +4,30 @@ import school_logo from "@/assets/school-logo.png";
 import { FavoriteStar } from "@/components/common/FavoriteStar";
 import { TimetableDates } from "@/components/common/TimetableDates";
 import { ShortLessonSwitcherCell } from "@/components/timetable/Cells";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/Dialog";
+import { Button } from "@/components/ui/Button";
 import { SCHOOL_SHORT, SCHOOL_WEBSITE } from "@/constants/school";
 import { TRANSLATION_DICT } from "@/constants/translations";
+import { cn } from "@/lib/utils";
+import { useSettingsWithoutStore } from "@/stores/settings";
 import { OptivumTimetable } from "@/types/optivum";
 import Image from "next/image";
 import Link from "next/link";
-import { FC, Fragment, useCallback, useEffect, useMemo, useState } from "react";
+import {
+  FC,
+  Fragment,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import { useIsClient } from "usehooks-ts";
 import { TopbarButtons } from "./Buttons";
 
@@ -20,6 +38,13 @@ interface TopbarProps {
 export const Topbar: FC<TopbarProps> = ({ timetable }) => {
   const isClient = useIsClient();
   const [printTimestamp, setPrintTimestamp] = useState<string>("");
+  const [isPrintDialogOpen, setIsPrintDialogOpen] = useState(false);
+  const [printMode, setPrintMode] = useState<"week" | "day">("week");
+  const selectedDayIndex = useSettingsWithoutStore(
+    (state) => state.selectedDayIndex,
+  );
+  const dayNames = useMemo(() => timetable?.dayNames ?? [], [timetable]);
+  const [printDayIndex, setPrintDayIndex] = useState<number>(selectedDayIndex);
 
   const updatePrintTimestamp = useCallback(() => {
     const formatter = new Intl.DateTimeFormat("pl-PL", {
@@ -28,6 +53,27 @@ export const Topbar: FC<TopbarProps> = ({ timetable }) => {
     });
 
     setPrintTimestamp(formatter.format(new Date()));
+  }, []);
+
+  const applyPrintPreferences = useCallback(
+    (mode: "week" | "day", dayIndex: number) => {
+      if (typeof document === "undefined") return;
+
+      document.body.setAttribute("data-print-mode", mode);
+      if (mode === "day") {
+        document.body.setAttribute("data-print-day", dayIndex.toString());
+      } else {
+        document.body.removeAttribute("data-print-day");
+      }
+    },
+    [],
+  );
+
+  const cleanupPrintPreferences = useCallback(() => {
+    if (typeof document === "undefined") return;
+
+    document.body.removeAttribute("data-print-mode");
+    document.body.removeAttribute("data-print-day");
   }, []);
 
   useEffect(() => {
@@ -39,21 +85,62 @@ export const Topbar: FC<TopbarProps> = ({ timetable }) => {
       updatePrintTimestamp();
     };
 
+    const handleAfterPrint = () => {
+      cleanupPrintPreferences();
+    };
+
     window.addEventListener("beforeprint", handleBeforePrint);
+    window.addEventListener("afterprint", handleAfterPrint);
 
     return () => {
       window.removeEventListener("beforeprint", handleBeforePrint);
+      window.removeEventListener("afterprint", handleAfterPrint);
+      cleanupPrintPreferences();
     };
-  }, [updatePrintTimestamp]);
+  }, [cleanupPrintPreferences, updatePrintTimestamp]);
 
-  const handlePrint = useCallback(() => {
-    if (typeof window === "undefined") return;
+  useEffect(() => {
+    if (!isPrintDialogOpen) return;
 
-    updatePrintTimestamp();
-    requestAnimationFrame(() => {
-      window.print();
-    });
-  }, [updatePrintTimestamp]);
+    const maxIndex = Math.max(dayNames.length - 1, 0);
+    const safeIndex = Math.min(Math.max(selectedDayIndex, 0), maxIndex);
+    setPrintDayIndex(safeIndex);
+  }, [dayNames, isPrintDialogOpen, selectedDayIndex]);
+
+  const handleConfirmPrint = useCallback(
+    (options?: { mode?: "week" | "day"; dayIndex?: number }) => {
+      if (typeof window === "undefined") return;
+
+      const targetMode = options?.mode ?? printMode;
+      const targetDay = options?.dayIndex ?? printDayIndex;
+      const maxIndex = Math.max(dayNames.length - 1, 0);
+      const safeDayIndex = Math.min(Math.max(targetDay, 0), maxIndex);
+
+      applyPrintPreferences(targetMode, safeDayIndex);
+      updatePrintTimestamp();
+      setIsPrintDialogOpen(false);
+
+      requestAnimationFrame(() => {
+        window.print();
+      });
+    },
+    [
+      applyPrintPreferences,
+      dayNames,
+      printDayIndex,
+      printMode,
+      updatePrintTimestamp,
+    ],
+  );
+
+  const openPrintDialog = useCallback(() => {
+    if (!dayNames.length) {
+      handleConfirmPrint({ mode: "week", dayIndex: 0 });
+      return;
+    }
+    setPrintMode("week");
+    setIsPrintDialogOpen(true);
+  }, [dayNames, handleConfirmPrint]);
 
   const titleElement = useMemo(() => {
     if (timetable?.title) {
@@ -84,7 +171,7 @@ export const Topbar: FC<TopbarProps> = ({ timetable }) => {
               <ShortLessonSwitcherCell />
             </div>
           </div>
-          <TopbarButtons onPrint={handlePrint} />
+          <TopbarButtons onPrint={openPrintDialog} />
         </div>
         <div className="grid gap-1.5 max-md:hidden">
           <div className="inline-flex items-center gap-x-4">
@@ -119,6 +206,75 @@ export const Topbar: FC<TopbarProps> = ({ timetable }) => {
           </p>
         )}
       </div>
+
+      <Dialog open={isPrintDialogOpen} onOpenChange={setIsPrintDialogOpen}>
+        <DialogContent className="max-w-xl gap-6">
+          <DialogHeader>
+            <DialogTitle>Drukowanie planu lekcji</DialogTitle>
+            <DialogDescription>
+              Wybierz zakres wydruku. Plan automatycznie przełączy się w jasny i czytelny motyw drukowania.
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="grid gap-4">
+            <div className="grid gap-3 sm:grid-cols-2">
+              <PrintModeOption
+                isActive={printMode === "week"}
+                onClick={() => setPrintMode("week")}
+                title="Cały plan"
+                description="Wydrukuj wszystkie dni tygodnia na jednej tabeli."
+              />
+              <PrintModeOption
+                isActive={printMode === "day"}
+                onClick={() => setPrintMode("day")}
+                title="Wybrany dzień"
+                description="Wydrukuj tylko zajęcia z konkretnego dnia."
+              />
+            </div>
+
+            {printMode === "day" && dayNames.length > 0 && (
+              <div className="grid gap-2">
+                <p className="text-sm font-medium text-primary/80">
+                  Dzień tygodnia
+                </p>
+                <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
+                  {dayNames.map((dayName, index) => (
+                    <button
+                      key={dayName}
+                      type="button"
+                      onClick={() => setPrintDayIndex(index)}
+                      aria-pressed={printDayIndex === index}
+                      className={cn(
+                        "rounded-lg border border-black/10 px-3 py-2 text-left text-sm font-semibold transition-colors",
+                        "hover:border-black/30 hover:bg-black/5",
+                        "dark:border-white/15 dark:text-white/70 dark:hover:border-white/40 dark:hover:bg-white/10",
+                        printDayIndex === index
+                          ? "border-black bg-black/5 text-black dark:border-white dark:bg-white/15 dark:text-white"
+                          : "text-black/70",
+                      )}
+                    >
+                      {dayName}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+
+          <DialogFooter className="gap-2 sm:justify-between">
+            <Button
+              type="button"
+              variant="ghost"
+              onClick={() => setIsPrintDialogOpen(false)}
+            >
+              Anuluj
+            </Button>
+            <Button type="button" onClick={handleConfirmPrint}>
+              Drukuj
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
@@ -137,4 +293,37 @@ const SchoolLink: FC = () => (
       Wróć na stronę szkoły
     </p>
   </Link>
+);
+
+interface PrintModeOptionProps {
+  isActive: boolean;
+  onClick: () => void;
+  title: string;
+  description: string;
+}
+
+const PrintModeOption: FC<PrintModeOptionProps> = ({
+  isActive,
+  onClick,
+  title,
+  description,
+}) => (
+  <button
+    type="button"
+    onClick={onClick}
+    aria-pressed={isActive}
+    className={cn(
+      "rounded-xl border border-black/10 bg-white px-4 py-3 text-left transition-all",
+      "hover:border-black/30 hover:shadow-sm",
+      "dark:border-white/15 dark:bg-[#111111] dark:text-white/70 dark:hover:border-white/40 dark:hover:bg-white/10",
+      isActive
+        ? "border-black bg-black/5 text-black dark:border-white dark:bg-white/15 dark:text-white"
+        : "text-black/70",
+    )}
+  >
+    <p className="text-base font-semibold">{title}</p>
+    <p className="mt-1 text-sm leading-relaxed text-black/60 dark:text-white/60">
+      {description}
+    </p>
+  </button>
 );
