@@ -269,7 +269,7 @@ export const Topbar: FC<TopbarProps> = ({ timetable }) => {
             >
               Anuluj
             </Button>
-            <Button type="button" onClick={handleConfirmPrint}>
+            <Button type="button" onClick={() => handleConfirmPrint()}>
               Drukuj
             </Button>
           </DialogFooter>
