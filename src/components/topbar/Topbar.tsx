@@ -4,6 +4,7 @@ import school_logo from "@/assets/school-logo.png";
 import { FavoriteStar } from "@/components/common/FavoriteStar";
 import { TimetableDates } from "@/components/common/TimetableDates";
 import { ShortLessonSwitcherCell } from "@/components/timetable/Cells";
+import { TimetablePrintSheet } from "@/components/print/TimetablePrintSheet";
 import {
   Dialog,
   DialogContent,
@@ -15,8 +16,10 @@ import {
 import { Button } from "@/components/ui/Button";
 import { SCHOOL_SHORT, SCHOOL_WEBSITE } from "@/constants/school";
 import { TRANSLATION_DICT } from "@/constants/translations";
+import { SHORT_HOURS } from "@/constants/settings";
+import { adjustShortenedLessons } from "@/lib/adjustShortenedLessons";
 import { cn } from "@/lib/utils";
-import { useSettingsWithoutStore } from "@/stores/settings";
+import { useSettingsStore, useSettingsWithoutStore } from "@/stores/settings";
 import { OptivumTimetable } from "@/types/optivum";
 import Image from "next/image";
 import Link from "next/link";
@@ -26,9 +29,11 @@ import {
   useCallback,
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from "react";
 import { useIsClient } from "usehooks-ts";
+import { useReactToPrint } from "react-to-print";
 import { TopbarButtons } from "./Buttons";
 
 interface TopbarProps {
@@ -43,6 +48,8 @@ export const Topbar: FC<TopbarProps> = ({ timetable }) => {
   const selectedDayIndex = useSettingsWithoutStore(
     (state) => state.selectedDayIndex,
   );
+  const lessonType = useSettingsStore((state) => state.lessonType);
+  const hoursAdjustIndex = useSettingsStore((state) => state.hoursAdjustIndex);
   const dayNames = useMemo(() => timetable?.dayNames ?? [], [timetable]);
   const [printDayIndex, setPrintDayIndex] = useState<number>(selectedDayIndex);
   const [pendingPrintOptions, setPendingPrintOptions] = useState<
@@ -52,6 +59,67 @@ export const Topbar: FC<TopbarProps> = ({ timetable }) => {
       }
     | null
   >(null);
+  const [printSheetOptions, setPrintSheetOptions] = useState<{
+    mode: "week" | "day";
+    dayIndex: number;
+  }>({
+    mode: "week",
+    dayIndex: 0,
+  });
+  const [shouldTriggerPrint, setShouldTriggerPrint] = useState(false);
+
+  const hours = useMemo(() => {
+    if (!timetable) return [];
+
+    if (lessonType === "custom") {
+      return adjustShortenedLessons(
+        hoursAdjustIndex,
+        Object.values(timetable.hours),
+      );
+    }
+
+    if (lessonType === "short") {
+      return Object.values(SHORT_HOURS);
+    }
+
+    return Object.values(timetable.hours);
+  }, [hoursAdjustIndex, lessonType, timetable]);
+
+  const lessons = useMemo(() => timetable?.lessons ?? [], [timetable]);
+
+  const maxLessons = useMemo(() => {
+    const lessonCounts = lessons.map((day) => day.length);
+    const hourCount = timetable ? Object.keys(timetable.hours).length : 0;
+    const adjustedHoursCount = hours.length;
+
+    return Math.max(hourCount, adjustedHoursCount, ...lessonCounts, 0);
+  }, [hours, lessons, timetable]);
+
+  const printableHours = useMemo(
+    () => hours.slice(0, maxLessons),
+    [hours, maxLessons],
+  );
+
+  const printTitle = useMemo(() => {
+    if (!timetable?.title) return "Plan lekcji";
+
+    return `Plan lekcji ${TRANSLATION_DICT[timetable.type]} ${timetable.title}`;
+  }, [timetable]);
+
+  const printContainerRef = useRef<HTMLDivElement | null>(null);
+
+  const handlePrint = useReactToPrint({
+    contentRef: printContainerRef,
+    documentTitle: printTitle,
+    pageStyle: `
+      @page { margin: 18mm 14mm; }
+      body {
+        background: #ffffff !important;
+        color: #0f172a !important;
+        -webkit-print-color-adjust: exact !important;
+      }
+    `,
+  });
 
   const updatePrintTimestamp = useCallback(() => {
     const formatter = new Intl.DateTimeFormat("pl-PL", {
@@ -61,50 +129,6 @@ export const Topbar: FC<TopbarProps> = ({ timetable }) => {
 
     setPrintTimestamp(formatter.format(new Date()));
   }, []);
-
-  const applyPrintPreferences = useCallback(
-    (mode: "week" | "day", dayIndex: number) => {
-      if (typeof document === "undefined") return;
-
-      document.body.setAttribute("data-print-mode", mode);
-      if (mode === "day") {
-        document.body.setAttribute("data-print-day", dayIndex.toString());
-      } else {
-        document.body.removeAttribute("data-print-day");
-      }
-    },
-    [],
-  );
-
-  const cleanupPrintPreferences = useCallback(() => {
-    if (typeof document === "undefined") return;
-
-    document.body.removeAttribute("data-print-mode");
-    document.body.removeAttribute("data-print-day");
-  }, []);
-
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-
-    updatePrintTimestamp();
-
-    const handleBeforePrint = () => {
-      updatePrintTimestamp();
-    };
-
-    const handleAfterPrint = () => {
-      cleanupPrintPreferences();
-    };
-
-    window.addEventListener("beforeprint", handleBeforePrint);
-    window.addEventListener("afterprint", handleAfterPrint);
-
-    return () => {
-      window.removeEventListener("beforeprint", handleBeforePrint);
-      window.removeEventListener("afterprint", handleAfterPrint);
-      cleanupPrintPreferences();
-    };
-  }, [cleanupPrintPreferences, updatePrintTimestamp]);
 
   useEffect(() => {
     if (!isPrintDialogOpen) return;
@@ -128,27 +152,27 @@ export const Topbar: FC<TopbarProps> = ({ timetable }) => {
   );
 
   useEffect(() => {
-    if (typeof window === "undefined") return;
     if (!pendingPrintOptions) return;
     if (isPrintDialogOpen) return;
 
-    const { mode, dayIndex } = pendingPrintOptions;
+    setPrintSheetOptions(pendingPrintOptions);
+    setPendingPrintOptions(null);
+    setShouldTriggerPrint(true);
+  }, [isPrintDialogOpen, pendingPrintOptions]);
 
-    applyPrintPreferences(mode, dayIndex);
-    updatePrintTimestamp();
+  useEffect(() => {
+    if (!shouldTriggerPrint) return;
 
-    const print = () => {
-      window.print();
-      setPendingPrintOptions(null);
-    };
+    const raf = requestAnimationFrame(() => {
+      updatePrintTimestamp();
 
-    requestAnimationFrame(print);
-  }, [
-    applyPrintPreferences,
-    isPrintDialogOpen,
-    pendingPrintOptions,
-    updatePrintTimestamp,
-  ]);
+      handlePrint();
+
+      setShouldTriggerPrint(false);
+    });
+
+    return () => cancelAnimationFrame(raf);
+  }, [handlePrint, shouldTriggerPrint, updatePrintTimestamp]);
 
   const openPrintDialog = useCallback(() => {
     if (!dayNames.length) {
@@ -170,12 +194,6 @@ export const Topbar: FC<TopbarProps> = ({ timetable }) => {
     } else {
       return "Nie znaleziono planu zajęć";
     }
-  }, [timetable]);
-
-  const printTitle = useMemo(() => {
-    if (!timetable?.title) return "Plan lekcji";
-
-    return `Plan lekcji ${TRANSLATION_DICT[timetable.type]} ${timetable.title}`;
   }, [timetable]);
 
   return (
@@ -207,21 +225,6 @@ export const Topbar: FC<TopbarProps> = ({ timetable }) => {
           </div>
           <TimetableDates timetable={timetable} />
         </div>
-      </div>
-
-      <div className="hidden print:flex print:flex-col print:gap-2 print:border-b print:border-black/10 print:pb-4">
-        <p className="text-xs font-semibold uppercase tracking-wider text-black/70">
-          {timetable ? `Rozkład zajęć ${TRANSLATION_DICT[timetable.type]}` : "Plan lekcji"}
-        </p>
-        <h1 className="text-3xl font-semibold text-black">{printTitle}</h1>
-        <div className="text-sm text-black/80">
-          <TimetableDates timetable={timetable} />
-        </div>
-        {printTimestamp && (
-          <p className="text-sm font-medium text-black/70">
-            Data wydruku: <span className="font-semibold text-black">{printTimestamp}</span>
-          </p>
-        )}
       </div>
 
       <Dialog open={isPrintDialogOpen} onOpenChange={setIsPrintDialogOpen}>
@@ -292,6 +295,22 @@ export const Topbar: FC<TopbarProps> = ({ timetable }) => {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      <div
+        ref={printContainerRef}
+        aria-hidden="true"
+        className="pointer-events-none absolute -left-[10000px] top-0 z-[-1]"
+      >
+        <TimetablePrintSheet
+          timetable={timetable}
+          hours={printableHours}
+          lessons={lessons}
+          dayNames={dayNames}
+          mode={printSheetOptions.mode}
+          dayIndex={printSheetOptions.dayIndex}
+          printTimestamp={printTimestamp}
+        />
+      </div>
     </div>
   );
 };
