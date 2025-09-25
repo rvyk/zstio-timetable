@@ -98,10 +98,10 @@ export const Timetable: FC<TimetableProps> = ({ timetable }) => {
     <div
       className={cn(
         hasLessons ? "" : "flex-1",
-        "border-lines bg-foreground flex w-full flex-col transition-all max-md:mb-20 md:overflow-hidden md:rounded-md md:border",
+        "border-lines bg-foreground flex w-full flex-col transition-all max-md:mb-20 md:overflow-hidden md:rounded-md md:border print:mb-0 print:bg-white print:shadow-none print:rounded-none print:border print:border-black/10 print:overflow-visible",
       )}
     >
-      <div className="divide-lines border-lines bg-foreground sticky top-0 z-20 flex justify-between divide-x border-y md:hidden">
+      <div className="divide-lines border-lines bg-foreground sticky top-0 z-20 flex justify-between divide-x border-y md:hidden print:hidden">
         {dayNames.map((dayName) => (
           <TableHeaderMobileCell
             key={dayName}
@@ -113,7 +113,7 @@ export const Timetable: FC<TimetableProps> = ({ timetable }) => {
       </div>
 
       <div
-        className="flex-1 overflow-hidden md:hidden"
+        className="flex-1 overflow-hidden md:hidden print:hidden"
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
       >
@@ -163,9 +163,9 @@ export const Timetable: FC<TimetableProps> = ({ timetable }) => {
         </div>
       </div>
 
-      <div className="h-full w-full max-md:hidden md:overflow-auto">
+      <div className="h-full w-full max-md:hidden md:overflow-auto print:block print:overflow-visible">
         {hasLessons ? (
-          <table className="w-full">
+          <table className="w-full print:text-black">
             <thead className="max-md:hidden">
               <tr className="divide-lines border-lines divide-x border-b">
                 <th>

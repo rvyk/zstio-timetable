@@ -36,13 +36,13 @@ export const Sidebar: FC = () => {
 
   return (
     <Fragment>
-      <div className="border-lines dark:border-primary/10 bg-foreground h-screen w-full max-w-xs border-r max-xl:hidden max-md:hidden">
+      <div className="border-lines dark:border-primary/10 bg-foreground h-screen w-full max-w-xs border-r max-xl:hidden max-md:hidden print:hidden">
         <div className="mr-3 flex h-full w-full flex-col justify-between gap-y-16 overflow-x-hidden overflow-y-auto px-4 py-6">
           <SidebarContent />
         </div>
       </div>
 
-      <div className="max-md:hidden xl:hidden">
+      <div className="max-md:hidden xl:hidden print:hidden">
         <Sheet open={isSidebarOpen} onOpenChange={toggleSidebar}>
           <SheetTrigger asChild>
             <div className="border-lines dark:border-primary/10 bg-foreground flex h-screen w-24 cursor-pointer flex-col items-center gap-10 border-r px-4 py-6">

@@ -46,14 +46,18 @@ export default function RootLayout({
       <body
         className={cn(
           poppins.className,
-          "flex h-screen antialiased bg-foreground md:bg-background",
+          "flex h-screen antialiased bg-foreground md:bg-background print:h-auto print:bg-white print:text-black",
         )}
       >
         <ThemeProvider attribute="class" disableTransitionOnChange>
-          <Toaster />
+          <div className="print:hidden">
+            <Toaster />
+          </div>
           <Sidebar />
           {children}
-          <SettingsPanel />
+          <div className="print:hidden">
+            <SettingsPanel />
+          </div>
         </ThemeProvider>
       </body>
     </html>

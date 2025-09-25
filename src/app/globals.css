@@ -108,3 +108,35 @@
   background-color: rgb(var(--accent-table));
   color: #fafafa;
 }
+
+@media print {
+  :root,
+  .dark {
+    --background: 255 255 255;
+    --foreground: 255 255 255;
+    --accent: 255 255 255;
+    --accent-secondary: 255 255 255;
+    --primary: 0 0 0;
+    --lines: 209 213 219;
+  }
+
+  html {
+    background: #ffffff !important;
+  }
+
+  body {
+    background: #ffffff !important;
+    color: #000000 !important;
+    min-height: auto !important;
+  }
+
+  body *,
+  .dark * {
+    box-shadow: none !important;
+  }
+
+  a {
+    color: inherit !important;
+    text-decoration: none !important;
+  }
+}
