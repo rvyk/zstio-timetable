@@ -100,16 +100,22 @@ export const TableHeaderMobileCell: FC<TableHeaderCellProps> = ({
     <button
       onClick={() => setSelectedDayIndex?.(dayObject.index)}
       className={cn(
+        "group relative flex w-full flex-col items-center justify-center overflow-hidden px-4 py-3 text-center transition-colors transition-opacity max-md:select-none",
         selectedDayIndex == dayObject.index &&
           "bg-accent-table text-accent-secondary group-hover:bg-accent-table/90 dark:text-primary",
         isPastDay && !isSelected &&
-          "max-md:text-muted-foreground/80 max-md:opacity-90 max-md:before:absolute max-md:before:inset-0 max-md:before:bg-gradient-to-b max-md:before:from-muted/70 max-md:before:via-muted/30 max-md:before:to-transparent max-md:before:content-['']",
-        "relative flex w-full flex-col items-center justify-center overflow-hidden px-4 py-3 text-center transition-colors transition-opacity max-md:select-none",
+          "max-md:text-muted-foreground/80",
       )}
     >
+      {isPastDay && !isSelected && (
+        <span
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 z-0 bg-gradient-to-br from-muted/80 via-muted/40 to-transparent opacity-95 transition-opacity group-hover:opacity-100"
+        />
+      )}
       <h2
         className={cn(
-          "text-sm font-semibold transition-colors",
+          "relative z-10 text-sm font-semibold transition-colors",
           isSelected
             ? "text-accent-secondary dark:text-primary"
             : isPastDay
@@ -121,7 +127,7 @@ export const TableHeaderMobileCell: FC<TableHeaderCellProps> = ({
       </h2>
       <h3
         className={cn(
-          "text-xs font-semibold transition-colors",
+          "relative z-10 text-xs font-semibold transition-colors",
           isSelected
             ? "text-accent-secondary/90 dark:text-primary/90"
             : isPastDay
@@ -135,7 +141,7 @@ export const TableHeaderMobileCell: FC<TableHeaderCellProps> = ({
       <div
         aria-hidden="true"
         className={cn(
-          "mt-2 flex h-1 w-full items-center justify-center transition-opacity",
+          "relative z-10 mt-2 flex h-1 w-full items-center justify-center transition-opacity",
           isPastDay ? "opacity-100" : "opacity-0",
         )}
       >
