@@ -103,8 +103,8 @@ export const TableHeaderMobileCell: FC<TableHeaderCellProps> = ({
         selectedDayIndex == dayObject.index &&
           "bg-accent-table text-accent-secondary group-hover:bg-accent-table/90 dark:text-primary",
         isPastDay && !isSelected &&
-          "max-md:bg-muted/60 max-md:text-muted-foreground/80 max-md:opacity-80",
-        "flex w-full flex-col items-center justify-center px-4 py-3 text-center transition-colors transition-opacity max-md:select-none",
+          "max-md:text-muted-foreground/80 max-md:opacity-90 max-md:before:absolute max-md:before:inset-0 max-md:before:bg-gradient-to-b max-md:before:from-muted/70 max-md:before:via-muted/30 max-md:before:to-transparent max-md:before:content-['']",
+        "relative flex w-full flex-col items-center justify-center overflow-hidden px-4 py-3 text-center transition-colors transition-opacity max-md:select-none",
       )}
     >
       <h2
@@ -132,19 +132,24 @@ export const TableHeaderMobileCell: FC<TableHeaderCellProps> = ({
         {dayNumber.dayNumber.toString().padStart(2, "0")}.
         {dayNumber.monthNumber.toString().padStart(2, "0")}
       </h3>
-      <span
+      <div
         aria-hidden="true"
         className={cn(
-          "mt-1 text-[10px] font-medium uppercase tracking-wide transition-colors",
-          isPastDay
-            ? isSelected
-              ? "text-accent-secondary/80 dark:text-primary/80"
-              : "text-muted-foreground/80"
-            : "text-transparent",
+          "mt-2 flex h-1 w-full items-center justify-center transition-opacity",
+          isPastDay ? "opacity-100" : "opacity-0",
         )}
       >
-        minęło
-      </span>
+        <span
+          className={cn(
+            "h-1 w-8 rounded-full transition-colors",
+            isPastDay
+              ? isSelected
+                ? "bg-accent-secondary/70 dark:bg-primary/70"
+                : "bg-muted-foreground/60"
+              : "bg-transparent",
+          )}
+        />
+      </div>
     </button>
   );
 };
