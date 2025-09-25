@@ -126,10 +126,16 @@ export const Timetable: FC<TimetableProps> = ({ timetable }) => {
             const dayHasLessons = dayLessons.some(
               (hourLessons) => hourLessons.length > 0,
             );
+            const isSelectedDay = dayIndex === selectedDayIndex;
+            const isPastDay = dayIndex < todayIndex;
             return (
               <div
                 key={dayIndex}
-                className="flex h-full w-full flex-shrink-0 flex-col"
+                className={cn(
+                  "flex h-full w-full flex-shrink-0 flex-col",
+                  isPastDay && !isSelectedDay &&
+                    "max-md:bg-muted/40 max-md:opacity-80",
+                )}
               >
                 {dayHasLessons ? (
                   <table className="w-full">

@@ -87,10 +87,14 @@ export const TableHeaderMobileCell: FC<TableHeaderCellProps> = ({
   setSelectedDayIndex,
 }) => {
   const dayNumber = useMemo(() => getDayNumberForNextWeek(dayName), [dayName]);
+  const todayIndex = useMemo(() => (new Date().getDay() + 6) % 7, []);
 
   const dayObject = DAYS_OF_WEEK.find((day) => day.long === dayName);
 
   if (!dayObject) return null;
+
+  const isSelected = selectedDayIndex === dayObject.index;
+  const isPastDay = dayObject.index < todayIndex;
 
   return (
     <button
@@ -98,14 +102,49 @@ export const TableHeaderMobileCell: FC<TableHeaderCellProps> = ({
       className={cn(
         selectedDayIndex == dayObject.index &&
           "bg-accent-table text-accent-secondary group-hover:bg-accent-table/90 dark:text-primary",
-        "flex w-full flex-col items-center justify-center px-4 py-3 text-center max-md:select-none",
+        isPastDay && !isSelected &&
+          "max-md:bg-muted/60 max-md:text-muted-foreground/80 max-md:opacity-80",
+        "flex w-full flex-col items-center justify-center px-4 py-3 text-center transition-colors transition-opacity max-md:select-none",
       )}
     >
-      <h2 className="text-sm font-semibold opacity-90">{dayObject.short}</h2>
-      <h3 className="text-xs font-semibold opacity-70">
+      <h2
+        className={cn(
+          "text-sm font-semibold transition-colors",
+          isSelected
+            ? "text-accent-secondary dark:text-primary"
+            : isPastDay
+              ? "text-muted-foreground"
+              : "text-primary/90",
+        )}
+      >
+        {dayObject.short}
+      </h2>
+      <h3
+        className={cn(
+          "text-xs font-semibold transition-colors",
+          isSelected
+            ? "text-accent-secondary/90 dark:text-primary/90"
+            : isPastDay
+              ? "text-muted-foreground/80"
+              : "text-primary/80",
+        )}
+      >
         {dayNumber.dayNumber.toString().padStart(2, "0")}.
         {dayNumber.monthNumber.toString().padStart(2, "0")}
       </h3>
+      <span
+        aria-hidden="true"
+        className={cn(
+          "mt-1 text-[10px] font-medium uppercase tracking-wide transition-colors",
+          isPastDay
+            ? isSelected
+              ? "text-accent-secondary/80 dark:text-primary/80"
+              : "text-muted-foreground/80"
+            : "text-transparent",
+        )}
+      >
+        minęło
+      </span>
     </button>
   );
 };
