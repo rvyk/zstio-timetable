@@ -45,6 +45,13 @@ export const Topbar: FC<TopbarProps> = ({ timetable }) => {
   );
   const dayNames = useMemo(() => timetable?.dayNames ?? [], [timetable]);
   const [printDayIndex, setPrintDayIndex] = useState<number>(selectedDayIndex);
+  const [pendingPrintOptions, setPendingPrintOptions] = useState<
+    | {
+        mode: "week" | "day";
+        dayIndex: number;
+      }
+    | null
+  >(null);
 
   const updatePrintTimestamp = useCallback(() => {
     const formatter = new Intl.DateTimeFormat("pl-PL", {
@@ -109,29 +116,39 @@ export const Topbar: FC<TopbarProps> = ({ timetable }) => {
 
   const handleConfirmPrint = useCallback(
     (options?: { mode?: "week" | "day"; dayIndex?: number }) => {
-      if (typeof window === "undefined") return;
-
       const targetMode = options?.mode ?? printMode;
       const targetDay = options?.dayIndex ?? printDayIndex;
       const maxIndex = Math.max(dayNames.length - 1, 0);
       const safeDayIndex = Math.min(Math.max(targetDay, 0), maxIndex);
 
-      applyPrintPreferences(targetMode, safeDayIndex);
-      updatePrintTimestamp();
+      setPendingPrintOptions({ mode: targetMode, dayIndex: safeDayIndex });
       setIsPrintDialogOpen(false);
-
-      requestAnimationFrame(() => {
-        window.print();
-      });
     },
-    [
-      applyPrintPreferences,
-      dayNames,
-      printDayIndex,
-      printMode,
-      updatePrintTimestamp,
-    ],
+    [dayNames, printDayIndex, printMode],
   );
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (!pendingPrintOptions) return;
+    if (isPrintDialogOpen) return;
+
+    const { mode, dayIndex } = pendingPrintOptions;
+
+    applyPrintPreferences(mode, dayIndex);
+    updatePrintTimestamp();
+
+    const print = () => {
+      window.print();
+      setPendingPrintOptions(null);
+    };
+
+    requestAnimationFrame(print);
+  }, [
+    applyPrintPreferences,
+    isPrintDialogOpen,
+    pendingPrintOptions,
+    updatePrintTimestamp,
+  ]);
 
   const openPrintDialog = useCallback(() => {
     if (!dayNames.length) {
