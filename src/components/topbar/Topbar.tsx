@@ -264,7 +264,7 @@ export const Topbar: FC<TopbarProps> = ({ timetable }) => {
           <DialogFooter className="gap-2 sm:justify-between">
             <Button
               type="button"
-              variant="ghost"
+              variant="secondary"
               onClick={() => setIsPrintDialogOpen(false)}
             >
               Anuluj
