@@ -8,7 +8,7 @@ import { useSettingsStore, useSettingsWithoutStore } from "@/stores/settings";
 import { useTimetableStore } from "@/stores/timetable";
 import type { OptivumTimetable } from "@/types/optivum";
 import { CalendarX2 } from "lucide-react";
-import { FC, useEffect, useMemo, useRef, useState } from "react";
+import { FC, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useReactToPrint } from "react-to-print";
 import {
   ShortLessonSwitcherCell,
@@ -102,11 +102,14 @@ export const Timetable: FC<TimetableProps> = ({ timetable }) => {
 
   const printableRef = useRef<HTMLDivElement>(null);
 
-  const formatDate = (date: Date) =>
-    new Intl.DateTimeFormat("pl-PL", {
-      dateStyle: "long",
-      timeStyle: "short",
-    }).format(date);
+  const formatDate = useCallback(
+    (date: Date) =>
+      new Intl.DateTimeFormat("pl-PL", {
+        dateStyle: "long",
+        timeStyle: "short",
+      }).format(date),
+    [],
+  );
 
   const [printTimestamp, setPrintTimestamp] = useState(() => formatDate(new Date()));
 
@@ -156,19 +159,24 @@ export const Timetable: FC<TimetableProps> = ({ timetable }) => {
     [],
   );
 
-  const handlePrint = useReactToPrint({
-    content: () => printableRef.current,
+  const triggerPrint = useReactToPrint({
+    contentRef: printableRef,
     pageStyle,
     documentTitle: timetable.title
       ? `Plan lekcji ${TRANSLATION_DICT[timetable.type]} ${timetable.title}`
       : "Plan lekcji",
-    removeAfterPrint: false,
-    onBeforeGetContent: () =>
-      new Promise<void>((resolve) => {
-        setPrintTimestamp(formatDate(new Date()));
+    preserveAfterPrint: true,
+    onBeforePrint: async () => {
+      setPrintTimestamp(formatDate(new Date()));
+      await new Promise<void>((resolve) => {
         setTimeout(resolve, 0);
-      }),
+      });
+    },
   });
+
+  const handlePrint = useCallback(() => {
+    triggerPrint();
+  }, [triggerPrint]);
 
   useEffect(() => {
     setPrintTimetable(handlePrint);
@@ -320,37 +328,37 @@ export const Timetable: FC<TimetableProps> = ({ timetable }) => {
                         </span>
                       </div>
                     </td>
-                      {lessons.map((day, dayIndex) => (
-                        <td key={dayIndex}>
-                          {(hourIndex < day.length ? day[hourIndex] : []).map((lesson, lessonIndex) => {
-                          const lessonDetails = [
-                            lesson.teacher,
-                            lesson.className,
-                          ]
-                            .filter(Boolean)
-                            .join(" • ");
+                    {lessons.map((day, dayIndex) => {
+                      const hourLessons = hourIndex < day.length ? day[hourIndex] : [];
 
-                          return (
-                            <div className="print-lesson" key={lessonIndex}>
-                              <span className="print-lesson__subject">
-                                {lesson.subject}
-                                {lesson.groupName ? ` (${lesson.groupName})` : ""}
-                              </span>
-                              {lessonDetails && (
-                                <span className="print-lesson__meta">
-                                  {lessonDetails}
+                      return (
+                        <td key={dayIndex}>
+                          {hourLessons.map((lesson, lessonIndex) => {
+                            const lessonDetails = [
+                              lesson.teacher,
+                              lesson.className,
+                            ]
+                              .filter(Boolean)
+                              .join(" • ");
+
+                            return (
+                              <div className="print-lesson" key={lessonIndex}>
+                                <span className="print-lesson__subject">
+                                  {lesson.subject}
+                                  {lesson.groupName ? ` (${lesson.groupName})` : ""}
                                 </span>
-                              )}
-                              {lesson.room && (
-                                <span className="print-lesson__meta">
-                                  Sala {lesson.room}
-                                </span>
-                              )}
-                            </div>
-                          );
-                        })}
-                      </td>
-                    ))}
+                                {lessonDetails && (
+                                  <span className="print-lesson__meta">{lessonDetails}</span>
+                                )}
+                                {lesson.room && (
+                                  <span className="print-lesson__meta">Sala {lesson.room}</span>
+                                )}
+                              </div>
+                            );
+                          })}
+                        </td>
+                      );
+                    })}
                   </tr>
                 ))}
               </tbody>
