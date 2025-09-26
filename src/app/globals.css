@@ -108,3 +108,57 @@
   background-color: rgb(var(--accent-table));
   color: #fafafa;
 }
+
+.print-container {
+  position: fixed;
+  top: -10000px;
+  left: -10000px;
+  opacity: 0;
+  pointer-events: none;
+  width: 100vw;
+}
+
+@media print {
+  :root,
+  .dark {
+    --background: 254 255 254 !important;
+    --foreground: 246 243 244 !important;
+    --accent: 254 255 254 !important;
+    --accent-secondary: 254 255 254 !important;
+    --accent-table: 239 9 51 !important;
+    --primary: 42 23 27 !important;
+    --lines: 208 201 203 !important;
+    color-scheme: light;
+  }
+
+  body {
+    background: #ffffff !important;
+    color: #111827 !important;
+  }
+
+  .print-container {
+    position: static;
+    opacity: 1;
+    pointer-events: auto;
+    width: auto;
+  }
+
+  .print-wrapper {
+    display: grid;
+    gap: 16px;
+  }
+
+  .print-header {
+    display: grid;
+    gap: 4px;
+  }
+
+  .print-table {
+    width: 100%;
+  }
+
+  .print-no-lessons {
+    font-size: 1rem;
+    color: #374151;
+  }
+}
