@@ -306,6 +306,7 @@ export const Timetable: FC<TimetableProps> = ({ timetable }) => {
                           {hourLessons.map((lesson, lessonIndex) => {
                             const lessonDetails = [
                               lesson.teacher,
+                              lesson.room ? `Sala ${lesson.room}` : undefined,
                               lesson.className,
                             ]
                               .filter(Boolean)
@@ -319,9 +320,6 @@ export const Timetable: FC<TimetableProps> = ({ timetable }) => {
                                 </span>
                                 {lessonDetails && (
                                   <span className="print-lesson__meta">{lessonDetails}</span>
-                                )}
-                                {lesson.room && (
-                                  <span className="print-lesson__meta">Sala {lesson.room}</span>
                                 )}
                               </div>
                             );

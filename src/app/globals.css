@@ -175,7 +175,7 @@
   .print-table th,
   .print-table td {
     border: 1px solid #d1d5db;
-    padding: 4px 6px;
+    padding: 2px 4px;
     vertical-align: top;
     word-break: break-word;
   }
@@ -202,8 +202,8 @@
 
   .print-lesson {
     display: grid;
-    gap: 2px;
-    margin-bottom: 4px;
+    gap: 1px;
+    margin-bottom: 3px;
   }
 
   .print-lesson:last-child {
