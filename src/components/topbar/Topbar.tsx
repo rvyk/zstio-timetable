@@ -106,10 +106,10 @@ export const Topbar: FC<TopbarProps> = ({ timetable }) => {
     return `Plan lekcji ${TRANSLATION_DICT[timetable.type]} ${timetable.title}`;
   }, [timetable]);
 
-  const printContainerRef = useRef<HTMLDivElement | null>(null);
+  const printSheetRef = useRef<HTMLDivElement | null>(null);
 
   const handlePrint = useReactToPrint({
-    contentRef: printContainerRef,
+    contentRef: printSheetRef,
     documentTitle: printTitle,
     pageStyle: `
       @page { margin: 18mm 14mm; }
@@ -296,12 +296,9 @@ export const Topbar: FC<TopbarProps> = ({ timetable }) => {
         </DialogContent>
       </Dialog>
 
-      <div
-        ref={printContainerRef}
-        aria-hidden="true"
-        className="pointer-events-none absolute -left-[10000px] top-0 z-[-1]"
-      >
+      <div aria-hidden="true" className="pointer-events-none absolute -left-[10000px] top-0 z-[-1]">
         <TimetablePrintSheet
+          ref={printSheetRef}
           timetable={timetable}
           hours={printableHours}
           lessons={lessons}
