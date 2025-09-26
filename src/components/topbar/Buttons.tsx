@@ -1,7 +1,11 @@
+"use client";
+
 import { Button } from "@/components/ui/Button";
 import { Skeleton } from "@/components/ui/Skeleton";
+import { useTimetableStore } from "@/stores/timetable";
 import { useSettingsWithoutStore } from "@/stores/settings";
-import { MenuIcon, MoonIcon, SunMediumIcon } from "lucide-react";
+import { MenuIcon, MoonIcon, PrinterIcon, SunMediumIcon } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 import { useTheme } from "next-themes";
 import { FC, useCallback } from "react";
 import { useIsClient } from "usehooks-ts";
@@ -12,6 +16,8 @@ export const TopbarButtons: FC = () => {
   const { theme, setTheme, systemTheme } = useTheme();
   const currentTheme = theme === "system" ? systemTheme : theme;
 
+  const printTimetable = useTimetableStore((state) => state.printTimetable);
+
   const toggleSettingsPanel = useSettingsWithoutStore(
     (state) => state.toggleSettingsPanel,
   );
@@ -20,11 +26,23 @@ export const TopbarButtons: FC = () => {
     setTheme(currentTheme === "light" ? "dark" : "light");
   }, [currentTheme, setTheme]);
 
-  const buttons = [
+  interface ButtonConfig {
+    icon: LucideIcon;
+    action?: () => void;
+    ariaLabel: string;
+    disabled?: boolean;
+  }
+
+  const buttons: ButtonConfig[] = [
+    {
+      icon: PrinterIcon,
+      action: printTimetable ? () => printTimetable() : undefined,
+      ariaLabel: "Drukuj plan lekcji",
+      disabled: !printTimetable,
+    },
     {
       icon: currentTheme === "dark" ? SunMediumIcon : MoonIcon,
-      href: null,
-      action: toggleTheme,
+      action: () => toggleTheme(),
       ariaLabel:
         currentTheme === "dark"
           ? "Przełącz na tryb jasny"
@@ -32,8 +50,7 @@ export const TopbarButtons: FC = () => {
     },
     {
       icon: MenuIcon,
-      href: null,
-      action: toggleSettingsPanel,
+      action: () => toggleSettingsPanel(),
       ariaLabel: "Otwórz panel ustawień",
     },
   ];
@@ -53,13 +70,14 @@ export const TopbarButtons: FC = () => {
         const IconComponent = button.icon;
 
         return (
-            <Button
-              key={index}
-              aria-label={button.ariaLabel}
-              variant="icon"
-              size="icon"
-              onClick={button.action}
-            >
+          <Button
+            key={index}
+            aria-label={button.ariaLabel}
+            variant="icon"
+            size="icon"
+            onClick={() => button.action?.()}
+            disabled={button.disabled}
+          >
             <IconComponent strokeWidth={2.5} className="size-4 sm:size-5" />
           </Button>
         );
