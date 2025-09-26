@@ -115,45 +115,63 @@ export const Timetable: FC<TimetableProps> = ({ timetable }) => {
 
   const pageStyle = useMemo(
     () =>
-      `@page { size: landscape; margin: 12mm; }
+      `@page { size: A4 landscape; margin: 10mm; }
       html, body {
         width: 100%;
+        margin: 0 !important;
         background: #ffffff !important;
         color: #111827 !important;
         font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      }
-      table {
-        border-collapse: collapse;
-        width: 100%;
-      }
-      th, td {
-        border: 1px solid #d1d5db;
-        padding: 8px;
-        vertical-align: top;
-      }
-      th {
-        background-color: #f3f4f6;
-        font-weight: 600;
+        font-size: 11px;
+        line-height: 1.35;
       }
       h1, h2, p {
         margin: 0;
         color: #111827 !important;
       }
+      .print-wrapper {
+        display: grid;
+        gap: 12px;
+      }
+      .print-header h1 {
+        font-size: 1.25rem;
+      }
+      .print-table {
+        border-collapse: collapse;
+        width: 100%;
+        table-layout: fixed;
+      }
+      .print-table th,
+      .print-table td {
+        border: 1px solid #d1d5db;
+        padding: 4px 6px;
+        vertical-align: top;
+        word-break: break-word;
+      }
+      .print-table th {
+        background-color: #f3f4f6;
+        font-weight: 600;
+      }
       .print-lesson {
         display: grid;
-        gap: 2px;
-        margin-bottom: 6px;
+        gap: 1px;
+        margin-bottom: 4px;
       }
       .print-lesson:last-child {
         margin-bottom: 0;
       }
       .print-lesson__subject {
         font-weight: 600;
-        font-size: 0.95rem;
+        font-size: 0.85rem;
       }
       .print-lesson__meta {
         color: #4b5563;
-        font-size: 0.85rem;
+        font-size: 0.7rem;
+        line-height: 1.3;
+      }
+      .print-no-lessons {
+        font-size: 0.95rem;
+        color: #374151;
       }
     `,
     [],
