@@ -64,18 +64,40 @@ export const Timetable: FC<TimetableProps> = ({ timetable }) => {
     return Math.max(hourCount, ...lessonCounts, 0);
   }, [lessons, timetable.hours]);
 
-  const hasLessons = useMemo(
-    () =>
-      lessons.some((day) => day.some((hourLessons) => hourLessons.length > 0)),
-    [lessons],
-  );
-
   const todayIndex = useMemo(() => (new Date().getDay() + 6) % 7, []);
   const dayNames = timetable.dayNames;
   const hoursList = useMemo(() => Object.values(hours), [hours]);
   const visibleHours = useMemo(
     () => hoursList.slice(0, maxLessons),
     [hoursList, maxLessons],
+  );
+
+  const lessonsByDay = useMemo(
+    () =>
+      dayNames.map((_, dayIndex) => {
+        const dayLessons = lessons[dayIndex] ?? [];
+        return visibleHours.map((_, hourIndex) => dayLessons[hourIndex] ?? []);
+      }),
+    [dayNames, lessons, visibleHours],
+  );
+
+  const dayHasLessons = useMemo(
+    () => lessonsByDay.map((day) => day.some((hour) => hour.length > 0)),
+    [lessonsByDay],
+  );
+
+  const hasLessons = useMemo(
+    () => dayHasLessons.some(Boolean),
+    [dayHasLessons],
+  );
+
+  const printableRows = useMemo(
+    () =>
+      visibleHours.map((hour, hourIndex) => ({
+        hour,
+        lessons: lessonsByDay.map((dayLessons) => dayLessons[hourIndex] ?? []),
+      })),
+    [lessonsByDay, visibleHours],
   );
 
   const handleDayChange = (newIndex: number) => {
@@ -114,66 +136,7 @@ export const Timetable: FC<TimetableProps> = ({ timetable }) => {
   const [printTimestamp, setPrintTimestamp] = useState(() => formatDate(new Date()));
 
   const pageStyle = useMemo(
-    () =>
-      `@page { size: A4 landscape; margin: 10mm; }
-      html, body {
-        width: 100%;
-        margin: 0 !important;
-        background: #ffffff !important;
-        color: #111827 !important;
-        font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-        font-size: 11px;
-        line-height: 1.35;
-      }
-      h1, h2, p {
-        margin: 0;
-        color: #111827 !important;
-      }
-      .print-wrapper {
-        display: grid;
-        gap: 12px;
-      }
-      .print-header h1 {
-        font-size: 1.25rem;
-      }
-      .print-table {
-        border-collapse: collapse;
-        width: 100%;
-        table-layout: fixed;
-      }
-      .print-table th,
-      .print-table td {
-        border: 1px solid #d1d5db;
-        padding: 4px 6px;
-        vertical-align: top;
-        word-break: break-word;
-      }
-      .print-table th {
-        background-color: #f3f4f6;
-        font-weight: 600;
-      }
-      .print-lesson {
-        display: grid;
-        gap: 1px;
-        margin-bottom: 4px;
-      }
-      .print-lesson:last-child {
-        margin-bottom: 0;
-      }
-      .print-lesson__subject {
-        font-weight: 600;
-        font-size: 0.85rem;
-      }
-      .print-lesson__meta {
-        color: #4b5563;
-        font-size: 0.7rem;
-        line-height: 1.3;
-      }
-      .print-no-lessons {
-        font-size: 0.95rem;
-        color: #374151;
-      }
-    `,
+    () => "@page { size: A4 landscape; margin: 10mm; }",
     [],
   );
 
@@ -229,45 +192,37 @@ export const Timetable: FC<TimetableProps> = ({ timetable }) => {
             className="flex h-full w-full transition-transform duration-300"
             style={{ transform: `translateX(-${selectedDayIndex * 100}%)` }}
           >
-            {dayNames.map((_, dayIndex) => {
-              const dayLessons = lessons[dayIndex] ?? [];
-              const dayHasLessons = dayLessons.some(
-                (hourLessons) => hourLessons.length > 0,
-              );
-              return (
-                <div
-                  key={dayIndex}
-                  className="flex h-full w-full flex-shrink-0 flex-col"
-                >
-                  {dayHasLessons ? (
-                    <table className="w-full">
-                      <tbody>
-                        {visibleHours.map((hour, hourIndex) => (
-                          <tr
-                            key={hourIndex}
-                            className="border-lines odd:bg-accent/50 odd:dark:bg-background border-b"
-                          >
-                            <TableHourCell
-                              hour={hour}
-                              isCurrentDay={dayIndex === todayIndex}
-                            />
-                            <td className="py-3 last:border-0 max-md:px-2 md:px-4">
-                              {(lessons[dayIndex]?.[hourIndex] ?? []).map(
-                                (lessonItem, index) => (
-                                  <LessonItem key={index} lesson={lessonItem} />
-                                ),
-                              )}
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  ) : (
-                    <NoLessons description="Na ten dzień nie wprowadzono planu zajęć" />
-                  )}
-                </div>
-              );
-            })}
+          {dayNames.map((_, dayIndex) => (
+            <div
+              key={dayIndex}
+              className="flex h-full w-full flex-shrink-0 flex-col"
+            >
+              {dayHasLessons[dayIndex] ? (
+                <table className="w-full">
+                  <tbody>
+                    {printableRows.map(({ hour, lessons: hourLessons }, hourIndex) => (
+                      <tr
+                        key={hourIndex}
+                        className="border-lines odd:bg-accent/50 odd:dark:bg-background border-b"
+                      >
+                        <TableHourCell
+                          hour={hour}
+                          isCurrentDay={dayIndex === todayIndex}
+                        />
+                        <td className="py-3 last:border-0 max-md:px-2 md:px-4">
+                          {hourLessons[dayIndex].map((lessonItem, index) => (
+                            <LessonItem key={index} lesson={lessonItem} />
+                          ))}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              ) : (
+                <NoLessons description="Na ten dzień nie wprowadzono planu zajęć" />
+              )}
+            </div>
+          ))}
           </div>
         </div>
 
@@ -285,13 +240,13 @@ export const Timetable: FC<TimetableProps> = ({ timetable }) => {
                 </tr>
               </thead>
               <tbody>
-                {visibleHours.map((hour, hourIndex) => (
+                {printableRows.map(({ hour }, hourIndex) => (
                   <tr
                     key={hourIndex}
                     className="divide-lines border-lines odd:bg-accent/50 odd:dark:bg-background border-b md:divide-x md:last:border-none"
                   >
                     <TableHourCell hour={hour} />
-                    {lessons.map((day, dayIndex) => (
+                    {lessonsByDay.map((day, dayIndex) => (
                       <TableLessonCell
                         key={dayIndex}
                         dayIndex={dayIndex}
@@ -336,7 +291,7 @@ export const Timetable: FC<TimetableProps> = ({ timetable }) => {
                 </tr>
               </thead>
               <tbody>
-                {visibleHours.map((hour, hourIndex) => (
+                {printableRows.map(({ hour, lessons: rowLessons }, hourIndex) => (
                   <tr key={hourIndex}>
                     <td>
                       <div className="print-lesson">
@@ -346,10 +301,7 @@ export const Timetable: FC<TimetableProps> = ({ timetable }) => {
                         </span>
                       </div>
                     </td>
-                    {lessons.map((day, dayIndex) => {
-                      const hourLessons = hourIndex < day.length ? day[hourIndex] : [];
-
-                      return (
+                    {rowLessons.map((hourLessons, dayIndex) => (
                         <td key={dayIndex}>
                           {hourLessons.map((lesson, lessonIndex) => {
                             const lessonDetails = [
@@ -375,8 +327,7 @@ export const Timetable: FC<TimetableProps> = ({ timetable }) => {
                             );
                           })}
                         </td>
-                      );
-                    })}
+                      ))}
                   </tr>
                 ))}
               </tbody>
