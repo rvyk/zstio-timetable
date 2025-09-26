@@ -164,6 +164,25 @@ export const Timetable: FC<TimetableProps> = ({ timetable }) => {
     return () => setPrintTimetable(null);
   }, [handlePrint, setPrintTimetable]);
 
+  useEffect(() => {
+    const handleKeydown = (event: KeyboardEvent) => {
+      if (event.repeat) return;
+
+      const isPrintShortcut = (event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "p";
+
+      if (!isPrintShortcut) return;
+
+      event.preventDefault();
+      handlePrint();
+    };
+
+    window.addEventListener("keydown", handleKeydown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeydown);
+    };
+  }, [handlePrint]);
+
   return (
     <>
       <div
