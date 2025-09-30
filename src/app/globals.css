@@ -108,3 +108,122 @@
   background-color: rgb(var(--accent-table));
   color: #fafafa;
 }
+
+.print-container {
+  position: fixed;
+  top: -10000px;
+  left: -10000px;
+  opacity: 0;
+  pointer-events: none;
+  width: 100vw;
+}
+
+@media print {
+  :root,
+  .dark {
+    --background: 254 255 254 !important;
+    --foreground: 246 243 244 !important;
+    --accent: 254 255 254 !important;
+    --accent-secondary: 254 255 254 !important;
+    --accent-table: 239 9 51 !important;
+    --primary: 42 23 27 !important;
+    --lines: 208 201 203 !important;
+    color-scheme: light;
+  }
+
+  body {
+    background: #ffffff !important;
+    color: #111827 !important;
+    font-size: 11px;
+    line-height: 1.35;
+    font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    margin: 0;
+  }
+
+  .print-container {
+    position: static;
+    opacity: 1;
+    pointer-events: auto;
+    width: auto;
+  }
+
+  .print-wrapper {
+    display: grid;
+    gap: 12px;
+  }
+
+  .print-header {
+    display: grid;
+    gap: 4px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid #e5e7eb;
+  }
+
+  .print-header h1 {
+    font-size: 1.25rem;
+    color: #0f172a;
+  }
+
+  .print-table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .print-table th,
+  .print-table td {
+    border: 1px solid #d1d5db;
+    padding: 2px 4px;
+    vertical-align: top;
+    word-break: break-word;
+  }
+
+  .print-table thead th {
+    background-color: #e2e8f0;
+    font-weight: 600;
+    color: #0f172a;
+  }
+
+  .print-table tbody tr:nth-child(odd) td {
+    background-color: #f8fafc;
+  }
+
+  .print-table tbody tr:nth-child(even) td {
+    background-color: #ffffff;
+  }
+
+  .print-table tbody td:first-child {
+    background-color: #e0e7ff;
+    font-weight: 600;
+    color: #1e3a8a;
+  }
+
+  .print-lesson {
+    display: grid;
+    gap: 1px;
+    margin-bottom: 3px;
+  }
+
+  .print-lesson:last-child {
+    margin-bottom: 0;
+  }
+
+  .print-lesson__subject {
+    font-weight: 600;
+    font-size: 0.85rem;
+    color: #1f2937;
+  }
+
+  .print-lesson__meta {
+    color: #475569;
+    font-size: 0.7rem;
+    line-height: 1.3;
+  }
+
+  .print-no-lessons {
+    font-size: 0.95rem;
+    color: #1f2937;
+  }
+}
