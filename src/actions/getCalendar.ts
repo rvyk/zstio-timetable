@@ -70,6 +70,8 @@ const createEvent = (
       startHour,
       startMinute,
     ],
+    startInputType: "local",
+    startOutputType: "local",
     title,
     description,
     url: env.NEXT_PUBLIC_APP_URL,
