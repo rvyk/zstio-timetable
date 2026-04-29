@@ -9,6 +9,7 @@ import type { Metadata, Viewport } from "next";
 import { Poppins } from "next/font/google";
 import { ReactNode } from "react";
 import "./globals.css";
+import { SerwistProvider } from "./serwist";
 
 export const fetchCache = "default-cache";
 
@@ -49,12 +50,14 @@ export default function RootLayout({
           "flex h-screen antialiased bg-foreground md:bg-background",
         )}
       >
-        <ThemeProvider attribute="class" disableTransitionOnChange>
-          <Toaster />
-          <Sidebar />
-          {children}
-          <SettingsPanel />
-        </ThemeProvider>
+        <SerwistProvider swUrl="/serwist/sw.js">
+          <ThemeProvider attribute="class" disableTransitionOnChange>
+            <Toaster />
+            <Sidebar />
+            {children}
+            <SettingsPanel />
+          </ThemeProvider>
+        </SerwistProvider>
       </body>
     </html>
   );
