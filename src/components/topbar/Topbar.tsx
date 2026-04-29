@@ -15,9 +15,10 @@ import { TopbarButtons } from "./Buttons";
 
 interface TopbarProps {
   timetable?: OptivumTimetable;
+  isOffline?: boolean;
 }
 
-export const Topbar: FC<TopbarProps> = ({ timetable }) => {
+export const Topbar: FC<TopbarProps> = ({ timetable, isOffline }) => {
   const isClient = useIsClient();
 
   const titleElement = useMemo(() => {
@@ -28,10 +29,12 @@ export const Topbar: FC<TopbarProps> = ({ timetable }) => {
           <span className="font-semibold">{timetable.title}</span>
         </Fragment>
       );
+    } else if (isOffline) {
+      return "Brak połączenia z siecią";
     } else {
       return "Nie znaleziono planu zajęć";
     }
-  }, [timetable]);
+  }, [timetable, isOffline]);
 
   return (
     <div className="grid gap-2 max-md:px-3 max-md:pt-3">

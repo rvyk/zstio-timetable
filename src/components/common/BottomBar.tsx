@@ -18,9 +18,10 @@ import { FC, MouseEvent, useMemo } from "react";
 
 interface BottomBarProps {
   timetable?: OptivumTimetable;
+  isOffline?: boolean;
 }
 
-export const BottomBar: FC<BottomBarProps> = ({ timetable }) => {
+export const BottomBar: FC<BottomBarProps> = ({ timetable, isOffline }) => {
   const titleElement = useMemo(() => {
     if (timetable) {
       return (
@@ -33,10 +34,21 @@ export const BottomBar: FC<BottomBarProps> = ({ timetable }) => {
           </p>
         </div>
       );
+    } else if (isOffline) {
+      return (
+        <div className="grid w-full justify-center gap-1 px-2 text-center text-primary">
+          <h2 className="mx-auto max-w-52 truncate text-ellipsis text-base font-semibold leading-tight opacity-90">
+            Jesteś offline
+          </h2>
+          <p className="mx-auto max-w-72 truncate text-ellipsis text-sm font-medium leading-tight opacity-70">
+            Brak połączenia z siecią
+          </p>
+        </div>
+      );
     } else {
       return "Nie znaleziono planu zajęć";
     }
-  }, [timetable]);
+  }, [timetable, isOffline]);
 
   const handleArrowKey = (
     e: MouseEvent<HTMLButtonElement>,
