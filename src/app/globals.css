@@ -108,3 +108,12 @@
   background-color: rgb(var(--accent-table));
   color: #fafafa;
 }
+
+.scrollbar-none {
+  scrollbar-width: none;
+}
+
+.scrollbar-none::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}

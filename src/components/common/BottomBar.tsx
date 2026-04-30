@@ -14,7 +14,7 @@ import { simulateKeyPress } from "@/lib/utils";
 import { OptivumTimetable } from "@/types/optivum";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { ArrowLeft, ArrowRight } from "lucide-react";
-import { FC, MouseEvent, useMemo } from "react";
+import { FC, MouseEvent, useEffect, useMemo, useState } from "react";
 
 interface BottomBarProps {
   timetable?: OptivumTimetable;
@@ -22,6 +22,7 @@ interface BottomBarProps {
 }
 
 export const BottomBar: FC<BottomBarProps> = ({ timetable, isOffline }) => {
+  const [viewportHeight, setViewportHeight] = useState<number | null>(null);
   const titleElement = useMemo(() => {
     if (timetable) {
       return (
@@ -61,6 +62,33 @@ export const BottomBar: FC<BottomBarProps> = ({ timetable, isOffline }) => {
     simulateKeyPress(key, key === "ArrowRight" ? 39 : 37);
   };
 
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const updateViewportHeight = () => {
+      const visualViewportHeight = window.visualViewport?.height;
+      setViewportHeight(visualViewportHeight ?? window.innerHeight);
+    };
+
+    updateViewportHeight();
+
+    window.visualViewport?.addEventListener("resize", updateViewportHeight);
+    window.visualViewport?.addEventListener("scroll", updateViewportHeight);
+    window.addEventListener("resize", updateViewportHeight);
+
+    return () => {
+      window.visualViewport?.removeEventListener(
+        "resize",
+        updateViewportHeight,
+      );
+      window.visualViewport?.removeEventListener(
+        "scroll",
+        updateViewportHeight,
+      );
+      window.removeEventListener("resize", updateViewportHeight);
+    };
+  }, []);
+
   return (
     <Drawer
       /*
@@ -72,7 +100,7 @@ export const BottomBar: FC<BottomBarProps> = ({ timetable, isOffline }) => {
       }}
     >
       <DrawerTrigger asChild>
-        <div className="fixed bottom-0 flex h-20 w-full flex-col rounded-t-md border border-primary/10 bg-background dark:bg-foreground md:hidden">
+        <div className="fixed bottom-0 flex h-20 w-full flex-col rounded-t-md border border-primary/10 bg-background outline-none focus:outline-none focus-visible:outline-none focus-visible:ring-0 dark:bg-foreground md:hidden">
           <div className="absolute left-0 right-0 top-1 mx-auto h-2 w-[100px] rounded-full bg-primary/10" />
           <div className="flex h-full items-center justify-between px-2">
             <Button
@@ -101,7 +129,12 @@ export const BottomBar: FC<BottomBarProps> = ({ timetable, isOffline }) => {
           </div>
         </div>
       </DrawerTrigger>
-      <DrawerContent className="md:hidden">
+      <DrawerContent
+        className="md:hidden"
+        style={
+          viewportHeight ? { maxHeight: `${viewportHeight}px` } : undefined
+        }
+      >
         <VisuallyHidden>
           <DrawerTitle>Przeglądaj plan zajęć</DrawerTitle>
           <DrawerDescription>

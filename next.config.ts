@@ -20,6 +20,8 @@ const withSerwist = withSerwistInit({
 const nextConfig: NextConfig = {
   output: process.env.DOCKERIZED === "true" ? "standalone" : undefined,
 
+  allowedDevOrigins: ["10.99.75.95"],
+
   redirects: async () => [
     {
       source: "/zastepstwa/:path*",
