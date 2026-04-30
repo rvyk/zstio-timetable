@@ -3,6 +3,8 @@
 import school_logo from "@/assets/school-logo.png";
 import { FavoriteStar } from "@/components/common/FavoriteStar";
 import { TimetableDates } from "@/components/common/TimetableDates";
+import { SidebarContent } from "@/components/sidebar/Sidebar";
+import SidebarContext from "@/components/sidebar/Context";
 import { ShortLessonSwitcherCell } from "@/components/timetable/Cells";
 import { SCHOOL_SHORT, SCHOOL_WEBSITE } from "@/constants/school";
 import { TRANSLATION_DICT } from "@/constants/translations";
@@ -37,9 +39,9 @@ export const Topbar: FC<TopbarProps> = ({ timetable, isOffline }) => {
   }, [timetable, isOffline]);
 
   return (
-    <div className="grid gap-2 max-md:px-3 max-md:pt-3">
-      <div className="flex w-full justify-between max-md:items-center">
-        <div className="flex gap-x-2 max-md:items-center">
+    <div className="grid gap-4 max-md:px-3 max-md:pt-3">
+      <div className="flex w-full items-center justify-between gap-3">
+        <div className="flex items-center gap-x-2">
           <SchoolLink />
           <div className="md:hidden">
             <ShortLessonSwitcherCell />
@@ -63,6 +65,11 @@ export const Topbar: FC<TopbarProps> = ({ timetable, isOffline }) => {
           )}
         </div>
         <TimetableDates timetable={timetable} />
+      </div>
+      <div className="hidden md:block xl:hidden">
+        <SidebarContext.Provider value={{ isPreview: false }}>
+          <SidebarContent showTimetableDates={false} layout="horizontal" showInfo={false} />
+        </SidebarContext.Provider>
       </div>
     </div>
   );

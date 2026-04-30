@@ -2,21 +2,12 @@
 
 import { TimetableDates } from "@/components/common/TimetableDates";
 import { Accordion } from "@/components/ui/Accordion";
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/Sheet";
 import { Skeleton } from "@/components/ui/Skeleton";
 import { DATA_SOURCE_COOKIE_NAME } from "@/lib/dataSource";
 import { cn } from "@/lib/utils";
 import { initDataSources, useDataSourceStore } from "@/stores/dataSource";
 import { useFavoritesStore } from "@/stores/favorites";
-import { useSettingsWithoutStore } from "@/stores/settings";
 import { useTimetableStore } from "@/stores/timetable";
-import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import {
   ChevronDown,
   GraduationCap,
@@ -27,13 +18,11 @@ import {
 import { useRouter } from "next/navigation";
 import { FC, Fragment, useEffect, useMemo, useState } from "react";
 import { useIsClient } from "usehooks-ts";
-import SidebarContext, { useSidebarContext } from "./Context";
+import { useSidebarContext } from "./Context";
 import { Dropdown } from "./Dropdown";
 import { Search } from "./Search";
 
 export const Sidebar: FC = () => {
-  const { isSidebarOpen, toggleSidebar } = useSettingsWithoutStore();
-
   return (
     <Fragment>
       <div className="border-lines dark:border-primary/10 bg-foreground h-screen w-full max-w-xs border-r max-xl:hidden max-md:hidden">
@@ -41,46 +30,72 @@ export const Sidebar: FC = () => {
           <SidebarContent />
         </div>
       </div>
-
-      <div className="max-md:hidden xl:hidden">
-        <Sheet open={isSidebarOpen} onOpenChange={toggleSidebar}>
-          <SheetTrigger asChild>
-            <div className="border-lines dark:border-primary/10 bg-foreground flex h-screen w-24 cursor-pointer flex-col items-center gap-10 border-r px-4 py-6">
-              <SidebarContext.Provider value={{ isPreview: true }}>
-                <SidebarContent />
-              </SidebarContext.Provider>
-            </div>
-          </SheetTrigger>
-          <SheetContent
-            side="left"
-            className="border-lines flex flex-col justify-between gap-y-16 overflow-x-hidden overflow-y-auto border-r px-4 py-6 xl:hidden"
-          >
-            <VisuallyHidden>
-              <SheetTitle>Nawigacja boczna</SheetTitle>
-            </VisuallyHidden>
-            <SidebarContent />
-            <VisuallyHidden>
-              <SheetDescription>
-                Lista wszystkich klas, nauczycieli i sal dostępnych w planie.
-              </SheetDescription>
-            </VisuallyHidden>
-          </SheetContent>
-        </Sheet>
-      </div>
     </Fragment>
   );
 };
 
 interface SidebarContentProps {
   showTimetableDates?: boolean;
+  layout?: "vertical" | "horizontal";
+  showInfo?: boolean;
 }
 
 export const SidebarContent: FC<SidebarContentProps> = ({
   showTimetableDates,
+  layout = "vertical",
+  showInfo = true,
+}) => {
+  const { isPreview } = useSidebarContext();
+  const isClient = useIsClient();
+
+  if (!isClient)
+    return (
+      <Fragment>
+        <div className={cn(isPreview && "w-12", "grid gap-10")}>
+          <Skeleton className="h-12 w-full" />
+          <div className={cn(isPreview && "mx-auto w-10", "grid gap-5")}>
+            <Skeleton className="h-10 w-full" />
+            <hr className="border-primary/10 h-px w-full border" />
+            <Skeleton className="h-10 w-full" />
+            <Skeleton className="h-10 w-full" />
+            <Skeleton className="h-10 w-full" />
+          </div>
+        </div>
+        <div className={cn(isPreview ? "hidden" : "grid", "gap-2")}>
+          <Skeleton className="h-3.5 w-3/4" />
+          <Skeleton className="h-3 w-3/5" />
+          <Skeleton className="h-3.5 w-24" />
+          <Skeleton className="h-3 w-full" />
+        </div>
+      </Fragment>
+    );
+
+  const infoSection = showInfo ? (
+    <SidebarInfo showTimetableDates={showTimetableDates} />
+  ) : null;
+
+  if (layout === "horizontal") {
+    return (
+      <div className="grid gap-4">
+        <TimetableSidebarDropdowns layout="horizontal" />
+        {infoSection}
+      </div>
+    );
+  }
+
+  return (
+    <Fragment>
+      <TimetableSidebarDropdowns layout="vertical" />
+      {infoSection}
+    </Fragment>
+  );
+};
+
+export const SidebarInfo: FC<{ showTimetableDates?: boolean }> = ({
+  showTimetableDates,
 }) => {
   const timetable = useTimetableStore((state) => state.timetable);
   const lastUpdatedTimetable = timetable?.lastUpdated;
-
   const { isPreview } = useSidebarContext();
   const isClient = useIsClient();
 
@@ -113,32 +128,19 @@ export const SidebarContent: FC<SidebarContentProps> = ({
     [availableDataSources, selectedDataSource],
   );
 
-  if (!isClient)
+  if (!isClient) {
     return (
-      <Fragment>
-        <div className={cn(isPreview && "w-12", "grid gap-10")}>
-          <Skeleton className="h-12 w-full" />
-          <div className={cn(isPreview && "mx-auto w-10", "grid gap-5")}>
-            <Skeleton className="h-10 w-full" />
-            <hr className="border-primary/10 h-px w-full border" />
-            <Skeleton className="h-10 w-full" />
-            <Skeleton className="h-10 w-full" />
-            <Skeleton className="h-10 w-full" />
-          </div>
-        </div>
-        <div className={cn(isPreview ? "hidden" : "grid", "gap-2")}>
-          <Skeleton className="h-3.5 w-3/4" />
-          <Skeleton className="h-3 w-3/5" />
-          <Skeleton className="h-3.5 w-24" />
-          <Skeleton className="h-3 w-full" />
-        </div>
-      </Fragment>
+      <div className={cn(isPreview ? "hidden" : "grid", "gap-2")}>
+        <Skeleton className="h-3.5 w-3/4" />
+        <Skeleton className="h-3 w-3/5" />
+        <Skeleton className="h-3.5 w-24" />
+        <Skeleton className="h-3 w-full" />
+      </div>
     );
+  }
 
   return (
-    <Fragment>
-      <TimetableSidebarDropdowns />
-
+    <div>
       <div className="flex flex-col gap-1">
         {showTimetableDates && (
           <TimetableDates
@@ -198,16 +200,16 @@ export const SidebarContent: FC<SidebarContentProps> = ({
                   onClick={() => setIsOpen(false)}
                 />
 
-                <div className="absolute inset-x-0 bottom-full z-20 mb-1 overflow-hidden rounded-lg border border-primary/20 bg-foreground/95 shadow-lg backdrop-blur-sm transition-all duration-200">
+                <div className="border-primary/20 bg-foreground/95 absolute inset-x-0 bottom-full z-20 mb-1 overflow-hidden rounded-lg border shadow-lg backdrop-blur-sm transition-all duration-200">
                   <div className="py-1">
                     {availableDataSources.map((source) => (
                       <button
                         key={source.url}
                         onClick={() => handleSourceChange(source.url)}
                         className={cn(
-                          "w-full px-3 py-2 text-left text-xs transition-colors duration-150 hover:bg-accent/50",
+                          "hover:bg-accent/50 w-full px-3 py-2 text-left text-xs transition-colors duration-150",
                           selectedDataSource === source.url &&
-                            "bg-accent/40 font-medium text-primary/95",
+                            "bg-accent/40 text-primary/95 font-medium",
                         )}
                       >
                         <div className="flex items-center gap-2">
@@ -237,14 +239,17 @@ export const SidebarContent: FC<SidebarContentProps> = ({
           </div>
         </div>
       </div>
-    </Fragment>
+    </div>
   );
 };
 
-const TimetableSidebarDropdowns: FC = () => {
+const TimetableSidebarDropdowns: FC<{ layout: "vertical" | "horizontal" }> = ({
+  layout,
+}) => {
   const { timetable } = useTimetableStore();
   const favorites = useFavoritesStore((state) => state.getFavorites());
   const { classes, teachers, rooms } = timetable?.list ?? {};
+  const isHorizontal = layout === "horizontal";
 
   const dropdownItems = useMemo(() => {
     return [
@@ -256,18 +261,35 @@ const TimetableSidebarDropdowns: FC = () => {
   }, [favorites, classes, teachers, rooms]);
 
   return (
-    <div className="grid gap-10">
-      <Search timetable={timetable} />
-      <Accordion type="multiple" className="grid w-full gap-5 px-2">
-        {dropdownItems.map((item, index) => (
-          <Fragment key={item.type}>
-            <Dropdown type={item.type} icon={item.icon} data={item.data} />
-            {index === 0 && (
-              <hr className="border-primary/10 h-px w-full border" />
-            )}
-          </Fragment>
-        ))}
-      </Accordion>
+    <div className={cn(isHorizontal ? "grid w-full gap-3" : "grid gap-10")}>
+      <div className={cn(isHorizontal ? "col-span-4" : "")}>
+        <Search timetable={timetable} />
+      </div>
+      {isHorizontal ? (
+        <div className="col-span-4 grid w-full grid-cols-4 gap-3">
+          {dropdownItems.map((item) => (
+            <Dropdown
+              key={item.type}
+              type={item.type}
+              icon={item.icon}
+              data={item.data}
+              className="col-span-4 md:col-span-2 lg:col-span-1"
+              useModal
+            />
+          ))}
+        </div>
+      ) : (
+        <Accordion type="multiple" className="grid w-full gap-5 px-2">
+          {dropdownItems.map((item, index) => (
+            <Fragment key={item.type}>
+              <Dropdown type={item.type} icon={item.icon} data={item.data} />
+              {index === 0 && (
+                <hr className="border-primary/10 h-px w-full border" />
+              )}
+            </Fragment>
+          ))}
+        </Accordion>
+      )}
     </div>
   );
 };

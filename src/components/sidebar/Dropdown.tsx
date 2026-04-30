@@ -4,6 +4,13 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/Accordion";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/Dialog";
 import { Button, buttonVariants } from "@/components/ui/Button";
 import { cn } from "@/lib/utils";
 import { useSettingsWithoutStore } from "@/stores/settings";
@@ -33,9 +40,17 @@ export interface DropdownProps {
   type: "class" | "teacher" | "room" | "favorites" | "search";
   icon: LucideIcon;
   data?: ListItem[];
+  className?: string;
+  useModal?: boolean;
 }
 
-export const Dropdown: FC<DropdownProps> = ({ type, icon: Icon, data }) => {
+export const Dropdown: FC<DropdownProps> = ({
+  type,
+  icon: Icon,
+  data,
+  className,
+  useModal = false,
+}) => {
   const { isPreview } = useSidebarContext();
   const isClient = useIsClient();
 
@@ -50,8 +65,72 @@ export const Dropdown: FC<DropdownProps> = ({ type, icon: Icon, data }) => {
 
   const label = LABELS[type as keyof typeof LABELS];
 
+  const triggerContent = (
+    <div className="flex w-full items-center justify-between rounded-md">
+      <div className="inline-flex items-center gap-x-3.5">
+        <div
+          className={cn(
+            "grid h-9 w-9 place-content-center rounded-sm border transition-all sm:h-10 sm:w-10",
+            "border-primary/10 bg-accent",
+            "group-hover:bg-primary/5 group-data-[state=open]:bg-primary/5",
+            "dark:bg-accent dark:group-hover:bg-accent dark:group-data-[state=open]:bg-accent",
+          )}
+        >
+          <Icon
+            className="size-4 text-primary/80 transition-all group-hover:text-primary/90 group-data-[state=open]:text-primary/90 sm:size-5"
+            strokeWidth={2.5}
+          />
+        </div>
+        <p
+          className={cn(
+            isPreview && "hidden",
+            "text-xs font-semibold text-primary/70 transition-colors sm:text-sm",
+            "group-hover:text-primary/90 group-data-[state=open]:text-primary/90 dark:font-medium",
+          )}
+        >
+          {label} {isClient && `(${itemCount})`}
+        </p>
+      </div>
+      <ChevronDown
+        className={cn(
+          isPreview && "hidden",
+          "size-4 text-primary/80 transition-transform group-data-[state=open]:rotate-180 sm:size-5",
+        )}
+      />
+    </div>
+  );
+
+  if (useModal) {
+    return (
+      <Dialog>
+        <DialogTrigger asChild>
+          <button
+            className={cn(
+              "group flex h-full w-full items-center rounded-md border border-primary/10 bg-accent/70 p-2 text-left transition-colors hover:bg-accent",
+              className,
+            )}
+          >
+            {triggerContent}
+          </button>
+        </DialogTrigger>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle className="text-primary/90">
+              {label} {isClient && `(${itemCount})`}
+            </DialogTitle>
+          </DialogHeader>
+          <DropdownContent type={type} data={data} />
+        </DialogContent>
+      </Dialog>
+    );
+  }
+
   return (
-    <AccordionItem value={type} disabled={isPreview}>
+    <AccordionItem
+      value={type}
+      disabled={isPreview}
+      className={cn(className)}
+    >
       <AccordionTrigger
         asChild={isPreview}
         className={cn(
@@ -60,38 +139,7 @@ export const Dropdown: FC<DropdownProps> = ({ type, icon: Icon, data }) => {
           "hover:bg-accent/90 data-[state=open]:bg-accent/90",
         )}
       >
-        <div className="inline-flex w-full items-center justify-between rounded-md">
-          <div className="inline-flex items-center gap-x-3.5">
-            <div
-              className={cn(
-                "grid h-9 w-9 place-content-center rounded-sm border transition-all sm:h-10 sm:w-10",
-                "border-primary/10 bg-accent",
-                "group-hover:bg-primary/5 group-data-[state=open]:bg-primary/5",
-                "dark:bg-accent dark:group-hover:bg-accent dark:group-data-[state=open]:bg-accent",
-              )}
-            >
-              <Icon
-                className="size-4 text-primary/80 transition-all group-hover:text-primary/90 group-data-[state=open]:text-primary/90 sm:size-5"
-                strokeWidth={2.5}
-              />
-            </div>
-            <p
-            className={cn(
-              isPreview && "hidden",
-              "text-xs font-semibold text-primary/70 transition-colors sm:text-sm",
-              "group-hover:text-primary/90 group-data-[state=open]:text-primary/90 dark:font-medium",
-            )}
-          >
-              {label} {isClient && `(${itemCount})`}
-          </p>
-        </div>
-          <ChevronDown
-            className={cn(
-              isPreview && "hidden",
-              "size-4 text-primary/80 transition-transform group-data-[state=open]:rotate-180 sm:size-5",
-            )}
-          />
-        </div>
+        {triggerContent}
       </AccordionTrigger>
       <AccordionContent>
         <DropdownContent type={type} data={data} />
@@ -107,7 +155,7 @@ interface DropdownContentProps {
 
 export const DropdownContent: FC<DropdownContentProps> = ({ type, data }) => {
   return (
-    <div className="mt-4 grid gap-2 rounded-md bg-primary/[0.03] p-4 dark:bg-accent/90 md:bg-accent/90">
+    <div className="mt-4 grid gap-2 rounded-md bg-primary/[0.03] p-4 dark:bg-accent/90 md:bg-accent/90 max-h-72 overflow-y-auto">
       {data && data.length > 0 ? (
         data.map((item) => (
           <ListItemComponent key={`${type}-${item.value}`} item={item} type={type} />

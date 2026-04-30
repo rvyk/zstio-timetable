@@ -6,6 +6,7 @@ import { FreeRoomsResultModal } from "@/components/modals/FreeRoomsResult";
 import { FreeRoomsSearchModal } from "@/components/modals/FreeRoomsSearch";
 import { ShortenedLessonsCalculatorModal } from "@/components/modals/ShortenedLessonsCalculator";
 import { Timetable } from "@/components/timetable/Timetable";
+import { SidebarInfo } from "@/components/sidebar/Sidebar";
 import { TimetableController } from "@/components/timetable/TimetableController";
 import { Topbar } from "@/components/topbar/Topbar";
 import { DATA_SOURCE_COOKIE_NAME } from "@/lib/dataSource";
@@ -80,6 +81,9 @@ const TimetablePage = async ({
         <DataSourceBanner />
         <Topbar timetable={timetable} />
         <Timetable timetable={timetable} />
+        <div className="hidden md:block xl:hidden">
+          <SidebarInfo showTimetableDates={false} />
+        </div>
         <BottomBar timetable={timetable} />
       </div>
       <FreeRoomsSearchModal />

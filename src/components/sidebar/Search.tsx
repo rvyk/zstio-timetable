@@ -62,7 +62,12 @@ export const Search: FC<SearchProps> = ({ timetable }) => {
   );
 
   return (
-    <div className={cn(isPreview && "place-content-center", "grid")}>
+    <div
+      className={cn(
+        isPreview ? "place-content-center" : "sm:min-w-[220px]",
+        "grid",
+      )}
+    >
       <div
         className={cn(
           isPreview ? "w-12" : "w-full",

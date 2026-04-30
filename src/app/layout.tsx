@@ -47,7 +47,7 @@ export default function RootLayout({
       <body
         className={cn(
           poppins.className,
-          "flex h-screen antialiased bg-foreground md:bg-background",
+          "bg-foreground md:bg-background flex antialiased max-md:h-screen xl:h-screen",
         )}
       >
         <SerwistProvider swUrl="/serwist/sw.js">
