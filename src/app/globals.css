@@ -168,3 +168,20 @@ body::before {
     scroll-behavior: auto !important;
   }
 }
+
+/* body ma flex + h-100dvh na potrzeby app-shella; przy druku to ucina
+   wydruk do jednej strony, więc wracamy do zwykłego flow */
+@media print {
+  html,
+  body {
+    display: block;
+    height: auto;
+    overflow: visible;
+    background: #fff;
+    color: #000;
+  }
+
+  @page {
+    margin: 1cm;
+  }
+}

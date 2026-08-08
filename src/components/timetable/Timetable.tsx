@@ -24,7 +24,7 @@ interface TimetableProps {
 const SWIPE_THRESHOLD = 50;
 
 const NoLessons: FC<{ description: string }> = ({ description }) => (
-  <div className="animate-[var(--animate-rise)] flex h-full w-full flex-col items-center justify-center gap-3 p-10 text-center">
+  <div className="flex h-full w-full animate-[var(--animate-rise)] flex-col items-center justify-center gap-3 p-10 text-center">
     <div className="border-lines bg-accent grid size-12 place-content-center rounded-xl border">
       <CalendarX2 className="text-primary/40 size-5" strokeWidth={1.75} />
     </div>
@@ -73,7 +73,9 @@ export const Timetable: FC<TimetableProps> = ({ timetable }) => {
   );
 
   // ?day=0..4 udaje inny dzień tygodnia (razem z ?now=HH:MM do testów)
-  const [todayIndex, setTodayIndex] = useState(() => (new Date().getDay() + 6) % 7);
+  const [todayIndex, setTodayIndex] = useState(
+    () => (new Date().getDay() + 6) % 7,
+  );
   useEffect(() => {
     const day = new URLSearchParams(window.location.search).get("day");
     if (day !== null) setTodayIndex(Number(day));
@@ -149,10 +151,7 @@ export const Timetable: FC<TimetableProps> = ({ timetable }) => {
                   <table className="w-full">
                     <tbody>
                       {visibleHours.map((hour, hourIndex) => (
-                        <tr
-                          key={hourIndex}
-                          className=""
-                        >
+                        <tr key={hourIndex} className="">
                           <TableHourCell
                             hour={hour}
                             isCurrentDay={dayIndex === todayIndex}
@@ -187,6 +186,8 @@ export const Timetable: FC<TimetableProps> = ({ timetable }) => {
               Rozkład zajęć {TRANSLATION_DICT[timetable.type]}
             </span>
           )}
+        </div>
+        <div className="flex shrink-0 items-center">
           {timetable.title && (
             <FavoriteStar
               item={{
@@ -194,14 +195,15 @@ export const Timetable: FC<TimetableProps> = ({ timetable }) => {
                 value: timetable.id.substring(1),
                 type: timetable.type,
               }}
-              small
+              withLabel
+              className="border-lines bg-accent hover:bg-accent/60 h-9 rounded-lg border px-3"
             />
           )}
+          <ShortLessonSwitcherCell />
         </div>
-        <ShortLessonSwitcherCell />
       </div>
 
-      <div className="w-full min-h-0 flex-1 max-md:hidden md:overflow-y-auto">
+      <div className="min-h-0 w-full flex-1 max-md:hidden md:overflow-y-auto">
         {hasLessons ? (
           <WeekBoard
             dayNames={dayNames}

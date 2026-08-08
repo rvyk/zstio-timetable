@@ -4,7 +4,7 @@ import { handleFavorite } from "@/lib/handleFavorites";
 import { cn } from "@/lib/utils";
 import { useFavoritesStore } from "@/stores/favorites";
 import { ListItem } from "@majusss/timetable-parser";
-import { StarIcon } from "lucide-react";
+import { BookmarkIcon } from "lucide-react";
 import { FC, useMemo } from "react";
 
 interface FavoriteStarProps {
@@ -13,6 +13,8 @@ interface FavoriteStarProps {
   className?: string;
   /** Hide until the containing `group` row is hovered/focused (list context). */
   revealOnHover?: boolean;
+  /** Podpis obok ikony — dla samotnego przycisku, gdzie sama ikona nic nie mówi. */
+  withLabel?: boolean;
 }
 
 export const FavoriteStar: FC<FavoriteStarProps> = ({
@@ -20,6 +22,7 @@ export const FavoriteStar: FC<FavoriteStarProps> = ({
   small,
   className,
   revealOnHover,
+  withLabel,
 }) => {
   const { favorites } = useFavoritesStore();
 
@@ -30,28 +33,35 @@ export const FavoriteStar: FC<FavoriteStarProps> = ({
   return (
     <button
       aria-label={isFavorite ? "Usuń z ulubionych" : "Dodaj do ulubionych"}
+      aria-pressed={isFavorite}
       onClick={(e) => {
         e.preventDefault();
         handleFavorite(item);
       }}
       className={cn(
-        "text-primary/30 hover:text-primary/60 shrink-0 rounded-sm transition-all",
+        "shrink-0 rounded-sm transition-colors",
+        isFavorite
+          ? "text-accent-table"
+          : "text-primary/40 hover:text-primary/70",
         revealOnHover &&
           !isFavorite &&
-          "opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 focus-visible:opacity-100 max-md:opacity-100",
+          "opacity-0 group-focus-within:opacity-100 group-hover:opacity-100 focus-visible:opacity-100 max-md:opacity-100",
+        withLabel && "flex items-center gap-1.5",
         className,
       )}
     >
-      <StarIcon
+      <BookmarkIcon
         strokeWidth={2}
         className={cn(
-          isFavorite
-            ? "fill-[#E0A32E] stroke-[#E0A32E]"
-            : "fill-transparent stroke-current",
-          small ? "size-3.5" : "size-4.5",
-          "transition-colors",
+          isFavorite ? "fill-current" : "fill-transparent",
+          small ? "size-3.5" : "size-4",
         )}
       />
+      {withLabel && (
+        <span className="text-[13px] leading-none font-medium">
+          {isFavorite ? "Zapisany" : "Zapisz"}
+        </span>
+      )}
     </button>
   );
 };

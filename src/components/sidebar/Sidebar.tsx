@@ -12,13 +12,13 @@ import { useSettingsWithoutStore } from "@/stores/settings";
 import { useTimetableStore } from "@/stores/timetable";
 import {
   ArrowLeft,
+  BookmarkIcon,
   ChevronDown,
   ChevronLeft,
   GraduationCap,
   MapPin,
   PrinterIcon,
   SlidersHorizontal,
-  StarIcon,
   Users,
 } from "lucide-react";
 import Image from "next/image";
@@ -74,7 +74,10 @@ export const SidebarContent: FC<SidebarContentProps> = ({
   if (layout === "horizontal") {
     return (
       <div className="grid gap-4">
-        <TimetableSidebarDropdowns layout="horizontal" showSearch={showSearch} />
+        <TimetableSidebarDropdowns
+          layout="horizontal"
+          showSearch={showSearch}
+        />
         {infoSection}
       </div>
     );
@@ -172,7 +175,7 @@ const SidebarActions: FC<{ collapsed: boolean; onExpand: () => void }> = ({
             onClick={() => setIsOpen(false)}
             aria-hidden
           />
-          <div className="border-lines bg-foreground/95 animate-[var(--animate-rise)] absolute inset-x-0 bottom-full z-20 mb-2 overflow-hidden rounded-lg border shadow-[var(--shadow-raised)] backdrop-blur-md">
+          <div className="border-lines bg-foreground/95 absolute inset-x-0 bottom-full z-20 mb-2 animate-[var(--animate-rise)] overflow-hidden rounded-lg border shadow-[var(--shadow-raised)] backdrop-blur-md">
             <SettingsList onSelect={() => setIsOpen(false)} />
           </div>
         </Fragment>
@@ -183,7 +186,10 @@ const SidebarActions: FC<{ collapsed: boolean; onExpand: () => void }> = ({
           onClick={() => window.open("/print", "_blank")}
           title="Drukuj plan"
           aria-label="Drukuj plan"
-          className={cn(ACTION_ROW, collapsed ? "size-9 justify-center" : "w-full px-2 py-2")}
+          className={cn(
+            ACTION_ROW,
+            collapsed ? "size-9 justify-center" : "w-full px-2 py-2",
+          )}
         >
           <PrinterIcon className="size-4 shrink-0" strokeWidth={1.75} />
           {!collapsed && "Drukuj plan"}
@@ -243,22 +249,25 @@ export const Sidebar: FC = () => {
       <SidebarContext.Provider value={{ isPreview: collapsed }}>
         {/* stała szerokość treści = brak przelewania tekstu w trakcie animacji */}
         <div className="h-full w-full overflow-hidden">
-        <nav
-          onClick={collapsed ? () => setSidebarCollapsed(false) : undefined}
-          className={cn(
-            collapsed ? "w-16 cursor-pointer items-center px-3" : "w-80 px-5",
-            "flex h-full flex-col gap-y-7 overflow-x-hidden overflow-y-auto py-6",
-          )}
-        >
-          <SidebarBrand collapsed={collapsed} onToggle={toggleSidebarCollapsed} />
-          <div className="flex flex-1 flex-col justify-between gap-y-12">
-            <SidebarContent showTimetableDates />
-          </div>
-          <SidebarActions
-            collapsed={collapsed}
-            onExpand={() => setSidebarCollapsed(false)}
-          />
-        </nav>
+          <nav
+            onClick={collapsed ? () => setSidebarCollapsed(false) : undefined}
+            className={cn(
+              collapsed ? "w-16 cursor-pointer items-center px-3" : "w-80 px-5",
+              "flex h-full flex-col gap-y-7 overflow-x-hidden overflow-y-auto py-6",
+            )}
+          >
+            <SidebarBrand
+              collapsed={collapsed}
+              onToggle={toggleSidebarCollapsed}
+            />
+            <div className="flex flex-1 flex-col justify-between gap-y-12">
+              <SidebarContent showTimetableDates />
+            </div>
+            <SidebarActions
+              collapsed={collapsed}
+              onExpand={() => setSidebarCollapsed(false)}
+            />
+          </nav>
         </div>
       </SidebarContext.Provider>
     </aside>
@@ -321,7 +330,7 @@ const TimetableSidebarDropdowns: FC<{
 
   const dropdownItems = useMemo(() => {
     return [
-      { type: "favorites" as const, icon: StarIcon, data: favorites },
+      { type: "favorites" as const, icon: BookmarkIcon, data: favorites },
       { type: "class" as const, icon: GraduationCap, data: classes },
       { type: "teacher" as const, icon: Users, data: teachers },
       { type: "room" as const, icon: MapPin, data: rooms },
