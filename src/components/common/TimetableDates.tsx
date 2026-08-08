@@ -30,7 +30,7 @@ export const TimetableDates: FC<TimetableDatesProps> = ({
           <span className="max-md:text-primary/90 max-md:font-semibold">
             Wygenerowano:{" "}
           </span>
-          <span className="md:text-primary/90 md:font-semibold">
+          <span className="text-primary/70 font-medium">
             {timetable.generatedDate}
           </span>
         </Fragment>,
@@ -43,7 +43,7 @@ export const TimetableDates: FC<TimetableDatesProps> = ({
           <span className="max-md:text-primary/90 max-md:font-semibold">
             Obowiązuje od:{" "}
           </span>
-          <span className="md:text-primary/90 md:font-semibold">
+          <span className="text-primary/70 font-medium">
             {timetable.validDate}
           </span>
         </Fragment>,
@@ -55,9 +55,11 @@ export const TimetableDates: FC<TimetableDatesProps> = ({
 
   if (hasNoLessons) {
     return (
-      <p className={cn("text-primary/50 text-base font-medium", className)}>
-        Szukany plan zajęć{" "}
-        <span className="text-primary/90 font-semibold">({timetable?.id})</span>{" "}
+      <p className={cn("text-primary/50 text-base", className)}>
+        Szukany plan zajęć
+        {timetable?.id && (
+          <span className="text-primary/80 font-mono"> {timetable.id}</span>
+        )}{" "}
         nie mógł zostać znaleziony.
       </p>
     );
@@ -66,7 +68,7 @@ export const TimetableDates: FC<TimetableDatesProps> = ({
   return (
     <p
       className={cn(
-        "text-primary/70 text-sm font-medium xl:text-base",
+        "text-primary/45 text-sm",
         className,
       )}
     >

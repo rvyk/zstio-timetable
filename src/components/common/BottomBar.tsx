@@ -26,22 +26,22 @@ export const BottomBar: FC<BottomBarProps> = ({ timetable, isOffline }) => {
   const titleElement = useMemo(() => {
     if (timetable) {
       return (
-        <div className="grid w-full justify-center gap-1 px-2 text-center text-primary">
-          <h2 className="mx-auto max-w-52 truncate text-ellipsis text-base font-semibold leading-tight opacity-90">
+        <div className="text-primary grid w-full justify-center gap-1 px-2 text-center">
+          <h2 className="mx-auto max-w-52 truncate leading-tight font-semibold tracking-tight text-ellipsis">
             {timetable.title}
           </h2>
-          <p className="mx-auto max-w-72 truncate text-ellipsis text-sm font-medium leading-tight opacity-70">
+          <p className="text-primary/45 mx-auto max-w-72 truncate text-xs leading-tight text-ellipsis">
             {`Rozkład zajęć ${TRANSLATION_DICT[timetable.type]}`}
           </p>
         </div>
       );
     } else if (isOffline) {
       return (
-        <div className="grid w-full justify-center gap-1 px-2 text-center text-primary">
-          <h2 className="mx-auto max-w-52 truncate text-ellipsis text-base font-semibold leading-tight opacity-90">
+        <div className="text-primary grid w-full justify-center gap-1 px-2 text-center">
+          <h2 className="mx-auto max-w-52 truncate leading-tight font-semibold tracking-tight text-ellipsis">
             Jesteś offline
           </h2>
-          <p className="mx-auto max-w-72 truncate text-ellipsis text-sm font-medium leading-tight opacity-70">
+          <p className="text-primary/45 mx-auto max-w-72 truncate text-xs leading-tight text-ellipsis">
             Brak połączenia z siecią
           </p>
         </div>
@@ -100,9 +100,9 @@ export const BottomBar: FC<BottomBarProps> = ({ timetable, isOffline }) => {
       }}
     >
       <DrawerTrigger asChild>
-        <div className="fixed bottom-0 flex h-20 w-full flex-col rounded-t-md border border-primary/10 bg-background outline-none focus:outline-none focus-visible:outline-none focus-visible:ring-0 dark:bg-foreground md:hidden">
-          <div className="absolute left-0 right-0 top-1 mx-auto h-2 w-[100px] rounded-full bg-primary/10" />
-          <div className="flex h-full items-center justify-between px-2">
+        <div className="border-lines bg-foreground/85 fixed bottom-0 z-30 flex h-20 w-full flex-col rounded-t-xl border-t shadow-[var(--shadow-raised)] backdrop-blur-xl outline-none md:hidden">
+          <div className="bg-primary/15 absolute top-1.5 right-0 left-0 mx-auto h-1 w-9 rounded-full" />
+          <div className="flex h-full items-center justify-between px-2 pt-1">
             <Button
               aria-label="Poprzednia klasa/nauczyciel/sala"
               variant="icon"

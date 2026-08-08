@@ -1,21 +1,24 @@
 import { ThemeProvider } from "@/components/common/ThemeProvider";
-import { SettingsPanel } from "@/components/settings/SettingsPanel";
-import { Sidebar } from "@/components/sidebar/Sidebar";
 import { Toaster } from "@/components/ui/Toaster";
 import { SCHOOL_NAME_ACCUSATIVE, SCHOOL_SHORT } from "@/constants/school";
 import { env } from "@/env";
 import { cn } from "@/lib/utils";
 import type { Metadata, Viewport } from "next";
-import { Poppins } from "next/font/google";
+import { Geist, Geist_Mono } from "next/font/google";
 import { ReactNode } from "react";
 import "./globals.css";
 import { SerwistProvider } from "./serwist";
 
 export const fetchCache = "default-cache";
 
-const poppins = Poppins({
+const geistSans = Geist({
+  subsets: ["latin", "latin-ext"],
+  variable: "--font-geist-sans",
+});
+
+const geistMono = Geist_Mono({
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800"],
+  variable: "--font-geist-mono",
 });
 
 export const metadata: Metadata = {
@@ -46,16 +49,21 @@ export default function RootLayout({
     <html lang="pl" suppressHydrationWarning>
       <body
         className={cn(
-          poppins.className,
-          "bg-foreground md:bg-background flex antialiased max-md:h-screen xl:h-screen",
+          geistSans.variable,
+          geistMono.variable,
+          "font-sans bg-foreground md:bg-background flex h-[100dvh] antialiased",
         )}
       >
         <SerwistProvider swUrl="/serwist/sw.js">
           <ThemeProvider attribute="class" disableTransitionOnChange>
             <Toaster />
-            <Sidebar />
+            <a
+              href="#plan"
+              className="bg-accent-table sr-only rounded-md px-4 py-2 text-sm font-medium text-white focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50"
+            >
+              Przejdź do planu
+            </a>
             {children}
-            <SettingsPanel />
           </ThemeProvider>
         </SerwistProvider>
       </body>

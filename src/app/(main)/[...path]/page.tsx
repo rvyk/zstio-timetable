@@ -1,15 +1,12 @@
 import { getOptivumList } from "@/actions/getOptivumList";
 import { getOptivumTimetable } from "@/actions/getOptivumTimetable";
 import { BottomBar } from "@/components/common/BottomBar";
-import { DataSourceBanner } from "@/components/common/DataSourceBanner";
 import { FreeRoomsResultModal } from "@/components/modals/FreeRoomsResult";
 import { FreeRoomsSearchModal } from "@/components/modals/FreeRoomsSearch";
 import { ShortenedLessonsCalculatorModal } from "@/components/modals/ShortenedLessonsCalculator";
 import { Timetable } from "@/components/timetable/Timetable";
-import { SidebarInfo } from "@/components/sidebar/Sidebar";
 import { TimetableController } from "@/components/timetable/TimetableController";
 import { Topbar } from "@/components/topbar/Topbar";
-import { DATA_SOURCE_COOKIE_NAME } from "@/lib/dataSource";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { Fragment } from "react";
@@ -66,26 +63,16 @@ const TimetablePage = async ({
     redirect(redirectTo);
   }
 
-  const requestedDataSource = cookieStore.get(DATA_SOURCE_COOKIE_NAME)?.value;
-
-  const timetable = await getOptivumTimetable(
-    type,
-    value,
-    requestedDataSource,
-  );
+  const timetable = await getOptivumTimetable(type, value);
 
   return (
     <Fragment>
       <TimetableController timetable={timetable} />
-      <div className="flex h-full w-full flex-col gap-y-3 max-md:overflow-y-auto md:gap-y-6 md:overflow-hidden md:p-8">
-        <DataSourceBanner />
+      <main className="flex h-full w-full min-w-0 flex-1 flex-col gap-y-3 max-md:overflow-y-auto md:gap-y-3 md:overflow-hidden md:p-3">
         <Topbar timetable={timetable} />
         <Timetable timetable={timetable} />
-        <div className="hidden md:block xl:hidden">
-          <SidebarInfo showTimetableDates={false} />
-        </div>
         <BottomBar timetable={timetable} />
-      </div>
+      </main>
       <FreeRoomsSearchModal />
       <FreeRoomsResultModal />
       <ShortenedLessonsCalculatorModal />

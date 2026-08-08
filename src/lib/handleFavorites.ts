@@ -15,9 +15,8 @@ export const handleFavorite = (item: ListItem) => {
     removeFavorite(item.name);
     toast({
       title: "Usunięto z ulubionych",
-      description: `Pomyślne usunięto z ulubionych: ${item.name}`,
+      description: item.name,
       icon: Trash2,
-      iconColor: "#EF0933",
     });
     return;
   }
@@ -28,6 +27,6 @@ export const handleFavorite = (item: ListItem) => {
 
   toast({
     title: "Dodano do ulubionych",
-    description: `Pomyślnie dodano do ulubionych: ${item.name}`,
+    description: item.name,
   });
 };

@@ -12,10 +12,8 @@ import {
 } from "@/components/ui/Sheet";
 import { usePwa } from "@/hooks/usePWA";
 import { showErrorToast } from "@/hooks/useToast";
-import { isOriginalDataSource } from "@/lib/dataSource";
 import { downloadFile } from "@/lib/downloadFile";
 import { cn } from "@/lib/utils";
-import { useDataSourceStore } from "@/stores/dataSource";
 import useModalsStore from "@/stores/modals";
 import { useSettingsStore, useSettingsWithoutStore } from "@/stores/settings";
 import { useTimetableStore } from "@/stores/timetable";
@@ -29,8 +27,10 @@ import {
   XIcon,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
+import { useTheme } from "next-themes";
 import Link from "next/link";
 import { ReactNode, useMemo } from "react";
+import { useIsClient } from "usehooks-ts";
 
 type SettingsItem = {
   key: string;
@@ -53,19 +53,20 @@ const SettingButton = ({
     <button
       onClick={onClick}
       className={cn(
-        "group -m-2 flex gap-4 rounded-md p-2 text-left transition-all",
-        "hover:bg-primary/10 dark:hover:bg-primary/10",
-        active && "bg-primary/10 dark:font-medium",
+        "group flex w-full gap-3 rounded-md p-2.5 text-left transition-colors",
+        "hover:bg-primary/[0.04] active:scale-[0.99]",
+        active && "bg-primary/[0.04]",
       )}
     >
-      <div className="grid h-10 min-w-10 place-content-center rounded-sm border border-primary/10 bg-primary/5 text-primary/80">
-        <Icon size={18} strokeWidth={2.5} />
-      </div>
-      <div className="grid gap-0.5">
-        <h2 className="text-sm font-semibold text-primary/80 sm:text-base">
+      <Icon
+        className="text-primary/35 group-hover:text-accent-table mt-0.5 size-4 shrink-0 transition-colors"
+        strokeWidth={1.75}
+      />
+      <div className="grid gap-1">
+        <h2 className="text-primary text-[13px] leading-none font-medium tracking-tight">
           {title}
         </h2>
-        <div className="text-xs font-medium text-primary/50 sm:text-sm">
+        <div className="text-primary/40 text-[11px] leading-relaxed">
           {description}
         </div>
       </div>
@@ -73,16 +74,48 @@ const SettingButton = ({
   );
 };
 
-export const SettingsPanel = () => {
+const THEMES = [
+  { value: "light", label: "Jasny" },
+  { value: "dark", label: "Ciemny" },
+  { value: "system", label: "Auto" },
+] as const;
+
+const ThemeSetting = () => {
+  const { theme, setTheme } = useTheme();
+  const isClient = useIsClient();
+  const active = isClient ? (theme ?? "system") : "system";
+
+  return (
+    <div className="grid gap-2 p-2.5">
+      <span className="text-primary/40 text-[11px] font-medium tracking-[0.06em] uppercase">
+        Motyw
+      </span>
+      <div className="border-lines bg-accent grid grid-cols-3 gap-1 rounded-lg border p-[3px]">
+        {THEMES.map((option) => (
+          <button
+            key={option.value}
+            onClick={() => setTheme(option.value)}
+            aria-pressed={active === option.value}
+            className={cn(
+              active === option.value
+                ? "bg-foreground text-primary shadow-[var(--shadow-soft)]"
+                : "text-primary/45 hover:text-primary",
+              "rounded-md py-1.5 text-[11px] font-medium transition-colors",
+            )}
+          >
+            {option.label}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export const SettingsList = ({ onSelect }: { onSelect?: () => void }) => {
   const toggleModal = useModalsStore((state) => state.toggleModal);
   const timetable = useTimetableStore((state) => state.timetable);
-  const { selectedDataSource } = useDataSourceStore();
-  const { toggleSettingsPanel, isSettingsPanelOpen } =
-    useSettingsWithoutStore();
   const savedSettings = useSettingsStore();
   const [prompt, isInstalled] = usePwa();
-
-  const isOriginalSource = isOriginalDataSource(selectedDataSource);
 
   const settings = useMemo<SettingsItem[]>(
     () => [
@@ -124,7 +157,6 @@ export const SettingsPanel = () => {
         key: "calendar",
         icon: CalendarArrowDownIcon,
         title: "Dodaj do kalendarza",
-        hidden: !isOriginalSource,
         onClick: async () => {
           if (!timetable?.lessons || timetable.lessons.length === 0) {
             showErrorToast(
@@ -185,7 +217,7 @@ export const SettingsPanel = () => {
         key: "freeRooms",
         icon: Search,
         title: "Wyszukaj wolną salę",
-        hidden: !isOriginalSource || timetable?.list.rooms?.length === 0,
+        hidden: timetable?.list.rooms?.length === 0,
         onClick: () => toggleModal("freeRoomsSearch"),
         description: (
           <p>
@@ -199,7 +231,6 @@ export const SettingsPanel = () => {
       prompt,
       savedSettings,
       timetable,
-      isOriginalSource,
       toggleModal,
     ],
   );
@@ -207,9 +238,31 @@ export const SettingsPanel = () => {
   const visibleSettings = settings.filter((setting) => !setting.hidden);
 
   return (
+    <div className="grid gap-0.5 p-1">
+      {visibleSettings.map(({ key, onClick, ...setting }) => (
+        <SettingButton
+          key={key}
+          {...setting}
+          onClick={() => {
+            onClick();
+            onSelect?.();
+          }}
+        />
+      ))}
+      <hr className="border-lines my-1" />
+      <ThemeSetting />
+    </div>
+  );
+};
+
+export const SettingsPanel = () => {
+  const { toggleSettingsPanel, isSettingsPanelOpen } =
+    useSettingsWithoutStore();
+
+  return (
     <Sheet open={isSettingsPanelOpen} onOpenChange={toggleSettingsPanel}>
-      <SheetContent className="flex flex-col justify-between gap-y-12 overflow-auto">
-        <div className="grid gap-6">
+      <SheetContent className="flex flex-col justify-between gap-y-12 overflow-auto md:hidden">
+        <div className="grid gap-5">
           <SheetHeader>
             <SheetTitle>Dodatkowe funkcje</SheetTitle>
             <VisuallyHidden>
@@ -224,20 +277,18 @@ export const SettingsPanel = () => {
               variant="icon"
               size="icon"
             >
-              <XIcon size={20} strokeWidth={2.5} />
+              <XIcon size={18} strokeWidth={2} />
             </Button>
           </SheetHeader>
-          <div className="grid gap-10 py-4">
-            {visibleSettings.map(({ key, ...setting }) => (
-              <SettingButton key={key} {...setting} />
-            ))}
+          <div className="-mx-1.5">
+            <SettingsList onSelect={toggleSettingsPanel} />
           </div>
         </div>
-        <SheetFooter>
+        <SheetFooter className="border-lines text-primary/35 border-t pt-5 text-[11px] leading-relaxed">
           © 2024 Made with ❤️ for ZSTiO by <br /> Szymański Paweł & Majcher
           Kacper <br />
           <Link
-            className="underline"
+            className="hover:text-primary underline underline-offset-2 transition-colors"
             target="_blank"
             href="https://github.com/rvyk/zstio-timetable"
           >

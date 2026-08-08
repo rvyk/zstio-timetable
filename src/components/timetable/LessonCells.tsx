@@ -18,16 +18,22 @@ export const TableLessonCell: FC<TableLessonCellProps> = ({
   lessonIndex,
   selectedDayIndex,
 }) => {
+  const lessons = day[lessonIndex] ?? [];
+
   return (
     <td
       className={cn(
         dayIndex != selectedDayIndex && "max-md:hidden",
-        "py-3 last:border-0 max-md:px-2 md:px-4",
+        "align-top p-1",
       )}
     >
-      {day[lessonIndex].map((lessonItem, index) => (
-        <LessonItem key={index} lesson={lessonItem} />
-      ))}
+      {lessons.length > 0 && (
+        <div className="grid gap-1">
+          {lessons.map((lessonItem, index) => (
+            <LessonItem key={index} lesson={lessonItem} />
+          ))}
+        </div>
+      )}
     </td>
   );
 };
@@ -36,31 +42,14 @@ interface LessonItemProps {
   lesson: TableLesson;
 }
 
-export const LessonItem: FC<LessonItemProps> = ({ lesson }) => {
-  return (
-    <div className="grid w-full">
-      <LessonHeader lesson={lesson} isStrikethrough={false} />
-    </div>
-  );
-};
-
-interface LessonHeaderProps {
-  lesson: TableLesson;
-  isStrikethrough: boolean;
-}
-
-const LessonHeader: FC<LessonHeaderProps> = ({ lesson, isStrikethrough }) => (
-  <div
-    className={cn(
-      isStrikethrough && "line-through opacity-50",
-      "flex w-full items-center gap-x-1.5 md:justify-between md:gap-x-4",
-    )}
-  >
-    <h2 className="whitespace-nowrap text-sm font-semibold text-primary/90 sm:text-base">
+/** Sama treść lekcji — bez obramowania, żeby kafelek mógł ją opakować po swojemu. */
+export const LessonEntry: FC<LessonItemProps> = ({ lesson }) => (
+  <div className="grid gap-0.5">
+    <h3 className="text-primary text-[15px] leading-tight font-medium tracking-[-0.01em]">
       {lesson.subject}
       <GroupName groupName={lesson.groupName} />
-    </h2>
-    <LessonLinks
+    </h3>
+    <LessonMeta
       classId={lesson.classId}
       className={lesson.className}
       teacherId={lesson.teacherId}
@@ -71,12 +60,20 @@ const LessonHeader: FC<LessonHeaderProps> = ({ lesson, isStrikethrough }) => (
   </div>
 );
 
+export const LessonItem: FC<LessonItemProps> = ({ lesson }) => (
+  <div className="border-lines/70 bg-accent/40 hover:border-lines hover:bg-accent rounded-md border px-2.5 py-1.5 transition-colors">
+    <LessonEntry lesson={lesson} />
+  </div>
+);
+
 const GroupName: FC<{ groupName?: string }> = ({ groupName }) =>
   groupName ? (
-    <span className="text-sm font-medium text-primary/70"> ({groupName})</span>
+    <span className="text-primary/45 ml-1.5 font-mono text-[11px] font-normal">
+      {groupName}
+    </span>
   ) : null;
 
-interface LessonLinksProps {
+interface LessonMetaProps {
   classId?: string;
   className?: string;
   teacherId?: string;
@@ -85,20 +82,33 @@ interface LessonLinksProps {
   roomName?: string;
 }
 
-const LessonLinks: FC<LessonLinksProps> = ({
+const LessonMeta: FC<LessonMetaProps> = ({
   classId,
   className,
   teacherId,
   teacherName,
   roomId,
   roomName,
-}) => (
-  <div className="inline-flex gap-x-1.5 text-sm font-medium text-primary/70">
-    <LessonLink id={classId} name={className} type="class" />
-    <LessonLink id={teacherId} name={teacherName} type="teacher" />
-    <LessonLink id={roomId} name={roomName} type="room" />
-  </div>
-);
+}) => {
+  const parts = [
+    { id: classId, name: className, type: "class" },
+    { id: teacherId, name: teacherName, type: "teacher" },
+    { id: roomId, name: roomName, type: "room" },
+  ].filter((part) => part.name);
+
+  if (parts.length === 0) return null;
+
+  return (
+    <div className="text-primary/50 flex flex-wrap items-center gap-x-1.5 text-xs">
+      {parts.map((part, index) => (
+        <span key={part.type} className="inline-flex items-center gap-x-1.5">
+          {index > 0 && <span className="text-primary/25">·</span>}
+          <LessonLink id={part.id} name={part.name} type={part.type} />
+        </span>
+      ))}
+    </div>
+  );
+};
 
 interface LessonLinkProps {
   id?: string;
@@ -106,21 +116,15 @@ interface LessonLinkProps {
   type: string;
 }
 
-const LessonLink: FC<LessonLinkProps> = ({ id, name, type }) => {
-  const link = `/${type}/${id}`;
-
-  return id && name ? (
+const LessonLink: FC<LessonLinkProps> = ({ id, name, type }) =>
+  id && name ? (
     <LinkWithCookie
-      aria-label={`Przejdź do ${link}`}
-      className="hover:underline"
-      href={link}
+      aria-label={`Przejdź do /${type}/${id}`}
+      className="hover:text-primary decoration-primary/40 transition-colors hover:underline hover:underline-offset-2"
+      href={`/${type}/${id}`}
     >
       {name}
     </LinkWithCookie>
-  ) : !id && name ? (
-    <p>
-      {name}
-    </p>
-  ) : null;
-};
-
+  ) : (
+    <span>{name}</span>
+  );

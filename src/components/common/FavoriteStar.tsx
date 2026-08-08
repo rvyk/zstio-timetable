@@ -10,9 +10,17 @@ import { FC, useMemo } from "react";
 interface FavoriteStarProps {
   item: ListItem;
   small?: boolean;
+  className?: string;
+  /** Hide until the containing `group` row is hovered/focused (list context). */
+  revealOnHover?: boolean;
 }
 
-export const FavoriteStar: FC<FavoriteStarProps> = ({ item, small }) => {
+export const FavoriteStar: FC<FavoriteStarProps> = ({
+  item,
+  small,
+  className,
+  revealOnHover,
+}) => {
   const { favorites } = useFavoritesStore();
 
   const isFavorite = useMemo(() => {
@@ -26,16 +34,22 @@ export const FavoriteStar: FC<FavoriteStarProps> = ({ item, small }) => {
         e.preventDefault();
         handleFavorite(item);
       }}
-      className="focus:outline-none"
+      className={cn(
+        "text-primary/30 hover:text-primary/60 shrink-0 rounded-sm transition-all",
+        revealOnHover &&
+          !isFavorite &&
+          "opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 focus-visible:opacity-100 max-md:opacity-100",
+        className,
+      )}
     >
       <StarIcon
-        strokeWidth={2.5}
+        strokeWidth={2}
         className={cn(
           isFavorite
-            ? "!fill-[#FFB800] drop-shadow-[0_0_5.6px_rgba(255,196,46,0.35)] grayscale-0 hover:drop-shadow-[0_0_6.6px_rgba(255,196,46,0.85)]"
-            : "drop-shadow-none grayscale",
-          small ? "size-5" : "size-6",
-          "fill-transparent stroke-[#FFB800] transition-all duration-300 hover:fill-[#FFB800]",
+            ? "fill-[#E0A32E] stroke-[#E0A32E]"
+            : "fill-transparent stroke-current",
+          small ? "size-3.5" : "size-4.5",
+          "transition-colors",
         )}
       />
     </button>

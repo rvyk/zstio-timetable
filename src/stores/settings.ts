@@ -39,6 +39,10 @@ interface useSettingsWithoutStore {
   isSidebarOpen: boolean;
   toggleSidebar: () => void;
 
+  isSidebarCollapsed: boolean;
+  setSidebarCollapsed: (isSidebarCollapsed: boolean) => void;
+  toggleSidebarCollapsed: () => void;
+
   selectedDayIndex: number;
   setSelectedDayIndex: (selectedDayIndex: number) => void;
 }
@@ -52,6 +56,11 @@ export const useSettingsWithoutStore = create<useSettingsWithoutStore>(
     isSidebarOpen: false,
     toggleSidebar: () =>
       set((state) => ({ isSidebarOpen: !state.isSidebarOpen })),
+
+    isSidebarCollapsed: false,
+    setSidebarCollapsed: (isSidebarCollapsed) => set({ isSidebarCollapsed }),
+    toggleSidebarCollapsed: () =>
+      set((state) => ({ isSidebarCollapsed: !state.isSidebarCollapsed })),
 
     selectedDayIndex: [0, 6].includes(new Date().getDay())
       ? 0

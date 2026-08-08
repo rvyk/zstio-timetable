@@ -33,11 +33,11 @@ export const Counter: FC<
         <span className="sr-only">Odejmij</span>
       </Button>
 
-      <div className="grid gap-1 text-center">
-        <h2 className="text-5xl font-semibold text-primary/90 sm:text-6xl">
+      <div className="grid gap-1.5 text-center">
+        <h2 className="text-primary tabular text-5xl leading-none font-semibold tracking-[-0.04em]">
           {count}
         </h2>
-        <p className="text-xs font-medium text-primary/70 sm:text-sm">
+        <p className="text-primary/40 text-[11px] font-medium tracking-[0.06em] uppercase">
           Numer lekcji
         </p>
       </div>

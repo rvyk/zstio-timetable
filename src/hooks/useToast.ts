@@ -14,7 +14,6 @@ type ToasterToast = ToastProps & {
   description?: React.ReactNode;
   action?: ToastActionElement;
   icon?: LucideIcon;
-  iconColor?: string;
 };
 
 let count = 0;
@@ -151,7 +150,6 @@ function toast({ ...props }: Toast) {
     type: "ADD_TOAST",
     toast: {
       icon: props.icon ?? icons[props.variant ?? "success"],
-      iconColor: props.iconColor,
       ...props,
       id,
       open: true,

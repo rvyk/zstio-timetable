@@ -65,42 +65,52 @@ export const Search: FC<SearchProps> = ({ timetable }) => {
     <div
       className={cn(
         isPreview ? "place-content-center" : "sm:min-w-[220px]",
-        "grid",
+        "relative grid",
       )}
     >
       <div
         className={cn(
           isPreview ? "w-12" : "w-full",
-          "inline-flex h-12 items-center justify-between rounded-md border border-primary/10 bg-accent-secondary p-3 dark:border-primary/10",
+          "border-lines bg-accent-secondary focus-within:border-primary/20 focus-within:bg-foreground inline-flex h-11 items-center justify-between rounded-lg border px-3 transition-colors",
         )}
       >
-        <div className="mr-2 flex w-full items-center gap-x-3">
-          <SearchIcon className="text-primary/70" size={20} strokeWidth={2.5} />
+        <div className="mr-2 flex w-full items-center gap-x-2.5">
+          <SearchIcon className="text-primary/40 shrink-0" size={17} strokeWidth={2} />
           <input
             name="search"
             value={value}
             onChange={(e) => setValue(e.target.value)}
             onKeyDown={handleKeyDown}
-            type="text"
+            type="search"
             autoComplete="off"
+            aria-label="Szukaj klasy, nauczyciela lub sali"
             className={cn(
               isPreview && "hidden",
-              "w-full bg-transparent text-xs font-medium text-primary/90 placeholder:text-primary/70 focus:outline-none sm:text-sm",
+              "text-primary placeholder:text-primary/35 w-full bg-transparent text-sm focus:outline-none [&::-webkit-search-cancel-button]:hidden",
             )}
-            placeholder="Szukaj..."
+            placeholder="Klasa, nauczyciel, sala…"
           />
         </div>
         {value && isPreview == false && (
           <button
             onClick={handleClearSearch}
-            className="text-primary/70 hover:text-primary/90"
+            aria-label="Wyczyść wyszukiwanie"
+            className="text-primary/40 hover:text-primary shrink-0 transition-colors"
           >
-            <XIcon size={20} strokeWidth={2.5} />
+            <XIcon size={16} strokeWidth={2} />
           </button>
         )}
       </div>
-      {filteredData.length > 0 && (
-        <DropdownContent type="search" data={filteredData} />
+      {value.trim() && !isPreview && (
+        <div className="border-lines bg-foreground animate-[var(--animate-rise)] absolute inset-x-0 top-full z-40 mt-2 overflow-hidden rounded-lg border p-1 shadow-[var(--shadow-raised)]">
+          {filteredData.length > 0 ? (
+            <DropdownContent type="search" data={filteredData} />
+          ) : (
+            <p className="text-primary/40 px-3 py-3 text-sm">
+              Nic nie pasuje do „{value.trim()}”.
+            </p>
+          )}
+        </div>
       )}
     </div>
   );

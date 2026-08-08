@@ -1,6 +1,5 @@
 "use client";
 
-import { Button } from "@/components/ui/Button";
 import { Skeleton } from "@/components/ui/Skeleton";
 import { DAYS_OF_WEEK } from "@/constants/days";
 import { cn, getDayNumberForNextWeek, parseTime } from "@/lib/utils";
@@ -41,6 +40,10 @@ export const TableHourCell: FC<TableHourCellProps> = ({
   const shouldShow = isCurrent && isCurrentDay;
   const timeRemaining = shouldShow ? end - currentTime : 0;
 
+  const progress = shouldShow
+    ? Math.min(100, ((currentTime - start) / (end - start)) * 100)
+    : 0;
+
   const { minutesRemaining, secondsRemaining } = useMemo(() => {
     const minutes = Math.floor(timeRemaining / 60)
       .toString()
@@ -49,27 +52,42 @@ export const TableHourCell: FC<TableHourCellProps> = ({
     return { minutesRemaining: minutes, secondsRemaining: seconds };
   }, [timeRemaining]);
 
+  const isLive = shouldShow && isClient;
+
   return (
-    <td className="relative px-4 py-3 text-center max-md:w-32 max-md:select-none">
-      {shouldShow && isClient && (
-        <div className="absolute left-0 h-[calc(100%-1.5rem)] w-1 rounded-r-lg bg-accent-table"></div>
+    <td className="relative align-top py-3.5 pr-3 pl-4 max-md:w-30 max-md:select-none">
+      {isLive && (
+        <span className="bg-accent-table absolute top-1/2 left-0 h-[calc(100%-1.25rem)] w-[3px] -translate-y-1/2 rounded-r-full" />
       )}
-      <h2 className="text-lg font-semibold text-primary/90 sm:text-xl">
-        {hour.number}
-      </h2>
-      {isClient ? (
-        <div className="grid gap-2">
-          <p className="text-xs font-medium text-primary/70 sm:text-sm">
-            {hour.timeFrom}-{hour.timeTo}
-          </p>
-          {shouldShow && (
-            <p className="mx-auto rounded-sm border border-accent-table bg-accent-table px-2 py-0.5 text-center text-sm font-medium text-accent/90 dark:bg-accent-table/10 dark:text-primary/90">
-              {`${minutesRemaining}:${secondsRemaining}`}
-            </p>
+      <div className="flex items-baseline gap-2 md:grid md:gap-1">
+        <span
+          className={cn(
+            isLive ? "text-accent-table" : "text-primary",
+            "tabular text-xl leading-none font-semibold tracking-tight tabular-nums sm:text-2xl",
           )}
+        >
+          {hour.number}
+        </span>
+        {isClient ? (
+          <span className="text-primary/65 tabular font-mono text-xs leading-none tracking-tight">
+            {hour.timeFrom}–{hour.timeTo}
+          </span>
+        ) : (
+          <Skeleton className="h-3 w-20" />
+        )}
+      </div>
+      {isLive && (
+        <div className="mt-2 grid gap-1.5">
+          <div className="bg-primary/10 h-[3px] w-full max-w-28 overflow-hidden rounded-full">
+            <div
+              className="bg-accent-table h-full rounded-full transition-[width] duration-1000 ease-linear"
+              style={{ width: `${progress}%` }}
+            />
+          </div>
+          <span className="text-accent-table tabular font-mono text-[11px] leading-none font-medium">
+            {`za ${minutesRemaining}:${secondsRemaining}`}
+          </span>
         </div>
-      ) : (
-        <Skeleton className="mx-auto h-4 w-24" />
       )}
     </td>
   );
@@ -92,20 +110,27 @@ export const TableHeaderMobileCell: FC<TableHeaderCellProps> = ({
 
   if (!dayObject) return null;
 
+  const isActive = selectedDayIndex == dayObject.index;
+
   return (
     <button
       onClick={() => setSelectedDayIndex?.(dayObject.index)}
+      aria-current={isActive ? "page" : undefined}
       className={cn(
-        selectedDayIndex == dayObject.index &&
-          "bg-accent-table text-accent-secondary group-hover:bg-accent-table/90 dark:text-primary",
-        "flex w-full flex-col items-center justify-center px-4 py-3 text-center max-md:select-none",
+        isActive ? "text-primary" : "text-primary/45 active:text-primary/70",
+        "relative flex w-full flex-col items-center justify-center gap-0.5 px-2 py-3 text-center transition-colors max-md:select-none",
       )}
     >
-      <h2 className="text-sm font-semibold opacity-90">{dayObject.short}</h2>
-      <h3 className="text-xs font-semibold opacity-70">
+      <span className="text-[13px] leading-none font-semibold">
+        {dayObject.short}
+      </span>
+      <span className="tabular font-mono text-[11px] leading-none opacity-70">
         {dayNumber.dayNumber.toString().padStart(2, "0")}.
         {dayNumber.monthNumber.toString().padStart(2, "0")}
-      </h3>
+      </span>
+      {isActive && (
+        <span className="bg-accent-table absolute inset-x-3 -bottom-px h-[2px] rounded-full" />
+      )}
     </button>
   );
 };
@@ -119,23 +144,26 @@ export const TableHeaderCell: FC<TableHeaderCellProps> = ({ dayName }) => {
 
   return (
     <th className="relative text-left max-md:select-none">
-      <div
-        className={cn(
-          isCurrentDay ? "gap-x-5" : "gap-x-3",
-          "inline-flex items-center px-4 py-3",
-        )}
-      >
-        <h2
+      {isCurrentDay && (
+        <span className="bg-accent-table absolute inset-x-0 top-0 h-[2px]" />
+      )}
+      <div className="inline-flex items-baseline gap-x-2.5 px-4 py-3.5">
+        <span
           className={cn(
-            isCurrentDay
-              ? "-mx-2.5 -my-1 rounded-sm bg-accent-table px-2.5 py-1 text-accent/90 dark:text-primary/90"
-              : "text-primary/90",
-            "text-3xl font-semibold",
+            isCurrentDay ? "text-accent-table" : "text-primary",
+            "tabular text-2xl leading-none font-semibold tracking-tight tabular-nums",
           )}
         >
           {day.dayNumber.toString().padStart(2, "0")}
-        </h2>
-        <h3 className="text-lg font-semibold text-primary/90">{dayName}</h3>
+        </span>
+        <span
+          className={cn(
+            isCurrentDay ? "text-primary" : "text-primary/75",
+            "text-[15px] leading-none font-medium",
+          )}
+        >
+          {dayName}
+        </span>
       </div>
     </th>
   );
@@ -147,42 +175,41 @@ export const ShortLessonSwitcherCell: FC = () => {
   const isShortLessons = lessonType === "short";
 
   return (
-    <div className="flex items-center justify-center px-2">
+    <div className="flex items-center justify-center px-3 py-2">
       {isClient ? (
-        <div className="relative h-9 sm:h-10">
-          <div className="flex h-9 sm:h-10">
-            {["45'", "30'"].map((value, index) => (
-              <Button
-                aria-label="Przełącz długość lekcji"
-                variant="icon"
+        <div className="border-lines bg-accent relative flex h-9 rounded-lg border p-[3px]">
+          {lessonType !== "custom" && (
+            <span
+              className={cn(
+                isShortLessons && "translate-x-full",
+                "bg-foreground absolute inset-y-[3px] left-[3px] w-[calc(50%-3px)] rounded-md shadow-[var(--shadow-soft)] transition-transform duration-300 [transition-timing-function:cubic-bezier(0.32,0.72,0,1)]",
+              )}
+            />
+          )}
+          {(["45'", "30'"] as const).map((value) => {
+            const active =
+              lessonType !== "custom" &&
+              (value === "45'") === (lessonType === "normal");
+            return (
+              <button
                 key={value}
+                aria-label={`Lekcje ${value}`}
+                aria-pressed={active}
                 onClick={() =>
                   setLessonType(value === "45'" ? "normal" : "short")
                 }
                 className={cn(
-                  index === 0 ? "!rounded-l-sm" : "!rounded-r-sm",
-                  "rounded-none bg-accent font-semibold text-primary/90 hover:bg-primary/5 hover:text-primary max-sm:h-9 max-sm:text-xs",
+                  active ? "text-primary" : "text-primary/50 hover:text-primary/80",
+                  "tabular relative z-10 w-11 rounded-md font-mono text-xs font-medium transition-colors",
                 )}
               >
                 {value}
-              </Button>
-            ))}
-          </div>
-          {lessonType !== "custom" && (
-            <div
-              className={cn(
-                isShortLessons
-                  ? "translate-x-[100%] transform rounded-r-sm"
-                  : "rounded-l-sm",
-                "absolute top-0 z-40 flex h-9 w-[50%] cursor-default items-center justify-center bg-accent-table px-4 py-2 text-xs font-semibold text-accent/90 transition-all dark:text-primary/90 sm:h-10 sm:text-sm",
-              )}
-            >
-              {isShortLessons ? "30'" : "45'"}
-            </div>
-          )}
+              </button>
+            );
+          })}
         </div>
       ) : (
-        <Skeleton className="h-9 w-28 rounded-sm sm:h-10" />
+        <Skeleton className="h-9 w-[94px] rounded-lg" />
       )}
     </div>
   );

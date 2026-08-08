@@ -2,9 +2,6 @@
 
 import school_logo from "@/assets/school-logo.png";
 import { FavoriteStar } from "@/components/common/FavoriteStar";
-import { TimetableDates } from "@/components/common/TimetableDates";
-import { SidebarContent } from "@/components/sidebar/Sidebar";
-import SidebarContext from "@/components/sidebar/Context";
 import { ShortLessonSwitcherCell } from "@/components/timetable/Cells";
 import { SCHOOL_SHORT, SCHOOL_WEBSITE } from "@/constants/school";
 import { TRANSLATION_DICT } from "@/constants/translations";
@@ -23,36 +20,36 @@ interface TopbarProps {
 export const Topbar: FC<TopbarProps> = ({ timetable, isOffline }) => {
   const isClient = useIsClient();
 
-  const titleElement = useMemo(() => {
+  const { eyebrow, title } = useMemo(() => {
     if (timetable?.title) {
-      return (
-        <Fragment>
-          Rozkład zajęć {TRANSLATION_DICT[timetable.type]}{" "}
-          <span className="font-semibold">{timetable.title}</span>
-        </Fragment>
-      );
-    } else if (isOffline) {
-      return "Brak połączenia z siecią";
-    } else {
-      return "Nie znaleziono planu zajęć";
+      return {
+        eyebrow: `Rozkład zajęć ${TRANSLATION_DICT[timetable.type]}`,
+        title: timetable.title,
+      };
     }
+    if (isOffline) {
+      return { eyebrow: "Tryb offline", title: "Brak połączenia z siecią" };
+    }
+    return { eyebrow: "Plan lekcji", title: "Nie znaleziono planu zajęć" };
   }, [timetable, isOffline]);
 
   return (
-    <div className="grid gap-4 max-md:px-3 max-md:pt-3">
-      <div className="flex w-full items-center justify-between gap-3">
+    <header className="grid gap-3 px-3 pt-3 md:hidden">
+      <div className="flex w-full items-center justify-between gap-3 md:hidden">
         <div className="flex items-center gap-x-2">
           <SchoolLink />
-          <div className="md:hidden">
-            <ShortLessonSwitcherCell />
-          </div>
+          <ShortLessonSwitcherCell />
         </div>
         <TopbarButtons />
       </div>
-      <div className="grid gap-1.5 max-md:hidden">
-        <div className="inline-flex items-center gap-x-4">
-          <h1 className="text-primary/90 xl:text-4.2xl max-w-2xl truncate text-3xl leading-tight font-semibold text-ellipsis">
-            {titleElement}
+
+      <div className="grid gap-2 max-md:hidden">
+        <p className="text-primary/45 text-xs font-medium tracking-[0.08em] uppercase">
+          {eyebrow}
+        </p>
+        <div className="inline-flex items-center gap-x-3">
+          <h1 className="text-primary max-w-2xl truncate text-3xl leading-none font-semibold tracking-[-0.03em] text-ellipsis xl:text-[2.5rem]">
+            {title}
           </h1>
           {timetable?.title && isClient && (
             <FavoriteStar
@@ -64,29 +61,17 @@ export const Topbar: FC<TopbarProps> = ({ timetable, isOffline }) => {
             />
           )}
         </div>
-        <TimetableDates timetable={timetable} />
       </div>
-      <div className="hidden md:block xl:hidden">
-        <SidebarContext.Provider value={{ isPreview: false }}>
-          <SidebarContent showTimetableDates={false} layout="horizontal" showInfo={false} />
-        </SidebarContext.Provider>
-      </div>
-    </div>
+    </header>
   );
 };
 
 const SchoolLink: FC = () => (
-  <Link
-    href={SCHOOL_WEBSITE}
-    className="group inline-flex w-fit items-center gap-x-4"
-  >
+  <Link href={SCHOOL_WEBSITE} aria-label={`Strona szkoły ${SCHOOL_SHORT}`}>
     <Image
       src={school_logo}
-      alt={`Logo szkoły ${SCHOOL_SHORT}`}
-      className="aspect-square w-10"
+      alt=""
+      className="aspect-square w-9 active:scale-95"
     />
-    <p className="text-primary/70 hover:text-primary/90 text-sm font-medium transition-colors max-md:hidden xl:text-base">
-      Wróć na stronę szkoły
-    </p>
   </Link>
 );

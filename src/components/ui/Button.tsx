@@ -5,21 +5,21 @@ import * as React from "react";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-950 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 dark:ring-offset-neutral-950 dark:focus-visible:ring-neutral-300",
+  "inline-flex items-center justify-center rounded-md text-sm font-medium transition-[background-color,border-color,color,transform,box-shadow] duration-200 ease-out active:scale-[0.97] disabled:pointer-events-none disabled:opacity-50",
   {
     variants: {
       variant: {
         default:
-          "bg-primary hover:bg-primary/90 dark:bg-accent border border-primary/10 text-accent/90 dark:text-primary/80 hover:dark:bg-primary/10 hover:text-accent/90 hover:dark:text-primary/90",
+          "bg-primary text-background border border-primary/10 shadow-[var(--shadow-soft)] hover:bg-primary/88 dark:bg-accent dark:text-primary/85 dark:hover:bg-accent-secondary dark:hover:text-primary",
         primary:
-          "bg-accent-table border border-accent-table/10 text-accent/90 dark:text-primary/90 hover:bg-accent-table/90",
+          "bg-accent-table border border-black/10 text-white shadow-[var(--shadow-soft)] hover:brightness-110",
         secondary:
-          "text-primary/90 bg-primary/10 border border-primary/10 hover:bg-primary/20 dark:bg-accent hover:dark:bg-primary/10",
-        icon: "bg-primary hover:bg-primary/90 dark:bg-accent border border-primary/10 text-accent/90 dark:text-primary/80 rounded-md hover:dark:bg-primary/10 hover:text-accent/90 hover:dark:text-primary/90",
+          "text-primary/90 bg-accent border border-lines hover:bg-primary/5 hover:text-primary",
+        icon: "bg-accent text-primary/70 border border-lines hover:bg-primary/5 hover:text-primary dark:hover:bg-accent-secondary",
         sidebarItem:
-          "rounded-md border justify-start border-transparent py-3 pl-6 pr-3 text-left text-xs sm:text-sm font-semibold text-primary/80 transition-all md:hover:border-primary/5 md:hover:bg-primary/5 dark:font-medium md:hover:dark:bg-primary/5",
+          "rounded-md border justify-start border-transparent py-2.5 pl-4 pr-3 text-left text-xs sm:text-sm font-medium text-primary/70 hover:bg-primary/5 hover:text-primary",
         sidebarItemActive:
-          "!border-primary/5 justify-start bg-primary/5 md:hover:border-primary/10 text-xs sm:text-sm md:hover:!bg-primary/10 dark:!bg-primary/5 md:hover:dark:!bg-primary/10 font-semibold dark:font-medium",
+          "justify-start text-xs sm:text-sm font-semibold text-primary !border-transparent bg-primary/[0.07] hover:!bg-primary/10 relative before:absolute before:left-0 before:top-1/2 before:h-4 before:w-[3px] before:-translate-y-1/2 before:rounded-r-full before:bg-accent-table",
       },
       size: {
         default: "h-10 px-4 py-2",

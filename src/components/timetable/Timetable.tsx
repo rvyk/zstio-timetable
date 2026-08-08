@@ -1,19 +1,21 @@
 "use client";
 
+import { FavoriteStar } from "@/components/common/FavoriteStar";
 import { SHORT_HOURS } from "@/constants/settings";
+import { TRANSLATION_DICT } from "@/constants/translations";
 import { adjustShortenedLessons } from "@/lib/adjustShortenedLessons";
 import { cn } from "@/lib/utils";
 import { useSettingsStore, useSettingsWithoutStore } from "@/stores/settings";
 import type { OptivumTimetable } from "@/types/optivum";
 import { CalendarX2 } from "lucide-react";
-import { FC, useMemo, useRef } from "react";
+import { FC, useEffect, useMemo, useRef, useState } from "react";
 import {
   ShortLessonSwitcherCell,
-  TableHeaderCell,
   TableHeaderMobileCell,
   TableHourCell,
 } from "./Cells";
-import { LessonItem, TableLessonCell } from "./LessonCells";
+import { LessonItem } from "./LessonCells";
+import { WeekBoard } from "./WeekBoard";
 
 interface TimetableProps {
   timetable: OptivumTimetable;
@@ -22,10 +24,16 @@ interface TimetableProps {
 const SWIPE_THRESHOLD = 50;
 
 const NoLessons: FC<{ description: string }> = ({ description }) => (
-  <div className="text-muted-foreground flex h-full w-full flex-col items-center justify-center gap-2 p-4 text-center">
-    <CalendarX2 className="text-primary/70 dark:text-primary/80 h-10 w-10" />
-    <h2 className="text-lg font-semibold">Brak planu zajęć</h2>
-    <p className="text-sm">{description}</p>
+  <div className="animate-[var(--animate-rise)] flex h-full w-full flex-col items-center justify-center gap-3 p-10 text-center">
+    <div className="border-lines bg-accent grid size-12 place-content-center rounded-xl border">
+      <CalendarX2 className="text-primary/40 size-5" strokeWidth={1.75} />
+    </div>
+    <div className="grid gap-1">
+      <h2 className="text-primary/90 text-base font-medium tracking-tight">
+        Brak planu zajęć
+      </h2>
+      <p className="text-primary/50 max-w-xs text-sm">{description}</p>
+    </div>
   </div>
 );
 
@@ -64,7 +72,12 @@ export const Timetable: FC<TimetableProps> = ({ timetable }) => {
     [lessons],
   );
 
-  const todayIndex = useMemo(() => (new Date().getDay() + 6) % 7, []);
+  // ?day=0..4 udaje inny dzień tygodnia (razem z ?now=HH:MM do testów)
+  const [todayIndex, setTodayIndex] = useState(() => (new Date().getDay() + 6) % 7);
+  useEffect(() => {
+    const day = new URLSearchParams(window.location.search).get("day");
+    if (day !== null) setTodayIndex(Number(day));
+  }, []);
   const dayNames = timetable.dayNames;
   const hoursList = useMemo(() => Object.values(hours), [hours]);
   const visibleHours = useMemo(
@@ -95,13 +108,14 @@ export const Timetable: FC<TimetableProps> = ({ timetable }) => {
   };
 
   return (
-    <div
+    <section
+      id="plan"
       className={cn(
-        hasLessons ? "" : "flex-1",
-        "border-lines bg-foreground flex w-full flex-col transition-all max-md:mb-20 md:overflow-hidden md:rounded-md md:border",
+        "flex-1",
+        "border-lines bg-foreground flex w-full flex-col max-md:mb-20 md:overflow-hidden md:rounded-xl md:border md:shadow-[var(--shadow-soft)]",
       )}
     >
-      <div className="divide-lines border-lines bg-foreground sticky top-0 z-20 flex justify-between divide-x border-y md:hidden">
+      <div className="border-lines bg-foreground/85 sticky top-0 z-20 flex justify-between border-b backdrop-blur-md md:hidden">
         {dayNames.map((dayName) => (
           <TableHeaderMobileCell
             key={dayName}
@@ -118,7 +132,7 @@ export const Timetable: FC<TimetableProps> = ({ timetable }) => {
         onTouchEnd={handleTouchEnd}
       >
         <div
-          className="flex h-full w-full transition-transform duration-300"
+          className="flex h-full w-full transition-transform duration-300 [transition-timing-function:cubic-bezier(0.32,0.72,0,1)]"
           style={{ transform: `translateX(-${selectedDayIndex * 100}%)` }}
         >
           {dayNames.map((_, dayIndex) => {
@@ -137,13 +151,13 @@ export const Timetable: FC<TimetableProps> = ({ timetable }) => {
                       {visibleHours.map((hour, hourIndex) => (
                         <tr
                           key={hourIndex}
-                          className="border-lines odd:bg-accent/50 odd:dark:bg-background border-b"
+                          className=""
                         >
                           <TableHourCell
                             hour={hour}
                             isCurrentDay={dayIndex === todayIndex}
                           />
-                          <td className="py-3 last:border-0 max-md:px-2 md:px-4">
+                          <td className="p-1 pl-0">
                             {(lessons[dayIndex]?.[hourIndex] ?? []).map(
                               (lessonItem, index) => (
                                 <LessonItem key={index} lesson={lessonItem} />
@@ -163,43 +177,42 @@ export const Timetable: FC<TimetableProps> = ({ timetable }) => {
         </div>
       </div>
 
-      <div className="h-full w-full max-md:hidden md:overflow-auto">
+      <div className="border-lines flex items-center justify-between gap-4 border-b pr-2 pl-4 max-md:hidden">
+        <div className="flex min-w-0 items-baseline gap-x-2.5">
+          <h1 className="text-primary truncate text-xl leading-none font-semibold tracking-[-0.02em]">
+            {timetable.title || "Nie znaleziono planu"}
+          </h1>
+          {timetable.title && (
+            <span className="text-primary/40 shrink-0 text-xs">
+              Rozkład zajęć {TRANSLATION_DICT[timetable.type]}
+            </span>
+          )}
+          {timetable.title && (
+            <FavoriteStar
+              item={{
+                name: timetable.title,
+                value: timetable.id.substring(1),
+                type: timetable.type,
+              }}
+              small
+            />
+          )}
+        </div>
+        <ShortLessonSwitcherCell />
+      </div>
+
+      <div className="w-full min-h-0 flex-1 max-md:hidden md:overflow-y-auto">
         {hasLessons ? (
-          <table className="w-full">
-            <thead className="max-md:hidden">
-              <tr className="divide-lines border-lines divide-x border-b">
-                <th>
-                  <ShortLessonSwitcherCell />
-                </th>
-                {dayNames.map((dayName) => (
-                  <TableHeaderCell key={dayName} dayName={dayName} />
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {visibleHours.map((hour, hourIndex) => (
-                <tr
-                  key={hourIndex}
-                  className="divide-lines border-lines odd:bg-accent/50 odd:dark:bg-background border-b md:divide-x md:last:border-none"
-                >
-                  <TableHourCell hour={hour} />
-                  {lessons.map((day, dayIndex) => (
-                    <TableLessonCell
-                      key={dayIndex}
-                      dayIndex={dayIndex}
-                      day={day}
-                      lessonIndex={hourIndex}
-                      selectedDayIndex={selectedDayIndex}
-                    />
-                  ))}
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <WeekBoard
+            dayNames={dayNames}
+            lessons={lessons}
+            hours={visibleHours}
+            todayIndex={todayIndex}
+          />
         ) : (
           <NoLessons description="Na ten tydzień nie wprowadzono planu zajęć" />
         )}
       </div>
-    </div>
+    </section>
   );
 };

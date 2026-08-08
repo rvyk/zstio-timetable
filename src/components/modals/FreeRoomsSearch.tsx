@@ -82,45 +82,39 @@ const Calendar: FC<{
   const timetable = useTimetableStore((state) => state.timetable);
 
   return (
-    <div className="flex justify-between">
-      {DAYS_OF_WEEK.slice(0, timetable?.dayNames.length).map((day) => (
-        <div
-          onClick={() => setSelectedDay(day.index)}
-          key={day.short}
-          className={cn(
-            selectedDay == day.index ? "border-primary/5" : "border-primary/10",
-            "group w-full cursor-pointer overflow-hidden border-y text-center transition-all first:rounded-l-sm first:border-l last:rounded-r-sm last:border-r",
-          )}
-        >
-          <div
+    <div className="grid grid-cols-5 gap-2">
+      {DAYS_OF_WEEK.slice(0, timetable?.dayNames.length).map((day) => {
+        const isSelected = selectedDay == day.index;
+        const date = getDayNumberForNextWeek(day.long);
+
+        return (
+          <button
+            type="button"
+            onClick={() => setSelectedDay(day.index)}
+            key={day.short}
+            aria-pressed={isSelected}
             className={cn(
-              selectedDay == day.index
-                ? "bg-primary/15 dark:bg-primary/5"
-                : "bg-primary/10",
-              "w-full py-3",
+              isSelected
+                ? "border-accent-table bg-accent-table/8 text-primary"
+                : "border-lines text-primary/60 hover:border-primary/20 hover:text-primary",
+              "grid gap-1.5 rounded-lg border px-1 py-3 text-center transition-colors active:scale-[0.97]",
             )}
           >
-            <p className="text-xs font-medium text-primary/90 sm:text-sm">
-              {day.short}
-            </p>
-          </div>
-          <div
-            className={cn(
-              selectedDay == day.index
-                ? "bg-accent-table text-accent-secondary group-hover:bg-accent-table/90 dark:text-primary"
-                : "text-primary group-hover:bg-primary/5",
-              "grid py-5 transition-all",
-            )}
-          >
-            <h2 className="text-xl font-semibold opacity-90 sm:text-2xl">
-              {getDayNumberForNextWeek(day.long).dayNumber}
-            </h2>
-            <h3 className="text-xs font-medium capitalize opacity-70 sm:text-sm">
-              {getDayNumberForNextWeek(day.long).month}
-            </h3>
-          </div>
-        </div>
-      ))}
+            <span className="text-[11px] font-medium">{day.short}</span>
+            <span
+              className={cn(
+                isSelected && "text-accent-table",
+                "tabular text-xl leading-none font-semibold tracking-tight",
+              )}
+            >
+              {date.dayNumber}
+            </span>
+            <span className="text-primary/40 text-[11px] capitalize">
+              {date.month}
+            </span>
+          </button>
+        );
+      })}
     </div>
   );
 };
