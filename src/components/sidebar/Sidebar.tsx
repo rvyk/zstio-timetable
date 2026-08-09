@@ -2,7 +2,10 @@
 
 import school_logo from "@/assets/school-logo.png";
 import { TimetableDates } from "@/components/common/TimetableDates";
-import { SettingsList } from "@/components/settings/SettingsPanel";
+import {
+  isThemeTransitionActive,
+  SettingsList,
+} from "@/components/settings/SettingsPanel";
 import { Accordion } from "@/components/ui/Accordion";
 import { Skeleton } from "@/components/ui/Skeleton";
 import { SCHOOL_SHORT, SCHOOL_WEBSITE } from "@/constants/school";
@@ -154,7 +157,10 @@ const SidebarActions: FC<{ collapsed: boolean; onExpand: () => void }> = ({
           {isOpen && (
             <div
               className="fixed inset-0 z-10"
-              onClick={() => setIsOpen(false)}
+              onClick={() => {
+                if (isThemeTransitionActive()) return;
+                setIsOpen(false);
+              }}
               aria-hidden
             />
           )}
@@ -162,7 +168,12 @@ const SidebarActions: FC<{ collapsed: boolean; onExpand: () => void }> = ({
           <div
             {...presenceProps}
             inert={!isOpen}
-            className="border-lines bg-foreground/95 data-[state=open]:animate-popover-in data-[state=closed]:animate-popover-out absolute inset-x-0 bottom-full z-20 mb-2 origin-bottom overflow-hidden rounded-lg border shadow-(--shadow-raised) backdrop-blur-md"
+            /* kryjące tło zamiast bg-foreground/95 + backdrop-blur: rozmycie
+               działa na tym, co za elementem, a w trakcie View Transition
+               strona jest płaskim zdjęciem i backdrop znika — blur mrugał przy
+               każdej zmianie motywu. Nad kryjącym paskiem bocznym i tak nie
+               robił różnicy, więc taniej go nie mieć niż go ratować */
+            className="border-lines bg-foreground data-[state=open]:animate-popover-in data-[state=closed]:animate-popover-out absolute inset-x-0 bottom-full z-20 mb-2 origin-bottom overflow-hidden rounded-lg border shadow-(--shadow-raised)"
           >
             <SettingsList onSelect={() => setIsOpen(false)} />
           </div>

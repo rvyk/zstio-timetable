@@ -86,16 +86,31 @@ const THEMES = [
 ] as const;
 
 /**
- * Bąbel nowego motywu rozchodzący się od klikniętego przycisku. Bez View
- * Transitions (Firefox) albo przy wyłączonych animacjach po prostu przełącza —
- * efekt jest ozdobą, nie warunkiem działania.
+ * Bąbel nowego motywu rozchodzący się od klikniętego przycisku — na desktopie.
+ *
+ * Telefon dostaje twardą podmianę. Bąbel to animacja `clip-path` na
+ * pełnoekranowej teksturze, a przenikanie kolorów to setki elementów naraz;
+ * jedno i drugie na telefonie tnie zamiast cieszyć. Zamiast szukać wersji
+ * „prawie płynnej" lepiej przełączyć natychmiast.
  *
  * flushSync: startViewTransition robi zdjęcie strony przed i po wywołaniu
  * callbacka, więc zmiana klasy motywu musi zdążyć się w jego trakcie, a nie
  * dopiero w kolejnym renderze Reacta.
  */
+/**
+ * Ustawiony na `<html>` przez cały czas trwania bąbla. Panele czytają go, żeby
+ * nie zamknąć się od kliknięcia, które padło w trakcie przejścia: przeglądarka
+ * podmienia wtedy zawartość strony na zdjęcie i trafienie potrafi wypaść poza
+ * panel, choć palec był dokładnie na przycisku motywu.
+ */
+export const THEME_TRANSITION_ATTR = "data-theme-switch";
+
+export const isThemeTransitionActive = () =>
+  document.documentElement.hasAttribute(THEME_TRANSITION_ATTR);
+
 const useThemeBubble = () => {
   const { theme, setTheme } = useTheme();
+  const running = useRef<ViewTransition | null>(null);
 
   const switchTheme = (value: string, event: MouseEvent<HTMLButtonElement>) => {
     // lib.dom typuje startViewTransition jako zawsze obecne, Firefox go nie ma;
@@ -104,11 +119,19 @@ const useThemeBubble = () => {
       | Document["startViewTransition"]
       | undefined;
 
-    if (
+    const skipMotion =
       !start ||
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches
-    ) {
-      setTheme(value);
+      window.matchMedia("(pointer: coarse)").matches ||
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    if (skipMotion) {
+      const target = document.documentElement;
+      target.dataset.themeInstant = "";
+      flushSync(() => setTheme(value));
+      // wymuszony reflow: nowe kolory są policzone, zanim przejścia wrócą,
+      // więc nic nie zdąży zacząć się przenikać
+      void document.body.offsetHeight;
+      delete target.dataset.themeInstant;
       return;
     }
 
@@ -119,20 +142,29 @@ const useThemeBubble = () => {
       Math.max(y, window.innerHeight - y),
     );
 
-    /* flaga przed zdjęciem, nie po: co jest widoczne w chwili wywołania
-       startViewTransition, ląduje w teksturze przejścia */
+    /* drugie kliknięcie w trakcie bąbla porzuca poprzednie przejście i zaczyna
+       nowe od zera — zamiast tego kończymy stare natychmiast, wtedy nowe
+       startuje z aktualnego obrazu, a nie z na wpół narysowanego */
+    running.current?.skipTransition();
+
     const root = document.documentElement;
-    root.dataset.themeSwitch = "";
+    root.setAttribute(THEME_TRANSITION_ATTR, "");
 
     const transition = start.call(document, () =>
       flushSync(() => setTheme(value)),
     );
+    running.current = transition;
 
-    void transition.finished.finally(() => delete root.dataset.themeSwitch);
+    void transition.finished.finally(() => {
+      if (running.current === transition) {
+        running.current = null;
+        root.removeAttribute(THEME_TRANSITION_ATTR);
+      }
+    });
 
     void transition.ready
       .then(() =>
-        root.animate(
+        document.documentElement.animate(
           {
             clipPath: [
               `circle(0px at ${x}px ${y}px)`,
@@ -374,12 +406,16 @@ export const SettingsMenu = () => {
           ref={triggerRef}
           aria-label="Otwórz dodatkowe funkcje"
           className={cn(
-            "border-lines bg-accent text-primary/70 active:bg-primary/5 active:text-primary grid size-11 place-content-center rounded-lg border transition-colors",
+            "border-lines bg-accent text-primary/70 active:bg-primary/5 active:text-primary grid size-11 place-content-center rounded-lg border transition duration-150 active:scale-90",
             /* przy otwartym panelu przycisk wychodzi nad przyciemnienie i zostaje
                ostry — to on jest kotwicą, więc nie może zniknąć razem z tłem.
                pointer-events-none oddaje klik nakładce, czyli stuknięcie w niego
                zamyka panel */
-            "data-[state=open]:text-primary data-[state=open]:bg-primary/5 data-[state=open]:pointer-events-none data-[state=open]:relative data-[state=open]:z-[60]",
+            /* kryjące bg-foreground, nie bg-primary/5: przez pięcioprocentowy
+               tusz prześwituje przyciemnienie i z przycisku zostaje sama ramka,
+               a ta w jasnym motywie jest prawie biała — wyglądało to jak dziura
+               wycięta w scrimie. Ta sama powierzchnia co panel, który otwiera */
+            "data-[state=open]:text-primary data-[state=open]:bg-foreground data-[state=open]:pointer-events-none data-[state=open]:relative data-[state=open]:z-[60]",
           )}
         >
           <SlidersHorizontal className="size-4.5" strokeWidth={2} />
@@ -397,6 +433,9 @@ export const SettingsMenu = () => {
           onOpenAutoFocus={(event) => {
             event.preventDefault();
             contentRef.current?.focus();
+          }}
+          onInteractOutside={(event) => {
+            if (isThemeTransitionActive()) event.preventDefault();
           }}
           style={{ top: anchor.top, right: anchor.right }}
           className="border-lines bg-foreground data-[state=open]:animate-popover-in data-[state=closed]:animate-popover-out fixed z-50 grid max-h-[calc(100dvh-6rem)] w-[min(19rem,calc(100vw-4rem))] origin-top-right gap-4 overflow-y-auto rounded-xl border p-4 shadow-(--shadow-raised) md:hidden"

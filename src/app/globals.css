@@ -281,15 +281,14 @@ body::before {
   z-index: 0;
 }
 
-/* Ziarno i rozmycia tła to najdroższe warstwy na stronie, a przez pół sekundy
-   przejścia nie niosą żadnej informacji — obie tekstury i tak są zamrożone.
-   Zdejmujemy je na czas podmiany, bo to one najbardziej tną na telefonie. */
-[data-theme-switch] body::before {
-  display: none;
-}
-
-[data-theme-switch] * {
-  backdrop-filter: none !important;
+/* Twarda podmiana motywu (telefon, Firefox, wyłączone animacje): na jedną
+   klatkę gasimy wszystkie przejścia, bo inaczej setki elementów zaczynają
+   przenikać kolor naraz. To samo, co robił disableTransitionOnChange
+   z next-themes, tylko bez zabijania przejazdu pigułki na desktopie. */
+[data-theme-instant] *,
+[data-theme-instant] *::before,
+[data-theme-instant] *::after {
+  transition: none !important;
 }
 
 ::view-transition-new(root) {
