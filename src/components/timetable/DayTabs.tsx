@@ -29,6 +29,7 @@ export const DayTabs: FC<DayTabsProps> = ({
     aria-label="Dzień tygodnia"
     className={cn(
       "border-lines bg-foreground/85 sticky top-0 z-20 flex border-b backdrop-blur-md",
+      "relative",
       className,
     )}
   >
@@ -63,11 +64,21 @@ export const DayTabs: FC<DayTabsProps> = ({
             {date.dayNumber.toString().padStart(2, "0")}.
             {date.monthNumber.toString().padStart(2, "0")}
           </span>
-          {isActive && (
-            <span className="bg-accent-table absolute inset-x-3 -bottom-px h-0.5 rounded-full" />
-          )}
         </button>
       );
     })}
+
+    {/* jeden wskaźnik na cały pasek zamiast jednego na zakładkę: przy zmianie
+        dnia przejeżdża do nowej pozycji, więc widać skąd dokąd */}
+    <span
+      aria-hidden
+      className="ease-out-quint pointer-events-none absolute -bottom-px left-0 flex h-0.5 transition-transform duration-300"
+      style={{
+        width: `${100 / dayNames.length}%`,
+        transform: `translateX(${selectedDayIndex * 100}%)`,
+      }}
+    >
+      <span className="bg-accent-table mx-3 h-full flex-1 rounded-full" />
+    </span>
   </div>
 );

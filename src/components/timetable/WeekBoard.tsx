@@ -33,7 +33,14 @@ export const WeekBoard: FC<WeekBoardProps> = ({
           const slots = buildDaySlots(hours, lessons[dayIndex]);
 
           return (
-            <section key={dayName} className="flex min-w-0 flex-col gap-2">
+            <section
+              key={dayName}
+              /* kolumny wjeżdżają po kolei — czyta się jako „tydzień od
+                 poniedziałku", nie jako pięć niezależnych bloków.
+                 45ms × 5 kolumn = 180ms całości, poniżej progu czekania */
+              className="animate-rise flex min-w-0 flex-col gap-2"
+              style={{ animationDelay: `${dayIndex * 45}ms` }}
+            >
               {/* opakowanie kryje kafelki przewijające się pod przyklejonym
                 nagłówkiem — sam nagłówek jest zaokrąglony jak kafelki lekcji */}
               {/* -mb-2 zjada gap-2, żeby całe tło pod nagłówkiem było kryjące */}

@@ -144,7 +144,11 @@ export default function RootLayout({
         )}
       >
         <SerwistProvider swUrl="/serwist/sw.js">
-          <ThemeProvider attribute="class" disableTransitionOnChange>
+          {/* bez disableTransitionOnChange: next-themes wstrzykiwał na czas
+              podmiany `* { transition: none !important }`, co zabijało jedyny
+              ruch dziejący się dokładnie wtedy — przejazd pigułki motywu.
+              Kolory i tak zmieniają się przez własne transition-colors */}
+          <ThemeProvider attribute="class">
             <Toaster />
             <a
               href="#plan"

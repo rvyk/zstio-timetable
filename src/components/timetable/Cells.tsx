@@ -2,6 +2,7 @@
 
 import { Skeleton } from "@/components/ui/Skeleton";
 import { MAX_LESSONS } from "@/constants/settings";
+import { usePresence } from "@/hooks/usePresence";
 import { cn } from "@/lib/utils";
 import { useSettingsStore } from "@/stores/settings";
 import { MinusIcon, PlusIcon } from "lucide-react";
@@ -32,6 +33,9 @@ export const ShortLessonSwitcherCell: FC<{ className?: string }> = ({
     enableCustomLessonsLength,
   } = useSettingsStore();
 
+  const isCustom = lessonType === "custom";
+  const { isMounted, presenceProps } = usePresence(isCustom);
+
   if (!isClient) {
     return (
       <div className={cn("px-3 py-2", className)}>
@@ -39,8 +43,6 @@ export const ShortLessonSwitcherCell: FC<{ className?: string }> = ({
       </div>
     );
   }
-
-  const isCustom = lessonType === "custom";
 
   return (
     /* col-reverse: na telefonie stepper nie mieści się obok przełącznika
@@ -52,13 +54,17 @@ export const ShortLessonSwitcherCell: FC<{ className?: string }> = ({
         className,
       )}
     >
-      {isCustom && (
-        <div className="border-lines bg-accent flex shrink-0 items-center justify-between rounded-lg border px-1 max-md:h-11 md:h-9 md:justify-start">
+      {isMounted && (
+        <div
+          {...presenceProps}
+          inert={!isCustom}
+          className="border-lines bg-accent data-[state=open]:animate-rise data-[state=closed]:animate-fall flex shrink-0 items-center justify-between rounded-lg border px-1 max-md:h-11 md:h-9 md:justify-start"
+        >
           <button
             aria-label="Wcześniejsza lekcja"
             disabled={hoursAdjustIndex <= MIN_ADJUST_INDEX}
             onClick={() => enableCustomLessonsLength(hoursAdjustIndex - 1)}
-            className="text-primary/50 hover:text-primary active:bg-primary/5 grid place-content-center rounded-md transition-colors disabled:opacity-30 max-md:h-full max-md:w-12 md:size-7"
+            className="text-primary/50 hover:text-primary active:bg-primary/5 grid place-content-center rounded-md transition duration-150 active:scale-90 disabled:opacity-30 max-md:h-full max-md:w-12 md:size-7"
           >
             <MinusIcon
               className="max-md:size-4.5 md:size-3.5"
@@ -72,14 +78,27 @@ export const ShortLessonSwitcherCell: FC<{ className?: string }> = ({
             aria-label="Późniejsza lekcja"
             disabled={hoursAdjustIndex >= MAX_LESSONS}
             onClick={() => enableCustomLessonsLength(hoursAdjustIndex + 1)}
-            className="text-primary/50 hover:text-primary active:bg-primary/5 grid place-content-center rounded-md transition-colors disabled:opacity-30 max-md:h-full max-md:w-12 md:size-7"
+            className="text-primary/50 hover:text-primary active:bg-primary/5 grid place-content-center rounded-md transition duration-150 active:scale-90 disabled:opacity-30 max-md:h-full max-md:w-12 md:size-7"
           >
             <PlusIcon className="max-md:size-4.5 md:size-3.5" strokeWidth={2} />
           </button>
         </div>
       )}
 
-      <div className="border-lines bg-accent flex min-w-0 gap-1 rounded-lg border p-0.75 max-md:h-11 max-md:w-full md:h-9 md:w-auto">
+      {/* grid zamiast flexa: równe kolumny to warunek, żeby pigułka mogła
+          przejeżdżać o 100% swojej szerokości zamiast być mierzona z DOM */}
+      <div className="border-lines bg-accent relative grid min-w-0 grid-cols-3 rounded-lg border p-0.75 max-md:h-11 max-md:w-full md:h-9 md:w-auto">
+        <span
+          aria-hidden
+          className="ease-out-quint pointer-events-none absolute inset-y-0.75 left-0.75 flex transition-transform duration-300"
+          style={{
+            width: `calc((100% - 0.375rem) / 3)`,
+            transform: `translateX(${LESSON_MODES.findIndex(({ value }) => value === lessonType) * 100}%)`,
+          }}
+        >
+          <span className="bg-foreground flex-1 rounded-md shadow-(--shadow-soft)" />
+        </span>
+
         {LESSON_MODES.map(({ value, label }) => {
           const active = lessonType === value;
           return (
@@ -93,10 +112,8 @@ export const ShortLessonSwitcherCell: FC<{ className?: string }> = ({
                   : setLessonType(value)
               }
               className={cn(
-                active
-                  ? "bg-foreground text-primary shadow-(--shadow-soft)"
-                  : "text-primary/50 hover:text-primary/80",
-                "tabular flex-1 rounded-md px-2.5 font-mono text-xs font-medium whitespace-nowrap transition-colors md:flex-none",
+                active ? "text-primary" : "text-primary/50 hover:text-primary/80",
+                "tabular relative rounded-md px-2.5 font-mono text-xs font-medium whitespace-nowrap transition-colors",
               )}
             >
               {label}

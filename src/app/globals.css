@@ -91,11 +91,28 @@
   --animate-accordion-down: accordion-down 0.22s cubic-bezier(0.32, 0.72, 0, 1);
   --animate-accordion-up: accordion-up 0.22s cubic-bezier(0.32, 0.72, 0, 1);
   --animate-rise: rise 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+  /* para do rise — wyjście krótsze i z prostszą krzywą, ma zejść z drogi */
+  --animate-fall: fall 0.16s cubic-bezier(0.4, 0, 1, 1) both;
   /* sąsiedni dzień: wjazd z boku, kierunek zgadza się z gestem.
      skok przez pół tygodnia: podmiana, bo żaden kierunek nie jest prawdziwy */
   --animate-day-in-right: day-in-right 0.3s cubic-bezier(0.22, 1, 0.36, 1) both;
   --animate-day-in-left: day-in-left 0.3s cubic-bezier(0.22, 1, 0.36, 1) both;
   --animate-day-swap: day-swap 0.26s cubic-bezier(0.22, 1, 0.36, 1) both;
+  /* potwierdzenie kliknięcia: ikona sama wraca do rozmiaru, nic nie zostaje */
+  --animate-pop: pop 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* okna i panele mają własne keyframes zamiast utility z tw-animate-css:
+     tamte nadpisują cały transform, więc gubią wyśrodkowanie -translate-1/2.
+     wyjście jest krótsze od wejścia — zamykanie ma schodzić z drogi */
+  --animate-overlay-in: overlay-in 0.2s ease-out both;
+  --animate-overlay-out: overlay-out 0.15s ease-in both;
+  --animate-dialog-in: dialog-in 0.22s cubic-bezier(0.16, 1, 0.3, 1) both;
+  --animate-dialog-out: dialog-out 0.16s cubic-bezier(0.4, 0, 1, 1) both;
+  --animate-popover-in: popover-in 0.18s cubic-bezier(0.16, 1, 0.3, 1) both;
+  --animate-popover-out: popover-out 0.13s cubic-bezier(0.4, 0, 1, 1) both;
+
+  --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
 
   @keyframes accordion-down {
     from {
@@ -123,6 +140,16 @@
       transform: none;
     }
   }
+  @keyframes fall {
+    from {
+      opacity: 1;
+      transform: none;
+    }
+    to {
+      opacity: 0;
+      transform: translateY(4px);
+    }
+  }
   @keyframes day-in-right {
     from {
       opacity: 0;
@@ -141,6 +168,76 @@
     to {
       opacity: 1;
       transform: none;
+    }
+  }
+  @keyframes overlay-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  @keyframes overlay-out {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
+    }
+  }
+  @keyframes dialog-in {
+    from {
+      opacity: 0;
+      transform: translate(-50%, calc(-50% + 8px)) scale(0.97);
+    }
+    to {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
+    }
+  }
+  @keyframes dialog-out {
+    from {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
+    }
+    to {
+      opacity: 0;
+      transform: translate(-50%, calc(-50% + 4px)) scale(0.98);
+    }
+  }
+  /* sama skala, bez przesunięcia: kierunek niesie transform-origin, więc te
+     same keyframes grają dla panelu spod paska górnego i dla tego znad
+     przycisku w panelu bocznym */
+  @keyframes popover-in {
+    from {
+      opacity: 0;
+      transform: scale(0.94);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  @keyframes popover-out {
+    from {
+      opacity: 1;
+      transform: none;
+    }
+    to {
+      opacity: 0;
+      transform: scale(0.97);
+    }
+  }
+  @keyframes pop {
+    0% {
+      transform: scale(1);
+    }
+    45% {
+      transform: scale(1.22);
+    }
+    100% {
+      transform: scale(1);
     }
   }
   @keyframes day-swap {
@@ -168,6 +265,24 @@ body::before {
 
 .dark body::before {
   opacity: 0.04;
+}
+
+/* Zmiana motywu przez View Transitions: domyślne przenikanie wyłączone, bo
+   ruch niesie bąbel rozchodzący się od klikniętego przycisku (klatki liczone
+   w JS, gdzie znamy współrzędne kliknięcia). Stary motyw leży nieruchomo pod
+   spodem, nowy jest nad nim i to jego maska rośnie. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+::view-transition-old(root) {
+  z-index: 0;
+}
+
+::view-transition-new(root) {
+  z-index: 1;
 }
 
 /* data reads as data: one column width per digit */
@@ -218,6 +333,8 @@ body::before {
   *::before,
   *::after {
     animation-duration: 0.01ms !important;
+    /* bez tego opóźnienia kaskady zostają i treść pojawia się skokowo */
+    animation-delay: 0ms !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }

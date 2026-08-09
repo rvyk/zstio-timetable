@@ -23,6 +23,7 @@ import { useTheme } from "next-themes";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
+  MouseEvent,
   ReactNode,
   useCallback,
   useEffect,
@@ -30,6 +31,7 @@ import {
   useRef,
   useState,
 } from "react";
+import { flushSync } from "react-dom";
 import { useIsClient } from "usehooks-ts";
 
 type SettingsItem = {
@@ -48,18 +50,21 @@ const SettingButton = ({
   description,
   onClick,
   active,
-}: Omit<SettingsItem, "key" | "hidden">) => {
+  index = 0,
+}: Omit<SettingsItem, "key" | "hidden"> & { index?: number }) => {
   return (
     <button
       onClick={onClick}
+      /* kaskada: panel otwiera się jako lista, nie jako gotowy blok */
+      style={{ animationDelay: `${60 + index * 35}ms` }}
       className={cn(
-        "group flex w-full gap-3 rounded-md p-2.5 text-left transition-colors max-md:min-h-11",
+        "group animate-rise flex w-full gap-3 rounded-md p-2.5 text-left transition duration-150 max-md:min-h-11",
         "hover:bg-primary/4 active:scale-[0.99]",
         active && "bg-primary/4",
       )}
     >
       <Icon
-        className="text-primary/45 group-hover:text-accent-table mt-0.5 size-4 shrink-0 transition-colors"
+        className="text-primary/45 group-hover:text-accent-table mt-0.5 size-4 shrink-0 transition duration-200 group-hover:scale-110"
         strokeWidth={1.75}
       />
       <div className="grid gap-1">
@@ -80,27 +85,105 @@ const THEMES = [
   { value: "system", label: "Auto" },
 ] as const;
 
-const ThemeSetting = () => {
+/**
+ * Bąbel nowego motywu rozchodzący się od klikniętego przycisku. Bez View
+ * Transitions (Firefox) albo przy wyłączonych animacjach po prostu przełącza —
+ * efekt jest ozdobą, nie warunkiem działania.
+ *
+ * flushSync: startViewTransition robi zdjęcie strony przed i po wywołaniu
+ * callbacka, więc zmiana klasy motywu musi zdążyć się w jego trakcie, a nie
+ * dopiero w kolejnym renderze Reacta.
+ */
+const useThemeBubble = () => {
   const { theme, setTheme } = useTheme();
+
+  const switchTheme = (value: string, event: MouseEvent<HTMLButtonElement>) => {
+    // lib.dom typuje startViewTransition jako zawsze obecne, Firefox go nie ma;
+    // odczyt przez Reflect, żeby typ został opcjonalny i sprawdzenie miało sens
+    const start = Reflect.get(document, "startViewTransition") as
+      | Document["startViewTransition"]
+      | undefined;
+
+    if (
+      !start ||
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    ) {
+      setTheme(value);
+      return;
+    }
+
+    const { clientX: x, clientY: y } = event;
+    // promień do najdalszego rogu — inaczej bąbel nie dociera do krawędzi
+    const radius = Math.hypot(
+      Math.max(x, window.innerWidth - x),
+      Math.max(y, window.innerHeight - y),
+    );
+
+    const transition = start.call(document, () =>
+      flushSync(() => setTheme(value)),
+    );
+
+    void transition.ready
+      .then(() =>
+        document.documentElement.animate(
+          {
+            clipPath: [
+              `circle(0px at ${x}px ${y}px)`,
+              `circle(${radius}px at ${x}px ${y}px)`,
+            ],
+          },
+          {
+            duration: 550,
+            easing: "cubic-bezier(0.16, 1, 0.3, 1)",
+            pseudoElement: "::view-transition-new(root)",
+          },
+        ),
+      )
+      /* przejście bywa porzucone (ukryta karta, kolejne kliknięcie w trakcie);
+         motyw i tak się przełącza, więc to nie jest błąd do raportowania */
+      .catch(() => undefined);
+  };
+
+  return { theme, switchTheme };
+};
+
+const ThemeSetting = () => {
+  const { theme, switchTheme } = useThemeBubble();
   const isClient = useIsClient();
   const active = isClient ? (theme ?? "system") : "system";
+  const activeIndex = Math.max(
+    0,
+    THEMES.findIndex((option) => option.value === active),
+  );
 
   return (
     <div className="grid gap-2 p-2.5">
       <span className="text-primary/40 text-[11px] font-medium tracking-[0.06em] uppercase">
         Motyw
       </span>
-      <div className="border-lines bg-accent grid grid-cols-3 gap-1 rounded-lg border p-0.75">
+      <div className="border-lines bg-accent relative grid grid-cols-3 rounded-lg border p-0.75">
+        {/* pigułka przejeżdża pod etykietami zamiast przeskakiwać tłem
+            — kolumny są równe, więc wystarczy przesunięcie o 100% szerokości */}
+        <span
+          aria-hidden
+          className="ease-out-quint pointer-events-none absolute inset-y-0.75 left-0.75 flex transition-transform duration-300"
+          style={{
+            width: `calc((100% - 0.375rem) / 3)`,
+            transform: `translateX(${activeIndex * 100}%)`,
+          }}
+        >
+          <span className="bg-foreground flex-1 rounded-md shadow-(--shadow-soft)" />
+        </span>
         {THEMES.map((option) => (
           <button
             key={option.value}
-            onClick={() => setTheme(option.value)}
+            onClick={(event) => switchTheme(option.value, event)}
             aria-pressed={active === option.value}
             className={cn(
               active === option.value
-                ? "bg-foreground text-primary shadow-(--shadow-soft)"
+                ? "text-primary"
                 : "text-primary/45 hover:text-primary",
-              "rounded-md py-1.5 text-[11px] font-medium transition-colors",
+              "relative rounded-md py-1.5 text-[11px] font-medium transition-colors",
             )}
           >
             {option.label}
@@ -220,10 +303,11 @@ export const SettingsList = ({
 
   return (
     <div className="grid gap-0.5 p-1">
-      {visibleSettings.map(({ key, onClick, ...setting }) => (
+      {visibleSettings.map(({ key, onClick, ...setting }, index) => (
         <SettingButton
           key={key}
           {...setting}
+          index={index}
           onClick={() => {
             onClick();
             onSelect?.();
@@ -293,7 +377,7 @@ export const SettingsMenu = () => {
       </DialogPrimitive.Trigger>
 
       <DialogPrimitive.Portal>
-        <DialogPrimitive.Overlay className="data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 fixed inset-0 z-50 bg-black/45 backdrop-blur-xs md:hidden" />
+        <DialogPrimitive.Overlay className="data-[state=open]:animate-overlay-in data-[state=closed]:animate-overlay-out fixed inset-0 z-50 bg-black/45 backdrop-blur-xs md:hidden" />
         <DialogPrimitive.Content
           ref={contentRef}
           tabIndex={-1}
@@ -305,7 +389,7 @@ export const SettingsMenu = () => {
             contentRef.current?.focus();
           }}
           style={{ top: anchor.top, right: anchor.right }}
-          className="border-lines bg-foreground data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 fixed z-50 grid max-h-[calc(100dvh-6rem)] w-[min(19rem,calc(100vw-4rem))] origin-top-right gap-4 overflow-y-auto rounded-xl border p-4 shadow-(--shadow-raised) duration-200 md:hidden"
+          className="border-lines bg-foreground data-[state=open]:animate-popover-in data-[state=closed]:animate-popover-out fixed z-50 grid max-h-[calc(100dvh-6rem)] w-[min(19rem,calc(100vw-4rem))] origin-top-right gap-4 overflow-y-auto rounded-xl border p-4 shadow-(--shadow-raised) md:hidden"
         >
           <VisuallyHidden>
             <DialogTitle>Dodatkowe funkcje</DialogTitle>

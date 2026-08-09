@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 import { useFavoritesStore } from "@/stores/favorites";
 import { ListItem } from "@majusss/timetable-parser";
 import { BookmarkIcon } from "lucide-react";
-import { FC, useMemo } from "react";
+import { FC, useMemo, useState } from "react";
 
 interface FavoriteStarProps {
   item: ListItem;
@@ -30,12 +30,19 @@ export const FavoriteStar: FC<FavoriteStarProps> = ({
     return favorites.some((c) => c.name === item.name);
   }, [favorites, item.name]);
 
+  /* licznik kliknięć, nie stan „czy zapisane": pop ma potwierdzać czynność,
+     a nie witać przy wejściu na stronę — inaczej cała lista zapisanych
+     zamigotałaby na pierwszym renderze. Zmiana klucza wymusza powtórzenie
+     keyframes, bo ta sama klasa drugi raz animacji nie odpali. */
+  const [clicks, setClicks] = useState(0);
+
   return (
     <button
       aria-label={isFavorite ? "Usuń z ulubionych" : "Dodaj do ulubionych"}
       aria-pressed={isFavorite}
       onClick={(e) => {
         e.preventDefault();
+        setClicks((count) => count + 1);
         handleFavorite(item);
       }}
       className={cn(
@@ -51,9 +58,11 @@ export const FavoriteStar: FC<FavoriteStarProps> = ({
       )}
     >
       <BookmarkIcon
+        key={clicks}
         strokeWidth={2}
         className={cn(
           isFavorite ? "fill-current" : "fill-transparent",
+          clicks > 0 && isFavorite && "animate-pop",
           small ? "size-3.5" : "size-4",
         )}
       />

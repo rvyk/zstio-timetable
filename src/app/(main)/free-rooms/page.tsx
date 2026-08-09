@@ -28,7 +28,15 @@ const FreeRoomsPage = async () => {
     /* ta sama rama co plan — inaczej na telefonie treść dotyka krawędzi,
        a bez Topbara i BottomBara nie ma stąd żadnego wyjścia */
     <main className="flex h-full w-full min-w-0 flex-1 flex-col gap-y-3 max-md:overflow-y-auto max-md:pb-[env(safe-area-inset-bottom)] md:overflow-hidden md:p-3">
-      <Topbar showLessonSwitcher={false} />
+      <Topbar
+        showLessonSwitcher={false}
+        page={{
+          title: "Wolne sale",
+          // "/" wraca na ostatnio oglądany plan (cookie lastVisited)
+          backHref: "/",
+          backLabel: "Wróć do planu",
+        }}
+      />
       <FreeRoomsBoard
         dayNames={dayNames}
         hours={hours}

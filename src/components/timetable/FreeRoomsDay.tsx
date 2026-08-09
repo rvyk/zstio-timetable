@@ -1,5 +1,6 @@
 "use client";
 
+import { usePresence } from "@/hooks/usePresence";
 import { cn } from "@/lib/utils";
 import { TableHour } from "@majusss/timetable-parser";
 import { ChevronDown } from "lucide-react";
@@ -44,7 +45,9 @@ export const FreeRoomsDay: FC<FreeRoomsDayProps> = ({
         }}
       />
 
-      <div className="grid gap-2 p-3">
+      {/* key na dniu: lista wjeżdża od nowa przy każdym przełączeniu zakładki,
+          tak samo jak plansza dnia w planie lekcji */}
+      <div key={dayIndex} className="grid gap-2 p-3">
         {hours.map((hour, hourIndex) => {
           const ids = freeRooms[dayIndex]?.[hourIndex] ?? [];
           const isOpen = openHour === hourIndex;
@@ -56,12 +59,13 @@ export const FreeRoomsDay: FC<FreeRoomsDayProps> = ({
                 onClick={() => setOpenHour(isOpen ? null : hourIndex)}
                 aria-expanded={isOpen}
                 disabled={isEmpty}
+                style={{ animationDelay: `${Math.min(hourIndex, 10) * 30}ms` }}
                 className={cn(
                   isOpen
                     ? "border-accent-table/45 bg-accent-table/[0.07]"
                     : "border-lines/70 bg-accent/40",
                   isEmpty && "opacity-45",
-                  "flex min-h-11 items-center gap-3 rounded-lg border px-3 py-2.5 text-left transition-colors",
+                  "animate-rise flex min-h-11 items-center gap-3 rounded-lg border px-3 py-2.5 text-left transition duration-150 not-disabled:active:scale-[0.98]",
                 )}
               >
                 <span
@@ -94,23 +98,39 @@ export const FreeRoomsDay: FC<FreeRoomsDayProps> = ({
                 )}
               </button>
 
-              {isOpen && (
-                <div className="animate-rise flex flex-wrap gap-1.5 pb-1">
-                  {ids.map((id) => (
-                    <Link
-                      key={id}
-                      href={`/room/${id}`}
-                      className="border-lines/70 bg-accent/40 text-primary/80 active:bg-accent flex min-h-9 items-center rounded-lg border px-3 text-sm transition-colors"
-                    >
-                      {roomNames.get(id) ?? id}
-                    </Link>
-                  ))}
-                </div>
-              )}
+              <RoomChips isOpen={isOpen} ids={ids} roomNames={roomNames} />
             </Fragment>
           );
         })}
       </div>
+    </div>
+  );
+};
+
+/** Osobny komponent, bo zwijanie musi dograć animację wyjścia zanim zniknie. */
+const RoomChips: FC<{
+  isOpen: boolean;
+  ids: string[];
+  roomNames: Map<string, string>;
+}> = ({ isOpen, ids, roomNames }) => {
+  const { isMounted, presenceProps } = usePresence(isOpen);
+  if (!isMounted) return null;
+
+  return (
+    <div
+      {...presenceProps}
+      className="data-[state=open]:animate-rise data-[state=closed]:animate-fall flex flex-wrap gap-1.5 pb-1"
+    >
+      {ids.map((id, index) => (
+        <Link
+          key={id}
+          href={`/room/${id}`}
+          style={{ animationDelay: `${Math.min(index, 14) * 20}ms` }}
+          className="border-lines/70 bg-accent/40 text-primary/80 active:bg-accent animate-rise flex min-h-9 items-center rounded-lg border px-3 text-sm transition duration-150 active:scale-95"
+        >
+          {roomNames.get(id) ?? id}
+        </Link>
+      ))}
     </div>
   );
 };

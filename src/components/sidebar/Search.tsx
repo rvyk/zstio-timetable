@@ -84,7 +84,7 @@ export const Search: FC<SearchProps> = ({ value, onChange, results }) => {
         <button
           onClick={() => onChange("")}
           aria-label="Wyczyść wyszukiwanie"
-          className="text-primary/45 hover:text-primary -mr-1 grid size-8 shrink-0 place-content-center rounded-md transition-colors"
+          className="text-primary/45 hover:text-primary animate-rise -mr-1 grid size-8 shrink-0 place-content-center rounded-md transition duration-150 active:scale-90"
         >
           <XIcon size={16} strokeWidth={2} />
         </button>

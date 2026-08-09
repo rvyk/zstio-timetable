@@ -16,7 +16,7 @@ import { useSettingsWithoutStore } from "@/stores/settings";
 import type { ListItem } from "@majusss/timetable-parser";
 import { ChevronDown, LucideIcon } from "lucide-react";
 import { usePathname } from "next/navigation";
-import { FC } from "react";
+import { CSSProperties, FC } from "react";
 import { useIsClient } from "usehooks-ts";
 import { FavoriteStar } from "../common/FavoriteStar";
 import { useSidebarContext } from "./Context";
@@ -179,11 +179,14 @@ export const DropdownContent: FC<DropdownContentProps> = ({
       )}
     >
       {data && data.length > 0 ? (
-        data.map((item) => (
+        data.map((item, index) => (
           <ListItemComponent
             key={`${type}-${item.value}`}
             item={item}
             type={type}
+            /* kaskada ścięta na 12 pozycjach: przy 70 nauczycielach reszta
+               czekałaby dłużej, niż trwa samo przewinięcie do niej */
+            style={{ animationDelay: `${Math.min(index, 12) * 20}ms` }}
           />
         ))
       ) : (
@@ -202,8 +205,8 @@ interface ListItemComponentProps {
 }
 
 export const ListItemComponent: FC<
-  ListItemComponentProps & { favoriteStar?: boolean }
-> = ({ item, type, onClick, favoriteStar = true }) => {
+  ListItemComponentProps & { favoriteStar?: boolean; style?: CSSProperties }
+> = ({ item, type, onClick, favoriteStar = true, style }) => {
   const { toggleSidebar, isSidebarOpen } = useSettingsWithoutStore();
 
   const pathname = usePathname();
@@ -226,18 +229,22 @@ export const ListItemComponent: FC<
       aria-label={`Przejdź do ${item.name}`}
       aria-current={isActive ? "page" : undefined}
       href={link}
+      style={style}
       className={cn(
+        "animate-rise",
         isActive
           ? "text-primary bg-primary/6 font-medium"
           : "text-primary/65 hover:text-primary hover:bg-primary/4",
-        "group flex w-full min-w-0 items-center justify-between gap-x-2 rounded-md px-3 py-2 text-sm transition-colors max-md:min-h-11",
+        "group flex w-full min-w-0 items-center justify-between gap-x-2 rounded-md px-3 py-2 text-sm transition duration-150 active:scale-[0.99] max-md:min-h-11",
       )}
     >
       <span className="flex min-w-0 items-center gap-2">
+        {/* kropka aktywnej pozycji wyskakuje ze skali zamiast pojawiać się
+            kolorem — przy przechodzeniu między planami widać, dokąd wskoczyła */}
         <span
           className={cn(
-            isActive ? "bg-accent-table" : "bg-transparent",
-            "size-1.5 shrink-0 rounded-full transition-colors",
+            isActive ? "bg-accent-table scale-100" : "bg-transparent scale-0",
+            "ease-out-quint size-1.5 shrink-0 rounded-full transition duration-300",
           )}
         />
         <span className="truncate">{item.name}</span>

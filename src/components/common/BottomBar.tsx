@@ -21,7 +21,7 @@ interface BottomBarProps {
 }
 
 const STEP_BUTTON =
-  "text-primary/55 active:bg-primary/5 active:text-primary grid size-11 shrink-0 place-content-center rounded-lg transition-colors disabled:opacity-30";
+  "text-primary/55 active:bg-primary/5 active:text-primary active:scale-90 grid size-11 shrink-0 place-content-center rounded-lg transition duration-150 disabled:opacity-30";
 
 export const BottomBar: FC<BottomBarProps> = ({ timetable, isOffline }) => {
   const [viewportHeight, setViewportHeight] = useState<number | null>(null);
@@ -93,13 +93,16 @@ export const BottomBar: FC<BottomBarProps> = ({ timetable, isOffline }) => {
 
           {/* jedyny element otwierający szufladę — reszta paska to osobne akcje */}
           <DrawerTrigger asChild>
-            <button className="active:bg-primary/5 grid min-w-0 flex-1 justify-items-center gap-0.5 rounded-lg px-2 py-1.5 transition-colors">
-              <span className="flex min-w-0 items-center gap-1.5">
+            <button className="active:bg-primary/5 group grid min-w-0 flex-1 justify-items-center gap-0.5 rounded-lg px-2 py-1.5 transition duration-150 active:scale-[0.98]">
+              {/* max-w-full: justify-items-center daje elementom siatki szerokość
+                  treści, więc bez tego truncate nie ma się o co oprzeć i długa
+                  nazwa sali wychodzi poza pasek */}
+              <span className="flex min-w-0 max-w-full items-center gap-1.5">
                 <span className="text-primary truncate text-[15px] leading-tight font-semibold tracking-tight">
                   {title}
                 </span>
                 <ChevronUp
-                  className="text-primary/35 size-3.5 shrink-0"
+                  className="text-primary/35 size-3.5 shrink-0 transition-transform duration-200 group-active:-translate-y-0.5"
                   strokeWidth={2.5}
                 />
               </span>
