@@ -1,6 +1,7 @@
 import { getOptivumList } from "@/actions/getOptivumList";
 import { getOptivumTimetable } from "@/actions/getOptivumTimetable";
 import { BottomBar } from "@/components/common/BottomBar";
+import { SchoolNews } from "@/components/common/SchoolNews";
 import { Timetable } from "@/components/timetable/Timetable";
 import { TimetableController } from "@/components/timetable/TimetableController";
 import { Topbar } from "@/components/topbar/Topbar";
@@ -37,7 +38,6 @@ export const generateMetadata = async ({
   const [type, value] = resolvedParams.path ?? [];
 
   if (!isTimetableType(type) || !value) {
-    // ta ścieżka i tak przekierowuje — niech nie zostawia po sobie indeksu
     return { robots: { index: false, follow: true } };
   }
 
@@ -75,6 +75,7 @@ const TimetablePage = async ({ params }: { params: Promise<PageParams> }) => {
       <TimetableController timetable={timetable} />
       <main className="flex h-full w-full min-w-0 flex-1 flex-col gap-y-3 max-md:overflow-y-auto max-md:pb-[calc(4rem+env(safe-area-inset-bottom))] md:gap-y-3 md:overflow-hidden md:p-3">
         <Topbar timetable={timetable} />
+        <SchoolNews />
         <Timetable timetable={timetable} />
         <BottomBar timetable={timetable} />
       </main>
