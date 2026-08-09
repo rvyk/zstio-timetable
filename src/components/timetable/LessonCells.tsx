@@ -24,7 +24,7 @@ export const TableLessonCell: FC<TableLessonCellProps> = ({
     <td
       className={cn(
         dayIndex != selectedDayIndex && "max-md:hidden",
-        "align-top p-1",
+        "p-1 align-top",
       )}
     >
       {lessons.length > 0 && (

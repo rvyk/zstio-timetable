@@ -81,9 +81,11 @@
   --radius-sm: 7px;
 
   /* tinted, single light source from above */
-  --shadow-soft: 0 1px 2px rgb(var(--shadow-color) / 0.04),
+  --shadow-soft:
+    0 1px 2px rgb(var(--shadow-color) / 0.04),
     0 4px 12px -4px rgb(var(--shadow-color) / 0.06);
-  --shadow-raised: 0 1px 2px rgb(var(--shadow-color) / 0.05),
+  --shadow-raised:
+    0 1px 2px rgb(var(--shadow-color) / 0.05),
     0 12px 32px -12px rgb(var(--shadow-color) / 0.14);
 
   --animate-accordion-down: accordion-down 0.22s cubic-bezier(0.32, 0.72, 0, 1);
@@ -91,16 +93,30 @@
   --animate-rise: rise 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
 
   @keyframes accordion-down {
-    from { height: 0 }
-    to   { height: var(--radix-accordion-content-height) }
+    from {
+      height: 0;
+    }
+    to {
+      height: var(--radix-accordion-content-height);
+    }
   }
   @keyframes accordion-up {
-    from { height: var(--radix-accordion-content-height) }
-    to   { height: 0 }
+    from {
+      height: var(--radix-accordion-content-height);
+    }
+    to {
+      height: 0;
+    }
   }
   @keyframes rise {
-    from { opacity: 0; transform: translateY(6px) }
-    to   { opacity: 1; transform: none }
+    from {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
   }
 }
 

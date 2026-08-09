@@ -10,16 +10,16 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          "bg-primary text-background border border-primary/10 shadow-[var(--shadow-soft)] hover:bg-primary/88 dark:bg-accent dark:text-primary/85 dark:hover:bg-accent-secondary dark:hover:text-primary",
+          "bg-primary text-background border border-primary/10 shadow-(--shadow-soft) hover:bg-primary/88 dark:bg-accent dark:text-primary/85 dark:hover:bg-accent-secondary dark:hover:text-primary",
         primary:
-          "bg-accent-table border border-black/10 text-white shadow-[var(--shadow-soft)] hover:brightness-110",
+          "bg-accent-table border border-black/10 text-white shadow-(--shadow-soft) hover:brightness-110",
         secondary:
           "text-primary/90 bg-accent border border-lines hover:bg-primary/5 hover:text-primary",
         icon: "bg-accent text-primary/70 border border-lines hover:bg-primary/5 hover:text-primary dark:hover:bg-accent-secondary",
         sidebarItem:
           "rounded-md border justify-start border-transparent py-2.5 pl-4 pr-3 text-left text-xs sm:text-sm font-medium text-primary/70 hover:bg-primary/5 hover:text-primary",
         sidebarItemActive:
-          "justify-start text-xs sm:text-sm font-semibold text-primary !border-transparent bg-primary/[0.07] hover:!bg-primary/10 relative before:absolute before:left-0 before:top-1/2 before:h-4 before:w-[3px] before:-translate-y-1/2 before:rounded-r-full before:bg-accent-table",
+          "justify-start text-xs sm:text-sm font-semibold text-primary border-transparent! bg-primary/[0.07] hover:bg-primary/10! relative before:absolute before:left-0 before:top-1/2 before:h-4 before:w-0.75 before:-translate-y-1/2 before:rounded-r-full before:bg-accent-table",
       },
       size: {
         default: "h-10 px-4 py-2",
@@ -35,7 +35,8 @@ const buttonVariants = cva(
 );
 
 export interface ButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
+  extends
+    React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {
   asChild?: boolean;
 }

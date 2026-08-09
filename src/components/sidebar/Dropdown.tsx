@@ -74,7 +74,7 @@ export const Dropdown: FC<DropdownProps> = ({
           )}
         >
           <Icon
-            className="text-primary/50 group-hover:text-primary group-data-[state=open]:text-primary size-[17px] transition-colors"
+            className="text-primary/50 group-hover:text-primary group-data-[state=open]:text-primary size-4.25 transition-colors"
             strokeWidth={1.75}
           />
         </div>
@@ -142,17 +142,13 @@ export const Dropdown: FC<DropdownProps> = ({
   }
 
   return (
-    <AccordionItem
-      value={type}
-      disabled={isPreview}
-      className={cn(className)}
-    >
+    <AccordionItem value={type} disabled={isPreview} className={cn(className)}>
       <AccordionTrigger
         asChild={isPreview}
         className={cn(
           isPreview && "pointer-events-none select-none",
           "group w-full rounded-lg p-2 transition-colors",
-          "hover:bg-primary/[0.04] data-[state=open]:bg-primary/[0.04]",
+          "hover:bg-primary/4 data-[state=open]:bg-primary/4",
         )}
       >
         {triggerContent}
@@ -184,7 +180,11 @@ export const DropdownContent: FC<DropdownContentProps> = ({
     >
       {data && data.length > 0 ? (
         data.map((item) => (
-          <ListItemComponent key={`${type}-${item.value}`} item={item} type={type} />
+          <ListItemComponent
+            key={`${type}-${item.value}`}
+            item={item}
+            type={type}
+          />
         ))
       ) : (
         <p className="text-primary/40 px-4 py-3 text-sm">
@@ -228,8 +228,8 @@ export const ListItemComponent: FC<
       href={link}
       className={cn(
         isActive
-          ? "text-primary bg-primary/[0.06] font-medium"
-          : "text-primary/65 hover:text-primary hover:bg-primary/[0.04]",
+          ? "text-primary bg-primary/6 font-medium"
+          : "text-primary/65 hover:text-primary hover:bg-primary/4",
         "group flex w-full min-w-0 items-center justify-between gap-x-2 rounded-md px-3 py-2 text-sm transition-colors",
       )}
     >

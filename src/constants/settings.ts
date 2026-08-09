@@ -9,9 +9,6 @@ export const BREAK_LENGTH = 5;
 /** Shortened lesson length in minutes */
 export const SHORT_LESSON_LENGTH = 30;
 
-/** Time format used to recognize and display time */
-export const CALCULATED_TIME_FORMAT = "HH:mm";
-
 /** Maximum number of lessons in a timetable */
 export const MAX_LESSONS = 14;
 

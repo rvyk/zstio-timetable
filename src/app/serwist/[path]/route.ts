@@ -12,9 +12,11 @@ import { spawnSync } from "node:child_process";
 // `git rev-parse HEAD` might not the most efficient way
 // of determining a revision, however. You may prefer to use
 // the hashes of every extra file you precache.
-const revision =
-  spawnSync("git", ["rev-parse", "HEAD"], { encoding: "utf-8" }).stdout ??
-  crypto.randomUUID();
+// `stdout` jest typowane jako string, ale przy nieudanym spawnie bywa nullem — stąd zwykły if.
+const { stdout } = spawnSync("git", ["rev-parse", "HEAD"], {
+  encoding: "utf-8",
+});
+const revision = stdout ? stdout.trim() : crypto.randomUUID();
 
 export const { dynamic, dynamicParams, revalidate, generateStaticParams, GET } =
   createSerwistRoute({

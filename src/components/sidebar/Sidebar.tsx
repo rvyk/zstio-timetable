@@ -175,7 +175,7 @@ const SidebarActions: FC<{ collapsed: boolean; onExpand: () => void }> = ({
             onClick={() => setIsOpen(false)}
             aria-hidden
           />
-          <div className="border-lines bg-foreground/95 absolute inset-x-0 bottom-full z-20 mb-2 animate-[var(--animate-rise)] overflow-hidden rounded-lg border shadow-[var(--shadow-raised)] backdrop-blur-md">
+          <div className="border-lines bg-foreground/95 animate-rise absolute inset-x-0 bottom-full z-20 mb-2 overflow-hidden rounded-lg border shadow-(--shadow-raised) backdrop-blur-md">
             <SettingsList onSelect={() => setIsOpen(false)} />
           </div>
         </Fragment>
@@ -243,7 +243,7 @@ export const Sidebar: FC = () => {
     <aside
       className={cn(
         collapsed ? "w-16" : "w-80",
-        "border-lines bg-foreground relative m-3 mr-0 h-[calc(100dvh-1.5rem)] shrink-0 rounded-xl border shadow-[var(--shadow-soft)] transition-[width] duration-300 [transition-timing-function:cubic-bezier(0.32,0.72,0,1)] max-md:hidden",
+        "border-lines bg-foreground relative m-3 mr-0 h-[calc(100dvh-1.5rem)] shrink-0 rounded-xl border shadow-(--shadow-soft) transition-[width] duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] max-md:hidden",
       )}
     >
       <SidebarContext.Provider value={{ isPreview: collapsed }}>
@@ -303,7 +303,7 @@ export const SidebarInfo: FC<{ showTimetableDates?: boolean }> = ({
       {lastUpdatedTimetable && (
         <p className="text-primary/40 text-[11px]">
           Ostatnia aktualizacja{" "}
-          <span className="text-primary/60 font-mono break-words">
+          <span className="text-primary/60 font-mono wrap-break-word">
             {lastUpdatedTimetable}
           </span>
         </p>
@@ -323,10 +323,9 @@ const TimetableSidebarDropdowns: FC<{
   const { isPreview } = useSidebarContext();
   const [openSections, setOpenSections] = useState<string[]>([]);
 
-  // w railu nie ma gdzie narysować rozwiniętej listy — zwijamy sekcje razem z panelem
-  useEffect(() => {
-    if (isPreview) setOpenSections([]);
-  }, [isPreview]);
+  // w railu nie ma gdzie narysować rozwiniętej listy — zwijamy sekcje razem z panelem.
+  // Liczone przy renderze, nie synchronizowane efektem, więc nie ma kaskady renderów.
+  const visibleSections = isPreview ? [] : openSections;
 
   const dropdownItems = useMemo(() => {
     return [
@@ -359,7 +358,7 @@ const TimetableSidebarDropdowns: FC<{
       ) : (
         <Accordion
           type="multiple"
-          value={openSections}
+          value={visibleSections}
           onValueChange={setOpenSections}
           className="grid w-full gap-1"
         >

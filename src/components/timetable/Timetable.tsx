@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 import { useSettingsStore, useSettingsWithoutStore } from "@/stores/settings";
 import type { OptivumTimetable } from "@/types/optivum";
 import { CalendarX2 } from "lucide-react";
-import { FC, useEffect, useMemo, useRef, useState } from "react";
+import { FC, useMemo, useRef, useSyncExternalStore } from "react";
 import {
   ShortLessonSwitcherCell,
   TableHeaderMobileCell,
@@ -23,8 +23,25 @@ interface TimetableProps {
 
 const SWIPE_THRESHOLD = 50;
 
+const NEVER_CHANGES = () => () => {};
+
+/**
+ * ?day=0..4 udaje inny dzień tygodnia (razem z ?now=HH:MM do testów).
+ * useSyncExternalStore daje osobny snapshot dla serwera i klienta, więc nie
+ * potrzebujemy setState w efekcie ani nie ryzykujemy niezgodności hydracji.
+ */
+const useTodayIndex = () => {
+  const override = useSyncExternalStore(
+    NEVER_CHANGES,
+    () => new URLSearchParams(window.location.search).get("day"),
+    () => null,
+  );
+
+  return override === null ? (new Date().getDay() + 6) % 7 : Number(override);
+};
+
 const NoLessons: FC<{ description: string }> = ({ description }) => (
-  <div className="flex h-full w-full animate-[var(--animate-rise)] flex-col items-center justify-center gap-3 p-10 text-center">
+  <div className="animate-rise flex h-full w-full flex-col items-center justify-center gap-3 p-10 text-center">
     <div className="border-lines bg-accent grid size-12 place-content-center rounded-xl border">
       <CalendarX2 className="text-primary/40 size-5" strokeWidth={1.75} />
     </div>
@@ -72,14 +89,7 @@ export const Timetable: FC<TimetableProps> = ({ timetable }) => {
     [lessons],
   );
 
-  // ?day=0..4 udaje inny dzień tygodnia (razem z ?now=HH:MM do testów)
-  const [todayIndex, setTodayIndex] = useState(
-    () => (new Date().getDay() + 6) % 7,
-  );
-  useEffect(() => {
-    const day = new URLSearchParams(window.location.search).get("day");
-    if (day !== null) setTodayIndex(Number(day));
-  }, []);
+  const todayIndex = useTodayIndex();
   const dayNames = timetable.dayNames;
   const hoursList = useMemo(() => Object.values(hours), [hours]);
   const visibleHours = useMemo(
@@ -95,11 +105,13 @@ export const Timetable: FC<TimetableProps> = ({ timetable }) => {
 
   const touchStartX = useRef<number | null>(null);
   const handleTouchStart = (e: React.TouchEvent) => {
-    touchStartX.current = e.touches[0].clientX;
+    touchStartX.current = e.touches[0]?.clientX ?? null;
   };
   const handleTouchEnd = (e: React.TouchEvent) => {
-    if (touchStartX.current === null) return;
-    const diff = e.changedTouches[0].clientX - touchStartX.current;
+    const endX = e.changedTouches[0]?.clientX;
+    if (touchStartX.current === null || endX === undefined) return;
+
+    const diff = endX - touchStartX.current;
     if (Math.abs(diff) > SWIPE_THRESHOLD) {
       const increment = diff < 0 ? 1 : -1;
       const totalDays = dayNames.length;
@@ -114,7 +126,7 @@ export const Timetable: FC<TimetableProps> = ({ timetable }) => {
       id="plan"
       className={cn(
         "flex-1",
-        "border-lines bg-foreground flex w-full flex-col max-md:mb-20 md:overflow-hidden md:rounded-xl md:border md:shadow-[var(--shadow-soft)]",
+        "border-lines bg-foreground flex w-full flex-col max-md:mb-20 md:overflow-hidden md:rounded-xl md:border md:shadow-(--shadow-soft)",
       )}
     >
       <div className="border-lines bg-foreground/85 sticky top-0 z-20 flex justify-between border-b backdrop-blur-md md:hidden">
@@ -134,7 +146,7 @@ export const Timetable: FC<TimetableProps> = ({ timetable }) => {
         onTouchEnd={handleTouchEnd}
       >
         <div
-          className="flex h-full w-full transition-transform duration-300 [transition-timing-function:cubic-bezier(0.32,0.72,0,1)]"
+          className="flex h-full w-full transition-transform duration-300 ease-[cubic-bezier(0.32,0.72,0,1)]"
           style={{ transform: `translateX(-${selectedDayIndex * 100}%)` }}
         >
           {dayNames.map((_, dayIndex) => {
@@ -145,7 +157,7 @@ export const Timetable: FC<TimetableProps> = ({ timetable }) => {
             return (
               <div
                 key={dayIndex}
-                className="flex h-full w-full flex-shrink-0 flex-col"
+                className="flex h-full w-full shrink-0 flex-col"
               >
                 {dayHasLessons ? (
                   <table className="w-full">

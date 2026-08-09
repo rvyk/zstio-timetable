@@ -100,7 +100,7 @@ export const BottomBar: FC<BottomBarProps> = ({ timetable, isOffline }) => {
       }}
     >
       <DrawerTrigger asChild>
-        <div className="border-lines bg-foreground/85 fixed bottom-0 z-30 flex h-20 w-full flex-col rounded-t-xl border-t shadow-[var(--shadow-raised)] backdrop-blur-xl outline-none md:hidden">
+        <div className="border-lines bg-foreground/85 fixed bottom-0 z-30 flex h-20 w-full flex-col rounded-t-xl border-t shadow-(--shadow-raised) backdrop-blur-xl outline-none md:hidden">
           <div className="bg-primary/15 absolute top-1.5 right-0 left-0 mx-auto h-1 w-9 rounded-full" />
           <div className="flex h-full items-center justify-between px-2 pt-1">
             <Button

@@ -47,7 +47,7 @@ export const FreeRoomsBoard: FC<FreeRoomsBoardProps> = ({
   return (
     <section
       id="plan"
-      className="border-lines bg-foreground flex w-full flex-1 flex-col max-md:mb-3 md:overflow-hidden md:rounded-xl md:border md:shadow-[var(--shadow-soft)]"
+      className="border-lines bg-foreground flex w-full flex-1 flex-col max-md:mb-3 md:overflow-hidden md:rounded-xl md:border md:shadow-(--shadow-soft)"
     >
       <div className="border-lines flex items-center justify-between gap-4 border-b py-2 pr-2 pl-4">
         <div className="flex min-w-0 items-baseline gap-x-2.5">
@@ -132,7 +132,7 @@ export const FreeRoomsBoard: FC<FreeRoomsBoardProps> = ({
               {dayNames.map((dayName, dayIndex) => {
                 const count = freeRooms[dayIndex]?.[hourIndex]?.length ?? 0;
                 const isSelected =
-                  selected?.[0] === dayIndex && selected?.[1] === hourIndex;
+                  selected?.[0] === dayIndex && selected[1] === hourIndex;
 
                 return (
                   <button
@@ -174,7 +174,7 @@ export const FreeRoomsBoard: FC<FreeRoomsBoardProps> = ({
         {selected && (
           <div
             ref={resultsRef}
-            className="border-lines mt-4 animate-[var(--animate-rise)] border-t pt-4"
+            className="border-lines animate-rise mt-4 border-t pt-4"
           >
             <p className="text-primary/40 mb-2 text-[11px] font-medium tracking-[0.06em] uppercase">
               {dayNames[selected[0]]}, lekcja {hours[selected[1]]?.number} (

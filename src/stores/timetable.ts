@@ -15,7 +15,6 @@ export const useTimetableStore = create<TimetableStore>()(
     }),
     {
       name: "timetable-storage",
-    }
-  )
+    },
+  ),
 );
-

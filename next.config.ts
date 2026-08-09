@@ -1,26 +1,12 @@
 import { withSentryConfig } from "@sentry/nextjs";
-import withSerwistInit from "@serwist/next";
-import { spawnSync } from "child_process";
 import type { NextConfig } from "next";
 import "./src/env";
 
-const revision =
-  spawnSync("git", ["rev-parse", "HEAD"], { encoding: "utf-8" }).stdout ??
-  crypto.randomUUID();
-
-const withSerwist = withSerwistInit({
-  additionalPrecacheEntries: [{ url: "/~offline", revision }],
-  swSrc: "src/app/sw.ts",
-  swDest: "public/sw.js",
-  cacheOnNavigation: true,
-  reloadOnOnline: true,
-  disable: process.env.NODE_ENV === "development",
-});
-
+// Service worker buduje `@serwist/turbopack` w src/app/serwist/[path]/route.ts.
+// Nie owijamy configu w `@serwist/next` — ten nie wspiera Turbopacka i duplikowałby SW.
 const nextConfig: NextConfig = {
-  output: process.env.DOCKERIZED === "true" ? "standalone" : undefined,
-
-  allowedDevOrigins: ["10.99.75.95"],
+  // Dockerfile kopiuje .next/standalone, więc budujemy je zawsze.
+  output: "standalone",
 
   redirects: async () => [
     {
@@ -37,9 +23,7 @@ const sentryConfig = {
   silent: !process.env.CI,
   widenClientFileUpload: true,
   hideSourceMaps: true,
-  disableLogger: true,
-  automaticVercelMonitors: false,
   telemetry: false,
 };
 
-export default withSentryConfig(withSerwist(nextConfig), sentryConfig);
+export default withSentryConfig(nextConfig, sentryConfig);

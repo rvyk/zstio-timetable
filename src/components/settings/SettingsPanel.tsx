@@ -53,8 +53,8 @@ const SettingButton = ({
       onClick={onClick}
       className={cn(
         "group flex w-full gap-3 rounded-md p-2.5 text-left transition-colors",
-        "hover:bg-primary/[0.04] active:scale-[0.99]",
-        active && "bg-primary/[0.04]",
+        "hover:bg-primary/4 active:scale-[0.99]",
+        active && "bg-primary/4",
       )}
     >
       <Icon
@@ -89,7 +89,7 @@ const ThemeSetting = () => {
       <span className="text-primary/40 text-[11px] font-medium tracking-[0.06em] uppercase">
         Motyw
       </span>
-      <div className="border-lines bg-accent grid grid-cols-3 gap-1 rounded-lg border p-[3px]">
+      <div className="border-lines bg-accent grid grid-cols-3 gap-1 rounded-lg border p-0.75">
         {THEMES.map((option) => (
           <button
             key={option.value}
@@ -97,7 +97,7 @@ const ThemeSetting = () => {
             aria-pressed={active === option.value}
             className={cn(
               active === option.value
-                ? "bg-foreground text-primary shadow-[var(--shadow-soft)]"
+                ? "bg-foreground text-primary shadow-(--shadow-soft)"
                 : "text-primary/45 hover:text-primary",
               "rounded-md py-1.5 text-[11px] font-medium transition-colors",
             )}
@@ -203,7 +203,7 @@ export const SettingsList = ({ onSelect }: { onSelect?: () => void }) => {
         icon: Search,
         title: "Wolne sale",
         hidden: timetable?.list.rooms?.length === 0,
-        onClick: () => router.push("/sale"),
+        onClick: () => router.push("/free-rooms"),
         description: (
           <p>
             Zobacz wolne sale w całym tygodniu naraz, z podziałem na dni i

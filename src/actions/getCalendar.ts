@@ -33,16 +33,9 @@ const parseTime = (timeStr: string) => {
   return { hours, minutes };
 };
 
-const createEvent = (
-  group: TableLesson,
-  dayIndex: number,
-  lessonIndex: number,
-  hours: TableHour[],
-) => {
+const createEvent = (group: TableLesson, dayIndex: number, hour: TableHour) => {
   const date = getDateOfNextWeekDayByIndex(dayIndex + 1);
-  const { hours: startHour, minutes: startMinute } = parseTime(
-    hours[lessonIndex].timeFrom,
-  );
+  const { hours: startHour, minutes: startMinute } = parseTime(hour.timeFrom);
 
   const { subject, groupName, className, teacher, room } = group;
 
@@ -96,8 +89,12 @@ const getIcs = (days: TableLesson[][][], hours: TableHour[]) => {
 
   days.forEach((day, dayIndex) => {
     day.forEach((lesson, lessonIndex) => {
+      // bez godziny nie da się umieścić lekcji w kalendarzu — pomijamy ją
+      const hour = hours[lessonIndex];
+      if (!hour) return;
+
       lesson.forEach((group) => {
-        events.push(createEvent(group, dayIndex, lessonIndex, hours));
+        events.push(createEvent(group, dayIndex, hour));
       });
     });
   });

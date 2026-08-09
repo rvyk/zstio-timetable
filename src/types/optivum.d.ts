@@ -24,4 +24,3 @@ interface OptivumTimetable {
   list: List;
   lastUpdated: string;
 }
-

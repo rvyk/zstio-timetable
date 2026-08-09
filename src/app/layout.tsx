@@ -46,12 +46,12 @@ export default function RootLayout({
   children: ReactNode;
 }>) {
   return (
-    <html lang="pl" suppressHydrationWarning>
+    <html lang="pl" suppressHydrationWarning data-scroll-behavior="smooth">
       <body
         className={cn(
           geistSans.variable,
           geistMono.variable,
-          "font-sans bg-foreground md:bg-background flex h-[100dvh] antialiased",
+          "bg-foreground md:bg-background flex h-dvh font-sans antialiased",
         )}
       >
         <SerwistProvider swUrl="/serwist/sw.js">

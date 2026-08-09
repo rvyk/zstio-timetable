@@ -10,6 +10,15 @@ import { useCallback, useEffect, useRef } from "react";
 const DOUBLE_TAP_DELAY = 300;
 const MOBILE_VIEW_QUERY = "(max-width: 768px)";
 
+const TYPE_TO_LIST = {
+  class: "classes",
+  teacher: "teachers",
+  room: "rooms",
+} as const satisfies Record<OptivumTimetable["type"], keyof List>;
+
+/** Kolejność przewijania strzałkami: klasy → nauczyciele → sale → klasy. */
+const TYPE_CYCLE = ["class", "teacher", "room"] as const;
+
 export const TimetableController = ({
   timetable,
 }: {
@@ -33,64 +42,35 @@ export const TimetableController = ({
       const type = timetable.type;
       const currentNumber = timetable.id.slice(1);
 
-      const typePropertyName = {
-        class: "classes",
-        teacher: "teachers",
-        room: "rooms",
-      }[type];
+      const items = timeTableList[TYPE_TO_LIST[type]];
+      if (!items) return;
 
-      if (!typePropertyName) return;
-
-      const currentIndex = timeTableList[
-        typePropertyName as keyof List
-      ]?.findIndex((val) => val.value == currentNumber);
-
-      if (currentIndex == undefined) return;
+      const currentIndex = items.findIndex((val) => val.value == currentNumber);
+      if (currentIndex === -1) return;
 
       const nextIndex = increment ? currentIndex + 1 : currentIndex - 1;
 
-      if (nextIndex == timeTableList[typePropertyName as keyof List]?.length) {
-        switch (type) {
-          case "class":
-            navigateTo(`/teacher/${timeTableList.classes[0].value}`);
-            break;
-          case "teacher":
-            if (timeTableList.teachers)
-              navigateTo(`/room/${timeTableList.teachers[0].value}`);
-            break;
-          case "room":
-            if (timeTableList.rooms)
-              navigateTo(`/class/${timeTableList.rooms[0].value}`);
-            break;
-        }
+      // wyjście poza listę → skaczemy na sąsiedni typ planu i zaczynamy od jego krańca
+      if (nextIndex < 0 || nextIndex >= items.length) {
+        const step = increment ? 1 : -1;
+        const nextType =
+          TYPE_CYCLE[
+            (TYPE_CYCLE.indexOf(type) + step + TYPE_CYCLE.length) %
+              TYPE_CYCLE.length
+          ];
+        if (!nextType) return;
+
+        const nextItems = timeTableList[TYPE_TO_LIST[nextType]];
+        if (!nextItems?.length) return;
+
+        const target = increment
+          ? nextItems[0]
+          : nextItems[nextItems.length - 1];
+        if (target) navigateTo(`/${nextType}/${target.value}`);
         return;
       }
 
-      if (nextIndex == -1) {
-        switch (type) {
-          case "class":
-            if (timeTableList.rooms)
-              navigateTo(
-                `/room/${timeTableList.rooms[timeTableList.rooms.length - 1].value}`,
-              );
-            break;
-          case "teacher":
-            navigateTo(
-              `/class/${timeTableList.classes[timeTableList.classes.length - 1].value}`,
-            );
-            break;
-          case "room":
-            if (timeTableList.teachers)
-              navigateTo(
-                `/teacher/${timeTableList.teachers[timeTableList.teachers.length - 1].value}`,
-              );
-            break;
-        }
-      }
-
-      const nextValue =
-        timeTableList[typePropertyName as keyof List]?.[nextIndex]?.value;
-
+      const nextValue = items[nextIndex]?.value;
       if (!nextValue) return;
 
       navigateTo(`/${type}/${nextValue}`);

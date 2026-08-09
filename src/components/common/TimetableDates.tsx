@@ -66,12 +66,7 @@ export const TimetableDates: FC<TimetableDatesProps> = ({
   }
 
   return (
-    <p
-      className={cn(
-        "text-primary/45 text-sm",
-        className,
-      )}
-    >
+    <p className={cn("text-primary/45 text-sm", className)}>
       {elements.map((el, idx) =>
         stackOnMobile ? (
           <span key={idx} className="block sm:inline">

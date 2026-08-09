@@ -1,13 +1,15 @@
 "use client";
 
+import { DAYS_OF_WEEK } from "@/constants/days";
 import { useTimetableStore } from "@/stores/timetable";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import { useIsClient } from "usehooks-ts";
+
+const DEFAULT_DAYS = DAYS_OF_WEEK.slice(0, 5).map((day) => day.long);
 
 export default function PrintPage() {
   const { timetable } = useTimetableStore();
-  const [isMounted, setIsMounted] = useState(false);
-
-  useEffect(() => setIsMounted(true), []);
+  const isMounted = useIsClient();
 
   // strona otwiera się z przycisku „Drukuj plan” — od razu podnosimy dialog druku
   useEffect(() => {
@@ -25,14 +27,8 @@ export default function PrintPage() {
   }
 
   const { title, dayNames, hours, lessons } = timetable;
-  const days = dayNames ?? [
-    "Poniedziałek",
-    "Wtorek",
-    "Środa",
-    "Czwartek",
-    "Piątek",
-  ];
-  const hourKeys = Object.keys(hours ?? {}).map(Number);
+  const days = dayNames.length > 0 ? dayNames : DEFAULT_DAYS;
+  const hourKeys = Object.keys(hours).map(Number);
   const maxHours = hourKeys.length > 0 ? Math.max(...hourKeys) : 0;
 
   return (
@@ -68,14 +64,16 @@ export default function PrintPage() {
                 {days.map((_, dayIndex) => (
                   <td
                     key={dayIndex}
-                    className="min-w-[120px] border border-gray-400 p-2 text-center align-top"
+                    className="min-w-30 border border-gray-400 p-2 text-center align-top"
                   >
                     {(lessons?.[dayIndex]?.[hourIndex] ?? []).map(
                       (lesson, index) => (
                         <div
                           key={index}
                           className={
-                            index > 0 ? "mt-2 border-t border-gray-200 pt-2" : ""
+                            index > 0
+                              ? "mt-2 border-t border-gray-200 pt-2"
+                              : ""
                           }
                         >
                           <div className="font-semibold">{lesson.subject}</div>

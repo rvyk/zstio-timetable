@@ -51,7 +51,7 @@ export const Search: FC<SearchProps> = ({ timetable }) => {
     (e: KeyboardEvent<HTMLInputElement>) => {
       if (e.key === "Enter" && filteredData.length === 1) {
         const item = filteredData[0];
-        if ("value" in item) {
+        if (item && "value" in item) {
           const link = `/${item.type}/${item.value}`;
           router.push(link);
           setLastVisitedCookie(link);
@@ -64,7 +64,7 @@ export const Search: FC<SearchProps> = ({ timetable }) => {
   return (
     <div
       className={cn(
-        isPreview ? "place-content-center" : "sm:min-w-[220px]",
+        isPreview ? "place-content-center" : "sm:min-w-55",
         "relative grid",
       )}
     >
@@ -75,7 +75,11 @@ export const Search: FC<SearchProps> = ({ timetable }) => {
         )}
       >
         <div className="mr-2 flex w-full items-center gap-x-2.5">
-          <SearchIcon className="text-primary/40 shrink-0" size={17} strokeWidth={2} />
+          <SearchIcon
+            className="text-primary/40 shrink-0"
+            size={17}
+            strokeWidth={2}
+          />
           <input
             name="search"
             value={value}
@@ -102,7 +106,7 @@ export const Search: FC<SearchProps> = ({ timetable }) => {
         )}
       </div>
       {value.trim() && !isPreview && (
-        <div className="border-lines bg-foreground animate-[var(--animate-rise)] absolute inset-x-0 top-full z-40 mt-2 overflow-hidden rounded-lg border p-1 shadow-[var(--shadow-raised)]">
+        <div className="border-lines bg-foreground animate-rise absolute inset-x-0 top-full z-40 mt-2 overflow-hidden rounded-lg border p-1 shadow-(--shadow-raised)">
           {filteredData.length > 0 ? (
             <DropdownContent type="search" data={filteredData} />
           ) : (

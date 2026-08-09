@@ -62,7 +62,7 @@ export const TableHourCell: FC<TableHourCellProps> = ({
   return (
     <td className="relative py-3.5 pr-3 pl-4 align-top max-md:w-30 max-md:select-none">
       {isLive && (
-        <span className="bg-accent-table absolute top-1/2 left-0 h-[calc(100%-1.25rem)] w-[3px] -translate-y-1/2 rounded-r-full" />
+        <span className="bg-accent-table absolute top-1/2 left-0 h-[calc(100%-1.25rem)] w-0.75 -translate-y-1/2 rounded-r-full" />
       )}
       <div className="flex items-baseline gap-2 md:grid md:gap-1">
         <span
@@ -83,7 +83,7 @@ export const TableHourCell: FC<TableHourCellProps> = ({
       </div>
       {isLive && (
         <div className="mt-2 grid gap-1.5">
-          <div className="bg-primary/10 h-[3px] w-full max-w-28 overflow-hidden rounded-full">
+          <div className="bg-primary/10 h-0.75 w-full max-w-28 overflow-hidden rounded-full">
             <div
               className="bg-accent-table h-full rounded-full transition-[width] duration-1000 ease-linear"
               style={{ width: `${progress}%` }}
@@ -134,7 +134,7 @@ export const TableHeaderMobileCell: FC<TableHeaderCellProps> = ({
         {dayNumber.monthNumber.toString().padStart(2, "0")}
       </span>
       {isActive && (
-        <span className="bg-accent-table absolute inset-x-3 -bottom-px h-[2px] rounded-full" />
+        <span className="bg-accent-table absolute inset-x-3 -bottom-px h-0.5 rounded-full" />
       )}
     </button>
   );
@@ -150,7 +150,7 @@ export const TableHeaderCell: FC<TableHeaderCellProps> = ({ dayName }) => {
   return (
     <th className="relative text-left max-md:select-none">
       {isCurrentDay && (
-        <span className="bg-accent-table absolute inset-x-0 top-0 h-[2px]" />
+        <span className="bg-accent-table absolute inset-x-0 top-0 h-0.5" />
       )}
       <div className="inline-flex items-baseline gap-x-2.5 px-4 py-3.5">
         <span
@@ -196,7 +196,7 @@ export const ShortLessonSwitcherCell: FC = () => {
   if (!isClient) {
     return (
       <div className="px-3 py-2">
-        <Skeleton className="h-9 w-[150px] rounded-lg" />
+        <Skeleton className="h-9 w-37.5 rounded-lg" />
       </div>
     );
   }
@@ -229,7 +229,7 @@ export const ShortLessonSwitcherCell: FC = () => {
         </div>
       )}
 
-      <div className="border-lines bg-accent flex h-9 gap-1 rounded-lg border p-[3px]">
+      <div className="border-lines bg-accent flex h-9 gap-1 rounded-lg border p-0.75">
         {LESSON_MODES.map(({ value, label }) => {
           const active = lessonType === value;
           return (
@@ -244,7 +244,7 @@ export const ShortLessonSwitcherCell: FC = () => {
               }
               className={cn(
                 active
-                  ? "bg-foreground text-primary shadow-[var(--shadow-soft)]"
+                  ? "bg-foreground text-primary shadow-(--shadow-soft)"
                   : "text-primary/50 hover:text-primary/80",
                 "tabular rounded-md px-2.5 font-mono text-xs font-medium transition-colors",
               )}

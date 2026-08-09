@@ -40,13 +40,13 @@ export const TopbarButtons: FC = () => {
         const IconComponent = button.icon;
 
         return (
-            <Button
-              key={index}
-              aria-label={button.ariaLabel}
-              variant="icon"
-              size="icon"
-              onClick={button.action}
-            >
+          <Button
+            key={index}
+            aria-label={button.ariaLabel}
+            variant="icon"
+            size="icon"
+            onClick={button.action}
+          >
             <IconComponent strokeWidth={2.5} className="size-4 sm:size-5" />
           </Button>
         );
