@@ -14,11 +14,6 @@ import { cn } from "@/lib/utils";
 export function Toaster() {
   const { toasts } = useToast();
 
-  const iconStyles = {
-    success: "text-accent-success",
-    error: "text-accent-table",
-  };
-
   return (
     <ToastProvider>
       {toasts.map(function ({
@@ -29,24 +24,24 @@ export function Toaster() {
         icon: LucideIcon,
         ...props
       }) {
+        const isError = props.variant === "error";
+
         return (
           <Toast key={id} {...props}>
-            <div className="flex min-w-0 items-start gap-x-2.5">
-              {LucideIcon && (
-                <LucideIcon
-                  className={cn(
-                    "mt-px size-4 shrink-0",
-                    iconStyles[props.variant ?? "success"],
-                  )}
-                  strokeWidth={1.75}
-                />
-              )}
-              <div className="min-w-0">
-                {title && <ToastTitle>{title}</ToastTitle>}
-                {description && (
-                  <ToastDescription>{description}</ToastDescription>
+            {LucideIcon && (
+              <LucideIcon
+                className={cn(
+                  isError ? "text-accent-table" : "text-primary/45",
+                  "mt-0.5 size-4 shrink-0",
                 )}
-              </div>
+                strokeWidth={1.75}
+              />
+            )}
+            <div className="min-w-0 flex-1">
+              {title && <ToastTitle>{title}</ToastTitle>}
+              {description && (
+                <ToastDescription>{description}</ToastDescription>
+              )}
             </div>
             {action}
             <ToastClose />

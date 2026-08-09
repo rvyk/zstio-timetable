@@ -18,6 +18,7 @@ import {
   GraduationCap,
   MapPin,
   PrinterIcon,
+  SearchIcon,
   SlidersHorizontal,
   Users,
 } from "lucide-react";
@@ -26,21 +27,15 @@ import Link from "next/link";
 import { FC, Fragment, useEffect, useMemo, useState } from "react";
 import { useIsClient, useMediaQuery } from "usehooks-ts";
 import SidebarContext, { useSidebarContext } from "./Context";
-import { Dropdown } from "./Dropdown";
-import { Search } from "./Search";
+import { Dropdown, DropdownContent } from "./Dropdown";
+import { Search, useSearchResults } from "./Search";
 
 interface SidebarContentProps {
   showTimetableDates?: boolean;
-  layout?: "vertical" | "horizontal";
-  showInfo?: boolean;
-  showSearch?: boolean;
 }
 
 export const SidebarContent: FC<SidebarContentProps> = ({
   showTimetableDates,
-  layout = "vertical",
-  showInfo = true,
-  showSearch = true,
 }) => {
   const { isPreview } = useSidebarContext();
   const isClient = useIsClient();
@@ -67,26 +62,10 @@ export const SidebarContent: FC<SidebarContentProps> = ({
       </Fragment>
     );
 
-  const infoSection = showInfo ? (
-    <SidebarInfo showTimetableDates={showTimetableDates} />
-  ) : null;
-
-  if (layout === "horizontal") {
-    return (
-      <div className="grid gap-4">
-        <TimetableSidebarDropdowns
-          layout="horizontal"
-          showSearch={showSearch}
-        />
-        {infoSection}
-      </div>
-    );
-  }
-
   return (
     <Fragment>
-      <TimetableSidebarDropdowns layout="vertical" showSearch={showSearch} />
-      {infoSection}
+      <TimetableSidebarDropdowns />
+      <SidebarInfo showTimetableDates={showTimetableDates} />
     </Fragment>
   );
 };
@@ -292,7 +271,14 @@ export const SidebarInfo: FC<{ showTimetableDates?: boolean }> = ({
   }
 
   return (
-    <div className={cn(isPreview ? "hidden" : "grid", "gap-2")}>
+    /* w szufladzie mobilnej metadane sąsiadują z listami — kreska oddziela
+       je od nawigacji; na desktopie robi to justify-between panelu */
+    <div
+      className={cn(
+        isPreview ? "hidden" : "grid",
+        "border-lines gap-2 max-md:mt-6 max-md:border-t max-md:pt-4",
+      )}
+    >
       {showTimetableDates && (
         <TimetableDates
           timetable={timetable ?? undefined}
@@ -312,16 +298,14 @@ export const SidebarInfo: FC<{ showTimetableDates?: boolean }> = ({
   );
 };
 
-const TimetableSidebarDropdowns: FC<{
-  layout: "vertical" | "horizontal";
-  showSearch?: boolean;
-}> = ({ layout, showSearch = true }) => {
+const TimetableSidebarDropdowns: FC = () => {
   const { timetable } = useTimetableStore();
   const favorites = useFavoritesStore((state) => state.getFavorites());
   const { classes, teachers, rooms } = timetable?.list ?? {};
-  const isHorizontal = layout === "horizontal";
   const { isPreview } = useSidebarContext();
   const [openSections, setOpenSections] = useState<string[]>([]);
+  const [query, setQuery] = useState("");
+  const results = useSearchResults(timetable, query);
 
   // w railu nie ma gdzie narysować rozwiniętej listy — zwijamy sekcje razem z panelem.
   // Liczone przy renderze, nie synchronizowane efektem, więc nie ma kaskady renderów.
@@ -336,24 +320,53 @@ const TimetableSidebarDropdowns: FC<{
     ];
   }, [favorites, classes, teachers, rooms]);
 
-  return (
-    <div className={cn(isHorizontal ? "grid w-full gap-3" : "grid gap-8")}>
-      {showSearch && (
-        <div className={cn(isHorizontal ? "col-span-4" : "")}>
-          <Search timetable={timetable} />
+  const isSearching = query.trim().length > 0;
+
+  if (isPreview) {
+    return (
+      <div className="grid gap-5">
+        <div className="border-lines bg-accent-secondary text-primary/45 grid h-11 w-12 place-content-center rounded-lg border">
+          <SearchIcon size={17} strokeWidth={2} />
         </div>
-      )}
-      {isHorizontal ? (
-        <div className="col-span-4 flex w-full flex-wrap gap-2">
-          {dropdownItems.map((item) => (
-            <Dropdown
-              key={item.type}
-              type={item.type}
-              icon={item.icon}
-              data={item.data}
-              useModal
-            />
+        <Accordion
+          type="multiple"
+          value={visibleSections}
+          onValueChange={setOpenSections}
+          className="grid w-full gap-1"
+        >
+          {dropdownItems.map((item, index) => (
+            <Fragment key={item.type}>
+              <Dropdown type={item.type} icon={item.icon} data={item.data} />
+              {index === 0 && <hr className="border-lines my-2 w-full" />}
+            </Fragment>
           ))}
+        </Accordion>
+      </div>
+    );
+  }
+
+  return (
+    <div className="grid gap-5 md:gap-8">
+      <Search value={query} onChange={setQuery} results={results} />
+
+      {/* wyniki zastępują listy zamiast nakładać się na nie: panel boczny i
+          szuflada mają własne przewijanie, które przycięłoby nakładkę */}
+      {isSearching ? (
+        <div className="grid gap-2">
+          <p className="text-primary/40 text-[11px] font-medium tracking-[0.06em] uppercase">
+            {results.length > 0 ? `Wyniki (${results.length})` : "Brak wyników"}
+          </p>
+          {results.length > 0 ? (
+            <DropdownContent
+              type="search"
+              data={results}
+              className="max-h-none"
+            />
+          ) : (
+            <p className="text-primary/45 text-sm">
+              Nic nie pasuje do „{query.trim()}”.
+            </p>
+          )}
         </div>
       ) : (
         <Accordion

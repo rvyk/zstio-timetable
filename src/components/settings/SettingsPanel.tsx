@@ -22,6 +22,7 @@ import {
   BellIcon,
   CalendarArrowDownIcon,
   DownloadIcon,
+  PrinterIcon,
   Search,
   XIcon,
 } from "lucide-react";
@@ -52,13 +53,13 @@ const SettingButton = ({
     <button
       onClick={onClick}
       className={cn(
-        "group flex w-full gap-3 rounded-md p-2.5 text-left transition-colors",
+        "group flex w-full gap-3 rounded-md p-2.5 text-left transition-colors max-md:min-h-11",
         "hover:bg-primary/4 active:scale-[0.99]",
         active && "bg-primary/4",
       )}
     >
       <Icon
-        className="text-primary/35 group-hover:text-accent-table mt-0.5 size-4 shrink-0 transition-colors"
+        className="text-primary/45 group-hover:text-accent-table mt-0.5 size-4 shrink-0 transition-colors"
         strokeWidth={1.75}
       />
       <div className="grid gap-1">
@@ -110,7 +111,14 @@ const ThemeSetting = () => {
   );
 };
 
-export const SettingsList = ({ onSelect }: { onSelect?: () => void }) => {
+export const SettingsList = ({
+  onSelect,
+  includePrint,
+}: {
+  onSelect?: () => void;
+  /** Na telefonie nie ma panelu bocznego z osobnym przyciskiem druku. */
+  includePrint?: boolean;
+}) => {
   const router = useRouter();
   const timetable = useTimetableStore((state) => state.timetable);
   const savedSettings = useSettingsStore();
@@ -134,12 +142,7 @@ export const SettingsList = ({ onSelect }: { onSelect?: () => void }) => {
             "Twoja przeglądarka nie obsługuje tej funkcji",
           );
         },
-        description: (
-          <p>
-            Zainstaluj plan lekcji jako aplikację PWA, aby uzyskać szybki dostęp
-            z ekranu głównego
-          </p>
-        ),
+        description: <p>Szybki dostęp z ekranu głównego, działa offline</p>,
       },
       {
         key: "notifications",
@@ -191,12 +194,15 @@ export const SettingsList = ({ onSelect }: { onSelect?: () => void }) => {
             );
           }
         },
-        description: (
-          <p>
-            Wyeksportuj obecnie przeglądany plan lekcji ({timetable?.title}),
-            aby łatwo dodać go do swojego ulubionego kalendarza
-          </p>
-        ),
+        description: <p>Pobierz plan {timetable?.title} jako plik .ics</p>,
+      },
+      {
+        key: "print",
+        icon: PrinterIcon,
+        title: "Drukuj plan",
+        hidden: !includePrint,
+        onClick: () => window.open("/print", "_blank"),
+        description: <p>Wersja do druku i zapisu do PDF</p>,
       },
       {
         key: "freeRooms",
@@ -204,15 +210,10 @@ export const SettingsList = ({ onSelect }: { onSelect?: () => void }) => {
         title: "Wolne sale",
         hidden: timetable?.list.rooms?.length === 0,
         onClick: () => router.push("/free-rooms"),
-        description: (
-          <p>
-            Zobacz wolne sale w całym tygodniu naraz, z podziałem na dni i
-            lekcje
-          </p>
-        ),
+        description: <p>Cały tydzień z podziałem na dni i lekcje</p>,
       },
     ],
-    [isInstalled, prompt, savedSettings, timetable, router],
+    [isInstalled, prompt, savedSettings, timetable, router, includePrint],
   );
 
   const visibleSettings = settings.filter((setting) => !setting.hidden);
@@ -261,7 +262,7 @@ export const SettingsPanel = () => {
             </Button>
           </SheetHeader>
           <div className="-mx-1.5">
-            <SettingsList onSelect={toggleSettingsPanel} />
+            <SettingsList onSelect={toggleSettingsPanel} includePrint />
           </div>
         </div>
         <SheetFooter className="border-lines text-primary/35 border-t pt-5 text-[11px] leading-relaxed">

@@ -3,9 +3,14 @@ import { getOptivumList } from "@/actions/getOptivumList";
 import { getOptivumTimetable } from "@/actions/getOptivumTimetable";
 import { FreeRoomsBoard } from "@/components/timetable/FreeRoomsBoard";
 import { Topbar } from "@/components/topbar/Topbar";
-import type { Metadata } from "next";
+import { SCHOOL_NAME_ACCUSATIVE } from "@/constants/school";
+import { pageSeo } from "@/lib/seo";
 
-export const metadata: Metadata = { title: "Wolne sale" };
+export const metadata = pageSeo(
+  "Wolne sale",
+  `Sprawdź, które sale w ${SCHOOL_NAME_ACCUSATIVE} są wolne — cały tydzień naraz, z podziałem na dni i numery lekcji.`,
+  "/free-rooms",
+);
 
 const FreeRoomsPage = async () => {
   const { rooms } = await getOptivumList();
@@ -22,7 +27,7 @@ const FreeRoomsPage = async () => {
   return (
     /* ta sama rama co plan — inaczej na telefonie treść dotyka krawędzi,
        a bez Topbara i BottomBara nie ma stąd żadnego wyjścia */
-    <main className="flex h-full w-full min-w-0 flex-1 flex-col gap-y-3 max-md:overflow-y-auto md:overflow-hidden md:p-3">
+    <main className="flex h-full w-full min-w-0 flex-1 flex-col gap-y-3 max-md:overflow-y-auto max-md:pb-[env(safe-area-inset-bottom)] md:overflow-hidden md:p-3">
       <Topbar showLessonSwitcher={false} />
       <FreeRoomsBoard
         dayNames={dayNames}

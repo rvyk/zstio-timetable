@@ -1,7 +1,6 @@
 "use client";
 
 import { SidebarContent } from "@/components/sidebar/Sidebar";
-import { Button } from "@/components/ui/Button";
 import {
   Drawer,
   DrawerContent,
@@ -13,61 +12,40 @@ import { TRANSLATION_DICT } from "@/constants/translations";
 import { simulateKeyPress } from "@/lib/utils";
 import { OptivumTimetable } from "@/types/optivum";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
-import { ArrowLeft, ArrowRight } from "lucide-react";
-import { FC, MouseEvent, useEffect, useMemo, useState } from "react";
+import { ArrowLeft, ArrowRight, ChevronUp } from "lucide-react";
+import { FC, MouseEvent, useEffect, useState } from "react";
 
 interface BottomBarProps {
   timetable?: OptivumTimetable;
   isOffline?: boolean;
 }
 
+const STEP_BUTTON =
+  "text-primary/55 active:bg-primary/5 active:text-primary grid size-11 shrink-0 place-content-center rounded-lg transition-colors disabled:opacity-30";
+
 export const BottomBar: FC<BottomBarProps> = ({ timetable, isOffline }) => {
   const [viewportHeight, setViewportHeight] = useState<number | null>(null);
-  const titleElement = useMemo(() => {
-    if (timetable) {
-      return (
-        <div className="text-primary grid w-full justify-center gap-1 px-2 text-center">
-          <h2 className="mx-auto max-w-52 truncate leading-tight font-semibold tracking-tight text-ellipsis">
-            {timetable.title}
-          </h2>
-          <p className="text-primary/45 mx-auto max-w-72 truncate text-xs leading-tight text-ellipsis">
-            {`Rozkład zajęć ${TRANSLATION_DICT[timetable.type]}`}
-          </p>
-        </div>
-      );
-    } else if (isOffline) {
-      return (
-        <div className="text-primary grid w-full justify-center gap-1 px-2 text-center">
-          <h2 className="mx-auto max-w-52 truncate leading-tight font-semibold tracking-tight text-ellipsis">
-            Jesteś offline
-          </h2>
-          <p className="text-primary/45 mx-auto max-w-72 truncate text-xs leading-tight text-ellipsis">
-            Brak połączenia z siecią
-          </p>
-        </div>
-      );
-    } else {
-      return "Nie znaleziono planu zajęć";
-    }
-  }, [timetable, isOffline]);
 
-  const handleArrowKey = (
-    e: MouseEvent<HTMLButtonElement>,
-    increment: boolean,
-  ) => {
+  const title =
+    timetable?.title ?? (isOffline ? "Jesteś offline" : "Wybierz plan");
+  const subtitle = timetable
+    ? `Rozkład zajęć ${TRANSLATION_DICT[timetable.type]}`
+    : isOffline
+      ? "Brak połączenia z siecią"
+      : "Klasa, nauczyciel lub sala";
+
+  const step = (e: MouseEvent<HTMLButtonElement>, forward: boolean) => {
     e.preventDefault();
     e.stopPropagation();
-
-    const key = increment ? "ArrowRight" : "ArrowLeft";
-    simulateKeyPress(key, key === "ArrowRight" ? 39 : 37);
+    const key = forward ? "ArrowRight" : "ArrowLeft";
+    simulateKeyPress(key, forward ? 39 : 37);
   };
 
   useEffect(() => {
     if (typeof window === "undefined") return;
 
     const updateViewportHeight = () => {
-      const visualViewportHeight = window.visualViewport?.height;
-      setViewportHeight(visualViewportHeight ?? window.innerHeight);
+      setViewportHeight(window.visualViewport?.height ?? window.innerHeight);
     };
 
     updateViewportHeight();
@@ -99,36 +77,50 @@ export const BottomBar: FC<BottomBarProps> = ({ timetable, isOffline }) => {
         if (isOpen) window.scrollTo(0, 0);
       }}
     >
-      <DrawerTrigger asChild>
-        <div className="border-lines bg-foreground/85 fixed bottom-0 z-30 flex h-20 w-full flex-col rounded-t-xl border-t shadow-(--shadow-raised) backdrop-blur-xl outline-none md:hidden">
-          <div className="bg-primary/15 absolute top-1.5 right-0 left-0 mx-auto h-1 w-9 rounded-full" />
-          <div className="flex h-full items-center justify-between px-2 pt-1">
-            <Button
-              aria-label="Poprzednia klasa/nauczyciel/sala"
-              variant="icon"
-              size="icon"
-              onClick={(e) => handleArrowKey(e, false)}
-              className="aspect-square h-10 w-10"
+      {/* pasek jest przyklejony do dołu, więc musi omijać pasek gestów iOS */}
+      <div className="border-lines bg-foreground/85 fixed inset-x-0 bottom-0 z-30 border-t pb-[env(safe-area-inset-bottom)] shadow-(--shadow-raised) backdrop-blur-xl select-none md:hidden">
+        <div className="flex h-16 items-center gap-1 px-2">
+          {/* bez wczytanego planu nie ma po czym przechodzić w bok */}
+          {timetable && (
+            <button
+              aria-label="Poprzedni plan"
+              onClick={(e) => step(e, false)}
+              className={STEP_BUTTON}
             >
-              <ArrowLeft size={20} strokeWidth={2.5} />
-            </Button>
-            <div className="mx-auto grid h-fit">
-              <div className="flex w-full justify-center text-center">
-                {titleElement}
-              </div>
-            </div>
-            <Button
-              aria-label="Następna klasa/nauczyciel/sala"
-              variant="icon"
-              size="icon"
-              onClick={(e) => handleArrowKey(e, true)}
-              className="aspect-square h-10 w-10"
+              <ArrowLeft className="size-5" strokeWidth={2} />
+            </button>
+          )}
+
+          {/* jedyny element otwierający szufladę — reszta paska to osobne akcje */}
+          <DrawerTrigger asChild>
+            <button className="active:bg-primary/5 grid min-w-0 flex-1 justify-items-center gap-0.5 rounded-lg px-2 py-1.5 transition-colors">
+              <span className="flex min-w-0 items-center gap-1.5">
+                <span className="text-primary truncate text-[15px] leading-tight font-semibold tracking-tight">
+                  {title}
+                </span>
+                <ChevronUp
+                  className="text-primary/35 size-3.5 shrink-0"
+                  strokeWidth={2.5}
+                />
+              </span>
+              <span className="text-primary/45 max-w-full truncate text-[11px] leading-tight">
+                {subtitle}
+              </span>
+            </button>
+          </DrawerTrigger>
+
+          {timetable && (
+            <button
+              aria-label="Następny plan"
+              onClick={(e) => step(e, true)}
+              className={STEP_BUTTON}
             >
-              <ArrowRight size={20} strokeWidth={2.5} />
-            </Button>
-          </div>
+              <ArrowRight className="size-5" strokeWidth={2} />
+            </button>
+          )}
         </div>
-      </DrawerTrigger>
+      </div>
+
       <DrawerContent
         className="md:hidden"
         style={
@@ -142,9 +134,7 @@ export const BottomBar: FC<BottomBarProps> = ({ timetable, isOffline }) => {
             zajęć.
           </DrawerDescription>
         </VisuallyHidden>
-        <div className="flex h-full flex-col justify-between gap-y-16">
-          <SidebarContent showTimetableDates />
-        </div>
+        <SidebarContent showTimetableDates />
       </DrawerContent>
     </Drawer>
   );

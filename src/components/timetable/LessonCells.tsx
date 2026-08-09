@@ -1,42 +1,8 @@
 "use client";
 
 import { LinkWithCookie } from "@/components/common/Link";
-import { cn } from "@/lib/utils";
 import { TableLesson } from "@majusss/timetable-parser";
 import { FC } from "react";
-
-interface TableLessonCellProps {
-  day: TableLesson[][];
-  dayIndex: number;
-  lessonIndex: number;
-  selectedDayIndex: number;
-}
-
-export const TableLessonCell: FC<TableLessonCellProps> = ({
-  day,
-  dayIndex,
-  lessonIndex,
-  selectedDayIndex,
-}) => {
-  const lessons = day[lessonIndex] ?? [];
-
-  return (
-    <td
-      className={cn(
-        dayIndex != selectedDayIndex && "max-md:hidden",
-        "p-1 align-top",
-      )}
-    >
-      {lessons.length > 0 && (
-        <div className="grid gap-1">
-          {lessons.map((lessonItem, index) => (
-            <LessonItem key={index} lesson={lessonItem} />
-          ))}
-        </div>
-      )}
-    </td>
-  );
-};
 
 interface LessonItemProps {
   lesson: TableLesson;
@@ -57,12 +23,6 @@ export const LessonEntry: FC<LessonItemProps> = ({ lesson }) => (
       roomId={lesson.roomId}
       roomName={lesson.room}
     />
-  </div>
-);
-
-export const LessonItem: FC<LessonItemProps> = ({ lesson }) => (
-  <div className="border-lines/70 bg-accent/40 hover:border-lines hover:bg-accent rounded-md border px-2.5 py-1.5 transition-colors">
-    <LessonEntry lesson={lesson} />
   </div>
 );
 

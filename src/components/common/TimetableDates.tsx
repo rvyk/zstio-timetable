@@ -27,9 +27,7 @@ export const TimetableDates: FC<TimetableDatesProps> = ({
     if (timetable.generatedDate && timetable.generatedDate !== "Invalid date") {
       arr.push(
         <Fragment key="generatedDate">
-          <span className="max-md:text-primary/90 max-md:font-semibold">
-            Wygenerowano:{" "}
-          </span>
+          <span>Wygenerowano: </span>
           <span className="text-primary/70 font-medium">
             {timetable.generatedDate}
           </span>
@@ -40,9 +38,7 @@ export const TimetableDates: FC<TimetableDatesProps> = ({
     if (timetable.validDate) {
       arr.push(
         <Fragment key="validDate">
-          <span className="max-md:text-primary/90 max-md:font-semibold">
-            Obowiązuje od:{" "}
-          </span>
+          <span>Obowiązuje od: </span>
           <span className="text-primary/70 font-medium">
             {timetable.validDate}
           </span>

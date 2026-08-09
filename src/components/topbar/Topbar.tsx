@@ -4,80 +4,85 @@ import school_logo from "@/assets/school-logo.png";
 import { FavoriteStar } from "@/components/common/FavoriteStar";
 import { ShortLessonSwitcherCell } from "@/components/timetable/Cells";
 import { SCHOOL_SHORT, SCHOOL_WEBSITE } from "@/constants/school";
-import { TRANSLATION_DICT } from "@/constants/translations";
-import { OptivumTimetable } from "@/types/optivum";
+import { useSettingsWithoutStore } from "@/stores/settings";
+import type { OptivumTimetable } from "@/types/optivum";
+import { ArrowLeft, SlidersHorizontal } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { FC, useMemo } from "react";
-import { useIsClient } from "usehooks-ts";
-import { TopbarButtons } from "./Buttons";
+import { FC } from "react";
 
 interface TopbarProps {
   timetable?: OptivumTimetable;
-  isOffline?: boolean;
   /** Poza planem nie ma czego skracać — np. na ekranie wolnych sal. */
   showLessonSwitcher?: boolean;
 }
 
+/**
+ * Pasek istnieje tylko na telefonie: tożsamość szkoły i akcje globalne u góry,
+ * tożsamość oglądanego planu na dole ekranu. Przełącznik długości lekcji dostaje
+ * własny wiersz, bo w trybie „od lekcji" rośnie o stepper.
+ */
 export const Topbar: FC<TopbarProps> = ({
   timetable,
-  isOffline,
   showLessonSwitcher = true,
-}) => {
-  const isClient = useIsClient();
+}) => (
+  <header className="grid gap-2 px-3 pt-3 md:hidden">
+    <div className="flex w-full items-center justify-between gap-3">
+      <SchoolLink />
+      <div className="flex items-center gap-1">
+        {timetable?.title && (
+          <FavoriteStar
+            item={{
+              name: timetable.title,
+              value: timetable.id.substring(1),
+              type: timetable.type,
+            }}
+            className="border-lines bg-accent active:bg-primary/5 grid size-11 place-content-center rounded-lg border"
+          />
+        )}
+        <SettingsButton />
+      </div>
+    </div>
 
-  const { eyebrow, title } = useMemo(() => {
-    if (timetable?.title) {
-      return {
-        eyebrow: `Rozkład zajęć ${TRANSLATION_DICT[timetable.type]}`,
-        title: timetable.title,
-      };
-    }
-    if (isOffline) {
-      return { eyebrow: "Tryb offline", title: "Brak połączenia z siecią" };
-    }
-    return { eyebrow: "Plan lekcji", title: "Nie znaleziono planu zajęć" };
-  }, [timetable, isOffline]);
+    {showLessonSwitcher && <ShortLessonSwitcherCell className="px-0 py-0" />}
+  </header>
+);
+
+const SettingsButton: FC = () => {
+  const toggleSettingsPanel = useSettingsWithoutStore(
+    (state) => state.toggleSettingsPanel,
+  );
 
   return (
-    <header className="grid gap-3 px-3 pt-3 md:hidden">
-      <div className="flex w-full items-center justify-between gap-3 md:hidden">
-        <div className="flex items-center gap-x-2">
-          <SchoolLink />
-          {showLessonSwitcher && <ShortLessonSwitcherCell />}
-        </div>
-        <TopbarButtons />
-      </div>
-
-      <div className="grid gap-2 max-md:hidden">
-        <p className="text-primary/45 text-xs font-medium tracking-[0.08em] uppercase">
-          {eyebrow}
-        </p>
-        <div className="inline-flex items-center gap-x-3">
-          <h1 className="text-primary max-w-2xl truncate text-3xl leading-none font-semibold tracking-[-0.03em] text-ellipsis xl:text-[2.5rem]">
-            {title}
-          </h1>
-          {timetable?.title && isClient && (
-            <FavoriteStar
-              item={{
-                name: timetable.title,
-                value: timetable.id.substring(1),
-                type: timetable.type,
-              }}
-            />
-          )}
-        </div>
-      </div>
-    </header>
+    <button
+      onClick={toggleSettingsPanel}
+      aria-label="Otwórz dodatkowe funkcje"
+      className="border-lines bg-accent text-primary/70 active:bg-primary/5 active:text-primary grid size-11 place-content-center rounded-lg border transition-colors"
+    >
+      <SlidersHorizontal className="size-4.5" strokeWidth={2} />
+    </button>
   );
 };
 
 const SchoolLink: FC = () => (
-  <Link href={SCHOOL_WEBSITE} aria-label={`Strona szkoły ${SCHOOL_SHORT}`}>
+  <Link
+    href={SCHOOL_WEBSITE}
+    className="group -m-1 flex items-center gap-x-2.5 rounded-lg p-1"
+    aria-label={`Przejdź na stronę szkoły ${SCHOOL_SHORT}`}
+  >
     <Image
       src={school_logo}
       alt=""
-      className="aspect-square w-9 active:scale-95"
+      className="aspect-square w-9 shrink-0 active:scale-95"
     />
+    <span className="grid gap-0.5">
+      <span className="text-primary text-sm leading-none font-semibold tracking-tight">
+        {SCHOOL_SHORT}
+      </span>
+      <span className="text-primary/40 flex items-center gap-1 text-[11px] leading-none">
+        <ArrowLeft className="size-3" strokeWidth={2} />
+        Strona szkoły
+      </span>
+    </span>
   </Link>
 );

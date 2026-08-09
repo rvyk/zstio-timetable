@@ -6,6 +6,7 @@ import { ListItem, TableHour } from "@majusss/timetable-parser";
 import { ArrowLeftIcon } from "lucide-react";
 import Link from "next/link";
 import { FC, useEffect, useMemo, useRef, useState } from "react";
+import { FreeRoomsDay } from "./FreeRoomsDay";
 
 interface FreeRoomsBoardProps {
   dayNames: string[];
@@ -68,7 +69,15 @@ export const FreeRoomsBoard: FC<FreeRoomsBoardProps> = ({
         </Link>
       </div>
 
-      <div className="min-h-0 flex-1 overflow-y-auto p-3 sm:p-4">
+      <FreeRoomsDay
+        dayNames={dayNames}
+        hours={hours}
+        freeRooms={freeRooms}
+        roomNames={roomNames}
+        todayIndex={todayIndex}
+      />
+
+      <div className="min-h-0 flex-1 overflow-y-auto p-3 max-sm:hidden sm:p-4">
         <div className="grid gap-1.5">
           {/* nagłówek: godziny po lewej, dni w kolumnach — jak w planie */}
           <div

@@ -1,7 +1,7 @@
 import { toast } from "@/hooks/useToast";
 import { useFavoritesStore } from "@/stores/favorites";
 import { ListItem } from "@majusss/timetable-parser";
-import { Trash2 } from "lucide-react";
+import { BookmarkIcon, Trash2 } from "lucide-react";
 
 export const handleFavorite = (item: ListItem) => {
   const { favorites, addFavorite, removeFavorite } =
@@ -13,20 +13,11 @@ export const handleFavorite = (item: ListItem) => {
 
   if (isAlreadyFavorite) {
     removeFavorite(item.name);
-    toast({
-      title: "Usunięto z ulubionych",
-      description: item.name,
-      icon: Trash2,
-    });
+    // nazwa planu w tytule: to jedyna informacja, po której poznasz, czego dotyczy
+    toast({ title: `Usunięto ${item.name} z ulubionych`, icon: Trash2 });
     return;
   }
 
-  addFavorite({
-    ...item,
-  });
-
-  toast({
-    title: "Dodano do ulubionych",
-    description: item.name,
-  });
+  addFavorite({ ...item });
+  toast({ title: `Dodano ${item.name} do ulubionych`, icon: BookmarkIcon });
 };

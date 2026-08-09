@@ -7,21 +7,15 @@ import { adjustShortenedLessons } from "@/lib/adjustShortenedLessons";
 import { cn } from "@/lib/utils";
 import { useSettingsStore, useSettingsWithoutStore } from "@/stores/settings";
 import type { OptivumTimetable } from "@/types/optivum";
-import { CalendarX2 } from "lucide-react";
-import { FC, useMemo, useRef, useSyncExternalStore } from "react";
-import {
-  ShortLessonSwitcherCell,
-  TableHeaderMobileCell,
-  TableHourCell,
-} from "./Cells";
-import { LessonItem } from "./LessonCells";
+import { FC, useMemo, useSyncExternalStore } from "react";
+import { ShortLessonSwitcherCell } from "./Cells";
+import { DayBoard } from "./DayBoard";
+import { NoLessons } from "./Slots";
 import { WeekBoard } from "./WeekBoard";
 
 interface TimetableProps {
   timetable: OptivumTimetable;
 }
-
-const SWIPE_THRESHOLD = 50;
 
 const NEVER_CHANGES = () => () => {};
 
@@ -39,20 +33,6 @@ const useTodayIndex = () => {
 
   return override === null ? (new Date().getDay() + 6) % 7 : Number(override);
 };
-
-const NoLessons: FC<{ description: string }> = ({ description }) => (
-  <div className="animate-rise flex h-full w-full flex-col items-center justify-center gap-3 p-10 text-center">
-    <div className="border-lines bg-accent grid size-12 place-content-center rounded-xl border">
-      <CalendarX2 className="text-primary/40 size-5" strokeWidth={1.75} />
-    </div>
-    <div className="grid gap-1">
-      <h2 className="text-primary/90 text-base font-medium tracking-tight">
-        Brak planu zajęć
-      </h2>
-      <p className="text-primary/50 max-w-xs text-sm">{description}</p>
-    </div>
-  </div>
-);
 
 export const Timetable: FC<TimetableProps> = ({ timetable }) => {
   const lessonType = useSettingsStore((state) => state.lessonType);
@@ -97,96 +77,28 @@ export const Timetable: FC<TimetableProps> = ({ timetable }) => {
     [hoursList, maxLessons],
   );
 
-  const handleDayChange = (newIndex: number) => {
-    if (selectedDayIndex !== newIndex) {
-      setSelectedDayIndex(newIndex);
-    }
-  };
-
-  const touchStartX = useRef<number | null>(null);
-  const handleTouchStart = (e: React.TouchEvent) => {
-    touchStartX.current = e.touches[0]?.clientX ?? null;
-  };
-  const handleTouchEnd = (e: React.TouchEvent) => {
-    const endX = e.changedTouches[0]?.clientX;
-    if (touchStartX.current === null || endX === undefined) return;
-
-    const diff = endX - touchStartX.current;
-    if (Math.abs(diff) > SWIPE_THRESHOLD) {
-      const increment = diff < 0 ? 1 : -1;
-      const totalDays = dayNames.length;
-      const nextIndex = (selectedDayIndex + increment + totalDays) % totalDays;
-      handleDayChange(nextIndex);
-    }
-    touchStartX.current = null;
-  };
-
   return (
     <section
       id="plan"
       className={cn(
         "flex-1",
-        "border-lines bg-foreground flex w-full flex-col max-md:mb-20 md:overflow-hidden md:rounded-xl md:border md:shadow-(--shadow-soft)",
+        "border-lines bg-foreground flex w-full flex-col md:overflow-hidden md:rounded-xl md:border md:shadow-(--shadow-soft)",
       )}
     >
-      <div className="border-lines bg-foreground/85 sticky top-0 z-20 flex justify-between border-b backdrop-blur-md md:hidden">
-        {dayNames.map((dayName) => (
-          <TableHeaderMobileCell
-            key={dayName}
-            dayName={dayName}
-            selectedDayIndex={selectedDayIndex}
-            setSelectedDayIndex={handleDayChange}
-          />
-        ))}
-      </div>
-
-      <div
-        className="flex-1 overflow-hidden md:hidden"
-        onTouchStart={handleTouchStart}
-        onTouchEnd={handleTouchEnd}
-      >
-        <div
-          className="flex h-full w-full transition-transform duration-300 ease-[cubic-bezier(0.32,0.72,0,1)]"
-          style={{ transform: `translateX(-${selectedDayIndex * 100}%)` }}
-        >
-          {dayNames.map((_, dayIndex) => {
-            const dayLessons = lessons[dayIndex] ?? [];
-            const dayHasLessons = dayLessons.some(
-              (hourLessons) => hourLessons.length > 0,
-            );
-            return (
-              <div
-                key={dayIndex}
-                className="flex h-full w-full shrink-0 flex-col"
-              >
-                {dayHasLessons ? (
-                  <table className="w-full">
-                    <tbody>
-                      {visibleHours.map((hour, hourIndex) => (
-                        <tr key={hourIndex} className="">
-                          <TableHourCell
-                            hour={hour}
-                            isCurrentDay={dayIndex === todayIndex}
-                          />
-                          <td className="p-1 pl-0">
-                            {(lessons[dayIndex]?.[hourIndex] ?? []).map(
-                              (lessonItem, index) => (
-                                <LessonItem key={index} lesson={lessonItem} />
-                              ),
-                            )}
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                ) : (
-                  <NoLessons description="Na ten dzień nie wprowadzono planu zajęć" />
-                )}
-              </div>
-            );
-          })}
+      {hasLessons ? (
+        <DayBoard
+          dayNames={dayNames}
+          lessons={lessons}
+          hours={visibleHours}
+          todayIndex={todayIndex}
+          selectedDayIndex={selectedDayIndex}
+          onDayChange={setSelectedDayIndex}
+        />
+      ) : (
+        <div className="md:hidden">
+          <NoLessons description="Na ten tydzień nie wprowadzono planu zajęć" />
         </div>
-      </div>
+      )}
 
       <div className="border-lines flex items-center justify-between gap-4 border-b pr-2 pl-4 max-md:hidden">
         <div className="flex min-w-0 items-baseline gap-x-2.5">

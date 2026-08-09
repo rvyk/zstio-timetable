@@ -1,6 +1,12 @@
 import { ThemeProvider } from "@/components/common/ThemeProvider";
 import { Toaster } from "@/components/ui/Toaster";
-import { SCHOOL_NAME_ACCUSATIVE, SCHOOL_SHORT } from "@/constants/school";
+import {
+  SCHOOL_CITY,
+  SCHOOL_NAME,
+  SCHOOL_NAME_ACCUSATIVE,
+  SCHOOL_SHORT,
+  SCHOOL_WEBSITE,
+} from "@/constants/school";
 import { env } from "@/env";
 import { cn } from "@/lib/utils";
 import type { Metadata, Viewport } from "next";
@@ -21,23 +27,100 @@ const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
 });
 
+const DESCRIPTION = `Aktualny plan lekcji ${SCHOOL_NAME_ACCUSATIVE}. Sprawdź rozkład zajęć klas, nauczycieli i sal oraz wolne sale w całym tygodniu.`;
+
 export const metadata: Metadata = {
   title: {
-    template: `%s | ${SCHOOL_SHORT} - Plan lekcji`,
-    default: `${SCHOOL_SHORT} - Plan lekcji`,
+    template: `%s | ${SCHOOL_SHORT} ${SCHOOL_CITY}`,
+    default: `Plan lekcji ${SCHOOL_SHORT} ${SCHOOL_CITY}`,
   },
-  description: `W prosty sposób sprawdź plan zajęć dla różnych klas, nauczycieli oraz sal w ${SCHOOL_NAME_ACCUSATIVE}.`,
+  description: DESCRIPTION,
   metadataBase: new URL(env.NEXT_PUBLIC_APP_URL),
+  applicationName: `Plan lekcji ${SCHOOL_SHORT}`,
+  keywords: [
+    `plan lekcji ${SCHOOL_SHORT}`,
+    `${SCHOOL_SHORT} ${SCHOOL_CITY}`,
+    "plan lekcji Jarosław",
+    "rozkład zajęć",
+    "zastępstwa",
+    "wolne sale",
+    "plan nauczycieli",
+  ],
+  authors: [{ name: "rvyk", url: "https://github.com/rvyk" }],
+  creator: "rvyk",
+  publisher: SCHOOL_NAME,
 
   alternates: {
     canonical: "./",
   },
+
+  openGraph: {
+    type: "website",
+    locale: "pl_PL",
+    siteName: `Plan lekcji ${SCHOOL_SHORT}`,
+    title: `Plan lekcji ${SCHOOL_SHORT} ${SCHOOL_CITY}`,
+    description: DESCRIPTION,
+    url: "./",
+  },
+
+  twitter: {
+    card: "summary_large_image",
+    title: `Plan lekcji ${SCHOOL_SHORT} ${SCHOOL_CITY}`,
+    description: DESCRIPTION,
+  },
+
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true, "max-image-preview": "large" },
+  },
+
+  appleWebApp: {
+    capable: true,
+    title: `Plan lekcji ${SCHOOL_SHORT}`,
+    statusBarStyle: "black-translucent",
+  },
+
+  formatDetection: { telephone: false, date: false, address: false },
 };
 
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  maximumScale: 1,
+  // bez tego env(safe-area-inset-*) jest zerowe i dolny pasek wchodzi pod pasek gestów
+  viewportFit: "cover",
+  // bez maximumScale — blokada zoomu to bariera dostępności i sygnał „mobile unfriendly”
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+    { media: "(prefers-color-scheme: dark)", color: "#0a0a0a" },
+  ],
+};
+
+/** Google potrzebuje jawnej informacji, czyj to plan i kto go publikuje. */
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "EducationalOrganization",
+      "@id": `${SCHOOL_WEBSITE}/#school`,
+      name: SCHOOL_NAME,
+      alternateName: SCHOOL_SHORT,
+      url: SCHOOL_WEBSITE,
+      address: {
+        "@type": "PostalAddress",
+        addressLocality: SCHOOL_CITY,
+        addressCountry: "PL",
+      },
+    },
+    {
+      "@type": "WebSite",
+      url: env.NEXT_PUBLIC_APP_URL,
+      name: `Plan lekcji ${SCHOOL_SHORT} ${SCHOOL_CITY}`,
+      description: DESCRIPTION,
+      inLanguage: "pl-PL",
+      publisher: { "@id": `${SCHOOL_WEBSITE}/#school` },
+    },
+  ],
 };
 
 export default function RootLayout({
@@ -47,6 +130,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pl" suppressHydrationWarning data-scroll-behavior="smooth">
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      </head>
       <body
         className={cn(
           geistSans.variable,

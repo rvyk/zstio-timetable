@@ -69,12 +69,12 @@ export const Dropdown: FC<DropdownProps> = ({
       <div className="inline-flex items-center gap-x-3">
         <div
           className={cn(
-            "border-lines bg-accent grid size-9 place-content-center rounded-md border transition-colors",
+            "border-lines bg-accent grid size-8 place-content-center rounded-md border transition-colors",
             "group-hover:bg-primary/5 group-data-[state=open]:bg-primary/5",
           )}
         >
           <Icon
-            className="text-primary/50 group-hover:text-primary group-data-[state=open]:text-primary size-4.25 transition-colors"
+            className="text-primary/50 group-hover:text-primary group-data-[state=open]:text-primary size-4 transition-colors"
             strokeWidth={1.75}
           />
         </div>
@@ -230,7 +230,7 @@ export const ListItemComponent: FC<
         isActive
           ? "text-primary bg-primary/6 font-medium"
           : "text-primary/65 hover:text-primary hover:bg-primary/4",
-        "group flex w-full min-w-0 items-center justify-between gap-x-2 rounded-md px-3 py-2 text-sm transition-colors",
+        "group flex w-full min-w-0 items-center justify-between gap-x-2 rounded-md px-3 py-2 text-sm transition-colors max-md:min-h-11",
       )}
     >
       <span className="flex min-w-0 items-center gap-2">

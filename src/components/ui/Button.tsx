@@ -24,7 +24,8 @@ const buttonVariants = cva(
       size: {
         default: "h-10 px-4 py-2",
         fit: "h-fit",
-        icon: "sm:h-10 sm:w-10 h-9 w-9",
+        // 44px na dotyku, 40px pod myszą
+        icon: "h-11 w-11 sm:h-10 sm:w-10",
       },
     },
     defaultVariants: {

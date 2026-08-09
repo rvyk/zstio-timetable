@@ -1,0 +1,166 @@
+"use client";
+
+import { cn, parseTime } from "@/lib/utils";
+import { TableHour, TableLesson } from "@majusss/timetable-parser";
+import { CalendarX2 } from "lucide-react";
+import { FC, useEffect, useMemo, useState } from "react";
+import { LessonEntry } from "./LessonCells";
+
+/**
+ * Słownik kafelków planu, wspólny dla planszy tygodnia (desktop) i dnia
+ * (telefon). Oba widoki różnią się układem, nie językiem wizualnym — dlatego
+ * kafelek żyje tutaj, a nie w którymkolwiek z nich.
+ */
+
+const secondsOfDay = () => {
+  const now = new Date();
+  return now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds();
+};
+
+/** ?now=HH:MM przesuwa zegar planszy — do podglądu trwającej lekcji. */
+const clockOffset = () => {
+  const value = new URLSearchParams(window.location.search).get("now");
+  if (!value) return 0;
+  const [h = 0, m = 0, s = 0] = value.split(":").map(Number);
+  return h * 3600 + m * 60 + s - secondsOfDay();
+};
+
+/** Jeden zegar na całą planszę — kafelki tylko czytają wynik. */
+export const useNowSeconds = () => {
+  const [now, setNow] = useState(secondsOfDay);
+
+  useEffect(() => {
+    const offset = clockOffset();
+    const tick = () => setNow(secondsOfDay() + offset);
+    tick();
+    const interval = setInterval(tick, 1000);
+    return () => clearInterval(interval);
+  }, []);
+
+  return now;
+};
+
+export interface DaySlot {
+  hour: TableHour;
+  entries: TableLesson[];
+}
+
+/**
+ * Puste sloty po ostatniej lekcji nie niosą informacji; te przed nią i pomiędzy
+ * owszem — pokazują późniejszy start i okienka.
+ */
+export const buildDaySlots = (
+  hours: TableHour[],
+  dayLessons: TableLesson[][] | undefined,
+): DaySlot[] => {
+  const all = hours.map((hour, hourIndex) => ({
+    hour,
+    entries: dayLessons?.[hourIndex] ?? [],
+  }));
+
+  let lastTaken = -1;
+  all.forEach((slot, index) => {
+    if (slot.entries.length > 0) lastTaken = index;
+  });
+
+  return all.slice(0, lastTaken + 1);
+};
+
+interface SlotCardProps {
+  hour: TableHour;
+  lessons: TableLesson[];
+  isToday: boolean;
+  now: number;
+}
+
+export const SlotCard: FC<SlotCardProps> = ({
+  hour,
+  lessons,
+  isToday,
+  now,
+}) => {
+  const start = useMemo(() => parseTime(hour.timeFrom), [hour.timeFrom]);
+  const end = useMemo(() => parseTime(hour.timeTo), [hour.timeTo]);
+
+  const isLive = isToday && now >= start && now < end;
+  const isPast = isToday && now >= end;
+  const progress = isLive ? ((now - start) / (end - start)) * 100 : 0;
+
+  const remaining = isLive ? end - now : 0;
+  const countdown = `${Math.floor(remaining / 60)
+    .toString()
+    .padStart(2, "0")}:${(remaining % 60).toString().padStart(2, "0")}`;
+
+  return (
+    <article
+      className={cn(
+        isLive
+          ? "border-accent-table/45 bg-accent-table/[0.07]"
+          : "border-lines/70 bg-accent/40 hover:border-lines hover:bg-accent",
+        isPast && !isLive && "opacity-55",
+        "relative grid gap-1.5 overflow-hidden rounded-lg border px-3 py-2.5 transition-colors",
+      )}
+    >
+      <div className="flex items-baseline justify-between gap-2">
+        <span
+          className={cn(
+            isLive ? "text-accent-table" : "text-primary/55",
+            "tabular font-mono text-[11px] font-semibold",
+          )}
+        >
+          {hour.number}
+        </span>
+        <span
+          className={cn(
+            isLive ? "text-accent-table" : "text-primary/55",
+            "tabular font-mono text-[11px]",
+          )}
+        >
+          {isLive ? `za ${countdown}` : `${hour.timeFrom}–${hour.timeTo}`}
+        </span>
+      </div>
+
+      <div className="grid gap-2">
+        {lessons.map((lesson, index) => (
+          <LessonEntry key={index} lesson={lesson} />
+        ))}
+      </div>
+
+      {isLive && (
+        <div className="bg-primary/10 absolute inset-x-0 bottom-0 h-0.75">
+          <div
+            className="bg-accent-table h-full transition-[width] duration-1000 ease-linear"
+            style={{ width: `${progress}%` }}
+          />
+        </div>
+      )}
+    </article>
+  );
+};
+
+export const NoLessons: FC<{ description: string }> = ({ description }) => (
+  <div className="animate-rise flex w-full flex-col items-center justify-center gap-3 p-10 text-center">
+    <div className="border-lines bg-accent grid size-12 place-content-center rounded-xl border">
+      <CalendarX2 className="text-primary/40 size-5" strokeWidth={1.75} />
+    </div>
+    <div className="grid gap-1">
+      <h2 className="text-primary/90 text-base font-medium tracking-tight">
+        Brak planu zajęć
+      </h2>
+      <p className="text-primary/50 max-w-xs text-sm">{description}</p>
+    </div>
+  </div>
+);
+
+/** Wolna godzina — czytana jako brak, nie jako treść. */
+export const GapCard: FC<{ hour: TableHour }> = ({ hour }) => (
+  <div className="border-lines/60 flex items-center justify-between gap-2 rounded-lg border border-dashed px-3 py-2">
+    <span className="text-primary/25 tabular font-mono text-[11px] font-semibold">
+      {hour.number}
+    </span>
+    <span className="text-primary/30 text-xs">okienko</span>
+    <span className="text-primary/25 tabular font-mono text-[11px]">
+      {hour.timeFrom}–{hour.timeTo}
+    </span>
+  </div>
+);
