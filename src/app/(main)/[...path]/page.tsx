@@ -1,17 +1,14 @@
 import { getOptivumList } from "@/actions/getOptivumList";
 import { getOptivumTimetable } from "@/actions/getOptivumTimetable";
 import { BottomBar } from "@/components/common/BottomBar";
-import { FreeRoomsResultModal } from "@/components/modals/FreeRoomsResult";
-import { FreeRoomsSearchModal } from "@/components/modals/FreeRoomsSearch";
-import { ShortenedLessonsCalculatorModal } from "@/components/modals/ShortenedLessonsCalculator";
 import { Timetable } from "@/components/timetable/Timetable";
 import { TimetableController } from "@/components/timetable/TimetableController";
 import { Topbar } from "@/components/topbar/Topbar";
+import type { OptivumTimetable } from "@/types/optivum";
+import type { Metadata } from "next";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { Fragment } from "react";
-import type { Metadata } from "next";
-import type { OptivumTimetable } from "@/types/optivum";
 
 interface PageParams {
   path?: string[];
@@ -45,11 +42,7 @@ export const generateMetadata = async ({
   return { title: timetable.title };
 };
 
-const TimetablePage = async ({
-  params,
-}: {
-  params: Promise<PageParams>;
-}) => {
+const TimetablePage = async ({ params }: { params: Promise<PageParams> }) => {
   const resolvedParams = await params;
   const [type, value] = resolvedParams.path ?? [];
 
@@ -73,9 +66,6 @@ const TimetablePage = async ({
         <Timetable timetable={timetable} />
         <BottomBar timetable={timetable} />
       </main>
-      <FreeRoomsSearchModal />
-      <FreeRoomsResultModal />
-      <ShortenedLessonsCalculatorModal />
     </Fragment>
   );
 };

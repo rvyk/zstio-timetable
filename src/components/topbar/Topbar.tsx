@@ -8,16 +8,22 @@ import { TRANSLATION_DICT } from "@/constants/translations";
 import { OptivumTimetable } from "@/types/optivum";
 import Image from "next/image";
 import Link from "next/link";
-import { FC, Fragment, useMemo } from "react";
+import { FC, useMemo } from "react";
 import { useIsClient } from "usehooks-ts";
 import { TopbarButtons } from "./Buttons";
 
 interface TopbarProps {
   timetable?: OptivumTimetable;
   isOffline?: boolean;
+  /** Poza planem nie ma czego skracać — np. na ekranie wolnych sal. */
+  showLessonSwitcher?: boolean;
 }
 
-export const Topbar: FC<TopbarProps> = ({ timetable, isOffline }) => {
+export const Topbar: FC<TopbarProps> = ({
+  timetable,
+  isOffline,
+  showLessonSwitcher = true,
+}) => {
   const isClient = useIsClient();
 
   const { eyebrow, title } = useMemo(() => {
@@ -38,7 +44,7 @@ export const Topbar: FC<TopbarProps> = ({ timetable, isOffline }) => {
       <div className="flex w-full items-center justify-between gap-3 md:hidden">
         <div className="flex items-center gap-x-2">
           <SchoolLink />
-          <ShortLessonSwitcherCell />
+          {showLessonSwitcher && <ShortLessonSwitcherCell />}
         </div>
         <TopbarButtons />
       </div>

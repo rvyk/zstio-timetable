@@ -28,8 +28,10 @@ const toastVariants = cva(
   "group pointer-events-auto relative flex w-full items-start justify-between gap-x-3 overflow-hidden rounded-lg border p-3 pr-9 backdrop-blur-md transition-all shadow-[var(--shadow-raised)] data-[swipe=cancel]:translate-x-0 data-[swipe=end]:translate-x-[var(--radix-toast-swipe-end-x)] data-[swipe=move]:translate-x-[var(--radix-toast-swipe-move-x)] data-[swipe=move]:transition-none data-[state=open]:animate-in data-[state=closed]:animate-out data-[swipe=end]:animate-out data-[state=closed]:fade-out-80 data-[state=closed]:slide-out-to-right-full data-[state=open]:slide-in-from-top-full data-[state=open]:sm:slide-in-from-bottom-full",
   {
     variants: {
+      // wspólny motyw: pasek akcentu przy lewej krawędzi, kolor niesie wariant
       variant: {
-        success: "border-lines bg-foreground/95",
+        success:
+          "border-lines bg-foreground/95 before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:bg-accent-success",
         error:
           "destructive border-lines bg-foreground/95 before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:bg-accent-table",
       },

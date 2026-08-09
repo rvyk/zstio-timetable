@@ -14,21 +14,20 @@ import { usePwa } from "@/hooks/usePWA";
 import { showErrorToast } from "@/hooks/useToast";
 import { downloadFile } from "@/lib/downloadFile";
 import { cn } from "@/lib/utils";
-import useModalsStore from "@/stores/modals";
 import { useSettingsStore, useSettingsWithoutStore } from "@/stores/settings";
 import { useTimetableStore } from "@/stores/timetable";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
+import type { LucideIcon } from "lucide-react";
 import {
   BellIcon,
-  CalculatorIcon,
   CalendarArrowDownIcon,
   DownloadIcon,
   Search,
   XIcon,
 } from "lucide-react";
-import type { LucideIcon } from "lucide-react";
 import { useTheme } from "next-themes";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { ReactNode, useMemo } from "react";
 import { useIsClient } from "usehooks-ts";
 
@@ -112,7 +111,7 @@ const ThemeSetting = () => {
 };
 
 export const SettingsList = ({ onSelect }: { onSelect?: () => void }) => {
-  const toggleModal = useModalsStore((state) => state.toggleModal);
+  const router = useRouter();
   const timetable = useTimetableStore((state) => state.timetable);
   const savedSettings = useSettingsStore();
   const [prompt, isInstalled] = usePwa();
@@ -149,9 +148,7 @@ export const SettingsList = ({ onSelect }: { onSelect?: () => void }) => {
         hidden: true,
         active: savedSettings.isNotificationEnabled,
         onClick: savedSettings.toggleNotification,
-        description: (
-          <p>Otrzymuj powiadomienia PUSH o nowym planie lekcji</p>
-        ),
+        description: <p>Otrzymuj powiadomienia PUSH o nowym planie lekcji</p>,
       },
       {
         key: "calendar",
@@ -202,37 +199,20 @@ export const SettingsList = ({ onSelect }: { onSelect?: () => void }) => {
         ),
       },
       {
-        key: "calculator",
-        icon: CalculatorIcon,
-        title: "Kalkulator skróconych lekcji",
-        onClick: () => toggleModal("shortenedLessonsCalculator"),
-        description: (
-          <p>
-            Oblicz, o której godzinie skończysz lekcje na podstawie
-            skróconego czasu ich trwania
-          </p>
-        ),
-      },
-      {
         key: "freeRooms",
         icon: Search,
-        title: "Wyszukaj wolną salę",
+        title: "Wolne sale",
         hidden: timetable?.list.rooms?.length === 0,
-        onClick: () => toggleModal("freeRoomsSearch"),
+        onClick: () => router.push("/sale"),
         description: (
           <p>
-            Znajdź wszystkie wolne sale według numeru lekcji i dnia tygodnia
+            Zobacz wolne sale w całym tygodniu naraz, z podziałem na dni i
+            lekcje
           </p>
         ),
       },
     ],
-    [
-      isInstalled,
-      prompt,
-      savedSettings,
-      timetable,
-      toggleModal,
-    ],
+    [isInstalled, prompt, savedSettings, timetable, router],
   );
 
   const visibleSettings = settings.filter((setting) => !setting.hidden);

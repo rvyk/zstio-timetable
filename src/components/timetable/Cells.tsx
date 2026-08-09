@@ -2,11 +2,16 @@
 
 import { Skeleton } from "@/components/ui/Skeleton";
 import { DAYS_OF_WEEK } from "@/constants/days";
+import { MAX_LESSONS } from "@/constants/settings";
 import { cn, getDayNumberForNextWeek, parseTime } from "@/lib/utils";
 import { useSettingsStore } from "@/stores/settings";
 import { TableHour } from "@majusss/timetable-parser";
+import { MinusIcon, PlusIcon } from "lucide-react";
 import { FC, useEffect, useMemo, useState } from "react";
 import { useIsClient } from "usehooks-ts";
+
+/** Pierwsza lekcja nie ma od czego liczyć skrócenia — poprzedniej brak. */
+const MIN_ADJUST_INDEX = 2;
 
 interface TableHourCellProps {
   hour: TableHour;
@@ -55,7 +60,7 @@ export const TableHourCell: FC<TableHourCellProps> = ({
   const isLive = shouldShow && isClient;
 
   return (
-    <td className="relative align-top py-3.5 pr-3 pl-4 max-md:w-30 max-md:select-none">
+    <td className="relative py-3.5 pr-3 pl-4 align-top max-md:w-30 max-md:select-none">
       {isLive && (
         <span className="bg-accent-table absolute top-1/2 left-0 h-[calc(100%-1.25rem)] w-[3px] -translate-y-1/2 rounded-r-full" />
       )}
@@ -169,48 +174,86 @@ export const TableHeaderCell: FC<TableHeaderCellProps> = ({ dayName }) => {
   );
 };
 
+const LESSON_MODES = [
+  { value: "normal", label: "45'" },
+  { value: "short", label: "30'" },
+  { value: "custom", label: "Od lekcji" },
+] as const;
+
+/**
+ * Trzeci tryb zastępuje dawny kalkulator w oknie modalnym: zamiast liczyć
+ * godziny obok planu, skracamy je wprost w planie i widać efekt od razu.
+ */
 export const ShortLessonSwitcherCell: FC = () => {
   const isClient = useIsClient();
-  const { lessonType, setLessonType } = useSettingsStore();
-  const isShortLessons = lessonType === "short";
+  const {
+    lessonType,
+    setLessonType,
+    hoursAdjustIndex,
+    enableCustomLessonsLength,
+  } = useSettingsStore();
+
+  if (!isClient) {
+    return (
+      <div className="px-3 py-2">
+        <Skeleton className="h-9 w-[150px] rounded-lg" />
+      </div>
+    );
+  }
+
+  const isCustom = lessonType === "custom";
 
   return (
-    <div className="flex items-center justify-center px-3 py-2">
-      {isClient ? (
-        <div className="border-lines bg-accent relative flex h-9 rounded-lg border p-[3px]">
-          {lessonType !== "custom" && (
-            <span
-              className={cn(
-                isShortLessons && "translate-x-full",
-                "bg-foreground absolute inset-y-[3px] left-[3px] w-[calc(50%-3px)] rounded-md shadow-[var(--shadow-soft)] transition-transform duration-300 [transition-timing-function:cubic-bezier(0.32,0.72,0,1)]",
-              )}
-            />
-          )}
-          {(["45'", "30'"] as const).map((value) => {
-            const active =
-              lessonType !== "custom" &&
-              (value === "45'") === (lessonType === "normal");
-            return (
-              <button
-                key={value}
-                aria-label={`Lekcje ${value}`}
-                aria-pressed={active}
-                onClick={() =>
-                  setLessonType(value === "45'" ? "normal" : "short")
-                }
-                className={cn(
-                  active ? "text-primary" : "text-primary/50 hover:text-primary/80",
-                  "tabular relative z-10 w-11 rounded-md font-mono text-xs font-medium transition-colors",
-                )}
-              >
-                {value}
-              </button>
-            );
-          })}
+    <div className="flex items-center gap-2 px-3 py-2">
+      {isCustom && (
+        <div className="border-lines bg-accent flex h-9 items-center rounded-lg border px-1">
+          <button
+            aria-label="Wcześniejsza lekcja"
+            disabled={hoursAdjustIndex <= MIN_ADJUST_INDEX}
+            onClick={() => enableCustomLessonsLength(hoursAdjustIndex - 1)}
+            className="text-primary/50 hover:text-primary grid size-6 place-content-center rounded transition-colors disabled:opacity-30"
+          >
+            <MinusIcon className="size-3.5" strokeWidth={2} />
+          </button>
+          <span className="tabular text-primary w-20 text-center font-mono text-xs">
+            od {hoursAdjustIndex}. lekcji
+          </span>
+          <button
+            aria-label="Późniejsza lekcja"
+            disabled={hoursAdjustIndex >= MAX_LESSONS}
+            onClick={() => enableCustomLessonsLength(hoursAdjustIndex + 1)}
+            className="text-primary/50 hover:text-primary grid size-6 place-content-center rounded transition-colors disabled:opacity-30"
+          >
+            <PlusIcon className="size-3.5" strokeWidth={2} />
+          </button>
         </div>
-      ) : (
-        <Skeleton className="h-9 w-[94px] rounded-lg" />
       )}
+
+      <div className="border-lines bg-accent flex h-9 gap-1 rounded-lg border p-[3px]">
+        {LESSON_MODES.map(({ value, label }) => {
+          const active = lessonType === value;
+          return (
+            <button
+              key={value}
+              aria-label={`Lekcje ${label}`}
+              aria-pressed={active}
+              onClick={() =>
+                value === "custom"
+                  ? enableCustomLessonsLength(hoursAdjustIndex)
+                  : setLessonType(value)
+              }
+              className={cn(
+                active
+                  ? "bg-foreground text-primary shadow-[var(--shadow-soft)]"
+                  : "text-primary/50 hover:text-primary/80",
+                "tabular rounded-md px-2.5 font-mono text-xs font-medium transition-colors",
+              )}
+            >
+              {label}
+            </button>
+          );
+        })}
+      </div>
     </div>
   );
 };

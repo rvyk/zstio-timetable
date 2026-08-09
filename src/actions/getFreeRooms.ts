@@ -39,18 +39,40 @@ const combineRooms = async (): Promise<Room[]> => {
   return fulfilledRooms;
 };
 
-export const getFreeRooms = async (weekdayIndex: number, lessonIndex: number) => {
+/**
+ * Cały tydzień naraz: same identyfikatory sal (krótkie, jak "B15"), nazwy
+ * klient ma już w liście sal. Dzięki temu siatka dzień × lekcja nie potrzebuje
+ * osobnego zapytania na każdą komórkę.
+ */
+export const getFreeRoomsWeek = async (
+  weekdayCount: number,
+  lessonCount: number,
+): Promise<string[][][]> => {
+  const rooms = await cachedRooms();
+
+  return Array.from({ length: weekdayCount }, (_, dayIndex) =>
+    Array.from({ length: lessonCount }, (_, lessonIndex) =>
+      rooms
+        .filter((room) => !room.lessons?.[dayIndex]?.[lessonIndex]?.length)
+        .map((room) => room.id),
+    ),
+  );
+};
+
+const cachedRooms = () =>
+  unstable_cache(() => combineRooms(), ["combinedRooms"], {
+    revalidate: REVALIDATE_TIME,
+  })();
+
+export const getFreeRooms = async (
+  weekdayIndex: number,
+  lessonIndex: number,
+) => {
   if (weekdayIndex < 0 || lessonIndex < 0) {
     return [];
   }
 
-  const rooms = await unstable_cache(
-    () => combineRooms(),
-    ["combinedRooms"],
-    {
-      revalidate: REVALIDATE_TIME,
-    },
-  )();
+  const rooms = await cachedRooms();
 
   return rooms.filter((room) => {
     const dayLessons = room.lessons?.[weekdayIndex];

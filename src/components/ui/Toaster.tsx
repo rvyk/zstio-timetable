@@ -15,7 +15,7 @@ export function Toaster() {
   const { toasts } = useToast();
 
   const iconStyles = {
-    success: "text-primary/35",
+    success: "text-accent-success",
     error: "text-accent-table",
   };
 

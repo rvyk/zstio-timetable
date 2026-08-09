@@ -12,6 +12,7 @@
     --accent: 241 239 236; /* #F1EFEC subtle surface */
     --accent-secondary: 248 247 245; /* #F8F7F5 input surface */
     --accent-table: 193 42 51; /* #C12A33 brand red, desaturated */
+    --accent-success: 42 122 84; /* #2A7A54 stonowana zieleń pod czerwień marki */
 
     --primary: 28 26 24; /* #1C1A18 warm near-black */
     --lines: 227 223 218; /* #E3DFDA */
@@ -26,6 +27,7 @@
     --accent: 28 27 25; /* #1C1B19 */
     --accent-secondary: 36 34 32; /* #242220 */
     --accent-table: 219 68 76; /* #DB444C lifted for dark contrast */
+    --accent-success: 76 176 128; /* #4CB080 podniesiona na ciemnym tle */
 
     --primary: 245 243 240; /* #F5F3F0 */
     --lines: 42 40 37; /* #2A2825 */
@@ -66,6 +68,7 @@
   --color-accent: rgb(var(--accent));
   --color-accent-secondary: rgb(var(--accent-secondary));
   --color-accent-table: rgb(var(--accent-table));
+  --color-accent-success: rgb(var(--accent-success));
   --color-primary: rgb(var(--primary));
   --color-lines: rgb(var(--lines));
 
