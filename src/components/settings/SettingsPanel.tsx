@@ -208,6 +208,9 @@ const ThemeSetting = () => {
             — kolumny są równe, więc wystarczy przesunięcie o 100% szerokości */}
         <span
           aria-hidden
+          /* jedyne przejście, które przeżywa twardą podmianę motywu — patrz
+             reguła [data-theme-instant] w globals.css */
+          data-keep-transition
           className="ease-out-quint pointer-events-none absolute inset-y-0.75 left-0.75 flex transition-transform duration-300"
           style={{
             width: `calc((100% - 0.375rem) / 3)`,
