@@ -8,8 +8,8 @@ import { MinusIcon, PlusIcon } from "lucide-react";
 import { FC } from "react";
 import { useIsClient } from "usehooks-ts";
 
-/** Pierwsza lekcja nie ma od czego liczyć skrócenia — poprzedniej brak. */
-const MIN_ADJUST_INDEX = 2;
+/** Skracanie zaczyna się najwcześniej od 5. lekcji — wcześniejsze bloki lecą normalnie. */
+const MIN_ADJUST_INDEX = 5;
 
 const LESSON_MODES = [
   { value: "normal", label: "45'" },
@@ -58,9 +58,12 @@ export const ShortLessonSwitcherCell: FC<{ className?: string }> = ({
             aria-label="Wcześniejsza lekcja"
             disabled={hoursAdjustIndex <= MIN_ADJUST_INDEX}
             onClick={() => enableCustomLessonsLength(hoursAdjustIndex - 1)}
-            className="text-primary/50 hover:text-primary grid place-content-center rounded transition-colors disabled:opacity-30 max-md:size-9 md:size-7"
+            className="text-primary/50 hover:text-primary active:bg-primary/5 grid place-content-center rounded-md transition-colors disabled:opacity-30 max-md:h-full max-md:w-12 md:size-7"
           >
-            <MinusIcon className="size-3.5" strokeWidth={2} />
+            <MinusIcon
+              className="max-md:size-4.5 md:size-3.5"
+              strokeWidth={2}
+            />
           </button>
           <span className="tabular text-primary w-20 text-center font-mono text-xs">
             od {hoursAdjustIndex}. lekcji
@@ -69,14 +72,14 @@ export const ShortLessonSwitcherCell: FC<{ className?: string }> = ({
             aria-label="Późniejsza lekcja"
             disabled={hoursAdjustIndex >= MAX_LESSONS}
             onClick={() => enableCustomLessonsLength(hoursAdjustIndex + 1)}
-            className="text-primary/50 hover:text-primary grid place-content-center rounded transition-colors disabled:opacity-30 max-md:size-9 md:size-7"
+            className="text-primary/50 hover:text-primary active:bg-primary/5 grid place-content-center rounded-md transition-colors disabled:opacity-30 max-md:h-full max-md:w-12 md:size-7"
           >
-            <PlusIcon className="size-3.5" strokeWidth={2} />
+            <PlusIcon className="max-md:size-4.5 md:size-3.5" strokeWidth={2} />
           </button>
         </div>
       )}
 
-      <div className="border-lines bg-accent flex min-w-0 flex-1 gap-1 rounded-lg border p-0.75 max-md:h-11 md:h-9 md:flex-none">
+      <div className="border-lines bg-accent flex min-w-0 gap-1 rounded-lg border p-0.75 max-md:h-11 max-md:w-full md:h-9 md:w-auto">
         {LESSON_MODES.map(({ value, label }) => {
           const active = lessonType === value;
           return (

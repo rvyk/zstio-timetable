@@ -91,9 +91,11 @@
   --animate-accordion-down: accordion-down 0.22s cubic-bezier(0.32, 0.72, 0, 1);
   --animate-accordion-up: accordion-up 0.22s cubic-bezier(0.32, 0.72, 0, 1);
   --animate-rise: rise 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
-  /* kierunek wejścia zgadza się z kierunkiem swipe'a — ruch potwierdza gest */
-  --animate-day-in-right: day-in-right 0.28s cubic-bezier(0.16, 1, 0.3, 1) both;
-  --animate-day-in-left: day-in-left 0.28s cubic-bezier(0.16, 1, 0.3, 1) both;
+  /* sąsiedni dzień: wjazd z boku, kierunek zgadza się z gestem.
+     skok przez pół tygodnia: podmiana, bo żaden kierunek nie jest prawdziwy */
+  --animate-day-in-right: day-in-right 0.3s cubic-bezier(0.22, 1, 0.36, 1) both;
+  --animate-day-in-left: day-in-left 0.3s cubic-bezier(0.22, 1, 0.36, 1) both;
+  --animate-day-swap: day-swap 0.26s cubic-bezier(0.22, 1, 0.36, 1) both;
 
   @keyframes accordion-down {
     from {
@@ -124,7 +126,7 @@
   @keyframes day-in-right {
     from {
       opacity: 0;
-      transform: translateX(14px);
+      transform: translateX(38%);
     }
     to {
       opacity: 1;
@@ -134,7 +136,17 @@
   @keyframes day-in-left {
     from {
       opacity: 0;
-      transform: translateX(-14px);
+      transform: translateX(-38%);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  @keyframes day-swap {
+    from {
+      opacity: 0;
+      transform: scale(0.975);
     }
     to {
       opacity: 1;

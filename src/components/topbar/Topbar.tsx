@@ -2,11 +2,11 @@
 
 import school_logo from "@/assets/school-logo.png";
 import { FavoriteStar } from "@/components/common/FavoriteStar";
+import { SettingsMenu } from "@/components/settings/SettingsPanel";
 import { ShortLessonSwitcherCell } from "@/components/timetable/Cells";
 import { SCHOOL_SHORT, SCHOOL_WEBSITE } from "@/constants/school";
-import { useSettingsWithoutStore } from "@/stores/settings";
 import type { OptivumTimetable } from "@/types/optivum";
-import { ArrowLeft, SlidersHorizontal } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { FC } from "react";
@@ -40,29 +40,13 @@ export const Topbar: FC<TopbarProps> = ({
             className="border-lines bg-accent active:bg-primary/5 grid size-11 place-content-center rounded-lg border"
           />
         )}
-        <SettingsButton />
+        <SettingsMenu />
       </div>
     </div>
 
     {showLessonSwitcher && <ShortLessonSwitcherCell className="px-0 py-0" />}
   </header>
 );
-
-const SettingsButton: FC = () => {
-  const toggleSettingsPanel = useSettingsWithoutStore(
-    (state) => state.toggleSettingsPanel,
-  );
-
-  return (
-    <button
-      onClick={toggleSettingsPanel}
-      aria-label="Otwórz dodatkowe funkcje"
-      className="border-lines bg-accent text-primary/70 active:bg-primary/5 active:text-primary grid size-11 place-content-center rounded-lg border transition-colors"
-    >
-      <SlidersHorizontal className="size-4.5" strokeWidth={2} />
-    </button>
-  );
-};
 
 const SchoolLink: FC = () => (
   <Link

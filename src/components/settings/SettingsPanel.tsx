@@ -1,21 +1,14 @@
 "use client";
 
 import { getCalendar } from "@/actions/getCalendar";
-import { Button } from "@/components/ui/Button";
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetFooter,
-  SheetHeader,
-  SheetTitle,
-} from "@/components/ui/Sheet";
+import { DialogDescription, DialogTitle } from "@/components/ui/Dialog";
 import { usePwa } from "@/hooks/usePWA";
 import { showErrorToast } from "@/hooks/useToast";
 import { downloadFile } from "@/lib/downloadFile";
 import { cn } from "@/lib/utils";
-import { useSettingsStore, useSettingsWithoutStore } from "@/stores/settings";
+import { useSettingsStore } from "@/stores/settings";
 import { useTimetableStore } from "@/stores/timetable";
+import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import type { LucideIcon } from "lucide-react";
 import {
@@ -24,12 +17,19 @@ import {
   DownloadIcon,
   PrinterIcon,
   Search,
-  XIcon,
+  SlidersHorizontal,
 } from "lucide-react";
 import { useTheme } from "next-themes";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ReactNode, useMemo } from "react";
+import {
+  ReactNode,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { useIsClient } from "usehooks-ts";
 
 type SettingsItem = {
@@ -236,47 +236,102 @@ export const SettingsList = ({
   );
 };
 
-export const SettingsPanel = () => {
-  const { toggleSettingsPanel, isSettingsPanelOpen } =
-    useSettingsWithoutStore();
+/** Pozycja panelu liczona z przycisku, bo pasek górny przewija się razem z treścią. */
+const useAnchor = (
+  triggerRef: React.RefObject<HTMLButtonElement | null>,
+  isOpen: boolean,
+) => {
+  const [anchor, setAnchor] = useState({ top: 64, right: 12 });
+
+  const measure = useCallback(() => {
+    const rect = triggerRef.current?.getBoundingClientRect();
+    if (!rect) return;
+    setAnchor({
+      top: rect.bottom + 8,
+      right: Math.max(12, window.innerWidth - rect.right),
+    });
+  }, [triggerRef]);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    measure();
+    window.addEventListener("resize", measure);
+    return () => window.removeEventListener("resize", measure);
+  }, [isOpen, measure]);
+
+  return anchor;
+};
+
+/**
+ * Panel rozwijany spod ikony w pasku górnym — ten sam wzorzec, co ustawienia
+ * w panelu bocznym na desktopie. Szuflada od dołu wjeżdżała z przeciwnego końca
+ * ekranu niż przycisk, który ją otwiera, i nic ich ze sobą nie wiązało.
+ */
+export const SettingsMenu = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
+  const anchor = useAnchor(triggerRef, isOpen);
 
   return (
-    <Sheet open={isSettingsPanelOpen} onOpenChange={toggleSettingsPanel}>
-      <SheetContent className="flex flex-col justify-between gap-y-12 overflow-auto md:hidden">
-        <div className="grid gap-5">
-          <SheetHeader>
-            <SheetTitle>Dodatkowe funkcje</SheetTitle>
-            <VisuallyHidden>
-              <SheetDescription>
-                Panel z dodatkowymi funkcjami planu — umożliwia wyszukiwanie sal
-                i zmianę ustawień.
-              </SheetDescription>
-            </VisuallyHidden>
-            <Button
-              onClick={toggleSettingsPanel}
-              aria-label="Zamknij panel ustawień"
-              variant="icon"
-              size="icon"
-            >
-              <XIcon size={18} strokeWidth={2} />
-            </Button>
-          </SheetHeader>
+    <DialogPrimitive.Root open={isOpen} onOpenChange={setIsOpen}>
+      <DialogPrimitive.Trigger asChild>
+        <button
+          ref={triggerRef}
+          aria-label="Otwórz dodatkowe funkcje"
+          className={cn(
+            "border-lines bg-accent text-primary/70 active:bg-primary/5 active:text-primary grid size-11 place-content-center rounded-lg border transition-colors",
+            /* przy otwartym panelu przycisk wychodzi nad przyciemnienie i zostaje
+               ostry — to on jest kotwicą, więc nie może zniknąć razem z tłem.
+               pointer-events-none oddaje klik nakładce, czyli stuknięcie w niego
+               zamyka panel */
+            "data-[state=open]:text-primary data-[state=open]:bg-primary/5 data-[state=open]:pointer-events-none data-[state=open]:relative data-[state=open]:z-[60]",
+          )}
+        >
+          <SlidersHorizontal className="size-4.5" strokeWidth={2} />
+        </button>
+      </DialogPrimitive.Trigger>
+
+      <DialogPrimitive.Portal>
+        <DialogPrimitive.Overlay className="data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 fixed inset-0 z-50 bg-black/45 backdrop-blur-xs md:hidden" />
+        <DialogPrimitive.Content
+          ref={contentRef}
+          tabIndex={-1}
+          /* domyślnie Radix wrzuca focus na pierwszą pozycję i podświetla ją
+             obwódką, jakby była wybrana; focus zostaje więc na samym panelu —
+             pułapka focusa i Escape dalej działają, Tab wchodzi w listę */
+          onOpenAutoFocus={(event) => {
+            event.preventDefault();
+            contentRef.current?.focus();
+          }}
+          style={{ top: anchor.top, right: anchor.right }}
+          className="border-lines bg-foreground data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 fixed z-50 grid max-h-[calc(100dvh-6rem)] w-[min(19rem,calc(100vw-4rem))] origin-top-right gap-4 overflow-y-auto rounded-xl border p-4 shadow-(--shadow-raised) duration-200 md:hidden"
+        >
+          <VisuallyHidden>
+            <DialogTitle>Dodatkowe funkcje</DialogTitle>
+            <DialogDescription>
+              Instalacja aplikacji, eksport do kalendarza, druk, wolne sale i
+              wybór motywu.
+            </DialogDescription>
+          </VisuallyHidden>
+
           <div className="-mx-1.5">
-            <SettingsList onSelect={toggleSettingsPanel} includePrint />
+            <SettingsList onSelect={() => setIsOpen(false)} includePrint />
           </div>
-        </div>
-        <SheetFooter className="border-lines text-primary/35 border-t pt-5 text-[11px] leading-relaxed">
-          © 2024 Made with ❤️ for ZSTiO by <br /> Szymański Paweł & Majcher
-          Kacper <br />
-          <Link
-            className="hover:text-primary underline underline-offset-2 transition-colors"
-            target="_blank"
-            href="https://github.com/rvyk/zstio-timetable"
-          >
-            GitHub (GPLv3)
-          </Link>
-        </SheetFooter>
-      </SheetContent>
-    </Sheet>
+
+          <p className="border-lines text-primary/35 border-t pt-3 text-center text-[11px] leading-relaxed">
+            © 2024 Made with ❤️ for ZSTiO by <br /> Szymański Paweł & Majcher
+            Kacper <br />
+            <Link
+              className="hover:text-primary underline underline-offset-2 transition-colors"
+              target="_blank"
+              href="https://github.com/rvyk/zstio-timetable"
+            >
+              GitHub (GPLv3)
+            </Link>
+          </p>
+        </DialogPrimitive.Content>
+      </DialogPrimitive.Portal>
+    </DialogPrimitive.Root>
   );
 };

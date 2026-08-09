@@ -33,9 +33,6 @@ export const useSettingsStore = create<TimetableSettingsStore>()(
 );
 
 interface useSettingsWithoutStore {
-  isSettingsPanelOpen: boolean;
-  toggleSettingsPanel: () => void;
-
   isSidebarOpen: boolean;
   toggleSidebar: () => void;
 
@@ -49,10 +46,6 @@ interface useSettingsWithoutStore {
 
 export const useSettingsWithoutStore = create<useSettingsWithoutStore>(
   (set) => ({
-    isSettingsPanelOpen: false,
-    toggleSettingsPanel: () =>
-      set((state) => ({ isSettingsPanelOpen: !state.isSettingsPanelOpen })),
-
     isSidebarOpen: false,
     toggleSidebar: () =>
       set((state) => ({ isSidebarOpen: !state.isSidebarOpen })),
