@@ -22,6 +22,9 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
+# obraz startuje z .next/standalone/server.js, więc build musi je wygenerować
+ENV BUILD_STANDALONE=true
+
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm run build
 
 # Production image, copy all the files and run next

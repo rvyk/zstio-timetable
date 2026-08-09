@@ -5,6 +5,7 @@ export const env = createEnv({
   server: {
     SENTRY_AUTH_TOKEN: z.string().optional(),
     SENTRY_SUPPRESS_TURBOPACK_WARNING: z.string().optional(),
+    BUILD_STANDALONE: z.enum(["true", "false"]).optional(),
   },
 
   client: {
@@ -18,5 +19,6 @@ export const env = createEnv({
     SENTRY_AUTH_TOKEN: process.env.SENTRY_AUTH_TOKEN,
     SENTRY_SUPPRESS_TURBOPACK_WARNING:
       process.env.SENTRY_SUPPRESS_TURBOPACK_WARNING,
+    BUILD_STANDALONE: process.env.BUILD_STANDALONE,
   },
 });
