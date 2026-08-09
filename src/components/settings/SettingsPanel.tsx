@@ -119,13 +119,20 @@ const useThemeBubble = () => {
       Math.max(y, window.innerHeight - y),
     );
 
+    /* flaga przed zdjęciem, nie po: co jest widoczne w chwili wywołania
+       startViewTransition, ląduje w teksturze przejścia */
+    const root = document.documentElement;
+    root.dataset.themeSwitch = "";
+
     const transition = start.call(document, () =>
       flushSync(() => setTheme(value)),
     );
 
+    void transition.finished.finally(() => delete root.dataset.themeSwitch);
+
     void transition.ready
       .then(() =>
-        document.documentElement.animate(
+        root.animate(
           {
             clipPath: [
               `circle(0px at ${x}px ${y}px)`,
@@ -133,7 +140,10 @@ const useThemeBubble = () => {
             ],
           },
           {
-            duration: 550,
+            /* krócej niż na desktopie wypadałoby estetycznie: na telefonie
+               każda klatka nad budżetem jest widoczna, a 400 ms i tak czyta
+               się jako pełny ruch */
+            duration: 400,
             easing: "cubic-bezier(0.16, 1, 0.3, 1)",
             pseudoElement: "::view-transition-new(root)",
           },

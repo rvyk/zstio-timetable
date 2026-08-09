@@ -281,6 +281,17 @@ body::before {
   z-index: 0;
 }
 
+/* Ziarno i rozmycia tła to najdroższe warstwy na stronie, a przez pół sekundy
+   przejścia nie niosą żadnej informacji — obie tekstury i tak są zamrożone.
+   Zdejmujemy je na czas podmiany, bo to one najbardziej tną na telefonie. */
+[data-theme-switch] body::before {
+  display: none;
+}
+
+[data-theme-switch] * {
+  backdrop-filter: none !important;
+}
+
 ::view-transition-new(root) {
   z-index: 1;
 }
