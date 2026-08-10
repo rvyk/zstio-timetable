@@ -15,9 +15,6 @@ export const MAX_LESSONS = 14;
 /** Maximum number of search results displayed */
 export const MAX_RESULTS = 5;
 
-/**
-    ZSTiO offers a maximum of 14 shortened lessons (30 minutes) in its timetable. If your school requires more, you can customize this feature to better suit your needs.
-*/
 export const SHORT_HOURS: TableHour[] = [
   { number: 1, timeFrom: "8:00", timeTo: "8:30" },
   { number: 2, timeFrom: "8:35", timeTo: "9:05" },

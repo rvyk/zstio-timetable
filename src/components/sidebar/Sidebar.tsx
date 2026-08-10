@@ -164,15 +164,9 @@ const SidebarActions: FC<{ collapsed: boolean; onExpand: () => void }> = ({
               aria-hidden
             />
           )}
-          {/* origin-bottom: panel wyrasta z przycisku, który go otwiera */}
           <div
             {...presenceProps}
             inert={!isOpen}
-            /* kryjące tło zamiast bg-foreground/95 + backdrop-blur: rozmycie
-               działa na tym, co za elementem, a w trakcie View Transition
-               strona jest płaskim zdjęciem i backdrop znika — blur mrugał przy
-               każdej zmianie motywu. Nad kryjącym paskiem bocznym i tak nie
-               robił różnicy, więc taniej go nie mieć niż go ratować */
             className="border-lines bg-foreground data-[state=open]:animate-popover-in data-[state=closed]:animate-popover-out absolute inset-x-0 bottom-full z-20 mb-2 origin-bottom overflow-hidden rounded-lg border shadow-(--shadow-raised)"
           >
             <SettingsList onSelect={() => setIsOpen(false)} />
@@ -181,8 +175,10 @@ const SidebarActions: FC<{ collapsed: boolean; onExpand: () => void }> = ({
       )}
 
       <div className={cn(collapsed && "justify-items-center", "grid gap-0.5")}>
-        <button
-          onClick={() => window.open("/print", "_blank")}
+        <a
+          href="/print"
+          target="_blank"
+          rel="noopener"
           title="Drukuj plan"
           aria-label="Drukuj plan"
           className={cn(
@@ -192,7 +188,7 @@ const SidebarActions: FC<{ collapsed: boolean; onExpand: () => void }> = ({
         >
           <PrinterIcon className="size-4 shrink-0" strokeWidth={1.75} />
           {!collapsed && "Drukuj plan"}
-        </button>
+        </a>
         <button
           onClick={openSettings}
           aria-expanded={isOpen}
@@ -227,7 +223,6 @@ export const Sidebar: FC = () => {
   const { isSidebarCollapsed, setSidebarCollapsed, toggleSidebarCollapsed } =
     useSettingsWithoutStore();
 
-  // poniżej xl plan potrzebuje całej dostępnej szerokości, więc rail jest domyślny
   const isNarrow = useMediaQuery("(max-width: 1279px)", {
     initializeWithValue: false,
   });
@@ -246,7 +241,6 @@ export const Sidebar: FC = () => {
       )}
     >
       <SidebarContext.Provider value={{ isPreview: collapsed }}>
-        {/* stała szerokość treści = brak przelewania tekstu w trakcie animacji */}
         <div className="h-full w-full overflow-hidden">
           <nav
             onClick={collapsed ? () => setSidebarCollapsed(false) : undefined}
@@ -291,8 +285,6 @@ export const SidebarInfo: FC<{ showTimetableDates?: boolean }> = ({
   }
 
   return (
-    /* w szufladzie mobilnej metadane sąsiadują z listami — kreska oddziela
-       je od nawigacji; na desktopie robi to justify-between panelu */
     <div
       className={cn(
         isPreview ? "hidden" : "grid",
@@ -327,8 +319,6 @@ const TimetableSidebarDropdowns: FC = () => {
   const [query, setQuery] = useState("");
   const results = useSearchResults(timetable, query);
 
-  // w railu nie ma gdzie narysować rozwiniętej listy — zwijamy sekcje razem z panelem.
-  // Liczone przy renderze, nie synchronizowane efektem, więc nie ma kaskady renderów.
   const visibleSections = isPreview ? [] : openSections;
 
   const dropdownItems = useMemo(() => {
@@ -369,8 +359,6 @@ const TimetableSidebarDropdowns: FC = () => {
     <div className="grid gap-5 md:gap-8">
       <Search value={query} onChange={setQuery} results={results} />
 
-      {/* wyniki zastępują listy zamiast nakładać się na nie: panel boczny i
-          szuflada mają własne przewijanie, które przycięłoby nakładkę */}
       {isSearching ? (
         <div className="grid gap-2">
           <p className="text-primary/40 text-[11px] font-medium tracking-[0.06em] uppercase">

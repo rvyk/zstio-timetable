@@ -39,7 +39,8 @@ type SettingsItem = {
   icon: LucideIcon;
   title: string;
   description: ReactNode;
-  onClick: () => void;
+  onClick?: () => void;
+  href?: string;
   hidden?: boolean;
   active?: boolean;
 };
@@ -49,13 +50,18 @@ const SettingButton = ({
   title,
   description,
   onClick,
+  href,
   active,
   index = 0,
 }: Omit<SettingsItem, "key" | "hidden"> & { index?: number }) => {
+  const Tag = href ? "a" : "button";
+
   return (
-    <button
+    <Tag
+      href={href}
+      target={href ? "_blank" : undefined}
+      rel={href ? "noopener" : undefined}
       onClick={onClick}
-      /* kaskada: panel otwiera się jako lista, nie jako gotowy blok */
       style={{ animationDelay: `${60 + index * 35}ms` }}
       className={cn(
         "group animate-rise flex w-full gap-3 rounded-md p-2.5 text-left transition duration-150 max-md:min-h-11",
@@ -75,7 +81,7 @@ const SettingButton = ({
           {description}
         </div>
       </div>
-    </button>
+    </Tag>
   );
 };
 
@@ -85,24 +91,6 @@ const THEMES = [
   { value: "system", label: "Auto" },
 ] as const;
 
-/**
- * Bąbel nowego motywu rozchodzący się od klikniętego przycisku — na desktopie.
- *
- * Telefon dostaje twardą podmianę. Bąbel to animacja `clip-path` na
- * pełnoekranowej teksturze, a przenikanie kolorów to setki elementów naraz;
- * jedno i drugie na telefonie tnie zamiast cieszyć. Zamiast szukać wersji
- * „prawie płynnej" lepiej przełączyć natychmiast.
- *
- * flushSync: startViewTransition robi zdjęcie strony przed i po wywołaniu
- * callbacka, więc zmiana klasy motywu musi zdążyć się w jego trakcie, a nie
- * dopiero w kolejnym renderze Reacta.
- */
-/**
- * Ustawiony na `<html>` przez cały czas trwania bąbla. Panele czytają go, żeby
- * nie zamknąć się od kliknięcia, które padło w trakcie przejścia: przeglądarka
- * podmienia wtedy zawartość strony na zdjęcie i trafienie potrafi wypaść poza
- * panel, choć palec był dokładnie na przycisku motywu.
- */
 export const THEME_TRANSITION_ATTR = "data-theme-switch";
 
 export const isThemeTransitionActive = () =>
@@ -113,11 +101,8 @@ const useThemeBubble = () => {
   const running = useRef<ViewTransition | null>(null);
 
   const switchTheme = (value: string, event: MouseEvent<HTMLButtonElement>) => {
-    // lib.dom typuje startViewTransition jako zawsze obecne, Firefox go nie ma;
-    // odczyt przez Reflect, żeby typ został opcjonalny i sprawdzenie miało sens
     const start = Reflect.get(document, "startViewTransition") as
-      | Document["startViewTransition"]
-      | undefined;
+      Document["startViewTransition"] | undefined;
 
     const skipMotion =
       !start ||
@@ -128,23 +113,17 @@ const useThemeBubble = () => {
       const target = document.documentElement;
       target.dataset.themeInstant = "";
       flushSync(() => setTheme(value));
-      // wymuszony reflow: nowe kolory są policzone, zanim przejścia wrócą,
-      // więc nic nie zdąży zacząć się przenikać
       void document.body.offsetHeight;
       delete target.dataset.themeInstant;
       return;
     }
 
     const { clientX: x, clientY: y } = event;
-    // promień do najdalszego rogu — inaczej bąbel nie dociera do krawędzi
     const radius = Math.hypot(
       Math.max(x, window.innerWidth - x),
       Math.max(y, window.innerHeight - y),
     );
 
-    /* drugie kliknięcie w trakcie bąbla porzuca poprzednie przejście i zaczyna
-       nowe od zera — zamiast tego kończymy stare natychmiast, wtedy nowe
-       startuje z aktualnego obrazu, a nie z na wpół narysowanego */
     running.current?.skipTransition();
 
     const root = document.documentElement;
@@ -172,17 +151,12 @@ const useThemeBubble = () => {
             ],
           },
           {
-            /* krócej niż na desktopie wypadałoby estetycznie: na telefonie
-               każda klatka nad budżetem jest widoczna, a 400 ms i tak czyta
-               się jako pełny ruch */
             duration: 400,
             easing: "cubic-bezier(0.16, 1, 0.3, 1)",
             pseudoElement: "::view-transition-new(root)",
           },
         ),
       )
-      /* przejście bywa porzucone (ukryta karta, kolejne kliknięcie w trakcie);
-         motyw i tak się przełącza, więc to nie jest błąd do raportowania */
       .catch(() => undefined);
   };
 
@@ -204,12 +178,8 @@ const ThemeSetting = () => {
         Motyw
       </span>
       <div className="border-lines bg-accent relative grid grid-cols-3 rounded-lg border p-0.75">
-        {/* pigułka przejeżdża pod etykietami zamiast przeskakiwać tłem
-            — kolumny są równe, więc wystarczy przesunięcie o 100% szerokości */}
         <span
           aria-hidden
-          /* jedyne przejście, które przeżywa twardą podmianę motywu — patrz
-             reguła [data-theme-instant] w globals.css */
           data-keep-transition
           className="ease-out-quint pointer-events-none absolute inset-y-0.75 left-0.75 flex transition-transform duration-300"
           style={{
@@ -244,7 +214,6 @@ export const SettingsList = ({
   includePrint,
 }: {
   onSelect?: () => void;
-  /** Na telefonie nie ma panelu bocznego z osobnym przyciskiem druku. */
   includePrint?: boolean;
 }) => {
   const router = useRouter();
@@ -329,7 +298,7 @@ export const SettingsList = ({
         icon: PrinterIcon,
         title: "Drukuj plan",
         hidden: !includePrint,
-        onClick: () => window.open("/print", "_blank"),
+        href: "/print",
         description: <p>Wersja do druku i zapisu do PDF</p>,
       },
       {
@@ -354,7 +323,7 @@ export const SettingsList = ({
           {...setting}
           index={index}
           onClick={() => {
-            onClick();
+            onClick?.();
             onSelect?.();
           }}
         />
@@ -365,7 +334,6 @@ export const SettingsList = ({
   );
 };
 
-/** Pozycja panelu liczona z przycisku, bo pasek górny przewija się razem z treścią. */
 const useAnchor = (
   triggerRef: React.RefObject<HTMLButtonElement | null>,
   isOpen: boolean,
@@ -391,11 +359,6 @@ const useAnchor = (
   return anchor;
 };
 
-/**
- * Panel rozwijany spod ikony w pasku górnym — ten sam wzorzec, co ustawienia
- * w panelu bocznym na desktopie. Szuflada od dołu wjeżdżała z przeciwnego końca
- * ekranu niż przycisk, który ją otwiera, i nic ich ze sobą nie wiązało.
- */
 export const SettingsMenu = () => {
   const [isOpen, setIsOpen] = useState(false);
   const triggerRef = useRef<HTMLButtonElement>(null);
@@ -410,15 +373,7 @@ export const SettingsMenu = () => {
           aria-label="Otwórz dodatkowe funkcje"
           className={cn(
             "border-lines bg-accent text-primary/70 active:bg-primary/5 active:text-primary grid size-11 place-content-center rounded-lg border transition duration-150 active:scale-90",
-            /* przy otwartym panelu przycisk wychodzi nad przyciemnienie i zostaje
-               ostry — to on jest kotwicą, więc nie może zniknąć razem z tłem.
-               pointer-events-none oddaje klik nakładce, czyli stuknięcie w niego
-               zamyka panel */
-            /* kryjące bg-foreground, nie bg-primary/5: przez pięcioprocentowy
-               tusz prześwituje przyciemnienie i z przycisku zostaje sama ramka,
-               a ta w jasnym motywie jest prawie biała — wyglądało to jak dziura
-               wycięta w scrimie. Ta sama powierzchnia co panel, który otwiera */
-            "data-[state=open]:text-primary data-[state=open]:bg-foreground data-[state=open]:pointer-events-none data-[state=open]:relative data-[state=open]:z-[60]",
+            "data-[state=open]:text-primary data-[state=open]:bg-foreground data-[state=open]:pointer-events-none data-[state=open]:relative data-[state=open]:z-60",
           )}
         >
           <SlidersHorizontal className="size-4.5" strokeWidth={2} />
@@ -430,9 +385,6 @@ export const SettingsMenu = () => {
         <DialogPrimitive.Content
           ref={contentRef}
           tabIndex={-1}
-          /* domyślnie Radix wrzuca focus na pierwszą pozycję i podświetla ją
-             obwódką, jakby była wybrana; focus zostaje więc na samym panelu —
-             pułapka focusa i Escape dalej działają, Tab wchodzi w listę */
           onOpenAutoFocus={(event) => {
             event.preventDefault();
             contentRef.current?.focus();

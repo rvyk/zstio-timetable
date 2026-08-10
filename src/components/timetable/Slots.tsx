@@ -6,18 +6,11 @@ import { CalendarX2 } from "lucide-react";
 import { FC, useEffect, useMemo, useState } from "react";
 import { LessonEntry } from "./LessonCells";
 
-/**
- * Słownik kafelków planu, wspólny dla planszy tygodnia (desktop) i dnia
- * (telefon). Oba widoki różnią się układem, nie językiem wizualnym — dlatego
- * kafelek żyje tutaj, a nie w którymkolwiek z nich.
- */
-
 const secondsOfDay = () => {
   const now = new Date();
   return now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds();
 };
 
-/** ?now=HH:MM przesuwa zegar planszy — do podglądu trwającej lekcji. */
 const clockOffset = () => {
   const value = new URLSearchParams(window.location.search).get("now");
   if (!value) return 0;
@@ -25,9 +18,8 @@ const clockOffset = () => {
   return h * 3600 + m * 60 + s - secondsOfDay();
 };
 
-/** Jeden zegar na całą planszę — kafelki tylko czytają wynik. */
 export const useNowSeconds = () => {
-  const [now, setNow] = useState(secondsOfDay);
+  const [now, setNow] = useState(-1);
 
   useEffect(() => {
     const offset = clockOffset();
@@ -45,10 +37,6 @@ export interface DaySlot {
   entries: TableLesson[];
 }
 
-/**
- * Puste sloty po ostatniej lekcji nie niosą informacji; te przed nią i pomiędzy
- * owszem — pokazują późniejszy start i okienka.
- */
 export const buildDaySlots = (
   hours: TableHour[],
   dayLessons: TableLesson[][] | undefined,
@@ -152,7 +140,6 @@ export const NoLessons: FC<{ description: string }> = ({ description }) => (
   </div>
 );
 
-/** Wolna godzina — czytana jako brak, nie jako treść. */
 export const GapCard: FC<{ hour: TableHour }> = ({ hour }) => (
   <div className="border-lines/60 flex items-center justify-between gap-2 rounded-lg border border-dashed px-3 py-2">
     <span className="text-primary/25 tabular font-mono text-[11px] font-semibold">

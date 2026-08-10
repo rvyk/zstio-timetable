@@ -5,32 +5,30 @@
 
 @layer base {
   :root {
-    /* one warm-neutral gray family, light */
-    --background: 246 245 243; /* #F6F5F3 canvas */
-    --foreground: 253 252 251; /* #FDFCFB surface */
+    --background: 246 245 243;
+    --foreground: 253 252 251;
 
-    --accent: 241 239 236; /* #F1EFEC subtle surface */
-    --accent-secondary: 248 247 245; /* #F8F7F5 input surface */
-    --accent-table: 193 42 51; /* #C12A33 brand red, desaturated */
-    --accent-success: 42 122 84; /* #2A7A54 stonowana zieleń pod czerwień marki */
+    --accent: 241 239 236;
+    --accent-secondary: 248 247 245;
+    --accent-table: 193 42 51;
+    --accent-success: 42 122 84;
 
-    --primary: 28 26 24; /* #1C1A18 warm near-black */
-    --lines: 227 223 218; /* #E3DFDA */
+    --primary: 28 26 24;
+    --lines: 227 223 218;
 
     --shadow-color: 28 26 24;
   }
 
   .dark {
-    --background: 13 13 12; /* #0D0D0C */
-    --foreground: 20 19 18; /* #141312 */
+    --background: 13 13 12;
+    --foreground: 20 19 18;
 
-    --accent: 28 27 25; /* #1C1B19 */
-    --accent-secondary: 36 34 32; /* #242220 */
-    --accent-table: 219 68 76; /* #DB444C lifted for dark contrast */
-    --accent-success: 76 176 128; /* #4CB080 podniesiona na ciemnym tle */
-
-    --primary: 245 243 240; /* #F5F3F0 */
-    --lines: 42 40 37; /* #2A2825 */
+    --accent: 28 27 25;
+    --accent-secondary: 36 34 32;
+    --accent-table: 219 68 76;
+    --accent-success: 76 176 128;
+    --primary: 245 243 240;
+    --lines: 42 40 37;
 
     --shadow-color: 0 0 0;
   }
@@ -54,7 +52,6 @@
     text-wrap: balance;
   }
 
-  /* one focus treatment everywhere, keyboard only */
   :focus-visible {
     outline: 2px solid rgb(var(--accent-table));
     outline-offset: 2px;
@@ -91,19 +88,12 @@
   --animate-accordion-down: accordion-down 0.22s cubic-bezier(0.32, 0.72, 0, 1);
   --animate-accordion-up: accordion-up 0.22s cubic-bezier(0.32, 0.72, 0, 1);
   --animate-rise: rise 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
-  /* para do rise — wyjście krótsze i z prostszą krzywą, ma zejść z drogi */
   --animate-fall: fall 0.16s cubic-bezier(0.4, 0, 1, 1) both;
-  /* sąsiedni dzień: wjazd z boku, kierunek zgadza się z gestem.
-     skok przez pół tygodnia: podmiana, bo żaden kierunek nie jest prawdziwy */
   --animate-day-in-right: day-in-right 0.3s cubic-bezier(0.22, 1, 0.36, 1) both;
   --animate-day-in-left: day-in-left 0.3s cubic-bezier(0.22, 1, 0.36, 1) both;
   --animate-day-swap: day-swap 0.26s cubic-bezier(0.22, 1, 0.36, 1) both;
-  /* potwierdzenie kliknięcia: ikona sama wraca do rozmiaru, nic nie zostaje */
   --animate-pop: pop 0.28s cubic-bezier(0.22, 1, 0.36, 1);
 
-  /* okna i panele mają własne keyframes zamiast utility z tw-animate-css:
-     tamte nadpisują cały transform, więc gubią wyśrodkowanie -translate-1/2.
-     wyjście jest krótsze od wejścia — zamykanie ma schodzić z drogi */
   --animate-overlay-in: overlay-in 0.2s ease-out both;
   --animate-overlay-out: overlay-out 0.15s ease-in both;
   --animate-dialog-in: dialog-in 0.22s cubic-bezier(0.16, 1, 0.3, 1) both;
@@ -206,9 +196,6 @@
       transform: translate(-50%, calc(-50% + 4px)) scale(0.98);
     }
   }
-  /* sama skala, bez przesunięcia: kierunek niesie transform-origin, więc te
-     same keyframes grają dla panelu spod paska górnego i dla tego znad
-     przycisku w panelu bocznym */
   @keyframes popover-in {
     from {
       opacity: 0;
@@ -252,7 +239,6 @@
   }
 }
 
-/* grain: breaks the flatness of large empty surfaces */
 body::before {
   content: "";
   position: fixed;
@@ -267,10 +253,6 @@ body::before {
   opacity: 0.04;
 }
 
-/* Zmiana motywu przez View Transitions: domyślne przenikanie wyłączone, bo
-   ruch niesie bąbel rozchodzący się od klikniętego przycisku (klatki liczone
-   w JS, gdzie znamy współrzędne kliknięcia). Stary motyw leży nieruchomo pod
-   spodem, nowy jest nad nim i to jego maska rośnie. */
 ::view-transition-old(root),
 ::view-transition-new(root) {
   animation: none;
@@ -281,13 +263,6 @@ body::before {
   z-index: 0;
 }
 
-/* Twarda podmiana motywu (telefon, Firefox, wyłączone animacje): na jedną
-   klatkę gasimy przejścia, bo inaczej setki elementów zaczynają przenikać
-   kolor naraz. To samo, co robił disableTransitionOnChange z next-themes.
-
-   Wyjątkiem jest [data-keep-transition] — pigułka wyboru motywu. Drogie jest
-   przenikanie kolorów na całej stronie, nie przejazd jednego elementu, a to
-   właśnie on pokazuje, co się przed chwilą zmieniło. */
 [data-theme-instant] *:not([data-keep-transition]),
 [data-theme-instant] *:not([data-keep-transition])::before,
 [data-theme-instant] *:not([data-keep-transition])::after {
@@ -298,7 +273,6 @@ body::before {
   z-index: 1;
 }
 
-/* data reads as data: one column width per digit */
 .tabular {
   font-variant-numeric: tabular-nums;
   font-feature-settings: "tnum";
@@ -346,15 +320,12 @@ body::before {
   *::before,
   *::after {
     animation-duration: 0.01ms !important;
-    /* bez tego opóźnienia kaskady zostają i treść pojawia się skokowo */
     animation-delay: 0ms !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
 }
 
-/* body ma flex + h-100dvh na potrzeby app-shella; przy druku to ucina
-   wydruk do jednej strony, więc wracamy do zwykłego flow */
 @media print {
   html,
   body {

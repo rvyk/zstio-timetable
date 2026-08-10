@@ -41,11 +41,6 @@ interface SearchProps {
   results: ListItem[];
 }
 
-/**
- * Samo pole — wyniki rysuje panel, który je otacza. Nakładka pozycjonowana
- * absolutnie i tak byłaby przycięta przez przewijalny kontener panelu bocznego
- * i szuflady.
- */
 export const Search: FC<SearchProps> = ({ value, onChange, results }) => {
   const router = useRouter();
 

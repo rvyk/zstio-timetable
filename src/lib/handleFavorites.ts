@@ -13,7 +13,6 @@ export const handleFavorite = (item: ListItem) => {
 
   if (isAlreadyFavorite) {
     removeFavorite(item.name);
-    // nazwa planu w tytule: to jedyna informacja, po której poznasz, czego dotyczy
     toast({ title: `Usunięto ${item.name} z ulubionych`, icon: Trash2 });
     return;
   }

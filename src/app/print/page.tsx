@@ -11,7 +11,6 @@ export default function PrintPage() {
   const { timetable } = useTimetableStore();
   const isMounted = useIsClient();
 
-  // strona otwiera się z przycisku „Drukuj plan” — od razu podnosimy dialog druku
   useEffect(() => {
     if (isMounted && timetable) window.print();
   }, [isMounted, timetable]);

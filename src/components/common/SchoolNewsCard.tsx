@@ -102,8 +102,6 @@ export const SchoolNewsCard: FC<SchoolNewsPost> = ({
 
           {phase === "idle" && (
             <>
-              {/* rozciągnięty link zamiast opakowania całości: przycisk nie może
-                  siedzieć w <a>, a klikalny ma być cały pasek */}
               <a
                 href={link}
                 target="_blank"

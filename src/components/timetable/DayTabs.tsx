@@ -12,11 +12,6 @@ interface DayTabsProps {
   className?: string;
 }
 
-/**
- * Dzień wybrany i dzień dzisiejszy to dwie różne informacje: pierwszą niesie
- * podkreślenie i kontrast tekstu, drugą kolor daty. Dzięki temu w czwartek
- * widać, gdzie jest „dziś", nawet gdy ogląda się poniedziałek.
- */
 export const DayTabs: FC<DayTabsProps> = ({
   dayNames,
   selectedDayIndex,
@@ -68,8 +63,6 @@ export const DayTabs: FC<DayTabsProps> = ({
       );
     })}
 
-    {/* jeden wskaźnik na cały pasek zamiast jednego na zakładkę: przy zmianie
-        dnia przejeżdża do nowej pozycji, więc widać skąd dokąd */}
     <span
       aria-hidden
       className="ease-out-quint pointer-events-none absolute -bottom-px left-0 flex h-0.5 transition-transform duration-300"

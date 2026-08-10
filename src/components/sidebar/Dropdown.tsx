@@ -184,8 +184,6 @@ export const DropdownContent: FC<DropdownContentProps> = ({
             key={`${type}-${item.value}`}
             item={item}
             type={type}
-            /* kaskada ścięta na 12 pozycjach: przy 70 nauczycielach reszta
-               czekałaby dłużej, niż trwa samo przewinięcie do niej */
             style={{ animationDelay: `${Math.min(index, 12) * 20}ms` }}
           />
         ))
@@ -239,11 +237,9 @@ export const ListItemComponent: FC<
       )}
     >
       <span className="flex min-w-0 items-center gap-2">
-        {/* kropka aktywnej pozycji wyskakuje ze skali zamiast pojawiać się
-            kolorem — przy przechodzeniu między planami widać, dokąd wskoczyła */}
         <span
           className={cn(
-            isActive ? "bg-accent-table scale-100" : "bg-transparent scale-0",
+            isActive ? "bg-accent-table scale-100" : "scale-0 bg-transparent",
             "ease-out-quint size-1.5 shrink-0 rounded-full transition duration-300",
           )}
         />

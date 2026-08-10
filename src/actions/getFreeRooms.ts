@@ -39,11 +39,6 @@ const combineRooms = async (): Promise<Room[]> => {
   return fulfilledRooms;
 };
 
-/**
- * Cały tydzień naraz: same identyfikatory sal (krótkie, jak "B15"), nazwy
- * klient ma już w liście sal. Dzięki temu siatka dzień × lekcja nie potrzebuje
- * osobnego zapytania na każdą komórkę.
- */
 export const getFreeRoomsWeek = async (
   weekdayCount: number,
   lessonCount: number,

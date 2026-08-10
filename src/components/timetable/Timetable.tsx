@@ -19,11 +19,6 @@ interface TimetableProps {
 
 const NEVER_CHANGES = () => () => {};
 
-/**
- * ?day=0..4 udaje inny dzień tygodnia (razem z ?now=HH:MM do testów).
- * useSyncExternalStore daje osobny snapshot dla serwera i klienta, więc nie
- * potrzebujemy setState w efekcie ani nie ryzykujemy niezgodności hydracji.
- */
 const useTodayIndex = () => {
   const override = useSyncExternalStore(
     NEVER_CHANGES,

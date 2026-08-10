@@ -16,7 +16,6 @@ const TYPE_TO_LIST = {
   room: "rooms",
 } as const satisfies Record<OptivumTimetable["type"], keyof List>;
 
-/** Kolejność przewijania strzałkami: klasy → nauczyciele → sale → klasy. */
 const TYPE_CYCLE = ["class", "teacher", "room"] as const;
 
 export const TimetableController = ({
@@ -50,7 +49,6 @@ export const TimetableController = ({
 
       const nextIndex = increment ? currentIndex + 1 : currentIndex - 1;
 
-      // wyjście poza listę → skaczemy na sąsiedni typ planu i zaczynamy od jego krańca
       if (nextIndex < 0 || nextIndex >= items.length) {
         const step = increment ? 1 : -1;
         const nextType =

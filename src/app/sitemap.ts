@@ -8,7 +8,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = new URL(env.NEXT_PUBLIC_APP_URL).origin;
   const lastModified = new Date();
 
-  // plan bywa korygowany w trakcie roku — "yearly" zniechęcało Google do powrotu
   const entry = (path: string, priority: number) => ({
     url: `${baseUrl}${path}`,
     lastModified,

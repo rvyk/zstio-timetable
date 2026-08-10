@@ -89,7 +89,6 @@ const getIcs = (days: TableLesson[][][], hours: TableHour[]) => {
 
   days.forEach((day, dayIndex) => {
     day.forEach((lesson, lessonIndex) => {
-      // bez godziny nie da się umieścić lekcji w kalendarzu — pomijamy ją
       const hour = hours[lessonIndex];
       if (!hour) return;
 

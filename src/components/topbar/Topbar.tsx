@@ -13,20 +13,10 @@ import { FC } from "react";
 
 interface TopbarProps {
   timetable?: OptivumTimetable;
-  /** Poza planem nie ma czego skracać — np. na ekranie wolnych sal. */
   showLessonSwitcher?: boolean;
-  /**
-   * Na podstronie tożsamość szkoły ustępuje miejsca tytułowi i wyjściu z niej —
-   * inaczej telefon dostaje drugi pasek nagłówka pod pierwszym.
-   */
   page?: { title: string; backHref: string; backLabel: string };
 }
 
-/**
- * Pasek istnieje tylko na telefonie: tożsamość szkoły i akcje globalne u góry,
- * tożsamość oglądanego planu na dole ekranu. Przełącznik długości lekcji dostaje
- * własny wiersz, bo w trybie „od lekcji" rośnie o stepper.
- */
 export const Topbar: FC<TopbarProps> = ({
   timetable,
   showLessonSwitcher = true,
@@ -54,8 +44,6 @@ export const Topbar: FC<TopbarProps> = ({
   </header>
 );
 
-/* lustrzane odbicie SchoolLink: ikona z tytułem nad podpisem powrotu, więc
-   pasek nie zmienia kształtu przy wejściu na podstronę */
 const PageLink: FC<NonNullable<TopbarProps["page"]>> = ({
   title,
   backHref,

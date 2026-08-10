@@ -77,10 +77,8 @@ export const BottomBar: FC<BottomBarProps> = ({ timetable, isOffline }) => {
         if (isOpen) window.scrollTo(0, 0);
       }}
     >
-      {/* pasek jest przyklejony do dołu, więc musi omijać pasek gestów iOS */}
       <div className="border-lines bg-foreground/85 fixed inset-x-0 bottom-0 z-30 border-t pb-[env(safe-area-inset-bottom)] shadow-(--shadow-raised) backdrop-blur-xl select-none md:hidden">
         <div className="flex h-16 items-center gap-1 px-2">
-          {/* bez wczytanego planu nie ma po czym przechodzić w bok */}
           {timetable && (
             <button
               aria-label="Poprzedni plan"
@@ -91,13 +89,9 @@ export const BottomBar: FC<BottomBarProps> = ({ timetable, isOffline }) => {
             </button>
           )}
 
-          {/* jedyny element otwierający szufladę — reszta paska to osobne akcje */}
           <DrawerTrigger asChild>
             <button className="active:bg-primary/5 group grid min-w-0 flex-1 justify-items-center gap-0.5 rounded-lg px-2 py-1.5 transition duration-150 active:scale-[0.98]">
-              {/* max-w-full: justify-items-center daje elementom siatki szerokość
-                  treści, więc bez tego truncate nie ma się o co oprzeć i długa
-                  nazwa sali wychodzi poza pasek */}
-              <span className="flex min-w-0 max-w-full items-center gap-1.5">
+              <span className="flex max-w-full min-w-0 items-center gap-1.5">
                 <span className="text-primary truncate text-[15px] leading-tight font-semibold tracking-tight">
                   {title}
                 </span>

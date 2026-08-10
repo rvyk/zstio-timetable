@@ -16,11 +16,6 @@ interface FreeRoomsDayProps {
   todayIndex: number;
 }
 
-/**
- * Mobilna wersja wolnych sal. Siatka tydzień × lekcje mieści się dopiero od sm;
- * na telefonie to ściana dwucyfrowych liczb, więc dzień wybiera się zakładkami,
- * a godziny czyta się z listy — dokładnie jak plan lekcji.
- */
 export const FreeRoomsDay: FC<FreeRoomsDayProps> = ({
   dayNames,
   hours,
@@ -45,8 +40,6 @@ export const FreeRoomsDay: FC<FreeRoomsDayProps> = ({
         }}
       />
 
-      {/* key na dniu: lista wjeżdża od nowa przy każdym przełączeniu zakładki,
-          tak samo jak plansza dnia w planie lekcji */}
       <div key={dayIndex} className="grid gap-2 p-3">
         {hours.map((hour, hourIndex) => {
           const ids = freeRooms[dayIndex]?.[hourIndex] ?? [];
@@ -107,7 +100,6 @@ export const FreeRoomsDay: FC<FreeRoomsDayProps> = ({
   );
 };
 
-/** Osobny komponent, bo zwijanie musi dograć animację wyjścia zanim zniknie. */
 const RoomChips: FC<{
   isOpen: boolean;
   ids: string[];

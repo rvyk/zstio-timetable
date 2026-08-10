@@ -15,7 +15,6 @@ export const metadata = pageSeo(
 const FreeRoomsPage = async () => {
   const { rooms } = await getOptivumList();
 
-  // dni i godziny bierzemy z dowolnego planu sali — siatka ma być ta sama co w planie
   const sample = rooms?.[0]
     ? await getOptivumTimetable("room", rooms[0].value)
     : null;
@@ -25,14 +24,11 @@ const FreeRoomsPage = async () => {
   const freeRooms = await getFreeRoomsWeek(dayNames.length, hours.length);
 
   return (
-    /* ta sama rama co plan — inaczej na telefonie treść dotyka krawędzi,
-       a bez Topbara i BottomBara nie ma stąd żadnego wyjścia */
     <main className="flex h-full w-full min-w-0 flex-1 flex-col gap-y-3 max-md:overflow-y-auto max-md:pb-[env(safe-area-inset-bottom)] md:overflow-hidden md:p-3">
       <Topbar
         showLessonSwitcher={false}
         page={{
           title: "Wolne sale",
-          // "/" wraca na ostatnio oglądany plan (cookie lastVisited)
           backHref: "/",
           backLabel: "Wróć do planu",
         }}

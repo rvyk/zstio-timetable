@@ -9,6 +9,7 @@ import {
 } from "@/constants/school";
 import { env } from "@/env";
 import { cn } from "@/lib/utils";
+import { Analytics } from "@vercel/analytics/next";
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { ReactNode } from "react";
@@ -87,16 +88,13 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  // bez tego env(safe-area-inset-*) jest zerowe i dolny pasek wchodzi pod pasek gestów
   viewportFit: "cover",
-  // bez maximumScale — blokada zoomu to bariera dostępności i sygnał „mobile unfriendly”
   themeColor: [
     { media: "(prefers-color-scheme: light)", color: "#ffffff" },
     { media: "(prefers-color-scheme: dark)", color: "#0a0a0a" },
   ],
 };
 
-/** Google potrzebuje jawnej informacji, czyj to plan i kto go publikuje. */
 const jsonLd = {
   "@context": "https://schema.org",
   "@graph": [
@@ -130,12 +128,6 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pl" suppressHydrationWarning data-scroll-behavior="smooth">
-      <head>
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-        />
-      </head>
       <body
         className={cn(
           geistSans.variable,
@@ -143,11 +135,13 @@ export default function RootLayout({
           "bg-foreground md:bg-background flex h-dvh font-sans antialiased",
         )}
       >
+        <script
+          type="application/ld+json"
+          suppressHydrationWarning
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+        <Analytics />
         <SerwistProvider swUrl="/serwist/sw.js">
-          {/* bez disableTransitionOnChange: next-themes wstrzykiwał na czas
-              podmiany `* { transition: none !important }`, co zabijało jedyny
-              ruch dziejący się dokładnie wtedy — przejazd pigułki motywu.
-              Kolory i tak zmieniają się przez własne transition-colors */}
           <ThemeProvider attribute="class">
             <Toaster />
             <a

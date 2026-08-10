@@ -21,10 +21,6 @@ export const WeekBoard: FC<WeekBoardProps> = ({
   const now = useNowSeconds();
 
   return (
-    /* @container: liczy się szerokość planszy, nie okna — sidebar zmienia jedno bez drugiego */
-    /* isolate: bez tego z-10 nagłówka wychodzi ponad szum z body::before (z-9)
-       i przyklejony pasek wygląda jak jaśniejszy prostokąt */
-    /* bez pt: górny odstęp daje pt-4 nagłówka, który musi być kryjący przy sticky */
     <div className="@container/board isolate px-4 pb-4">
       <div className="grid grid-cols-1 gap-x-3 gap-y-7 @lg/board:grid-cols-2 @2xl/board:grid-cols-3 @3xl/board:grid-cols-4 @4xl/board:grid-cols-5">
         {dayNames.map((dayName, dayIndex) => {
@@ -35,15 +31,9 @@ export const WeekBoard: FC<WeekBoardProps> = ({
           return (
             <section
               key={dayName}
-              /* kolumny wjeżdżają po kolei — czyta się jako „tydzień od
-                 poniedziałku", nie jako pięć niezależnych bloków.
-                 45ms × 5 kolumn = 180ms całości, poniżej progu czekania */
               className="animate-rise flex min-w-0 flex-col gap-2"
               style={{ animationDelay: `${dayIndex * 45}ms` }}
             >
-              {/* opakowanie kryje kafelki przewijające się pod przyklejonym
-                nagłówkiem — sam nagłówek jest zaokrąglony jak kafelki lekcji */}
-              {/* -mb-2 zjada gap-2, żeby całe tło pod nagłówkiem było kryjące */}
               <header className="bg-foreground sticky top-0 z-10 -mb-2 pt-4 pb-4">
                 <div
                   className={cn(

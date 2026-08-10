@@ -12,7 +12,6 @@ import { spawnSync } from "node:child_process";
 // `git rev-parse HEAD` might not the most efficient way
 // of determining a revision, however. You may prefer to use
 // the hashes of every extra file you precache.
-// `stdout` jest typowane jako string, ale przy nieudanym spawnie bywa nullem — stąd zwykły if.
 const { stdout } = spawnSync("git", ["rev-parse", "HEAD"], {
   encoding: "utf-8",
 });
@@ -23,6 +22,5 @@ export const { dynamic, dynamicParams, revalidate, generateStaticParams, GET } =
     additionalPrecacheEntries: [{ url: "/~offline", revision }],
     swSrc: "src/app/sw.ts",
     // nextConfig,
-    // If set to `false`, Serwist will attempt to use `esbuild-wasm`.
     useNativeEsbuild: true,
   });

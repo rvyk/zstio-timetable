@@ -33,7 +33,6 @@ test("parseHeaderDate formatuje w strefie Europe/Warsaw", () => {
   const res = new Response(null, {
     headers: { date: "Sat, 09 Aug 2026 12:34:56 GMT" },
   });
-  // 12:34 UTC w sierpniu = 14:34 w Warszawie (UTC+2)
   assert.equal(parseHeaderDate(res), "09 sierpnia 2026r. 14:34:56");
 });
 

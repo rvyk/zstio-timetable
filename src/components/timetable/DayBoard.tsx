@@ -31,11 +31,6 @@ interface DayBoardProps {
   onDayChange: (index: number) => void;
 }
 
-/**
- * Mobilny odpowiednik planszy tygodnia: ten sam kafelek, jedna kolumna, jeden
- * dzień naraz. Renderujemy tylko wybrany dzień — dzięki temu wysokość ekranu
- * odpowiada treści, a nie najdłuższemu dniu tygodnia.
- */
 export const DayBoard: FC<DayBoardProps> = ({
   dayNames,
   lessons,
@@ -48,13 +43,6 @@ export const DayBoard: FC<DayBoardProps> = ({
   const [transition, setTransition] = useState<Transition>("swap");
   const touchStartX = useRef<number | null>(null);
 
-  /**
-   * Sąsiedni dzień przesuwa się w bok, bo ruch odwzorowuje przejście o jeden
-   * krok. Skok z poniedziałku na piątek nie ma prawdziwego kierunku — udawany
-   * przesuw sugerowałby, że przewinęliśmy przez środek tygodnia, więc zamiast
-   * niego jest podmiana. Swipe zawsze narzuca kierunek gestu, nawet gdy zawija
-   * się z piątku na poniedziałek.
-   */
   const goTo = (index: number, swipeDirection?: Transition) => {
     if (index === selectedDayIndex) return;
 
@@ -102,8 +90,6 @@ export const DayBoard: FC<DayBoardProps> = ({
         onTouchEnd={handleTouchEnd}
       >
         <div
-          /* key wymusza remount przy zmianie dnia, więc animacja wejścia gra
-             przy każdym przełączeniu, a nie tylko przy pierwszym renderze */
           key={selectedDayIndex}
           className={cn(TRANSITION_CLASS[transition], "grid gap-2 p-3")}
         >

@@ -8,7 +8,6 @@ interface LessonItemProps {
   lesson: TableLesson;
 }
 
-/** Sama treść lekcji — bez obramowania, żeby kafelek mógł ją opakować po swojemu. */
 export const LessonEntry: FC<LessonItemProps> = ({ lesson }) => (
   <div className="grid gap-0.5">
     <h3 className="text-primary text-[15px] leading-tight font-medium tracking-[-0.01em]">

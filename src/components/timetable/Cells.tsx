@@ -9,7 +9,6 @@ import { MinusIcon, PlusIcon } from "lucide-react";
 import { FC } from "react";
 import { useIsClient } from "usehooks-ts";
 
-/** Skracanie zaczyna się najwcześniej od 5. lekcji — wcześniejsze bloki lecą normalnie. */
 const MIN_ADJUST_INDEX = 5;
 
 const LESSON_MODES = [
@@ -18,10 +17,6 @@ const LESSON_MODES = [
   { value: "custom", label: "Od lekcji" },
 ] as const;
 
-/**
- * Trzeci tryb zastępuje dawny kalkulator w oknie modalnym: zamiast liczyć
- * godziny obok planu, skracamy je wprost w planie i widać efekt od razu.
- */
 export const ShortLessonSwitcherCell: FC<{ className?: string }> = ({
   className,
 }) => {
@@ -45,9 +40,6 @@ export const ShortLessonSwitcherCell: FC<{ className?: string }> = ({
   }
 
   return (
-    /* col-reverse: na telefonie stepper nie mieści się obok przełącznika
-       („Od lekcji" łamie się na dwie linie), więc schodzi pod niego —
-       a że jest doprecyzowaniem trybu, czyta się to w naturalnej kolejności */
     <div
       className={cn(
         "flex gap-2 px-3 py-2 max-md:flex-col-reverse max-md:items-stretch md:items-center",
@@ -85,8 +77,6 @@ export const ShortLessonSwitcherCell: FC<{ className?: string }> = ({
         </div>
       )}
 
-      {/* grid zamiast flexa: równe kolumny to warunek, żeby pigułka mogła
-          przejeżdżać o 100% swojej szerokości zamiast być mierzona z DOM */}
       <div className="border-lines bg-accent relative grid min-w-0 grid-cols-3 rounded-lg border p-0.75 max-md:h-11 max-md:w-full md:h-9 md:w-auto">
         <span
           aria-hidden
@@ -112,7 +102,9 @@ export const ShortLessonSwitcherCell: FC<{ className?: string }> = ({
                   : setLessonType(value)
               }
               className={cn(
-                active ? "text-primary" : "text-primary/50 hover:text-primary/80",
+                active
+                  ? "text-primary"
+                  : "text-primary/50 hover:text-primary/80",
                 "tabular relative rounded-md px-2.5 font-mono text-xs font-medium whitespace-nowrap transition-colors",
               )}
             >

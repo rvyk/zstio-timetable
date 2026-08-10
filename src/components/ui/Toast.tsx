@@ -16,7 +16,6 @@ const ToastViewport = React.forwardRef<
   <ToastPrimitives.Viewport
     ref={ref}
     className={cn(
-      // na telefonie toast musi stanąć nad dolnym paskiem, nie na nim
       "fixed inset-x-0 bottom-[calc(4rem+env(safe-area-inset-bottom))] z-100 flex max-h-screen flex-col gap-y-2 p-3 md:right-0 md:bottom-0 md:left-auto md:w-95 md:p-4",
       className,
     )}
@@ -29,8 +28,6 @@ const toastVariants = cva(
   "group pointer-events-auto relative flex w-full items-start gap-x-2.5 overflow-hidden rounded-lg border p-3 backdrop-blur-md transition-all shadow-(--shadow-raised) data-[swipe=cancel]:translate-x-0 data-[swipe=end]:translate-x-(--radix-toast-swipe-end-x) data-[swipe=move]:translate-x-(--radix-toast-swipe-move-x) data-[swipe=move]:transition-none data-[state=open]:animate-in data-[state=closed]:animate-out data-[swipe=end]:animate-out data-[state=closed]:fade-out-80 data-[state=closed]:slide-out-to-right-full data-[state=open]:slide-in-from-top-full data-[state=open]:sm:slide-in-from-bottom-full",
   {
     variants: {
-      /* Kolor niesie stan, nie dekorację: potwierdzenie jest neutralne, bo nie ma
-         o czym alarmować; błąd bierze obwódkę marki, tę samą co trwająca lekcja. */
       variant: {
         success: "border-lines bg-foreground/95",
         error: "destructive border-accent-table/45 bg-foreground/95",
@@ -80,7 +77,6 @@ const ToastClose = React.forwardRef<
     ref={ref}
     aria-label="Zamknij powiadomienie"
     className={cn(
-      // na dotyku nie ma hovera, więc zamknięcie musi być widoczne od razu
       "text-primary/40 hover:text-primary hover:bg-primary/5 -my-1 -mr-1 grid size-8 shrink-0 place-content-center rounded-md transition-colors",
       className,
     )}

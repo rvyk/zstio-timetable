@@ -1,10 +1,6 @@
 import { SCHOOL_SHORT } from "@/constants/school";
 import type { Metadata } from "next";
 
-/**
- * Next scala metadane płytko: własny `openGraph` na stronie kasuje ten z layoutu
- * razem z og:image i og:type. Dlatego każda podstrona dostaje pełny komplet.
- */
 export const pageSeo = (
   title: string,
   description: string,

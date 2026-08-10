@@ -13,7 +13,6 @@ interface FavoriteStarProps {
   className?: string;
   /** Hide until the containing `group` row is hovered/focused (list context). */
   revealOnHover?: boolean;
-  /** Podpis obok ikony — dla samotnego przycisku, gdzie sama ikona nic nie mówi. */
   withLabel?: boolean;
 }
 
@@ -30,10 +29,6 @@ export const FavoriteStar: FC<FavoriteStarProps> = ({
     return favorites.some((c) => c.name === item.name);
   }, [favorites, item.name]);
 
-  /* licznik kliknięć, nie stan „czy zapisane": pop ma potwierdzać czynność,
-     a nie witać przy wejściu na stronę — inaczej cała lista zapisanych
-     zamigotałaby na pierwszym renderze. Zmiana klucza wymusza powtórzenie
-     keyframes, bo ta sama klasa drugi raz animacji nie odpali. */
   const [clicks, setClicks] = useState(0);
 
   return (
