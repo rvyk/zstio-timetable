@@ -2,7 +2,7 @@
 
 import { cn, parseTime } from "@/lib/utils";
 import { TableHour, TableLesson } from "@majusss/timetable-parser";
-import { CalendarX2 } from "lucide-react";
+import { CalendarX2, Coffee } from "lucide-react";
 import { FC, useEffect, useMemo, useState } from "react";
 import { LessonEntry } from "./LessonCells";
 
@@ -54,6 +54,11 @@ export const buildDaySlots = (
   return all.slice(0, lastTaken + 1);
 };
 
+const formatCountdown = (seconds: number) =>
+  `${Math.floor(seconds / 60)
+    .toString()
+    .padStart(2, "0")}:${(seconds % 60).toString().padStart(2, "0")}`;
+
 interface SlotCardProps {
   hour: TableHour;
   lessons: TableLesson[];
@@ -74,37 +79,35 @@ export const SlotCard: FC<SlotCardProps> = ({
   const isPast = isToday && now >= end;
   const progress = isLive ? ((now - start) / (end - start)) * 100 : 0;
 
-  const remaining = isLive ? end - now : 0;
-  const countdown = `${Math.floor(remaining / 60)
-    .toString()
-    .padStart(2, "0")}:${(remaining % 60).toString().padStart(2, "0")}`;
-
   return (
     <article
       className={cn(
         isLive
-          ? "border-accent-table/45 bg-accent-table/[0.07]"
+          ? "border-lines bg-accent shadow-lg shadow-black/30"
           : "border-lines/70 bg-accent/40 hover:border-lines hover:bg-accent",
         isPast && !isLive && "opacity-55",
-        "relative grid gap-1.5 overflow-hidden rounded-lg border px-3 py-2.5 transition-colors",
+        "relative grid gap-1.5 rounded-lg border px-3 py-2.5 transition-colors",
       )}
     >
-      <div className="flex items-baseline justify-between gap-2">
+      <div className="flex items-center justify-between gap-2">
+        {isLive ? (
+          <span className="bg-accent-table rounded-full px-2 py-0.5 text-[10px] font-semibold tracking-[0.06em] text-white uppercase">
+            teraz
+          </span>
+        ) : (
+          <span className="text-primary/55 tabular font-mono text-[11px] font-semibold">
+            {hour.number}
+          </span>
+        )}
         <span
           className={cn(
-            isLive ? "text-accent-table" : "text-primary/55",
-            "tabular font-mono text-[11px] font-semibold",
-          )}
-        >
-          {hour.number}
-        </span>
-        <span
-          className={cn(
-            isLive ? "text-accent-table" : "text-primary/55",
+            isLive ? "text-accent-table font-semibold" : "text-primary/55",
             "tabular font-mono text-[11px]",
           )}
         >
-          {isLive ? `za ${countdown}` : `${hour.timeFrom}–${hour.timeTo}`}
+          {isLive
+            ? formatCountdown(end - now)
+            : `${hour.timeFrom}–${hour.timeTo}`}
         </span>
       </div>
 
@@ -115,7 +118,7 @@ export const SlotCard: FC<SlotCardProps> = ({
       </div>
 
       {isLive && (
-        <div className="bg-primary/10 absolute inset-x-0 bottom-0 h-0.75">
+        <div className="bg-primary/10 mt-0.5 h-0.5 overflow-hidden rounded-full">
           <div
             className="bg-accent-table h-full transition-[width] duration-1000 ease-linear"
             style={{ width: `${progress}%` }}
@@ -123,6 +126,37 @@ export const SlotCard: FC<SlotCardProps> = ({
         </div>
       )}
     </article>
+  );
+};
+
+/** Divider shown between two cards while the break between them is running. */
+export const BreakRow: FC<{ from: string; to: string; now: number }> = ({
+  from,
+  to,
+  now,
+}) => {
+  const start = parseTime(from);
+  const end = parseTime(to);
+  if (now < start || now >= end) return null;
+
+  const progress = ((now - start) / (end - start)) * 100;
+
+  return (
+    <div className="animate-rise flex items-center gap-2 px-1 py-0.5">
+      <Coffee className="text-accent-table size-3 shrink-0" strokeWidth={2} />
+      <span className="text-accent-table/80 text-[11px] font-medium">
+        przerwa
+      </span>
+      <div className="bg-primary/10 h-px flex-1 overflow-hidden rounded-full">
+        <div
+          className="bg-accent-table/50 h-full transition-[width] duration-1000 ease-linear"
+          style={{ width: `${progress}%` }}
+        />
+      </div>
+      <span className="text-accent-table tabular font-mono text-[11px]">
+        {formatCountdown(end - now)}
+      </span>
+    </div>
   );
 };
 

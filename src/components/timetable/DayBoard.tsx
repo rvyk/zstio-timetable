@@ -2,9 +2,10 @@
 
 import { cn } from "@/lib/utils";
 import { TableHour, TableLesson } from "@majusss/timetable-parser";
-import { FC, TouchEvent, useRef, useState } from "react";
+import { FC, Fragment, TouchEvent, useRef, useState } from "react";
 import { DayTabs } from "./DayTabs";
 import {
+  BreakRow,
   GapCard,
   NoLessons,
   SlotCard,
@@ -94,19 +95,27 @@ export const DayBoard: FC<DayBoardProps> = ({
           className={cn(TRANSITION_CLASS[transition], "grid gap-2 p-3")}
         >
           {slots.length > 0 ? (
-            slots.map((slot) =>
-              slot.entries.length > 0 ? (
-                <SlotCard
-                  key={slot.hour.number}
-                  hour={slot.hour}
-                  lessons={slot.entries}
-                  isToday={isToday}
-                  now={now}
-                />
-              ) : (
-                <GapCard key={slot.hour.number} hour={slot.hour} />
-              ),
-            )
+            slots.map((slot, index) => (
+              <Fragment key={slot.hour.number}>
+                {isToday && index > 0 && (
+                  <BreakRow
+                    from={slots[index - 1]!.hour.timeTo}
+                    to={slot.hour.timeFrom}
+                    now={now}
+                  />
+                )}
+                {slot.entries.length > 0 ? (
+                  <SlotCard
+                    hour={slot.hour}
+                    lessons={slot.entries}
+                    isToday={isToday}
+                    now={now}
+                  />
+                ) : (
+                  <GapCard hour={slot.hour} />
+                )}
+              </Fragment>
+            ))
           ) : (
             <NoLessons description="Na ten dzień nie wprowadzono planu zajęć" />
           )}
