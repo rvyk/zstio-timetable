@@ -1,6 +1,8 @@
 "use client";
 
+import { useLocale, useT } from "@/components/common/LocaleProvider";
 import { DAYS_OF_WEEK } from "@/constants/days";
+import { dayLabel } from "@/lib/i18n";
 import { useTimetableStore } from "@/stores/timetable";
 import { useEffect } from "react";
 import { useIsClient } from "usehooks-ts";
@@ -8,6 +10,8 @@ import { useIsClient } from "usehooks-ts";
 const DEFAULT_DAYS = DAYS_OF_WEEK.slice(0, 5).map((day) => day.long);
 
 export default function PrintPage() {
+  const translate = useT();
+  const locale = useLocale();
   const { timetable } = useTimetableStore();
   const isMounted = useIsClient();
 
@@ -18,11 +22,7 @@ export default function PrintPage() {
   if (!isMounted) return null;
 
   if (!timetable) {
-    return (
-      <p className="p-8 text-black">
-        Brak danych planu lekcji — wróć na stronę główną, aby go wczytać.
-      </p>
-    );
+    return <p className="p-8 text-black">{translate("print.noData")}</p>;
   }
 
   const { title, dayNames, hours, lessons } = timetable;
@@ -37,11 +37,15 @@ export default function PrintPage() {
       <table className="w-full border-collapse border border-gray-400 text-sm">
         <thead>
           <tr className="bg-gray-100 print:bg-gray-100">
-            <th className="w-16 border border-gray-400 p-2">Nr</th>
-            <th className="w-32 border border-gray-400 p-2">Godziny</th>
+            <th className="w-16 border border-gray-400 p-2">
+              {translate("print.number")}
+            </th>
+            <th className="w-32 border border-gray-400 p-2">
+              {translate("print.hours")}
+            </th>
             {days.map((day) => (
               <th key={day} className="border border-gray-400 p-2">
-                {day}
+                {dayLabel(locale, day, "long")}
               </th>
             ))}
           </tr>

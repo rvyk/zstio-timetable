@@ -308,6 +308,40 @@ body::before {
   height: 0;
 }
 
+/* Dostępność — przełączniki z panelu ustawień, stan na `<html>`. */
+
+html[data-a11y-text] {
+  font-size: 18px;
+}
+
+:root[data-a11y-contrast] {
+  --primary: 0 0 0;
+  --lines: 150 145 138;
+  --accent-table: 168 25 33;
+}
+
+:root[data-a11y-contrast].dark {
+  --primary: 255 255 255;
+  --lines: 120 116 110;
+  --accent-table: 255 130 136;
+}
+
+/* ponytail: wyliczone klasy przezroczystości — Tailwind wypala alfę w
+   `color-mix`, więc nie da się jej podbić zmienną. Nowy stopień `text-primary/x`
+   trzeba dopisać tutaj. */
+[data-a11y-contrast] .text-primary\/25,
+[data-a11y-contrast] .text-primary\/30,
+[data-a11y-contrast] .text-primary\/35,
+[data-a11y-contrast] .text-primary\/40,
+[data-a11y-contrast] .text-primary\/45,
+[data-a11y-contrast] .text-primary\/50,
+[data-a11y-contrast] .text-primary\/55,
+[data-a11y-contrast] .text-primary\/60,
+[data-a11y-contrast] .text-primary\/65,
+[data-a11y-contrast] .text-primary\/70 {
+  color: rgb(var(--primary) / 0.85);
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -317,6 +351,18 @@ body::before {
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+}
+
+[data-a11y-motion] {
+  scroll-behavior: auto !important;
+}
+
+[data-a11y-motion] *,
+[data-a11y-motion] *::before,
+[data-a11y-motion] *::after {
+  animation-duration: 0.01ms !important;
+  animation-delay: 0ms !important;
+  transition-duration: 0.01ms !important;
 }
 
 @media print {

@@ -2,6 +2,7 @@
 
 import school_logo from "@/assets/school-logo.png";
 import { FavoriteStar } from "@/components/common/FavoriteStar";
+import { useT } from "@/components/common/LocaleProvider";
 import { SettingsMenu } from "@/components/settings/SettingsPanel";
 import { ShortLessonSwitcherCell } from "@/components/timetable/Cells";
 import { SCHOOL_SHORT, SCHOOL_WEBSITE } from "@/constants/school";
@@ -67,25 +68,29 @@ const PageLink: FC<NonNullable<TopbarProps["page"]>> = ({
   </Link>
 );
 
-const SchoolLink: FC = () => (
-  <Link
-    href={SCHOOL_WEBSITE}
-    className="group -m-1 flex items-center gap-x-2.5 rounded-lg p-1"
-    aria-label={`Przejdź na stronę szkoły ${SCHOOL_SHORT}`}
-  >
-    <Image
-      src={school_logo}
-      alt=""
-      className="aspect-square w-9 shrink-0 active:scale-95"
-    />
-    <span className="grid gap-0.5">
-      <span className="text-primary text-sm leading-none font-semibold tracking-tight">
-        {SCHOOL_SHORT}
+const SchoolLink: FC = () => {
+  const translate = useT();
+
+  return (
+    <Link
+      href={SCHOOL_WEBSITE}
+      className="group -m-1 flex items-center gap-x-2.5 rounded-lg p-1"
+      aria-label={translate("school.linkAria", { school: SCHOOL_SHORT })}
+    >
+      <Image
+        src={school_logo}
+        alt=""
+        className="aspect-square w-9 shrink-0 active:scale-95"
+      />
+      <span className="grid gap-0.5">
+        <span className="text-primary text-sm leading-none font-semibold tracking-tight">
+          {SCHOOL_SHORT}
+        </span>
+        <span className="text-primary/40 flex items-center gap-1 text-[11px] leading-none">
+          <ArrowLeft className="size-3" strokeWidth={2} />
+          {translate("school.link")}
+        </span>
       </span>
-      <span className="text-primary/40 flex items-center gap-1 text-[11px] leading-none">
-        <ArrowLeft className="size-3" strokeWidth={2} />
-        Strona szkoły
-      </span>
-    </span>
-  </Link>
-);
+    </Link>
+  );
+};

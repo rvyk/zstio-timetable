@@ -1,10 +1,22 @@
 "use client";
 
-import { getCalendar } from "@/lib/calendar";
+import {
+  useLocale,
+  useSetLocale,
+  useT,
+} from "@/components/common/LocaleProvider";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/Accordion";
 import { DialogDescription, DialogTitle } from "@/components/ui/Dialog";
 import { usePwa } from "@/hooks/usePWA";
 import { showErrorToast } from "@/hooks/useToast";
+import { getCalendar } from "@/lib/calendar";
 import { downloadFile } from "@/lib/downloadFile";
+import { LOCALES, type Locale } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 import { useSettingsStore } from "@/stores/settings";
 import { useTimetableStore } from "@/stores/timetable";
@@ -12,8 +24,10 @@ import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import type { LucideIcon } from "lucide-react";
 import {
+  AccessibilityIcon,
   BellIcon,
   CalendarArrowDownIcon,
+  ChevronDown,
   DownloadIcon,
   PrinterIcon,
   Search,
@@ -85,10 +99,15 @@ const SettingButton = ({
 };
 
 const THEMES = [
-  { value: "light", label: "Jasny" },
-  { value: "dark", label: "Ciemny" },
-  { value: "system", label: "Auto" },
+  { value: "light", key: "theme.light" },
+  { value: "dark", key: "theme.dark" },
+  { value: "system", key: "theme.system" },
 ] as const;
+
+const LANGUAGE_LABELS: Record<Locale, string> = {
+  pl: "Polski",
+  uk: "Українська",
+};
 
 /**
  * Zmiana motywu jest natychmiastowa. Klasa na `<html>` podmienia się w jednym
@@ -114,6 +133,7 @@ const useThemeSwitch = () => {
 };
 
 const ThemeSetting = () => {
+  const translate = useT();
   const { theme, switchTheme } = useThemeSwitch();
   const isClient = useIsClient();
   const active = isClient ? (theme ?? "system") : "system";
@@ -125,7 +145,7 @@ const ThemeSetting = () => {
   return (
     <div className="grid gap-2 p-2.5">
       <span className="text-primary/40 text-[11px] font-medium tracking-[0.06em] uppercase">
-        Motyw
+        {translate("theme.label")}
       </span>
       <div className="border-lines bg-accent relative grid grid-cols-3 rounded-lg border p-0.75">
         <span
@@ -151,11 +171,142 @@ const ThemeSetting = () => {
               "relative rounded-md py-1.5 text-[11px] font-medium transition-colors",
             )}
           >
-            {option.label}
+            {translate(option.key)}
           </button>
         ))}
       </div>
     </div>
+  );
+};
+
+const LanguageSetting = () => {
+  const translate = useT();
+  const locale = useLocale();
+  const setLocale = useSetLocale();
+  const activeIndex = Math.max(0, LOCALES.indexOf(locale));
+
+  return (
+    <div className="grid gap-2 p-2.5">
+      <span className="text-primary/40 text-[11px] font-medium tracking-[0.06em] uppercase">
+        {translate("language.label")}
+      </span>
+      <div className="border-lines bg-accent relative grid grid-cols-2 rounded-lg border p-0.75">
+        <span
+          aria-hidden
+          data-keep-transition
+          className="ease-out-quint pointer-events-none absolute inset-y-0.75 left-0.75 flex transition-transform duration-300"
+          style={{
+            width: `calc((100% - 0.375rem) / 2)`,
+            transform: `translateX(${activeIndex * 100}%)`,
+          }}
+        >
+          <span className="bg-foreground flex-1 rounded-md shadow-(--shadow-soft)" />
+        </span>
+        {LOCALES.map((option) => (
+          <button
+            key={option}
+            onClick={() => setLocale(option)}
+            aria-pressed={locale === option}
+            lang={option}
+            className={cn(
+              locale === option
+                ? "text-primary"
+                : "text-primary/45 hover:text-primary",
+              "relative rounded-md py-1.5 text-[11px] font-medium transition-colors",
+            )}
+          >
+            {LANGUAGE_LABELS[option]}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+const A11Y_OPTIONS = [
+  { key: "text", label: "a11y.text", hint: "a11y.textHint" },
+  { key: "contrast", label: "a11y.contrast", hint: "a11y.contrastHint" },
+  { key: "motion", label: "a11y.motion", hint: "a11y.motionHint" },
+] as const;
+
+const AccessibilitySetting = ({ index = 0 }: { index?: number }) => {
+  const translate = useT();
+  const a11y = useSettingsStore((state) => state.a11y);
+  const toggleA11y = useSettingsStore((state) => state.toggleA11y);
+  const isClient = useIsClient();
+
+  const activeCount = isClient
+    ? A11Y_OPTIONS.filter((option) => a11y[option.key]).length
+    : 0;
+
+  return (
+    <Accordion type="single" collapsible>
+      <AccordionItem value="a11y">
+        <AccordionTrigger
+          style={{ animationDelay: `${60 + index * 35}ms` }}
+          className="group animate-rise hover:bg-primary/4 w-full items-start gap-3 rounded-md p-2.5 text-left transition duration-150 max-md:min-h-11"
+        >
+          <AccessibilityIcon
+            className="text-primary/45 group-hover:text-accent-table mt-0.5 size-4 shrink-0 transition duration-200 group-hover:scale-110"
+            strokeWidth={1.75}
+          />
+          <span className="grid flex-1 gap-1">
+            <span className="text-primary text-[13px] leading-none font-medium tracking-tight">
+              {translate("a11y.label")}
+            </span>
+            <span className="text-primary/40 text-[11px] leading-relaxed">
+              {activeCount > 0
+                ? translate("a11y.active", { count: activeCount })
+                : translate("a11y.summary")}
+            </span>
+          </span>
+          <ChevronDown
+            className="text-primary/35 mt-0.5 size-3.5 shrink-0 transition-transform duration-300 group-data-[state=open]:rotate-180"
+            strokeWidth={2}
+          />
+        </AccordionTrigger>
+        <AccordionContent className="mx-2 grid gap-0.5 pt-1">
+          {A11Y_OPTIONS.map((option) => {
+            const active = isClient && a11y[option.key];
+
+            return (
+              <button
+                key={option.key}
+                role="switch"
+                aria-checked={active}
+                onClick={() => toggleA11y(option.key)}
+                className="hover:bg-primary/4 flex items-center gap-3 rounded-md p-2.5 text-left transition-colors max-md:min-h-11"
+              >
+                <span className="grid flex-1 gap-1">
+                  <span className="text-primary text-[13px] leading-none font-medium tracking-tight">
+                    {translate(option.label)}
+                  </span>
+                  <span className="text-primary/40 text-[11px] leading-relaxed">
+                    {translate(option.hint)}
+                  </span>
+                </span>
+                <span
+                  aria-hidden
+                  className={cn(
+                    "border-lines relative h-5 w-8.5 shrink-0 rounded-full border transition-colors duration-200",
+                    active ? "bg-accent-table border-transparent" : "bg-accent",
+                  )}
+                >
+                  <span
+                    className={cn(
+                      "ease-out-quint absolute top-0.5 left-0.5 size-3.5 rounded-full transition-transform duration-200",
+                      active
+                        ? "translate-x-3.5 bg-white"
+                        : "bg-primary/35 translate-x-0",
+                    )}
+                  />
+                </span>
+              </button>
+            );
+          })}
+        </AccordionContent>
+      </AccordionItem>
+    </Accordion>
   );
 };
 
@@ -167,6 +318,7 @@ export const SettingsList = ({
   includePrint?: boolean;
 }) => {
   const router = useRouter();
+  const translate = useT();
   const timetable = useTimetableStore((state) => state.timetable);
   const savedSettings = useSettingsStore();
   const [prompt, isInstalled] = usePwa();
@@ -176,7 +328,7 @@ export const SettingsList = ({
       {
         key: "install",
         icon: DownloadIcon,
-        title: "Zainstaluj aplikację",
+        title: translate("settings.install"),
         hidden: isInstalled,
         onClick: () => {
           if (prompt) {
@@ -185,30 +337,30 @@ export const SettingsList = ({
           }
 
           showErrorToast(
-            "Nie można zainstalować aplikacji",
-            "Twoja przeglądarka nie obsługuje tej funkcji",
+            translate("settings.installError"),
+            translate("settings.installErrorHint"),
           );
         },
-        description: <p>Szybki dostęp z ekranu głównego, działa offline</p>,
+        description: <p>{translate("settings.installHint")}</p>,
       },
       {
         key: "notifications",
         icon: BellIcon,
-        title: "Powiadomienia",
+        title: translate("settings.notifications"),
         hidden: true,
         active: savedSettings.isNotificationEnabled,
         onClick: savedSettings.toggleNotification,
-        description: <p>Otrzymuj powiadomienia PUSH o nowym planie lekcji</p>,
+        description: <p>{translate("settings.notificationsHint")}</p>,
       },
       {
         key: "calendar",
         icon: CalendarArrowDownIcon,
-        title: "Dodaj do kalendarza",
+        title: translate("settings.calendar"),
         onClick: async () => {
           if (!timetable?.lessons || timetable.lessons.length === 0) {
             showErrorToast(
-              "Nie można wygenerować pliku kalendarza",
-              "Brak wydarzeń do wyeksportowania w obecnym planie lekcji",
+              translate("settings.calendarError"),
+              translate("settings.calendarEmpty"),
             );
             return;
           }
@@ -222,8 +374,8 @@ export const SettingsList = ({
             if (calendar.error ?? !calendar.value) {
               console.error(calendar.error);
               showErrorToast(
-                "Nie można wygenerować pliku kalendarza",
-                calendar.error?.message ?? "Wystąpił nieznany błąd",
+                translate("settings.calendarError"),
+                calendar.error?.message ?? translate("settings.unknownError"),
               );
               return;
             }
@@ -236,31 +388,45 @@ export const SettingsList = ({
           } catch (error) {
             console.error(error);
             showErrorToast(
-              "Nie można wygenerować pliku kalendarza",
-              "Wystąpił błąd podczas generowania pliku kalendarza",
+              translate("settings.calendarError"),
+              translate("settings.calendarErrorHint"),
             );
           }
         },
-        description: <p>Pobierz plan {timetable?.title} jako plik .ics</p>,
+        description: (
+          <p>
+            {translate("settings.calendarHint", {
+              title: timetable?.title ?? "",
+            })}
+          </p>
+        ),
       },
       {
         key: "print",
         icon: PrinterIcon,
-        title: "Drukuj plan",
+        title: translate("settings.print"),
         hidden: !includePrint,
         href: "/print",
-        description: <p>Wersja do druku i zapisu do PDF</p>,
+        description: <p>{translate("settings.printHint")}</p>,
       },
       {
         key: "freeRooms",
         icon: Search,
-        title: "Wolne sale",
+        title: translate("freeRooms.title"),
         hidden: timetable?.list.rooms?.length === 0,
         onClick: () => router.push("/free-rooms"),
-        description: <p>Cały tydzień z podziałem na dni i lekcje</p>,
+        description: <p>{translate("settings.freeRoomsHint")}</p>,
       },
     ],
-    [isInstalled, prompt, savedSettings, timetable, router, includePrint],
+    [
+      isInstalled,
+      prompt,
+      savedSettings,
+      timetable,
+      router,
+      includePrint,
+      translate,
+    ],
   );
 
   const visibleSettings = settings.filter((setting) => !setting.hidden);
@@ -278,8 +444,10 @@ export const SettingsList = ({
           }}
         />
       ))}
+      <AccessibilitySetting index={visibleSettings.length} />
       <hr className="border-lines my-1" />
       <ThemeSetting />
+      <LanguageSetting />
     </div>
   );
 };
@@ -310,6 +478,7 @@ const useAnchor = (
 };
 
 export const SettingsMenu = () => {
+  const translate = useT();
   const [isOpen, setIsOpen] = useState(false);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
@@ -320,7 +489,7 @@ export const SettingsMenu = () => {
       <DialogPrimitive.Trigger asChild>
         <button
           ref={triggerRef}
-          aria-label="Otwórz dodatkowe funkcje"
+          aria-label={translate("settings.menuOpen")}
           className={cn(
             "border-lines bg-accent text-primary/70 active:bg-primary/5 active:text-primary grid size-11 place-content-center rounded-lg border transition duration-150 active:scale-90",
             "data-[state=open]:text-primary data-[state=open]:bg-foreground data-[state=open]:pointer-events-none data-[state=open]:relative data-[state=open]:z-60",
@@ -343,10 +512,9 @@ export const SettingsMenu = () => {
           className="border-lines bg-foreground data-[state=open]:animate-popover-in data-[state=closed]:animate-popover-out fixed z-50 grid max-h-[calc(100dvh-6rem)] w-[min(19rem,calc(100vw-4rem))] origin-top-right gap-4 overflow-y-auto rounded-xl border p-4 shadow-(--shadow-raised) md:hidden"
         >
           <VisuallyHidden>
-            <DialogTitle>Dodatkowe funkcje</DialogTitle>
+            <DialogTitle>{translate("settings.menu")}</DialogTitle>
             <DialogDescription>
-              Instalacja aplikacji, eksport do kalendarza, druk, wolne sale i
-              wybór motywu.
+              {translate("settings.menuHint")}
             </DialogDescription>
           </VisuallyHidden>
 

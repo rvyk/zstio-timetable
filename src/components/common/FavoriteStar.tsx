@@ -1,5 +1,6 @@
 "use client";
 
+import { useT } from "@/components/common/LocaleProvider";
 import { handleFavorite } from "@/lib/handleFavorites";
 import { cn } from "@/lib/utils";
 import { useFavoritesStore } from "@/stores/favorites";
@@ -23,6 +24,7 @@ export const FavoriteStar: FC<FavoriteStarProps> = ({
   revealOnHover,
   withLabel,
 }) => {
+  const translate = useT();
   const { favorites } = useFavoritesStore();
 
   const isFavorite = useMemo(() => {
@@ -33,12 +35,12 @@ export const FavoriteStar: FC<FavoriteStarProps> = ({
 
   return (
     <button
-      aria-label={isFavorite ? "Usuń z ulubionych" : "Dodaj do ulubionych"}
+      aria-label={translate(isFavorite ? "favorites.remove" : "favorites.add")}
       aria-pressed={isFavorite}
       onClick={(e) => {
         e.preventDefault();
         setClicks((count) => count + 1);
-        handleFavorite(item);
+        handleFavorite(item, translate);
       }}
       className={cn(
         "shrink-0 rounded-sm transition-colors",
@@ -63,7 +65,7 @@ export const FavoriteStar: FC<FavoriteStarProps> = ({
       />
       {withLabel && (
         <span className="text-[13px] leading-none font-medium">
-          {isFavorite ? "Zapisany" : "Zapisz"}
+          {translate(isFavorite ? "favorites.saved" : "favorites.save")}
         </span>
       )}
     </button>

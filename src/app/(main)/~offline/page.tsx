@@ -1,5 +1,7 @@
 import { BottomBar } from "@/components/common/BottomBar";
 import { Topbar } from "@/components/topbar/Topbar";
+import { t } from "@/lib/i18n";
+import { getLocale } from "@/lib/locale.server";
 import { WifiOff } from "lucide-react";
 import type { Metadata } from "next";
 import { Fragment } from "react";
@@ -9,7 +11,9 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
-export default function Offline() {
+export default async function Offline() {
+  const locale = await getLocale();
+
   return (
     <Fragment>
       <main className="flex h-full w-full min-w-0 flex-1 flex-col gap-y-3 max-md:overflow-y-auto max-md:pb-[calc(4rem+env(safe-area-inset-bottom))] md:overflow-hidden md:p-3">
@@ -21,11 +25,10 @@ export default function Offline() {
             </div>
             <div className="grid gap-1">
               <h2 className="text-primary/90 text-base font-medium tracking-tight">
-                Jesteś offline
+                {t(locale, "offline.title")}
               </h2>
               <p className="text-primary/50 max-w-xs text-sm">
-                Złap zasięg, żeby załadować plan zajęć. Ostatnio otwarte plany
-                zostały zapisane i działają bez internetu.
+                {t(locale, "offline.description")}
               </p>
             </div>
           </div>

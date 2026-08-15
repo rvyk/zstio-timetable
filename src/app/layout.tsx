@@ -1,3 +1,4 @@
+import { LocaleProvider } from "@/components/common/LocaleProvider";
 import { ServiceWorker } from "@/components/common/ServiceWorker";
 import { ThemeProvider } from "@/components/common/ThemeProvider";
 import { Toaster } from "@/components/ui/Toaster";
@@ -9,6 +10,8 @@ import {
   SCHOOL_WEBSITE,
 } from "@/constants/school";
 import { env } from "@/env";
+import { t } from "@/lib/i18n";
+import { getLocale } from "@/lib/locale.server";
 import { cn } from "@/lib/utils";
 import { Analytics } from "@vercel/analytics/next";
 import type { Metadata, Viewport } from "next";
@@ -121,13 +124,15 @@ const jsonLd = {
   ],
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: ReactNode;
 }>) {
+  const locale = await getLocale();
+
   return (
-    <html lang="pl" suppressHydrationWarning data-scroll-behavior="smooth">
+    <html lang={locale} suppressHydrationWarning data-scroll-behavior="smooth">
       <body
         className={cn(
           geistSans.variable,
@@ -135,6 +140,13 @@ export default function RootLayout({
           "bg-foreground md:bg-background flex h-dvh font-sans antialiased",
         )}
       >
+        {/* Ustawienia dostępności przed pierwszym malowaniem — inaczej większy
+            tekst czy kontrast mrugają po hydracji zustanda. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `try{var a=JSON.parse(localStorage.getItem("timetable-settings")).state.a11y;for(var k in a)if(a[k])document.documentElement.setAttribute("data-a11y-"+k,"")}catch(e){}`,
+          }}
+        />
         <script
           type="application/ld+json"
           suppressHydrationWarning
@@ -143,14 +155,16 @@ export default function RootLayout({
         <Analytics />
         <ServiceWorker />
         <ThemeProvider attribute="class">
-          <Toaster />
-          <a
-            href="#plan"
-            className="bg-accent-table sr-only rounded-md px-4 py-2 text-sm font-medium text-white focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50"
-          >
-            Przejdź do planu
-          </a>
-          {children}
+          <LocaleProvider locale={locale}>
+            <Toaster />
+            <a
+              href="#plan"
+              className="bg-accent-table sr-only rounded-md px-4 py-2 text-sm font-medium text-white focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50"
+            >
+              {t(locale, "skipToPlan")}
+            </a>
+            {children}
+          </LocaleProvider>
         </ThemeProvider>
       </body>
     </html>

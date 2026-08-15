@@ -1,5 +1,6 @@
 "use client";
 
+import { useT } from "@/components/common/LocaleProvider";
 import { Skeleton } from "@/components/ui/Skeleton";
 import { MAX_LESSONS } from "@/constants/settings";
 import { usePresence } from "@/hooks/usePresence";
@@ -14,12 +15,13 @@ const MIN_ADJUST_INDEX = 5;
 const LESSON_MODES = [
   { value: "normal", label: "45'" },
   { value: "short", label: "30'" },
-  { value: "custom", label: "Od lekcji" },
+  { value: "custom", label: null },
 ] as const;
 
 export const ShortLessonSwitcherCell: FC<{ className?: string }> = ({
   className,
 }) => {
+  const translate = useT();
   const isClient = useIsClient();
   const {
     lessonType,
@@ -53,7 +55,7 @@ export const ShortLessonSwitcherCell: FC<{ className?: string }> = ({
           className="border-lines bg-accent data-[state=open]:animate-rise data-[state=closed]:animate-fall flex shrink-0 items-center justify-between rounded-lg border px-1 max-md:h-11 md:h-9 md:justify-start"
         >
           <button
-            aria-label="Wcześniejsza lekcja"
+            aria-label={translate("lessons.earlier")}
             disabled={hoursAdjustIndex <= MIN_ADJUST_INDEX}
             onClick={() => enableCustomLessonsLength(hoursAdjustIndex - 1)}
             className="text-primary/50 hover:text-primary active:bg-primary/5 grid place-content-center rounded-md transition duration-150 active:scale-90 disabled:opacity-30 max-md:h-full max-md:w-12 md:size-7"
@@ -64,10 +66,10 @@ export const ShortLessonSwitcherCell: FC<{ className?: string }> = ({
             />
           </button>
           <span className="tabular text-primary w-20 text-center font-mono text-xs">
-            od {hoursAdjustIndex}. lekcji
+            {translate("lessons.from", { number: hoursAdjustIndex })}
           </span>
           <button
-            aria-label="Późniejsza lekcja"
+            aria-label={translate("lessons.later")}
             disabled={hoursAdjustIndex >= MAX_LESSONS}
             onClick={() => enableCustomLessonsLength(hoursAdjustIndex + 1)}
             className="text-primary/50 hover:text-primary active:bg-primary/5 grid place-content-center rounded-md transition duration-150 active:scale-90 disabled:opacity-30 max-md:h-full max-md:w-12 md:size-7"
@@ -89,12 +91,13 @@ export const ShortLessonSwitcherCell: FC<{ className?: string }> = ({
           <span className="bg-foreground flex-1 rounded-md shadow-(--shadow-soft)" />
         </span>
 
-        {LESSON_MODES.map(({ value, label }) => {
+        {LESSON_MODES.map(({ value, label: rawLabel }) => {
+          const label = rawLabel ?? translate("lessons.mode.custom");
           const active = lessonType === value;
           return (
             <button
               key={value}
-              aria-label={`Lekcje ${label}`}
+              aria-label={translate("lessons.mode.aria", { label })}
               aria-pressed={active}
               onClick={() =>
                 value === "custom"

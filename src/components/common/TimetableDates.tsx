@@ -1,3 +1,4 @@
+import { useT } from "@/components/common/LocaleProvider";
 import { cn } from "@/lib/utils";
 import { OptivumTimetable } from "@/types/optivum";
 import { FC, Fragment, JSX, useMemo } from "react";
@@ -13,6 +14,7 @@ export const TimetableDates: FC<TimetableDatesProps> = ({
   className,
   stackOnMobile,
 }) => {
+  const translate = useT();
   const hasNoLessons = useMemo(
     () =>
       timetable?.lessons?.some((innerArray) => innerArray.length === 0) ?? true,
@@ -27,7 +29,7 @@ export const TimetableDates: FC<TimetableDatesProps> = ({
     if (timetable.generatedDate && timetable.generatedDate !== "Invalid date") {
       arr.push(
         <Fragment key="generatedDate">
-          <span>Wygenerowano: </span>
+          <span>{translate("dates.generated")}</span>
           <span className="text-primary/70 font-medium">
             {timetable.generatedDate}
           </span>
@@ -38,7 +40,7 @@ export const TimetableDates: FC<TimetableDatesProps> = ({
     if (timetable.validDate) {
       arr.push(
         <Fragment key="validDate">
-          <span>Obowiązuje od: </span>
+          <span>{translate("dates.validFrom")}</span>
           <span className="text-primary/70 font-medium">
             {timetable.validDate}
           </span>
@@ -47,16 +49,16 @@ export const TimetableDates: FC<TimetableDatesProps> = ({
     }
 
     return arr;
-  }, [hasNoLessons, timetable]);
+  }, [hasNoLessons, timetable, translate]);
 
   if (hasNoLessons) {
     return (
       <p className={cn("text-primary/50 text-base", className)}>
-        Szukany plan zajęć
+        {translate("dates.notFoundStart")}
         {timetable?.id && (
           <span className="text-primary/80 font-mono"> {timetable.id}</span>
         )}{" "}
-        nie mógł zostać znaleziony.
+        {translate("dates.notFoundEnd")}
       </p>
     );
   }

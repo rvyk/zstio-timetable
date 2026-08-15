@@ -1,5 +1,7 @@
 "use client";
 
+import { useLocale, useT } from "@/components/common/LocaleProvider";
+import { dayLabel } from "@/lib/i18n";
 import { cn, getDayNumberForNextWeek } from "@/lib/utils";
 import { TableHour, TableLesson } from "@majusss/timetable-parser";
 import { FC, Fragment } from "react";
@@ -24,6 +26,8 @@ export const WeekBoard: FC<WeekBoardProps> = ({
   hours,
   todayIndex,
 }) => {
+  const locale = useLocale();
+  const translate = useT();
   const now = useNowSeconds();
 
   return (
@@ -63,11 +67,11 @@ export const WeekBoard: FC<WeekBoardProps> = ({
                       "text-sm leading-none font-medium",
                     )}
                   >
-                    {dayName}
+                    {dayLabel(locale, dayName, "long")}
                   </h2>
                   {isToday && (
                     <span className="bg-accent-table/12 text-accent-table ml-auto rounded-full px-2 py-0.5 text-[10px] font-semibold tracking-[0.06em] uppercase">
-                      dziś
+                      {translate("timetable.today")}
                     </span>
                   )}
                 </div>
@@ -96,7 +100,9 @@ export const WeekBoard: FC<WeekBoardProps> = ({
                   </Fragment>
                 ))
               ) : (
-                <p className="text-primary/30 px-3 py-2 text-xs">Brak zajęć</p>
+                <p className="text-primary/30 px-3 py-2 text-xs">
+                  {translate("timetable.noLessons")}
+                </p>
               )}
             </section>
           );

@@ -1,8 +1,9 @@
 "use client";
 
-import { DAYS_OF_WEEK } from "@/constants/days";
+import { useLocale, useT } from "@/components/common/LocaleProvider";
 import { usePresence } from "@/hooks/usePresence";
 import { warsawDayIndex } from "@/lib/dates";
+import { dayLabel } from "@/lib/i18n";
 import { cn, getDayNumberForNextWeek } from "@/lib/utils";
 import { ListItem, TableHour } from "@majusss/timetable-parser";
 import { ArrowLeftIcon } from "lucide-react";
@@ -23,6 +24,8 @@ export const FreeRoomsBoard: FC<FreeRoomsBoardProps> = ({
   freeRooms,
   rooms,
 }) => {
+  const locale = useLocale();
+  const translate = useT();
   const [selected, setSelected] = useState<[number, number] | null>(null);
   const todayIndex = warsawDayIndex();
 
@@ -55,10 +58,10 @@ export const FreeRoomsBoard: FC<FreeRoomsBoardProps> = ({
       <div className="border-lines flex items-center justify-between gap-4 border-b py-2 pr-2 pl-4 max-md:hidden">
         <div className="flex min-w-0 items-baseline gap-x-2.5">
           <h1 className="text-primary text-xl leading-none font-semibold tracking-[-0.02em]">
-            Wolne sale
+            {translate("freeRooms.title")}
           </h1>
           <span className="text-primary/40 truncate text-xs max-sm:hidden">
-            Cały tydzień naraz — wybierz kratkę, żeby zobaczyć listę
+            {translate("freeRooms.hint")}
           </span>
         </div>
         <Link
@@ -66,7 +69,7 @@ export const FreeRoomsBoard: FC<FreeRoomsBoardProps> = ({
           className="border-lines bg-accent hover:bg-accent/60 text-primary/70 hover:text-primary flex h-9 shrink-0 items-center gap-1.5 rounded-lg border px-3 text-[13px] font-medium transition-colors"
         >
           <ArrowLeftIcon className="size-4" strokeWidth={2} />
-          Plan
+          {translate("freeRooms.back")}
         </Link>
       </div>
 
@@ -110,9 +113,11 @@ export const FreeRoomsBoard: FC<FreeRoomsBoardProps> = ({
                     {date.dayNumber.toString().padStart(2, "0")}
                   </span>
                   <h2 className="text-primary/60 truncate text-sm leading-none font-medium">
-                    <span className="max-sm:hidden">{dayName}</span>
+                    <span className="max-sm:hidden">
+                      {dayLabel(locale, dayName, "long")}
+                    </span>
                     <span className="sm:hidden">
-                      {DAYS_OF_WEEK.find((day) => day.long === dayName)?.short}
+                      {dayLabel(locale, dayName, "short")}
                     </span>
                   </h2>
                 </div>
@@ -185,10 +190,14 @@ export const FreeRoomsBoard: FC<FreeRoomsBoardProps> = ({
             className="border-lines data-[state=open]:animate-rise data-[state=closed]:animate-fall mt-4 border-t pt-4"
           >
             <p className="text-primary/40 mb-2 text-[11px] font-medium tracking-[0.06em] uppercase">
-              {shown && dayNames[shown[0]]}, lekcja{" "}
-              {shown && hours[shown[1]]?.number} (
-              {shown && hours[shown[1]]?.timeFrom}–
-              {shown && hours[shown[1]]?.timeTo}) — {selectedIds.length} wolnych
+              {shown &&
+                translate("freeRooms.selection", {
+                  day: dayLabel(locale, dayNames[shown[0]] ?? "", "long"),
+                  number: hours[shown[1]]?.number ?? "",
+                  from: hours[shown[1]]?.timeFrom ?? "",
+                  to: hours[shown[1]]?.timeTo ?? "",
+                  count: selectedIds.length,
+                })}
             </p>
             <div className="flex flex-wrap gap-1.5">
               {selectedIds.map((id, index) => (

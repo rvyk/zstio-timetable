@@ -1,5 +1,6 @@
 "use client";
 
+import { useT } from "@/components/common/LocaleProvider";
 import { SidebarContent } from "@/components/sidebar/Sidebar";
 import {
   Drawer,
@@ -8,7 +9,6 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/Drawer";
-import { TRANSLATION_DICT } from "@/constants/translations";
 import { simulateKeyPress } from "@/lib/utils";
 import { OptivumTimetable } from "@/types/optivum";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
@@ -24,15 +24,17 @@ const STEP_BUTTON =
   "text-primary/55 active:bg-primary/5 active:text-primary active:scale-90 grid size-11 shrink-0 place-content-center rounded-lg transition duration-150 disabled:opacity-30";
 
 export const BottomBar: FC<BottomBarProps> = ({ timetable, isOffline }) => {
+  const translate = useT();
   const [viewportHeight, setViewportHeight] = useState<number | null>(null);
 
   const title =
-    timetable?.title ?? (isOffline ? "Jesteś offline" : "Wybierz plan");
+    timetable?.title ??
+    translate(isOffline ? "bottomBar.offline" : "bottomBar.pick");
   const subtitle = timetable
-    ? `Rozkład zajęć ${TRANSLATION_DICT[timetable.type]}`
-    : isOffline
-      ? "Brak połączenia z siecią"
-      : "Klasa, nauczyciel lub sala";
+    ? translate("bottomBar.schedule", {
+        type: translate(`type.${timetable.type}`),
+      })
+    : translate(isOffline ? "bottomBar.offlineHint" : "bottomBar.pickHint");
 
   const step = (e: MouseEvent<HTMLButtonElement>, forward: boolean) => {
     e.preventDefault();
@@ -81,7 +83,7 @@ export const BottomBar: FC<BottomBarProps> = ({ timetable, isOffline }) => {
         <div className="flex h-16 items-center gap-1 px-2">
           {timetable && (
             <button
-              aria-label="Poprzedni plan"
+              aria-label={translate("bottomBar.prev")}
               onClick={(e) => step(e, false)}
               className={STEP_BUTTON}
             >
@@ -108,7 +110,7 @@ export const BottomBar: FC<BottomBarProps> = ({ timetable, isOffline }) => {
 
           {timetable && (
             <button
-              aria-label="Następny plan"
+              aria-label={translate("bottomBar.next")}
               onClick={(e) => step(e, true)}
               className={STEP_BUTTON}
             >
@@ -125,10 +127,9 @@ export const BottomBar: FC<BottomBarProps> = ({ timetable, isOffline }) => {
         }
       >
         <VisuallyHidden>
-          <DrawerTitle>Przeglądaj plan zajęć</DrawerTitle>
+          <DrawerTitle>{translate("bottomBar.browse")}</DrawerTitle>
           <DrawerDescription>
-            Wybierz klasę, nauczyciela lub salę, aby zobaczyć odpowiedni plan
-            zajęć.
+            {translate("bottomBar.browseHint")}
           </DrawerDescription>
         </VisuallyHidden>
         <SidebarContent showTimetableDates />

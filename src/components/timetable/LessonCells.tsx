@@ -1,6 +1,7 @@
 "use client";
 
 import { LinkWithCookie } from "@/components/common/Link";
+import { useT } from "@/components/common/LocaleProvider";
 import { TableLesson } from "@majusss/timetable-parser";
 import { FC } from "react";
 
@@ -75,10 +76,12 @@ interface LessonLinkProps {
   type: string;
 }
 
-const LessonLink: FC<LessonLinkProps> = ({ id, name, type }) =>
-  id && name ? (
+const LessonLink: FC<LessonLinkProps> = ({ id, name, type }) => {
+  const translate = useT();
+
+  return id && name ? (
     <LinkWithCookie
-      aria-label={`Przejdź do /${type}/${id}`}
+      aria-label={translate("timetable.goTo", { target: `/${type}/${id}` })}
       className="hover:text-primary decoration-primary/40 transition-colors hover:underline hover:underline-offset-2"
       href={`/${type}/${id}`}
     >
@@ -87,3 +90,4 @@ const LessonLink: FC<LessonLinkProps> = ({ id, name, type }) =>
   ) : (
     <span>{name}</span>
   );
+};

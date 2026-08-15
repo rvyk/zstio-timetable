@@ -1,5 +1,6 @@
 "use client";
 
+import { useT } from "@/components/common/LocaleProvider";
 import { usePresence } from "@/hooks/usePresence";
 import { cn } from "@/lib/utils";
 import { TableHour } from "@majusss/timetable-parser";
@@ -23,6 +24,7 @@ export const FreeRoomsDay: FC<FreeRoomsDayProps> = ({
   roomNames,
   todayIndex,
 }) => {
+  const translate = useT();
   const [dayIndex, setDayIndex] = useState(
     todayIndex >= 0 && todayIndex < dayNames.length ? todayIndex : 0,
   );
@@ -78,7 +80,9 @@ export const FreeRoomsDay: FC<FreeRoomsDayProps> = ({
                   {hour.timeFrom}–{hour.timeTo}
                 </span>
                 <span className="text-primary ml-auto text-[13px] font-medium">
-                  {isEmpty ? "brak wolnych" : `${ids.length} wolnych`}
+                  {isEmpty
+                    ? translate("freeRooms.none")
+                    : translate("freeRooms.count", { count: ids.length })}
                 </span>
                 {!isEmpty && (
                   <ChevronDown

@@ -4,6 +4,8 @@ import { getOptivumTimetable } from "@/actions/getOptivumTimetable";
 import { FreeRoomsBoard } from "@/components/timetable/FreeRoomsBoard";
 import { Topbar } from "@/components/topbar/Topbar";
 import { SCHOOL_NAME_ACCUSATIVE } from "@/constants/school";
+import { t } from "@/lib/i18n";
+import { getLocale } from "@/lib/locale.server";
 import { pageSeo } from "@/lib/seo";
 
 // Render per request — inaczej prerenderowany HTML niesie "dziś" sprzed
@@ -18,6 +20,7 @@ export const metadata = pageSeo(
 );
 
 const FreeRoomsPage = async () => {
+  const locale = await getLocale();
   const { rooms } = await getOptivumList();
 
   const sample = rooms?.[0]
@@ -33,9 +36,9 @@ const FreeRoomsPage = async () => {
       <Topbar
         showLessonSwitcher={false}
         page={{
-          title: "Wolne sale",
+          title: t(locale, "freeRooms.title"),
           backHref: "/",
-          backLabel: "Wróć do planu",
+          backLabel: t(locale, "freeRooms.backLabel"),
         }}
       />
       <FreeRoomsBoard

@@ -1,5 +1,7 @@
 "use client";
 
+import { useLocale, useT } from "@/components/common/LocaleProvider";
+import type { Locale } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 import { useNewsStore } from "@/stores/news";
 import { ArrowUpRight, Check, Megaphone } from "lucide-react";
@@ -13,10 +15,11 @@ export interface SchoolNewsPost {
   date: string;
 }
 
-const NEWS_DATE = new Intl.DateTimeFormat("pl-PL", {
-  day: "numeric",
-  month: "long",
-});
+const newsDate = (locale: Locale) =>
+  new Intl.DateTimeFormat(locale === "uk" ? "uk-UA" : "pl-PL", {
+    day: "numeric",
+    month: "long",
+  });
 
 const CONFIRM_MS = 700;
 
@@ -26,6 +29,8 @@ export const SchoolNewsCard: FC<SchoolNewsPost> = ({
   link,
   date,
 }) => {
+  const translate = useT();
+  const locale = useLocale();
   const isRead = useNewsStore((state) => state.readId) >= id;
   const markRead = useNewsStore((state) => state.markRead);
   const [phase, setPhase] = useState<"idle" | "read" | "gone">("idle");
@@ -88,13 +93,13 @@ export const SchoolNewsCard: FC<SchoolNewsPost> = ({
             <span className="text-primary/40 truncate text-[11px] leading-tight">
               {phase === "idle" ? (
                 <>
-                  Aktualności szkoły
+                  {translate("news.source")}
                   {!Number.isNaN(parsedDate.getTime()) &&
-                    ` · ${NEWS_DATE.format(parsedDate)}`}
+                    ` · ${newsDate(locale).format(parsedDate)}`}
                 </>
               ) : (
                 <span className="animate-rise inline-block">
-                  Oznaczono jako przeczytane
+                  {translate("news.read")}
                 </span>
               )}
             </span>
@@ -107,7 +112,7 @@ export const SchoolNewsCard: FC<SchoolNewsPost> = ({
                 target="_blank"
                 rel="noreferrer"
                 className="group/link before:absolute before:inset-0 before:rounded-xl"
-                aria-label={`Otwórz aktualność: ${title}`}
+                aria-label={translate("news.open", { title })}
               >
                 <ArrowUpRight
                   className="text-primary/35 size-4 shrink-0 transition-transform duration-200 group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5"
@@ -116,8 +121,8 @@ export const SchoolNewsCard: FC<SchoolNewsPost> = ({
               </a>
               <button
                 onClick={dismiss}
-                aria-label="Oznacz jako przeczytane"
-                title="Oznacz jako przeczytane"
+                aria-label={translate("news.markRead")}
+                title={translate("news.markRead")}
                 className="text-primary/35 hover:bg-primary/5 hover:text-primary relative grid size-7 shrink-0 place-content-center rounded-md transition active:scale-90"
               >
                 <Check className="size-4" strokeWidth={2} />

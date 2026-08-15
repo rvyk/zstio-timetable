@@ -1,5 +1,6 @@
 "use client";
 
+import { useT } from "@/components/common/LocaleProvider";
 import { cn } from "@/lib/utils";
 import { TableHour, TableLesson } from "@majusss/timetable-parser";
 import { FC, Fragment, TouchEvent, useRef, useState } from "react";
@@ -40,6 +41,7 @@ export const DayBoard: FC<DayBoardProps> = ({
   selectedDayIndex,
   onDayChange,
 }) => {
+  const translate = useT();
   const now = useNowSeconds();
   const [transition, setTransition] = useState<Transition>("swap");
   const touchStartX = useRef<number | null>(null);
@@ -117,7 +119,7 @@ export const DayBoard: FC<DayBoardProps> = ({
               </Fragment>
             ))
           ) : (
-            <NoLessons description="Na ten dzień nie wprowadzono planu zajęć" />
+            <NoLessons description={translate("timetable.emptyDay")} />
           )}
         </div>
       </div>

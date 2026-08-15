@@ -1,5 +1,7 @@
+import { useT } from "@/components/common/LocaleProvider";
 import { MAX_RESULTS } from "@/constants/settings";
 import { setLastVisitedCookie } from "@/lib/utils";
+import { useRecentStore } from "@/stores/recent";
 import { OptivumTimetable } from "@/types/optivum";
 import { ListItem } from "@majusss/timetable-parser";
 import { SearchIcon, XIcon } from "lucide-react";
@@ -42,6 +44,8 @@ interface SearchProps {
 }
 
 export const Search: FC<SearchProps> = ({ value, onChange, results }) => {
+  const translate = useT();
+  const addRecent = useRecentStore((state) => state.addRecent);
   const router = useRouter();
 
   const handleKeyDown = useCallback(
@@ -52,9 +56,10 @@ export const Search: FC<SearchProps> = ({ value, onChange, results }) => {
         const link = `/${item.type}/${item.value}`;
         router.push(link);
         setLastVisitedCookie(link);
+        addRecent(item);
       }
     },
-    [results, router],
+    [results, router, addRecent],
   );
 
   return (
@@ -71,14 +76,14 @@ export const Search: FC<SearchProps> = ({ value, onChange, results }) => {
         onKeyDown={handleKeyDown}
         type="search"
         autoComplete="off"
-        aria-label="Szukaj klasy, nauczyciela lub sali"
+        aria-label={translate("search.aria")}
         className="text-primary placeholder:text-primary/45 w-full min-w-0 bg-transparent text-sm focus:outline-none [&::-webkit-search-cancel-button]:hidden"
-        placeholder="Klasa, nauczyciel, sala…"
+        placeholder={translate("search.placeholder")}
       />
       {value && (
         <button
           onClick={() => onChange("")}
-          aria-label="Wyczyść wyszukiwanie"
+          aria-label={translate("search.clear")}
           className="text-primary/45 hover:text-primary animate-rise -mr-1 grid size-8 shrink-0 place-content-center rounded-md transition duration-150 active:scale-90"
         >
           <XIcon size={16} strokeWidth={2} />

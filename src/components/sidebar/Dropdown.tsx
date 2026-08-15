@@ -1,4 +1,5 @@
 import { LinkWithCookie } from "@/components/common/Link";
+import { useT } from "@/components/common/LocaleProvider";
 import {
   AccordionContent,
   AccordionItem,
@@ -11,7 +12,9 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/Dialog";
+import type { TranslationKey } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
+import { useRecentStore } from "@/stores/recent";
 import { useSettingsWithoutStore } from "@/stores/settings";
 import type { ListItem } from "@majusss/timetable-parser";
 import { ChevronDown, LucideIcon } from "lucide-react";
@@ -21,12 +24,15 @@ import { useIsClient } from "usehooks-ts";
 import { FavoriteStar } from "../common/FavoriteStar";
 import { useSidebarContext } from "./Context";
 
-const LABELS: Record<Exclude<DropdownProps["type"], "search">, string> = {
-  favorites: "Ulubione",
-  class: "Klasy",
-  teacher: "Nauczyciele",
-  room: "Sale",
-};
+const LABELS = {
+  favorites: "list.favorites",
+  class: "list.class",
+  teacher: "list.teacher",
+  room: "list.room",
+} as const satisfies Record<
+  Exclude<DropdownProps["type"], "search">,
+  TranslationKey
+>;
 
 const NAVIGABLE_TYPES = ["class", "teacher", "room"] as const;
 
@@ -50,6 +56,7 @@ export const Dropdown: FC<DropdownProps> = ({
   className,
   useModal = false,
 }) => {
+  const translate = useT();
   const { isPreview } = useSidebarContext();
   const isClient = useIsClient();
 
@@ -62,7 +69,7 @@ export const Dropdown: FC<DropdownProps> = ({
     return null;
   }
 
-  const label = LABELS[type as keyof typeof LABELS];
+  const label = translate(LABELS[type as keyof typeof LABELS]);
 
   const triggerContent = (
     <div className="flex w-full items-center justify-between rounded-md">
@@ -164,13 +171,17 @@ interface DropdownContentProps {
   type: DropdownProps["type"];
   data?: ListItem[];
   className?: string;
+  onSelect?: () => void;
 }
 
 export const DropdownContent: FC<DropdownContentProps> = ({
   type,
   data,
   className,
+  onSelect,
 }) => {
+  const translate = useT();
+
   return (
     <div
       className={cn(
@@ -184,12 +195,13 @@ export const DropdownContent: FC<DropdownContentProps> = ({
             key={`${type}-${item.value}`}
             item={item}
             type={type}
+            onClick={onSelect}
             style={{ animationDelay: `${Math.min(index, 12) * 20}ms` }}
           />
         ))
       ) : (
         <p className="text-primary/40 px-4 py-3 text-sm">
-          Nic tu jeszcze nie ma.
+          {translate("list.empty")}
         </p>
       )}
     </div>
@@ -205,6 +217,8 @@ interface ListItemComponentProps {
 export const ListItemComponent: FC<
   ListItemComponentProps & { favoriteStar?: boolean; style?: CSSProperties }
 > = ({ item, type, onClick, favoriteStar = true, style }) => {
+  const translate = useT();
+  const addRecent = useRecentStore((state) => state.addRecent);
   const { toggleSidebar, isSidebarOpen } = useSettingsWithoutStore();
 
   const pathname = usePathname();
@@ -213,6 +227,9 @@ export const ListItemComponent: FC<
   const link = `/${itemType}/${item.value}`;
 
   const handleButton = () => {
+    // historia zbiera tylko trafienia z wyszukiwarki — lista klas czy sal to
+    // przeglądanie, nie wyszukiwanie
+    if (type === "search") addRecent({ ...item, type: itemType });
     if (isSidebarOpen) {
       toggleSidebar();
     }
@@ -224,7 +241,7 @@ export const ListItemComponent: FC<
   return (
     <LinkWithCookie
       onClick={handleButton}
-      aria-label={`Przejdź do ${item.name}`}
+      aria-label={translate("timetable.goTo", { target: item.name })}
       aria-current={isActive ? "page" : undefined}
       href={link}
       style={style}

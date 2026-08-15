@@ -1,5 +1,6 @@
 "use client";
 
+import { useT } from "@/components/common/LocaleProvider";
 import { cn, parseTime } from "@/lib/utils";
 import { TableHour, TableLesson } from "@majusss/timetable-parser";
 import { CalendarX2, Coffee } from "lucide-react";
@@ -72,6 +73,7 @@ export const SlotCard: FC<SlotCardProps> = ({
   isToday,
   now,
 }) => {
+  const translate = useT();
   const start = useMemo(() => parseTime(hour.timeFrom), [hour.timeFrom]);
   const end = useMemo(() => parseTime(hour.timeTo), [hour.timeTo]);
 
@@ -92,7 +94,7 @@ export const SlotCard: FC<SlotCardProps> = ({
       <div className="flex items-center justify-between gap-2">
         {isLive ? (
           <span className="bg-accent-table rounded-full px-2 py-0.5 text-[10px] font-semibold tracking-[0.06em] text-white uppercase">
-            teraz
+            {translate("timetable.now")}
           </span>
         ) : (
           <span className="text-primary/55 tabular font-mono text-[11px] font-semibold">
@@ -135,6 +137,7 @@ export const BreakRow: FC<{ from: string; to: string; now: number }> = ({
   to,
   now,
 }) => {
+  const translate = useT();
   const start = parseTime(from);
   const end = parseTime(to);
   if (now < start || now >= end) return null;
@@ -145,7 +148,7 @@ export const BreakRow: FC<{ from: string; to: string; now: number }> = ({
     <div className="animate-rise flex items-center gap-2 px-1 py-0.5">
       <Coffee className="text-accent-table size-3 shrink-0" strokeWidth={2} />
       <span className="text-accent-table/80 text-[11px] font-medium">
-        przerwa
+        {translate("timetable.break")}
       </span>
       <div className="bg-primary/10 h-px flex-1 overflow-hidden rounded-full">
         <div
@@ -160,28 +163,38 @@ export const BreakRow: FC<{ from: string; to: string; now: number }> = ({
   );
 };
 
-export const NoLessons: FC<{ description: string }> = ({ description }) => (
-  <div className="animate-rise flex w-full flex-col items-center justify-center gap-3 p-10 text-center">
-    <div className="border-lines bg-accent grid size-12 place-content-center rounded-xl border">
-      <CalendarX2 className="text-primary/40 size-5" strokeWidth={1.75} />
-    </div>
-    <div className="grid gap-1">
-      <h2 className="text-primary/90 text-base font-medium tracking-tight">
-        Brak planu zajęć
-      </h2>
-      <p className="text-primary/50 max-w-xs text-sm">{description}</p>
-    </div>
-  </div>
-);
+export const NoLessons: FC<{ description: string }> = ({ description }) => {
+  const translate = useT();
 
-export const GapCard: FC<{ hour: TableHour }> = ({ hour }) => (
-  <div className="border-lines/60 flex items-center justify-between gap-2 rounded-lg border border-dashed px-3 py-2">
-    <span className="text-primary/25 tabular font-mono text-[11px] font-semibold">
-      {hour.number}
-    </span>
-    <span className="text-primary/30 text-xs">okienko</span>
-    <span className="text-primary/25 tabular font-mono text-[11px]">
-      {hour.timeFrom}–{hour.timeTo}
-    </span>
-  </div>
-);
+  return (
+    <div className="animate-rise flex w-full flex-col items-center justify-center gap-3 p-10 text-center">
+      <div className="border-lines bg-accent grid size-12 place-content-center rounded-xl border">
+        <CalendarX2 className="text-primary/40 size-5" strokeWidth={1.75} />
+      </div>
+      <div className="grid gap-1">
+        <h2 className="text-primary/90 text-base font-medium tracking-tight">
+          {translate("timetable.empty")}
+        </h2>
+        <p className="text-primary/50 max-w-xs text-sm">{description}</p>
+      </div>
+    </div>
+  );
+};
+
+export const GapCard: FC<{ hour: TableHour }> = ({ hour }) => {
+  const translate = useT();
+
+  return (
+    <div className="border-lines/60 flex items-center justify-between gap-2 rounded-lg border border-dashed px-3 py-2">
+      <span className="text-primary/25 tabular font-mono text-[11px] font-semibold">
+        {hour.number}
+      </span>
+      <span className="text-primary/30 text-xs">
+        {translate("timetable.gap")}
+      </span>
+      <span className="text-primary/25 tabular font-mono text-[11px]">
+        {hour.timeFrom}–{hour.timeTo}
+      </span>
+    </div>
+  );
+};

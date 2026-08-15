@@ -1,8 +1,8 @@
 "use client";
 
 import { FavoriteStar } from "@/components/common/FavoriteStar";
+import { useT } from "@/components/common/LocaleProvider";
 import { SHORT_HOURS } from "@/constants/settings";
-import { TRANSLATION_DICT } from "@/constants/translations";
 import { adjustShortenedLessons } from "@/lib/adjustShortenedLessons";
 import { warsawDayIndex } from "@/lib/dates";
 import { cn } from "@/lib/utils";
@@ -31,6 +31,7 @@ const useTodayIndex = () => {
 };
 
 export const Timetable: FC<TimetableProps> = ({ timetable }) => {
+  const translate = useT();
   const lessonType = useSettingsStore((state) => state.lessonType);
   const hoursAdjustIndex = useSettingsStore((state) => state.hoursAdjustIndex);
   const storedDayIndex = useSettingsWithoutStore(
@@ -95,18 +96,20 @@ export const Timetable: FC<TimetableProps> = ({ timetable }) => {
         />
       ) : (
         <div className="md:hidden">
-          <NoLessons description="Na ten tydzień nie wprowadzono planu zajęć" />
+          <NoLessons description={translate("timetable.emptyWeek")} />
         </div>
       )}
 
       <div className="border-lines flex items-center justify-between gap-4 border-b pr-2 pl-4 max-md:hidden">
         <div className="flex min-w-0 items-baseline gap-x-2.5">
           <h1 className="text-primary truncate text-xl leading-none font-semibold tracking-[-0.02em]">
-            {timetable.title || "Nie znaleziono planu"}
+            {timetable.title || translate("timetable.notFound")}
           </h1>
           {timetable.title && (
             <span className="text-primary/40 shrink-0 text-xs">
-              Rozkład zajęć {TRANSLATION_DICT[timetable.type]}
+              {translate("timetable.schedule", {
+                type: translate(`type.${timetable.type}`),
+              })}
             </span>
           )}
         </div>
@@ -135,7 +138,7 @@ export const Timetable: FC<TimetableProps> = ({ timetable }) => {
             todayIndex={todayIndex}
           />
         ) : (
-          <NoLessons description="Na ten tydzień nie wprowadzono planu zajęć" />
+          <NoLessons description={translate("timetable.emptyWeek")} />
         )}
       </div>
     </section>
