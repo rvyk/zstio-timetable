@@ -55,9 +55,9 @@ export const useSettingsWithoutStore = create<useSettingsWithoutStore>(
     toggleSidebarCollapsed: () =>
       set((state) => ({ isSidebarCollapsed: !state.isSidebarCollapsed })),
 
-    selectedDayIndex: [0, 6].includes(new Date().getDay())
-      ? 0
-      : new Date().getDay() - 1,
+    // -1 = "jeszcze nie wybrano", rozwiązywane przy renderze na dzisiejszy
+    // dzień. Liczenie daty tutaj zamrażało ją na starcie procesu serwera.
+    selectedDayIndex: -1,
     setSelectedDayIndex: (selectedDayIndex) => set({ selectedDayIndex }),
   }),
 );

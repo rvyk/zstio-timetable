@@ -253,24 +253,17 @@ body::before {
   opacity: 0.04;
 }
 
-::view-transition-old(root),
-::view-transition-new(root) {
-  animation: none;
-  mix-blend-mode: normal;
-}
+/* Zmiana motywu: na jedną klatkę gasimy przejścia, bo inaczej setki elementów
+   z transition-colors zaczynają przenikać naraz i to widać jako zacięcie.
+   To samo, co robił disableTransitionOnChange z next-themes.
 
-::view-transition-old(root) {
-  z-index: 0;
-}
-
+   Wyjątkiem jest [data-keep-transition] — pigułka wyboru motywu. Drogie jest
+   przenikanie kolorów na całej stronie, nie przejazd jednego elementu, a to
+   właśnie on pokazuje, co się przed chwilą zmieniło. */
 [data-theme-instant] *:not([data-keep-transition]),
 [data-theme-instant] *:not([data-keep-transition])::before,
 [data-theme-instant] *:not([data-keep-transition])::after {
   transition: none !important;
-}
-
-::view-transition-new(root) {
-  z-index: 1;
 }
 
 .tabular {

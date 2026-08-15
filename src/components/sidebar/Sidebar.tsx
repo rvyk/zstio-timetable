@@ -2,10 +2,7 @@
 
 import school_logo from "@/assets/school-logo.png";
 import { TimetableDates } from "@/components/common/TimetableDates";
-import {
-  isThemeTransitionActive,
-  SettingsList,
-} from "@/components/settings/SettingsPanel";
+import { SettingsList } from "@/components/settings/SettingsPanel";
 import { Accordion } from "@/components/ui/Accordion";
 import { Skeleton } from "@/components/ui/Skeleton";
 import { SCHOOL_SHORT, SCHOOL_WEBSITE } from "@/constants/school";
@@ -157,17 +154,15 @@ const SidebarActions: FC<{ collapsed: boolean; onExpand: () => void }> = ({
           {isOpen && (
             <div
               className="fixed inset-0 z-10"
-              onClick={() => {
-                if (isThemeTransitionActive()) return;
-                setIsOpen(false);
-              }}
+              onClick={() => setIsOpen(false)}
               aria-hidden
             />
           )}
           <div
             {...presenceProps}
             inert={!isOpen}
-            className="border-lines bg-foreground data-[state=open]:animate-popover-in data-[state=closed]:animate-popover-out absolute inset-x-0 bottom-full z-20 mb-2 origin-bottom overflow-hidden rounded-lg border shadow-(--shadow-raised)"
+            /* origin-bottom: panel wyrasta z przycisku, który go otwiera */
+            className="border-lines bg-foreground/95 data-[state=open]:animate-popover-in data-[state=closed]:animate-popover-out absolute inset-x-0 bottom-full z-20 mb-2 origin-bottom overflow-hidden rounded-lg border shadow-(--shadow-raised) backdrop-blur-md"
           >
             <SettingsList onSelect={() => setIsOpen(false)} />
           </div>

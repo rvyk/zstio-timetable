@@ -4,6 +4,7 @@ import { FavoriteStar } from "@/components/common/FavoriteStar";
 import { SHORT_HOURS } from "@/constants/settings";
 import { TRANSLATION_DICT } from "@/constants/translations";
 import { adjustShortenedLessons } from "@/lib/adjustShortenedLessons";
+import { warsawDayIndex } from "@/lib/dates";
 import { cn } from "@/lib/utils";
 import { useSettingsStore, useSettingsWithoutStore } from "@/stores/settings";
 import type { OptivumTimetable } from "@/types/optivum";
@@ -26,13 +27,13 @@ const useTodayIndex = () => {
     () => null,
   );
 
-  return override === null ? (new Date().getDay() + 6) % 7 : Number(override);
+  return override === null ? warsawDayIndex() : Number(override);
 };
 
 export const Timetable: FC<TimetableProps> = ({ timetable }) => {
   const lessonType = useSettingsStore((state) => state.lessonType);
   const hoursAdjustIndex = useSettingsStore((state) => state.hoursAdjustIndex);
-  const selectedDayIndex = useSettingsWithoutStore(
+  const storedDayIndex = useSettingsWithoutStore(
     (state) => state.selectedDayIndex,
   );
   const setSelectedDayIndex = useSettingsWithoutStore(
@@ -65,6 +66,9 @@ export const Timetable: FC<TimetableProps> = ({ timetable }) => {
   );
 
   const todayIndex = useTodayIndex();
+  // W weekend startujemy od poniedziałku.
+  const selectedDayIndex =
+    storedDayIndex >= 0 ? storedDayIndex : todayIndex > 4 ? 0 : todayIndex;
   const dayNames = timetable.dayNames;
   const hoursList = useMemo(() => Object.values(hours), [hours]);
   const visibleHours = useMemo(

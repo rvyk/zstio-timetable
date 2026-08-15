@@ -2,6 +2,7 @@
 
 import { DAYS_OF_WEEK } from "@/constants/days";
 import { usePresence } from "@/hooks/usePresence";
+import { warsawDayIndex } from "@/lib/dates";
 import { cn, getDayNumberForNextWeek } from "@/lib/utils";
 import { ListItem, TableHour } from "@majusss/timetable-parser";
 import { ArrowLeftIcon } from "lucide-react";
@@ -23,7 +24,7 @@ export const FreeRoomsBoard: FC<FreeRoomsBoardProps> = ({
   rooms,
 }) => {
   const [selected, setSelected] = useState<[number, number] | null>(null);
-  const todayIndex = (new Date().getDay() + 6) % 7;
+  const todayIndex = warsawDayIndex();
 
   const roomNames = useMemo(
     () => new Map(rooms.map((room) => [room.value, room.name])),

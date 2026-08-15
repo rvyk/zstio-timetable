@@ -1,4 +1,5 @@
 import { DAYS_OF_WEEK } from "@/constants/days";
+import { warsawDayIndex, warsawToday } from "@/lib/dates";
 import { clsx, type ClassValue } from "clsx";
 import { setCookie } from "cookies-next";
 import { twMerge } from "tailwind-merge";
@@ -14,7 +15,10 @@ export const setLastVisitedCookie = (link: string) => {
   });
 };
 
-const SHORT_MONTH = new Intl.DateTimeFormat("pl-PL", { month: "short" });
+const SHORT_MONTH = new Intl.DateTimeFormat("pl-PL", {
+  timeZone: "UTC",
+  month: "short",
+});
 
 export const getDayNumberForNextWeek = (
   dayName: string,
@@ -23,8 +27,8 @@ export const getDayNumberForNextWeek = (
   month: string;
   monthNumber: number;
 } => {
-  const today = new Date();
-  const todayIndex = (today.getDay() + 6) % 7;
+  const today = warsawToday();
+  const todayIndex = warsawDayIndex();
 
   const targetDay = DAYS_OF_WEEK.find(
     (day) => day.long === dayName || day.short === dayName,
@@ -33,9 +37,9 @@ export const getDayNumberForNextWeek = (
   if (!targetDay) {
     console.error("Day not found");
     return {
-      dayNumber: today.getDate(),
+      dayNumber: today.getUTCDate(),
       month: `${SHORT_MONTH.format(today)}.`,
-      monthNumber: today.getMonth() + 1,
+      monthNumber: today.getUTCMonth() + 1,
     };
   }
 
@@ -43,12 +47,12 @@ export const getDayNumberForNextWeek = (
   if (diff < 0) diff += 7;
 
   const targetDate = new Date(today);
-  targetDate.setDate(today.getDate() + diff);
+  targetDate.setUTCDate(today.getUTCDate() + diff);
 
   return {
-    dayNumber: targetDate.getDate(),
+    dayNumber: targetDate.getUTCDate(),
     month: `${SHORT_MONTH.format(targetDate)}.`,
-    monthNumber: targetDate.getMonth() + 1,
+    monthNumber: targetDate.getUTCMonth() + 1,
   };
 };
 

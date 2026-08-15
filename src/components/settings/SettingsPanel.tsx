@@ -1,6 +1,6 @@
 "use client";
 
-import { getCalendar } from "@/actions/getCalendar";
+import { getCalendar } from "@/lib/calendar";
 import { DialogDescription, DialogTitle } from "@/components/ui/Dialog";
 import { usePwa } from "@/hooks/usePWA";
 import { showErrorToast } from "@/hooks/useToast";
@@ -23,7 +23,6 @@ import { useTheme } from "next-themes";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
-  MouseEvent,
   ReactNode,
   useCallback,
   useEffect,
@@ -91,80 +90,31 @@ const THEMES = [
   { value: "system", label: "Auto" },
 ] as const;
 
-export const THEME_TRANSITION_ATTR = "data-theme-switch";
-
-export const isThemeTransitionActive = () =>
-  document.documentElement.hasAttribute(THEME_TRANSITION_ATTR);
-
-const useThemeBubble = () => {
+/**
+ * Zmiana motywu jest natychmiastowa. Klasa na `<html>` podmienia się w jednym
+ * renderze, a na tę jedną klatkę gasimy przejścia — inaczej setki elementów
+ * z `transition-colors` zaczynają przenikać naraz i to widać jako zacięcie.
+ * Jedynym wyjątkiem jest pigułka wyboru: patrz `[data-keep-transition]`
+ * w globals.css.
+ */
+const useThemeSwitch = () => {
   const { theme, setTheme } = useTheme();
-  const running = useRef<ViewTransition | null>(null);
 
-  const switchTheme = (value: string, event: MouseEvent<HTMLButtonElement>) => {
-    const start = Reflect.get(document, "startViewTransition") as
-      Document["startViewTransition"] | undefined;
-
-    const skipMotion =
-      !start ||
-      window.matchMedia("(pointer: coarse)").matches ||
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-    if (skipMotion) {
-      const target = document.documentElement;
-      target.dataset.themeInstant = "";
-      flushSync(() => setTheme(value));
-      void document.body.offsetHeight;
-      delete target.dataset.themeInstant;
-      return;
-    }
-
-    const { clientX: x, clientY: y } = event;
-    const radius = Math.hypot(
-      Math.max(x, window.innerWidth - x),
-      Math.max(y, window.innerHeight - y),
-    );
-
-    running.current?.skipTransition();
-
+  const switchTheme = (value: string) => {
     const root = document.documentElement;
-    root.setAttribute(THEME_TRANSITION_ATTR, "");
-
-    const transition = start.call(document, () =>
-      flushSync(() => setTheme(value)),
-    );
-    running.current = transition;
-
-    void transition.finished.finally(() => {
-      if (running.current === transition) {
-        running.current = null;
-        root.removeAttribute(THEME_TRANSITION_ATTR);
-      }
-    });
-
-    void transition.ready
-      .then(() =>
-        document.documentElement.animate(
-          {
-            clipPath: [
-              `circle(0px at ${x}px ${y}px)`,
-              `circle(${radius}px at ${x}px ${y}px)`,
-            ],
-          },
-          {
-            duration: 400,
-            easing: "cubic-bezier(0.16, 1, 0.3, 1)",
-            pseudoElement: "::view-transition-new(root)",
-          },
-        ),
-      )
-      .catch(() => undefined);
+    root.dataset.themeInstant = "";
+    flushSync(() => setTheme(value));
+    // wymuszony reflow: nowe kolory są policzone, zanim przejścia wrócą,
+    // więc nic nie zdąży zacząć się przenikać
+    void document.body.offsetHeight;
+    delete root.dataset.themeInstant;
   };
 
   return { theme, switchTheme };
 };
 
 const ThemeSetting = () => {
-  const { theme, switchTheme } = useThemeBubble();
+  const { theme, switchTheme } = useThemeSwitch();
   const isClient = useIsClient();
   const active = isClient ? (theme ?? "system") : "system";
   const activeIndex = Math.max(
@@ -192,7 +142,7 @@ const ThemeSetting = () => {
         {THEMES.map((option) => (
           <button
             key={option.value}
-            onClick={(event) => switchTheme(option.value, event)}
+            onClick={() => switchTheme(option.value)}
             aria-pressed={active === option.value}
             className={cn(
               active === option.value
@@ -388,9 +338,6 @@ export const SettingsMenu = () => {
           onOpenAutoFocus={(event) => {
             event.preventDefault();
             contentRef.current?.focus();
-          }}
-          onInteractOutside={(event) => {
-            if (isThemeTransitionActive()) event.preventDefault();
           }}
           style={{ top: anchor.top, right: anchor.right }}
           className="border-lines bg-foreground data-[state=open]:animate-popover-in data-[state=closed]:animate-popover-out fixed z-50 grid max-h-[calc(100dvh-6rem)] w-[min(19rem,calc(100vw-4rem))] origin-top-right gap-4 overflow-y-auto rounded-xl border p-4 shadow-(--shadow-raised) md:hidden"

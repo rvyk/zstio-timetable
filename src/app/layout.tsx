@@ -1,3 +1,4 @@
+import { ServiceWorker } from "@/components/common/ServiceWorker";
 import { ThemeProvider } from "@/components/common/ThemeProvider";
 import { Toaster } from "@/components/ui/Toaster";
 import {
@@ -14,7 +15,6 @@ import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { ReactNode } from "react";
 import "./globals.css";
-import { SerwistProvider } from "./serwist";
 
 export const fetchCache = "default-cache";
 
@@ -141,18 +141,17 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
         <Analytics />
-        <SerwistProvider swUrl="/serwist/sw.js">
-          <ThemeProvider attribute="class">
-            <Toaster />
-            <a
-              href="#plan"
-              className="bg-accent-table sr-only rounded-md px-4 py-2 text-sm font-medium text-white focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50"
-            >
-              Przejdź do planu
-            </a>
-            {children}
-          </ThemeProvider>
-        </SerwistProvider>
+        <ServiceWorker />
+        <ThemeProvider attribute="class">
+          <Toaster />
+          <a
+            href="#plan"
+            className="bg-accent-table sr-only rounded-md px-4 py-2 text-sm font-medium text-white focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50"
+          >
+            Przejdź do planu
+          </a>
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );

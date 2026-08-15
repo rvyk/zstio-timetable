@@ -35,6 +35,27 @@ const parts = (formatter: Intl.DateTimeFormat, date: Date) =>
     formatter.formatToParts(date).map((part) => [part.type, part.value]),
   ) as Record<Intl.DateTimeFormatPartTypes, string>;
 
+const WARSAW_YMD = new Intl.DateTimeFormat("en-US", {
+  timeZone: "Europe/Warsaw",
+  year: "numeric",
+  month: "2-digit",
+  day: "2-digit",
+});
+
+/**
+ * Dzisiejsza data szkoły jako północ UTC. Serwer (UTC) i przeglądarka
+ * (dowolna strefa) liczą z tego to samo, więc SSR i hydracja się zgadzają.
+ * Czytaj polami UTC.
+ */
+export const warsawToday = (at: Date = new Date()): Date => {
+  const { year, month, day } = parts(WARSAW_YMD, at);
+  return new Date(Date.UTC(Number(year), Number(month) - 1, Number(day)));
+};
+
+/** 0 = poniedziałek ... 6 = niedziela, wg czasu w Polsce. */
+export const warsawDayIndex = (at?: Date): number =>
+  (warsawToday(at).getUTCDay() + 6) % 7;
+
 export const parseOptivumDate = (raw: string): Date | null => {
   const trimmed = raw.trim();
 

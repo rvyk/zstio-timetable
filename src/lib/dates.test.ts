@@ -5,6 +5,7 @@ import {
   parseHeaderDate,
   parseOptivumDate,
   shiftTime,
+  warsawDayIndex,
 } from "./dates.ts";
 
 test("formatOptivumDate obsługuje ISO z getGeneratedDate", () => {
@@ -42,6 +43,15 @@ test("parseHeaderDate radzi sobie z brakiem/niepoprawnym nagłówkiem", () => {
     parseHeaderDate(new Response(null, { headers: { date: "nonsense" } })),
     "Brak danych",
   );
+});
+
+test("warsawDayIndex liczy dzień wg Polski, nie UTC", () => {
+  // 22:59 UTC w piątek to już sobota w Warszawie – tu SSR rozjeżdżał się z klientem.
+  assert.equal(warsawDayIndex(new Date("2026-08-14T22:59:00Z")), 5);
+  assert.equal(warsawDayIndex(new Date("2026-08-14T21:59:00Z")), 4);
+  // Zimą przesunięcie to +1h.
+  assert.equal(warsawDayIndex(new Date("2026-01-05T23:30:00Z")), 1);
+  assert.equal(warsawDayIndex(new Date("2026-01-05T22:30:00Z")), 0);
 });
 
 test("shiftTime dodaje minuty i uzupełnia zerami", () => {

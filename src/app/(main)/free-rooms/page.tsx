@@ -6,6 +6,11 @@ import { Topbar } from "@/components/topbar/Topbar";
 import { SCHOOL_NAME_ACCUSATIVE } from "@/constants/school";
 import { pageSeo } from "@/lib/seo";
 
+// Render per request — inaczej prerenderowany HTML niesie "dziś" sprzed
+// nawet 15 minut i po północy rozjeżdża się z klientem. Same plany sal
+// siedzą w unstable_cache, więc to tylko koszt renderu.
+export const dynamic = "force-dynamic";
+
 export const metadata = pageSeo(
   "Wolne sale",
   `Sprawdź, które sale w ${SCHOOL_NAME_ACCUSATIVE} są wolne — cały tydzień naraz, z podziałem na dni i numery lekcji.`,

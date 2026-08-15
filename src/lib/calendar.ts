@@ -1,11 +1,7 @@
-"use server";
-
 import { SCHOOL_SHORT } from "@/constants/school";
-import { REVALIDATE_TIME } from "@/constants/settings";
 import { env } from "@/env";
 import { TableHour, TableLesson } from "@majusss/timetable-parser";
-import * as ics from "ics";
-import { unstable_cache } from "next/cache";
+import type * as ics from "ics";
 
 const getDateOfNextWeekDayByIndex = (dayIndex: number) => {
   const date = new Date();
@@ -84,7 +80,16 @@ const createEvent = (group: TableLesson, dayIndex: number, hour: TableHour) => {
   } as ics.EventAttributes;
 };
 
-const getIcs = (days: TableLesson[][][], hours: TableHour[]) => {
+/**
+ * Liczone w przeglądarce. Wcześniej była to server action — stare karty po
+ * deployu trafiały na nieistniejące już ID akcji ("Failed to find Server
+ * Action"), a `unstable_cache` potrafił oddać plan z datami z zeszłego tygodnia.
+ */
+export const getCalendar = async (
+  days: TableLesson[][][],
+  hours: TableHour[],
+) => {
+  const { createEvents } = await import("ics");
   const events: ics.EventAttributes[] = [];
 
   days.forEach((day, dayIndex) => {
@@ -98,12 +103,5 @@ const getIcs = (days: TableLesson[][][], hours: TableHour[]) => {
     });
   });
 
-  return ics.createEvents(events);
+  return createEvents(events);
 };
-
-export const getCalendar = unstable_cache(
-  async (days: TableLesson[][][], hours: TableHour[]) =>
-    await getIcs(days, hours),
-  ["icsCalendar"],
-  { revalidate: REVALIDATE_TIME },
-);
