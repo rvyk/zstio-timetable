@@ -152,7 +152,7 @@ export default async function RootLayout({
           suppressHydrationWarning
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
-        <Analytics />
+        {env.NEXT_PUBLIC_DISABLE_ANALYTICS !== "true" && <Analytics />}
         <ServiceWorker />
         <ThemeProvider attribute="class">
           <LocaleProvider locale={locale}>
