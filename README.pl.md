@@ -51,7 +51,6 @@ Nowoczesna i odświeżona aplikacja planu lekcji dla Zespołu Szkół Techniczny
 
    Utwórz plik `.env.local` na podstawie `.env.example` i ustaw:
    - **`NEXT_PUBLIC_TIMETABLE_URL` (wymagane):** URL do planu lekcji Twojej szkoły (UONET).
-   - **`NEXT_PUBLIC_TIMETABLES_URL` (opcjonalne):** Konfiguruj wiele źródeł planów lekcji oddzielonych spacjami.
    - **`NEXT_PUBLIC_APP_URL` (wymagane):** Podstawowy URL aplikacji.
    - **`SENTRY_AUTH_TOKEN` (opcjonalne):** Token autoryzacji Sentry.
 

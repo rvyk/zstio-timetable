@@ -1,12 +1,11 @@
-import { SCHOOL_SHORT, SCHOOL_NAME_ACCUSATIVE } from "@/constants/school";
+import { SCHOOL_NAME_ACCUSATIVE, SCHOOL_SHORT } from "@/constants/school";
 import { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
     name: `Plan lekcji ${SCHOOL_SHORT}`,
     short_name: `Plan lekcji ${SCHOOL_SHORT}`,
-      description:
-        `W prosty sposób sprawdź plan zajęć dla różnych klas, nauczycieli oraz sal w ${SCHOOL_NAME_ACCUSATIVE}.`,
+    description: `W prosty sposób sprawdź plan zajęć dla różnych klas, nauczycieli oraz sal w ${SCHOOL_NAME_ACCUSATIVE}.`,
     start_url: "/",
     display: "standalone",
     orientation: "portrait",

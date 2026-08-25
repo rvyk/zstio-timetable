@@ -1,21 +1,16 @@
 "use server";
 
 import { REVALIDATE_TIME } from "@/constants/settings";
-import { joinDataSourcePath } from "@/lib/dataSource";
-import { parseHeaderDate } from "@/lib/utils";
+import { getTimetableBaseUrl, joinDataSourcePath } from "@/lib/dataSource";
+import { formatOptivumDate, parseHeaderDate } from "@/lib/dates";
 import type { OptivumTimetable } from "@/types/optivum";
 import type { List } from "@majusss/timetable-parser";
 import { Table } from "@majusss/timetable-parser";
-import parser from "any-date-parser";
-import moment from "moment";
-import "moment/locale/pl";
-import { getActiveDataSource } from "./getActiveDataSource";
 import { getOptivumList } from "./getOptivumList";
 
 export const getOptivumTimetable = async (
   type: OptivumTimetable["type"],
   index: string,
-  dataSource?: string,
 ): Promise<OptivumTimetable> => {
   const timetablePrefixes: Record<OptivumTimetable["type"], string> = {
     class: "o",
@@ -28,9 +23,7 @@ export const getOptivumTimetable = async (
     ? `${timetablePrefixes[type]}${sanitizedIndex}`
     : "";
 
-  const fallbackTimetable = (
-    list: List,
-  ): OptivumTimetable => ({
+  const fallbackTimetable = (list: List): OptivumTimetable => ({
     id: timetableId,
     hours: {},
     lessons: [],
@@ -43,20 +36,7 @@ export const getOptivumTimetable = async (
     lastUpdated: "Brak danych",
   });
 
-  const formatOptivumDate = (raw?: string | null): string | null => {
-    if (!raw) {
-      return null;
-    }
-
-    const parsedDate = parser.fromString(raw, "pl");
-    if (!parsedDate.isValid()) {
-      return null;
-    }
-
-    return moment(parsedDate).locale("pl").format("D MMMM YYYY[r.]");
-  };
-
-  const listPromise = getOptivumList(dataSource);
+  const listPromise = getOptivumList();
 
   if (!sanitizedIndex) {
     const list = await listPromise;
@@ -64,7 +44,7 @@ export const getOptivumTimetable = async (
   }
 
   try {
-    const baseUrl = await getActiveDataSource(dataSource);
+    const baseUrl = getTimetableBaseUrl();
     if (!baseUrl) {
       const list = await listPromise;
       return fallbackTimetable(list);

@@ -1,11 +1,7 @@
-"use server";
-
 import { SCHOOL_SHORT } from "@/constants/school";
-import { REVALIDATE_TIME } from "@/constants/settings";
 import { env } from "@/env";
 import { TableHour, TableLesson } from "@majusss/timetable-parser";
-import * as ics from "ics";
-import { unstable_cache } from "next/cache";
+import type * as ics from "ics";
 
 const getDateOfNextWeekDayByIndex = (dayIndex: number) => {
   const date = new Date();
@@ -33,16 +29,9 @@ const parseTime = (timeStr: string) => {
   return { hours, minutes };
 };
 
-const createEvent = (
-  group: TableLesson,
-  dayIndex: number,
-  lessonIndex: number,
-  hours: TableHour[],
-) => {
+const createEvent = (group: TableLesson, dayIndex: number, hour: TableHour) => {
   const date = getDateOfNextWeekDayByIndex(dayIndex + 1);
-  const { hours: startHour, minutes: startMinute } = parseTime(
-    hours[lessonIndex].timeFrom,
-  );
+  const { hours: startHour, minutes: startMinute } = parseTime(hour.timeFrom);
 
   const { subject, groupName, className, teacher, room } = group;
 
@@ -91,23 +80,28 @@ const createEvent = (
   } as ics.EventAttributes;
 };
 
-const getIcs = (days: TableLesson[][][], hours: TableHour[]) => {
+/**
+ * Liczone w przeglądarce. Wcześniej była to server action — stare karty po
+ * deployu trafiały na nieistniejące już ID akcji ("Failed to find Server
+ * Action"), a `unstable_cache` potrafił oddać plan z datami z zeszłego tygodnia.
+ */
+export const getCalendar = async (
+  days: TableLesson[][][],
+  hours: TableHour[],
+) => {
+  const { createEvents } = await import("ics");
   const events: ics.EventAttributes[] = [];
 
   days.forEach((day, dayIndex) => {
     day.forEach((lesson, lessonIndex) => {
+      const hour = hours[lessonIndex];
+      if (!hour) return;
+
       lesson.forEach((group) => {
-        events.push(createEvent(group, dayIndex, lessonIndex, hours));
+        events.push(createEvent(group, dayIndex, hour));
       });
     });
   });
 
-  return ics.createEvents(events);
+  return createEvents(events);
 };
-
-export const getCalendar = unstable_cache(
-  async (days: TableLesson[][][], hours: TableHour[]) =>
-    await getIcs(days, hours),
-  ["icsCalendar"],
-  { revalidate: REVALIDATE_TIME },
-);

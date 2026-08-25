@@ -1,189 +1,121 @@
 "use client";
 
-import { Button } from "@/components/ui/Button";
+import { useT } from "@/components/common/LocaleProvider";
 import { Skeleton } from "@/components/ui/Skeleton";
-import { DAYS_OF_WEEK } from "@/constants/days";
-import { cn, getDayNumberForNextWeek, parseTime } from "@/lib/utils";
+import { MAX_LESSONS } from "@/constants/settings";
+import { usePresence } from "@/hooks/usePresence";
+import { cn } from "@/lib/utils";
 import { useSettingsStore } from "@/stores/settings";
-import { TableHour } from "@majusss/timetable-parser";
-import { FC, useEffect, useMemo, useState } from "react";
+import { MinusIcon, PlusIcon } from "lucide-react";
+import { FC } from "react";
 import { useIsClient } from "usehooks-ts";
 
-interface TableHourCellProps {
-  hour: TableHour;
-  isCurrentDay?: boolean;
-}
+const MIN_ADJUST_INDEX = 5;
 
-export const TableHourCell: FC<TableHourCellProps> = ({
-  hour,
-  isCurrentDay = true,
+const LESSON_MODES = [
+  { value: "normal", label: "45'" },
+  { value: "short", label: "30'" },
+  { value: "custom", label: null },
+] as const;
+
+export const ShortLessonSwitcherCell: FC<{ className?: string }> = ({
+  className,
 }) => {
+  const translate = useT();
   const isClient = useIsClient();
-  const [currentTime, setCurrentTime] = useState(() => {
-    const now = new Date();
-    return now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds();
-  });
+  const {
+    lessonType,
+    setLessonType,
+    hoursAdjustIndex,
+    enableCustomLessonsLength,
+  } = useSettingsStore();
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      const now = new Date();
-      setCurrentTime(
-        now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds(),
-      );
-    }, 1000);
+  const isCustom = lessonType === "custom";
+  const { isMounted, presenceProps } = usePresence(isCustom);
 
-    return () => clearInterval(interval);
-  }, []);
-
-  const start = useMemo(() => parseTime(hour.timeFrom), [hour.timeFrom]);
-  const end = useMemo(() => parseTime(hour.timeTo), [hour.timeTo]);
-  const isCurrent = currentTime >= start && currentTime < end;
-  const shouldShow = isCurrent && isCurrentDay;
-  const timeRemaining = shouldShow ? end - currentTime : 0;
-
-  const { minutesRemaining, secondsRemaining } = useMemo(() => {
-    const minutes = Math.floor(timeRemaining / 60)
-      .toString()
-      .padStart(2, "0");
-    const seconds = (timeRemaining % 60).toString().padStart(2, "0");
-    return { minutesRemaining: minutes, secondsRemaining: seconds };
-  }, [timeRemaining]);
+  if (!isClient) {
+    return (
+      <div className={cn("px-3 py-2", className)}>
+        <Skeleton className="rounded-lg max-md:h-11 max-md:w-full md:h-9 md:w-37.5" />
+      </div>
+    );
+  }
 
   return (
-    <td className="relative px-4 py-3 text-center max-md:w-32 max-md:select-none">
-      {shouldShow && isClient && (
-        <div className="absolute left-0 h-[calc(100%-1.5rem)] w-1 rounded-r-lg bg-accent-table"></div>
-      )}
-      <h2 className="text-lg font-semibold text-primary/90 sm:text-xl">
-        {hour.number}
-      </h2>
-      {isClient ? (
-        <div className="grid gap-2">
-          <p className="text-xs font-medium text-primary/70 sm:text-sm">
-            {hour.timeFrom}-{hour.timeTo}
-          </p>
-          {shouldShow && (
-            <p className="mx-auto rounded-sm border border-accent-table bg-accent-table px-2 py-0.5 text-center text-sm font-medium text-accent/90 dark:bg-accent-table/10 dark:text-primary/90">
-              {`${minutesRemaining}:${secondsRemaining}`}
-            </p>
-          )}
-        </div>
-      ) : (
-        <Skeleton className="mx-auto h-4 w-24" />
-      )}
-    </td>
-  );
-};
-
-interface TableHeaderCellProps {
-  dayName: string;
-  selectedDayIndex?: number;
-  setSelectedDayIndex?: (selectedDayIndex: number) => void;
-}
-
-export const TableHeaderMobileCell: FC<TableHeaderCellProps> = ({
-  dayName,
-  selectedDayIndex,
-  setSelectedDayIndex,
-}) => {
-  const dayNumber = useMemo(() => getDayNumberForNextWeek(dayName), [dayName]);
-
-  const dayObject = DAYS_OF_WEEK.find((day) => day.long === dayName);
-
-  if (!dayObject) return null;
-
-  return (
-    <button
-      onClick={() => setSelectedDayIndex?.(dayObject.index)}
+    <div
       className={cn(
-        selectedDayIndex == dayObject.index &&
-          "bg-accent-table text-accent-secondary group-hover:bg-accent-table/90 dark:text-primary",
-        "flex w-full flex-col items-center justify-center px-4 py-3 text-center max-md:select-none",
+        "flex gap-2 px-3 py-2 max-md:flex-col-reverse max-md:items-stretch md:items-center",
+        className,
       )}
     >
-      <h2 className="text-sm font-semibold opacity-90">{dayObject.short}</h2>
-      <h3 className="text-xs font-semibold opacity-70">
-        {dayNumber.dayNumber.toString().padStart(2, "0")}.
-        {dayNumber.monthNumber.toString().padStart(2, "0")}
-      </h3>
-    </button>
-  );
-};
-
-export const TableHeaderCell: FC<TableHeaderCellProps> = ({ dayName }) => {
-  const day = useMemo(() => getDayNumberForNextWeek(dayName), [dayName]);
-  const isCurrentDay = useMemo(
-    () => new Date().getDate() === day.dayNumber,
-    [day],
-  );
-
-  return (
-    <th className="relative text-left max-md:select-none">
-      <div
-        className={cn(
-          isCurrentDay ? "gap-x-5" : "gap-x-3",
-          "inline-flex items-center px-4 py-3",
-        )}
-      >
-        <h2
-          className={cn(
-            isCurrentDay
-              ? "-mx-2.5 -my-1 rounded-sm bg-accent-table px-2.5 py-1 text-accent/90 dark:text-primary/90"
-              : "text-primary/90",
-            "text-3xl font-semibold",
-          )}
+      {isMounted && (
+        <div
+          {...presenceProps}
+          inert={!isCustom}
+          className="border-lines bg-accent data-[state=open]:animate-rise data-[state=closed]:animate-fall flex shrink-0 items-center justify-between rounded-lg border px-1 max-md:h-11 md:h-9 md:justify-start"
         >
-          {day.dayNumber.toString().padStart(2, "0")}
-        </h2>
-        <h3 className="text-lg font-semibold text-primary/90">{dayName}</h3>
-      </div>
-    </th>
-  );
-};
+          <button
+            aria-label={translate("lessons.earlier")}
+            disabled={hoursAdjustIndex <= MIN_ADJUST_INDEX}
+            onClick={() => enableCustomLessonsLength(hoursAdjustIndex - 1)}
+            className="text-primary/50 hover:text-primary active:bg-primary/5 grid place-content-center rounded-md transition duration-150 active:scale-90 disabled:opacity-30 max-md:h-full max-md:w-12 md:size-7"
+          >
+            <MinusIcon
+              className="max-md:size-4.5 md:size-3.5"
+              strokeWidth={2}
+            />
+          </button>
+          <span className="tabular text-primary w-20 text-center font-mono text-xs">
+            {translate("lessons.from", { number: hoursAdjustIndex })}
+          </span>
+          <button
+            aria-label={translate("lessons.later")}
+            disabled={hoursAdjustIndex >= MAX_LESSONS}
+            onClick={() => enableCustomLessonsLength(hoursAdjustIndex + 1)}
+            className="text-primary/50 hover:text-primary active:bg-primary/5 grid place-content-center rounded-md transition duration-150 active:scale-90 disabled:opacity-30 max-md:h-full max-md:w-12 md:size-7"
+          >
+            <PlusIcon className="max-md:size-4.5 md:size-3.5" strokeWidth={2} />
+          </button>
+        </div>
+      )}
 
-export const ShortLessonSwitcherCell: FC = () => {
-  const isClient = useIsClient();
-  const { lessonType, setLessonType } = useSettingsStore();
-  const isShortLessons = lessonType === "short";
+      <div className="border-lines bg-accent relative grid min-w-0 grid-cols-3 rounded-lg border p-0.75 max-md:h-11 max-md:w-full md:h-9 md:w-auto">
+        <span
+          aria-hidden
+          className="ease-out-quint pointer-events-none absolute inset-y-0.75 left-0.75 flex transition-transform duration-300"
+          style={{
+            width: `calc((100% - 0.375rem) / 3)`,
+            transform: `translateX(${LESSON_MODES.findIndex(({ value }) => value === lessonType) * 100}%)`,
+          }}
+        >
+          <span className="bg-foreground flex-1 rounded-md shadow-(--shadow-soft)" />
+        </span>
 
-  return (
-    <div className="flex items-center justify-center px-2">
-      {isClient ? (
-        <div className="relative h-9 sm:h-10">
-          <div className="flex h-9 sm:h-10">
-            {["45'", "30'"].map((value, index) => (
-              <Button
-                aria-label="Przełącz długość lekcji"
-                variant="icon"
-                key={value}
-                onClick={() =>
-                  setLessonType(value === "45'" ? "normal" : "short")
-                }
-                className={cn(
-                  index === 0 ? "!rounded-l-sm" : "!rounded-r-sm",
-                  "rounded-none bg-accent font-semibold text-primary/90 hover:bg-primary/5 hover:text-primary max-sm:h-9 max-sm:text-xs",
-                )}
-              >
-                {value}
-              </Button>
-            ))}
-          </div>
-          {lessonType !== "custom" && (
-            <div
+        {LESSON_MODES.map(({ value, label: rawLabel }) => {
+          const label = rawLabel ?? translate("lessons.mode.custom");
+          const active = lessonType === value;
+          return (
+            <button
+              key={value}
+              aria-label={translate("lessons.mode.aria", { label })}
+              aria-pressed={active}
+              onClick={() =>
+                value === "custom"
+                  ? enableCustomLessonsLength(hoursAdjustIndex)
+                  : setLessonType(value)
+              }
               className={cn(
-                isShortLessons
-                  ? "translate-x-[100%] transform rounded-r-sm"
-                  : "rounded-l-sm",
-                "absolute top-0 z-40 flex h-9 w-[50%] cursor-default items-center justify-center bg-accent-table px-4 py-2 text-xs font-semibold text-accent/90 transition-all dark:text-primary/90 sm:h-10 sm:text-sm",
+                active
+                  ? "text-primary"
+                  : "text-primary/50 hover:text-primary/80",
+                "tabular relative rounded-md px-2.5 font-mono text-xs font-medium whitespace-nowrap transition-colors",
               )}
             >
-              {isShortLessons ? "30'" : "45'"}
-            </div>
-          )}
-        </div>
-      ) : (
-        <Skeleton className="h-9 w-28 rounded-sm sm:h-10" />
-      )}
+              {label}
+            </button>
+          );
+        })}
+      </div>
     </div>
   );
 };

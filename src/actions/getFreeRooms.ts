@@ -1,22 +1,19 @@
 "use server";
 
 import { REVALIDATE_TIME } from "@/constants/settings";
-import { DATA_SOURCE_COOKIE_NAME } from "@/lib/dataSource";
 import type { Room } from "@/types/optivum";
 import { unstable_cache } from "next/cache";
-import { cookies } from "next/headers";
-import { getActiveDataSource } from "./getActiveDataSource";
 import { getOptivumList } from "./getOptivumList";
 import { getOptivumTimetable } from "./getOptivumTimetable";
 
-const combineRooms = async (dataSource?: string): Promise<Room[]> => {
-  const { rooms: roomList } = await getOptivumList(dataSource);
+const combineRooms = async (): Promise<Room[]> => {
+  const { rooms: roomList } = await getOptivumList();
   if (!roomList || roomList.length === 0) {
     return [];
   }
 
   const roomPromises = roomList.map(async (room) => {
-    const timetable = await getOptivumTimetable("room", room.value, dataSource);
+    const timetable = await getOptivumTimetable("room", room.value);
 
     return {
       id: room.value,
@@ -42,22 +39,35 @@ const combineRooms = async (dataSource?: string): Promise<Room[]> => {
   return fulfilledRooms;
 };
 
-export const getFreeRooms = async (weekdayIndex: number, lessonIndex: number) => {
+export const getFreeRoomsWeek = async (
+  weekdayCount: number,
+  lessonCount: number,
+): Promise<string[][][]> => {
+  const rooms = await cachedRooms();
+
+  return Array.from({ length: weekdayCount }, (_, dayIndex) =>
+    Array.from({ length: lessonCount }, (_, lessonIndex) =>
+      rooms
+        .filter((room) => !room.lessons?.[dayIndex]?.[lessonIndex]?.length)
+        .map((room) => room.id),
+    ),
+  );
+};
+
+const cachedRooms = () =>
+  unstable_cache(() => combineRooms(), ["combinedRooms"], {
+    revalidate: REVALIDATE_TIME,
+  })();
+
+export const getFreeRooms = async (
+  weekdayIndex: number,
+  lessonIndex: number,
+) => {
   if (weekdayIndex < 0 || lessonIndex < 0) {
     return [];
   }
 
-  const cookieStore = await cookies();
-  const requestedSource = cookieStore.get(DATA_SOURCE_COOKIE_NAME)?.value;
-  const activeSource = await getActiveDataSource(requestedSource);
-
-  const rooms = await unstable_cache(
-    () => combineRooms(activeSource),
-    ["combinedRooms", activeSource],
-    {
-      revalidate: REVALIDATE_TIME,
-    },
-  )();
+  const rooms = await cachedRooms();
 
   return rooms.filter((room) => {
     const dayLessons = room.lessons?.[weekdayIndex];

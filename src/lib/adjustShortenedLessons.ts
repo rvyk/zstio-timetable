@@ -1,10 +1,6 @@
-import {
-  BREAK_LENGTH,
-  CALCULATED_TIME_FORMAT,
-  SHORT_LESSON_LENGTH,
-} from "@/constants/settings";
+import { BREAK_LENGTH, SHORT_LESSON_LENGTH } from "@/constants/settings";
+import { shiftTime } from "@/lib/dates";
 import { TableHour } from "@majusss/timetable-parser";
-import moment from "moment";
 
 export const adjustShortenedLessons = (
   startIndex: number,
@@ -13,18 +9,15 @@ export const adjustShortenedLessons = (
   return defaultHours.reduce((adjustedHours: TableHour[], hour) => {
     const hourNumber = Number(hour.number);
 
-    if (hourNumber >= startIndex) {
-      const previousHour = adjustedHours[adjustedHours.length - 1];
-      const { timeFrom, timeTo } = calculateNewTimes(
-        previousHour.timeTo,
-        BREAK_LENGTH,
-        SHORT_LESSON_LENGTH,
-      );
+    const previousHour = adjustedHours[adjustedHours.length - 1];
+
+    if (hourNumber >= startIndex && previousHour) {
+      const timeFrom = shiftTime(previousHour.timeTo, BREAK_LENGTH);
 
       adjustedHours.push({
         ...hour,
         timeFrom,
-        timeTo,
+        timeTo: shiftTime(timeFrom, SHORT_LESSON_LENGTH),
       });
     } else {
       adjustedHours.push(hour);
@@ -32,20 +25,4 @@ export const adjustShortenedLessons = (
 
     return adjustedHours;
   }, []);
-};
-
-const calculateNewTimes = (
-  previousTimeTo: string,
-  breakLength: number,
-  lessonLength: number,
-): { timeFrom: string; timeTo: string } => {
-  const newTimeFrom = moment(previousTimeTo, CALCULATED_TIME_FORMAT)
-    .add(breakLength, "minutes")
-    .format(CALCULATED_TIME_FORMAT);
-
-  const newTimeTo = moment(newTimeFrom, CALCULATED_TIME_FORMAT)
-    .add(lessonLength, "minutes")
-    .format(CALCULATED_TIME_FORMAT);
-
-  return { timeFrom: newTimeFrom, timeTo: newTimeTo };
 };

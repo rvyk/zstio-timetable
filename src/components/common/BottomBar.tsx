@@ -1,7 +1,7 @@
 "use client";
 
+import { useT } from "@/components/common/LocaleProvider";
 import { SidebarContent } from "@/components/sidebar/Sidebar";
-import { Button } from "@/components/ui/Button";
 import {
   Drawer,
   DrawerContent,
@@ -9,65 +9,45 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/Drawer";
-import { TRANSLATION_DICT } from "@/constants/translations";
 import { simulateKeyPress } from "@/lib/utils";
 import { OptivumTimetable } from "@/types/optivum";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
-import { ArrowLeft, ArrowRight } from "lucide-react";
-import { FC, MouseEvent, useEffect, useMemo, useState } from "react";
+import { ArrowLeft, ArrowRight, ChevronUp } from "lucide-react";
+import { FC, MouseEvent, useEffect, useState } from "react";
 
 interface BottomBarProps {
   timetable?: OptivumTimetable;
   isOffline?: boolean;
 }
 
-export const BottomBar: FC<BottomBarProps> = ({ timetable, isOffline }) => {
-  const [viewportHeight, setViewportHeight] = useState<number | null>(null);
-  const titleElement = useMemo(() => {
-    if (timetable) {
-      return (
-        <div className="grid w-full justify-center gap-1 px-2 text-center text-primary">
-          <h2 className="mx-auto max-w-52 truncate text-ellipsis text-base font-semibold leading-tight opacity-90">
-            {timetable.title}
-          </h2>
-          <p className="mx-auto max-w-72 truncate text-ellipsis text-sm font-medium leading-tight opacity-70">
-            {`Rozkład zajęć ${TRANSLATION_DICT[timetable.type]}`}
-          </p>
-        </div>
-      );
-    } else if (isOffline) {
-      return (
-        <div className="grid w-full justify-center gap-1 px-2 text-center text-primary">
-          <h2 className="mx-auto max-w-52 truncate text-ellipsis text-base font-semibold leading-tight opacity-90">
-            Jesteś offline
-          </h2>
-          <p className="mx-auto max-w-72 truncate text-ellipsis text-sm font-medium leading-tight opacity-70">
-            Brak połączenia z siecią
-          </p>
-        </div>
-      );
-    } else {
-      return "Nie znaleziono planu zajęć";
-    }
-  }, [timetable, isOffline]);
+const STEP_BUTTON =
+  "text-primary/55 active:bg-primary/5 active:text-primary active:scale-90 grid size-11 shrink-0 place-content-center rounded-lg transition duration-150 disabled:opacity-30";
 
-  const handleArrowKey = (
-    e: MouseEvent<HTMLButtonElement>,
-    increment: boolean,
-  ) => {
+export const BottomBar: FC<BottomBarProps> = ({ timetable, isOffline }) => {
+  const translate = useT();
+  const [viewportHeight, setViewportHeight] = useState<number | null>(null);
+
+  const title =
+    timetable?.title ??
+    translate(isOffline ? "bottomBar.offline" : "bottomBar.pick");
+  const subtitle = timetable
+    ? translate("bottomBar.schedule", {
+        type: translate(`type.${timetable.type}`),
+      })
+    : translate(isOffline ? "bottomBar.offlineHint" : "bottomBar.pickHint");
+
+  const step = (e: MouseEvent<HTMLButtonElement>, forward: boolean) => {
     e.preventDefault();
     e.stopPropagation();
-
-    const key = increment ? "ArrowRight" : "ArrowLeft";
-    simulateKeyPress(key, key === "ArrowRight" ? 39 : 37);
+    const key = forward ? "ArrowRight" : "ArrowLeft";
+    simulateKeyPress(key, forward ? 39 : 37);
   };
 
   useEffect(() => {
     if (typeof window === "undefined") return;
 
     const updateViewportHeight = () => {
-      const visualViewportHeight = window.visualViewport?.height;
-      setViewportHeight(visualViewportHeight ?? window.innerHeight);
+      setViewportHeight(window.visualViewport?.height ?? window.innerHeight);
     };
 
     updateViewportHeight();
@@ -99,36 +79,47 @@ export const BottomBar: FC<BottomBarProps> = ({ timetable, isOffline }) => {
         if (isOpen) window.scrollTo(0, 0);
       }}
     >
-      <DrawerTrigger asChild>
-        <div className="fixed bottom-0 flex h-20 w-full flex-col rounded-t-md border border-primary/10 bg-background outline-none focus:outline-none focus-visible:outline-none focus-visible:ring-0 dark:bg-foreground md:hidden">
-          <div className="absolute left-0 right-0 top-1 mx-auto h-2 w-[100px] rounded-full bg-primary/10" />
-          <div className="flex h-full items-center justify-between px-2">
-            <Button
-              aria-label="Poprzednia klasa/nauczyciel/sala"
-              variant="icon"
-              size="icon"
-              onClick={(e) => handleArrowKey(e, false)}
-              className="aspect-square h-10 w-10"
+      <div className="border-lines bg-foreground/85 fixed inset-x-0 bottom-0 z-30 border-t pb-[env(safe-area-inset-bottom)] shadow-(--shadow-raised) backdrop-blur-xl select-none md:hidden">
+        <div className="flex h-16 items-center gap-1 px-2">
+          {timetable && (
+            <button
+              aria-label={translate("bottomBar.prev")}
+              onClick={(e) => step(e, false)}
+              className={STEP_BUTTON}
             >
-              <ArrowLeft size={20} strokeWidth={2.5} />
-            </Button>
-            <div className="mx-auto grid h-fit">
-              <div className="flex w-full justify-center text-center">
-                {titleElement}
-              </div>
-            </div>
-            <Button
-              aria-label="Następna klasa/nauczyciel/sala"
-              variant="icon"
-              size="icon"
-              onClick={(e) => handleArrowKey(e, true)}
-              className="aspect-square h-10 w-10"
+              <ArrowLeft className="size-5" strokeWidth={2} />
+            </button>
+          )}
+
+          <DrawerTrigger asChild>
+            <button className="active:bg-primary/5 group grid min-w-0 flex-1 justify-items-center gap-0.5 rounded-lg px-2 py-1.5 transition duration-150 active:scale-[0.98]">
+              <span className="flex max-w-full min-w-0 items-center gap-1.5">
+                <span className="text-primary truncate text-[15px] leading-tight font-semibold tracking-tight">
+                  {title}
+                </span>
+                <ChevronUp
+                  className="text-primary/35 size-3.5 shrink-0 transition-transform duration-200 group-active:-translate-y-0.5"
+                  strokeWidth={2.5}
+                />
+              </span>
+              <span className="text-primary/45 max-w-full truncate text-[11px] leading-tight">
+                {subtitle}
+              </span>
+            </button>
+          </DrawerTrigger>
+
+          {timetable && (
+            <button
+              aria-label={translate("bottomBar.next")}
+              onClick={(e) => step(e, true)}
+              className={STEP_BUTTON}
             >
-              <ArrowRight size={20} strokeWidth={2.5} />
-            </Button>
-          </div>
+              <ArrowRight className="size-5" strokeWidth={2} />
+            </button>
+          )}
         </div>
-      </DrawerTrigger>
+      </div>
+
       <DrawerContent
         className="md:hidden"
         style={
@@ -136,15 +127,12 @@ export const BottomBar: FC<BottomBarProps> = ({ timetable, isOffline }) => {
         }
       >
         <VisuallyHidden>
-          <DrawerTitle>Przeglądaj plan zajęć</DrawerTitle>
+          <DrawerTitle>{translate("bottomBar.browse")}</DrawerTitle>
           <DrawerDescription>
-            Wybierz klasę, nauczyciela lub salę, aby zobaczyć odpowiedni plan
-            zajęć.
+            {translate("bottomBar.browseHint")}
           </DrawerDescription>
         </VisuallyHidden>
-        <div className="flex h-full flex-col justify-between gap-y-16">
-          <SidebarContent showTimetableDates />
-        </div>
+        <SidebarContent showTimetableDates />
       </DrawerContent>
     </Drawer>
   );

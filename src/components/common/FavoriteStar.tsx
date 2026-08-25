@@ -1,43 +1,73 @@
 "use client";
 
+import { useT } from "@/components/common/LocaleProvider";
 import { handleFavorite } from "@/lib/handleFavorites";
 import { cn } from "@/lib/utils";
 import { useFavoritesStore } from "@/stores/favorites";
 import { ListItem } from "@majusss/timetable-parser";
-import { StarIcon } from "lucide-react";
-import { FC, useMemo } from "react";
+import { BookmarkIcon } from "lucide-react";
+import { FC, useMemo, useState } from "react";
 
 interface FavoriteStarProps {
   item: ListItem;
   small?: boolean;
+  className?: string;
+  /** Hide until the containing `group` row is hovered/focused (list context). */
+  revealOnHover?: boolean;
+  withLabel?: boolean;
 }
 
-export const FavoriteStar: FC<FavoriteStarProps> = ({ item, small }) => {
+export const FavoriteStar: FC<FavoriteStarProps> = ({
+  item,
+  small,
+  className,
+  revealOnHover,
+  withLabel,
+}) => {
+  const translate = useT();
   const { favorites } = useFavoritesStore();
 
   const isFavorite = useMemo(() => {
     return favorites.some((c) => c.name === item.name);
   }, [favorites, item.name]);
 
+  const [clicks, setClicks] = useState(0);
+
   return (
     <button
-      aria-label={isFavorite ? "Usuń z ulubionych" : "Dodaj do ulubionych"}
+      aria-label={translate(isFavorite ? "favorites.remove" : "favorites.add")}
+      aria-pressed={isFavorite}
       onClick={(e) => {
         e.preventDefault();
-        handleFavorite(item);
+        setClicks((count) => count + 1);
+        handleFavorite(item, translate);
       }}
-      className="focus:outline-none"
+      className={cn(
+        "shrink-0 rounded-sm transition-colors",
+        isFavorite
+          ? "text-accent-table"
+          : "text-primary/40 hover:text-primary/70",
+        revealOnHover &&
+          !isFavorite &&
+          "opacity-0 group-focus-within:opacity-100 group-hover:opacity-100 focus-visible:opacity-100 max-md:opacity-100",
+        withLabel && "flex items-center gap-1.5",
+        className,
+      )}
     >
-      <StarIcon
-        strokeWidth={2.5}
+      <BookmarkIcon
+        key={clicks}
+        strokeWidth={2}
         className={cn(
-          isFavorite
-            ? "!fill-[#FFB800] drop-shadow-[0_0_5.6px_rgba(255,196,46,0.35)] grayscale-0 hover:drop-shadow-[0_0_6.6px_rgba(255,196,46,0.85)]"
-            : "drop-shadow-none grayscale",
-          small ? "size-5" : "size-6",
-          "fill-transparent stroke-[#FFB800] transition-all duration-300 hover:fill-[#FFB800]",
+          isFavorite ? "fill-current" : "fill-transparent",
+          clicks > 0 && isFavorite && "animate-pop",
+          small ? "size-3.5" : "size-4",
         )}
       />
+      {withLabel && (
+        <span className="text-[13px] leading-none font-medium">
+          {translate(isFavorite ? "favorites.saved" : "favorites.save")}
+        </span>
+      )}
     </button>
   );
 };

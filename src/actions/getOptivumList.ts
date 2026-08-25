@@ -1,18 +1,15 @@
 "use server";
 
 import { REVALIDATE_TIME } from "@/constants/settings";
-import { joinDataSourcePath } from "@/lib/dataSource";
+import { getTimetableBaseUrl, joinDataSourcePath } from "@/lib/dataSource";
 import type { List } from "@majusss/timetable-parser";
 import { TimetableList } from "@majusss/timetable-parser";
-import { getActiveDataSource } from "./getActiveDataSource";
 
 const EMPTY_LIST: List = { classes: [], teachers: [], rooms: [] };
 
-export const getOptivumList = async (
-  dataSource?: string,
-): Promise<List> => {
+export const getOptivumList = async (): Promise<List> => {
   try {
-    const baseUrl = await getActiveDataSource(dataSource);
+    const baseUrl = getTimetableBaseUrl();
     if (!baseUrl) {
       return { ...EMPTY_LIST };
     }

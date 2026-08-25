@@ -28,7 +28,10 @@ const DrawerOverlay = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <DrawerPrimitive.Overlay
     ref={ref}
-    className={cn("fixed inset-0 z-50 bg-black/80 md:hidden", className)}
+    className={cn(
+      "fixed inset-0 z-50 bg-black/45 backdrop-blur-[2px] md:hidden",
+      className,
+    )}
     {...props}
   />
 ));
@@ -40,19 +43,19 @@ const DrawerContent = React.forwardRef<
 >(({ className, children, ...props }, ref) => (
   <DrawerPortal>
     <DrawerOverlay />
-      <DrawerPrimitive.Content
-        ref={ref}
-        className={cn(
-          "fixed inset-x-0 bottom-0 z-50 mt-24 flex h-5/6 flex-col rounded-t-md border border-primary/10 bg-background outline-none focus:outline-none focus-visible:outline-none focus-visible:ring-0",
-          className,
-        )}
-        {...props}
-      >
-        <div className="mx-auto mb-2 mt-4 min-h-2 w-[100px] rounded-full bg-primary/10" />
-        <div className="h-full overflow-y-auto overflow-x-hidden p-4 scrollbar-none">
-          {children}
-        </div>
-      </DrawerPrimitive.Content>
+    <DrawerPrimitive.Content
+      ref={ref}
+      className={cn(
+        "border-lines bg-foreground fixed inset-x-0 bottom-0 z-50 mt-24 flex max-h-[86dvh] flex-col rounded-t-xl border shadow-(--shadow-raised) outline-none focus:outline-none focus-visible:ring-0 focus-visible:outline-none",
+        className,
+      )}
+      {...props}
+    >
+      <div className="bg-primary/15 mx-auto mt-3 mb-1 h-1 w-9 shrink-0 rounded-full" />
+      <div className="min-h-0 flex-1 scrollbar-none overflow-x-hidden overflow-y-auto p-4 pb-[max(1rem,env(safe-area-inset-bottom))]">
+        {children}
+      </div>
+    </DrawerPrimitive.Content>
   </DrawerPortal>
 ));
 DrawerContent.displayName = "DrawerContent";
@@ -86,7 +89,7 @@ const DrawerTitle = React.forwardRef<
   <DrawerPrimitive.Title
     ref={ref}
     className={cn(
-      "text-lg font-semibold leading-none tracking-tight",
+      "text-lg leading-none font-semibold tracking-tight",
       className,
     )}
     {...props}
@@ -100,7 +103,7 @@ const DrawerDescription = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <DrawerPrimitive.Description
     ref={ref}
-    className={cn("text-sm text-neutral-500 dark:text-neutral-400", className)}
+    className={cn("text-primary/50 text-sm", className)}
     {...props}
   />
 ));

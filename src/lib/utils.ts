@@ -1,9 +1,7 @@
 import { DAYS_OF_WEEK } from "@/constants/days";
+import { warsawDayIndex, warsawToday } from "@/lib/dates";
 import { clsx, type ClassValue } from "clsx";
 import { setCookie } from "cookies-next";
-import moment from "moment";
-import "moment-timezone";
-import "moment/locale/pl";
 import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {
@@ -17,19 +15,10 @@ export const setLastVisitedCookie = (link: string) => {
   });
 };
 
-export const parseHeaderDate = (res: Response): string => {
-  const headerDate = res.headers.get("date");
-  if (!headerDate) {
-    return "Brak danych";
-  }
-
-  const parsedDate = moment(headerDate);
-  if (!parsedDate.isValid()) {
-    return "Brak danych";
-  }
-
-  return parsedDate.tz("Europe/Warsaw").format("DD MMMM YYYY[r.] HH:mm:ss");
-};
+const SHORT_MONTH = new Intl.DateTimeFormat("pl-PL", {
+  timeZone: "UTC",
+  month: "short",
+});
 
 export const getDayNumberForNextWeek = (
   dayName: string,
@@ -38,8 +27,8 @@ export const getDayNumberForNextWeek = (
   month: string;
   monthNumber: number;
 } => {
-  const today = new Date();
-  const todayIndex = (today.getDay() + 6) % 7;
+  const today = warsawToday();
+  const todayIndex = warsawDayIndex();
 
   const targetDay = DAYS_OF_WEEK.find(
     (day) => day.long === dayName || day.short === dayName,
@@ -48,9 +37,9 @@ export const getDayNumberForNextWeek = (
   if (!targetDay) {
     console.error("Day not found");
     return {
-      dayNumber: today.getDate(),
-      month: moment(today).format("MMM"),
-      monthNumber: today.getMonth() + 1,
+      dayNumber: today.getUTCDate(),
+      month: `${SHORT_MONTH.format(today)}.`,
+      monthNumber: today.getUTCMonth() + 1,
     };
   }
 
@@ -58,12 +47,12 @@ export const getDayNumberForNextWeek = (
   if (diff < 0) diff += 7;
 
   const targetDate = new Date(today);
-  targetDate.setDate(today.getDate() + diff);
+  targetDate.setUTCDate(today.getUTCDate() + diff);
 
   return {
-    dayNumber: targetDate.getDate(),
-    month: moment(targetDate).format("MMM") + ".",
-    monthNumber: targetDate.getMonth() + 1,
+    dayNumber: targetDate.getUTCDate(),
+    month: `${SHORT_MONTH.format(targetDate)}.`,
+    monthNumber: targetDate.getUTCMonth() + 1,
   };
 };
 
@@ -80,6 +69,6 @@ export const simulateKeyPress = (key: string, keyCode: number) => {
 };
 
 export const parseTime = (timeStr: string): number => {
-  const [hours, minutes] = timeStr.split(":").map(Number);
+  const [hours = 0, minutes = 0] = timeStr.split(":").map(Number);
   return hours * 3600 + minutes * 60;
 };

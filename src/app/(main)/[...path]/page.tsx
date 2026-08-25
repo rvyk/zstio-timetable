@@ -1,20 +1,18 @@
 import { getOptivumList } from "@/actions/getOptivumList";
 import { getOptivumTimetable } from "@/actions/getOptivumTimetable";
 import { BottomBar } from "@/components/common/BottomBar";
-import { DataSourceBanner } from "@/components/common/DataSourceBanner";
-import { FreeRoomsResultModal } from "@/components/modals/FreeRoomsResult";
-import { FreeRoomsSearchModal } from "@/components/modals/FreeRoomsSearch";
-import { ShortenedLessonsCalculatorModal } from "@/components/modals/ShortenedLessonsCalculator";
+import { SchoolNews } from "@/components/common/SchoolNews";
 import { Timetable } from "@/components/timetable/Timetable";
-import { SidebarInfo } from "@/components/sidebar/Sidebar";
 import { TimetableController } from "@/components/timetable/TimetableController";
 import { Topbar } from "@/components/topbar/Topbar";
-import { DATA_SOURCE_COOKIE_NAME } from "@/lib/dataSource";
+import { SCHOOL_NAME_ACCUSATIVE } from "@/constants/school";
+import { TRANSLATION_DICT } from "@/constants/translations";
+import { pageSeo } from "@/lib/seo";
+import type { OptivumTimetable } from "@/types/optivum";
+import type { Metadata } from "next";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { Fragment } from "react";
-import type { Metadata } from "next";
-import type { OptivumTimetable } from "@/types/optivum";
 
 interface PageParams {
   path?: string[];
@@ -40,19 +38,23 @@ export const generateMetadata = async ({
   const [type, value] = resolvedParams.path ?? [];
 
   if (!isTimetableType(type) || !value) {
-    return { title: "" };
+    return { robots: { index: false, follow: true } };
   }
 
   const timetable = await getOptivumTimetable(type, value);
 
-  return { title: timetable.title };
+  if (!timetable.title) {
+    return { robots: { index: false, follow: true } };
+  }
+
+  return pageSeo(
+    `Plan lekcji ${TRANSLATION_DICT[type]} ${timetable.title}`,
+    `Aktualny plan lekcji ${TRANSLATION_DICT[type]} ${timetable.title} w ${SCHOOL_NAME_ACCUSATIVE}. Godziny zajęć, przedmioty, sale i nauczyciele na każdy dzień tygodnia.`,
+    `/${type}/${value}`,
+  );
 };
 
-const TimetablePage = async ({
-  params,
-}: {
-  params: Promise<PageParams>;
-}) => {
+const TimetablePage = async ({ params }: { params: Promise<PageParams> }) => {
   const resolvedParams = await params;
   const [type, value] = resolvedParams.path ?? [];
 
@@ -66,29 +68,17 @@ const TimetablePage = async ({
     redirect(redirectTo);
   }
 
-  const requestedDataSource = cookieStore.get(DATA_SOURCE_COOKIE_NAME)?.value;
-
-  const timetable = await getOptivumTimetable(
-    type,
-    value,
-    requestedDataSource,
-  );
+  const timetable = await getOptivumTimetable(type, value);
 
   return (
     <Fragment>
       <TimetableController timetable={timetable} />
-      <div className="flex h-full w-full flex-col gap-y-3 max-md:overflow-y-auto md:gap-y-6 md:overflow-hidden md:p-8">
-        <DataSourceBanner />
+      <main className="flex h-full w-full min-w-0 flex-1 flex-col gap-y-3 max-md:overflow-y-auto max-md:pb-[calc(4rem+env(safe-area-inset-bottom))] md:gap-y-3 md:overflow-hidden md:p-3">
         <Topbar timetable={timetable} />
+        <SchoolNews />
         <Timetable timetable={timetable} />
-        <div className="hidden md:block xl:hidden">
-          <SidebarInfo showTimetableDates={false} />
-        </div>
         <BottomBar timetable={timetable} />
-      </div>
-      <FreeRoomsSearchModal />
-      <FreeRoomsResultModal />
-      <ShortenedLessonsCalculatorModal />
+      </main>
     </Fragment>
   );
 };

@@ -2,91 +2,95 @@
 
 import school_logo from "@/assets/school-logo.png";
 import { FavoriteStar } from "@/components/common/FavoriteStar";
-import { TimetableDates } from "@/components/common/TimetableDates";
-import { SidebarContent } from "@/components/sidebar/Sidebar";
-import SidebarContext from "@/components/sidebar/Context";
+import { useT } from "@/components/common/LocaleProvider";
+import { SettingsMenu } from "@/components/settings/SettingsPanel";
 import { ShortLessonSwitcherCell } from "@/components/timetable/Cells";
 import { SCHOOL_SHORT, SCHOOL_WEBSITE } from "@/constants/school";
-import { TRANSLATION_DICT } from "@/constants/translations";
-import { OptivumTimetable } from "@/types/optivum";
+import type { OptivumTimetable } from "@/types/optivum";
+import { ArrowLeft } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { FC, Fragment, useMemo } from "react";
-import { useIsClient } from "usehooks-ts";
-import { TopbarButtons } from "./Buttons";
+import { FC } from "react";
 
 interface TopbarProps {
   timetable?: OptivumTimetable;
-  isOffline?: boolean;
+  showLessonSwitcher?: boolean;
+  page?: { title: string; backHref: string; backLabel: string };
 }
 
-export const Topbar: FC<TopbarProps> = ({ timetable, isOffline }) => {
-  const isClient = useIsClient();
-
-  const titleElement = useMemo(() => {
-    if (timetable?.title) {
-      return (
-        <Fragment>
-          Rozkład zajęć {TRANSLATION_DICT[timetable.type]}{" "}
-          <span className="font-semibold">{timetable.title}</span>
-        </Fragment>
-      );
-    } else if (isOffline) {
-      return "Brak połączenia z siecią";
-    } else {
-      return "Nie znaleziono planu zajęć";
-    }
-  }, [timetable, isOffline]);
-
-  return (
-    <div className="grid gap-4 max-md:px-3 max-md:pt-3">
-      <div className="flex w-full items-center justify-between gap-3">
-        <div className="flex items-center gap-x-2">
-          <SchoolLink />
-          <div className="md:hidden">
-            <ShortLessonSwitcherCell />
-          </div>
-        </div>
-        <TopbarButtons />
-      </div>
-      <div className="grid gap-1.5 max-md:hidden">
-        <div className="inline-flex items-center gap-x-4">
-          <h1 className="text-primary/90 xl:text-4.2xl max-w-2xl truncate text-3xl leading-tight font-semibold text-ellipsis">
-            {titleElement}
-          </h1>
-          {timetable?.title && isClient && (
-            <FavoriteStar
-              item={{
-                name: timetable.title,
-                value: timetable.id.substring(1),
-                type: timetable.type,
-              }}
-            />
-          )}
-        </div>
-        <TimetableDates timetable={timetable} />
-      </div>
-      <div className="hidden md:block xl:hidden">
-        <SidebarContext.Provider value={{ isPreview: false }}>
-          <SidebarContent showTimetableDates={false} layout="horizontal" showInfo={false} />
-        </SidebarContext.Provider>
+export const Topbar: FC<TopbarProps> = ({
+  timetable,
+  showLessonSwitcher = true,
+  page,
+}) => (
+  <header className="grid gap-2 px-3 pt-3 md:hidden">
+    <div className="flex w-full items-center justify-between gap-3">
+      {page ? <PageLink {...page} /> : <SchoolLink />}
+      <div className="flex items-center gap-1">
+        {timetable?.title && (
+          <FavoriteStar
+            item={{
+              name: timetable.title,
+              value: timetable.id.substring(1),
+              type: timetable.type,
+            }}
+            className="border-lines bg-accent active:bg-primary/5 grid size-11 place-content-center rounded-lg border"
+          />
+        )}
+        <SettingsMenu />
       </div>
     </div>
-  );
-};
 
-const SchoolLink: FC = () => (
+    {showLessonSwitcher && <ShortLessonSwitcherCell className="px-0 py-0" />}
+  </header>
+);
+
+const PageLink: FC<NonNullable<TopbarProps["page"]>> = ({
+  title,
+  backHref,
+  backLabel,
+}) => (
   <Link
-    href={SCHOOL_WEBSITE}
-    className="group inline-flex w-fit items-center gap-x-4"
+    href={backHref}
+    className="group -m-1 flex min-w-0 items-center gap-x-2.5 rounded-lg p-1"
   >
-    <Image
-      src={school_logo}
-      alt={`Logo szkoły ${SCHOOL_SHORT}`}
-      className="aspect-square w-10"
-    />
-    <p className="text-primary/70 hover:text-primary/90 text-sm font-medium transition-colors max-md:hidden xl:text-base">
-      Wróć na stronę szkoły
-    </p>
+    <span className="border-lines bg-accent group-active:bg-primary/5 grid size-9 shrink-0 place-content-center rounded-lg border transition duration-150 group-active:scale-90">
+      <ArrowLeft className="text-primary/70 size-4.5" strokeWidth={2} />
+    </span>
+    <span className="grid min-w-0 gap-0.5">
+      <span className="text-primary truncate text-sm leading-none font-semibold tracking-tight">
+        {title}
+      </span>
+      <span className="text-primary/40 truncate text-[11px] leading-none">
+        {backLabel}
+      </span>
+    </span>
   </Link>
 );
+
+const SchoolLink: FC = () => {
+  const translate = useT();
+
+  return (
+    <Link
+      href={SCHOOL_WEBSITE}
+      className="group -m-1 flex items-center gap-x-2.5 rounded-lg p-1"
+      aria-label={translate("school.linkAria", { school: SCHOOL_SHORT })}
+    >
+      <Image
+        src={school_logo}
+        alt=""
+        className="aspect-square w-9 shrink-0 active:scale-95"
+      />
+      <span className="grid gap-0.5">
+        <span className="text-primary text-sm leading-none font-semibold tracking-tight">
+          {SCHOOL_SHORT}
+        </span>
+        <span className="text-primary/40 flex items-center gap-1 text-[11px] leading-none">
+          <ArrowLeft className="size-3" strokeWidth={2} />
+          {translate("school.link")}
+        </span>
+      </span>
+    </Link>
+  );
+};

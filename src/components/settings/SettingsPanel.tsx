@@ -1,43 +1,59 @@
 "use client";
 
-import { getCalendar } from "@/actions/getCalendar";
-import { Button } from "@/components/ui/Button";
 import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetFooter,
-  SheetHeader,
-  SheetTitle,
-} from "@/components/ui/Sheet";
+  useLocale,
+  useSetLocale,
+  useT,
+} from "@/components/common/LocaleProvider";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/Accordion";
+import { DialogDescription, DialogTitle } from "@/components/ui/Dialog";
 import { usePwa } from "@/hooks/usePWA";
 import { showErrorToast } from "@/hooks/useToast";
-import { isOriginalDataSource } from "@/lib/dataSource";
+import { getCalendar } from "@/lib/calendar";
 import { downloadFile } from "@/lib/downloadFile";
+import { LOCALES, type Locale } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
-import { useDataSourceStore } from "@/stores/dataSource";
-import useModalsStore from "@/stores/modals";
-import { useSettingsStore, useSettingsWithoutStore } from "@/stores/settings";
+import { useSettingsStore } from "@/stores/settings";
 import { useTimetableStore } from "@/stores/timetable";
+import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
-import {
-  BellIcon,
-  CalculatorIcon,
-  CalendarArrowDownIcon,
-  DownloadIcon,
-  Search,
-  XIcon,
-} from "lucide-react";
 import type { LucideIcon } from "lucide-react";
+import {
+  AccessibilityIcon,
+  BellIcon,
+  CalendarArrowDownIcon,
+  ChevronDown,
+  DownloadIcon,
+  PrinterIcon,
+  Search,
+  SlidersHorizontal,
+} from "lucide-react";
+import { useTheme } from "next-themes";
 import Link from "next/link";
-import { ReactNode, useMemo } from "react";
+import { useRouter } from "next/navigation";
+import {
+  ReactNode,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
+import { flushSync } from "react-dom";
+import { useIsClient } from "usehooks-ts";
 
 type SettingsItem = {
   key: string;
   icon: LucideIcon;
   title: string;
   description: ReactNode;
-  onClick: () => void;
+  onClick?: () => void;
+  href?: string;
   hidden?: boolean;
   active?: boolean;
 };
@@ -47,49 +63,272 @@ const SettingButton = ({
   title,
   description,
   onClick,
+  href,
   active,
-}: Omit<SettingsItem, "key" | "hidden">) => {
+  index = 0,
+}: Omit<SettingsItem, "key" | "hidden"> & { index?: number }) => {
+  const Tag = href ? "a" : "button";
+
   return (
-    <button
+    <Tag
+      href={href}
+      target={href ? "_blank" : undefined}
+      rel={href ? "noopener" : undefined}
       onClick={onClick}
+      style={{ animationDelay: `${60 + index * 35}ms` }}
       className={cn(
-        "group -m-2 flex gap-4 rounded-md p-2 text-left transition-all",
-        "hover:bg-primary/10 dark:hover:bg-primary/10",
-        active && "bg-primary/10 dark:font-medium",
+        "group animate-rise flex w-full gap-3 rounded-md p-2.5 text-left transition duration-150 max-md:min-h-11",
+        "hover:bg-primary/4 active:scale-[0.99]",
+        active && "bg-primary/4",
       )}
     >
-      <div className="grid h-10 min-w-10 place-content-center rounded-sm border border-primary/10 bg-primary/5 text-primary/80">
-        <Icon size={18} strokeWidth={2.5} />
-      </div>
-      <div className="grid gap-0.5">
-        <h2 className="text-sm font-semibold text-primary/80 sm:text-base">
+      <Icon
+        className="text-primary/45 group-hover:text-accent-table mt-0.5 size-4 shrink-0 transition duration-200 group-hover:scale-110"
+        strokeWidth={1.75}
+      />
+      <div className="grid gap-1">
+        <h2 className="text-primary text-[13px] leading-none font-medium tracking-tight">
           {title}
         </h2>
-        <div className="text-xs font-medium text-primary/50 sm:text-sm">
+        <div className="text-primary/40 text-[11px] leading-relaxed">
           {description}
         </div>
       </div>
-    </button>
+    </Tag>
   );
 };
 
-export const SettingsPanel = () => {
-  const toggleModal = useModalsStore((state) => state.toggleModal);
+const THEMES = [
+  { value: "light", key: "theme.light" },
+  { value: "dark", key: "theme.dark" },
+  { value: "system", key: "theme.system" },
+] as const;
+
+const LANGUAGE_LABELS: Record<Locale, string> = {
+  pl: "Polski",
+  uk: "Українська",
+};
+
+/**
+ * Zmiana motywu jest natychmiastowa. Klasa na `<html>` podmienia się w jednym
+ * renderze, a na tę jedną klatkę gasimy przejścia — inaczej setki elementów
+ * z `transition-colors` zaczynają przenikać naraz i to widać jako zacięcie.
+ * Jedynym wyjątkiem jest pigułka wyboru: patrz `[data-keep-transition]`
+ * w globals.css.
+ */
+const useThemeSwitch = () => {
+  const { theme, setTheme } = useTheme();
+
+  const switchTheme = (value: string) => {
+    const root = document.documentElement;
+    root.dataset.themeInstant = "";
+    flushSync(() => setTheme(value));
+    // wymuszony reflow: nowe kolory są policzone, zanim przejścia wrócą,
+    // więc nic nie zdąży zacząć się przenikać
+    void document.body.offsetHeight;
+    delete root.dataset.themeInstant;
+  };
+
+  return { theme, switchTheme };
+};
+
+const ThemeSetting = () => {
+  const translate = useT();
+  const { theme, switchTheme } = useThemeSwitch();
+  const isClient = useIsClient();
+  const active = isClient ? (theme ?? "system") : "system";
+  const activeIndex = Math.max(
+    0,
+    THEMES.findIndex((option) => option.value === active),
+  );
+
+  return (
+    <div className="grid gap-2 p-2.5">
+      <span className="text-primary/40 text-[11px] font-medium tracking-[0.06em] uppercase">
+        {translate("theme.label")}
+      </span>
+      <div className="border-lines bg-accent relative grid grid-cols-3 rounded-lg border p-0.75">
+        <span
+          aria-hidden
+          data-keep-transition
+          className="ease-out-quint pointer-events-none absolute inset-y-0.75 left-0.75 flex transition-transform duration-300"
+          style={{
+            width: `calc((100% - 0.375rem) / 3)`,
+            transform: `translateX(${activeIndex * 100}%)`,
+          }}
+        >
+          <span className="bg-foreground flex-1 rounded-md shadow-(--shadow-soft)" />
+        </span>
+        {THEMES.map((option) => (
+          <button
+            key={option.value}
+            onClick={() => switchTheme(option.value)}
+            aria-pressed={active === option.value}
+            className={cn(
+              active === option.value
+                ? "text-primary"
+                : "text-primary/45 hover:text-primary",
+              "relative rounded-md py-1.5 text-[11px] font-medium transition-colors",
+            )}
+          >
+            {translate(option.key)}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+const LanguageSetting = () => {
+  const translate = useT();
+  const locale = useLocale();
+  const setLocale = useSetLocale();
+  const activeIndex = Math.max(0, LOCALES.indexOf(locale));
+
+  return (
+    <div className="grid gap-2 p-2.5">
+      <span className="text-primary/40 text-[11px] font-medium tracking-[0.06em] uppercase">
+        {translate("language.label")}
+      </span>
+      <div className="border-lines bg-accent relative grid grid-cols-2 rounded-lg border p-0.75">
+        <span
+          aria-hidden
+          data-keep-transition
+          className="ease-out-quint pointer-events-none absolute inset-y-0.75 left-0.75 flex transition-transform duration-300"
+          style={{
+            width: `calc((100% - 0.375rem) / 2)`,
+            transform: `translateX(${activeIndex * 100}%)`,
+          }}
+        >
+          <span className="bg-foreground flex-1 rounded-md shadow-(--shadow-soft)" />
+        </span>
+        {LOCALES.map((option) => (
+          <button
+            key={option}
+            onClick={() => setLocale(option)}
+            aria-pressed={locale === option}
+            lang={option}
+            className={cn(
+              locale === option
+                ? "text-primary"
+                : "text-primary/45 hover:text-primary",
+              "relative rounded-md py-1.5 text-[11px] font-medium transition-colors",
+            )}
+          >
+            {LANGUAGE_LABELS[option]}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+const A11Y_OPTIONS = [
+  { key: "text", label: "a11y.text", hint: "a11y.textHint" },
+  { key: "contrast", label: "a11y.contrast", hint: "a11y.contrastHint" },
+  { key: "motion", label: "a11y.motion", hint: "a11y.motionHint" },
+] as const;
+
+const AccessibilitySetting = ({ index = 0 }: { index?: number }) => {
+  const translate = useT();
+  const a11y = useSettingsStore((state) => state.a11y);
+  const toggleA11y = useSettingsStore((state) => state.toggleA11y);
+  const isClient = useIsClient();
+
+  const activeCount = isClient
+    ? A11Y_OPTIONS.filter((option) => a11y[option.key]).length
+    : 0;
+
+  return (
+    <Accordion type="single" collapsible>
+      <AccordionItem value="a11y">
+        <AccordionTrigger
+          style={{ animationDelay: `${60 + index * 35}ms` }}
+          className="group animate-rise hover:bg-primary/4 w-full items-start gap-3 rounded-md p-2.5 text-left transition duration-150 max-md:min-h-11"
+        >
+          <AccessibilityIcon
+            className="text-primary/45 group-hover:text-accent-table mt-0.5 size-4 shrink-0 transition duration-200 group-hover:scale-110"
+            strokeWidth={1.75}
+          />
+          <span className="grid flex-1 gap-1">
+            <span className="text-primary text-[13px] leading-none font-medium tracking-tight">
+              {translate("a11y.label")}
+            </span>
+            <span className="text-primary/40 text-[11px] leading-relaxed">
+              {activeCount > 0
+                ? translate("a11y.active", { count: activeCount })
+                : translate("a11y.summary")}
+            </span>
+          </span>
+          <ChevronDown
+            className="text-primary/35 mt-0.5 size-3.5 shrink-0 transition-transform duration-300 group-data-[state=open]:rotate-180"
+            strokeWidth={2}
+          />
+        </AccordionTrigger>
+        <AccordionContent className="mx-2 grid gap-0.5 pt-1">
+          {A11Y_OPTIONS.map((option) => {
+            const active = isClient && a11y[option.key];
+
+            return (
+              <button
+                key={option.key}
+                role="switch"
+                aria-checked={active}
+                onClick={() => toggleA11y(option.key)}
+                className="hover:bg-primary/4 flex items-center gap-3 rounded-md p-2.5 text-left transition-colors max-md:min-h-11"
+              >
+                <span className="grid flex-1 gap-1">
+                  <span className="text-primary text-[13px] leading-none font-medium tracking-tight">
+                    {translate(option.label)}
+                  </span>
+                  <span className="text-primary/40 text-[11px] leading-relaxed">
+                    {translate(option.hint)}
+                  </span>
+                </span>
+                <span
+                  aria-hidden
+                  className={cn(
+                    "border-lines relative h-5 w-8.5 shrink-0 rounded-full border transition-colors duration-200",
+                    active ? "bg-accent-table border-transparent" : "bg-accent",
+                  )}
+                >
+                  <span
+                    className={cn(
+                      "ease-out-quint absolute top-0.5 left-0.5 size-3.5 rounded-full transition-transform duration-200",
+                      active
+                        ? "translate-x-3.5 bg-white"
+                        : "bg-primary/35 translate-x-0",
+                    )}
+                  />
+                </span>
+              </button>
+            );
+          })}
+        </AccordionContent>
+      </AccordionItem>
+    </Accordion>
+  );
+};
+
+export const SettingsList = ({
+  onSelect,
+  includePrint,
+}: {
+  onSelect?: () => void;
+  includePrint?: boolean;
+}) => {
+  const router = useRouter();
+  const translate = useT();
   const timetable = useTimetableStore((state) => state.timetable);
-  const { selectedDataSource } = useDataSourceStore();
-  const { toggleSettingsPanel, isSettingsPanelOpen } =
-    useSettingsWithoutStore();
   const savedSettings = useSettingsStore();
   const [prompt, isInstalled] = usePwa();
-
-  const isOriginalSource = isOriginalDataSource(selectedDataSource);
 
   const settings = useMemo<SettingsItem[]>(
     () => [
       {
         key: "install",
         icon: DownloadIcon,
-        title: "Zainstaluj aplikację",
+        title: translate("settings.install"),
         hidden: isInstalled,
         onClick: () => {
           if (prompt) {
@@ -98,38 +337,30 @@ export const SettingsPanel = () => {
           }
 
           showErrorToast(
-            "Nie można zainstalować aplikacji",
-            "Twoja przeglądarka nie obsługuje tej funkcji",
+            translate("settings.installError"),
+            translate("settings.installErrorHint"),
           );
         },
-        description: (
-          <p>
-            Zainstaluj plan lekcji jako aplikację PWA, aby uzyskać szybki dostęp
-            z ekranu głównego
-          </p>
-        ),
+        description: <p>{translate("settings.installHint")}</p>,
       },
       {
         key: "notifications",
         icon: BellIcon,
-        title: "Powiadomienia",
+        title: translate("settings.notifications"),
         hidden: true,
         active: savedSettings.isNotificationEnabled,
         onClick: savedSettings.toggleNotification,
-        description: (
-          <p>Otrzymuj powiadomienia PUSH o nowym planie lekcji</p>
-        ),
+        description: <p>{translate("settings.notificationsHint")}</p>,
       },
       {
         key: "calendar",
         icon: CalendarArrowDownIcon,
-        title: "Dodaj do kalendarza",
-        hidden: !isOriginalSource,
+        title: translate("settings.calendar"),
         onClick: async () => {
           if (!timetable?.lessons || timetable.lessons.length === 0) {
             showErrorToast(
-              "Nie można wygenerować pliku kalendarza",
-              "Brak wydarzeń do wyeksportowania w obecnym planie lekcji",
+              translate("settings.calendarError"),
+              translate("settings.calendarEmpty"),
             );
             return;
           }
@@ -143,8 +374,8 @@ export const SettingsPanel = () => {
             if (calendar.error ?? !calendar.value) {
               console.error(calendar.error);
               showErrorToast(
-                "Nie można wygenerować pliku kalendarza",
-                calendar.error?.message ?? "Wystąpił nieznany błąd",
+                translate("settings.calendarError"),
+                calendar.error?.message ?? translate("settings.unknownError"),
               );
               return;
             }
@@ -157,41 +388,34 @@ export const SettingsPanel = () => {
           } catch (error) {
             console.error(error);
             showErrorToast(
-              "Nie można wygenerować pliku kalendarza",
-              "Wystąpił błąd podczas generowania pliku kalendarza",
+              translate("settings.calendarError"),
+              translate("settings.calendarErrorHint"),
             );
           }
         },
         description: (
           <p>
-            Wyeksportuj obecnie przeglądany plan lekcji ({timetable?.title}),
-            aby łatwo dodać go do swojego ulubionego kalendarza
+            {translate("settings.calendarHint", {
+              title: timetable?.title ?? "",
+            })}
           </p>
         ),
       },
       {
-        key: "calculator",
-        icon: CalculatorIcon,
-        title: "Kalkulator skróconych lekcji",
-        onClick: () => toggleModal("shortenedLessonsCalculator"),
-        description: (
-          <p>
-            Oblicz, o której godzinie skończysz lekcje na podstawie
-            skróconego czasu ich trwania
-          </p>
-        ),
+        key: "print",
+        icon: PrinterIcon,
+        title: translate("settings.print"),
+        hidden: !includePrint,
+        href: "/print",
+        description: <p>{translate("settings.printHint")}</p>,
       },
       {
         key: "freeRooms",
         icon: Search,
-        title: "Wyszukaj wolną salę",
-        hidden: !isOriginalSource || timetable?.list.rooms?.length === 0,
-        onClick: () => toggleModal("freeRoomsSearch"),
-        description: (
-          <p>
-            Znajdź wszystkie wolne sale według numeru lekcji i dnia tygodnia
-          </p>
-        ),
+        title: translate("freeRooms.title"),
+        hidden: timetable?.list.rooms?.length === 0,
+        onClick: () => router.push("/free-rooms"),
+        description: <p>{translate("settings.freeRoomsHint")}</p>,
       },
     ],
     [
@@ -199,52 +423,118 @@ export const SettingsPanel = () => {
       prompt,
       savedSettings,
       timetable,
-      isOriginalSource,
-      toggleModal,
+      router,
+      includePrint,
+      translate,
     ],
   );
 
   const visibleSettings = settings.filter((setting) => !setting.hidden);
 
   return (
-    <Sheet open={isSettingsPanelOpen} onOpenChange={toggleSettingsPanel}>
-      <SheetContent className="flex flex-col justify-between gap-y-12 overflow-auto">
-        <div className="grid gap-6">
-          <SheetHeader>
-            <SheetTitle>Dodatkowe funkcje</SheetTitle>
-            <VisuallyHidden>
-              <SheetDescription>
-                Panel z dodatkowymi funkcjami planu — umożliwia wyszukiwanie sal
-                i zmianę ustawień.
-              </SheetDescription>
-            </VisuallyHidden>
-            <Button
-              onClick={toggleSettingsPanel}
-              aria-label="Zamknij panel ustawień"
-              variant="icon"
-              size="icon"
-            >
-              <XIcon size={20} strokeWidth={2.5} />
-            </Button>
-          </SheetHeader>
-          <div className="grid gap-10 py-4">
-            {visibleSettings.map(({ key, ...setting }) => (
-              <SettingButton key={key} {...setting} />
-            ))}
+    <div className="grid gap-0.5 p-1">
+      {visibleSettings.map(({ key, onClick, ...setting }, index) => (
+        <SettingButton
+          key={key}
+          {...setting}
+          index={index}
+          onClick={() => {
+            onClick?.();
+            onSelect?.();
+          }}
+        />
+      ))}
+      <AccessibilitySetting index={visibleSettings.length} />
+      <hr className="border-lines my-1" />
+      <ThemeSetting />
+      <LanguageSetting />
+    </div>
+  );
+};
+
+const useAnchor = (
+  triggerRef: React.RefObject<HTMLButtonElement | null>,
+  isOpen: boolean,
+) => {
+  const [anchor, setAnchor] = useState({ top: 64, right: 12 });
+
+  const measure = useCallback(() => {
+    const rect = triggerRef.current?.getBoundingClientRect();
+    if (!rect) return;
+    setAnchor({
+      top: rect.bottom + 8,
+      right: Math.max(12, window.innerWidth - rect.right),
+    });
+  }, [triggerRef]);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    measure();
+    window.addEventListener("resize", measure);
+    return () => window.removeEventListener("resize", measure);
+  }, [isOpen, measure]);
+
+  return anchor;
+};
+
+export const SettingsMenu = () => {
+  const translate = useT();
+  const [isOpen, setIsOpen] = useState(false);
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
+  const anchor = useAnchor(triggerRef, isOpen);
+
+  return (
+    <DialogPrimitive.Root open={isOpen} onOpenChange={setIsOpen}>
+      <DialogPrimitive.Trigger asChild>
+        <button
+          ref={triggerRef}
+          aria-label={translate("settings.menuOpen")}
+          className={cn(
+            "border-lines bg-accent text-primary/70 active:bg-primary/5 active:text-primary grid size-11 place-content-center rounded-lg border transition duration-150 active:scale-90",
+            "data-[state=open]:text-primary data-[state=open]:bg-foreground data-[state=open]:pointer-events-none data-[state=open]:relative data-[state=open]:z-60",
+          )}
+        >
+          <SlidersHorizontal className="size-4.5" strokeWidth={2} />
+        </button>
+      </DialogPrimitive.Trigger>
+
+      <DialogPrimitive.Portal>
+        <DialogPrimitive.Overlay className="data-[state=open]:animate-overlay-in data-[state=closed]:animate-overlay-out fixed inset-0 z-50 bg-black/45 backdrop-blur-xs md:hidden" />
+        <DialogPrimitive.Content
+          ref={contentRef}
+          tabIndex={-1}
+          onOpenAutoFocus={(event) => {
+            event.preventDefault();
+            contentRef.current?.focus();
+          }}
+          style={{ top: anchor.top, right: anchor.right }}
+          className="border-lines bg-foreground data-[state=open]:animate-popover-in data-[state=closed]:animate-popover-out fixed z-50 grid max-h-[calc(100dvh-6rem)] w-[min(19rem,calc(100vw-4rem))] origin-top-right gap-4 overflow-y-auto rounded-xl border p-4 shadow-(--shadow-raised) md:hidden"
+        >
+          <VisuallyHidden>
+            <DialogTitle>{translate("settings.menu")}</DialogTitle>
+            <DialogDescription>
+              {translate("settings.menuHint")}
+            </DialogDescription>
+          </VisuallyHidden>
+
+          <div className="-mx-1.5">
+            <SettingsList onSelect={() => setIsOpen(false)} includePrint />
           </div>
-        </div>
-        <SheetFooter>
-          © 2024 Made with ❤️ for ZSTiO by <br /> Szymański Paweł & Majcher
-          Kacper <br />
-          <Link
-            className="underline"
-            target="_blank"
-            href="https://github.com/rvyk/zstio-timetable"
-          >
-            GitHub (GPLv3)
-          </Link>
-        </SheetFooter>
-      </SheetContent>
-    </Sheet>
+
+          <p className="border-lines text-primary/35 border-t pt-3 text-center text-[11px] leading-relaxed">
+            © 2024 Made with ❤️ for ZSTiO by <br /> Szymański Paweł & Majcher
+            Kacper <br />
+            <Link
+              className="hover:text-primary underline underline-offset-2 transition-colors"
+              target="_blank"
+              href="https://github.com/rvyk/zstio-timetable"
+            >
+              GitHub (GPLv3)
+            </Link>
+          </p>
+        </DialogPrimitive.Content>
+      </DialogPrimitive.Portal>
+    </DialogPrimitive.Root>
   );
 };

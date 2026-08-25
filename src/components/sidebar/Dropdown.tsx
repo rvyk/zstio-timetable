@@ -1,4 +1,5 @@
 import { LinkWithCookie } from "@/components/common/Link";
+import { useT } from "@/components/common/LocaleProvider";
 import {
   AccordionContent,
   AccordionItem,
@@ -11,23 +12,27 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/Dialog";
-import { Button, buttonVariants } from "@/components/ui/Button";
+import type { TranslationKey } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
+import { useRecentStore } from "@/stores/recent";
 import { useSettingsWithoutStore } from "@/stores/settings";
 import type { ListItem } from "@majusss/timetable-parser";
 import { ChevronDown, LucideIcon } from "lucide-react";
 import { usePathname } from "next/navigation";
-import { FC } from "react";
+import { CSSProperties, FC } from "react";
 import { useIsClient } from "usehooks-ts";
 import { FavoriteStar } from "../common/FavoriteStar";
 import { useSidebarContext } from "./Context";
 
-const LABELS: Record<Exclude<DropdownProps["type"], "search">, string> = {
-  favorites: "Ulubione",
-  class: "Klasy",
-  teacher: "Nauczyciele",
-  room: "Sale",
-};
+const LABELS = {
+  favorites: "list.favorites",
+  class: "list.class",
+  teacher: "list.teacher",
+  room: "list.room",
+} as const satisfies Record<
+  Exclude<DropdownProps["type"], "search">,
+  TranslationKey
+>;
 
 const NAVIGABLE_TYPES = ["class", "teacher", "room"] as const;
 
@@ -51,6 +56,7 @@ export const Dropdown: FC<DropdownProps> = ({
   className,
   useModal = false,
 }) => {
+  const translate = useT();
   const { isPreview } = useSidebarContext();
   const isClient = useIsClient();
 
@@ -63,39 +69,42 @@ export const Dropdown: FC<DropdownProps> = ({
     return null;
   }
 
-  const label = LABELS[type as keyof typeof LABELS];
+  const label = translate(LABELS[type as keyof typeof LABELS]);
 
   const triggerContent = (
     <div className="flex w-full items-center justify-between rounded-md">
-      <div className="inline-flex items-center gap-x-3.5">
+      <div className="inline-flex items-center gap-x-3">
         <div
           className={cn(
-            "grid h-9 w-9 place-content-center rounded-sm border transition-all sm:h-10 sm:w-10",
-            "border-primary/10 bg-accent",
+            "border-lines bg-accent grid size-8 place-content-center rounded-md border transition-colors",
             "group-hover:bg-primary/5 group-data-[state=open]:bg-primary/5",
-            "dark:bg-accent dark:group-hover:bg-accent dark:group-data-[state=open]:bg-accent",
           )}
         >
           <Icon
-            className="size-4 text-primary/80 transition-all group-hover:text-primary/90 group-data-[state=open]:text-primary/90 sm:size-5"
-            strokeWidth={2.5}
+            className="text-primary/50 group-hover:text-primary group-data-[state=open]:text-primary size-4 transition-colors"
+            strokeWidth={1.75}
           />
         </div>
         <p
           className={cn(
             isPreview && "hidden",
-            "text-xs font-semibold text-primary/70 transition-colors sm:text-sm",
-            "group-hover:text-primary/90 group-data-[state=open]:text-primary/90 dark:font-medium",
+            "text-primary/70 group-hover:text-primary group-data-[state=open]:text-primary text-sm font-medium transition-colors",
           )}
         >
-          {label} {isClient && `(${itemCount})`}
+          {label}
+          {isClient && (
+            <span className="text-primary/35 tabular ml-1.5 font-mono text-[11px]">
+              {itemCount}
+            </span>
+          )}
         </p>
       </div>
       <ChevronDown
         className={cn(
           isPreview && "hidden",
-          "size-4 text-primary/80 transition-transform group-data-[state=open]:rotate-180 sm:size-5",
+          "text-primary/35 size-4 transition-transform duration-300 group-data-[state=open]:rotate-180",
         )}
+        strokeWidth={2}
       />
     </div>
   );
@@ -106,43 +115,53 @@ export const Dropdown: FC<DropdownProps> = ({
         <DialogTrigger asChild>
           <button
             className={cn(
-              "group flex h-full w-full items-center rounded-md border border-primary/10 bg-accent/70 p-2 text-left transition-colors hover:bg-accent",
+              "group border-lines bg-foreground text-primary/70 hover:text-primary hover:border-primary/20 inline-flex h-9 items-center gap-2 rounded-lg border pr-2.5 pl-3 text-sm font-medium transition-colors active:scale-[0.98]",
               className,
             )}
           >
-            {triggerContent}
+            <Icon className="size-4 shrink-0" strokeWidth={1.75} />
+            {label}
+            <span className="text-primary/30 tabular font-mono text-[11px]">
+              {isClient ? itemCount : ""}
+            </span>
+            <ChevronDown className="text-primary/30 size-3.5" strokeWidth={2} />
           </button>
         </DialogTrigger>
-        <DialogContent className="max-w-2xl">
+        <DialogContent className="max-w-3xl gap-5">
           <DialogHeader>
-            <DialogTitle className="text-primary/90">
-              {label} {isClient && `(${itemCount})`}
+            <DialogTitle>
+              {label}
+              {isClient && (
+                <span className="text-primary/35 tabular ml-2 font-mono text-sm font-normal">
+                  {itemCount}
+                </span>
+              )}
             </DialogTitle>
           </DialogHeader>
-          <DropdownContent type={type} data={data} />
+          <DropdownContent
+            type={type}
+            data={data}
+            className="-mx-2 max-h-[60vh] px-2 sm:grid-cols-2 lg:grid-cols-3"
+          />
         </DialogContent>
       </Dialog>
     );
   }
 
   return (
-    <AccordionItem
-      value={type}
-      disabled={isPreview}
-      className={cn(className)}
-    >
+    <AccordionItem value={type} disabled={isPreview} className={cn(className)}>
       <AccordionTrigger
         asChild={isPreview}
         className={cn(
           isPreview && "pointer-events-none select-none",
-          "group -m-2 w-full rounded-md p-2 transition-colors",
-          "hover:bg-accent/90 data-[state=open]:bg-accent/90",
+          "group w-full rounded-lg p-2 transition-colors",
+          "hover:bg-primary/4 data-[state=open]:bg-primary/4",
         )}
       >
         {triggerContent}
       </AccordionTrigger>
       <AccordionContent>
-        <DropdownContent type={type} data={data} />
+        <DropdownContent type={type} data={data} className="mt-2 pl-3" />
       </AccordionContent>
     </AccordionItem>
   );
@@ -151,18 +170,38 @@ export const Dropdown: FC<DropdownProps> = ({
 interface DropdownContentProps {
   type: DropdownProps["type"];
   data?: ListItem[];
+  className?: string;
+  onSelect?: () => void;
 }
 
-export const DropdownContent: FC<DropdownContentProps> = ({ type, data }) => {
+export const DropdownContent: FC<DropdownContentProps> = ({
+  type,
+  data,
+  className,
+  onSelect,
+}) => {
+  const translate = useT();
+
   return (
-    <div className="mt-4 grid gap-2 rounded-md bg-primary/[0.03] p-4 dark:bg-accent/90 md:bg-accent/90 max-h-72 overflow-y-auto">
+    <div
+      className={cn(
+        "grid max-h-72 grid-cols-1 gap-0.5 overflow-y-auto py-1",
+        className,
+      )}
+    >
       {data && data.length > 0 ? (
-        data.map((item) => (
-          <ListItemComponent key={`${type}-${item.value}`} item={item} type={type} />
+        data.map((item, index) => (
+          <ListItemComponent
+            key={`${type}-${item.value}`}
+            item={item}
+            type={type}
+            onClick={onSelect}
+            style={{ animationDelay: `${Math.min(index, 12) * 20}ms` }}
+          />
         ))
       ) : (
-        <p className="text-center text-xs font-semibold text-primary/70 dark:font-medium sm:text-sm">
-          Brak danych
+        <p className="text-primary/40 px-4 py-3 text-sm">
+          {translate("list.empty")}
         </p>
       )}
     </div>
@@ -176,8 +215,10 @@ interface ListItemComponentProps {
 }
 
 export const ListItemComponent: FC<
-  ListItemComponentProps & { favoriteStar?: boolean }
-> = ({ item, type, onClick, favoriteStar = true }) => {
+  ListItemComponentProps & { favoriteStar?: boolean; style?: CSSProperties }
+> = ({ item, type, onClick, favoriteStar = true, style }) => {
+  const translate = useT();
+  const addRecent = useRecentStore((state) => state.addRecent);
   const { toggleSidebar, isSidebarOpen } = useSettingsWithoutStore();
 
   const pathname = usePathname();
@@ -186,27 +227,44 @@ export const ListItemComponent: FC<
   const link = `/${itemType}/${item.value}`;
 
   const handleButton = () => {
+    // historia zbiera tylko trafienia z wyszukiwarki — lista klas czy sal to
+    // przeglądanie, nie wyszukiwanie
+    if (type === "search") addRecent({ ...item, type: itemType });
     if (isSidebarOpen) {
       toggleSidebar();
     }
     onClick?.();
   };
 
+  const isActive = pathname === link;
+
   return (
-    <Button onClick={handleButton} variant="sidebarItem" asChild size="fit">
-      <LinkWithCookie
-        aria-label={`Przejdź do ${item.name}`}
-        href={link}
-        className={cn(
-          pathname === link && buttonVariants({ variant: "sidebarItemActive" }),
-          "flex w-full !justify-between gap-x-2",
-        )}
-      >
-        {item.name}
-        {favoriteStar && (
-          <FavoriteStar item={{ ...item, type: itemType }} small />
-        )}
-      </LinkWithCookie>
-    </Button>
+    <LinkWithCookie
+      onClick={handleButton}
+      aria-label={translate("timetable.goTo", { target: item.name })}
+      aria-current={isActive ? "page" : undefined}
+      href={link}
+      style={style}
+      className={cn(
+        "animate-rise",
+        isActive
+          ? "text-primary bg-primary/6 font-medium"
+          : "text-primary/65 hover:text-primary hover:bg-primary/4",
+        "group flex w-full min-w-0 items-center justify-between gap-x-2 rounded-md px-3 py-2 text-sm transition duration-150 active:scale-[0.99] max-md:min-h-11",
+      )}
+    >
+      <span className="flex min-w-0 items-center gap-2">
+        <span
+          className={cn(
+            isActive ? "bg-accent-table scale-100" : "scale-0 bg-transparent",
+            "ease-out-quint size-1.5 shrink-0 rounded-full transition duration-300",
+          )}
+        />
+        <span className="truncate">{item.name}</span>
+      </span>
+      {favoriteStar && (
+        <FavoriteStar item={{ ...item, type: itemType }} small revealOnHover />
+      )}
+    </LinkWithCookie>
   );
 };

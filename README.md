@@ -51,7 +51,6 @@ A modern and refreshed timetable application for Zespół Szkół Technicznych i
 
    Create a `.env.local` file based on `.env.example` and set the following:
    - **`NEXT_PUBLIC_TIMETABLE_URL` (required):** The URL of your school's UONET timetable.
-   - **`NEXT_PUBLIC_TIMETABLES_URL` (optional):** Configure multiple timetable sources separated by spaces.
    - **`NEXT_PUBLIC_APP_URL` (required):** The base URL of your application.
    - **`SENTRY_AUTH_TOKEN` (optional):** Your Sentry authentication token.
 

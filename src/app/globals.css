@@ -5,26 +5,57 @@
 
 @layer base {
   :root {
-    --background: 254 255 254; /* #FEFFFE */
-    --foreground: 246 243 244; /* #F6F3F4 */
+    --background: 246 245 243;
+    --foreground: 253 252 251;
 
-    --accent: 254 255 254;      /* #FEFFFE */
-    --accent-secondary: 254 255 254; /* #FEFFFE */
-    --accent-table: 239 9 51;   /* #EF0933 */
+    --accent: 241 239 236;
+    --accent-secondary: 248 247 245;
+    --accent-table: 193 42 51;
+    --accent-success: 42 122 84;
 
-    --primary: 42 23 27;        /* #2A171B */
-    --lines: 208 201 203;       /* #D0C9CB */
+    --primary: 28 26 24;
+    --lines: 227 223 218;
+
+    --shadow-color: 28 26 24;
   }
 
   .dark {
-    --background: 16 16 16;     /* #101010 */
-    --foreground: 14 14 14;     /* #0E0E0E */
+    --background: 13 13 12;
+    --foreground: 20 19 18;
 
-    --accent: 21 21 21;         /* #151515 */
-    --accent-secondary: 32 32 32; /* #202020 */
+    --accent: 28 27 25;
+    --accent-secondary: 36 34 32;
+    --accent-table: 219 68 76;
+    --accent-success: 76 176 128;
+    --primary: 245 243 240;
+    --lines: 42 40 37;
 
-    --primary: 250 250 250;     /* #FAFAFA */
-    --lines: 28 28 28;          /* #1C1C1C */
+    --shadow-color: 0 0 0;
+  }
+
+  * {
+    border-color: rgb(var(--lines));
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    text-wrap: pretty;
+  }
+
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+
+  :focus-visible {
+    outline: 2px solid rgb(var(--accent-table));
+    outline-offset: 2px;
+    border-radius: 6px;
   }
 }
 
@@ -34,79 +65,238 @@
   --color-accent: rgb(var(--accent));
   --color-accent-secondary: rgb(var(--accent-secondary));
   --color-accent-table: rgb(var(--accent-table));
+  --color-accent-success: rgb(var(--accent-success));
   --color-primary: rgb(var(--primary));
   --color-lines: rgb(var(--lines));
 
-  --radius-lg: 16px;
-  --radius-md: 12px;
-  --radius-sm: 8px;
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
 
-  --text-4_2xl: 2.5rem;
+  --radius-xl: 20px;
+  --radius-lg: 14px;
+  --radius-md: 10px;
+  --radius-sm: 7px;
 
-  --animate-accordion-down: accordion-down 0.2s ease-out;
-  --animate-accordion-up: accordion-up 0.2s ease-out;
+  /* tinted, single light source from above */
+  --shadow-soft:
+    0 1px 2px rgb(var(--shadow-color) / 0.04),
+    0 4px 12px -4px rgb(var(--shadow-color) / 0.06);
+  --shadow-raised:
+    0 1px 2px rgb(var(--shadow-color) / 0.05),
+    0 12px 32px -12px rgb(var(--shadow-color) / 0.14);
+
+  --animate-accordion-down: accordion-down 0.22s cubic-bezier(0.32, 0.72, 0, 1);
+  --animate-accordion-up: accordion-up 0.22s cubic-bezier(0.32, 0.72, 0, 1);
+  --animate-rise: rise 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+  --animate-fall: fall 0.16s cubic-bezier(0.4, 0, 1, 1) both;
+  --animate-day-in-right: day-in-right 0.3s cubic-bezier(0.22, 1, 0.36, 1) both;
+  --animate-day-in-left: day-in-left 0.3s cubic-bezier(0.22, 1, 0.36, 1) both;
+  --animate-day-swap: day-swap 0.26s cubic-bezier(0.22, 1, 0.36, 1) both;
+  --animate-pop: pop 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+
+  --animate-overlay-in: overlay-in 0.2s ease-out both;
+  --animate-overlay-out: overlay-out 0.15s ease-in both;
+  --animate-dialog-in: dialog-in 0.22s cubic-bezier(0.16, 1, 0.3, 1) both;
+  --animate-dialog-out: dialog-out 0.16s cubic-bezier(0.4, 0, 1, 1) both;
+  --animate-popover-in: popover-in 0.18s cubic-bezier(0.16, 1, 0.3, 1) both;
+  --animate-popover-out: popover-out 0.13s cubic-bezier(0.4, 0, 1, 1) both;
+
+  --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
 
   @keyframes accordion-down {
-    from { height: 0 }
-    to   { height: var(--radix-accordion-content-height) }
+    from {
+      height: 0;
+    }
+    to {
+      height: var(--radix-accordion-content-height);
+    }
   }
   @keyframes accordion-up {
-    from { height: var(--radix-accordion-content-height) }
-    to   { height: 0 }
+    from {
+      height: var(--radix-accordion-content-height);
+    }
+    to {
+      height: 0;
+    }
   }
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  @keyframes fall {
+    from {
+      opacity: 1;
+      transform: none;
+    }
+    to {
+      opacity: 0;
+      transform: translateY(4px);
+    }
+  }
+  @keyframes day-in-right {
+    from {
+      opacity: 0;
+      transform: translateX(38%);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  @keyframes day-in-left {
+    from {
+      opacity: 0;
+      transform: translateX(-38%);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  @keyframes overlay-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  @keyframes overlay-out {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
+    }
+  }
+  @keyframes dialog-in {
+    from {
+      opacity: 0;
+      transform: translate(-50%, calc(-50% + 8px)) scale(0.97);
+    }
+    to {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
+    }
+  }
+  @keyframes dialog-out {
+    from {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
+    }
+    to {
+      opacity: 0;
+      transform: translate(-50%, calc(-50% + 4px)) scale(0.98);
+    }
+  }
+  @keyframes popover-in {
+    from {
+      opacity: 0;
+      transform: scale(0.94);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  @keyframes popover-out {
+    from {
+      opacity: 1;
+      transform: none;
+    }
+    to {
+      opacity: 0;
+      transform: scale(0.97);
+    }
+  }
+  @keyframes pop {
+    0% {
+      transform: scale(1);
+    }
+    45% {
+      transform: scale(1.22);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+  @keyframes day-swap {
+    from {
+      opacity: 0;
+      transform: scale(0.975);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 9;
+  pointer-events: none;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.dark body::before {
+  opacity: 0.04;
+}
+
+/* Zmiana motywu: na jedną klatkę gasimy przejścia, bo inaczej setki elementów
+   z transition-colors zaczynają przenikać naraz i to widać jako zacięcie.
+   To samo, co robił disableTransitionOnChange z next-themes.
+
+   Wyjątkiem jest [data-keep-transition] — pigułka wyboru motywu. Drogie jest
+   przenikanie kolorów na całej stronie, nie przejazd jednego elementu, a to
+   właśnie on pokazuje, co się przed chwilą zmieniło. */
+[data-theme-instant] *:not([data-keep-transition]),
+[data-theme-instant] *:not([data-keep-transition])::before,
+[data-theme-instant] *:not([data-keep-transition])::after {
+  transition: none !important;
+}
+
+.tabular {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
 }
 
 *::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 8px;
+  height: 8px;
 }
+*::-webkit-scrollbar-track,
 *::-webkit-scrollbar-corner {
-  background: rgba(54, 54, 54, 0.5);
-}
-*::-webkit-scrollbar-track {
-  background-color: rgba(54, 54, 54, 0.5);
-}
-*::-webkit-scrollbar-track:hover {
-  background-color: rgba(54, 54, 54, 0.7);
-}
-*::-webkit-scrollbar-track:active {
-  background-color: rgba(54, 54, 54, 0.8);
+  background-color: transparent;
 }
 *::-webkit-scrollbar-thumb {
-  background-color: rgba(42, 23, 27, 0.5);
+  background-color: rgb(var(--primary) / 0.15);
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: content-box;
 }
 *::-webkit-scrollbar-thumb:hover {
-  background-color: rgba(42, 23, 27, 0.7);
-}
-*::-webkit-scrollbar-thumb:active {
-  background-color: rgb(42, 23, 27);
+  background-color: rgb(var(--primary) / 0.3);
 }
 
-.dark *::-webkit-scrollbar-corner {
-  background: rgb(66, 66, 66);
-}
-.dark *::-webkit-scrollbar-track {
-  background-color: rgb(66, 66, 66);
-}
-.dark *::-webkit-scrollbar-track:hover {
-  background-color: rgba(66, 66, 66, 0.7);
-}
-.dark *::-webkit-scrollbar-track:active {
-  background-color: rgba(66, 66, 66, 0.5);
-}
-.dark *::-webkit-scrollbar-thumb {
-  background-color: rgba(32, 32, 32, 0.5);
-}
-.dark *::-webkit-scrollbar-thumb:hover {
-  background-color: rgba(32, 32, 32, 0.7);
-}
-.dark *::-webkit-scrollbar-thumb:active {
-  background-color: rgba(32, 32, 32, 0.8);
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(var(--primary) / 0.18) transparent;
 }
 
 ::selection {
-  background-color: rgb(var(--accent-table));
-  color: #fafafa;
+  background-color: rgb(var(--accent-table) / 0.9);
+  color: #fff;
 }
 
 .scrollbar-none {
@@ -116,4 +306,76 @@
 .scrollbar-none::-webkit-scrollbar {
   width: 0;
   height: 0;
+}
+
+/* Dostępność — przełączniki z panelu ustawień, stan na `<html>`. */
+
+html[data-a11y-text] {
+  font-size: 18px;
+}
+
+:root[data-a11y-contrast] {
+  --primary: 0 0 0;
+  --lines: 150 145 138;
+  --accent-table: 168 25 33;
+}
+
+:root[data-a11y-contrast].dark {
+  --primary: 255 255 255;
+  --lines: 120 116 110;
+  --accent-table: 255 130 136;
+}
+
+/* ponytail: wyliczone klasy przezroczystości — Tailwind wypala alfę w
+   `color-mix`, więc nie da się jej podbić zmienną. Nowy stopień `text-primary/x`
+   trzeba dopisać tutaj. */
+[data-a11y-contrast] .text-primary\/25,
+[data-a11y-contrast] .text-primary\/30,
+[data-a11y-contrast] .text-primary\/35,
+[data-a11y-contrast] .text-primary\/40,
+[data-a11y-contrast] .text-primary\/45,
+[data-a11y-contrast] .text-primary\/50,
+[data-a11y-contrast] .text-primary\/55,
+[data-a11y-contrast] .text-primary\/60,
+[data-a11y-contrast] .text-primary\/65,
+[data-a11y-contrast] .text-primary\/70 {
+  color: rgb(var(--primary) / 0.85);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-delay: 0ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+[data-a11y-motion] {
+  scroll-behavior: auto !important;
+}
+
+[data-a11y-motion] *,
+[data-a11y-motion] *::before,
+[data-a11y-motion] *::after {
+  animation-duration: 0.01ms !important;
+  animation-delay: 0ms !important;
+  transition-duration: 0.01ms !important;
+}
+
+@media print {
+  html,
+  body {
+    display: block;
+    height: auto;
+    overflow: visible;
+    background: #fff;
+    color: #000;
+  }
+
+  @page {
+    margin: 1cm;
+  }
 }
