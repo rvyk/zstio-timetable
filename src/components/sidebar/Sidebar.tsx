@@ -373,7 +373,11 @@ const TimetableSidebarDropdowns: FC = () => {
   return (
     <div
       className="grid gap-5 md:gap-8"
-      onFocus={() => setIsFocused(true)}
+      /* tylko pole wyszukiwarki otwiera podpowiedzi — focus z akordeonu czy
+         linku listy podmieniał widok na ulubione przy każdym kliknięciu */
+      onFocus={(event) => {
+        if (event.target.tagName === "INPUT") setIsFocused(true);
+      }}
       /* zamykamy dopiero, gdy focus wyjdzie poza wyszukiwarkę i jej listę */
       onBlur={(event) => {
         if (!event.currentTarget.contains(event.relatedTarget)) {
