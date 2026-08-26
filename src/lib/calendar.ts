@@ -62,6 +62,8 @@ const createEvent = (
   url: string,
   withAlarm: boolean,
   roomNames: Map<string, string>,
+  uid: string,
+  calName: string,
 ) => {
   const date = getDateOfNextWeekDayByIndex(dayIndex + 1);
   const { hours: startHour, minutes: startMinute } = parseTime(hour.timeFrom);
@@ -97,6 +99,8 @@ const createEvent = (
   ];
 
   return {
+    uid,
+    calName,
     start: [
       date.getFullYear(),
       date.getMonth() + 1,
@@ -140,12 +144,15 @@ export const getCalendar = async (timetable: OptivumTimetable) => {
     (timetable.list.rooms ?? []).map((room) => [room.value, room.name]),
   );
 
+  const host = new URL(env.NEXT_PUBLIC_APP_URL).host;
+  const calName = `Plan lekcji ${timetable.title}`;
+
   (timetable.lessons ?? []).forEach((day, dayIndex) => {
     day.forEach((lesson, lessonIndex) => {
       const hour = hours[lessonIndex];
       if (!hour) return;
 
-      lesson.forEach((group) => {
+      lesson.forEach((group, groupIndex) => {
         const withAlarm = !alarmedDays.has(dayIndex);
         alarmedDays.add(dayIndex);
 
@@ -158,11 +165,21 @@ export const getCalendar = async (timetable: OptivumTimetable) => {
             url,
             withAlarm,
             roomNames,
+            `${timetable.id}-${dayIndex}-${lessonIndex}-${groupIndex}@${host}`,
+            calName,
           ),
         );
       });
     });
   });
 
-  return createEvents(events);
+  const calendar = createEvents(events);
+
+  return {
+    ...calendar,
+    value: calendar.value?.replace(
+      "METHOD:PUBLISH\r\n",
+      "METHOD:PUBLISH\r\nX-WR-TIMEZONE:Europe/Warsaw\r\n",
+    ),
+  };
 };

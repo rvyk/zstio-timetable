@@ -316,9 +316,20 @@ export const SettingsList = ({
             });
           }
 
-          if (window.location.protocol === "https:") {
-            window.location.href = url.replace(/^https/, "webcal");
+          if (window.location.protocol !== "https:") return;
+
+          const webcal = url.replace(/^https/, "webcal");
+
+          if (/Android/i.test(navigator.userAgent)) {
+            window.open(
+              `https://calendar.google.com/calendar/render?cid=${encodeURIComponent(webcal)}`,
+              "_blank",
+              "noopener",
+            );
+            return;
           }
+
+          window.location.href = webcal;
         },
         description: (
           <p>
