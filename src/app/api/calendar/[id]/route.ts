@@ -25,10 +25,7 @@ export const GET = async (
     return new Response("Not found", { status: 404 });
   }
 
-  const { error, value } = await getCalendar(
-    timetable.lessons,
-    Object.values(timetable.hours),
-  );
+  const { error, value } = await getCalendar(timetable);
 
   if (error ?? !value) {
     console.error("Failed to build calendar:", error);

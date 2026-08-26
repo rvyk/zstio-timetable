@@ -6,7 +6,7 @@ import {
   parseOptivumDate,
   shiftTime,
   warsawDayIndex,
-} from "./dates.ts";
+} from "../src/lib/dates.ts";
 
 test("formatOptivumDate obsługuje ISO z getGeneratedDate", () => {
   assert.equal(formatOptivumDate("2026-03-08"), "8 marca 2026r.");
