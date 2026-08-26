@@ -128,7 +128,10 @@ export const Timetable: FC<TimetableProps> = ({ timetable }) => {
         </div>
       </div>
 
-      <div className="min-h-0 w-full flex-1 max-md:hidden md:overflow-y-auto">
+      <div
+        data-plan-scroll
+        className="min-h-0 w-full flex-1 scroll-smooth motion-reduce:scroll-auto max-md:hidden md:overflow-y-auto"
+      >
         {hasLessons ? (
           <WeekBoard
             dayNames={dayNames}

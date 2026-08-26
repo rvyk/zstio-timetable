@@ -9,6 +9,21 @@ import { useCallback, useEffect, useRef } from "react";
 
 const DOUBLE_TAP_DELAY = 300;
 const MOBILE_VIEW_QUERY = "(max-width: 768px)";
+const SCROLL_STEP = 120;
+
+const isTyping = (target: EventTarget | null) =>
+  target instanceof HTMLElement &&
+  (target.isContentEditable ||
+    ["INPUT", "TEXTAREA", "SELECT"].includes(target.tagName));
+
+const scrollPlan = (direction: 1 | -1) => {
+  const plan = document.querySelector<HTMLElement>("[data-plan-scroll]");
+  if (!plan || plan.scrollHeight <= plan.clientHeight) return false;
+
+  plan.scrollTop += direction * SCROLL_STEP;
+
+  return true;
+};
 
 const TYPE_TO_LIST = {
   class: "classes",
@@ -78,9 +93,16 @@ export const TimetableController = ({
 
   useEffect(() => {
     const listener = (e: KeyboardEvent) => {
+      if (isTyping(e.target) || e.metaKey || e.ctrlKey || e.altKey) return;
+
       if (["ArrowLeft", "ArrowRight"].includes(e.key)) {
         e.preventDefault();
-        handleArrowKey(e.key == "ArrowRight");
+        handleArrowKey(e.key === "ArrowRight");
+        return;
+      }
+
+      if (["ArrowUp", "ArrowDown"].includes(e.key)) {
+        if (scrollPlan(e.key === "ArrowDown" ? 1 : -1)) e.preventDefault();
       }
     };
 

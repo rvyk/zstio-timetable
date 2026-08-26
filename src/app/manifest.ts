@@ -22,7 +22,7 @@ export default function manifest(): MetadataRoute.Manifest {
     shortcuts: [
       {
         name: "Ostatnio oglądany plan",
-        short_name: "Mój plan",
+        short_name: "Ostatni plan",
         url: "/",
         icons: [{ src: "/icon-512x512.png", sizes: "512x512" }],
       },
