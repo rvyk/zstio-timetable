@@ -19,5 +19,19 @@ export default function manifest(): MetadataRoute.Manifest {
         purpose: "any",
       },
     ],
+    shortcuts: [
+      {
+        name: "Ostatnio oglądany plan",
+        short_name: "Mój plan",
+        url: "/",
+        icons: [{ src: "/icon-512x512.png", sizes: "512x512" }],
+      },
+      {
+        name: "Wolne sale",
+        short_name: "Wolne sale",
+        url: "/free-rooms",
+        icons: [{ src: "/icon-512x512.png", sizes: "512x512" }],
+      },
+    ],
   };
 }

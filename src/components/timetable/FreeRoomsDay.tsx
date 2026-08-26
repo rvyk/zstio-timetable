@@ -15,6 +15,7 @@ interface FreeRoomsDayProps {
   freeRooms: string[][][];
   roomNames: Map<string, string>;
   todayIndex: number;
+  nowHourIndex: number | null;
 }
 
 export const FreeRoomsDay: FC<FreeRoomsDayProps> = ({
@@ -23,12 +24,19 @@ export const FreeRoomsDay: FC<FreeRoomsDayProps> = ({
   freeRooms,
   roomNames,
   todayIndex,
+  nowHourIndex,
 }) => {
   const translate = useT();
   const [dayIndex, setDayIndex] = useState(
     todayIndex >= 0 && todayIndex < dayNames.length ? todayIndex : 0,
   );
   const [openHour, setOpenHour] = useState<number | null>(null);
+  const [autoOpened, setAutoOpened] = useState(false);
+
+  if (!autoOpened && nowHourIndex !== null) {
+    setAutoOpened(true);
+    setOpenHour(nowHourIndex);
+  }
 
   return (
     <div className="sm:hidden">

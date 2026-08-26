@@ -1,5 +1,6 @@
 import { DAYS_OF_WEEK } from "@/constants/days";
 import { warsawDayIndex, warsawToday } from "@/lib/dates";
+import type { TableHour } from "@majusss/timetable-parser";
 import { clsx, type ClassValue } from "clsx";
 import { setCookie } from "cookies-next";
 import { twMerge } from "tailwind-merge";
@@ -71,4 +72,12 @@ export const simulateKeyPress = (key: string, keyCode: number) => {
 export const parseTime = (timeStr: string): number => {
   const [hours = 0, minutes = 0] = timeStr.split(":").map(Number);
   return hours * 3600 + minutes * 60;
+};
+
+export const currentLessonIndex = (hours: TableHour[]): number | null => {
+  const now = new Date();
+  const seconds = now.getHours() * 3600 + now.getMinutes() * 60;
+  const index = hours.findIndex((hour) => seconds < parseTime(hour.timeTo));
+
+  return index === -1 ? null : index;
 };

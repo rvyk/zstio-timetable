@@ -4,11 +4,18 @@ import { useLocale, useT } from "@/components/common/LocaleProvider";
 import { usePresence } from "@/hooks/usePresence";
 import { warsawDayIndex } from "@/lib/dates";
 import { dayLabel } from "@/lib/i18n";
-import { cn, getDayNumberForNextWeek } from "@/lib/utils";
+import { cn, currentLessonIndex, getDayNumberForNextWeek } from "@/lib/utils";
 import { ListItem, TableHour } from "@majusss/timetable-parser";
-import { ArrowLeftIcon } from "lucide-react";
+import { ArrowLeftIcon, ClockIcon } from "lucide-react";
 import Link from "next/link";
-import { FC, useEffect, useMemo, useRef, useState } from "react";
+import {
+  FC,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  useSyncExternalStore,
+} from "react";
 import { FreeRoomsDay } from "./FreeRoomsDay";
 
 interface FreeRoomsBoardProps {
@@ -17,6 +24,8 @@ interface FreeRoomsBoardProps {
   freeRooms: string[][][];
   rooms: ListItem[];
 }
+
+const NEVER_CHANGES = () => () => {};
 
 export const FreeRoomsBoard: FC<FreeRoomsBoardProps> = ({
   dayNames,
@@ -39,6 +48,18 @@ export const FreeRoomsBoard: FC<FreeRoomsBoardProps> = ({
     [freeRooms],
   );
 
+  const nowHourIndex = useSyncExternalStore(
+    NEVER_CHANGES,
+    () => (todayIndex < dayNames.length ? currentLessonIndex(hours) : null),
+    () => null,
+  );
+
+  const [autoSelected, setAutoSelected] = useState(false);
+  if (!autoSelected && nowHourIndex !== null) {
+    setAutoSelected(true);
+    setSelected([todayIndex, nowHourIndex]);
+  }
+
   const { isMounted, presenceProps } = usePresence(selected !== null);
   const [shown, setShown] = useState(selected);
   if (selected && selected !== shown) setShown(selected);
@@ -46,7 +67,12 @@ export const FreeRoomsBoard: FC<FreeRoomsBoardProps> = ({
   const selectedIds = shown ? (freeRooms[shown[0]]?.[shown[1]] ?? []) : [];
 
   const resultsRef = useRef<HTMLDivElement>(null);
+  const skipScroll = useRef(true);
   useEffect(() => {
+    if (skipScroll.current) {
+      skipScroll.current = false;
+      return;
+    }
     if (selected) resultsRef.current?.scrollIntoView({ block: "nearest" });
   }, [selected]);
 
@@ -64,13 +90,25 @@ export const FreeRoomsBoard: FC<FreeRoomsBoardProps> = ({
             {translate("freeRooms.hint")}
           </span>
         </div>
-        <Link
-          href="/"
-          className="border-lines bg-accent hover:bg-accent/60 text-primary/70 hover:text-primary flex h-9 shrink-0 items-center gap-1.5 rounded-lg border px-3 text-[13px] font-medium transition-colors"
-        >
-          <ArrowLeftIcon className="size-4" strokeWidth={2} />
-          {translate("freeRooms.back")}
-        </Link>
+        <div className="flex shrink-0 items-center gap-2">
+          <button
+            onClick={() =>
+              nowHourIndex !== null && setSelected([todayIndex, nowHourIndex])
+            }
+            disabled={nowHourIndex === null}
+            className="border-lines bg-accent hover:bg-accent/60 text-primary/70 hover:text-primary flex h-9 items-center gap-1.5 rounded-lg border px-3 text-[13px] font-medium transition-colors disabled:opacity-40"
+          >
+            <ClockIcon className="size-4" strokeWidth={2} />
+            {translate("freeRooms.now")}
+          </button>
+          <Link
+            href="/"
+            className="border-lines bg-accent hover:bg-accent/60 text-primary/70 hover:text-primary flex h-9 items-center gap-1.5 rounded-lg border px-3 text-[13px] font-medium transition-colors"
+          >
+            <ArrowLeftIcon className="size-4" strokeWidth={2} />
+            {translate("freeRooms.back")}
+          </Link>
+        </div>
       </div>
 
       <FreeRoomsDay
@@ -79,6 +117,7 @@ export const FreeRoomsBoard: FC<FreeRoomsBoardProps> = ({
         freeRooms={freeRooms}
         roomNames={roomNames}
         todayIndex={todayIndex}
+        nowHourIndex={nowHourIndex}
       />
 
       <div className="min-h-0 flex-1 overflow-y-auto p-3 max-sm:hidden sm:p-4">

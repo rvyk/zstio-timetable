@@ -180,6 +180,7 @@ const DICT = {
   },
   "freeRooms.none": { pl: "brak wolnych", uk: "немає вільних" },
   "freeRooms.count": { pl: "{count} wolnych", uk: "вільних: {count}" },
+  "freeRooms.now": { pl: "Teraz", uk: "Зараз" },
 
   "offline.title": { pl: "Jesteś offline", uk: "Ви офлайн" },
   "offline.description": {
@@ -208,10 +209,25 @@ const DICT = {
     pl: "Twoja przeglądarka nie obsługuje tej funkcji",
     uk: "Ваш браузер не підтримує цю функцію",
   },
-  "settings.calendar": { pl: "Dodaj do kalendarza", uk: "Додати до календаря" },
+  "settings.calendar": {
+    pl: "Subskrybuj kalendarz",
+    uk: "Підписатися на календар",
+  },
   "settings.calendarHint": {
-    pl: "Pobierz plan {title} jako plik .ics",
-    uk: "Завантажте розклад {title} у форматі .ics",
+    pl: "Plan {title} w kalendarzu, odświeżany automatycznie",
+    uk: "Розклад {title} у календарі, оновлюється автоматично",
+  },
+  "settings.calendarCopied": {
+    pl: "Skopiowano link do kalendarza",
+    uk: "Скопійовано посилання на календар",
+  },
+  "settings.calendarCopyFailed": {
+    pl: "Skopiuj link do kalendarza ręcznie",
+    uk: "Скопіюйте посилання на календар вручну",
+  },
+  "settings.calendarCopiedHint": {
+    pl: "Jeśli kalendarz się nie otworzył, wklej link w opcji „Dodaj z adresu URL”",
+    uk: "Якщо календар не відкрився, вставте посилання в «Додати з URL»",
   },
   "settings.calendarError": {
     pl: "Nie można wygenerować pliku kalendarza",
@@ -220,14 +236,6 @@ const DICT = {
   "settings.calendarEmpty": {
     pl: "Brak wydarzeń do wyeksportowania w obecnym planie lekcji",
     uk: "У поточному розкладі немає подій для експорту",
-  },
-  "settings.unknownError": {
-    pl: "Wystąpił nieznany błąd",
-    uk: "Сталася невідома помилка",
-  },
-  "settings.calendarErrorHint": {
-    pl: "Wystąpił błąd podczas generowania pliku kalendarza",
-    uk: "Під час створення файлу календаря сталася помилка",
   },
   "settings.print": { pl: "Drukuj plan", uk: "Друкувати розклад" },
   "settings.printHint": {

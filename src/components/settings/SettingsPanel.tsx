@@ -14,9 +14,7 @@ import {
 import { DialogDescription, DialogTitle } from "@/components/ui/Dialog";
 import { Segmented } from "@/components/ui/Segmented";
 import { usePwa } from "@/hooks/usePWA";
-import { showErrorToast } from "@/hooks/useToast";
-import { getCalendar } from "@/lib/calendar";
-import { downloadFile } from "@/lib/downloadFile";
+import { showErrorToast, toast } from "@/hooks/useToast";
 import { LOCALES, type Locale } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 import { useSettingsStore } from "@/stores/settings";
@@ -293,7 +291,7 @@ export const SettingsList = ({
         icon: CalendarArrowDownIcon,
         title: translate("settings.calendar"),
         onClick: async () => {
-          if (!timetable?.lessons || timetable.lessons.length === 0) {
+          if (!timetable?.id || !timetable.lessons?.length) {
             showErrorToast(
               translate("settings.calendarError"),
               translate("settings.calendarEmpty"),
@@ -301,32 +299,25 @@ export const SettingsList = ({
             return;
           }
 
+          const url = `${window.location.origin}/api/calendar/${timetable.id}.ics`;
+
           try {
-            const calendar = await getCalendar(
-              timetable.lessons,
-              Object.values(timetable.hours),
-            );
-
-            if (calendar.error ?? !calendar.value) {
-              console.error(calendar.error);
-              showErrorToast(
-                translate("settings.calendarError"),
-                calendar.error?.message ?? translate("settings.unknownError"),
-              );
-              return;
-            }
-
-            downloadFile({
-              content: calendar.value,
-              mimeType: "text/calendar;charset=utf-8",
-              fileName: `${timetable.title}.ics`,
+            await navigator.clipboard.writeText(url);
+            toast({
+              title: translate("settings.calendarCopied"),
+              description: translate("settings.calendarCopiedHint"),
+              icon: CalendarArrowDownIcon,
             });
-          } catch (error) {
-            console.error(error);
-            showErrorToast(
-              translate("settings.calendarError"),
-              translate("settings.calendarErrorHint"),
-            );
+          } catch {
+            toast({
+              title: translate("settings.calendarCopyFailed"),
+              description: url,
+              icon: CalendarArrowDownIcon,
+            });
+          }
+
+          if (window.location.protocol === "https:") {
+            window.location.href = url.replace(/^https/, "webcal");
           }
         },
         description: (
