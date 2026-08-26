@@ -1,11 +1,10 @@
 {
-  "// uwaga": "Projekt używa TypeScript 6.x — VS Code bundluje starszy. Bez tsdk edytor i CLI mogą się rozjeżdżać (np. przy noUncheckedIndexedAccess).",
   "typescript.tsdk": "node_modules/typescript/lib",
   "typescript.enablePromptUseWorkspaceTsdk": true,
   "eslint.useFlatConfig": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnSave": true,
   "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": "explicit"
-  }
+    "source.fixAll.eslint": "explicit",
+  },
 }

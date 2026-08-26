@@ -10,11 +10,11 @@
 
     --accent: 241 239 236;
     --accent-secondary: 248 247 245;
-    --accent-table: 193 42 51;
-    --accent-success: 42 122 84;
+    --accent-table: 176 30 39;
+    --accent-success: 30 105 70;
 
-    --primary: 28 26 24;
-    --lines: 227 223 218;
+    --primary: 20 19 17;
+    --lines: 224 220 214;
 
     --shadow-color: 28 26 24;
   }
@@ -27,8 +27,8 @@
     --accent-secondary: 36 34 32;
     --accent-table: 219 68 76;
     --accent-success: 76 176 128;
-    --primary: 245 243 240;
-    --lines: 42 40 37;
+    --primary: 250 249 247;
+    --lines: 47 45 41;
 
     --shadow-color: 0 0 0;
   }
@@ -338,7 +338,9 @@ html[data-a11y-text] {
 [data-a11y-contrast] .text-primary\/55,
 [data-a11y-contrast] .text-primary\/60,
 [data-a11y-contrast] .text-primary\/65,
-[data-a11y-contrast] .text-primary\/70 {
+[data-a11y-contrast] .text-primary\/70,
+[data-a11y-contrast] .text-primary\/72,
+[data-a11y-contrast] .text-primary\/75 {
   color: rgb(var(--primary) / 0.85);
 }
 

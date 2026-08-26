@@ -28,7 +28,7 @@ export const LessonEntry: FC<LessonItemProps> = ({ lesson }) => (
 
 const GroupName: FC<{ groupName?: string }> = ({ groupName }) =>
   groupName ? (
-    <span className="text-primary/45 ml-1.5 font-mono text-[11px] font-normal">
+    <span className="text-primary/60 ml-1.5 font-mono text-[11px] font-normal">
       {groupName}
     </span>
   ) : null;
@@ -59,10 +59,10 @@ const LessonMeta: FC<LessonMetaProps> = ({
   if (parts.length === 0) return null;
 
   return (
-    <div className="text-primary/50 flex flex-wrap items-center gap-x-1.5 text-xs">
+    <div className="text-primary/65 flex flex-wrap items-center gap-x-1.5 text-xs">
       {parts.map((part, index) => (
         <span key={part.type} className="inline-flex items-center gap-x-1.5">
-          {index > 0 && <span className="text-primary/25">·</span>}
+          {index > 0 && <span className="text-primary/40">·</span>}
           <LessonLink id={part.id} name={part.name} type={part.type} />
         </span>
       ))}

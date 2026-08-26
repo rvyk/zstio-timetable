@@ -28,7 +28,7 @@ const TOAST_BASE =
 
 const TOAST_VARIANTS = {
   success: "border-lines bg-foreground/95",
-  error: "destructive border-accent-table/45 bg-foreground/95",
+  error: "destructive border-accent-table/60 bg-foreground/95",
 };
 
 export type ToastVariant = keyof typeof TOAST_VARIANTS;
@@ -55,7 +55,7 @@ const ToastClose = React.forwardRef<
     ref={ref}
     aria-label="Zamknij powiadomienie"
     className={cn(
-      "text-primary/40 hover:text-primary hover:bg-primary/5 -my-1 -mr-1 grid size-8 shrink-0 place-content-center rounded-md transition-colors",
+      "text-primary hover:bg-primary/5 -my-1 -mr-1 grid size-8 shrink-0 place-content-center rounded-md opacity-55 transition hover:opacity-100",
       className,
     )}
     toast-close=""
@@ -87,7 +87,7 @@ const ToastDescription = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <ToastPrimitives.Description
     ref={ref}
-    className={cn("text-primary/55 mt-0.5 text-xs leading-snug", className)}
+    className={cn("text-primary/70 mt-0.5 text-xs leading-snug", className)}
     {...props}
   />
 ));

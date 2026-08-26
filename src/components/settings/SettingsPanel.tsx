@@ -78,14 +78,14 @@ const SettingButton = ({
       )}
     >
       <Icon
-        className="text-primary/45 group-hover:text-accent-table mt-0.5 size-4 shrink-0 transition duration-200 group-hover:scale-110"
+        className="text-primary/60 group-hover:text-accent-table mt-0.5 size-4 shrink-0 transition duration-200 group-hover:scale-110"
         strokeWidth={1.75}
       />
       <div className="grid gap-1">
         <h2 className="text-primary text-[13px] leading-none font-medium tracking-tight">
           {title}
         </h2>
-        <div className="text-primary/40 text-[11px] leading-relaxed">
+        <div className="text-primary/55 text-[11px] leading-relaxed">
           {description}
         </div>
       </div>
@@ -125,7 +125,7 @@ const ThemeSetting = () => {
 
   return (
     <div className="grid gap-2 p-2.5">
-      <span className="text-primary/40 text-[11px] font-medium tracking-[0.06em] uppercase">
+      <span className="text-primary/55 text-[11px] font-medium tracking-[0.06em] uppercase">
         {translate("theme.label")}
       </span>
       <Segmented
@@ -149,7 +149,7 @@ const LanguageSetting = () => {
 
   return (
     <div className="grid gap-2 p-2.5">
-      <span className="text-primary/40 text-[11px] font-medium tracking-[0.06em] uppercase">
+      <span className="text-primary/55 text-[11px] font-medium tracking-[0.06em] uppercase">
         {translate("language.label")}
       </span>
       <Segmented
@@ -191,21 +191,21 @@ const AccessibilitySetting = ({ index = 0 }: { index?: number }) => {
           className="group animate-rise hover:bg-primary/4 w-full items-start gap-3 rounded-md p-2.5 text-left transition duration-150 max-md:min-h-11"
         >
           <AccessibilityIcon
-            className="text-primary/45 group-hover:text-accent-table mt-0.5 size-4 shrink-0 transition duration-200 group-hover:scale-110"
+            className="text-primary group-hover:text-accent-table mt-0.5 size-4 shrink-0 opacity-60 transition duration-200 group-hover:scale-110"
             strokeWidth={1.75}
           />
           <span className="grid flex-1 gap-1">
             <span className="text-primary text-[13px] leading-none font-medium tracking-tight">
               {translate("a11y.label")}
             </span>
-            <span className="text-primary/40 text-[11px] leading-relaxed">
+            <span className="text-primary text-[11px] leading-relaxed opacity-55">
               {activeCount > 0
                 ? translate("a11y.active", { count: activeCount })
                 : translate("a11y.summary")}
             </span>
           </span>
           <ChevronDown
-            className="text-primary/35 mt-0.5 size-3.5 shrink-0 transition-transform duration-300 group-data-[state=open]:rotate-180"
+            className="text-primary mt-0.5 size-3.5 shrink-0 opacity-50 transition-transform duration-300 group-data-[state=open]:rotate-180"
             strokeWidth={2}
           />
         </AccordionTrigger>
@@ -225,7 +225,7 @@ const AccessibilitySetting = ({ index = 0 }: { index?: number }) => {
                   <span className="text-primary text-[13px] leading-none font-medium tracking-tight">
                     {translate(option.label)}
                   </span>
-                  <span className="text-primary/40 text-[11px] leading-relaxed">
+                  <span className="text-primary/55 text-[11px] leading-relaxed">
                     {translate(option.hint)}
                   </span>
                 </span>
@@ -421,11 +421,14 @@ export const SettingsMenu = () => {
           ref={triggerRef}
           aria-label={translate("settings.menuOpen")}
           className={cn(
-            "border-lines bg-accent text-primary/70 active:bg-primary/5 active:text-primary grid size-11 place-content-center rounded-lg border transition duration-150 active:scale-90",
+            "border-lines bg-accent text-primary/80 active:bg-primary/5 active:text-primary grid size-11 place-content-center rounded-lg border transition duration-150 active:scale-90",
             "data-[state=open]:text-primary data-[state=open]:bg-foreground data-[state=open]:pointer-events-none data-[state=open]:relative data-[state=open]:z-120",
           )}
         >
-          <SlidersHorizontal className="size-4.5" strokeWidth={2} />
+          <SlidersHorizontal
+            className="text-primary size-4.5 opacity-80"
+            strokeWidth={2}
+          />
         </button>
       </DialogPrimitive.Trigger>
 
@@ -452,7 +455,7 @@ export const SettingsMenu = () => {
             <SettingsList onSelect={() => setIsOpen(false)} includePrint />
           </div>
 
-          <p className="border-lines text-primary/35 border-t pt-3 text-center text-[11px] leading-relaxed">
+          <p className="border-lines text-primary/50 border-t pt-3 text-center text-[11px] leading-relaxed">
             © 2024 Made with ❤️ for ZSTiO by <br /> Szymański Paweł & Majcher
             Kacper <br />
             <Link

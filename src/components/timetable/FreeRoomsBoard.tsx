@@ -66,15 +66,24 @@ export const FreeRoomsBoard: FC<FreeRoomsBoardProps> = ({
 
   const selectedIds = shown ? (freeRooms[shown[0]]?.[shown[1]] ?? []) : [];
 
-  const resultsRef = useRef<HTMLDivElement>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
   const skipScroll = useRef(true);
   useEffect(() => {
     if (skipScroll.current) {
       skipScroll.current = false;
       return;
     }
-    if (selected) resultsRef.current?.scrollIntoView({ block: "nearest" });
-  }, [selected]);
+    if (!selected) return;
+    const timeout = setTimeout(
+      () =>
+        scrollRef.current?.scrollTo({
+          top: scrollRef.current.scrollHeight,
+          behavior: "smooth",
+        }),
+      0,
+    );
+    return () => clearTimeout(timeout);
+  }, [selected, isMounted, selectedIds.length]);
 
   return (
     <section
@@ -86,7 +95,7 @@ export const FreeRoomsBoard: FC<FreeRoomsBoardProps> = ({
           <h1 className="text-primary text-xl leading-none font-semibold tracking-[-0.02em]">
             {translate("freeRooms.title")}
           </h1>
-          <span className="text-primary/40 truncate text-xs max-sm:hidden">
+          <span className="text-primary/55 truncate text-xs max-sm:hidden">
             {translate("freeRooms.hint")}
           </span>
         </div>
@@ -96,16 +105,22 @@ export const FreeRoomsBoard: FC<FreeRoomsBoardProps> = ({
               nowHourIndex !== null && setSelected([todayIndex, nowHourIndex])
             }
             disabled={nowHourIndex === null}
-            className="border-lines bg-accent hover:bg-accent/60 text-primary/70 hover:text-primary flex h-9 items-center gap-1.5 rounded-lg border px-3 text-[13px] font-medium transition-colors disabled:opacity-40"
+            className="border-lines bg-accent hover:bg-accent/60 text-primary/80 hover:text-primary flex h-9 items-center gap-1.5 rounded-lg border px-3 text-[13px] font-medium transition-colors disabled:opacity-40"
           >
-            <ClockIcon className="size-4" strokeWidth={2} />
+            <ClockIcon
+              className="text-primary size-4 opacity-80"
+              strokeWidth={2}
+            />
             {translate("freeRooms.now")}
           </button>
           <Link
             href="/"
-            className="border-lines bg-accent hover:bg-accent/60 text-primary/70 hover:text-primary flex h-9 items-center gap-1.5 rounded-lg border px-3 text-[13px] font-medium transition-colors"
+            className="border-lines bg-accent hover:bg-accent/60 text-primary/80 hover:text-primary flex h-9 items-center gap-1.5 rounded-lg border px-3 text-[13px] font-medium transition-colors"
           >
-            <ArrowLeftIcon className="size-4" strokeWidth={2} />
+            <ArrowLeftIcon
+              className="text-primary size-4 opacity-80"
+              strokeWidth={2}
+            />
             {translate("freeRooms.back")}
           </Link>
         </div>
@@ -120,7 +135,10 @@ export const FreeRoomsBoard: FC<FreeRoomsBoardProps> = ({
         nowHourIndex={nowHourIndex}
       />
 
-      <div className="min-h-0 flex-1 overflow-y-auto p-3 max-sm:hidden sm:p-4">
+      <div
+        ref={scrollRef}
+        className="min-h-0 flex-1 overflow-y-auto p-3 max-sm:hidden sm:p-4"
+      >
         <div className="grid gap-1.5">
           <div
             className="grid gap-1.5 [--hours-col:2.75rem] sm:[--hours-col:7rem]"
@@ -138,7 +156,7 @@ export const FreeRoomsBoard: FC<FreeRoomsBoardProps> = ({
                   key={dayName}
                   className={cn(
                     isToday
-                      ? "border-accent-table/40 bg-accent-table/[0.07]"
+                      ? "border-accent-table/55 bg-accent-table/[0.07]"
                       : "border-lines/70 bg-accent/40",
                     "flex flex-col items-center gap-0.5 rounded-lg border px-2 py-2 sm:flex-row sm:items-baseline sm:justify-start sm:gap-2 sm:px-3",
                   )}
@@ -151,7 +169,7 @@ export const FreeRoomsBoard: FC<FreeRoomsBoardProps> = ({
                   >
                     {date.dayNumber.toString().padStart(2, "0")}
                   </span>
-                  <h2 className="text-primary/60 truncate text-sm leading-none font-medium">
+                  <h2 className="text-primary/72 truncate text-sm leading-none font-medium">
                     <span className="max-sm:hidden">
                       {dayLabel(locale, dayName, "long")}
                     </span>
@@ -174,10 +192,10 @@ export const FreeRoomsBoard: FC<FreeRoomsBoardProps> = ({
               }}
             >
               <div className="border-lines/70 bg-accent/40 flex items-baseline justify-center gap-1 rounded-lg border px-2 py-2 sm:justify-between sm:px-3">
-                <span className="text-primary/40 tabular font-mono text-[11px] font-semibold">
+                <span className="text-primary/55 tabular font-mono text-[11px] font-semibold">
                   {hour.number}
                 </span>
-                <span className="text-primary/40 tabular font-mono text-[11px] max-sm:hidden">
+                <span className="text-primary/55 tabular font-mono text-[11px] max-sm:hidden">
                   {hour.timeFrom}
                 </span>
               </div>
@@ -209,7 +227,7 @@ export const FreeRoomsBoard: FC<FreeRoomsBoardProps> = ({
                   >
                     <span
                       className={cn(
-                        count === 0 ? "text-primary/25" : "text-primary/80",
+                        count === 0 ? "text-primary/40" : "text-primary/88",
                         "tabular font-mono text-xs",
                       )}
                     >
@@ -224,11 +242,10 @@ export const FreeRoomsBoard: FC<FreeRoomsBoardProps> = ({
 
         {isMounted && (
           <div
-            ref={resultsRef}
             {...presenceProps}
             className="border-lines data-[state=open]:animate-rise data-[state=closed]:animate-fall mt-4 border-t pt-4"
           >
-            <p className="text-primary/40 mb-2 text-[11px] font-medium tracking-[0.06em] uppercase">
+            <p className="text-primary/55 mb-2 text-[11px] font-medium tracking-[0.06em] uppercase">
               {shown &&
                 translate("freeRooms.selection", {
                   day: dayLabel(locale, dayNames[shown[0]] ?? "", "long"),
@@ -244,7 +261,7 @@ export const FreeRoomsBoard: FC<FreeRoomsBoardProps> = ({
                   key={id}
                   href={`/room/${id}`}
                   style={{ animationDelay: `${Math.min(index, 14) * 20}ms` }}
-                  className="border-lines/70 bg-accent/40 hover:border-lines hover:bg-accent text-primary/80 hover:text-primary animate-rise rounded-lg border px-3 py-1.5 text-sm transition-colors"
+                  className="border-lines/70 bg-accent/40 hover:border-lines hover:bg-accent text-primary/88 hover:text-primary animate-rise rounded-lg border px-3 py-1.5 text-sm transition-colors"
                 >
                   {roomNames.get(id) ?? id}
                 </Link>

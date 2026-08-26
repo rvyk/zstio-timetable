@@ -21,7 +21,7 @@ interface BottomBarProps {
 }
 
 const STEP_BUTTON =
-  "text-primary/55 active:bg-primary/5 active:text-primary active:scale-90 grid size-11 shrink-0 place-content-center rounded-lg transition duration-150 disabled:opacity-30";
+  "text-primary opacity-70 active:bg-primary/5 active:opacity-100 active:scale-90 grid size-11 shrink-0 place-content-center rounded-lg transition duration-150 disabled:opacity-30";
 
 export const BottomBar: FC<BottomBarProps> = ({ timetable, isOffline }) => {
   const translate = useT();
@@ -94,11 +94,11 @@ export const BottomBar: FC<BottomBarProps> = ({ timetable, isOffline }) => {
                   {title}
                 </span>
                 <ChevronUp
-                  className="text-primary/35 size-3.5 shrink-0 transition-transform duration-200 group-active:-translate-y-0.5"
+                  className="text-primary size-3.5 shrink-0 opacity-50 transition-transform duration-200 group-active:-translate-y-0.5"
                   strokeWidth={2.5}
                 />
               </span>
-              <span className="text-primary/45 max-w-full truncate text-[11px] leading-tight">
+              <span className="text-primary/60 max-w-full truncate text-[11px] leading-tight">
                 {subtitle}
               </span>
             </button>

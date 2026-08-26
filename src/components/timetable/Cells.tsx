@@ -59,7 +59,7 @@ export const ShortLessonSwitcherCell: FC<{ className?: string }> = ({
             aria-label={translate("lessons.earlier")}
             disabled={hoursAdjustIndex <= MIN_ADJUST_INDEX}
             onClick={() => enableCustomLessonsLength(hoursAdjustIndex - 1)}
-            className="text-primary/50 hover:text-primary active:bg-primary/5 grid place-content-center rounded-md transition duration-150 active:scale-90 disabled:opacity-30 max-md:h-full max-md:w-12 md:size-7"
+            className="text-primary active:bg-primary/5 grid place-content-center rounded-md opacity-65 transition duration-150 hover:opacity-100 active:scale-90 disabled:opacity-30 max-md:h-full max-md:w-12 md:size-7"
           >
             <MinusIcon
               className="max-md:size-4.5 md:size-3.5"
@@ -73,7 +73,7 @@ export const ShortLessonSwitcherCell: FC<{ className?: string }> = ({
             aria-label={translate("lessons.later")}
             disabled={hoursAdjustIndex >= MAX_LESSONS}
             onClick={() => enableCustomLessonsLength(hoursAdjustIndex + 1)}
-            className="text-primary/50 hover:text-primary active:bg-primary/5 grid place-content-center rounded-md transition duration-150 active:scale-90 disabled:opacity-30 max-md:h-full max-md:w-12 md:size-7"
+            className="text-primary active:bg-primary/5 grid place-content-center rounded-md opacity-65 transition duration-150 hover:opacity-100 active:scale-90 disabled:opacity-30 max-md:h-full max-md:w-12 md:size-7"
           >
             <PlusIcon className="max-md:size-4.5 md:size-3.5" strokeWidth={2} />
           </button>
@@ -97,7 +97,7 @@ export const ShortLessonSwitcherCell: FC<{ className?: string }> = ({
         }
         className="h-9 min-w-0 max-md:w-full md:w-auto"
         buttonClassName="tabular px-2.5 font-mono text-xs font-medium whitespace-nowrap"
-        inactiveClassName="text-primary/50 hover:text-primary/80"
+        inactiveClassName="text-primary/65 hover:text-primary/88"
       />
     </div>
   );

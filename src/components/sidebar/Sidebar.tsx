@@ -102,7 +102,7 @@ const SidebarBrand: FC<{ collapsed: boolean; onToggle: () => void }> = ({
             <span className="text-primary text-sm leading-none font-semibold tracking-tight">
               {SCHOOL_SHORT}
             </span>
-            <span className="text-primary/40 group-hover:text-primary/70 flex items-center gap-1 text-[11px] leading-none transition-colors">
+            <span className="text-primary flex items-center gap-1 text-[11px] leading-none opacity-55 transition-colors group-hover:opacity-100">
               <ArrowLeft
                 className="size-3 transition-transform duration-300 group-hover:-translate-x-0.5"
                 strokeWidth={2}
@@ -121,7 +121,7 @@ const SidebarBrand: FC<{ collapsed: boolean; onToggle: () => void }> = ({
         aria-expanded={!collapsed}
         className={cn(
           !collapsed && "ml-auto",
-          "text-primary/40 hover:bg-primary/5 hover:text-primary grid size-7 shrink-0 place-content-center rounded-md transition-colors",
+          "text-primary hover:bg-primary/5 grid size-7 shrink-0 place-content-center rounded-md opacity-55 transition hover:opacity-100",
         )}
       >
         <ChevronLeft
@@ -137,7 +137,7 @@ const SidebarBrand: FC<{ collapsed: boolean; onToggle: () => void }> = ({
 };
 
 const ACTION_ROW =
-  "flex items-center gap-2.5 rounded-md text-[13px] text-primary/55 transition-colors hover:bg-primary/5 hover:text-primary";
+  "flex items-center gap-2.5 rounded-md text-[13px] text-primary/70 transition-colors hover:bg-primary/5 hover:text-primary";
 
 const SidebarActions: FC<{ collapsed: boolean; onExpand: () => void }> = ({
   collapsed,
@@ -313,9 +313,9 @@ export const SidebarInfo: FC<{ showTimetableDates?: boolean }> = ({
         />
       )}
       {lastUpdatedTimetable && (
-        <p className="text-primary/40 text-[11px]">
+        <p className="text-primary/55 text-[11px]">
           {translate("dates.lastUpdated")}{" "}
-          <span className="text-primary/60 font-mono wrap-break-word">
+          <span className="text-primary/72 font-mono wrap-break-word">
             {lastUpdatedTimetable}
           </span>
         </p>
@@ -369,7 +369,7 @@ const TimetableSidebarDropdowns: FC = () => {
   if (isPreview) {
     return (
       <div className="grid gap-5">
-        <div className="border-lines bg-accent-secondary text-primary/45 grid h-11 w-12 place-content-center rounded-lg border">
+        <div className="border-lines bg-accent-secondary text-primary/60 grid h-11 w-12 place-content-center rounded-lg border">
           <SearchIcon size={17} strokeWidth={2} />
         </div>
         {sections}
@@ -397,7 +397,7 @@ const TimetableSidebarDropdowns: FC = () => {
           onMouseDown={(event) => event.preventDefault()}
         >
           <div className="flex items-center justify-between gap-2">
-            <p className="text-primary/40 text-[11px] font-medium tracking-[0.06em] uppercase">
+            <p className="text-primary/55 text-[11px] font-medium tracking-[0.06em] uppercase">
               {translate(
                 recent.length > 0 ? "sidebar.recent" : "list.favorites",
               )}
@@ -405,7 +405,7 @@ const TimetableSidebarDropdowns: FC = () => {
             {recent.length > 0 && (
               <button
                 onClick={clearRecent}
-                className="text-primary/40 hover:text-primary text-[11px] font-medium transition-colors"
+                className="text-primary/55 hover:text-primary text-[11px] font-medium transition-colors"
               >
                 {translate("sidebar.clearRecent")}
               </button>
@@ -420,7 +420,7 @@ const TimetableSidebarDropdowns: FC = () => {
         </div>
       ) : isSearching ? (
         <div className="grid gap-2">
-          <p className="text-primary/40 text-[11px] font-medium tracking-[0.06em] uppercase">
+          <p className="text-primary/55 text-[11px] font-medium tracking-[0.06em] uppercase">
             {results.length > 0
               ? translate("sidebar.results", { count: results.length })
               : translate("sidebar.noResults")}
@@ -433,7 +433,7 @@ const TimetableSidebarDropdowns: FC = () => {
               onSelect={() => setQuery("")}
             />
           ) : (
-            <p className="text-primary/45 text-sm">
+            <p className="text-primary/60 text-sm">
               {translate("sidebar.noMatch", { query: query.trim() })}
             </p>
           )}

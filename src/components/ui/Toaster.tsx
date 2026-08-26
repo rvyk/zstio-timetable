@@ -24,7 +24,7 @@ export function Toaster() {
             {Icon && (
               <Icon
                 className={cn(
-                  isError ? "text-accent-table" : "text-primary/45",
+                  isError ? "text-accent-table" : "text-primary/60",
                   "mt-0.5 size-4 shrink-0",
                 )}
                 strokeWidth={1.75}

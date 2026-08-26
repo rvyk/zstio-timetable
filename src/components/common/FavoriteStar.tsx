@@ -43,7 +43,7 @@ export const FavoriteStar: FC<FavoriteStarProps> = ({
         "shrink-0 rounded-sm transition-colors",
         isFavorite
           ? "text-accent-table"
-          : "text-primary/40 hover:text-primary/70",
+          : "text-primary/55 hover:text-primary/80",
         revealOnHover &&
           !isFavorite &&
           "opacity-0 group-focus-within:opacity-100 group-hover:opacity-100 focus-visible:opacity-100 max-md:opacity-100",

@@ -96,7 +96,7 @@ export const Search: FC<SearchProps> = ({ value, onChange, results }) => {
   return (
     <div className="border-lines bg-accent-secondary focus-within:border-primary/20 focus-within:bg-foreground inline-flex h-11 w-full items-center gap-x-2.5 rounded-lg border px-3 transition-colors">
       <SearchIcon
-        className="text-primary/45 shrink-0"
+        className="text-primary shrink-0 opacity-60"
         size={17}
         strokeWidth={2}
       />
@@ -109,13 +109,13 @@ export const Search: FC<SearchProps> = ({ value, onChange, results }) => {
         type="search"
         autoComplete="off"
         aria-label={translate("search.aria")}
-        className="text-primary placeholder:text-primary/45 w-full min-w-0 bg-transparent text-sm focus:outline-none [&::-webkit-search-cancel-button]:hidden"
+        className="text-primary placeholder:text-primary/60 w-full min-w-0 bg-transparent text-sm focus:outline-none [&::-webkit-search-cancel-button]:hidden"
         placeholder={translate("search.placeholder")}
       />
       {!value && isClient && (
         <kbd
           aria-hidden
-          className="border-lines text-primary/35 rounded border px-1.5 py-0.5 font-mono text-[10px] max-md:hidden"
+          className="border-lines text-primary/50 rounded border px-1.5 py-0.5 font-mono text-[10px] max-md:hidden"
         >
           {isMac ? "⌘" : "Ctrl "}K
         </kbd>
@@ -124,7 +124,7 @@ export const Search: FC<SearchProps> = ({ value, onChange, results }) => {
         <button
           onClick={() => onChange("")}
           aria-label={translate("search.clear")}
-          className="text-primary/45 hover:text-primary animate-rise -mr-1 grid size-8 shrink-0 place-content-center rounded-md transition duration-150 active:scale-90"
+          className="text-primary animate-rise -mr-1 grid size-8 shrink-0 place-content-center rounded-md opacity-60 transition duration-150 hover:opacity-100 active:scale-90"
         >
           <XIcon size={16} strokeWidth={2} />
         </button>

@@ -76,19 +76,19 @@ export const Dropdown: FC<DropdownProps> = ({
           )}
         >
           <Icon
-            className="text-primary/50 group-hover:text-primary group-data-[state=open]:text-primary size-4 transition-colors"
+            className="text-primary/65 group-hover:text-primary group-data-[state=open]:text-primary size-4 transition-colors"
             strokeWidth={1.75}
           />
         </div>
         <p
           className={cn(
             isPreview && "hidden",
-            "text-primary/70 group-hover:text-primary group-data-[state=open]:text-primary text-sm font-medium transition-colors",
+            "text-primary/80 group-hover:text-primary group-data-[state=open]:text-primary text-sm font-medium transition-colors",
           )}
         >
           {label}
           {isClient && (
-            <span className="text-primary/35 tabular ml-1.5 font-mono text-[11px]">
+            <span className="text-primary tabular ml-1.5 font-mono text-[11px] opacity-35">
               {itemCount}
             </span>
           )}
@@ -97,7 +97,7 @@ export const Dropdown: FC<DropdownProps> = ({
       <ChevronDown
         className={cn(
           isPreview && "hidden",
-          "text-primary/35 size-4 transition-transform duration-300 group-data-[state=open]:rotate-180",
+          "text-primary size-4 opacity-50 transition-transform duration-300 group-data-[state=open]:rotate-180",
         )}
         strokeWidth={2}
       />
@@ -110,16 +110,19 @@ export const Dropdown: FC<DropdownProps> = ({
         <DialogTrigger asChild>
           <button
             className={cn(
-              "group border-lines bg-foreground text-primary/70 hover:text-primary hover:border-primary/20 inline-flex h-9 items-center gap-2 rounded-lg border pr-2.5 pl-3 text-sm font-medium transition-colors active:scale-[0.98]",
+              "group border-lines bg-foreground text-primary/80 hover:text-primary hover:border-primary/20 inline-flex h-9 items-center gap-2 rounded-lg border pr-2.5 pl-3 text-sm font-medium transition-colors active:scale-[0.98]",
               className,
             )}
           >
             <Icon className="size-4 shrink-0" strokeWidth={1.75} />
             {label}
-            <span className="text-primary/30 tabular font-mono text-[11px]">
+            <span className="text-primary tabular font-mono text-[11px] opacity-35">
               {isClient ? itemCount : ""}
             </span>
-            <ChevronDown className="text-primary/30 size-3.5" strokeWidth={2} />
+            <ChevronDown
+              className="text-primary size-3.5 opacity-45"
+              strokeWidth={2}
+            />
           </button>
         </DialogTrigger>
         <DialogContent className="max-w-3xl gap-5">
@@ -127,7 +130,7 @@ export const Dropdown: FC<DropdownProps> = ({
             <DialogTitle>
               {label}
               {isClient && (
-                <span className="text-primary/35 tabular ml-2 font-mono text-sm font-normal">
+                <span className="text-primary tabular ml-2 font-mono text-sm font-normal opacity-40">
                   {itemCount}
                 </span>
               )}
@@ -195,7 +198,7 @@ export const DropdownContent: FC<DropdownContentProps> = ({
           />
         ))
       ) : (
-        <p className="text-primary/40 px-4 py-3 text-sm">
+        <p className="text-primary/55 px-4 py-3 text-sm">
           {translate("list.empty")}
         </p>
       )}
@@ -243,7 +246,7 @@ const ListItemComponent: FC<
         "animate-rise",
         isActive
           ? "text-primary bg-primary/6 font-medium"
-          : "text-primary/65 hover:text-primary hover:bg-primary/4",
+          : "text-primary/75 hover:text-primary hover:bg-primary/4",
         "group flex w-full min-w-0 items-center justify-between gap-x-2 rounded-md px-3 py-2 text-sm transition duration-150 active:scale-[0.99] max-md:min-h-11",
       )}
     >

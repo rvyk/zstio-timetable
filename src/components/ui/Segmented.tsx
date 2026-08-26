@@ -26,7 +26,7 @@ export const Segmented = <T extends string>({
   onSelect,
   className,
   buttonClassName,
-  inactiveClassName = "text-primary/45 hover:text-primary",
+  inactiveClassName = "text-primary/60 hover:text-primary",
   keepTransition,
 }: SegmentedProps<T>) => {
   const activeIndex = Math.max(

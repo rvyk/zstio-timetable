@@ -21,13 +21,16 @@ export default async function Offline() {
         <section className="border-lines bg-foreground flex w-full flex-1 flex-col md:overflow-hidden md:rounded-xl md:border md:shadow-(--shadow-soft)">
           <div className="flex h-full w-full flex-col items-center justify-center gap-3 p-10 text-center">
             <div className="border-lines bg-accent grid size-12 place-content-center rounded-xl border">
-              <WifiOff className="text-primary/40 size-5" strokeWidth={1.75} />
+              <WifiOff
+                className="text-primary size-5 opacity-55"
+                strokeWidth={1.75}
+              />
             </div>
             <div className="grid gap-1">
-              <h2 className="text-primary/90 text-base font-medium tracking-tight">
+              <h2 className="text-primary/95 text-base font-medium tracking-tight">
                 {t(locale, "offline.title")}
               </h2>
-              <p className="text-primary/50 max-w-xs text-sm">
+              <p className="text-primary/65 max-w-xs text-sm">
                 {t(locale, "offline.description")}
               </p>
             </div>

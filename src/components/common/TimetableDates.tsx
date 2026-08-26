@@ -30,7 +30,7 @@ export const TimetableDates: FC<TimetableDatesProps> = ({
       arr.push(
         <Fragment key="generatedDate">
           <span>{translate("dates.generated")}</span>
-          <span className="text-primary/70 font-medium">
+          <span className="text-primary/80 font-medium">
             {timetable.generatedDate}
           </span>
         </Fragment>,
@@ -41,7 +41,7 @@ export const TimetableDates: FC<TimetableDatesProps> = ({
       arr.push(
         <Fragment key="validDate">
           <span>{translate("dates.validFrom")}</span>
-          <span className="text-primary/70 font-medium">
+          <span className="text-primary/80 font-medium">
             {timetable.validDate}
           </span>
         </Fragment>,
@@ -53,10 +53,10 @@ export const TimetableDates: FC<TimetableDatesProps> = ({
 
   if (hasNoLessons) {
     return (
-      <p className={cn("text-primary/50 text-base", className)}>
+      <p className={cn("text-primary/65 text-base", className)}>
         {translate("dates.notFoundStart")}
         {timetable?.id && (
-          <span className="text-primary/80 font-mono"> {timetable.id}</span>
+          <span className="text-primary/88 font-mono"> {timetable.id}</span>
         )}{" "}
         {translate("dates.notFoundEnd")}
       </p>
@@ -64,7 +64,7 @@ export const TimetableDates: FC<TimetableDatesProps> = ({
   }
 
   return (
-    <p className={cn("text-primary/45 text-sm", className)}>
+    <p className={cn("text-primary/60 text-sm", className)}>
       {elements.map((el, idx) =>
         stackOnMobile ? (
           <span key={idx} className="block sm:inline">

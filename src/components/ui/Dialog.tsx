@@ -57,8 +57,8 @@ const DialogHeader = ({
   >
     <div className="grid gap-1.5">{props.children}</div>
     <DialogPrimitive.Close asChild>
-      <button className="bg-accent text-primary/70 border-lines hover:bg-primary/5 hover:text-primary dark:hover:bg-accent-secondary -mt-1 -mr-1 grid size-11 shrink-0 place-content-center rounded-md border transition-colors sm:size-10">
-        <X className="size-4" strokeWidth={2} />
+      <button className="bg-accent text-primary/80 border-lines hover:bg-primary/5 hover:text-primary dark:hover:bg-accent-secondary -mt-1 -mr-1 grid size-11 shrink-0 place-content-center rounded-md border transition-colors sm:size-10">
+        <X className="text-primary size-4 opacity-80" strokeWidth={2} />
         <span className="sr-only">Zamknij</span>
       </button>
     </DialogPrimitive.Close>
@@ -88,7 +88,7 @@ const DialogDescription = React.forwardRef<
   <DialogPrimitive.Description
     ref={ref}
     className={cn(
-      "text-primary/45 max-w-[46ch] text-sm leading-relaxed",
+      "text-primary/60 max-w-[46ch] text-sm leading-relaxed",
       className,
     )}
     {...props}

@@ -48,7 +48,7 @@ export const DayTabs: FC<DayTabsProps> = ({
             className={cn(
               isActive
                 ? "text-primary"
-                : "text-primary/45 active:text-primary/70",
+                : "text-primary/60 active:text-primary/80",
               "relative flex min-h-12 w-full flex-col items-center justify-center gap-1 px-1 py-2.5 transition-colors select-none",
             )}
           >
@@ -57,7 +57,7 @@ export const DayTabs: FC<DayTabsProps> = ({
             </span>
             <span
               className={cn(
-                isToday ? "text-accent-table" : "opacity-70",
+                isToday ? "text-accent-table" : "opacity-85",
                 "tabular font-mono text-[11px] leading-none",
               )}
             >

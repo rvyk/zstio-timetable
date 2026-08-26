@@ -104,7 +104,7 @@ export const SlotCard: FC<SlotCardProps> = ({
         isLive
           ? "border-lines bg-accent dark:shadow-lg dark:shadow-black/30"
           : "border-lines/70 bg-accent/40 hover:border-lines hover:bg-accent",
-        isPast && !isLive && "opacity-55",
+        isPast && !isLive && "opacity-75",
         "relative grid gap-1.5 rounded-lg border px-3 py-2.5 transition-colors",
       )}
     >
@@ -114,13 +114,13 @@ export const SlotCard: FC<SlotCardProps> = ({
             {translate("timetable.now")}
           </span>
         ) : (
-          <span className="text-primary/55 tabular font-mono text-[11px] font-semibold">
+          <span className="text-primary/70 tabular font-mono text-[11px] font-semibold">
             {hour.number}
           </span>
         )}
         <span
           className={cn(
-            isLive ? "text-accent-table font-semibold" : "text-primary/55",
+            isLive ? "text-accent-table font-semibold" : "text-primary/70",
             "tabular font-mono text-[11px]",
           )}
         >
@@ -163,7 +163,7 @@ export const BreakRow: FC<{ from: string; to: string; now: number }> = ({
   return (
     <div className="animate-rise flex items-center gap-2 px-1 py-0.5">
       <Coffee className="text-accent-table size-3 shrink-0" strokeWidth={2} />
-      <span className="text-accent-table/80 text-[11px] font-medium">
+      <span className="text-accent-table/90 text-[11px] font-medium">
         {translate("timetable.break")}
       </span>
       <div className="bg-primary/10 h-px flex-1 overflow-hidden rounded-full">
@@ -185,13 +185,16 @@ export const NoLessons: FC<{ description: string }> = ({ description }) => {
   return (
     <div className="animate-rise flex w-full flex-col items-center justify-center gap-3 p-10 text-center">
       <div className="border-lines bg-accent grid size-12 place-content-center rounded-xl border">
-        <CalendarX2 className="text-primary/40 size-5" strokeWidth={1.75} />
+        <CalendarX2
+          className="text-primary size-5 opacity-55"
+          strokeWidth={1.75}
+        />
       </div>
       <div className="grid gap-1">
-        <h2 className="text-primary/90 text-base font-medium tracking-tight">
+        <h2 className="text-primary/95 text-base font-medium tracking-tight">
           {translate("timetable.empty")}
         </h2>
-        <p className="text-primary/50 max-w-xs text-sm">{description}</p>
+        <p className="text-primary/65 max-w-xs text-sm">{description}</p>
       </div>
     </div>
   );
@@ -202,13 +205,13 @@ export const GapCard: FC<{ hour: TableHour }> = ({ hour }) => {
 
   return (
     <div className="border-lines/60 flex items-center justify-between gap-2 rounded-lg border border-dashed px-3 py-2">
-      <span className="text-primary/25 tabular font-mono text-[11px] font-semibold">
+      <span className="text-primary/40 tabular font-mono text-[11px] font-semibold">
         {hour.number}
       </span>
-      <span className="text-primary/30 text-xs">
+      <span className="text-primary/45 text-xs">
         {translate("timetable.gap")}
       </span>
-      <span className="text-primary/25 tabular font-mono text-[11px]">
+      <span className="text-primary/40 tabular font-mono text-[11px]">
         {hour.timeFrom}–{hour.timeTo}
       </span>
     </div>
@@ -219,28 +222,34 @@ export const DaySlots: FC<{
   slots: DaySlot[];
   isToday: boolean;
   now: number;
-}> = ({ slots, isToday, now }) => (
-  <Fragment>
-    {slots.map((slot, index) => (
-      <Fragment key={slot.hour.number}>
-        {isToday && index > 0 && (
-          <BreakRow
-            from={slots[index - 1]!.hour.timeTo}
-            to={slot.hour.timeFrom}
-            now={now}
-          />
-        )}
-        {slot.entries.length > 0 ? (
-          <SlotCard
-            hour={slot.hour}
-            lessons={slot.entries}
-            isToday={isToday}
-            now={now}
-          />
-        ) : (
-          <GapCard hour={slot.hour} />
-        )}
-      </Fragment>
-    ))}
-  </Fragment>
-);
+}> = ({ slots, isToday, now }) => {
+  const dayOver =
+    isToday && now >= parseTime(slots.at(-1)?.hour.timeTo ?? "00:00");
+  const isActiveDay = isToday && !dayOver;
+
+  return (
+    <Fragment>
+      {slots.map((slot, index) => (
+        <Fragment key={slot.hour.number}>
+          {isActiveDay && index > 0 && (
+            <BreakRow
+              from={slots[index - 1]!.hour.timeTo}
+              to={slot.hour.timeFrom}
+              now={now}
+            />
+          )}
+          {slot.entries.length > 0 ? (
+            <SlotCard
+              hour={slot.hour}
+              lessons={slot.entries}
+              isToday={isActiveDay}
+              now={now}
+            />
+          ) : (
+            <GapCard hour={slot.hour} />
+          )}
+        </Fragment>
+      ))}
+    </Fragment>
+  );
+};

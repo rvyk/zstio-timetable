@@ -71,7 +71,7 @@ export const SchoolNewsCard: FC<SchoolNewsPost> = ({
         >
           {phase === "idle" ? (
             <Megaphone
-              className="text-primary/40 size-4 shrink-0"
+              className="text-primary size-4 shrink-0 opacity-55"
               strokeWidth={2}
             />
           ) : (
@@ -85,12 +85,12 @@ export const SchoolNewsCard: FC<SchoolNewsPost> = ({
             <span
               className={cn(
                 "truncate text-[13px] leading-tight font-medium transition-colors duration-300",
-                phase === "idle" ? "text-primary" : "text-primary/45",
+                phase === "idle" ? "text-primary" : "text-primary/60",
               )}
             >
               {title}
             </span>
-            <span className="text-primary/40 truncate text-[11px] leading-tight">
+            <span className="text-primary/55 truncate text-[11px] leading-tight">
               {phase === "idle" ? (
                 <>
                   {translate("news.source")}
@@ -115,7 +115,7 @@ export const SchoolNewsCard: FC<SchoolNewsPost> = ({
                 aria-label={translate("news.open", { title })}
               >
                 <ArrowUpRight
-                  className="text-primary/35 size-4 shrink-0 transition-transform duration-200 group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5"
+                  className="text-primary size-4 shrink-0 opacity-50 transition-transform duration-200 group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5"
                   strokeWidth={2}
                 />
               </a>
@@ -123,7 +123,7 @@ export const SchoolNewsCard: FC<SchoolNewsPost> = ({
                 onClick={dismiss}
                 aria-label={translate("news.markRead")}
                 title={translate("news.markRead")}
-                className="text-primary/35 hover:bg-primary/5 hover:text-primary relative grid size-7 shrink-0 place-content-center rounded-md transition active:scale-90"
+                className="text-primary hover:bg-primary/5 relative grid size-7 shrink-0 place-content-center rounded-md opacity-50 transition hover:opacity-100 active:scale-90"
               >
                 <Check className="size-4" strokeWidth={2} />
               </button>

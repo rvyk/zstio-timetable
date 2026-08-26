@@ -55,13 +55,13 @@ const PageLink: FC<NonNullable<TopbarProps["page"]>> = ({
     className="group -m-1 flex min-w-0 items-center gap-x-2.5 rounded-lg p-1"
   >
     <span className="border-lines bg-accent group-active:bg-primary/5 grid size-9 shrink-0 place-content-center rounded-lg border transition duration-150 group-active:scale-90">
-      <ArrowLeft className="text-primary/70 size-4.5" strokeWidth={2} />
+      <ArrowLeft className="text-primary size-4.5 opacity-80" strokeWidth={2} />
     </span>
     <span className="grid min-w-0 gap-0.5">
       <span className="text-primary truncate text-sm leading-none font-semibold tracking-tight">
         {title}
       </span>
-      <span className="text-primary/40 truncate text-[11px] leading-none">
+      <span className="text-primary/55 truncate text-[11px] leading-none">
         {backLabel}
       </span>
     </span>
@@ -86,7 +86,7 @@ const SchoolLink: FC = () => {
         <span className="text-primary text-sm leading-none font-semibold tracking-tight">
           {SCHOOL_SHORT}
         </span>
-        <span className="text-primary/40 flex items-center gap-1 text-[11px] leading-none">
+        <span className="text-primary flex items-center gap-1 text-[11px] leading-none opacity-55">
           <ArrowLeft className="size-3" strokeWidth={2} />
           {translate("school.link")}
         </span>

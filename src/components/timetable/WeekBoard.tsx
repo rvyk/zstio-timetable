@@ -43,7 +43,7 @@ export const WeekBoard: FC<WeekBoardProps> = ({
                   className={cn(
                     "flex items-baseline gap-2 rounded-lg border px-3 py-2",
                     isToday
-                      ? "border-accent-table/40 bg-accent-table/[0.07]"
+                      ? "border-accent-table/55 bg-accent-table/[0.07]"
                       : "border-lines/70 bg-accent/40",
                   )}
                 >
@@ -57,7 +57,7 @@ export const WeekBoard: FC<WeekBoardProps> = ({
                   </span>
                   <h2
                     className={cn(
-                      isToday ? "text-primary" : "text-primary/60",
+                      isToday ? "text-primary" : "text-primary/72",
                       "text-sm leading-none font-medium",
                     )}
                   >
@@ -74,7 +74,7 @@ export const WeekBoard: FC<WeekBoardProps> = ({
               {slots.length > 0 ? (
                 <DaySlots slots={slots} isToday={isToday} now={now} />
               ) : (
-                <p className="text-primary/30 px-3 py-2 text-xs">
+                <p className="text-primary/45 px-3 py-2 text-xs">
                   {translate("timetable.noLessons")}
                 </p>
               )}

@@ -118,12 +118,12 @@ export const PlanChanges: FC<{ timetable: OptivumTimetable }> = ({
               <span
                 className={cn(
                   "truncate text-[13px] leading-tight font-medium transition-colors duration-300",
-                  phase === "idle" ? "text-primary" : "text-primary/45",
+                  phase === "idle" ? "text-primary" : "text-primary/60",
                 )}
               >
                 {translate("changes.title")}
               </span>
-              <span className="text-primary/40 truncate text-[11px] leading-tight">
+              <span className="text-primary/55 truncate text-[11px] leading-tight">
                 {phase === "idle" ? (
                   translate("changes.summary", { count: changes.length })
                 ) : (
@@ -145,7 +145,7 @@ export const PlanChanges: FC<{ timetable: OptivumTimetable }> = ({
                   title={translate(
                     isExpanded ? "changes.hide" : "changes.show",
                   )}
-                  className="text-primary/35 hover:bg-primary/5 hover:text-primary grid size-7 shrink-0 place-content-center rounded-md transition active:scale-90"
+                  className="text-primary hover:bg-primary/5 grid size-7 shrink-0 place-content-center rounded-md opacity-50 transition hover:opacity-100 active:scale-90"
                 >
                   <ChevronDown
                     className={cn(
@@ -159,7 +159,7 @@ export const PlanChanges: FC<{ timetable: OptivumTimetable }> = ({
                   onClick={() => setPhase("read")}
                   aria-label={translate("changes.dismiss")}
                   title={translate("changes.dismiss")}
-                  className="text-primary/35 hover:bg-primary/5 hover:text-primary grid size-7 shrink-0 place-content-center rounded-md transition active:scale-90"
+                  className="text-primary hover:bg-primary/5 grid size-7 shrink-0 place-content-center rounded-md opacity-50 transition hover:opacity-100 active:scale-90"
                 >
                   <Check className="size-4" strokeWidth={2} />
                 </button>
@@ -168,14 +168,14 @@ export const PlanChanges: FC<{ timetable: OptivumTimetable }> = ({
           </div>
 
           {isExpanded && phase === "idle" && (
-            <ul className="border-lines text-primary/60 grid gap-1 border-t pt-2 text-[11px] leading-relaxed">
+            <ul className="border-lines text-primary/72 grid gap-1 border-t pt-2 text-[11px] leading-relaxed">
               {changes.slice(0, VISIBLE_CHANGES).map((change) => (
                 <li key={`${change.dayIndex}-${change.hourIndex}`}>
                   {describe(change)}
                 </li>
               ))}
               {changes.length > VISIBLE_CHANGES && (
-                <li className="text-primary/35">
+                <li className="text-primary/50">
                   {translate("changes.more", {
                     count: changes.length - VISIBLE_CHANGES,
                   })}

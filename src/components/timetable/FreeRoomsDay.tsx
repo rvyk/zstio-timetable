@@ -65,15 +65,15 @@ export const FreeRoomsDay: FC<FreeRoomsDayProps> = ({
                 style={{ animationDelay: `${Math.min(hourIndex, 10) * 30}ms` }}
                 className={cn(
                   isOpen
-                    ? "border-accent-table/45 bg-accent-table/[0.07]"
+                    ? "border-accent-table/60 bg-accent-table/[0.07]"
                     : "border-lines/70 bg-accent/40",
-                  isEmpty && "opacity-45",
+                  isEmpty && "opacity-65",
                   "animate-rise flex min-h-11 items-center gap-3 rounded-lg border px-3 py-2.5 text-left transition duration-150 not-disabled:active:scale-[0.98]",
                 )}
               >
                 <span
                   className={cn(
-                    isOpen ? "text-accent-table" : "text-primary/55",
+                    isOpen ? "text-accent-table" : "text-primary/70",
                     "tabular w-4 shrink-0 font-mono text-[11px] font-semibold",
                   )}
                 >
@@ -81,7 +81,7 @@ export const FreeRoomsDay: FC<FreeRoomsDayProps> = ({
                 </span>
                 <span
                   className={cn(
-                    isOpen ? "text-accent-table" : "text-primary/55",
+                    isOpen ? "text-accent-table" : "text-primary/70",
                     "tabular shrink-0 font-mono text-[11px]",
                   )}
                 >
@@ -96,7 +96,7 @@ export const FreeRoomsDay: FC<FreeRoomsDayProps> = ({
                   <ChevronDown
                     className={cn(
                       isOpen && "rotate-180",
-                      "text-primary/35 size-4 shrink-0 transition-transform duration-300",
+                      "text-primary size-4 shrink-0 opacity-50 transition-transform duration-300",
                     )}
                     strokeWidth={2}
                   />
@@ -130,7 +130,7 @@ const RoomChips: FC<{
           key={id}
           href={`/room/${id}`}
           style={{ animationDelay: `${Math.min(index, 14) * 20}ms` }}
-          className="border-lines/70 bg-accent/40 text-primary/80 active:bg-accent animate-rise flex min-h-9 items-center rounded-lg border px-3 text-sm transition duration-150 active:scale-95"
+          className="border-lines/70 bg-accent/40 text-primary/88 active:bg-accent animate-rise flex min-h-9 items-center rounded-lg border px-3 text-sm transition duration-150 active:scale-95"
         >
           {roomNames.get(id) ?? id}
         </Link>
