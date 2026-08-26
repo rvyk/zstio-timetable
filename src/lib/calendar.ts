@@ -119,6 +119,7 @@ const createEvent = (
       ? [
           {
             action: "display",
+            description: title,
             trigger: { minutes: 10, before: true },
           },
         ]
