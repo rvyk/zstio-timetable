@@ -40,8 +40,18 @@ const floatingDateTime = (date: Date, hours: number, minutes: number) =>
   `${date.getUTCFullYear()}${pad(date.getUTCMonth() + 1)}${pad(date.getUTCDate())}T${pad(hours)}${pad(minutes)}00`;
 
 const parseTime = (timeStr: string) => {
-  const [hours, minutes] = timeStr.split(":").map(Number);
+  const [hours = 0, minutes = 0] = timeStr.split(":").map(Number);
   return { hours, minutes };
+};
+
+const DEFAULT_LESSON_MINUTES = 45;
+
+const lessonMinutes = (hour: TableHour) => {
+  const from = parseTime(hour.timeFrom);
+  const to = parseTime(hour.timeTo);
+  const minutes = to.hours * 60 + to.minutes - (from.hours * 60 + from.minutes);
+
+  return minutes > 0 ? minutes : DEFAULT_LESSON_MINUTES;
 };
 
 const createEvent = (
@@ -50,11 +60,10 @@ const createEvent = (
   hour: TableHour,
   daysOff: Date[],
   url: string,
+  withAlarm: boolean,
 ) => {
   const date = getDateOfNextWeekDayByIndex(dayIndex + 1);
-  const { hours: startHour = 0, minutes: startMinute = 0 } = parseTime(
-    hour.timeFrom,
-  );
+  const { hours: startHour, minutes: startMinute } = parseTime(hour.timeFrom);
 
   const start = Date.UTC(date.getFullYear(), date.getMonth(), date.getDate());
   const exclusionDates = daysOff
@@ -97,16 +106,15 @@ const createEvent = (
     description,
     url,
     location: room ? `Sala ${room}` : undefined,
-    duration: { minutes: 45 },
-    alarms: [
-      {
-        action: "display",
-        trigger: {
-          minutes: 3,
-          before: true,
-        },
-      },
-    ],
+    duration: { minutes: lessonMinutes(hour) },
+    alarms: withAlarm
+      ? [
+          {
+            action: "display",
+            trigger: { minutes: 10, before: true },
+          },
+        ]
+      : undefined,
     categories,
     recurrenceRule: `FREQ=WEEKLY;BYDAY=${getRRuleByDayIndex(dayIndex + 1)}`,
     exclusionDates,
@@ -123,13 +131,20 @@ export const getCalendar = async (timetable: OptivumTimetable) => {
     env.NEXT_PUBLIC_APP_URL,
   ).toString();
 
+  const alarmedDays = new Set<number>();
+
   (timetable.lessons ?? []).forEach((day, dayIndex) => {
     day.forEach((lesson, lessonIndex) => {
       const hour = hours[lessonIndex];
       if (!hour) return;
 
       lesson.forEach((group) => {
-        events.push(createEvent(group, dayIndex, hour, daysOff, url));
+        const withAlarm = !alarmedDays.has(dayIndex);
+        alarmedDays.add(dayIndex);
+
+        events.push(
+          createEvent(group, dayIndex, hour, daysOff, url, withAlarm),
+        );
       });
     });
   });
