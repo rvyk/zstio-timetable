@@ -155,7 +155,7 @@ export const Dropdown: FC<DropdownProps> = ({
       >
         {triggerContent}
       </AccordionTrigger>
-      <AccordionContent>
+      <AccordionContent className="-ml-2 w-[calc(100%+16px)] xl:min-w-65">
         <DropdownContent type={type} data={data} className="mt-2 pl-3" />
       </AccordionContent>
     </AccordionItem>

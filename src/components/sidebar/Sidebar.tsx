@@ -27,7 +27,7 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { FC, Fragment, useEffect, useState } from "react";
+import { FC, Fragment, useEffect, useRef, useState } from "react";
 import { useIsClient, useMediaQuery } from "usehooks-ts";
 import SidebarContext, { useSidebarContext } from "./Context";
 import { Dropdown, DropdownContent } from "./Dropdown";
@@ -146,6 +146,20 @@ const SidebarActions: FC<{ collapsed: boolean; onExpand: () => void }> = ({
   const translate = useT();
   const [isOpen, setIsOpen] = useState(false);
   const { isMounted, presenceProps } = usePresence(isOpen && !collapsed);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const closeOnOutside = (event: PointerEvent) => {
+      if (!containerRef.current?.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener("pointerdown", closeOnOutside);
+    return () => document.removeEventListener("pointerdown", closeOnOutside);
+  }, [isOpen]);
 
   const openSettings = () => {
     if (collapsed) {
@@ -157,24 +171,15 @@ const SidebarActions: FC<{ collapsed: boolean; onExpand: () => void }> = ({
   };
 
   return (
-    <div className="border-lines relative border-t pt-2">
+    <div ref={containerRef} className="border-lines relative border-t pt-2">
       {isMounted && (
-        <Fragment>
-          {isOpen && (
-            <div
-              className="fixed inset-0 z-10"
-              onClick={() => setIsOpen(false)}
-              aria-hidden
-            />
-          )}
-          <div
-            {...presenceProps}
-            inert={!isOpen}
-            className="border-lines bg-foreground/95 data-[state=open]:animate-popover-in data-[state=closed]:animate-popover-out absolute inset-x-0 bottom-full z-20 mb-2 max-h-[calc(100dvh-9rem)] origin-bottom overflow-y-auto rounded-lg border shadow-(--shadow-raised) backdrop-blur-md"
-          >
-            <SettingsList onSelect={() => setIsOpen(false)} />
-          </div>
-        </Fragment>
+        <div
+          {...presenceProps}
+          inert={!isOpen}
+          className="border-lines bg-foreground/95 data-[state=open]:animate-popover-in data-[state=closed]:animate-popover-out absolute inset-x-0 bottom-full z-20 mb-2 max-h-[calc(100dvh-9rem)] origin-bottom overflow-y-auto rounded-lg border shadow-(--shadow-raised) backdrop-blur-md"
+        >
+          <SettingsList onSelect={() => setIsOpen(false)} />
+        </div>
       )}
 
       <div className={cn(collapsed && "justify-items-center", "grid gap-0.5")}>

@@ -209,7 +209,7 @@ const AccessibilitySetting = ({ index = 0 }: { index?: number }) => {
             strokeWidth={2}
           />
         </AccordionTrigger>
-        <AccordionContent className="mx-2 grid gap-0.5 pt-1">
+        <AccordionContent contentClassName="mx-2 grid gap-0.5 pt-1">
           {A11Y_OPTIONS.map((option) => {
             const active = isClient && a11y[option.key];
 
