@@ -199,8 +199,6 @@ const DICT = {
     pl: "Brak danych planu lekcji — wróć na stronę główną, aby go wczytać.",
     uk: "Немає даних розкладу — поверніться на головну сторінку, щоб завантажити його.",
   },
-  "print.number": { pl: "Nr", uk: "№" },
-  "print.hours": { pl: "Godziny", uk: "Години" },
 
   "settings.install": {
     pl: "Zainstaluj aplikację",
