@@ -61,6 +61,7 @@ const createEvent = (
   daysOff: Date[],
   url: string,
   withAlarm: boolean,
+  roomNames: Map<string, string>,
 ) => {
   const date = getDateOfNextWeekDayByIndex(dayIndex + 1);
   const { hours: startHour, minutes: startMinute } = parseTime(hour.timeFrom);
@@ -73,7 +74,10 @@ const createEvent = (
     )
     .map((dayOff) => floatingDateTime(dayOff, startHour, startMinute));
 
-  const { subject, groupName, className, teacher, room } = group;
+  const { subject, groupName, className, teacher } = group;
+  const room = group.roomId
+    ? (roomNames.get(group.roomId) ?? group.room)
+    : group.room;
 
   const title = groupName ? `${subject} (${groupName})` : subject;
 
@@ -132,6 +136,9 @@ export const getCalendar = async (timetable: OptivumTimetable) => {
   ).toString();
 
   const alarmedDays = new Set<number>();
+  const roomNames = new Map(
+    (timetable.list.rooms ?? []).map((room) => [room.value, room.name]),
+  );
 
   (timetable.lessons ?? []).forEach((day, dayIndex) => {
     day.forEach((lesson, lessonIndex) => {
@@ -143,7 +150,15 @@ export const getCalendar = async (timetable: OptivumTimetable) => {
         alarmedDays.add(dayIndex);
 
         events.push(
-          createEvent(group, dayIndex, hour, daysOff, url, withAlarm),
+          createEvent(
+            group,
+            dayIndex,
+            hour,
+            daysOff,
+            url,
+            withAlarm,
+            roomNames,
+          ),
         );
       });
     });

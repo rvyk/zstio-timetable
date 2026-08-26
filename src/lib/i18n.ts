@@ -193,6 +193,26 @@ const DICT = {
     uk: "Немає даних розкладу — поверніться на головну сторінку, щоб завантажити його.",
   },
 
+  "changes.title": { pl: "Plan się zmienił", uk: "Розклад змінився" },
+  "changes.summary": {
+    pl: "Zmiany od twojej ostatniej wizyty: {count}",
+    uk: "Змін від вашого останнього візиту: {count}",
+  },
+  "changes.show": { pl: "Pokaż zmiany", uk: "Показати зміни" },
+  "changes.hide": { pl: "Ukryj zmiany", uk: "Сховати зміни" },
+  "changes.dismiss": { pl: "Wiem, ukryj", uk: "Зрозуміло, сховати" },
+  "changes.dismissed": {
+    pl: "Zapamiętano obecny plan",
+    uk: "Поточний розклад запам'ятано",
+  },
+  "changes.lesson": {
+    pl: "{day}, lekcja {number}",
+    uk: "{day}, урок {number}",
+  },
+  "changes.added": { pl: "dodano: {what}", uk: "додано: {what}" },
+  "changes.removed": { pl: "usunięto: {what}", uk: "видалено: {what}" },
+  "changes.more": { pl: "i {count} więcej", uk: "та ще {count}" },
+
   "settings.install": {
     pl: "Zainstaluj aplikację",
     uk: "Встановити застосунок",

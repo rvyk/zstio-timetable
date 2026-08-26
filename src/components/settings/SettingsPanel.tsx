@@ -411,7 +411,7 @@ export const SettingsMenu = () => {
           aria-label={translate("settings.menuOpen")}
           className={cn(
             "border-lines bg-accent text-primary/70 active:bg-primary/5 active:text-primary grid size-11 place-content-center rounded-lg border transition duration-150 active:scale-90",
-            "data-[state=open]:text-primary data-[state=open]:bg-foreground data-[state=open]:pointer-events-none data-[state=open]:relative data-[state=open]:z-60",
+            "data-[state=open]:text-primary data-[state=open]:bg-foreground data-[state=open]:pointer-events-none data-[state=open]:relative data-[state=open]:z-120",
           )}
         >
           <SlidersHorizontal className="size-4.5" strokeWidth={2} />
@@ -419,7 +419,7 @@ export const SettingsMenu = () => {
       </DialogPrimitive.Trigger>
 
       <DialogPrimitive.Portal>
-        <DialogPrimitive.Overlay className="data-[state=open]:animate-overlay-in data-[state=closed]:animate-overlay-out fixed inset-0 z-50 bg-black/45 backdrop-blur-xs md:hidden" />
+        <DialogPrimitive.Overlay className="data-[state=open]:animate-overlay-in data-[state=closed]:animate-overlay-out fixed inset-0 z-110 bg-black/45 backdrop-blur-xs md:hidden" />
         <DialogPrimitive.Content
           ref={contentRef}
           tabIndex={-1}
@@ -428,7 +428,7 @@ export const SettingsMenu = () => {
             contentRef.current?.focus();
           }}
           style={{ top: anchor.top, right: anchor.right }}
-          className="border-lines bg-foreground data-[state=open]:animate-popover-in data-[state=closed]:animate-popover-out fixed z-50 grid max-h-[calc(100dvh-6rem)] w-[min(19rem,calc(100vw-4rem))] origin-top-right gap-4 overflow-y-auto rounded-xl border p-4 shadow-(--shadow-raised) md:hidden"
+          className="border-lines bg-foreground data-[state=open]:animate-popover-in data-[state=closed]:animate-popover-out fixed z-110 grid max-h-[calc(100dvh-6rem)] w-[min(19rem,calc(100vw-4rem))] origin-top-right gap-4 overflow-y-auto rounded-xl border p-4 shadow-(--shadow-raised) md:hidden"
         >
           <VisuallyHidden>
             <DialogTitle>{translate("settings.menu")}</DialogTitle>

@@ -1,6 +1,7 @@
 import { getOptivumList } from "@/actions/getOptivumList";
 import { getOptivumTimetable } from "@/actions/getOptivumTimetable";
 import { BottomBar } from "@/components/common/BottomBar";
+import { PlanChanges } from "@/components/common/PlanChanges";
 import { SchoolNews } from "@/components/common/SchoolNews";
 import { Timetable } from "@/components/timetable/Timetable";
 import { TimetableController } from "@/components/timetable/TimetableController";
@@ -70,6 +71,7 @@ const TimetablePage = async ({ params }: { params: Promise<PageParams> }) => {
       <main className="flex h-full w-full min-w-0 flex-1 flex-col gap-y-3 max-md:overflow-y-auto max-md:pb-[calc(4rem+env(safe-area-inset-bottom))] md:gap-y-3 md:overflow-hidden md:p-3">
         <Topbar timetable={timetable} />
         <SchoolNews />
+        <PlanChanges timetable={timetable} />
         <Timetable timetable={timetable} />
         <BottomBar timetable={timetable} />
       </main>
