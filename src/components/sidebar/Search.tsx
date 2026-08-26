@@ -6,7 +6,23 @@ import { OptivumTimetable } from "@/types/optivum";
 import { ListItem } from "@majusss/timetable-parser";
 import { SearchIcon, XIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { FC, KeyboardEvent, useCallback, useMemo } from "react";
+import {
+  FC,
+  KeyboardEvent,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+} from "react";
+import { useIsClient } from "usehooks-ts";
+
+/** „Łysy” → „lysy”, „Śr.” → „sr.” — inaczej wpisanie bez ogonków nic nie znajduje. */
+const normalize = (value: string) =>
+  value
+    .toLowerCase()
+    .replace(/ł/g, "l")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
 
 const listKeys: Record<string, string> = {
   classes: "class",
@@ -19,7 +35,7 @@ export const useSearchResults = (
   query: string,
 ) =>
   useMemo(() => {
-    const needle = query.toLowerCase().trim();
+    const needle = normalize(query).trim();
     if (!needle || !timetable) return [];
 
     let results: ListItem[] = [];
@@ -28,7 +44,7 @@ export const useSearchResults = (
       const items = timetable.list[key as keyof typeof timetable.list] ?? [];
       results = results.concat(
         items
-          .filter((item) => item.name.toLowerCase().includes(needle))
+          .filter((item) => normalize(item.name).includes(needle))
           .map((item) => ({ ...item, type: listKeys[key] })),
       );
       if (results.length >= MAX_RESULTS) break;
@@ -47,6 +63,21 @@ export const Search: FC<SearchProps> = ({ value, onChange, results }) => {
   const translate = useT();
   const addRecent = useRecentStore((state) => state.addRecent);
   const router = useRouter();
+  const inputRef = useRef<HTMLInputElement>(null);
+  const isClient = useIsClient();
+  const isMac = isClient && navigator.userAgent.includes("Mac");
+
+  useEffect(() => {
+    const focusOnShortcut = (event: globalThis.KeyboardEvent) => {
+      if (event.key !== "k" || !(event.metaKey || event.ctrlKey)) return;
+      event.preventDefault();
+      inputRef.current?.focus();
+      inputRef.current?.select();
+    };
+
+    document.addEventListener("keydown", focusOnShortcut);
+    return () => document.removeEventListener("keydown", focusOnShortcut);
+  }, []);
 
   const handleKeyDown = useCallback(
     (e: KeyboardEvent<HTMLInputElement>) => {
@@ -70,6 +101,7 @@ export const Search: FC<SearchProps> = ({ value, onChange, results }) => {
         strokeWidth={2}
       />
       <input
+        ref={inputRef}
         name="search"
         value={value}
         onChange={(e) => onChange(e.target.value)}
@@ -80,6 +112,14 @@ export const Search: FC<SearchProps> = ({ value, onChange, results }) => {
         className="text-primary placeholder:text-primary/45 w-full min-w-0 bg-transparent text-sm focus:outline-none [&::-webkit-search-cancel-button]:hidden"
         placeholder={translate("search.placeholder")}
       />
+      {!value && isClient && (
+        <kbd
+          aria-hidden
+          className="border-lines text-primary/35 rounded border px-1.5 py-0.5 font-mono text-[10px] max-md:hidden"
+        >
+          {isMac ? "⌘" : "Ctrl "}K
+        </kbd>
+      )}
       {value && (
         <button
           onClick={() => onChange("")}
