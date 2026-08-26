@@ -37,7 +37,7 @@ export const ShortLessonSwitcherCell: FC<{ className?: string }> = ({
   if (!isClient) {
     return (
       <div className={cn("px-3 py-2", className)}>
-        <Skeleton className="rounded-lg max-md:h-11 max-md:w-full md:h-9 md:w-37.5" />
+        <Skeleton className="h-9 rounded-lg max-md:w-full md:w-37.5" />
       </div>
     );
   }
@@ -53,7 +53,7 @@ export const ShortLessonSwitcherCell: FC<{ className?: string }> = ({
         <div
           {...presenceProps}
           inert={!isCustom}
-          className="border-lines bg-accent data-[state=open]:animate-rise data-[state=closed]:animate-fall flex shrink-0 items-center justify-between rounded-lg border px-1 max-md:h-11 md:h-9 md:justify-start"
+          className="border-lines bg-accent data-[state=open]:animate-rise data-[state=closed]:animate-fall flex h-9 shrink-0 items-center justify-between rounded-lg border px-1 md:justify-start"
         >
           <button
             aria-label={translate("lessons.earlier")}
@@ -95,7 +95,7 @@ export const ShortLessonSwitcherCell: FC<{ className?: string }> = ({
             ? enableCustomLessonsLength(hoursAdjustIndex)
             : setLessonType(value)
         }
-        className="min-w-0 max-md:h-11 max-md:w-full md:h-9 md:w-auto"
+        className="h-9 min-w-0 max-md:w-full md:w-auto"
         buttonClassName="tabular px-2.5 font-mono text-xs font-medium whitespace-nowrap"
         inactiveClassName="text-primary/50 hover:text-primary/80"
       />
