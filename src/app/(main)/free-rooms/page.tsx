@@ -8,9 +8,6 @@ import { t } from "@/lib/i18n";
 import { getLocale } from "@/lib/locale.server";
 import { pageSeo } from "@/lib/seo";
 
-// Render per request — inaczej prerenderowany HTML niesie "dziś" sprzed
-// nawet 15 minut i po północy rozjeżdża się z klientem. Same plany sal
-// siedzą w unstable_cache, więc to tylko koszt renderu.
 export const dynamic = "force-dynamic";
 
 export const metadata = pageSeo(

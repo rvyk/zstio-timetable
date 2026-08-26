@@ -24,25 +24,24 @@ import { useIsClient } from "usehooks-ts";
 import { FavoriteStar } from "../common/FavoriteStar";
 import { useSidebarContext } from "./Context";
 
+type ListType = "class" | "teacher" | "room" | "favorites" | "search";
+
 const LABELS = {
   favorites: "list.favorites",
   class: "list.class",
   teacher: "list.teacher",
   room: "list.room",
-} as const satisfies Record<
-  Exclude<DropdownProps["type"], "search">,
-  TranslationKey
->;
+} as const satisfies Record<Exclude<ListType, "search">, TranslationKey>;
 
 const NAVIGABLE_TYPES = ["class", "teacher", "room"] as const;
 
 const isNavigableType = (
-  value: DropdownProps["type"],
+  value: ListType,
 ): value is (typeof NAVIGABLE_TYPES)[number] =>
   NAVIGABLE_TYPES.includes(value as (typeof NAVIGABLE_TYPES)[number]);
 
-export interface DropdownProps {
-  type: "class" | "teacher" | "room" | "favorites" | "search";
+interface DropdownProps {
+  type: keyof typeof LABELS;
   icon: LucideIcon;
   data?: ListItem[];
   className?: string;
@@ -65,11 +64,7 @@ export const Dropdown: FC<DropdownProps> = ({
     return null;
   }
 
-  if (!Object.prototype.hasOwnProperty.call(LABELS, type)) {
-    return null;
-  }
-
-  const label = translate(LABELS[type as keyof typeof LABELS]);
+  const label = translate(LABELS[type]);
 
   const triggerContent = (
     <div className="flex w-full items-center justify-between rounded-md">
@@ -168,7 +163,7 @@ export const Dropdown: FC<DropdownProps> = ({
 };
 
 interface DropdownContentProps {
-  type: DropdownProps["type"];
+  type: ListType;
   data?: ListItem[];
   className?: string;
   onSelect?: () => void;
@@ -210,25 +205,24 @@ export const DropdownContent: FC<DropdownContentProps> = ({
 
 interface ListItemComponentProps {
   item: ListItem;
-  type: DropdownProps["type"];
+  type: ListType;
   onClick?: () => void;
 }
 
-export const ListItemComponent: FC<
+const ListItemComponent: FC<
   ListItemComponentProps & { favoriteStar?: boolean; style?: CSSProperties }
 > = ({ item, type, onClick, favoriteStar = true, style }) => {
   const translate = useT();
   const addRecent = useRecentStore((state) => state.addRecent);
-  const { toggleSidebar, isSidebarOpen } = useSettingsWithoutStore();
+  const toggleSidebar = useSettingsWithoutStore((state) => state.toggleSidebar);
+  const isSidebarOpen = useSettingsWithoutStore((state) => state.isSidebarOpen);
 
   const pathname = usePathname();
-  const rawType = (item.type ?? type) as DropdownProps["type"];
+  const rawType = (item.type ?? type) as ListType;
   const itemType = isNavigableType(rawType) ? rawType : NAVIGABLE_TYPES[0];
   const link = `/${itemType}/${item.value}`;
 
   const handleButton = () => {
-    // historia zbiera tylko trafienia z wyszukiwarki — lista klas czy sal to
-    // przeglądanie, nie wyszukiwanie
     if (type === "search") addRecent({ ...item, type: itemType });
     if (isSidebarOpen) {
       toggleSidebar();

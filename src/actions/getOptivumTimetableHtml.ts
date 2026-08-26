@@ -12,7 +12,9 @@ export const getOptivumTimetableHtml = async (
   const url = joinDataSourcePath(baseUrl, `plany/${timetableId}.html`);
 
   try {
-    const response = await fetch(url, { next: { revalidate: REVALIDATE_TIME } });
+    const response = await fetch(url, {
+      next: { revalidate: REVALIDATE_TIME },
+    });
     if (!response.ok) return null;
 
     const html = await response.text();

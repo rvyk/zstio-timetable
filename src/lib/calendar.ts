@@ -80,11 +80,6 @@ const createEvent = (group: TableLesson, dayIndex: number, hour: TableHour) => {
   } as ics.EventAttributes;
 };
 
-/**
- * Liczone w przeglądarce. Wcześniej była to server action — stare karty po
- * deployu trafiały na nieistniejące już ID akcji ("Failed to find Server
- * Action"), a `unstable_cache` potrafił oddać plan z datami z zeszłego tygodnia.
- */
 export const getCalendar = async (
   days: TableLesson[][][],
   hours: TableHour[],

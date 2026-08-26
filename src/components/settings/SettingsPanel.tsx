@@ -12,6 +12,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/Accordion";
 import { DialogDescription, DialogTitle } from "@/components/ui/Dialog";
+import { Segmented } from "@/components/ui/Segmented";
 import { usePwa } from "@/hooks/usePWA";
 import { showErrorToast } from "@/hooks/useToast";
 import { getCalendar } from "@/lib/calendar";
@@ -25,7 +26,6 @@ import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import type { LucideIcon } from "lucide-react";
 import {
   AccessibilityIcon,
-  BellIcon,
   CalendarArrowDownIcon,
   ChevronDown,
   DownloadIcon,
@@ -55,7 +55,6 @@ type SettingsItem = {
   onClick?: () => void;
   href?: string;
   hidden?: boolean;
-  active?: boolean;
 };
 
 const SettingButton = ({
@@ -64,7 +63,6 @@ const SettingButton = ({
   description,
   onClick,
   href,
-  active,
   index = 0,
 }: Omit<SettingsItem, "key" | "hidden"> & { index?: number }) => {
   const Tag = href ? "a" : "button";
@@ -79,7 +77,6 @@ const SettingButton = ({
       className={cn(
         "group animate-rise flex w-full gap-3 rounded-md p-2.5 text-left transition duration-150 max-md:min-h-11",
         "hover:bg-primary/4 active:scale-[0.99]",
-        active && "bg-primary/4",
       )}
     >
       <Icon
@@ -109,13 +106,6 @@ const LANGUAGE_LABELS: Record<Locale, string> = {
   uk: "Українська",
 };
 
-/**
- * Zmiana motywu jest natychmiastowa. Klasa na `<html>` podmienia się w jednym
- * renderze, a na tę jedną klatkę gasimy przejścia — inaczej setki elementów
- * z `transition-colors` zaczynają przenikać naraz i to widać jako zacięcie.
- * Jedynym wyjątkiem jest pigułka wyboru: patrz `[data-keep-transition]`
- * w globals.css.
- */
 const useThemeSwitch = () => {
   const { theme, setTheme } = useTheme();
 
@@ -123,8 +113,6 @@ const useThemeSwitch = () => {
     const root = document.documentElement;
     root.dataset.themeInstant = "";
     flushSync(() => setTheme(value));
-    // wymuszony reflow: nowe kolory są policzone, zanim przejścia wrócą,
-    // więc nic nie zdąży zacząć się przenikać
     void document.body.offsetHeight;
     delete root.dataset.themeInstant;
   };
@@ -136,45 +124,22 @@ const ThemeSetting = () => {
   const translate = useT();
   const { theme, switchTheme } = useThemeSwitch();
   const isClient = useIsClient();
-  const active = isClient ? (theme ?? "system") : "system";
-  const activeIndex = Math.max(
-    0,
-    THEMES.findIndex((option) => option.value === active),
-  );
 
   return (
     <div className="grid gap-2 p-2.5">
       <span className="text-primary/40 text-[11px] font-medium tracking-[0.06em] uppercase">
         {translate("theme.label")}
       </span>
-      <div className="border-lines bg-accent relative grid grid-cols-3 rounded-lg border p-0.75">
-        <span
-          aria-hidden
-          data-keep-transition
-          className="ease-out-quint pointer-events-none absolute inset-y-0.75 left-0.75 flex transition-transform duration-300"
-          style={{
-            width: `calc((100% - 0.375rem) / 3)`,
-            transform: `translateX(${activeIndex * 100}%)`,
-          }}
-        >
-          <span className="bg-foreground flex-1 rounded-md shadow-(--shadow-soft)" />
-        </span>
-        {THEMES.map((option) => (
-          <button
-            key={option.value}
-            onClick={() => switchTheme(option.value)}
-            aria-pressed={active === option.value}
-            className={cn(
-              active === option.value
-                ? "text-primary"
-                : "text-primary/45 hover:text-primary",
-              "relative rounded-md py-1.5 text-[11px] font-medium transition-colors",
-            )}
-          >
-            {translate(option.key)}
-          </button>
-        ))}
-      </div>
+      <Segmented
+        options={THEMES.map(({ value, key }) => ({
+          value,
+          label: translate(key),
+        }))}
+        value={isClient ? (theme ?? "system") : "system"}
+        onSelect={switchTheme}
+        buttonClassName="py-1.5 text-[11px] font-medium"
+        keepTransition
+      />
     </div>
   );
 };
@@ -183,42 +148,23 @@ const LanguageSetting = () => {
   const translate = useT();
   const locale = useLocale();
   const setLocale = useSetLocale();
-  const activeIndex = Math.max(0, LOCALES.indexOf(locale));
 
   return (
     <div className="grid gap-2 p-2.5">
       <span className="text-primary/40 text-[11px] font-medium tracking-[0.06em] uppercase">
         {translate("language.label")}
       </span>
-      <div className="border-lines bg-accent relative grid grid-cols-2 rounded-lg border p-0.75">
-        <span
-          aria-hidden
-          data-keep-transition
-          className="ease-out-quint pointer-events-none absolute inset-y-0.75 left-0.75 flex transition-transform duration-300"
-          style={{
-            width: `calc((100% - 0.375rem) / 2)`,
-            transform: `translateX(${activeIndex * 100}%)`,
-          }}
-        >
-          <span className="bg-foreground flex-1 rounded-md shadow-(--shadow-soft)" />
-        </span>
-        {LOCALES.map((option) => (
-          <button
-            key={option}
-            onClick={() => setLocale(option)}
-            aria-pressed={locale === option}
-            lang={option}
-            className={cn(
-              locale === option
-                ? "text-primary"
-                : "text-primary/45 hover:text-primary",
-              "relative rounded-md py-1.5 text-[11px] font-medium transition-colors",
-            )}
-          >
-            {LANGUAGE_LABELS[option]}
-          </button>
-        ))}
-      </div>
+      <Segmented
+        options={LOCALES.map((option) => ({
+          value: option,
+          label: LANGUAGE_LABELS[option],
+          lang: option,
+        }))}
+        value={locale}
+        onSelect={setLocale}
+        buttonClassName="py-1.5 text-[11px] font-medium"
+        keepTransition
+      />
     </div>
   );
 };
@@ -320,7 +266,6 @@ export const SettingsList = ({
   const router = useRouter();
   const translate = useT();
   const timetable = useTimetableStore((state) => state.timetable);
-  const savedSettings = useSettingsStore();
   const [prompt, isInstalled] = usePwa();
 
   const settings = useMemo<SettingsItem[]>(
@@ -342,15 +287,6 @@ export const SettingsList = ({
           );
         },
         description: <p>{translate("settings.installHint")}</p>,
-      },
-      {
-        key: "notifications",
-        icon: BellIcon,
-        title: translate("settings.notifications"),
-        hidden: true,
-        active: savedSettings.isNotificationEnabled,
-        onClick: savedSettings.toggleNotification,
-        description: <p>{translate("settings.notificationsHint")}</p>,
       },
       {
         key: "calendar",
@@ -418,15 +354,7 @@ export const SettingsList = ({
         description: <p>{translate("settings.freeRoomsHint")}</p>,
       },
     ],
-    [
-      isInstalled,
-      prompt,
-      savedSettings,
-      timetable,
-      router,
-      includePrint,
-      translate,
-    ],
+    [isInstalled, prompt, timetable, router, includePrint, translate],
   );
 
   const visibleSettings = settings.filter((setting) => !setting.hidden);

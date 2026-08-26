@@ -71,10 +71,6 @@ export const BottomBar: FC<BottomBarProps> = ({ timetable, isOffline }) => {
 
   return (
     <Drawer
-      /*
-        Testing needed: a known problem is scrolling the page after opening the bottom drawer on iOS
-        https://github.com/shadcn-ui/ui/issues/3943
-      */
       onOpenChange={(isOpen) => {
         if (isOpen) window.scrollTo(0, 0);
       }}

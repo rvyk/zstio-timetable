@@ -3,16 +3,9 @@
 import { useT } from "@/components/common/LocaleProvider";
 import { cn } from "@/lib/utils";
 import { TableHour, TableLesson } from "@majusss/timetable-parser";
-import { FC, Fragment, TouchEvent, useRef, useState } from "react";
+import { FC, TouchEvent, useRef, useState } from "react";
 import { DayTabs } from "./DayTabs";
-import {
-  BreakRow,
-  GapCard,
-  NoLessons,
-  SlotCard,
-  buildDaySlots,
-  useNowSeconds,
-} from "./Slots";
+import { DaySlots, NoLessons, buildDaySlots, useNowSeconds } from "./Slots";
 
 const SWIPE_THRESHOLD = 50;
 
@@ -97,27 +90,7 @@ export const DayBoard: FC<DayBoardProps> = ({
           className={cn(TRANSITION_CLASS[transition], "grid gap-2 p-3")}
         >
           {slots.length > 0 ? (
-            slots.map((slot, index) => (
-              <Fragment key={slot.hour.number}>
-                {isToday && index > 0 && (
-                  <BreakRow
-                    from={slots[index - 1]!.hour.timeTo}
-                    to={slot.hour.timeFrom}
-                    now={now}
-                  />
-                )}
-                {slot.entries.length > 0 ? (
-                  <SlotCard
-                    hour={slot.hour}
-                    lessons={slot.entries}
-                    isToday={isToday}
-                    now={now}
-                  />
-                ) : (
-                  <GapCard hour={slot.hour} />
-                )}
-              </Fragment>
-            ))
+            <DaySlots slots={slots} isToday={isToday} now={now} />
           ) : (
             <NoLessons description={translate("timetable.emptyDay")} />
           )}

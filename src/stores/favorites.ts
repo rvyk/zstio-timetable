@@ -5,13 +5,12 @@ import { persist } from "zustand/middleware";
 interface FavoritesStore {
   favorites: ListItem[];
   addFavorite: (item: ListItem) => void;
-  removeFavorite: (value: string) => void;
-  getFavorites: () => ListItem[];
+  removeFavorite: (name: string) => void;
 }
 
 export const useFavoritesStore = create<FavoritesStore>()(
   persist(
-    (set, get) => ({
+    (set) => ({
       favorites: [],
 
       addFavorite: (item) =>
@@ -23,8 +22,6 @@ export const useFavoritesStore = create<FavoritesStore>()(
         set((state) => ({
           favorites: state.favorites.filter((item) => item.name !== name),
         })),
-
-      getFavorites: () => get().favorites,
     }),
     {
       name: "favorites",

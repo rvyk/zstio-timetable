@@ -5,15 +5,12 @@ import { X } from "lucide-react";
 import * as React from "react";
 
 import { cn } from "@/lib/utils";
-import { Button } from "./Button";
 
 const Dialog = DialogPrimitive.Root;
 
 const DialogTrigger = DialogPrimitive.Trigger;
 
 const DialogPortal = DialogPrimitive.Portal;
-
-const DialogClose = DialogPrimitive.Close;
 
 const DialogOverlay = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Overlay>,
@@ -60,28 +57,14 @@ const DialogHeader = ({
   >
     <div className="grid gap-1.5">{props.children}</div>
     <DialogPrimitive.Close asChild>
-      <Button variant="icon" size="icon" className="-mt-1 -mr-1 shrink-0">
+      <button className="bg-accent text-primary/70 border-lines hover:bg-primary/5 hover:text-primary dark:hover:bg-accent-secondary -mt-1 -mr-1 grid size-11 shrink-0 place-content-center rounded-md border transition-colors sm:size-10">
         <X className="size-4" strokeWidth={2} />
         <span className="sr-only">Zamknij</span>
-      </Button>
+      </button>
     </DialogPrimitive.Close>
   </div>
 );
 DialogHeader.displayName = "DialogHeader";
-
-const DialogFooter = ({
-  className,
-  ...props
-}: React.HTMLAttributes<HTMLDivElement>) => (
-  <div
-    className={cn(
-      "flex flex-col-reverse gap-2 sm:flex-row sm:justify-end",
-      className,
-    )}
-    {...props}
-  />
-);
-DialogFooter.displayName = "DialogFooter";
 
 const DialogTitle = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Title>,
@@ -115,13 +98,9 @@ DialogDescription.displayName = DialogPrimitive.Description.displayName;
 
 export {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
-  DialogOverlay,
-  DialogPortal,
   DialogTitle,
   DialogTrigger,
 };

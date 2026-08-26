@@ -17,7 +17,6 @@ const combineRooms = async (): Promise<Room[]> => {
 
     return {
       id: room.value,
-      title: timetable.title,
       lessons: timetable.lessons,
     } satisfies Room;
   });
@@ -58,20 +57,3 @@ const cachedRooms = () =>
   unstable_cache(() => combineRooms(), ["combinedRooms"], {
     revalidate: REVALIDATE_TIME,
   })();
-
-export const getFreeRooms = async (
-  weekdayIndex: number,
-  lessonIndex: number,
-) => {
-  if (weekdayIndex < 0 || lessonIndex < 0) {
-    return [];
-  }
-
-  const rooms = await cachedRooms();
-
-  return rooms.filter((room) => {
-    const dayLessons = room.lessons?.[weekdayIndex];
-    const lessonEntries = dayLessons?.[lessonIndex];
-    return !lessonEntries || lessonEntries.length === 0;
-  });
-};

@@ -6,13 +6,12 @@ import { cn } from "@/lib/utils";
 import { useFavoritesStore } from "@/stores/favorites";
 import { ListItem } from "@majusss/timetable-parser";
 import { BookmarkIcon } from "lucide-react";
-import { FC, useMemo, useState } from "react";
+import { FC, useState } from "react";
 
 interface FavoriteStarProps {
   item: ListItem;
   small?: boolean;
   className?: string;
-  /** Hide until the containing `group` row is hovered/focused (list context). */
   revealOnHover?: boolean;
   withLabel?: boolean;
 }
@@ -25,11 +24,9 @@ export const FavoriteStar: FC<FavoriteStarProps> = ({
   withLabel,
 }) => {
   const translate = useT();
-  const { favorites } = useFavoritesStore();
-
-  const isFavorite = useMemo(() => {
-    return favorites.some((c) => c.name === item.name);
-  }, [favorites, item.name]);
+  const isFavorite = useFavoritesStore((state) =>
+    state.favorites.some((entry) => entry.name === item.name),
+  );
 
   const [clicks, setClicks] = useState(0);
 

@@ -4,14 +4,8 @@ import { useLocale, useT } from "@/components/common/LocaleProvider";
 import { dayLabel } from "@/lib/i18n";
 import { cn, getDayNumberForNextWeek } from "@/lib/utils";
 import { TableHour, TableLesson } from "@majusss/timetable-parser";
-import { FC, Fragment } from "react";
-import {
-  BreakRow,
-  GapCard,
-  SlotCard,
-  buildDaySlots,
-  useNowSeconds,
-} from "./Slots";
+import { FC } from "react";
+import { DaySlots, buildDaySlots, useNowSeconds } from "./Slots";
 
 interface WeekBoardProps {
   dayNames: string[];
@@ -78,27 +72,7 @@ export const WeekBoard: FC<WeekBoardProps> = ({
               </header>
 
               {slots.length > 0 ? (
-                slots.map((slot, index) => (
-                  <Fragment key={slot.hour.number}>
-                    {isToday && index > 0 && (
-                      <BreakRow
-                        from={slots[index - 1]!.hour.timeTo}
-                        to={slot.hour.timeFrom}
-                        now={now}
-                      />
-                    )}
-                    {slot.entries.length > 0 ? (
-                      <SlotCard
-                        hour={slot.hour}
-                        lessons={slot.entries}
-                        isToday={isToday}
-                        now={now}
-                      />
-                    ) : (
-                      <GapCard hour={slot.hour} />
-                    )}
-                  </Fragment>
-                ))
+                <DaySlots slots={slots} isToday={isToday} now={now} />
               ) : (
                 <p className="text-primary/30 px-3 py-2 text-xs">
                   {translate("timetable.noLessons")}

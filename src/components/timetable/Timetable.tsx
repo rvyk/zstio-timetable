@@ -67,7 +67,6 @@ export const Timetable: FC<TimetableProps> = ({ timetable }) => {
   );
 
   const todayIndex = useTodayIndex();
-  // W weekend startujemy od poniedziałku.
   const selectedDayIndex =
     storedDayIndex >= 0 ? storedDayIndex : todayIndex > 4 ? 0 : todayIndex;
   const dayNames = timetable.dayNames;

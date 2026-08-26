@@ -8,7 +8,6 @@ declare module "@majusss/timetable-parser" {
 
 interface Room {
   id: string;
-  title: string;
   lessons?: TableLesson[][][];
 }
 

@@ -1,197 +1,65 @@
 "use client";
 
-import * as React from "react";
-
-import type { ToastActionElement, ToastProps } from "@/components/ui/Toast";
-import { CircleCheck, CircleX, LucideIcon } from "lucide-react";
+import type { ToastProps } from "@/components/ui/Toast";
+import { CircleCheck, CircleX, type LucideIcon } from "lucide-react";
+import type { ReactNode } from "react";
+import { create } from "zustand";
 
 const TOAST_LIMIT = 3;
-const TOAST_REMOVE_DELAY = 1000000;
+const REMOVE_DELAY = 400;
 
-type ToasterToast = ToastProps & {
+const ICONS = { success: CircleCheck, error: CircleX };
+
+export type ToastItem = ToastProps & {
   id: string;
-  title?: React.ReactNode;
-  description?: React.ReactNode;
-  action?: ToastActionElement;
+  title?: ReactNode;
+  description?: ReactNode;
   icon?: LucideIcon;
 };
 
+export const useToasts = create<{ toasts: ToastItem[] }>(() => ({
+  toasts: [],
+}));
+
+const patch = (update: (toasts: ToastItem[]) => ToastItem[]) =>
+  useToasts.setState((state) => ({ toasts: update(state.toasts) }));
+
 let count = 0;
 
-function genId() {
-  count = (count + 1) % Number.MAX_SAFE_INTEGER;
-  return count.toString();
-}
+export const toast = ({
+  variant,
+  icon,
+  ...props
+}: Omit<ToastItem, "id" | "open" | "onOpenChange">) => {
+  const id = (++count).toString();
+  const kind = variant ?? "success";
 
-type Action =
-  | {
-      type: "ADD_TOAST";
-      toast: ToasterToast;
-    }
-  | {
-      type: "UPDATE_TOAST";
-      toast: Partial<ToasterToast>;
-    }
-  | {
-      type: "DISMISS_TOAST";
-      toastId?: ToasterToast["id"];
-    }
-  | {
-      type: "REMOVE_TOAST";
-      toastId?: ToasterToast["id"];
-    };
-
-interface State {
-  toasts: ToasterToast[];
-}
-
-const toastTimeouts = new Map<string, ReturnType<typeof setTimeout>>();
-
-const addToRemoveQueue = (toastId: string) => {
-  if (toastTimeouts.has(toastId)) {
-    return;
-  }
-
-  const timeout = setTimeout(() => {
-    toastTimeouts.delete(toastId);
-    dispatch({
-      type: "REMOVE_TOAST",
-      toastId: toastId,
-    });
-  }, TOAST_REMOVE_DELAY);
-
-  toastTimeouts.set(toastId, timeout);
-};
-
-export const reducer = (state: State, action: Action): State => {
-  switch (action.type) {
-    case "ADD_TOAST":
-      return {
-        ...state,
-        toasts: [action.toast, ...state.toasts].slice(0, TOAST_LIMIT),
-      };
-
-    case "UPDATE_TOAST":
-      return {
-        ...state,
-        toasts: state.toasts.map((t) =>
-          t.id === action.toast.id ? { ...t, ...action.toast } : t,
-        ),
-      };
-
-    case "DISMISS_TOAST": {
-      const { toastId } = action;
-
-      if (toastId) {
-        addToRemoveQueue(toastId);
-      } else {
-        state.toasts.forEach((toast) => {
-          addToRemoveQueue(toast.id);
-        });
-      }
-
-      return {
-        ...state,
-        toasts: state.toasts.map((t) =>
-          t.id === toastId || toastId === undefined
-            ? {
-                ...t,
-                open: false,
-              }
-            : t,
-        ),
-      };
-    }
-    case "REMOVE_TOAST":
-      if (action.toastId === undefined) {
-        return {
-          ...state,
-          toasts: [],
-        };
-      }
-      return {
-        ...state,
-        toasts: state.toasts.filter((t) => t.id !== action.toastId),
-      };
-    default:
-      return state;
-  }
-};
-
-const listeners: Array<(state: State) => void> = [];
-
-let memoryState: State = { toasts: [] };
-
-function dispatch(action: Action) {
-  memoryState = reducer(memoryState, action);
-  listeners.forEach((listener) => {
-    listener(memoryState);
-  });
-}
-
-type Toast = Omit<ToasterToast, "id">;
-
-function toast({ ...props }: Toast) {
-  const id = genId();
-
-  const icons = {
-    success: CircleCheck,
-    error: CircleX,
+  const close = () => {
+    patch((toasts) =>
+      toasts.map((item) => (item.id === id ? { ...item, open: false } : item)),
+    );
+    setTimeout(
+      () => patch((toasts) => toasts.filter((item) => item.id !== id)),
+      REMOVE_DELAY,
+    );
   };
 
-  const update = (props: ToasterToast) =>
-    dispatch({
-      type: "UPDATE_TOAST",
-      toast: { ...props, id },
-    });
-  const dismiss = () => dispatch({ type: "DISMISS_TOAST", toastId: id });
-
-  dispatch({
-    type: "ADD_TOAST",
-    toast: {
-      icon: props.icon ?? icons[props.variant ?? "success"],
-      ...props,
-      id,
-      open: true,
-      onOpenChange: (open) => {
-        if (!open) dismiss();
+  useToasts.setState((state) => ({
+    toasts: [
+      {
+        ...props,
+        id,
+        variant: kind,
+        icon: icon ?? ICONS[kind],
+        open: true,
+        onOpenChange: (open: boolean) => {
+          if (!open) close();
+        },
       },
-    },
-  });
+      ...state.toasts,
+    ].slice(0, TOAST_LIMIT),
+  }));
+};
 
-  return {
-    id: id,
-    dismiss,
-    update,
-  };
-}
-
-function useToast() {
-  const [state, setState] = React.useState<State>(memoryState);
-
-  React.useEffect(() => {
-    listeners.push(setState);
-    return () => {
-      const index = listeners.indexOf(setState);
-      if (index > -1) {
-        listeners.splice(index, 1);
-      }
-    };
-  }, [state]);
-
-  return {
-    ...state,
-    toast,
-    dismiss: (toastId?: string) => dispatch({ type: "DISMISS_TOAST", toastId }),
-  };
-}
-
-function showErrorToast(title: string, description: string) {
-  toast({
-    title,
-    description,
-    variant: "error",
-  });
-}
-
-export { showErrorToast, toast, useToast };
+export const showErrorToast = (title: string, description: string) =>
+  toast({ title, description, variant: "error" });

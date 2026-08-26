@@ -21,7 +21,7 @@ export const handleFavorite = (item: ListItem, translate: Translate) => {
     return;
   }
 
-  addFavorite({ ...item });
+  addFavorite(item);
   toast({
     title: translate("favorites.added", { name: item.name }),
     icon: BookmarkIcon,

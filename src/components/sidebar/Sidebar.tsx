@@ -27,7 +27,7 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { FC, Fragment, useEffect, useMemo, useState } from "react";
+import { FC, Fragment, useEffect, useState } from "react";
 import { useIsClient, useMediaQuery } from "usehooks-ts";
 import SidebarContext, { useSidebarContext } from "./Context";
 import { Dropdown, DropdownContent } from "./Dropdown";
@@ -170,9 +170,6 @@ const SidebarActions: FC<{ collapsed: boolean; onExpand: () => void }> = ({
           <div
             {...presenceProps}
             inert={!isOpen}
-            /* origin-bottom: panel wyrasta z przycisku, który go otwiera */
-            /* max-h: przy większym tekście albo rozwiniętej dostępności panel
-               przerasta okno — wtedy scrolluje się w sobie */
             className="border-lines bg-foreground/95 data-[state=open]:animate-popover-in data-[state=closed]:animate-popover-out absolute inset-x-0 bottom-full z-20 mb-2 max-h-[calc(100dvh-9rem)] origin-bottom overflow-y-auto rounded-lg border shadow-(--shadow-raised) backdrop-blur-md"
           >
             <SettingsList onSelect={() => setIsOpen(false)} />
@@ -226,8 +223,15 @@ const SidebarActions: FC<{ collapsed: boolean; onExpand: () => void }> = ({
 };
 
 export const Sidebar: FC = () => {
-  const { isSidebarCollapsed, setSidebarCollapsed, toggleSidebarCollapsed } =
-    useSettingsWithoutStore();
+  const collapsed = useSettingsWithoutStore(
+    (state) => state.isSidebarCollapsed,
+  );
+  const setSidebarCollapsed = useSettingsWithoutStore(
+    (state) => state.setSidebarCollapsed,
+  );
+  const toggleSidebarCollapsed = useSettingsWithoutStore(
+    (state) => state.toggleSidebarCollapsed,
+  );
 
   const isNarrow = useMediaQuery("(max-width: 1279px)", {
     initializeWithValue: false,
@@ -236,8 +240,6 @@ export const Sidebar: FC = () => {
   useEffect(() => {
     setSidebarCollapsed(isNarrow);
   }, [isNarrow, setSidebarCollapsed]);
-
-  const collapsed = isSidebarCollapsed;
 
   return (
     <aside
@@ -320,7 +322,7 @@ export const SidebarInfo: FC<{ showTimetableDates?: boolean }> = ({
 const TimetableSidebarDropdowns: FC = () => {
   const translate = useT();
   const { timetable } = useTimetableStore();
-  const favorites = useFavoritesStore((state) => state.getFavorites());
+  const favorites = useFavoritesStore((state) => state.favorites);
   const { classes, teachers, rooms } = timetable?.list ?? {};
   const { isPreview } = useSidebarContext();
   const [openSections, setOpenSections] = useState<string[]>([]);
@@ -332,18 +334,30 @@ const TimetableSidebarDropdowns: FC = () => {
 
   const visibleSections = isPreview ? [] : openSections;
 
-  const dropdownItems = useMemo(() => {
-    return [
-      { type: "favorites" as const, icon: BookmarkIcon, data: favorites },
-      { type: "class" as const, icon: GraduationCap, data: classes },
-      { type: "teacher" as const, icon: Users, data: teachers },
-      { type: "room" as const, icon: MapPin, data: rooms },
-    ];
-  }, [favorites, classes, teachers, rooms]);
+  const dropdownItems = [
+    { type: "favorites" as const, icon: BookmarkIcon, data: favorites },
+    { type: "class" as const, icon: GraduationCap, data: classes },
+    { type: "teacher" as const, icon: Users, data: teachers },
+    { type: "room" as const, icon: MapPin, data: rooms },
+  ];
+
+  const sections = (
+    <Accordion
+      type="multiple"
+      value={visibleSections}
+      onValueChange={setOpenSections}
+      className="grid w-full gap-1"
+    >
+      {dropdownItems.map((item, index) => (
+        <Fragment key={item.type}>
+          <Dropdown type={item.type} icon={item.icon} data={item.data} />
+          {index === 0 && <hr className="border-lines my-2 w-full" />}
+        </Fragment>
+      ))}
+    </Accordion>
+  );
 
   const isSearching = query.trim().length > 0;
-  // pusta historia (np. pierwsze wejście) → podpowiadamy ulubione, żeby
-  // kliknięcie w wyszukiwarkę nigdy nie kończyło się pustką
   const suggestions = recent.length > 0 ? recent : favorites;
   const showSuggestions = isFocused && !isSearching && suggestions.length > 0;
 
@@ -353,19 +367,7 @@ const TimetableSidebarDropdowns: FC = () => {
         <div className="border-lines bg-accent-secondary text-primary/45 grid h-11 w-12 place-content-center rounded-lg border">
           <SearchIcon size={17} strokeWidth={2} />
         </div>
-        <Accordion
-          type="multiple"
-          value={visibleSections}
-          onValueChange={setOpenSections}
-          className="grid w-full gap-1"
-        >
-          {dropdownItems.map((item, index) => (
-            <Fragment key={item.type}>
-              <Dropdown type={item.type} icon={item.icon} data={item.data} />
-              {index === 0 && <hr className="border-lines my-2 w-full" />}
-            </Fragment>
-          ))}
-        </Accordion>
+        {sections}
       </div>
     );
   }
@@ -373,12 +375,9 @@ const TimetableSidebarDropdowns: FC = () => {
   return (
     <div
       className="grid gap-5 md:gap-8"
-      /* tylko pole wyszukiwarki otwiera podpowiedzi — focus z akordeonu czy
-         linku listy podmieniał widok na ulubione przy każdym kliknięciu */
       onFocus={(event) => {
         if (event.target.tagName === "INPUT") setIsFocused(true);
       }}
-      /* zamykamy dopiero, gdy focus wyjdzie poza wyszukiwarkę i jej listę */
       onBlur={(event) => {
         if (!event.currentTarget.contains(event.relatedTarget)) {
           setIsFocused(false);
@@ -388,8 +387,6 @@ const TimetableSidebarDropdowns: FC = () => {
       <Search value={query} onChange={setQuery} results={results} />
 
       {showSuggestions ? (
-        /* bez preventDefault wciśnięcie myszy zabiera focus polu, lista znika
-           jeszcze przed puszczeniem przycisku i klik nigdy nie dochodzi */
         <div
           className="grid gap-2"
           onMouseDown={(event) => event.preventDefault()}
@@ -428,8 +425,6 @@ const TimetableSidebarDropdowns: FC = () => {
               type="search"
               data={results}
               className="max-h-none"
-              /* po wejściu w wynik pole wraca do stanu wyjściowego, żeby
-                 kolejne kliknięcie w wyszukiwarkę pokazało historię */
               onSelect={() => setQuery("")}
             />
           ) : (
@@ -439,19 +434,7 @@ const TimetableSidebarDropdowns: FC = () => {
           )}
         </div>
       ) : (
-        <Accordion
-          type="multiple"
-          value={visibleSections}
-          onValueChange={setOpenSections}
-          className="grid w-full gap-1"
-        >
-          {dropdownItems.map((item, index) => (
-            <Fragment key={item.type}>
-              <Dropdown type={item.type} icon={item.icon} data={item.data} />
-              {index === 0 && <hr className="border-lines my-2 w-full" />}
-            </Fragment>
-          ))}
-        </Accordion>
+        sections
       )}
     </div>
   );

@@ -1,6 +1,7 @@
 "use client";
 
 import { useT } from "@/components/common/LocaleProvider";
+import { Segmented } from "@/components/ui/Segmented";
 import { Skeleton } from "@/components/ui/Skeleton";
 import { MAX_LESSONS } from "@/constants/settings";
 import { usePresence } from "@/hooks/usePresence";
@@ -79,43 +80,25 @@ export const ShortLessonSwitcherCell: FC<{ className?: string }> = ({
         </div>
       )}
 
-      <div className="border-lines bg-accent relative grid min-w-0 grid-cols-3 rounded-lg border p-0.75 max-md:h-11 max-md:w-full md:h-9 md:w-auto">
-        <span
-          aria-hidden
-          className="ease-out-quint pointer-events-none absolute inset-y-0.75 left-0.75 flex transition-transform duration-300"
-          style={{
-            width: `calc((100% - 0.375rem) / 3)`,
-            transform: `translateX(${LESSON_MODES.findIndex(({ value }) => value === lessonType) * 100}%)`,
-          }}
-        >
-          <span className="bg-foreground flex-1 rounded-md shadow-(--shadow-soft)" />
-        </span>
-
-        {LESSON_MODES.map(({ value, label: rawLabel }) => {
+      <Segmented
+        options={LESSON_MODES.map(({ value, label: rawLabel }) => {
           const label = rawLabel ?? translate("lessons.mode.custom");
-          const active = lessonType === value;
-          return (
-            <button
-              key={value}
-              aria-label={translate("lessons.mode.aria", { label })}
-              aria-pressed={active}
-              onClick={() =>
-                value === "custom"
-                  ? enableCustomLessonsLength(hoursAdjustIndex)
-                  : setLessonType(value)
-              }
-              className={cn(
-                active
-                  ? "text-primary"
-                  : "text-primary/50 hover:text-primary/80",
-                "tabular relative rounded-md px-2.5 font-mono text-xs font-medium whitespace-nowrap transition-colors",
-              )}
-            >
-              {label}
-            </button>
-          );
+          return {
+            value,
+            label,
+            ariaLabel: translate("lessons.mode.aria", { label }),
+          };
         })}
-      </div>
+        value={lessonType}
+        onSelect={(value) =>
+          value === "custom"
+            ? enableCustomLessonsLength(hoursAdjustIndex)
+            : setLessonType(value)
+        }
+        className="min-w-0 max-md:h-11 max-md:w-full md:h-9 md:w-auto"
+        buttonClassName="tabular px-2.5 font-mono text-xs font-medium whitespace-nowrap"
+        inactiveClassName="text-primary/50 hover:text-primary/80"
+      />
     </div>
   );
 };

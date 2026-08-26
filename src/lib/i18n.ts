@@ -11,14 +11,6 @@ export const LOCALE_COOKIE = "lang";
 export const isLocale = (value?: string): value is Locale =>
   LOCALES.includes(value as Locale);
 
-/**
- * Słownik interfejsu. Klucz → tłumaczenia, żeby wersje językowe stały obok
- * siebie i nie dało się dodać nowego napisu tylko po polsku. Metadane (SEO,
- * manifest) zostają po polsku — strona nie ma osobnych adresów per język.
- *
- * ponytail: zwykły obiekt zamiast biblioteki i18n — bez routingu per język
- * next-intl nic tu nie wnosi. Gdy dojdą adresy /uk/…, wtedy biblioteka.
- */
 const DICT = {
   "type.class": { pl: "oddziału", uk: "класу" },
   "type.teacher": { pl: "nauczyciela", uk: "вчителя" },
@@ -216,11 +208,6 @@ const DICT = {
     pl: "Twoja przeglądarka nie obsługuje tej funkcji",
     uk: "Ваш браузер не підтримує цю функцію",
   },
-  "settings.notifications": { pl: "Powiadomienia", uk: "Сповіщення" },
-  "settings.notificationsHint": {
-    pl: "Otrzymuj powiadomienia PUSH o nowym planie lekcji",
-    uk: "Отримуйте PUSH-сповіщення про новий розклад",
-  },
   "settings.calendar": { pl: "Dodaj do kalendarza", uk: "Додати до календаря" },
   "settings.calendarHint": {
     pl: "Pobierz plan {title} jako plik .ics",
@@ -312,10 +299,6 @@ export const t = (
 
 export type Translate = (key: TranslationKey, vars?: TranslationVars) => string;
 
-/**
- * Nazwy dni przychodzą z Optivum po polsku — na ekran idą przez słownik,
- * a gdy nazwa jest nietypowa, zostaje tak, jak przyszła.
- */
 export const dayLabel = (
   locale: Locale,
   dayName: string,

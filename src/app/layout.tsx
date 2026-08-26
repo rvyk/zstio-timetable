@@ -140,8 +140,6 @@ export default async function RootLayout({
           "bg-foreground md:bg-background flex h-dvh font-sans antialiased",
         )}
       >
-        {/* Ustawienia dostępności przed pierwszym malowaniem — inaczej większy
-            tekst czy kontrast mrugają po hydracji zustanda. */}
         <script
           dangerouslySetInnerHTML={{
             __html: `try{var a=JSON.parse(localStorage.getItem("timetable-settings")).state.a11y;for(var k in a)if(a[k])document.documentElement.setAttribute("data-a11y-"+k,"")}catch(e){}`,

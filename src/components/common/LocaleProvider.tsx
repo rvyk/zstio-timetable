@@ -23,16 +23,11 @@ export const LocaleProvider = ({
 
 export const useLocale = () => use(LocaleContext);
 
-/** `const translate = useT()` → `translate("news.source")`. */
 export const useT = (): Translate => {
   const locale = useLocale();
   return useMemo(() => (key, vars) => t(locale, key, vars), [locale]);
 };
 
-/**
- * Język siedzi w ciasteczku, bo napisy renderują też komponenty serwerowe —
- * `router.refresh()` przeciąga nową wersję bez gubienia stanu klienta.
- */
 export const useSetLocale = () => {
   const router = useRouter();
 

@@ -2,7 +2,6 @@ import { ListItem } from "@majusss/timetable-parser";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
-/** Ile ostatnio wyszukanych planów pamiętamy. */
 const MAX_RECENT = 5;
 
 interface RecentStore {

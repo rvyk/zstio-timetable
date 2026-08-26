@@ -5,21 +5,13 @@ import { AnchorHTMLAttributes, FC } from "react";
 export const LinkWithCookie: FC<
   AnchorHTMLAttributes<HTMLAnchorElement> & { href: string }
 > = ({ href, children, onClick, ...rest }) => {
-  const handleClick = (
-    link: string,
-    e: React.MouseEvent<HTMLAnchorElement>,
-  ) => {
-    setLastVisitedCookie(link);
-
-    if (onClick) {
-      onClick(e);
-    }
-  };
-
   return (
     <Link
       href={href}
-      onClick={(e) => handleClick(href, e)}
+      onClick={(event) => {
+        setLastVisitedCookie(href);
+        onClick?.(event);
+      }}
       prefetch={false}
       {...rest}
     >

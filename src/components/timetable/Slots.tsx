@@ -4,7 +4,7 @@ import { useT } from "@/components/common/LocaleProvider";
 import { cn, parseTime } from "@/lib/utils";
 import { TableHour, TableLesson } from "@majusss/timetable-parser";
 import { CalendarX2, Coffee } from "lucide-react";
-import { FC, useEffect, useMemo, useState } from "react";
+import { FC, Fragment, useMemo, useSyncExternalStore } from "react";
 import { LessonEntry } from "./LessonCells";
 
 const secondsOfDay = () => {
@@ -19,19 +19,36 @@ const clockOffset = () => {
   return h * 3600 + m * 60 + s - secondsOfDay();
 };
 
-export const useNowSeconds = () => {
-  const [now, setNow] = useState(-1);
+let currentSeconds = -1;
+let offset = 0;
+let timer: ReturnType<typeof setInterval> | undefined;
+const listeners = new Set<() => void>();
 
-  useEffect(() => {
-    const offset = clockOffset();
-    const tick = () => setNow(secondsOfDay() + offset);
-    tick();
-    const interval = setInterval(tick, 1000);
-    return () => clearInterval(interval);
-  }, []);
-
-  return now;
+const tick = () => {
+  currentSeconds = secondsOfDay() + offset;
+  listeners.forEach((listener) => listener());
 };
+
+const subscribe = (listener: () => void) => {
+  if (listeners.size === 0) {
+    offset = clockOffset();
+    tick();
+    timer = setInterval(tick, 1000);
+  }
+  listeners.add(listener);
+
+  return () => {
+    listeners.delete(listener);
+    if (listeners.size === 0) clearInterval(timer);
+  };
+};
+
+export const useNowSeconds = () =>
+  useSyncExternalStore(
+    subscribe,
+    () => currentSeconds,
+    () => -1,
+  );
 
 export interface DaySlot {
   hour: TableHour;
@@ -85,7 +102,7 @@ export const SlotCard: FC<SlotCardProps> = ({
     <article
       className={cn(
         isLive
-          ? "border-lines bg-accent shadow-lg shadow-black/30"
+          ? "border-lines bg-accent dark:shadow-lg dark:shadow-black/30"
           : "border-lines/70 bg-accent/40 hover:border-lines hover:bg-accent",
         isPast && !isLive && "opacity-55",
         "relative grid gap-1.5 rounded-lg border px-3 py-2.5 transition-colors",
@@ -131,7 +148,6 @@ export const SlotCard: FC<SlotCardProps> = ({
   );
 };
 
-/** Divider shown between two cards while the break between them is running. */
 export const BreakRow: FC<{ from: string; to: string; now: number }> = ({
   from,
   to,
@@ -198,3 +214,33 @@ export const GapCard: FC<{ hour: TableHour }> = ({ hour }) => {
     </div>
   );
 };
+
+export const DaySlots: FC<{
+  slots: DaySlot[];
+  isToday: boolean;
+  now: number;
+}> = ({ slots, isToday, now }) => (
+  <Fragment>
+    {slots.map((slot, index) => (
+      <Fragment key={slot.hour.number}>
+        {isToday && index > 0 && (
+          <BreakRow
+            from={slots[index - 1]!.hour.timeTo}
+            to={slot.hour.timeFrom}
+            now={now}
+          />
+        )}
+        {slot.entries.length > 0 ? (
+          <SlotCard
+            hour={slot.hour}
+            lessons={slot.entries}
+            isToday={isToday}
+            now={now}
+          />
+        ) : (
+          <GapCard hour={slot.hour} />
+        )}
+      </Fragment>
+    ))}
+  </Fragment>
+);

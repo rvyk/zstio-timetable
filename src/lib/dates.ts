@@ -42,17 +42,11 @@ const WARSAW_YMD = new Intl.DateTimeFormat("en-US", {
   day: "2-digit",
 });
 
-/**
- * Dzisiejsza data szkoły jako północ UTC. Serwer (UTC) i przeglądarka
- * (dowolna strefa) liczą z tego to samo, więc SSR i hydracja się zgadzają.
- * Czytaj polami UTC.
- */
 export const warsawToday = (at: Date = new Date()): Date => {
   const { year, month, day } = parts(WARSAW_YMD, at);
   return new Date(Date.UTC(Number(year), Number(month) - 1, Number(day)));
 };
 
-/** 0 = poniedziałek ... 6 = niedziela, wg czasu w Polsce. */
 export const warsawDayIndex = (at?: Date): number =>
   (warsawToday(at).getUTCDay() + 6) % 7;
 
