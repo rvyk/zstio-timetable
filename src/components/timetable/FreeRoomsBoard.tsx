@@ -169,7 +169,7 @@ export const FreeRoomsBoard: FC<FreeRoomsBoardProps> = ({
                   >
                     {date.dayNumber.toString().padStart(2, "0")}
                   </span>
-                  <h2 className="text-primary/72 truncate text-sm leading-none font-medium">
+                  <h2 className="text-primary/72 truncate text-sm leading-tight font-medium">
                     <span className="max-sm:hidden">
                       {dayLabel(locale, dayName, "long")}
                     </span>

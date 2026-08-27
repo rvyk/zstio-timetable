@@ -1,0 +1,179 @@
+"use client";
+
+import { useLocale, useT } from "@/components/common/LocaleProvider";
+import { dayLabel } from "@/lib/i18n";
+import { cn, getDayNumberForNextWeek, parseTime } from "@/lib/utils";
+import { TableHour, TableLesson } from "@majusss/timetable-parser";
+import { FC } from "react";
+import { LessonEntry } from "./LessonCells";
+import { formatCountdown, useNowSeconds } from "./Slots";
+
+interface TableBoardProps {
+  dayNames: string[];
+  lessons: TableLesson[][][];
+  hours: TableHour[];
+  todayIndex: number;
+}
+
+export const TableBoard: FC<TableBoardProps> = ({
+  dayNames,
+  lessons,
+  hours,
+  todayIndex,
+}) => {
+  const locale = useLocale();
+  const translate = useT();
+  const now = useNowSeconds();
+
+  const lastTakenHour = hours.reduce(
+    (last, _, hourIndex) =>
+      lessons.some((day) => (day[hourIndex]?.length ?? 0) > 0)
+        ? hourIndex
+        : last,
+    -1,
+  );
+  const visibleHours = hours.slice(0, lastTakenHour + 1);
+
+  return (
+    <div className="animate-rise @container/table px-4 pb-4">
+      <table
+        className={cn(
+          "w-full table-fixed border-separate border-spacing-0 text-left",
+          "[&_td]:px-2 [&_td]:py-2 [&_th]:px-2 [&_th]:py-2.5",
+          "@3xl/table:[&_td]:px-3 @3xl/table:[&_td]:py-3 @3xl/table:[&_th]:py-3",
+          "[&_h3]:truncate [&_h3]:text-[13px] @3xl/table:[&_h3]:text-[15px]",
+          "[&_h3+div]:flex-nowrap [&_h3+div]:overflow-hidden [&_h3+div]:text-[11px] @3xl/table:[&_h3+div]:text-xs",
+          "[&_h3+div>span]:min-w-0 [&_h3+div>span]:truncate",
+        )}
+      >
+        <thead>
+          <tr>
+            <th className="border-lines bg-foreground sticky top-0 z-20 w-16 border-b align-bottom @3xl/table:w-24">
+              <span className="text-primary/40 text-[10px] font-semibold tracking-[0.08em] uppercase">
+                {translate("timetable.hour")}
+              </span>
+            </th>
+            {dayNames.map((dayName, dayIndex) => {
+              const date = getDayNumberForNextWeek(dayName);
+              const isToday = dayIndex === todayIndex;
+
+              return (
+                <th
+                  key={dayName}
+                  className={cn(
+                    "border-lines bg-foreground sticky top-0 z-20 border-b align-bottom",
+                    isToday && "border-accent-table/60",
+                  )}
+                >
+                  <div className="flex min-w-0 items-baseline gap-1.5">
+                    <span
+                      className={cn(
+                        isToday ? "text-accent-table" : "text-primary/45",
+                        "tabular font-mono text-[11px] font-semibold",
+                      )}
+                    >
+                      {date.dayNumber.toString().padStart(2, "0")}
+                    </span>
+                    <span
+                      className={cn(
+                        isToday ? "text-primary" : "text-primary/70",
+                        "truncate text-xs leading-tight font-medium tracking-[-0.01em] @3xl/table:text-[13px]",
+                      )}
+                    >
+                      <span className="@2xl/table:hidden">
+                        {dayLabel(locale, dayName, "short")}
+                      </span>
+                      <span className="@max-2xl/table:hidden">
+                        {dayLabel(locale, dayName, "long")}
+                      </span>
+                    </span>
+                  </div>
+                </th>
+              );
+            })}
+          </tr>
+        </thead>
+        <tbody>
+          {visibleHours.map((hour, hourIndex) => {
+            const start = parseTime(hour.timeFrom);
+            const end = parseTime(hour.timeTo);
+            const isLiveHour = now >= start && now < end;
+            const isLast = hourIndex === visibleHours.length - 1;
+
+            return (
+              <tr
+                key={hour.number}
+                className={cn("group", hourIndex % 2 === 1 && "bg-accent/45")}
+              >
+                <td
+                  className={cn(
+                    "group-hover:bg-accent/75 align-top transition-colors",
+                    !isLast && "border-lines/40 border-b",
+                  )}
+                >
+                  <div className="flex flex-col gap-x-2 @3xl/table:flex-row @3xl/table:items-baseline @3xl/table:justify-between">
+                    <span
+                      className={cn(
+                        isLiveHour ? "text-accent-table" : "text-primary/70",
+                        "tabular font-mono text-[13px] font-semibold",
+                      )}
+                    >
+                      {hour.number}
+                    </span>
+                    <span
+                      className={cn(
+                        isLiveHour
+                          ? "text-accent-table text-[11px] font-semibold"
+                          : "text-primary/40 text-[10px]",
+                        "tabular text-right font-mono leading-tight",
+                      )}
+                    >
+                      {isLiveHour ? (
+                        formatCountdown(end - now)
+                      ) : (
+                        <>
+                          {hour.timeFrom}
+                          <br />
+                          {hour.timeTo}
+                        </>
+                      )}
+                    </span>
+                  </div>
+                </td>
+
+                {dayNames.map((dayName, dayIndex) => {
+                  const entries = lessons[dayIndex]?.[hourIndex] ?? [];
+                  const isToday = dayIndex === todayIndex;
+                  const isNow = isLiveHour && isToday;
+
+                  return (
+                    <td
+                      key={dayName}
+                      className={cn(
+                        "border-lines/40 border-l align-top transition-colors",
+                        !isLast && "border-b",
+                        isToday && "bg-accent/60 group-hover:bg-accent/85",
+                        isNow && "bg-accent-table/[0.06]",
+                        !isToday && "group-hover:bg-accent/75",
+                      )}
+                    >
+                      {entries.length > 0 ? (
+                        <div className="grid gap-2.5">
+                          {entries.map((lesson, index) => (
+                            <LessonEntry key={index} lesson={lesson} />
+                          ))}
+                        </div>
+                      ) : (
+                        <span className="text-primary/25 text-xs">—</span>
+                      )}
+                    </td>
+                  );
+                })}
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+    </div>
+  );
+};

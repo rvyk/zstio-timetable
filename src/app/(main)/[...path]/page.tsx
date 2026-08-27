@@ -7,11 +7,13 @@ import { Timetable } from "@/components/timetable/Timetable";
 import { TimetableController } from "@/components/timetable/TimetableController";
 import { Topbar } from "@/components/topbar/Topbar";
 import { SCHOOL_NAME_ACCUSATIVE } from "@/constants/school";
+import { WEEK_VIEW_COOKIE, isWeekView } from "@/constants/settings";
 import { TRANSLATION_DICT } from "@/constants/translations";
 import { lastVisitedPath } from "@/lib/lastVisited.server";
 import { pageSeo } from "@/lib/seo";
 import type { OptivumTimetable } from "@/types/optivum";
 import type { Metadata } from "next";
+import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { Fragment } from "react";
 
@@ -64,6 +66,7 @@ const TimetablePage = async ({ params }: { params: Promise<PageParams> }) => {
   }
 
   const timetable = await getOptivumTimetable(type, value);
+  const storedView = (await cookies()).get(WEEK_VIEW_COOKIE)?.value;
 
   return (
     <Fragment>
@@ -72,7 +75,10 @@ const TimetablePage = async ({ params }: { params: Promise<PageParams> }) => {
         <Topbar timetable={timetable} />
         <SchoolNews />
         <PlanChanges timetable={timetable} />
-        <Timetable timetable={timetable} />
+        <Timetable
+          timetable={timetable}
+          initialView={isWeekView(storedView) ? storedView : "columns"}
+        />
         <BottomBar timetable={timetable} />
       </main>
     </Fragment>

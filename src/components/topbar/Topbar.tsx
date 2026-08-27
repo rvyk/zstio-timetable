@@ -58,10 +58,10 @@ const PageLink: FC<NonNullable<TopbarProps["page"]>> = ({
       <ArrowLeft className="text-primary size-4.5 opacity-80" strokeWidth={2} />
     </span>
     <span className="grid min-w-0 gap-0.5">
-      <span className="text-primary truncate text-sm leading-none font-semibold tracking-tight">
+      <span className="text-primary truncate text-sm leading-tight font-semibold tracking-tight">
         {title}
       </span>
-      <span className="text-primary/55 truncate text-[11px] leading-none">
+      <span className="text-primary/55 truncate text-[11px] leading-tight">
         {backLabel}
       </span>
     </span>
