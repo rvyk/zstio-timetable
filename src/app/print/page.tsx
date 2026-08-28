@@ -14,7 +14,9 @@ export default function PrintPage() {
 
   useEffect(() => {
     if (!isMounted || !timetable?.id) return;
-    void getOptivumTimetableHtml(timetable.id).then(setHtml);
+    void getOptivumTimetableHtml(timetable.id)
+      .then(setHtml)
+      .catch(() => setHtml(null));
   }, [isMounted, timetable?.id]);
 
   if (!isMounted) return null;
