@@ -6,6 +6,10 @@ export const env = createEnv({
     SENTRY_AUTH_TOKEN: z.string().optional(),
     SENTRY_SUPPRESS_TURBOPACK_WARNING: z.string().optional(),
     BUILD_STANDALONE: z.enum(["true", "false"]).optional(),
+    DISCORD_WEBHOOK_URL: z.string().url().optional(),
+    PLAN_WATCH_SECRET: z.string().optional(),
+    PLAN_SNAPSHOT_PATH: z.string().optional(),
+    PLAN_WATCH_INTERVAL_MINUTES: z.coerce.number().int().min(1).optional(),
   },
 
   client: {
@@ -24,5 +28,9 @@ export const env = createEnv({
     SENTRY_SUPPRESS_TURBOPACK_WARNING:
       process.env.SENTRY_SUPPRESS_TURBOPACK_WARNING,
     BUILD_STANDALONE: process.env.BUILD_STANDALONE,
+    DISCORD_WEBHOOK_URL: process.env.DISCORD_WEBHOOK_URL,
+    PLAN_WATCH_SECRET: process.env.PLAN_WATCH_SECRET,
+    PLAN_SNAPSHOT_PATH: process.env.PLAN_SNAPSHOT_PATH,
+    PLAN_WATCH_INTERVAL_MINUTES: process.env.PLAN_WATCH_INTERVAL_MINUTES,
   },
 });

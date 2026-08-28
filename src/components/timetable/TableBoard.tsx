@@ -147,7 +147,7 @@ export const TableBoard: FC<TableBoardProps> = ({
                 >
                   <td
                     className={cn(
-                      "group-hover:bg-accent/75 align-middle transition-colors",
+                      "group-hover:bg-accent/75 align-top transition-colors",
                       !isLast && "border-lines/40 border-b",
                       breakPad,
                     )}

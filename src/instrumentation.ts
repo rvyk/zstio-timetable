@@ -3,6 +3,9 @@ import * as Sentry from "@sentry/nextjs";
 export async function register() {
   if (process.env.NEXT_RUNTIME === "nodejs") {
     await import("../sentry.server.config");
+
+    const { startPlanWatchCron } = await import("@/lib/runPlanWatch");
+    startPlanWatchCron();
   }
 
   if (process.env.NEXT_RUNTIME === "edge") {
