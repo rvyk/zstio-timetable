@@ -127,11 +127,8 @@ const DICT = {
     pl: "Na ten tydzień nie wprowadzono planu zajęć",
     uk: "На цей тиждень розклад не внесено",
   },
-  "timetable.noLessons": { pl: "Brak zajęć", uk: "Немає занять" },
-  "timetable.now": { pl: "teraz", uk: "зараз" },
   "timetable.break": { pl: "przerwa", uk: "перерва" },
   "timetable.gap": { pl: "okienko", uk: "вікно" },
-  "timetable.today": { pl: "dziś", uk: "сьогодні" },
   "timetable.hour": { pl: "Lekcja", uk: "Урок" },
   "timetable.dayTable": {
     pl: "Plan lekcji na wybrany dzień",
