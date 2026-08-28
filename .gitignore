@@ -38,3 +38,6 @@ next-env.d.ts
 
 public/sw*
 public/swe-worker*
+
+# plan snapshots
+/data

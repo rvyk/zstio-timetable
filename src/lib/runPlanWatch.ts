@@ -101,7 +101,8 @@ export const runPlanWatch = async () => {
 
   await writeSnapshots(next);
 
-  const notified = changed.length > 0 && !isFirstRun;
+  const notified =
+    changed.length > 0 && !isFirstRun && Boolean(env.DISCORD_WEBHOOK_URL);
 
   if (notified) {
     await postToDiscord(
