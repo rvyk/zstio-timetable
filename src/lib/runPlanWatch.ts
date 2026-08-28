@@ -1,4 +1,3 @@
-import { getOptivumList } from "@/actions/getOptivumList";
 import { getOptivumTimetable } from "@/actions/getOptivumTimetable";
 import { env } from "@/env";
 import { planGrid, type PlanGrid } from "@/lib/planDiff";
@@ -10,22 +9,43 @@ import { dirname } from "node:path";
 const snapshotPath = () =>
   env.PLAN_SNAPSHOT_PATH ?? "./data/plan-snapshots.json";
 
-const CONCURRENCY = 8;
+const CONCURRENCY = 3;
+const PROBE_FALLBACK = "1";
 
 type Snapshots = Record<string, PlanGrid>;
 
-const readSnapshots = async (): Promise<Snapshots> => {
+interface SnapshotFile {
+  generatedDate: string | null;
+  probe: string;
+  grids: Snapshots;
+}
+
+const EMPTY_FILE: SnapshotFile = {
+  generatedDate: null,
+  probe: PROBE_FALLBACK,
+  grids: {},
+};
+
+const readSnapshots = async (): Promise<SnapshotFile> => {
   try {
-    return JSON.parse(
+    const parsed = JSON.parse(
       await readFile(/*turbopackIgnore: true*/ snapshotPath(), "utf8"),
-    ) as Snapshots;
+    ) as Partial<SnapshotFile>;
+
+    if (!parsed.grids) return EMPTY_FILE;
+
+    return {
+      generatedDate: parsed.generatedDate ?? null,
+      probe: parsed.probe ?? PROBE_FALLBACK,
+      grids: parsed.grids,
+    };
   } catch {
-    return {};
+    return EMPTY_FILE;
   }
 };
 
-const writeSnapshots = async (snapshots: Snapshots) => {
-  const payload = JSON.stringify(snapshots);
+const writeSnapshots = async (file: SnapshotFile) => {
+  const payload = JSON.stringify(file);
 
   await mkdir(dirname(snapshotPath()), { recursive: true });
   await writeFile(/*turbopackIgnore: true*/ snapshotPath(), payload, "utf8");
@@ -59,7 +79,20 @@ const postToDiscord = async (embeds: object[]) => {
 };
 
 export const runPlanWatch = async () => {
-  const list = await getOptivumList();
+  const stored = await readSnapshots();
+  const isFirstRun = Object.keys(stored.grids).length === 0;
+
+  const probe = await getOptivumTimetable("class", stored.probe);
+
+  if (!probe.title) {
+    return { checked: 0, changed: [], notified: false, skipped: "unreachable" };
+  }
+
+  if (!isFirstRun && probe.generatedDate === stored.generatedDate) {
+    return { checked: 0, changed: [], notified: false, skipped: "unchanged" };
+  }
+
+  const list = probe.list;
   const targets: { type: OptivumTimetable["type"]; value: string }[] = [
     ...list.classes.map((item) => ({
       type: "class" as const,
@@ -75,10 +108,8 @@ export const runPlanWatch = async () => {
     })),
   ];
 
-  const snapshots = await readSnapshots();
-  const isFirstRun = Object.keys(snapshots).length === 0;
   const changed: ChangedPlan[] = [];
-  const next: Snapshots = {};
+  const grids: Snapshots = {};
 
   for (let i = 0; i < targets.length; i += CONCURRENCY) {
     await Promise.all(
@@ -88,9 +119,9 @@ export const runPlanWatch = async () => {
 
         if (!grid.some((day) => day.some(Boolean))) return;
 
-        next[timetable.id] = grid;
+        grids[timetable.id] = grid;
 
-        const before = snapshots[timetable.id];
+        const before = stored.grids[timetable.id];
         if (!before) return;
 
         const summary = summarizeChanges(value, timetable, before, grid);
@@ -99,7 +130,15 @@ export const runPlanWatch = async () => {
     );
   }
 
-  await writeSnapshots(next);
+  if (Object.keys(grids).length === 0) {
+    return { checked: 0, changed: [], notified: false, skipped: "unreachable" };
+  }
+
+  await writeSnapshots({
+    generatedDate: probe.generatedDate,
+    probe: list.classes[0]?.value ?? stored.probe,
+    grids,
+  });
 
   const notified =
     changed.length > 0 && !isFirstRun && Boolean(env.DISCORD_WEBHOOK_URL);
@@ -110,7 +149,12 @@ export const runPlanWatch = async () => {
     );
   }
 
-  return { checked: Object.keys(next).length, changed, notified };
+  return {
+    checked: Object.keys(grids).length,
+    changed,
+    notified,
+    skipped: null,
+  };
 };
 
 const MINUTE = 60_000;
@@ -121,9 +165,11 @@ export const startPlanWatchCron = () => {
 
   const tick = () =>
     void runPlanWatch()
-      .then(({ checked, changed, notified }) => {
+      .then(({ checked, changed, notified, skipped }) => {
         console.warn(
-          `[plan-watch] sprawdzono ${checked} planów, zmienionych: ${changed.length}, wysłano: ${notified}`,
+          skipped
+            ? `[plan-watch] pominięto przebieg (${skipped})`
+            : `[plan-watch] sprawdzono ${checked} planów, zmienionych: ${changed.length}, wysłano: ${notified}`,
         );
       })
       .catch((error: unknown) => {

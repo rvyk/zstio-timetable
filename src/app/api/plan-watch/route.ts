@@ -14,11 +14,12 @@ export const GET = async (request: Request) => {
     return new Response("Unauthorized", { status: 401 });
   }
 
-  const { checked, changed, notified } = await runPlanWatch();
+  const { checked, changed, notified, skipped } = await runPlanWatch();
 
   return Response.json({
     checked,
     notified,
+    skipped,
     changed: changed.map((plan) => ({
       id: plan.id,
       title: plan.title,
