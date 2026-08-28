@@ -26,10 +26,3 @@ export const SHORT_HOURS: TableHour[] = [
   { number: 13, timeFrom: "15:10", timeTo: "15:40" },
   { number: 14, timeFrom: "15:45", timeTo: "16:15" },
 ];
-
-export const WEEK_VIEW_COOKIE = "week-view";
-
-export type WeekView = "columns" | "table";
-
-export const isWeekView = (value?: string): value is WeekView =>
-  value === "columns" || value === "table";

@@ -133,8 +133,10 @@ const DICT = {
   "timetable.gap": { pl: "okienko", uk: "вікно" },
   "timetable.today": { pl: "dziś", uk: "сьогодні" },
   "timetable.hour": { pl: "Lekcja", uk: "Урок" },
-  "timetable.view.columns": { pl: "Widok kolumnowy", uk: "Вигляд колонками" },
-  "timetable.view.table": { pl: "Widok tabelaryczny", uk: "Табличний вигляд" },
+  "timetable.dayTable": {
+    pl: "Plan lekcji na wybrany dzień",
+    uk: "Розклад занять на обраний день",
+  },
   "timetable.goTo": { pl: "Przejdź do {target}", uk: "Перейти до {target}" },
 
   "sidebar.expand": {

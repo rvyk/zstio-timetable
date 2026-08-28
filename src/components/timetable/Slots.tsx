@@ -1,11 +1,10 @@
 "use client";
 
 import { useT } from "@/components/common/LocaleProvider";
-import { cn, parseTime } from "@/lib/utils";
+import { parseTime } from "@/lib/utils";
 import { TableHour, TableLesson } from "@majusss/timetable-parser";
 import { CalendarX2, Coffee } from "lucide-react";
-import { FC, Fragment, useMemo, useSyncExternalStore } from "react";
-import { LessonEntry } from "./LessonCells";
+import { FC, useSyncExternalStore } from "react";
 
 const secondsOfDay = () => {
   const now = new Date();
@@ -77,78 +76,10 @@ export const formatCountdown = (seconds: number) =>
     .toString()
     .padStart(2, "0")}:${(seconds % 60).toString().padStart(2, "0")}`;
 
-interface SlotCardProps {
-  hour: TableHour;
-  lessons: TableLesson[];
-  isToday: boolean;
-  now: number;
-}
-
-export const SlotCard: FC<SlotCardProps> = ({
-  hour,
-  lessons,
-  isToday,
-  now,
-}) => {
-  const translate = useT();
-  const start = useMemo(() => parseTime(hour.timeFrom), [hour.timeFrom]);
-  const end = useMemo(() => parseTime(hour.timeTo), [hour.timeTo]);
-
-  const isLive = isToday && now >= start && now < end;
-  const isPast = isToday && now >= end;
-  const progress = isLive ? ((now - start) / (end - start)) * 100 : 0;
-
-  return (
-    <article
-      className={cn(
-        isLive
-          ? "border-lines bg-accent dark:shadow-lg dark:shadow-black/30"
-          : "border-lines/70 bg-accent/40 hover:border-lines hover:bg-accent",
-        isPast && !isLive && "opacity-75",
-        "relative grid gap-1.5 rounded-lg border px-3 py-2.5 transition-colors",
-      )}
-    >
-      <div className="flex items-center justify-between gap-2">
-        {isLive ? (
-          <span className="bg-accent-table rounded-full px-2 py-0.5 text-[10px] font-semibold tracking-[0.06em] text-white uppercase">
-            {translate("timetable.now")}
-          </span>
-        ) : (
-          <span className="text-primary/70 tabular font-mono text-[11px] font-semibold">
-            {hour.number}
-          </span>
-        )}
-        <span
-          className={cn(
-            isLive ? "text-accent-table font-semibold" : "text-primary/70",
-            "tabular font-mono text-[11px]",
-          )}
-        >
-          {isLive
-            ? formatCountdown(end - now)
-            : `${hour.timeFrom}–${hour.timeTo}`}
-        </span>
-      </div>
-
-      <div className="grid gap-2">
-        {lessons.map((lesson, index) => (
-          <LessonEntry key={index} lesson={lesson} />
-        ))}
-      </div>
-
-      {isLive && (
-        <div className="bg-primary/10 mt-0.5 h-0.5 overflow-hidden rounded-full">
-          <div
-            className="bg-accent-table h-full transition-[width] duration-1000 ease-linear"
-            style={{ width: `${progress}%` }}
-          />
-        </div>
-      )}
-    </article>
-  );
-};
-
-export const BreakRow: FC<{ from: string; to: string; now: number }> = ({
+/** Znacznik przerwy — leży na granicy dwóch wierszy, żeby nie rozdzielać
+    tabeli i nie przerywać pionowych linii kolumn. Renderuje się tylko wtedy,
+    gdy przerwa właśnie trwa; rodzic musi być `relative` i mieć zerową wysokość. */
+export const BreakMarker: FC<{ from: string; to: string; now: number }> = ({
   from,
   to,
   now,
@@ -161,19 +92,19 @@ export const BreakRow: FC<{ from: string; to: string; now: number }> = ({
   const progress = ((now - start) / (end - start)) * 100;
 
   return (
-    <div className="animate-rise flex items-center gap-2 px-1 py-0.5">
-      <Coffee className="text-accent-table size-3 shrink-0" strokeWidth={2} />
-      <span className="text-accent-table/90 text-[11px] font-medium">
+    <div className="pointer-events-none absolute inset-x-0 top-0 z-10 flex -translate-y-1/2 items-center gap-2 px-3">
+      <span className="border-accent-table/35 bg-foreground text-accent-table flex shrink-0 items-center gap-1.5 rounded-full border px-2 py-0.5 text-[10px] leading-none font-medium">
+        <Coffee className="size-3" strokeWidth={2} />
         {translate("timetable.break")}
+        <span className="tabular font-mono font-semibold">
+          {formatCountdown(end - now)}
+        </span>
       </span>
-      <div className="bg-primary/10 h-px flex-1 overflow-hidden rounded-full">
-        <div
-          className="bg-accent-table/50 h-full transition-[width] duration-1000 ease-linear"
+      <span className="bg-primary/10 h-px flex-1 overflow-hidden rounded-full">
+        <span
+          className="bg-accent-table/50 block h-full transition-[width] duration-1000 ease-linear"
           style={{ width: `${progress}%` }}
         />
-      </div>
-      <span className="text-accent-table tabular font-mono text-[11px]">
-        {formatCountdown(end - now)}
       </span>
     </div>
   );
@@ -197,59 +128,5 @@ export const NoLessons: FC<{ description: string }> = ({ description }) => {
         <p className="text-primary/65 max-w-xs text-sm">{description}</p>
       </div>
     </div>
-  );
-};
-
-export const GapCard: FC<{ hour: TableHour }> = ({ hour }) => {
-  const translate = useT();
-
-  return (
-    <div className="border-lines/60 flex items-center justify-between gap-2 rounded-lg border border-dashed px-3 py-2">
-      <span className="text-primary/40 tabular font-mono text-[11px] font-semibold">
-        {hour.number}
-      </span>
-      <span className="text-primary/45 text-xs">
-        {translate("timetable.gap")}
-      </span>
-      <span className="text-primary/40 tabular font-mono text-[11px]">
-        {hour.timeFrom}–{hour.timeTo}
-      </span>
-    </div>
-  );
-};
-
-export const DaySlots: FC<{
-  slots: DaySlot[];
-  isToday: boolean;
-  now: number;
-}> = ({ slots, isToday, now }) => {
-  const dayOver =
-    isToday && now >= parseTime(slots.at(-1)?.hour.timeTo ?? "00:00");
-  const isActiveDay = isToday && !dayOver;
-
-  return (
-    <Fragment>
-      {slots.map((slot, index) => (
-        <Fragment key={slot.hour.number}>
-          {isActiveDay && index > 0 && (
-            <BreakRow
-              from={slots[index - 1]!.hour.timeTo}
-              to={slot.hour.timeFrom}
-              now={now}
-            />
-          )}
-          {slot.entries.length > 0 ? (
-            <SlotCard
-              hour={slot.hour}
-              lessons={slot.entries}
-              isToday={isActiveDay}
-              now={now}
-            />
-          ) : (
-            <GapCard hour={slot.hour} />
-          )}
-        </Fragment>
-      ))}
-    </Fragment>
   );
 };

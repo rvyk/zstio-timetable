@@ -4,9 +4,9 @@ import { useLocale, useT } from "@/components/common/LocaleProvider";
 import { dayLabel } from "@/lib/i18n";
 import { cn, getDayNumberForNextWeek, parseTime } from "@/lib/utils";
 import { TableHour, TableLesson } from "@majusss/timetable-parser";
-import { FC } from "react";
+import { FC, Fragment } from "react";
 import { LessonEntry } from "./LessonCells";
-import { formatCountdown, useNowSeconds } from "./Slots";
+import { BreakMarker, formatCountdown, useNowSeconds } from "./Slots";
 
 interface TableBoardProps {
   dayNames: string[];
@@ -33,6 +33,7 @@ export const TableBoard: FC<TableBoardProps> = ({
     -1,
   );
   const visibleHours = hours.slice(0, lastTakenHour + 1);
+  const isSchoolDay = todayIndex >= 0 && todayIndex < dayNames.length;
 
   return (
     <div className="animate-rise @container/table px-4 pb-4">
@@ -48,7 +49,7 @@ export const TableBoard: FC<TableBoardProps> = ({
       >
         <thead>
           <tr>
-            <th className="border-lines bg-foreground sticky top-0 z-20 w-16 border-b align-bottom @3xl/table:w-24">
+            <th className="border-lines bg-foreground sticky top-0 z-20 w-20 border-b align-bottom @3xl/table:w-24">
               <span className="text-primary/40 text-[10px] font-semibold tracking-[0.08em] uppercase">
                 {translate("timetable.hour")}
               </span>
@@ -99,77 +100,119 @@ export const TableBoard: FC<TableBoardProps> = ({
             const end = parseTime(hour.timeTo);
             const isLiveHour = now >= start && now < end;
             const isLast = hourIndex === visibleHours.length - 1;
+            const previousEnd =
+              hourIndex > 0
+                ? parseTime(visibleHours[hourIndex - 1]!.timeTo)
+                : undefined;
+            const isBreak =
+              isSchoolDay &&
+              previousEnd !== undefined &&
+              now >= previousEnd &&
+              now < start;
+            const nextStart =
+              hourIndex < visibleHours.length - 1
+                ? parseTime(visibleHours[hourIndex + 1]!.timeFrom)
+                : undefined;
+            const isBreakAfter =
+              isSchoolDay &&
+              nextStart !== undefined &&
+              now >= end &&
+              now < nextStart;
+            /* Znacznik przerwy leży na granicy wierszy, więc sąsiadującym
+               komórkom dokładamy oddechu. `!`, bo padding komórek ustawia
+               reguła `[&_td]` na tabeli. */
+            const breakPad = cn(isBreak && "pt-6!", isBreakAfter && "pb-6!");
 
             return (
-              <tr
-                key={hour.number}
-                className={cn("group", hourIndex % 2 === 1 && "bg-accent/45")}
-              >
-                <td
-                  className={cn(
-                    "group-hover:bg-accent/75 align-top transition-colors",
-                    !isLast && "border-lines/40 border-b",
-                  )}
-                >
-                  <div className="flex flex-col gap-x-2 @3xl/table:flex-row @3xl/table:items-baseline @3xl/table:justify-between">
-                    <span
-                      className={cn(
-                        isLiveHour ? "text-accent-table" : "text-primary/70",
-                        "tabular font-mono text-[13px] font-semibold",
-                      )}
-                    >
-                      {hour.number}
-                    </span>
-                    <span
-                      className={cn(
-                        isLiveHour
-                          ? "text-accent-table text-[11px] font-semibold"
-                          : "text-primary/40 text-[10px]",
-                        "tabular text-right font-mono leading-tight",
-                      )}
-                    >
-                      {isLiveHour ? (
-                        formatCountdown(end - now)
-                      ) : (
-                        <>
-                          {hour.timeFrom}
-                          <br />
-                          {hour.timeTo}
-                        </>
-                      )}
-                    </span>
-                  </div>
-                </td>
-
-                {dayNames.map((dayName, dayIndex) => {
-                  const entries = lessons[dayIndex]?.[hourIndex] ?? [];
-                  const isToday = dayIndex === todayIndex;
-                  const isNow = isLiveHour && isToday;
-
-                  return (
+              <Fragment key={hour.number}>
+                {isBreak && (
+                  <tr>
                     <td
-                      key={dayName}
-                      className={cn(
-                        "border-lines/40 border-l align-top transition-colors",
-                        !isLast && "border-b",
-                        isToday && "bg-accent/60 group-hover:bg-accent/85",
-                        isNow && "bg-accent-table/[0.06]",
-                        !isToday && "group-hover:bg-accent/75",
-                      )}
+                      colSpan={dayNames.length + 1}
+                      className="relative border-0"
+                      /* padding z `[&_td]` na tabeli wygrywa nad klasą, więc
+                         zerujemy go inline — wiersz ma mieć zero wysokości */
+                      style={{ padding: 0, height: 0, lineHeight: 0 }}
                     >
-                      {entries.length > 0 ? (
-                        <div className="grid gap-2.5">
-                          {entries.map((lesson, index) => (
-                            <LessonEntry key={index} lesson={lesson} />
-                          ))}
-                        </div>
-                      ) : (
-                        <span className="text-primary/25 text-xs">—</span>
-                      )}
+                      <BreakMarker
+                        from={visibleHours[hourIndex - 1]!.timeTo}
+                        to={hour.timeFrom}
+                        now={now}
+                      />
                     </td>
-                  );
-                })}
-              </tr>
+                  </tr>
+                )}
+                <tr
+                  className={cn("group", hourIndex % 2 === 1 && "bg-accent/45")}
+                >
+                  <td
+                    className={cn(
+                      "group-hover:bg-accent/75 align-middle transition-colors",
+                      !isLast && "border-lines/40 border-b",
+                      breakPad,
+                    )}
+                  >
+                    <div className="flex flex-col items-center gap-0.5">
+                      <span
+                        className={cn(
+                          isLiveHour ? "text-accent-table" : "text-primary/85",
+                          "tabular text-[16px] leading-none font-semibold",
+                        )}
+                      >
+                        {hour.number}
+                      </span>
+                      <span className="text-primary/40 tabular text-center text-[10px] leading-tight tracking-tight whitespace-nowrap">
+                        {hour.timeFrom}–{hour.timeTo}
+                      </span>
+                      {isLiveHour && (
+                        <Fragment>
+                          <div className="bg-primary/10 mt-0.5 h-0.5 w-full overflow-hidden rounded-full">
+                            <div
+                              className="bg-accent-table h-full transition-[width] duration-1000 ease-linear"
+                              style={{
+                                width: `${((now - start) / (end - start)) * 100}%`,
+                              }}
+                            />
+                          </div>
+                          <span className="text-accent-table tabular font-mono text-[9px] leading-none font-semibold">
+                            {formatCountdown(end - now)}
+                          </span>
+                        </Fragment>
+                      )}
+                    </div>
+                  </td>
+
+                  {dayNames.map((dayName, dayIndex) => {
+                    const entries = lessons[dayIndex]?.[hourIndex] ?? [];
+                    const isToday = dayIndex === todayIndex;
+                    const isNow = isLiveHour && isToday;
+
+                    return (
+                      <td
+                        key={dayName}
+                        className={cn(
+                          "border-lines/40 border-l align-top transition-colors",
+                          !isLast && "border-b",
+                          isToday && "bg-accent/60 group-hover:bg-accent/85",
+                          isNow && "bg-accent-table/[0.06]",
+                          !isToday && "group-hover:bg-accent/75",
+                          breakPad,
+                        )}
+                      >
+                        {entries.length > 0 ? (
+                          <div className="grid gap-2.5">
+                            {entries.map((lesson, index) => (
+                              <LessonEntry key={index} lesson={lesson} />
+                            ))}
+                          </div>
+                        ) : (
+                          <span className="text-primary/25 text-xs">—</span>
+                        )}
+                      </td>
+                    );
+                  })}
+                </tr>
+              </Fragment>
             );
           })}
         </tbody>

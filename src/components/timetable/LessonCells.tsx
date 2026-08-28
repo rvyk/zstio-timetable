@@ -2,34 +2,62 @@
 
 import { LinkWithCookie } from "@/components/common/Link";
 import { useT } from "@/components/common/LocaleProvider";
+import { cn } from "@/lib/utils";
 import { TableLesson } from "@majusss/timetable-parser";
 import { FC } from "react";
 
 interface LessonItemProps {
   lesson: TableLesson;
+  /** Układ jednowierszowy: przedmiot, grupa, nauczyciel i sala w jednej linii. */
+  inline?: boolean;
 }
 
-export const LessonEntry: FC<LessonItemProps> = ({ lesson }) => (
-  <div className="grid gap-0.5">
-    <h3 className="text-primary text-[15px] leading-tight font-medium tracking-[-0.01em]">
-      {lesson.subject}
-      <GroupName groupName={lesson.groupName} />
-    </h3>
-    <LessonMeta
-      classId={lesson.classId}
-      className={lesson.className}
-      teacherId={lesson.teacherId}
-      teacherName={lesson.teacher}
-      roomId={lesson.roomId}
-      roomName={lesson.room}
-    />
-  </div>
-);
+export const LessonEntry: FC<LessonItemProps> = ({ lesson, inline }) =>
+  inline ? (
+    <div className="flex flex-wrap items-baseline gap-x-1.5 gap-y-0.5">
+      <h3 className="text-primary text-[15px] leading-snug font-medium tracking-[-0.01em]">
+        {lesson.subject}
+      </h3>
+      <GroupName groupName={lesson.groupName} inline />
+      <LessonMeta
+        classId={lesson.classId}
+        className={lesson.className}
+        teacherId={lesson.teacherId}
+        teacherName={lesson.teacher}
+        roomId={lesson.roomId}
+        roomName={lesson.room}
+        inline
+      />
+    </div>
+  ) : (
+    <div className="grid gap-0.5">
+      <h3 className="text-primary text-[15px] leading-tight font-medium tracking-[-0.01em]">
+        {lesson.subject}
+        <GroupName groupName={lesson.groupName} />
+      </h3>
+      <LessonMeta
+        classId={lesson.classId}
+        className={lesson.className}
+        teacherId={lesson.teacherId}
+        teacherName={lesson.teacher}
+        roomId={lesson.roomId}
+        roomName={lesson.room}
+      />
+    </div>
+  );
 
-const GroupName: FC<{ groupName?: string }> = ({ groupName }) =>
+const GroupName: FC<{ groupName?: string; inline?: boolean }> = ({
+  groupName,
+  inline,
+}) =>
   groupName ? (
-    <span className="text-primary/60 ml-1.5 font-mono text-[11px] font-normal">
-      {groupName}
+    <span
+      className={cn(
+        "text-primary/55 font-mono text-[11px] font-normal",
+        !inline && "ml-1.5",
+      )}
+    >
+      ({groupName})
     </span>
   ) : null;
 
@@ -40,6 +68,7 @@ interface LessonMetaProps {
   teacherName?: string;
   roomId?: string;
   roomName?: string;
+  inline?: boolean;
 }
 
 const LessonMeta: FC<LessonMetaProps> = ({
@@ -49,6 +78,7 @@ const LessonMeta: FC<LessonMetaProps> = ({
   teacherName,
   roomId,
   roomName,
+  inline,
 }) => {
   const parts = [
     { id: classId, name: className, type: "class" },
@@ -59,10 +89,17 @@ const LessonMeta: FC<LessonMetaProps> = ({
   if (parts.length === 0) return null;
 
   return (
-    <div className="text-primary/65 flex flex-wrap items-center gap-x-1.5 text-xs">
+    <div
+      className={cn(
+        "flex flex-wrap items-baseline",
+        inline
+          ? "text-primary/55 gap-x-2 text-[13px]"
+          : "text-primary/65 items-center gap-x-1.5 text-xs",
+      )}
+    >
       {parts.map((part, index) => (
         <span key={part.type} className="inline-flex items-center gap-x-1.5">
-          {index > 0 && <span className="text-primary/40">·</span>}
+          {!inline && index > 0 && <span className="text-primary/40">·</span>}
           <LessonLink id={part.id} name={part.name} type={part.type} />
         </span>
       ))}

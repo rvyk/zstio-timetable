@@ -2,29 +2,20 @@
 
 import { FavoriteStar } from "@/components/common/FavoriteStar";
 import { useT } from "@/components/common/LocaleProvider";
-import { Segmented } from "@/components/ui/Segmented";
-import {
-  SHORT_HOURS,
-  WEEK_VIEW_COOKIE,
-  type WeekView,
-} from "@/constants/settings";
+import { SHORT_HOURS } from "@/constants/settings";
 import { adjustShortenedLessons } from "@/lib/adjustShortenedLessons";
 import { warsawDayIndex } from "@/lib/dates";
 import { cn } from "@/lib/utils";
 import { useSettingsStore, useSettingsWithoutStore } from "@/stores/settings";
 import type { OptivumTimetable } from "@/types/optivum";
-import { setCookie } from "cookies-next";
-import { Columns3, Table2 } from "lucide-react";
-import { FC, useMemo, useState, useSyncExternalStore } from "react";
+import { FC, useMemo, useSyncExternalStore } from "react";
 import { ShortLessonSwitcherCell } from "./Cells";
 import { DayBoard } from "./DayBoard";
 import { NoLessons } from "./Slots";
 import { TableBoard } from "./TableBoard";
-import { WeekBoard } from "./WeekBoard";
 
 interface TimetableProps {
   timetable: OptivumTimetable;
-  initialView: WeekView;
 }
 
 const NEVER_CHANGES = () => () => {};
@@ -39,9 +30,8 @@ const useTodayIndex = () => {
   return override === null ? warsawDayIndex() : Number(override);
 };
 
-export const Timetable: FC<TimetableProps> = ({ timetable, initialView }) => {
+export const Timetable: FC<TimetableProps> = ({ timetable }) => {
   const translate = useT();
-  const [weekView, setWeekView] = useState(initialView);
   const lessonType = useSettingsStore((state) => state.lessonType);
   const hoursAdjustIndex = useSettingsStore((state) => state.hoursAdjustIndex);
   const storedDayIndex = useSettingsWithoutStore(
@@ -110,44 +100,17 @@ export const Timetable: FC<TimetableProps> = ({ timetable, initialView }) => {
       )}
 
       <div className="border-lines @container/head flex items-center justify-between gap-4 border-b pr-2 pl-4 max-md:hidden">
-        <div className="flex min-w-0 items-center gap-x-3 py-2">
-          <Segmented
-            options={[
-              {
-                value: "columns" as const,
-                label: <Columns3 className="mx-auto size-4" strokeWidth={2} />,
-                ariaLabel: translate("timetable.view.columns"),
-              },
-              {
-                value: "table" as const,
-                label: <Table2 className="mx-auto size-4" strokeWidth={2} />,
-                ariaLabel: translate("timetable.view.table"),
-              },
-            ]}
-            value={weekView}
-            onSelect={(value) => {
-              setWeekView(value);
-              setCookie(WEEK_VIEW_COOKIE, value, {
-                path: "/",
-                expires: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000),
-              });
-            }}
-            className="h-9 shrink-0"
-            buttonClassName="w-9"
-            inactiveClassName="text-primary/55 hover:text-primary/88"
-          />
-          <div className="flex min-w-0 items-baseline gap-x-2.5">
-            <h1 className="text-primary truncate text-xl leading-tight font-semibold tracking-[-0.02em]">
-              {timetable.title || translate("timetable.notFound")}
-            </h1>
-            {timetable.title && (
-              <span className="text-primary/55 truncate text-xs">
-                {translate("timetable.schedule", {
-                  type: translate(`type.${timetable.type}`),
-                })}
-              </span>
-            )}
-          </div>
+        <div className="flex min-w-0 items-baseline gap-x-2.5 py-2.5">
+          <h1 className="text-primary truncate text-xl leading-tight font-semibold tracking-[-0.02em]">
+            {timetable.title || translate("timetable.notFound")}
+          </h1>
+          {timetable.title && (
+            <span className="text-primary/55 truncate text-xs">
+              {translate("timetable.schedule", {
+                type: translate(`type.${timetable.type}`),
+              })}
+            </span>
+          )}
         </div>
         <div className="flex shrink-0 items-center">
           {timetable.title && (
@@ -171,15 +134,8 @@ export const Timetable: FC<TimetableProps> = ({ timetable, initialView }) => {
       >
         {!hasLessons ? (
           <NoLessons description={translate("timetable.emptyWeek")} />
-        ) : weekView === "table" ? (
-          <TableBoard
-            dayNames={dayNames}
-            lessons={lessons}
-            hours={visibleHours}
-            todayIndex={todayIndex}
-          />
         ) : (
-          <WeekBoard
+          <TableBoard
             dayNames={dayNames}
             lessons={lessons}
             hours={visibleHours}
