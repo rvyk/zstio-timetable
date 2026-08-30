@@ -115,7 +115,7 @@ export const Search: FC<SearchProps> = ({ value, onChange, results }) => {
       {!value && isClient && (
         <kbd
           aria-hidden
-          className="border-lines text-primary/50 rounded border px-1.5 py-0.5 font-mono text-[10px] max-md:hidden"
+          className="border-lines text-primary/50 shrink-0 rounded border px-1.5 py-0.5 font-mono text-[10px] whitespace-nowrap max-md:hidden"
         >
           {isMac ? "⌘" : "Ctrl "}K
         </kbd>

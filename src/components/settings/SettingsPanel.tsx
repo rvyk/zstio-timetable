@@ -320,16 +320,16 @@ export const SettingsList = ({
 
           const webcal = url.replace(/^https/, "webcal");
 
-          if (/Android/i.test(navigator.userAgent)) {
-            window.open(
-              `https://calendar.google.com/calendar/render?cid=${encodeURIComponent(webcal)}`,
-              "_blank",
-              "noopener",
-            );
+          if (/iPhone|iPad|iPod|Macintosh/i.test(navigator.userAgent)) {
+            window.location.href = webcal;
             return;
           }
 
-          window.location.href = webcal;
+          window.open(
+            `https://calendar.google.com/calendar/render?cid=${encodeURIComponent(webcal)}`,
+            "_blank",
+            "noopener",
+          );
         },
         description: (
           <p>
