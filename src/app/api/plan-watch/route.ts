@@ -25,7 +25,6 @@ export const GET = async (request: Request) => {
       title: plan.title,
       type: plan.type,
       count: plan.count,
-      lines: plan.lines,
     })),
   });
 };

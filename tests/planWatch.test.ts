@@ -1,47 +1,52 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import { planGrid } from "../src/lib/planDiff.ts";
-import { planEmbed, summarizeChanges } from "../src/lib/planWatch.ts";
+import { changesEmbed, summarizeChanges } from "../src/lib/planWatch.ts";
 
-const timetable = {
-  id: "o12",
-  title: "1A",
-  type: "class" as const,
-  dayNames: ["Poniedziałek", "Wtorek"],
-  generatedDate: "2026-08-28",
-  validDate: "2026-09-01",
-};
+const timetable = { id: "o12", title: "1A", type: "class" as const };
 
-test("summarizeChanges opisuje który plan i co się zmieniło", () => {
-  const before = planGrid([
-    [[{ subject: "matma", teacher: "WJ", room: "17" }]],
-  ]);
-  const after = planGrid([[[{ subject: "wf", teacher: "Ró", room: "sala" }]]]);
+const plan = (
+  title: string,
+  type: "class" | "teacher" | "room",
+  count = 1,
+) => ({ id: type[0] + title, value: "1", title, type, count });
 
-  const summary = summarizeChanges("12", timetable, before, after);
+test("summarizeChanges zgłasza plan tylko gdy coś się zmieniło", () => {
+  const before = planGrid([[[{ subject: "matma", teacher: "WJ" }]]]);
+  const after = planGrid([[[{ subject: "wf", teacher: "Ró" }]]]);
 
-  assert.ok(summary);
-  assert.equal(summary.id, "o12");
-  assert.equal(summary.count, 1);
-  assert.match(summary.lines[0]!, /Poniedziałek, lekcja 1/);
-  assert.match(summary.lines[0]!, /matma \(WJ, 17\) → wf \(Ró, sala\)/);
+  assert.equal(summarizeChanges("12", timetable, before, before), null);
+  assert.deepEqual(summarizeChanges("12", timetable, before, after), {
+    id: "o12",
+    value: "12",
+    title: "1A",
+    type: "class",
+    count: 1,
+  });
 });
 
-test("summarizeChanges zwraca null bez zmian", () => {
-  const grid = planGrid([[[{ subject: "matma" }]]]);
-  assert.equal(summarizeChanges("12", timetable, grid, grid), null);
-});
-
-test("planEmbed linkuje do konkretnego planu", () => {
-  const summary = summarizeChanges(
-    "12",
-    timetable,
-    planGrid([[[]]]),
-    planGrid([[[{ subject: "matma" }]]]),
-  )!;
-
-  assert.equal(
-    planEmbed(summary, "https://plan.zstiojar.edu.pl/").url,
-    "https://plan.zstiojar.edu.pl/class/12",
+test("changesEmbed grupuje plany po typie i podaje czas wykrycia", () => {
+  const embed = changesEmbed(
+    [plan("1A", "class"), plan("2B", "class"), plan("Kowalski", "teacher")],
+    "1 września 2026r.",
+    new Date("2026-08-30T12:34:00Z"),
   );
+
+  assert.equal(embed.description, "Zmiany w 3 planach.");
+  assert.deepEqual(
+    embed.fields.map((f) => f.name),
+    ["Oddziały (2)", "Nauczyciele (1)", "Wykryto", "Obowiązuje od"],
+  );
+  assert.equal(embed.fields[0]!.value, "1A, 2B");
+  assert.match(embed.fields[2]!.value, /14:34/);
+});
+
+test("changesEmbed nie przekracza limitu 1024 znaków na pole", () => {
+  const many = Array.from({ length: 300 }, (_, i) =>
+    plan(`Oddzial-numer-${i}`, "class"),
+  );
+  const embed = changesEmbed(many, null);
+
+  assert.ok(embed.fields[0]!.value.length <= 1024);
+  assert.match(embed.fields[0]!.value, /i \d+ więcej$/);
 });

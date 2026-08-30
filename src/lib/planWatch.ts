@@ -1,76 +1,90 @@
 import type { OptivumTimetable } from "@/types/optivum";
-import { describeCell, planChanges, type PlanGrid } from "./planDiff.ts";
+import { planChanges, type PlanGrid } from "./planDiff.ts";
 
-const MAX_LINES = 15;
-
-const TYPE_LABEL: Record<OptivumTimetable["type"], string> = {
-  class: "Oddział",
-  teacher: "Nauczyciel",
-  room: "Sala",
+const TYPE_FIELD: Record<OptivumTimetable["type"], string> = {
+  class: "Oddziały",
+  teacher: "Nauczyciele",
+  room: "Sale",
 };
+
+const MAX_FIELD_CHARS = 1024;
 
 export interface ChangedPlan {
   id: string;
   value: string;
   title: string;
   type: OptivumTimetable["type"];
-  generatedDate: string | null;
-  validDate: string | null;
-  lines: string[];
   count: number;
 }
 
 export const summarizeChanges = (
   value: string,
-  timetable: Pick<
-    OptivumTimetable,
-    "id" | "title" | "type" | "dayNames" | "generatedDate" | "validDate"
-  >,
+  timetable: Pick<OptivumTimetable, "id" | "title" | "type">,
   before: PlanGrid,
   after: PlanGrid,
 ): ChangedPlan | null => {
-  const changes = planChanges(before, after);
-  if (changes.length === 0) return null;
+  const count = planChanges(before, after).length;
 
-  const lines = changes.slice(0, MAX_LINES).map((change) => {
-    const day =
-      timetable.dayNames[change.dayIndex] ?? `Dzień ${change.dayIndex + 1}`;
-    const where = `**${day}, lekcja ${change.hourIndex + 1}**`;
-
-    if (!change.before)
-      return `${where} — dodano: ${describeCell(change.after)}`;
-    if (!change.after)
-      return `${where} — usunięto: ${describeCell(change.before)}`;
-
-    return `${where} — ${describeCell(change.before)} → ${describeCell(change.after)}`;
-  });
-
-  if (changes.length > lines.length) {
-    lines.push(`…i ${changes.length - lines.length} więcej zmian`);
-  }
+  if (count === 0) return null;
 
   return {
     id: timetable.id,
     value,
     title: timetable.title,
     type: timetable.type,
-    generatedDate: timetable.generatedDate,
-    validDate: timetable.validDate,
-    lines,
-    count: changes.length,
+    count,
   };
 };
 
-export const planEmbed = (plan: ChangedPlan, appUrl: string) => ({
-  title: `${TYPE_LABEL[plan.type]} ${plan.title || plan.id}`,
-  url: `${appUrl.replace(/\/+$/, "")}/${plan.type}/${plan.value}`,
-  description: plan.lines.join("\n").slice(0, 4096),
-  color: 0x5865f2,
-  fields: [
-    { name: "Zmian", value: String(plan.count), inline: true },
-    { name: "Obowiązuje od", value: plan.validDate ?? "—", inline: true },
-    { name: "Wygenerowano", value: plan.generatedDate ?? "—", inline: true },
-  ],
-  footer: { text: `ID planu: ${plan.id}` },
-  timestamp: new Date().toISOString(),
-});
+const joinNames = (plans: ChangedPlan[]): string => {
+  const names = plans.map((plan) => plan.title || plan.id);
+  const kept: string[] = [];
+
+  for (const name of names) {
+    const candidate = [...kept, name].join(", ");
+    if (candidate.length > MAX_FIELD_CHARS - 20) break;
+    kept.push(name);
+  }
+
+  const rest = names.length - kept.length;
+
+  return rest > 0
+    ? `${kept.join(", ")} i ${rest} więcej`
+    : kept.join(", ") || "—";
+};
+
+export const detectedAt = (now: Date): string =>
+  now.toLocaleString("pl-PL", {
+    timeZone: "Europe/Warsaw",
+    dateStyle: "short",
+    timeStyle: "short",
+  });
+
+export const changesEmbed = (
+  plans: ChangedPlan[],
+  validDate: string | null,
+  now = new Date(),
+) => {
+  const types: OptivumTimetable["type"][] = ["class", "teacher", "room"];
+
+  const fields = types
+    .map((type) => ({ type, list: plans.filter((plan) => plan.type === type) }))
+    .filter(({ list }) => list.length > 0)
+    .map(({ type, list }) => ({
+      name: `${TYPE_FIELD[type]} (${list.length})`,
+      value: joinNames(list),
+      inline: false,
+    }));
+
+  return {
+    title: "Zmienił się plan lekcji",
+    description: `Zmiany w ${plans.length} ${plans.length === 1 ? "planie" : "planach"}.`,
+    color: 0x5865f2,
+    fields: [
+      ...fields,
+      { name: "Wykryto", value: detectedAt(now), inline: true },
+      { name: "Obowiązuje od", value: validDate ?? "—", inline: true },
+    ],
+    timestamp: now.toISOString(),
+  };
+};

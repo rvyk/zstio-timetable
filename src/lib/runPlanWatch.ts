@@ -1,7 +1,11 @@
 import { getOptivumTimetable } from "@/actions/getOptivumTimetable";
 import { env } from "@/env";
 import { planGrid, type PlanGrid } from "@/lib/planDiff";
-import { planEmbed, summarizeChanges, type ChangedPlan } from "@/lib/planWatch";
+import {
+  changesEmbed,
+  summarizeChanges,
+  type ChangedPlan,
+} from "@/lib/planWatch";
 import type { OptivumTimetable } from "@/types/optivum";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { dirname } from "node:path";
@@ -51,30 +55,22 @@ const writeSnapshots = async (file: SnapshotFile) => {
   await writeFile(/*turbopackIgnore: true*/ snapshotPath(), payload, "utf8");
 };
 
-const postToDiscord = async (embeds: object[]) => {
+const postToDiscord = async (embed: object) => {
   const webhook = env.DISCORD_WEBHOOK_URL;
   if (!webhook) return;
 
-  for (let i = 0; i < embeds.length; i += 10) {
-    const response = await fetch(webhook, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        content:
-          i === 0
-            ? `📅 Wykryto zmiany w planie lekcji (${embeds.length} ${embeds.length === 1 ? "plan" : "planów"})`
-            : undefined,
-        embeds: embeds.slice(i, i + 10),
-      }),
-    });
+  const response = await fetch(webhook, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ embeds: [embed] }),
+  });
 
-    if (!response.ok) {
-      console.error(
-        "Discord webhook failed:",
-        response.status,
-        await response.text(),
-      );
-    }
+  if (!response.ok) {
+    console.error(
+      "Discord webhook failed:",
+      response.status,
+      await response.text(),
+    );
   }
 };
 
@@ -144,9 +140,7 @@ export const runPlanWatch = async () => {
     changed.length > 0 && !isFirstRun && Boolean(env.DISCORD_WEBHOOK_URL);
 
   if (notified) {
-    await postToDiscord(
-      changed.map((plan) => planEmbed(plan, env.NEXT_PUBLIC_APP_URL)),
-    );
+    await postToDiscord(changesEmbed(changed, probe.validDate));
   }
 
   return {
