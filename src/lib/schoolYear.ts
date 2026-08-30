@@ -45,7 +45,7 @@ export const easterSunday = (year: number): Date => {
   return utcDate(year, month, day);
 };
 
-const lastSchoolDay = (year: number): Date => {
+export const lastSchoolDay = (year: number): Date => {
   const june20 = utcDate(year, 6, 20);
   return addDays(june20, (5 - june20.getUTCDay() + 7) % 7 || 7);
 };

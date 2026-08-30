@@ -1,6 +1,6 @@
 import { SCHOOL_SHORT } from "@/constants/school";
 import { env } from "@/env";
-import { isSchoolDayOff, schoolDaysOff } from "@/lib/schoolYear";
+import { isSchoolDayOff, lastSchoolDay, schoolDaysOff } from "@/lib/schoolYear";
 import type { OptivumTimetable } from "@/types/optivum";
 import { TableHour, TableLesson } from "@majusss/timetable-parser";
 import type * as ics from "ics";
@@ -69,10 +69,15 @@ const createEvent = (
   const { hours: startHour, minutes: startMinute } = parseTime(hour.timeFrom);
 
   const start = Date.UTC(date.getFullYear(), date.getMonth(), date.getDate());
+  const until = lastSchoolDay(
+    date.getMonth() >= 8 ? date.getFullYear() + 1 : date.getFullYear(),
+  );
   const exclusionDates = daysOff
     .filter(
       (dayOff) =>
-        dayOff.getUTCDay() === (dayIndex + 1) % 7 && dayOff.getTime() > start,
+        dayOff.getUTCDay() === (dayIndex + 1) % 7 &&
+        dayOff.getTime() > start &&
+        dayOff.getTime() <= until.getTime(),
     )
     .map((dayOff) => floatingDateTime(dayOff, startHour, startMinute));
 
@@ -141,7 +146,7 @@ const createEvent = (
         ]
       : undefined,
     categories,
-    recurrenceRule: `FREQ=WEEKLY;BYDAY=${getRRuleByDayIndex(dayIndex + 1)}`,
+    recurrenceRule: `FREQ=WEEKLY;UNTIL=${floatingDateTime(until, 23, 59)};BYDAY=${getRRuleByDayIndex(dayIndex + 1)}`,
     exclusionDates,
   } as ics.EventAttributes;
 };
@@ -194,9 +199,8 @@ export const getCalendar = async (timetable: OptivumTimetable) => {
 
   return {
     ...calendar,
-    value: calendar.value?.replace(
-      "METHOD:PUBLISH\r\n",
-      "METHOD:PUBLISH\r\nX-WR-TIMEZONE:Europe/Warsaw\r\n",
-    ),
+    value: calendar.value
+      ?.replace("METHOD:PUBLISH\r\n", "X-WR-TIMEZONE:Europe/Warsaw\r\n")
+      .replaceAll("\r\n\t", "\r\n "),
   };
 };

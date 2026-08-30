@@ -322,7 +322,7 @@ export const SettingsList = ({
 
           if (/Android/i.test(navigator.userAgent)) {
             window.open(
-              `https://calendar.google.com/calendar/render?cid=${encodeURIComponent(url)}`,
+              `https://calendar.google.com/calendar/render?cid=${encodeURIComponent(webcal)}`,
               "_blank",
               "noopener",
             );
