@@ -77,7 +77,6 @@
   --radius-md: 10px;
   --radius-sm: 7px;
 
-  /* tinted, single light source from above */
   --shadow-soft:
     0 1px 2px rgb(var(--shadow-color) / 0.04),
     0 4px 12px -4px rgb(var(--shadow-color) / 0.06);
@@ -253,13 +252,6 @@ body::before {
   opacity: 0.04;
 }
 
-/* Zmiana motywu: na jedną klatkę gasimy przejścia, bo inaczej setki elementów
-   z transition-colors zaczynają przenikać naraz i to widać jako zacięcie.
-   To samo, co robił disableTransitionOnChange z next-themes.
-
-   Wyjątkiem jest [data-keep-transition] — pigułka wyboru motywu. Drogie jest
-   przenikanie kolorów na całej stronie, nie przejazd jednego elementu, a to
-   właśnie on pokazuje, co się przed chwilą zmieniło. */
 [data-theme-instant] *:not([data-keep-transition]),
 [data-theme-instant] *:not([data-keep-transition])::before,
 [data-theme-instant] *:not([data-keep-transition])::after {
@@ -307,8 +299,6 @@ body::before {
   width: 0;
   height: 0;
 }
-
-/* Dostępność — przełączniki z panelu ustawień, stan na `<html>`. */
 
 html[data-a11y-text] {
   font-size: 18px;

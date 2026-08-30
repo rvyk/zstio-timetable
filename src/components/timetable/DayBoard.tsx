@@ -101,8 +101,6 @@ export const DayBoard: FC<DayBoardProps> = ({
               <caption className="sr-only">
                 {translate("timetable.dayTable")}
               </caption>
-              {/* Szerokość kolumny godzin trzymamy inline — `table-fixed`
-                  bierze ją z <col>, a nie z klasy na komórce. */}
               <colgroup>
                 <col style={{ width: "5.25rem" }} />
                 <col />
@@ -131,7 +129,6 @@ export const DayBoard: FC<DayBoardProps> = ({
                     nextStart !== undefined &&
                     now >= end &&
                     now < nextStart;
-                  /* Oddech dla wierszy stykających się ze znacznikiem przerwy. */
                   const breakPad = cn(
                     showBreak && "pt-6",
                     showBreakAfter && "pb-6",

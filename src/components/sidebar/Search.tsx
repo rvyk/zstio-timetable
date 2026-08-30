@@ -16,7 +16,6 @@ import {
 } from "react";
 import { useIsClient } from "usehooks-ts";
 
-/** „Łysy” → „lysy”, „Śr.” → „sr.” — inaczej wpisanie bez ogonków nic nie znajduje. */
 const normalize = (value: string) =>
   value
     .toLowerCase()

@@ -76,9 +76,6 @@ export const formatCountdown = (seconds: number) =>
     .toString()
     .padStart(2, "0")}:${(seconds % 60).toString().padStart(2, "0")}`;
 
-/** Znacznik przerwy — leży na granicy dwóch wierszy, żeby nie rozdzielać
-    tabeli i nie przerywać pionowych linii kolumn. Renderuje się tylko wtedy,
-    gdy przerwa właśnie trwa; rodzic musi być `relative` i mieć zerową wysokość. */
 export const BreakMarker: FC<{ from: string; to: string; now: number }> = ({
   from,
   to,

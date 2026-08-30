@@ -4,9 +4,10 @@ import { useLocale, useT } from "@/components/common/LocaleProvider";
 import { dayLabel } from "@/lib/i18n";
 import { cn, getDayNumberForNextWeek, parseTime } from "@/lib/utils";
 import { TableHour, TableLesson } from "@majusss/timetable-parser";
-import { FC, Fragment } from "react";
+import { FC, Fragment, useRef } from "react";
 import { LessonEntry } from "./LessonCells";
 import { BreakMarker, formatCountdown, useNowSeconds } from "./Slots";
+import { useFillerRows } from "./useFillerRows";
 
 interface TableBoardProps {
   dayNames: string[];
@@ -35,9 +36,16 @@ export const TableBoard: FC<TableBoardProps> = ({
   const visibleHours = hours.slice(0, lastTakenHour + 1);
   const isSchoolDay = todayIndex >= 0 && todayIndex < dayNames.length;
 
+  const tableRef = useRef<HTMLTableElement>(null);
+  const filler = useFillerRows(tableRef, "[data-plan-scroll]", 16, [
+    visibleHours.length,
+    dayNames.length,
+  ]);
+
   return (
     <div className="animate-rise @container/table px-4 pb-4">
       <table
+        ref={tableRef}
         className={cn(
           "w-full table-fixed border-separate border-spacing-0 text-left",
           "[&_td]:px-2 [&_td]:py-2 [&_th]:px-2 [&_th]:py-2.5",
@@ -99,7 +107,8 @@ export const TableBoard: FC<TableBoardProps> = ({
             const start = parseTime(hour.timeFrom);
             const end = parseTime(hour.timeTo);
             const isLiveHour = now >= start && now < end;
-            const isLast = hourIndex === visibleHours.length - 1;
+            const isLast =
+              hourIndex === visibleHours.length - 1 && filler.count === 0;
             const previousEnd =
               hourIndex > 0
                 ? parseTime(visibleHours[hourIndex - 1]!.timeTo)
@@ -118,9 +127,6 @@ export const TableBoard: FC<TableBoardProps> = ({
               nextStart !== undefined &&
               now >= end &&
               now < nextStart;
-            /* Znacznik przerwy leży na granicy wierszy, więc sąsiadującym
-               komórkom dokładamy oddechu. `!`, bo padding komórek ustawia
-               reguła `[&_td]` na tabeli. */
             const breakPad = cn(isBreak && "pt-6!", isBreakAfter && "pb-6!");
 
             return (
@@ -130,8 +136,6 @@ export const TableBoard: FC<TableBoardProps> = ({
                     <td
                       colSpan={dayNames.length + 1}
                       className="relative border-0"
-                      /* padding z `[&_td]` na tabeli wygrywa nad klasą, więc
-                         zerujemy go inline — wiersz ma mieć zero wysokości */
                       style={{ padding: 0, height: 0, lineHeight: 0 }}
                     >
                       <BreakMarker
@@ -143,6 +147,7 @@ export const TableBoard: FC<TableBoardProps> = ({
                   </tr>
                 )}
                 <tr
+                  data-hour
                   className={cn("group", hourIndex % 2 === 1 && "bg-accent/45")}
                 >
                   <td
@@ -194,7 +199,7 @@ export const TableBoard: FC<TableBoardProps> = ({
                           "border-lines/40 border-l align-top transition-colors",
                           !isLast && "border-b",
                           isToday && "bg-accent/60 group-hover:bg-accent/85",
-                          isNow && "bg-accent-table/[0.06]",
+                          isNow && "bg-accent-table/6",
                           !isToday && "group-hover:bg-accent/75",
                           breakPad,
                         )}
@@ -215,6 +220,33 @@ export const TableBoard: FC<TableBoardProps> = ({
               </Fragment>
             );
           })}
+          {Array.from({ length: filler.count }, (_, index) => (
+            <tr
+              key={`filler-${index}`}
+              className={cn(
+                (visibleHours.length + index) % 2 === 1 && "bg-accent/45",
+              )}
+              style={{ height: filler.height }}
+            >
+              <td
+                className={cn(
+                  index !== filler.count - 1 && "border-lines/40 border-b",
+                )}
+              />
+              {dayNames.map((dayName, dayIndex) => (
+                <td
+                  key={dayName}
+                  className={cn(
+                    "border-lines/40 border-l align-top",
+                    index !== filler.count - 1 && "border-b",
+                    dayIndex === todayIndex && "bg-accent/60",
+                  )}
+                >
+                  <span className="text-primary/25 text-xs">—</span>
+                </td>
+              ))}
+            </tr>
+          ))}
         </tbody>
       </table>
     </div>

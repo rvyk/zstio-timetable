@@ -8,7 +8,6 @@ import { FC } from "react";
 
 interface LessonItemProps {
   lesson: TableLesson;
-  /** Układ jednowierszowy: przedmiot, grupa, nauczyciel i sala w jednej linii. */
   inline?: boolean;
 }
 
