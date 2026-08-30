@@ -14,9 +14,10 @@ import { t } from "@/lib/i18n";
 import { getLocale } from "@/lib/locale.server";
 import { cn } from "@/lib/utils";
 import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import { ReactNode } from "react";
+import { Fragment, ReactNode } from "react";
 import "./globals.css";
 
 export const fetchCache = "default-cache";
@@ -150,7 +151,12 @@ export default async function RootLayout({
           suppressHydrationWarning
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
-        {env.NEXT_PUBLIC_DISABLE_ANALYTICS !== "true" && <Analytics />}
+        {env.NEXT_PUBLIC_DISABLE_ANALYTICS !== "true" && (
+          <Fragment>
+            <Analytics />
+            <SpeedInsights />
+          </Fragment>
+        )}
         <ServiceWorker />
         <ThemeProvider attribute="class">
           <LocaleProvider locale={locale}>
