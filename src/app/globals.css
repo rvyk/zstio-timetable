@@ -326,9 +326,6 @@ html[data-a11y-text] {
   --accent-table: 255 130 136;
 }
 
-/* ponytail: wyliczone klasy przezroczystości — Tailwind wypala alfę w
-   `color-mix`, więc nie da się jej podbić zmienną. Nowy stopień `text-primary/x`
-   trzeba dopisać tutaj. */
 [data-a11y-contrast] .text-primary\/25,
 [data-a11y-contrast] .text-primary\/30,
 [data-a11y-contrast] .text-primary\/35,

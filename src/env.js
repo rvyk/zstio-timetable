@@ -16,12 +16,14 @@ export const env = createEnv({
     NEXT_PUBLIC_TIMETABLE_URL: z.string().url().optional(),
     NEXT_PUBLIC_APP_URL: z.string().url(),
     NEXT_PUBLIC_SCHOOL_NEWS_URL: z.string().url().optional(),
+    NEXT_PUBLIC_ALT_TIMETABLE_URL: z.string().url().optional(),
     NEXT_PUBLIC_DISABLE_ANALYTICS: z.enum(["true", "false"]).optional(),
   },
 
   runtimeEnv: {
     NEXT_PUBLIC_TIMETABLE_URL: process.env.NEXT_PUBLIC_TIMETABLE_URL,
     NEXT_PUBLIC_SCHOOL_NEWS_URL: process.env.NEXT_PUBLIC_SCHOOL_NEWS_URL,
+    NEXT_PUBLIC_ALT_TIMETABLE_URL: process.env.NEXT_PUBLIC_ALT_TIMETABLE_URL,
     NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
     NEXT_PUBLIC_DISABLE_ANALYTICS: process.env.NEXT_PUBLIC_DISABLE_ANALYTICS,
     SENTRY_AUTH_TOKEN: process.env.SENTRY_AUTH_TOKEN,

@@ -2,6 +2,7 @@
 
 import school_logo from "@/assets/school-logo.png";
 import { useT } from "@/components/common/LocaleProvider";
+import { OtherTimetables } from "@/components/common/OtherTimetables";
 import { TimetableDates } from "@/components/common/TimetableDates";
 import { SettingsList } from "@/components/settings/SettingsPanel";
 import { Accordion } from "@/components/ui/Accordion";
@@ -320,6 +321,7 @@ export const SidebarInfo: FC<{ showTimetableDates?: boolean }> = ({
           </span>
         </p>
       )}
+      <OtherTimetables />
     </div>
   );
 };

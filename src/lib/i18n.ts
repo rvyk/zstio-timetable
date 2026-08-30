@@ -99,8 +99,8 @@ const DICT = {
     uk: "не вдалося знайти.",
   },
   "dates.lastUpdated": {
-    pl: "Ostatnia aktualizacja",
-    uk: "Останнє оновлення",
+    pl: "Ostatnia aktualizacja:",
+    uk: "Останнє оновлення:",
   },
 
   "lessons.mode.custom": { pl: "Od lekcji", uk: "З уроку" },
@@ -267,6 +267,18 @@ const DICT = {
   "settings.freeRoomsHint": {
     pl: "Cały tydzień z podziałem na dni i lekcje",
     uk: "Цілий тиждень за днями та уроками",
+  },
+  "settings.otherTimetables": {
+    pl: "Inne wersje planu:",
+    uk: "Інші версії розкладу:",
+  },
+  "settings.sourceTimetable": {
+    pl: "Oryginalny",
+    uk: "Оригінальний",
+  },
+  "settings.altTimetable": {
+    pl: "Alternatywny",
+    uk: "Альтернативний",
   },
   "settings.menu": { pl: "Dodatkowe funkcje", uk: "Додаткові функції" },
   "settings.menuOpen": {
