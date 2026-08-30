@@ -76,6 +76,14 @@ const createEvent = (
     )
     .map((dayOff) => floatingDateTime(dayOff, startHour, startMinute));
 
+  const end = new Date(
+    date.getFullYear(),
+    date.getMonth(),
+    date.getDate(),
+    startHour,
+    startMinute + lessonMinutes(hour),
+  );
+
   const { subject, groupName, className, teacher } = group;
   const room = group.roomId
     ? (roomNames.get(group.roomId) ?? group.room)
@@ -114,7 +122,15 @@ const createEvent = (
     description,
     url,
     location: room ? `Sala ${room}` : undefined,
-    duration: { minutes: lessonMinutes(hour) },
+    end: [
+      end.getFullYear(),
+      end.getMonth() + 1,
+      end.getDate(),
+      end.getHours(),
+      end.getMinutes(),
+    ],
+    endInputType: "local",
+    endOutputType: "local",
     alarms: withAlarm
       ? [
           {
