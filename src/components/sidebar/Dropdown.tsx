@@ -21,7 +21,7 @@ import { ChevronDown, LucideIcon } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { CSSProperties, FC } from "react";
 import { useIsClient } from "usehooks-ts";
-import { FavoriteStar } from "../common/FavoriteStar";
+import { DefaultPlanButton, FavoriteStar } from "../common/FavoriteStar";
 import { useSidebarContext } from "./Context";
 
 type ListType = "class" | "teacher" | "room" | "favorites" | "search";
@@ -259,9 +259,18 @@ const ListItemComponent: FC<
         />
         <span className="truncate">{item.name}</span>
       </span>
-      {favoriteStar && (
-        <FavoriteStar item={{ ...item, type: itemType }} small revealOnHover />
-      )}
+      <span className="flex shrink-0 items-center gap-1.5">
+        {type === "favorites" && (
+          <DefaultPlanButton item={{ ...item, type: itemType }} />
+        )}
+        {favoriteStar && (
+          <FavoriteStar
+            item={{ ...item, type: itemType }}
+            small
+            revealOnHover
+          />
+        )}
+      </span>
     </LinkWithCookie>
   );
 };

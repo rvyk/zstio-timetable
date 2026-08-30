@@ -1,11 +1,12 @@
 "use client";
 
 import { useT } from "@/components/common/LocaleProvider";
+import { toast } from "@/hooks/useToast";
 import { handleFavorite } from "@/lib/handleFavorites";
 import { cn } from "@/lib/utils";
-import { useFavoritesStore } from "@/stores/favorites";
+import { favoritePath, useFavoritesStore } from "@/stores/favorites";
 import { ListItem } from "@majusss/timetable-parser";
-import { BookmarkIcon } from "lucide-react";
+import { BookmarkIcon, PinIcon } from "lucide-react";
 import { FC, useState } from "react";
 
 interface FavoriteStarProps {
@@ -65,6 +66,48 @@ export const FavoriteStar: FC<FavoriteStarProps> = ({
           {translate(isFavorite ? "favorites.saved" : "favorites.save")}
         </span>
       )}
+    </button>
+  );
+};
+
+export const DefaultPlanButton: FC<{ item: ListItem; className?: string }> = ({
+  item,
+  className,
+}) => {
+  const translate = useT();
+  const path = favoritePath(item);
+  const isDefault = useFavoritesStore((state) => state.defaultPath === path);
+  const setDefaultPath = useFavoritesStore((state) => state.setDefaultPath);
+
+  return (
+    <button
+      aria-label={translate(
+        isDefault ? "favorites.unsetDefault" : "favorites.setDefault",
+      )}
+      aria-pressed={isDefault}
+      onClick={(e) => {
+        e.preventDefault();
+        setDefaultPath(isDefault ? null : path);
+        toast({
+          title: translate(
+            isDefault ? "favorites.defaultUnset" : "favorites.defaultSet",
+            { name: item.name },
+          ),
+          icon: PinIcon,
+        });
+      }}
+      className={cn(
+        "shrink-0 rounded-sm transition-colors",
+        isDefault
+          ? "text-accent-table"
+          : "text-primary/55 hover:text-primary/80 opacity-0 group-focus-within:opacity-100 group-hover:opacity-100 focus-visible:opacity-100 max-md:opacity-100",
+        className,
+      )}
+    >
+      <PinIcon
+        strokeWidth={2}
+        className={cn("size-3.5", isDefault && "fill-current")}
+      />
     </button>
   );
 };

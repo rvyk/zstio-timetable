@@ -76,6 +76,22 @@ const DICT = {
     pl: "Usunięto {name} z ulubionych",
     uk: "{name} видалено з обраного",
   },
+  "favorites.setDefault": {
+    pl: "Ustaw jako domyślny plan",
+    uk: "Зробити розкладом за умовчанням",
+  },
+  "favorites.unsetDefault": {
+    pl: "Usuń jako domyślny plan",
+    uk: "Прибрати розклад за умовчанням",
+  },
+  "favorites.defaultSet": {
+    pl: "{name} jest teraz domyślnym planem",
+    uk: "{name} тепер розклад за умовчанням",
+  },
+  "favorites.defaultUnset": {
+    pl: "{name} nie jest już domyślnym planem",
+    uk: "{name} більше не розклад за умовчанням",
+  },
 
   "news.source": { pl: "Aktualności szkoły", uk: "Новини школи" },
   "news.read": {
