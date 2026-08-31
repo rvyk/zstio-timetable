@@ -92,6 +92,8 @@
   --animate-day-in-left: day-in-left 0.3s cubic-bezier(0.22, 1, 0.36, 1) both;
   --animate-day-swap: day-swap 0.26s cubic-bezier(0.22, 1, 0.36, 1) both;
   --animate-pop: pop 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+  --animate-toast-countdown: toast-countdown var(--toast-duration, 5000ms)
+    linear forwards;
 
   --animate-overlay-in: overlay-in 0.2s ease-out both;
   --animate-overlay-out: overlay-out 0.15s ease-in both;
@@ -103,6 +105,14 @@
   --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
 
+  @keyframes toast-countdown {
+    from {
+      transform: scaleX(1);
+    }
+    to {
+      transform: scaleX(0);
+    }
+  }
   @keyframes accordion-down {
     from {
       height: 0;

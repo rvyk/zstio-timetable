@@ -6,6 +6,7 @@ import type { ReactNode } from "react";
 import { create } from "zustand";
 
 const TOAST_LIMIT = 3;
+export const TOAST_DURATION = 5000;
 const REMOVE_DELAY = 400;
 
 const ICONS = { success: CircleCheck, error: CircleX };
@@ -50,6 +51,7 @@ export const toast = ({
         ...props,
         id,
         variant: kind,
+        duration: props.duration ?? TOAST_DURATION,
         icon: icon ?? ICONS[kind],
         open: true,
         onOpenChange: (open: boolean) => {

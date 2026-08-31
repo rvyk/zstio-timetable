@@ -80,9 +80,13 @@ export const Search: FC<SearchProps> = ({ value, onChange, results }) => {
 
   const handleKeyDown = useCallback(
     (e: KeyboardEvent<HTMLInputElement>) => {
+      if (e.key === "Escape") {
+        e.currentTarget.blur();
+        return;
+      }
       if (e.key !== "Enter") return;
       const item = results[0];
-      if (results.length === 1 && item && "value" in item) {
+      if (item && "value" in item) {
         const link = `/${item.type}/${item.value}`;
         router.push(link);
         setLastVisitedCookie(link);
