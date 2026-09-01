@@ -3,12 +3,14 @@
 import { useT } from "@/components/common/LocaleProvider";
 import { env } from "@/env";
 import { useAltTimetable } from "@/hooks/useAltTimetable";
-import { getTimetableBaseUrl } from "@/lib/dataSource";
+import { getTimetableBaseUrl, joinDataSourcePath } from "@/lib/dataSource";
 import { FC, Fragment } from "react";
 
 export const OtherTimetables: FC = () => {
   const translate = useT();
   const hasAltTimetable = useAltTimetable();
+
+  const altUrl = hasAltTimetable ? env.NEXT_PUBLIC_ALT_TIMETABLE_URL : null;
 
   const links = [
     {
@@ -16,10 +18,15 @@ export const OtherTimetables: FC = () => {
       label: translate("settings.sourceTimetable"),
     },
     {
-      href: hasAltTimetable ? env.NEXT_PUBLIC_ALT_TIMETABLE_URL : undefined,
+      href: altUrl,
       label: translate("settings.altTimetable"),
     },
-  ].filter((link) => link.href);
+  ]
+    .filter((link) => link.href)
+    .map((link) => ({
+      ...link,
+      href: joinDataSourcePath(link.href!, "index.html"),
+    }));
 
   if (links.length === 0) return null;
 
