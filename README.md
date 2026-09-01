@@ -69,7 +69,8 @@ A modern and refreshed timetable application for Zespół Szkół Technicznych i
    - **`BUILD_STANDALONE` (optional):** Set to `"true"` for a standalone Next.js output (used by the Dockerfile).
    - **`DISCORD_WEBHOOK_URL` (optional):** Discord webhook for plan change notifications. Without it the watcher stays off entirely.
    - **`PLAN_WATCH_INTERVAL_MINUTES` (optional):** Run the watcher in-process every N minutes (15+ recommended; ignored on Vercel).
-   - **`PLAN_WATCH_SECRET` (optional):** Guards `GET /api/plan-watch`, the manual trigger for the same run.
+   - **`PLAN_WATCH_SECRET` (optional):** Guards `GET /api/plan-watch`, the manual trigger for the same run, and `POST /api/revalidate`.
+   - **`REVALIDATE_URL` (optional):** Base URL of another deployment (e.g. Vercel). When the watcher detects a change it calls `POST /api/revalidate` there so its timetable cache is purged too.
    - **`PLAN_SNAPSHOT_PATH` (optional):** Where the previous plan snapshot is stored (defaults to `./data/plan-snapshots.json`). Point it at a mounted volume so it survives restarts.
    - **`SENTRY_AUTH_TOKEN` (optional):** Your Sentry authentication token.
 

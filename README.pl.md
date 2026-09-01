@@ -69,7 +69,8 @@ Nowoczesna i odświeżona aplikacja planu lekcji dla Zespołu Szkół Techniczny
    - **`BUILD_STANDALONE` (opcjonalne):** Ustaw na `"true"`, aby zbudować Next.js w trybie standalone (używane przez Dockerfile).
    - **`DISCORD_WEBHOOK_URL` (opcjonalne):** Webhook Discorda do powiadomień o zmianach w planie. Bez niego watcher jest całkowicie wyłączony.
    - **`PLAN_WATCH_INTERVAL_MINUTES` (opcjonalne):** Uruchamia watcher w procesie aplikacji co N minut (zalecane 15+; ignorowane na Vercelu).
-   - **`PLAN_WATCH_SECRET` (opcjonalne):** Zabezpiecza `GET /api/plan-watch`, czyli ręczne wywołanie tego samego sprawdzenia.
+   - **`PLAN_WATCH_SECRET` (opcjonalne):** Zabezpiecza `GET /api/plan-watch`, czyli ręczne wywołanie tego samego sprawdzenia, oraz `POST /api/revalidate`.
+   - **`REVALIDATE_URL` (opcjonalne):** Adres drugiego deploymentu (np. Vercel). Po wykryciu zmiany watcher uderza w `POST /api/revalidate` pod tym adresem, żeby wyczyścić tam cache planów.
    - **`PLAN_SNAPSHOT_PATH` (opcjonalne):** Miejsce zapisu poprzedniego snapshotu planu (domyślnie `./data/plan-snapshots.json`). Wskaż zamontowany wolumen, aby przetrwał restarty.
    - **`SENTRY_AUTH_TOKEN` (opcjonalne):** Token autoryzacji Sentry.
 

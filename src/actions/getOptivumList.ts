@@ -1,6 +1,6 @@
 "use server";
 
-import { REVALIDATE_TIME } from "@/constants/settings";
+import { REVALIDATE_TIME, TIMETABLE_TAG } from "@/constants/settings";
 import { getTimetableBaseUrl, joinDataSourcePath } from "@/lib/dataSource";
 import type { List } from "@majusss/timetable-parser";
 import { TimetableList } from "@majusss/timetable-parser";
@@ -18,6 +18,7 @@ export const getOptivumList = async (): Promise<List> => {
     const response = await fetch(url, {
       next: {
         revalidate: REVALIDATE_TIME,
+        tags: [TIMETABLE_TAG],
       },
     });
     if (!response.ok) {

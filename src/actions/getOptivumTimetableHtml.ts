@@ -1,6 +1,6 @@
 "use server";
 
-import { REVALIDATE_TIME } from "@/constants/settings";
+import { REVALIDATE_TIME, TIMETABLE_TAG } from "@/constants/settings";
 import { getTimetableBaseUrl, joinDataSourcePath } from "@/lib/dataSource";
 
 export const getOptivumTimetableHtml = async (
@@ -13,7 +13,7 @@ export const getOptivumTimetableHtml = async (
 
   try {
     const response = await fetch(url, {
-      next: { revalidate: REVALIDATE_TIME },
+      next: { revalidate: REVALIDATE_TIME, tags: [TIMETABLE_TAG] },
     });
     if (!response.ok) return null;
 

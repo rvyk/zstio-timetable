@@ -2,6 +2,8 @@ import { TableHour } from "@majusss/timetable-parser";
 
 export const REVALIDATE_TIME = 900;
 
+export const TIMETABLE_TAG = "timetable";
+
 export const BREAK_LENGTH = 5;
 
 export const SHORT_LESSON_LENGTH = 30;

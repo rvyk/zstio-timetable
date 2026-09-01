@@ -10,6 +10,7 @@ export const env = createEnv({
     PLAN_WATCH_SECRET: z.string().optional(),
     PLAN_SNAPSHOT_PATH: z.string().optional(),
     PLAN_WATCH_INTERVAL_MINUTES: z.coerce.number().int().min(1).optional(),
+    REVALIDATE_URL: z.string().url().optional(),
   },
 
   client: {
@@ -34,5 +35,6 @@ export const env = createEnv({
     PLAN_WATCH_SECRET: process.env.PLAN_WATCH_SECRET,
     PLAN_SNAPSHOT_PATH: process.env.PLAN_SNAPSHOT_PATH,
     PLAN_WATCH_INTERVAL_MINUTES: process.env.PLAN_WATCH_INTERVAL_MINUTES,
+    REVALIDATE_URL: process.env.REVALIDATE_URL,
   },
 });

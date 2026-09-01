@@ -74,6 +74,37 @@ const postToDiscord = async (embed: object) => {
   }
 };
 
+const revalidateDeployments = async () => {
+  const secret = env.PLAN_WATCH_SECRET;
+  if (!secret) return;
+
+  const targets = [
+    `http://127.0.0.1:${process.env.PORT ?? 3000}`,
+    env.REVALIDATE_URL,
+  ].filter((url): url is string => Boolean(url));
+
+  await Promise.all(
+    targets.map(async (url) => {
+      try {
+        const response = await fetch(new URL("/api/revalidate", url), {
+          method: "POST",
+          headers: { authorization: `Bearer ${secret}` },
+        });
+
+        if (!response.ok) {
+          console.error(
+            "[plan-watch] revalidate failed:",
+            url,
+            response.status,
+          );
+        }
+      } catch (error) {
+        console.error("[plan-watch] revalidate failed:", url, error);
+      }
+    }),
+  );
+};
+
 export const runPlanWatch = async () => {
   const stored = await readSnapshots();
   const isFirstRun = Object.keys(stored.grids).length === 0;
@@ -135,6 +166,8 @@ export const runPlanWatch = async () => {
     probe: list.classes[0]?.value ?? stored.probe,
     grids,
   });
+
+  await revalidateDeployments();
 
   const notified =
     changed.length > 0 && !isFirstRun && Boolean(env.DISCORD_WEBHOOK_URL);

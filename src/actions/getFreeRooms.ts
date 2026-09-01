@@ -1,6 +1,6 @@
 "use server";
 
-import { REVALIDATE_TIME } from "@/constants/settings";
+import { REVALIDATE_TIME, TIMETABLE_TAG } from "@/constants/settings";
 import type { Room } from "@/types/optivum";
 import { unstable_cache } from "next/cache";
 import { getOptivumList } from "./getOptivumList";
@@ -56,4 +56,5 @@ export const getFreeRoomsWeek = async (
 const cachedRooms = () =>
   unstable_cache(() => combineRooms(), ["combinedRooms"], {
     revalidate: REVALIDATE_TIME,
+    tags: [TIMETABLE_TAG],
   })();
