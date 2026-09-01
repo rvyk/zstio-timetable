@@ -23,6 +23,16 @@ Sentry.init({
   // Setting this option to true will print useful information to the console while you're setting up Sentry.
   debug: false,
 
+  // Noise from the user's environment, not from us: page translators mutating
+  // the DOM under React, flaky service worker script fetches, and Android
+  // WebView tearing down its JS bridge mid-session.
+  ignoreErrors: [
+    "The node to be removed is not a child of this node",
+    "The node before which the new node is to be inserted is not a child of this node",
+    "Failed to register a ServiceWorker",
+    "Java object is gone",
+  ],
+
   beforeSend: (event) =>
     isOurError(
       event.exception?.values?.flatMap(
