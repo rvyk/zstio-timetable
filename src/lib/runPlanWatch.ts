@@ -1,5 +1,6 @@
 import { getOptivumTimetable } from "@/actions/getOptivumTimetable";
 import { env } from "@/env";
+import { getTimetableBaseUrl, joinDataSourcePath } from "@/lib/dataSource";
 import { planGrid, type PlanGrid } from "@/lib/planDiff";
 import {
   changesEmbed,
@@ -20,14 +21,32 @@ type Snapshots = Record<string, PlanGrid>;
 
 interface SnapshotFile {
   generatedDate: string | null;
+  stamp: string | null;
   probe: string;
   grids: Snapshots;
 }
 
 const EMPTY_FILE: SnapshotFile = {
   generatedDate: null,
+  stamp: null,
   probe: PROBE_FALLBACK,
   grids: {},
+};
+
+const probeStamp = async (index: string): Promise<string | null> => {
+  const baseUrl = getTimetableBaseUrl();
+  if (!baseUrl) return null;
+
+  try {
+    const response = await fetch(
+      joinDataSourcePath(baseUrl, `plany/o${index}.html`),
+      { method: "HEAD", cache: "no-store" },
+    );
+
+    return response.ok ? response.headers.get("last-modified") : null;
+  } catch {
+    return null;
+  }
 };
 
 const readSnapshots = async (): Promise<SnapshotFile> => {
@@ -40,6 +59,7 @@ const readSnapshots = async (): Promise<SnapshotFile> => {
 
     return {
       generatedDate: parsed.generatedDate ?? null,
+      stamp: parsed.stamp ?? null,
       probe: parsed.probe ?? PROBE_FALLBACK,
       grids: parsed.grids,
     };
@@ -109,13 +129,20 @@ export const runPlanWatch = async () => {
   const stored = await readSnapshots();
   const isFirstRun = Object.keys(stored.grids).length === 0;
 
-  const probe = await getOptivumTimetable("class", stored.probe);
+  const [probe, stamp] = await Promise.all([
+    getOptivumTimetable("class", stored.probe),
+    probeStamp(stored.probe),
+  ]);
 
   if (!probe.title) {
     return { checked: 0, changed: [], notified: false, skipped: "unreachable" };
   }
 
-  if (!isFirstRun && probe.generatedDate === stored.generatedDate) {
+  const unchanged = stamp
+    ? stamp === stored.stamp
+    : probe.generatedDate === stored.generatedDate;
+
+  if (!isFirstRun && unchanged) {
     return { checked: 0, changed: [], notified: false, skipped: "unchanged" };
   }
 
@@ -163,6 +190,7 @@ export const runPlanWatch = async () => {
 
   await writeSnapshots({
     generatedDate: probe.generatedDate,
+    stamp,
     probe: list.classes[0]?.value ?? stored.probe,
     grids,
   });
