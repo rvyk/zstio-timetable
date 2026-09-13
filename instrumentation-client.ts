@@ -25,8 +25,10 @@ Sentry.init({
 
   // Noise from the user's environment, not from us: page translators mutating
   // the DOM under React, flaky service worker script fetches, and Android
-  // WebView tearing down its JS bridge mid-session.
+  // WebView tearing down its JS bridge mid-session, and fetches aborted when
+  // the page is closed mid-request (e.g. WebPageTest bots).
   ignoreErrors: [
+    "AbortError",
     "The node to be removed is not a child of this node",
     "The node before which the new node is to be inserted is not a child of this node",
     "Failed to register a ServiceWorker",
