@@ -15,6 +15,7 @@ import { useFavoritesStore } from "@/stores/favorites";
 import { useRecentStore } from "@/stores/recent";
 import { useSettingsWithoutStore } from "@/stores/settings";
 import { useTimetableStore } from "@/stores/timetable";
+import type { OptivumTimetable } from "@/types/optivum";
 import type { List } from "@majusss/timetable-parser";
 import {
   ArrowLeft,
@@ -30,7 +31,7 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { FC, Fragment, useEffect, useState } from "react";
+import { FC, Fragment, ReactNode, useEffect, useState } from "react";
 import { useIsClient, useMediaQuery } from "usehooks-ts";
 import SidebarContext, { useSidebarContext } from "./Context";
 import { Dropdown, DropdownContent } from "./Dropdown";
@@ -253,7 +254,10 @@ const SidebarActions: FC<{ collapsed: boolean; onExpand: () => void }> = ({
   );
 };
 
-export const Sidebar: FC<{ list: List }> = ({ list }) => {
+export const Sidebar: FC<{ list: List; sidebarInfo?: ReactNode }> = ({
+  list,
+  sidebarInfo,
+}) => {
   const collapsed = useSettingsWithoutStore(
     (state) => state.isSidebarCollapsed,
   );
@@ -317,7 +321,7 @@ export const Sidebar: FC<{ list: List }> = ({ list }) => {
                   aria-hidden
                   className="from-foreground pointer-events-none absolute inset-x-0 bottom-full h-50 bg-linear-to-t to-transparent opacity-0 transition-opacity duration-300 group-has-[[data-settings][data-state=open]]/footer:opacity-100"
                 />
-                <SidebarInfo showTimetableDates />
+                <SidebarInfo showTimetableDates dates={sidebarInfo} />
                 <SidebarActions
                   collapsed={collapsed}
                   onExpand={() => setSidebarCollapsed(false)}
@@ -331,23 +335,11 @@ export const Sidebar: FC<{ list: List }> = ({ list }) => {
   );
 };
 
-export const SidebarInfo: FC<{ showTimetableDates?: boolean }> = ({
-  showTimetableDates,
-}) => {
-  const timetable = useTimetableStore((state) => state.timetable);
-  const translate = useT();
-  const lastUpdatedTimetable = timetable?.lastUpdated;
+export const SidebarInfo: FC<{
+  showTimetableDates?: boolean;
+  dates?: ReactNode;
+}> = ({ showTimetableDates, dates }) => {
   const { isPreview } = useSidebarContext();
-  const isClient = useIsClient();
-
-  if (!isClient) {
-    return (
-      <div className={cn(isPreview ? "hidden" : "grid", "gap-2 px-2")}>
-        <Skeleton className="h-3 w-48" />
-        <Skeleton className="h-3 w-32" />
-      </div>
-    );
-  }
 
   return (
     <div
@@ -356,23 +348,59 @@ export const SidebarInfo: FC<{ showTimetableDates?: boolean }> = ({
         "border-lines gap-2 px-2 max-md:mt-6 max-md:border-t max-md:pt-4",
       )}
     >
+      {dates ?? <StoredTimetableInfo showTimetableDates={showTimetableDates} />}
+      <OtherTimetables />
+    </div>
+  );
+};
+
+export const StoredTimetableInfo: FC<{ showTimetableDates?: boolean }> = ({
+  showTimetableDates,
+}) => {
+  const timetable = useTimetableStore((state) => state.timetable);
+  const isClient = useIsClient();
+
+  if (!isClient) {
+    return (
+      <Fragment>
+        <Skeleton className="h-3 w-48" />
+        <Skeleton className="h-3 w-32" />
+      </Fragment>
+    );
+  }
+
+  return (
+    <TimetableInfo
+      timetable={timetable ?? undefined}
+      showTimetableDates={showTimetableDates}
+    />
+  );
+};
+
+export const TimetableInfo: FC<{
+  timetable?: OptivumTimetable;
+  showTimetableDates?: boolean;
+}> = ({ timetable, showTimetableDates }) => {
+  const translate = useT();
+
+  return (
+    <Fragment>
       {showTimetableDates && (
         <TimetableDates
-          timetable={timetable ?? undefined}
+          timetable={timetable}
           stackOnMobile
           className="text-xs"
         />
       )}
-      {lastUpdatedTimetable && (
-        <p className="text-primary/55 text-[11px]">
+      {timetable?.lastUpdated && (
+        <p className="text-primary/60 text-[11px]">
           {translate("dates.lastUpdated")}{" "}
           <span className="text-primary/72 font-mono wrap-break-word">
-            {lastUpdatedTimetable}
+            {timetable.lastUpdated}
           </span>
         </p>
       )}
-      <OtherTimetables />
-    </div>
+    </Fragment>
   );
 };
 
