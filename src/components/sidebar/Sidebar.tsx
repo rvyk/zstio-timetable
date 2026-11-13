@@ -6,6 +6,7 @@ import { OtherTimetables } from "@/components/common/OtherTimetables";
 import { TimetableDates } from "@/components/common/TimetableDates";
 import { SettingsList } from "@/components/settings/SettingsPanel";
 import { Accordion } from "@/components/ui/Accordion";
+import { ScrollArea } from "@/components/ui/ScrollArea";
 import { Skeleton } from "@/components/ui/Skeleton";
 import { SCHOOL_SHORT, SCHOOL_WEBSITE } from "@/constants/school";
 import { usePresence } from "@/hooks/usePresence";
@@ -28,7 +29,7 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { FC, Fragment, useEffect, useRef, useState } from "react";
+import { FC, Fragment, useEffect, useState } from "react";
 import { useIsClient, useMediaQuery } from "usehooks-ts";
 import SidebarContext, { useSidebarContext } from "./Context";
 import { Dropdown, DropdownContent } from "./Dropdown";
@@ -47,16 +48,7 @@ export const SidebarContent: FC<SidebarContentProps> = ({
   if (!isClient)
     return (
       <Fragment>
-        <div className={cn(isPreview && "w-12", "grid gap-10")}>
-          <Skeleton className="h-12 w-full" />
-          <div className={cn(isPreview && "mx-auto w-10", "grid gap-5")}>
-            <Skeleton className="h-10 w-full" />
-            <hr className="border-primary/10 h-px w-full border" />
-            <Skeleton className="h-10 w-full" />
-            <Skeleton className="h-10 w-full" />
-            <Skeleton className="h-10 w-full" />
-          </div>
-        </div>
+        <SidebarListSkeleton />
         <div className={cn(isPreview ? "hidden" : "grid", "gap-2")}>
           <Skeleton className="h-3.5 w-3/4" />
           <Skeleton className="h-3 w-3/5" />
@@ -74,6 +66,35 @@ export const SidebarContent: FC<SidebarContentProps> = ({
   );
 };
 
+const SidebarListSkeleton: FC = () => {
+  const { isPreview } = useSidebarContext();
+
+  if (isPreview)
+    return (
+      <div className="grid w-8 gap-2">
+        <Skeleton className="size-8" />
+        <Skeleton className="size-8" />
+        <hr className="border-lines my-1" />
+        <Skeleton className="size-8" />
+        <Skeleton className="size-8" />
+        <Skeleton className="size-8" />
+      </div>
+    );
+
+  return (
+    <div className="grid gap-10">
+      <Skeleton className="h-12 w-full" />
+      <div className="grid gap-5">
+        <Skeleton className="h-10 w-full" />
+        <hr className="border-primary/10 h-px w-full border" />
+        <Skeleton className="h-10 w-full" />
+        <Skeleton className="h-10 w-full" />
+        <Skeleton className="h-10 w-full" />
+      </div>
+    </div>
+  );
+};
+
 const SidebarBrand: FC<{ collapsed: boolean; onToggle: () => void }> = ({
   collapsed,
   onToggle,
@@ -83,7 +104,7 @@ const SidebarBrand: FC<{ collapsed: boolean; onToggle: () => void }> = ({
   return (
     <div
       className={cn(
-        collapsed ? "flex-col gap-y-3" : "gap-x-3",
+        collapsed ? "flex-col gap-y-5" : "gap-x-3",
         "flex items-center",
       )}
     >
@@ -96,7 +117,10 @@ const SidebarBrand: FC<{ collapsed: boolean; onToggle: () => void }> = ({
         <Image
           src={school_logo}
           alt=""
-          className="aspect-square w-9 shrink-0 transition-transform duration-300 group-hover:scale-105"
+          className={cn(
+            collapsed ? "w-8" : "w-9",
+            "aspect-square shrink-0 transition-transform duration-300 group-hover:scale-105",
+          )}
         />
         {!collapsed && (
           <span className="grid gap-0.5">
@@ -122,7 +146,7 @@ const SidebarBrand: FC<{ collapsed: boolean; onToggle: () => void }> = ({
         aria-expanded={!collapsed}
         className={cn(
           !collapsed && "ml-auto",
-          "text-primary hover:bg-primary/5 grid size-7 shrink-0 place-content-center rounded-md opacity-55 transition hover:opacity-100",
+          "border-lines bg-accent text-primary/55 hover:text-primary hover:bg-primary/5 grid size-8 shrink-0 place-content-center rounded-md border transition",
         )}
       >
         <ChevronLeft
@@ -137,6 +161,8 @@ const SidebarBrand: FC<{ collapsed: boolean; onToggle: () => void }> = ({
   );
 };
 
+const SETTINGS_PANEL_MS = 300;
+
 const ACTION_ROW =
   "flex items-center gap-2.5 rounded-md text-[13px] text-primary/70 transition-colors hover:bg-primary/5 hover:text-primary";
 
@@ -146,21 +172,10 @@ const SidebarActions: FC<{ collapsed: boolean; onExpand: () => void }> = ({
 }) => {
   const translate = useT();
   const [isOpen, setIsOpen] = useState(false);
-  const { isMounted, presenceProps } = usePresence(isOpen && !collapsed);
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (!isOpen) return;
-
-    const closeOnOutside = (event: PointerEvent) => {
-      if (!containerRef.current?.contains(event.target as Node)) {
-        setIsOpen(false);
-      }
-    };
-
-    document.addEventListener("pointerdown", closeOnOutside);
-    return () => document.removeEventListener("pointerdown", closeOnOutside);
-  }, [isOpen]);
+  const { isMounted, presenceProps } = usePresence(
+    isOpen && !collapsed,
+    SETTINGS_PANEL_MS,
+  );
 
   const openSettings = () => {
     if (collapsed) {
@@ -172,18 +187,8 @@ const SidebarActions: FC<{ collapsed: boolean; onExpand: () => void }> = ({
   };
 
   return (
-    <div ref={containerRef} className="border-lines relative border-t pt-2">
-      {isMounted && (
-        <div
-          {...presenceProps}
-          inert={!isOpen}
-          className="border-lines bg-foreground/95 data-[state=open]:animate-popover-in data-[state=closed]:animate-popover-out absolute inset-x-0 bottom-full z-20 mb-2 max-h-[calc(100dvh-9rem)] origin-bottom overflow-y-auto rounded-lg border shadow-(--shadow-raised) backdrop-blur-md"
-        >
-          <SettingsList onSelect={() => setIsOpen(false)} />
-        </div>
-      )}
-
-      <div className={cn(collapsed && "justify-items-center", "grid gap-0.5")}>
+    <div className="border-lines border-t pt-2">
+      <div className={cn(collapsed ? "gap-2" : "gap-0.5", "grid")}>
         <a
           href="/print"
           target="_blank"
@@ -192,7 +197,7 @@ const SidebarActions: FC<{ collapsed: boolean; onExpand: () => void }> = ({
           aria-label={translate("settings.print")}
           className={cn(
             ACTION_ROW,
-            collapsed ? "size-9 justify-center" : "w-full px-2 py-2",
+            collapsed ? "size-8 justify-center" : "w-full px-2 py-2",
           )}
         >
           <PrinterIcon className="size-4 shrink-0" strokeWidth={1.75} />
@@ -205,8 +210,8 @@ const SidebarActions: FC<{ collapsed: boolean; onExpand: () => void }> = ({
           aria-label={translate("settings.menu")}
           className={cn(
             ACTION_ROW,
-            collapsed ? "size-9 justify-center" : "w-full px-2 py-2",
-            isOpen && !collapsed && "bg-primary/5 text-primary",
+            collapsed ? "size-8 justify-center" : "w-full px-2 py-2",
+            isOpen && !collapsed && "text-primary",
           )}
         >
           <SlidersHorizontal className="size-4 shrink-0" strokeWidth={1.75} />
@@ -215,7 +220,7 @@ const SidebarActions: FC<{ collapsed: boolean; onExpand: () => void }> = ({
               {translate("settings.menu")}
               <ChevronDown
                 className={cn(
-                  "ml-auto size-3.5 transition-transform duration-300",
+                  "text-primary/45 ml-auto size-3.5 transition-transform duration-300",
                   isOpen && "rotate-180",
                 )}
                 strokeWidth={2}
@@ -224,6 +229,20 @@ const SidebarActions: FC<{ collapsed: boolean; onExpand: () => void }> = ({
           )}
         </button>
       </div>
+
+      {isMounted && (
+        <div
+          data-settings
+          {...presenceProps}
+          inert={!isOpen}
+          style={{ transitionDuration: `${SETTINGS_PANEL_MS}ms` }}
+          className="grid grid-rows-[0fr] transition-[grid-template-rows] ease-[cubic-bezier(0.32,0.72,0,1)] data-[state=open]:grid-rows-[1fr] starting:data-[state=open]:grid-rows-[0fr]"
+        >
+          <div className="overflow-hidden">
+            <SettingsList onSelect={() => setIsOpen(false)} compact />
+          </div>
+        </div>
+      )}
     </div>
   );
 };
@@ -238,6 +257,7 @@ export const Sidebar: FC = () => {
   const toggleSidebarCollapsed = useSettingsWithoutStore(
     (state) => state.toggleSidebarCollapsed,
   );
+  const isClient = useIsClient();
 
   const isNarrow = useMediaQuery("(max-width: 1279px)", {
     initializeWithValue: false,
@@ -255,27 +275,50 @@ export const Sidebar: FC = () => {
       )}
     >
       <SidebarContext.Provider value={{ isPreview: collapsed }}>
-        <div className="h-full w-full overflow-hidden">
-          <nav
-            onClick={collapsed ? () => setSidebarCollapsed(false) : undefined}
-            className={cn(
-              collapsed ? "w-16 cursor-pointer items-center px-3" : "w-80 px-5",
-              "flex h-full flex-col gap-y-7 overflow-x-hidden overflow-y-auto py-6",
+        <nav
+          onClick={collapsed ? () => setSidebarCollapsed(false) : undefined}
+          className={cn(
+            collapsed && "cursor-pointer",
+            "h-full w-full overflow-hidden",
+          )}
+        >
+          <ScrollArea
+            className="h-full"
+            viewportClassName="h-full overflow-x-hidden"
+            contentClassName={cn(
+              collapsed
+                ? "w-[calc(4rem-2px)] items-center gap-y-5 py-[15px]"
+                : "w-[calc(20rem-2px)] gap-y-7 px-5 py-6",
+              "flex min-h-full flex-col",
             )}
+            scrollbarClassName="top-3 bottom-3"
           >
             <SidebarBrand
               collapsed={collapsed}
               onToggle={toggleSidebarCollapsed}
             />
-            <div className="flex flex-1 flex-col justify-between gap-y-12">
-              <SidebarContent showTimetableDates />
+            <div className="grid flex-1 grid-rows-[1fr_auto] gap-y-12">
+              <div className="col-start-1 row-start-1">
+                {isClient ? (
+                  <TimetableSidebarDropdowns />
+                ) : (
+                  <SidebarListSkeleton />
+                )}
+              </div>
+              <div className="group/footer bg-foreground relative col-start-1 row-start-2 grid gap-y-7 self-end has-[[data-settings]]:row-[1/-1]">
+                <div
+                  aria-hidden
+                  className="from-foreground pointer-events-none absolute inset-x-0 bottom-full h-50 bg-linear-to-t to-transparent opacity-0 transition-opacity duration-300 group-has-[[data-settings][data-state=open]]/footer:opacity-100"
+                />
+                <SidebarInfo showTimetableDates />
+                <SidebarActions
+                  collapsed={collapsed}
+                  onExpand={() => setSidebarCollapsed(false)}
+                />
+              </div>
             </div>
-            <SidebarActions
-              collapsed={collapsed}
-              onExpand={() => setSidebarCollapsed(false)}
-            />
-          </nav>
-        </div>
+          </ScrollArea>
+        </nav>
       </SidebarContext.Provider>
     </aside>
   );
@@ -292,7 +335,7 @@ export const SidebarInfo: FC<{ showTimetableDates?: boolean }> = ({
 
   if (!isClient) {
     return (
-      <div className={cn(isPreview ? "hidden" : "grid", "gap-2")}>
+      <div className={cn(isPreview ? "hidden" : "grid", "gap-2 px-2")}>
         <Skeleton className="h-3 w-48" />
         <Skeleton className="h-3 w-32" />
       </div>
@@ -303,7 +346,7 @@ export const SidebarInfo: FC<{ showTimetableDates?: boolean }> = ({
     <div
       className={cn(
         isPreview ? "hidden" : "grid",
-        "border-lines gap-2 max-md:mt-6 max-md:border-t max-md:pt-4",
+        "border-lines gap-2 px-2 max-md:mt-6 max-md:border-t max-md:pt-4",
       )}
     >
       {showTimetableDates && (
@@ -332,14 +375,12 @@ const TimetableSidebarDropdowns: FC = () => {
   const favorites = useFavoritesStore((state) => state.favorites);
   const { classes, teachers, rooms } = timetable?.list ?? {};
   const { isPreview } = useSidebarContext();
-  const [openSections, setOpenSections] = useState<string[]>([]);
+  const [openSection, setOpenSection] = useState("");
   const [query, setQuery] = useState("");
   const [isFocused, setIsFocused] = useState(false);
   const recent = useRecentStore((state) => state.recent);
   const clearRecent = useRecentStore((state) => state.clearRecent);
   const results = useSearchResults(timetable, query);
-
-  const visibleSections = isPreview ? [] : openSections;
 
   const dropdownItems = [
     { type: "favorites" as const, icon: BookmarkIcon, data: favorites },
@@ -350,15 +391,20 @@ const TimetableSidebarDropdowns: FC = () => {
 
   const sections = (
     <Accordion
-      type="multiple"
-      value={visibleSections}
-      onValueChange={setOpenSections}
-      className="grid w-full gap-1"
+      type="single"
+      collapsible
+      value={isPreview ? "" : openSection}
+      onValueChange={setOpenSection}
+      className={cn(isPreview ? "gap-2" : "gap-1", "grid w-full")}
     >
       {dropdownItems.map((item, index) => (
         <Fragment key={item.type}>
           <Dropdown type={item.type} icon={item.icon} data={item.data} />
-          {index === 0 && <hr className="border-lines my-2 w-full" />}
+          {index === 0 && (
+            <hr
+              className={cn(isPreview ? "my-1" : "my-2", "border-lines w-full")}
+            />
+          )}
         </Fragment>
       ))}
     </Accordion>
@@ -370,9 +416,9 @@ const TimetableSidebarDropdowns: FC = () => {
 
   if (isPreview) {
     return (
-      <div className="grid gap-5">
-        <div className="border-lines bg-accent-secondary text-primary/60 grid h-11 w-12 place-content-center rounded-lg border">
-          <SearchIcon size={17} strokeWidth={2} />
+      <div className="grid w-8 gap-2">
+        <div className="border-lines bg-accent text-primary/65 grid size-8 place-content-center rounded-md border">
+          <SearchIcon className="size-4" strokeWidth={1.75} />
         </div>
         {sections}
       </div>
@@ -399,7 +445,7 @@ const TimetableSidebarDropdowns: FC = () => {
           onMouseDown={(event) => event.preventDefault()}
         >
           <div className="flex items-center justify-between gap-2">
-            <p className="text-primary/55 text-[11px] font-medium tracking-[0.06em] uppercase">
+            <p className="text-primary/55 text-xs font-medium">
               {translate(
                 recent.length > 0 ? "sidebar.recent" : "list.favorites",
               )}
@@ -407,7 +453,7 @@ const TimetableSidebarDropdowns: FC = () => {
             {recent.length > 0 && (
               <button
                 onClick={clearRecent}
-                className="text-primary/55 hover:text-primary text-[11px] font-medium transition-colors"
+                className="text-primary/55 hover:text-primary text-xs font-medium transition-colors"
               >
                 {translate("sidebar.clearRecent")}
               </button>
@@ -416,13 +462,13 @@ const TimetableSidebarDropdowns: FC = () => {
           <DropdownContent
             type="search"
             data={suggestions}
-            className="max-h-none"
+            viewportClassName="max-h-none"
             onSelect={() => setIsFocused(false)}
           />
         </div>
       ) : isSearching ? (
         <div className="grid gap-2">
-          <p className="text-primary/55 text-[11px] font-medium tracking-[0.06em] uppercase">
+          <p className="text-primary/55 text-xs font-medium">
             {results.length > 0
               ? translate("sidebar.results", { count: results.length })
               : translate("sidebar.noResults")}
@@ -431,7 +477,7 @@ const TimetableSidebarDropdowns: FC = () => {
             <DropdownContent
               type="search"
               data={results}
-              className="max-h-none"
+              viewportClassName="max-h-none"
               onSelect={() => setQuery("")}
             />
           ) : (
