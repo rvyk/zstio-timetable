@@ -13,11 +13,13 @@ import { pageSeo, siteSeo } from "@/lib/seo";
 import type { OptivumTimetable } from "@/types/optivum";
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
-import { Fragment } from "react";
+import { cache, Fragment } from "react";
 
 interface PageParams {
   path?: string[];
 }
+
+const getTimetable = cache(getOptivumTimetable);
 
 const TIMETABLE_TYPES: readonly OptivumTimetable["type"][] = [
   "class",
@@ -42,7 +44,7 @@ export const generateMetadata = async ({
     return { robots: { index: false, follow: true } };
   }
 
-  const timetable = await getOptivumTimetable(type, value);
+  const timetable = await getTimetable(type, value);
 
   if (!timetable.title) {
     return {
@@ -66,7 +68,7 @@ const TimetablePage = async ({ params }: { params: Promise<PageParams> }) => {
     redirect("/");
   }
 
-  const timetable = await getOptivumTimetable(type, value);
+  const timetable = await getTimetable(type, value);
 
   return (
     <Fragment>
