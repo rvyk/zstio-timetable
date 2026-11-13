@@ -3,6 +3,7 @@
 import { FavoriteStar } from "@/components/common/FavoriteStar";
 import { useT } from "@/components/common/LocaleProvider";
 import { SHORT_HOURS } from "@/constants/settings";
+import { useToday } from "@/hooks/useToday";
 import { adjustShortenedLessons } from "@/lib/adjustShortenedLessons";
 import { warsawDayIndex } from "@/lib/dates";
 import { cn } from "@/lib/utils";
@@ -16,21 +17,22 @@ import { TableBoard } from "./TableBoard";
 
 interface TimetableProps {
   timetable: OptivumTimetable;
+  renderedOn: Date;
 }
 
 const NEVER_CHANGES = () => () => {};
 
-const useTodayIndex = () => {
+const useTodayIndex = (today: Date) => {
   const override = useSyncExternalStore(
     NEVER_CHANGES,
     () => new URLSearchParams(window.location.search).get("day"),
     () => null,
   );
 
-  return override === null ? warsawDayIndex() : Number(override);
+  return override === null ? warsawDayIndex(today) : Number(override);
 };
 
-export const Timetable: FC<TimetableProps> = ({ timetable }) => {
+export const Timetable: FC<TimetableProps> = ({ timetable, renderedOn }) => {
   const translate = useT();
   const lessonType = useSettingsStore((state) => state.lessonType);
   const hoursAdjustIndex = useSettingsStore((state) => state.hoursAdjustIndex);
@@ -66,7 +68,8 @@ export const Timetable: FC<TimetableProps> = ({ timetable }) => {
     [lessons],
   );
 
-  const todayIndex = useTodayIndex();
+  const today = useToday(renderedOn);
+  const todayIndex = useTodayIndex(today);
   const selectedDayIndex =
     storedDayIndex >= 0 ? storedDayIndex : todayIndex > 4 ? 0 : todayIndex;
   const dayNames = timetable.dayNames;
@@ -90,6 +93,7 @@ export const Timetable: FC<TimetableProps> = ({ timetable }) => {
           lessons={lessons}
           hours={visibleHours}
           todayIndex={todayIndex}
+          today={today}
           selectedDayIndex={selectedDayIndex}
           onDayChange={setSelectedDayIndex}
         />
@@ -140,6 +144,7 @@ export const Timetable: FC<TimetableProps> = ({ timetable }) => {
             lessons={lessons}
             hours={visibleHours}
             todayIndex={todayIndex}
+            today={today}
           />
         )}
       </div>

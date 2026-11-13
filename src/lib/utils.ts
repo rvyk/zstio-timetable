@@ -23,13 +23,14 @@ const SHORT_MONTH = new Intl.DateTimeFormat("pl-PL", {
 
 export const getDayNumberForNextWeek = (
   dayName: string,
+  at: Date,
 ): {
   dayNumber: number;
   month: string;
   monthNumber: number;
 } => {
-  const today = warsawToday();
-  const todayIndex = warsawDayIndex();
+  const today = warsawToday(at);
+  const todayIndex = warsawDayIndex(at);
 
   const targetDay = DAYS_OF_WEEK.find(
     (day) => day.long === dayName || day.short === dayName,

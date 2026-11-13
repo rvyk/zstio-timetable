@@ -8,6 +8,7 @@ import { TimetableController } from "@/components/timetable/TimetableController"
 import { Topbar } from "@/components/topbar/Topbar";
 import { SCHOOL_NAME_ACCUSATIVE } from "@/constants/school";
 import { TRANSLATION_DICT } from "@/constants/translations";
+import { warsawToday } from "@/lib/dates";
 import { lastVisitedPath } from "@/lib/lastVisited.server";
 import { pageSeo } from "@/lib/seo";
 import type { OptivumTimetable } from "@/types/optivum";
@@ -72,7 +73,7 @@ const TimetablePage = async ({ params }: { params: Promise<PageParams> }) => {
         <Topbar timetable={timetable} />
         <SchoolNews />
         <PlanChanges timetable={timetable} />
-        <Timetable timetable={timetable} />
+        <Timetable timetable={timetable} renderedOn={warsawToday()} />
         <BottomBar timetable={timetable} />
       </main>
     </Fragment>

@@ -29,6 +29,7 @@ interface DayBoardProps {
   lessons: TableLesson[][][];
   hours: TableHour[];
   todayIndex: number;
+  today: Date;
   selectedDayIndex: number;
   onDayChange: (index: number) => void;
 }
@@ -38,6 +39,7 @@ export const DayBoard: FC<DayBoardProps> = ({
   lessons,
   hours,
   todayIndex,
+  today,
   selectedDayIndex,
   onDayChange,
 }) => {
@@ -87,6 +89,7 @@ export const DayBoard: FC<DayBoardProps> = ({
         dayNames={dayNames}
         selectedDayIndex={selectedDayIndex}
         todayIndex={todayIndex}
+        today={today}
         onSelect={goTo}
       />
 

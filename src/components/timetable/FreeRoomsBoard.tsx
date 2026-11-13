@@ -2,6 +2,7 @@
 
 import { useLocale, useT } from "@/components/common/LocaleProvider";
 import { usePresence } from "@/hooks/usePresence";
+import { useToday } from "@/hooks/useToday";
 import { warsawDayIndex } from "@/lib/dates";
 import { dayLabel } from "@/lib/i18n";
 import { cn, currentLessonIndex, getDayNumberForNextWeek } from "@/lib/utils";
@@ -23,6 +24,7 @@ interface FreeRoomsBoardProps {
   hours: TableHour[];
   freeRooms: string[][][];
   rooms: ListItem[];
+  renderedOn: Date;
 }
 
 const NEVER_CHANGES = () => () => {};
@@ -32,11 +34,13 @@ export const FreeRoomsBoard: FC<FreeRoomsBoardProps> = ({
   hours,
   freeRooms,
   rooms,
+  renderedOn,
 }) => {
   const locale = useLocale();
   const translate = useT();
   const [selected, setSelected] = useState<[number, number] | null>(null);
-  const todayIndex = warsawDayIndex();
+  const today = useToday(renderedOn);
+  const todayIndex = warsawDayIndex(today);
 
   const roomNames = useMemo(
     () => new Map(rooms.map((room) => [room.value, room.name])),
@@ -132,6 +136,7 @@ export const FreeRoomsBoard: FC<FreeRoomsBoardProps> = ({
         freeRooms={freeRooms}
         roomNames={roomNames}
         todayIndex={todayIndex}
+        today={today}
         nowHourIndex={nowHourIndex}
       />
 
@@ -148,7 +153,7 @@ export const FreeRoomsBoard: FC<FreeRoomsBoardProps> = ({
           >
             <span />
             {dayNames.map((dayName, dayIndex) => {
-              const date = getDayNumberForNextWeek(dayName);
+              const date = getDayNumberForNextWeek(dayName, today);
               const isToday = dayIndex === todayIndex;
 
               return (

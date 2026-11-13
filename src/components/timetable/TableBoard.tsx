@@ -14,6 +14,7 @@ interface TableBoardProps {
   lessons: TableLesson[][][];
   hours: TableHour[];
   todayIndex: number;
+  today: Date;
 }
 
 export const TableBoard: FC<TableBoardProps> = ({
@@ -21,6 +22,7 @@ export const TableBoard: FC<TableBoardProps> = ({
   lessons,
   hours,
   todayIndex,
+  today,
 }) => {
   const locale = useLocale();
   const translate = useT();
@@ -63,7 +65,7 @@ export const TableBoard: FC<TableBoardProps> = ({
               </span>
             </th>
             {dayNames.map((dayName, dayIndex) => {
-              const date = getDayNumberForNextWeek(dayName);
+              const date = getDayNumberForNextWeek(dayName, today);
               const isToday = dayIndex === todayIndex;
 
               return (
