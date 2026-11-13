@@ -76,7 +76,7 @@ export const formatOptivumDate = (raw?: string | null): string | null => {
   const date = parseOptivumDate(raw);
   if (!date || Number.isNaN(date.getTime())) return null;
 
-  return `${OPTIVUM_DATE.format(date)}r.`;
+  return OPTIVUM_DATE.format(date);
 };
 
 export const parseHeaderDate = (res: Response): string => {
@@ -88,7 +88,7 @@ export const parseHeaderDate = (res: Response): string => {
 
   const { day, month, year, hour, minute, second } = parts(HEADER_DATE, date);
 
-  return `${day} ${month} ${year}r. ${hour}:${minute}:${second}`;
+  return `${day} ${month} ${year} ${hour}:${minute}:${second}`;
 };
 
 export const shiftTime = (time: string, minutes: number): string => {
