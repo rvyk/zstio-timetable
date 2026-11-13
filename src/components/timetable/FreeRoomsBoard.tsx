@@ -245,7 +245,7 @@ export const FreeRoomsBoard: FC<FreeRoomsBoardProps> = ({
             {...presenceProps}
             className="border-lines data-[state=open]:animate-rise data-[state=closed]:animate-fall mt-4 border-t pt-4"
           >
-            <p className="text-primary/55 mb-2 text-[11px] font-medium tracking-[0.06em] uppercase">
+            <p className="text-primary/55 mb-2 text-xs font-medium">
               {shown &&
                 translate("freeRooms.selection", {
                   day: dayLabel(locale, dayNames[shown[0]] ?? "", "long"),

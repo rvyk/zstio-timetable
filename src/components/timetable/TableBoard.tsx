@@ -57,8 +57,8 @@ export const TableBoard: FC<TableBoardProps> = ({
       >
         <thead>
           <tr>
-            <th className="border-lines bg-foreground sticky top-0 z-20 w-20 border-b align-bottom @3xl/table:w-24">
-              <span className="text-primary/40 text-[10px] font-semibold tracking-[0.08em] uppercase">
+            <th className="border-lines bg-foreground sticky top-0 z-20 w-20 border-b text-center align-bottom @3xl/table:w-24">
+              <span className="text-primary/45 text-xs leading-tight font-medium @3xl/table:text-[13px]">
                 {translate("timetable.hour")}
               </span>
             </th>
@@ -78,7 +78,7 @@ export const TableBoard: FC<TableBoardProps> = ({
                     <span
                       className={cn(
                         isToday ? "text-accent-table" : "text-primary/45",
-                        "tabular font-mono text-[11px] font-semibold",
+                        "tabular font-mono text-xs font-semibold @3xl/table:text-[13px]",
                       )}
                     >
                       {date.dayNumber.toString().padStart(2, "0")}
