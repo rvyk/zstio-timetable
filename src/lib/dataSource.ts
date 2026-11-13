@@ -1,5 +1,3 @@
-import { env } from "@/env";
-
 const sanitizeUrl = (candidate?: string | null): string | null => {
   if (!candidate) return null;
   const trimmedCandidate = candidate.trim();
@@ -21,7 +19,7 @@ const sanitizeUrl = (candidate?: string | null): string | null => {
 };
 
 export const getTimetableBaseUrl = (): string =>
-  sanitizeUrl(env.NEXT_PUBLIC_TIMETABLE_URL ?? null) ?? "";
+  sanitizeUrl(process.env.NEXT_PUBLIC_TIMETABLE_URL ?? null) ?? "";
 
 export const joinDataSourcePath = (baseUrl: string, path: string): string => {
   const normalizedBase = baseUrl.replace(/\/+$/, "");
