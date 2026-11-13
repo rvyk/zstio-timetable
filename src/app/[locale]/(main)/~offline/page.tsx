@@ -1,18 +1,20 @@
 import { BottomBar } from "@/components/common/BottomBar";
 import { Topbar } from "@/components/topbar/Topbar";
 import { t } from "@/lib/i18n";
-import { getLocale } from "@/lib/locale.server";
+import { getLocale, type LocaleParams } from "@/lib/locale.server";
+import { siteSeo } from "@/lib/seo";
 import { WifiOff } from "lucide-react";
 import type { Metadata } from "next";
 import { Fragment } from "react";
 
 export const metadata: Metadata = {
+  ...siteSeo("/~offline"),
   title: "Brak połączenia",
   robots: { index: false, follow: false },
 };
 
-export default async function Offline() {
-  const locale = await getLocale();
+export default async function Offline({ params }: { params: LocaleParams }) {
+  const locale = await getLocale(params);
 
   return (
     <Fragment>

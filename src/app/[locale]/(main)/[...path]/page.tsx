@@ -9,8 +9,7 @@ import { Topbar } from "@/components/topbar/Topbar";
 import { SCHOOL_NAME_ACCUSATIVE } from "@/constants/school";
 import { TRANSLATION_DICT } from "@/constants/translations";
 import { warsawToday } from "@/lib/dates";
-import { lastVisitedPath } from "@/lib/lastVisited.server";
-import { pageSeo } from "@/lib/seo";
+import { pageSeo, siteSeo } from "@/lib/seo";
 import type { OptivumTimetable } from "@/types/optivum";
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
@@ -46,7 +45,10 @@ export const generateMetadata = async ({
   const timetable = await getOptivumTimetable(type, value);
 
   if (!timetable.title) {
-    return { robots: { index: false, follow: true } };
+    return {
+      ...siteSeo(`/${type}/${value}`),
+      robots: { index: false, follow: true },
+    };
   }
 
   return pageSeo(
@@ -61,7 +63,7 @@ const TimetablePage = async ({ params }: { params: Promise<PageParams> }) => {
   const [type, value] = resolvedParams.path ?? [];
 
   if (!isTimetableType(type) || !value) {
-    redirect(await lastVisitedPath());
+    redirect("/");
   }
 
   const timetable = await getOptivumTimetable(type, value);
