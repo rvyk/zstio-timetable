@@ -148,6 +148,7 @@ export default async function RootLayout({
             {children}
           </LocaleProvider>
         </ThemeProvider>
+        <div aria-hidden className="noise" />
       </body>
     </html>
   );
