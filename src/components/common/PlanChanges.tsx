@@ -161,7 +161,7 @@ export const PlanChanges: FC<{ timetable: OptivumTimetable }> = ({
                   title={translate("changes.dismiss")}
                   className="text-primary hover:bg-primary/5 grid size-7 shrink-0 place-content-center rounded-md opacity-50 transition hover:opacity-100 active:scale-90"
                 >
-                  <Check className="size-4" strokeWidth={2} />
+                  <Check className="size-3.5" strokeWidth={2} />
                 </button>
               </>
             )}

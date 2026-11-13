@@ -12,6 +12,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/Dialog";
+import { ScrollArea } from "@/components/ui/ScrollArea";
 import type { TranslationKey } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 import { useRecentStore } from "@/stores/recent";
@@ -139,7 +140,9 @@ export const Dropdown: FC<DropdownProps> = ({
           <DropdownContent
             type={type}
             data={data}
-            className="-mx-2 max-h-[60vh] px-2 sm:grid-cols-2 lg:grid-cols-3"
+            className="-mx-2"
+            viewportClassName="max-h-[60vh] px-2"
+            gridClassName="sm:grid-cols-2 lg:grid-cols-3"
           />
         </DialogContent>
       </Dialog>
@@ -151,8 +154,8 @@ export const Dropdown: FC<DropdownProps> = ({
       <AccordionTrigger
         asChild={isPreview}
         className={cn(
-          isPreview && "pointer-events-none select-none",
-          "group w-full rounded-lg p-2 transition-colors",
+          isPreview ? "pointer-events-none select-none" : "p-2",
+          "group w-full rounded-lg transition-colors",
           "hover:bg-primary/4 data-[state=open]:bg-primary/4",
         )}
       >
@@ -169,6 +172,8 @@ interface DropdownContentProps {
   type: ListType;
   data?: ListItem[];
   className?: string;
+  viewportClassName?: string;
+  gridClassName?: string;
   onSelect?: () => void;
 }
 
@@ -176,15 +181,19 @@ export const DropdownContent: FC<DropdownContentProps> = ({
   type,
   data,
   className,
+  viewportClassName,
+  gridClassName,
   onSelect,
 }) => {
   const translate = useT();
 
   return (
-    <div
-      className={cn(
-        "grid max-h-72 grid-cols-1 gap-0.5 overflow-y-auto py-1",
-        className,
+    <ScrollArea
+      className={className}
+      viewportClassName={cn("max-h-72", viewportClassName)}
+      contentClassName={cn(
+        "grid grid-cols-1 gap-0.5 py-1 data-[scrollable]:pr-3",
+        gridClassName,
       )}
     >
       {data && data.length > 0 ? (
@@ -202,9 +211,12 @@ export const DropdownContent: FC<DropdownContentProps> = ({
           {translate("list.empty")}
         </p>
       )}
-    </div>
+    </ScrollArea>
   );
 };
+
+const ROW_ACTION =
+  "group-hover:border-lines group-hover:bg-accent hover:bg-primary/10 grid size-7 place-content-center rounded-md border border-transparent max-md:size-9";
 
 interface ListItemComponentProps {
   item: ListItem;
@@ -245,9 +257,9 @@ const ListItemComponent: FC<
       className={cn(
         "animate-rise",
         isActive
-          ? "text-primary bg-primary/6 font-medium"
-          : "text-primary/75 hover:text-primary hover:bg-primary/4",
-        "group flex w-full min-w-0 items-center justify-between gap-x-2 rounded-md px-3 py-2 text-sm transition duration-150 active:scale-[0.99] max-md:min-h-11",
+          ? "text-primary bg-primary/6 border-accent-table/60 font-medium"
+          : "text-primary/75 hover:text-primary hover:bg-primary/4 border-transparent",
+        "group flex w-full min-w-0 items-center justify-between gap-x-2 rounded-md border py-2 pr-1 pl-3 text-sm transition duration-150 active:scale-[0.99] max-md:min-h-11",
       )}
     >
       <span className="flex min-w-0 items-center gap-2">
@@ -259,15 +271,19 @@ const ListItemComponent: FC<
         />
         <span className="truncate">{item.name}</span>
       </span>
-      <span className="flex shrink-0 items-center gap-1.5">
+      <span className="-my-1 flex shrink-0 items-center gap-1 max-md:-my-2">
         {type === "favorites" && (
-          <DefaultPlanButton item={{ ...item, type: itemType }} />
+          <DefaultPlanButton
+            item={{ ...item, type: itemType }}
+            className={ROW_ACTION}
+          />
         )}
         {favoriteStar && (
           <FavoriteStar
             item={{ ...item, type: itemType }}
             small
             revealOnHover
+            className={ROW_ACTION}
           />
         )}
       </span>

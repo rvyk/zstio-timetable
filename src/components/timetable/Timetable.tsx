@@ -2,6 +2,7 @@
 
 import { FavoriteStar } from "@/components/common/FavoriteStar";
 import { useT } from "@/components/common/LocaleProvider";
+import { ScrollArea } from "@/components/ui/ScrollArea";
 import { SHORT_HOURS } from "@/constants/settings";
 import { useToday } from "@/hooks/useToday";
 import { adjustShortenedLessons } from "@/lib/adjustShortenedLessons";
@@ -117,6 +118,7 @@ export const Timetable: FC<TimetableProps> = ({ timetable, renderedOn }) => {
           )}
         </div>
         <div className="flex shrink-0 items-center">
+          <ShortLessonSwitcherCell />
           {timetable.title && (
             <FavoriteStar
               item={{
@@ -128,13 +130,14 @@ export const Timetable: FC<TimetableProps> = ({ timetable, renderedOn }) => {
               className="border-lines bg-accent hover:bg-accent/60 h-9 rounded-lg border px-3 @max-3xl/head:gap-0 @max-3xl/head:px-2.5 @max-3xl/head:[&>span]:hidden"
             />
           )}
-          <ShortLessonSwitcherCell />
         </div>
       </div>
 
-      <div
+      <ScrollArea
         data-plan-scroll
-        className="min-h-0 w-full flex-1 scroll-smooth motion-reduce:scroll-auto max-md:hidden md:overflow-y-auto"
+        className="flex min-h-0 w-full flex-1 flex-col max-md:hidden"
+        viewportClassName="min-h-0 flex-1 scroll-smooth motion-reduce:scroll-auto"
+        scrollbarClassName="top-[calc(3rem+4px)] bottom-2 w-4"
       >
         {!hasLessons ? (
           <NoLessons description={translate("timetable.emptyWeek")} />
@@ -147,7 +150,7 @@ export const Timetable: FC<TimetableProps> = ({ timetable, renderedOn }) => {
             today={today}
           />
         )}
-      </div>
+      </ScrollArea>
     </section>
   );
 };

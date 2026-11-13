@@ -114,10 +114,9 @@ export const SchoolNewsCard: FC<SchoolNewsPost> = ({
                 className="group/link before:absolute before:inset-0 before:rounded-xl"
                 aria-label={translate("news.open", { title })}
               >
-                <ArrowUpRight
-                  className="text-primary size-4 shrink-0 opacity-50 transition-transform duration-200 group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5"
-                  strokeWidth={2}
-                />
+                <span className="text-primary group-hover/link:bg-primary/5 grid size-7 shrink-0 place-content-center rounded-md opacity-50 transition group-hover/link:opacity-100 group-active/link:scale-90">
+                  <ArrowUpRight className="size-4" strokeWidth={2} />
+                </span>
               </a>
               <button
                 onClick={dismiss}
@@ -125,7 +124,7 @@ export const SchoolNewsCard: FC<SchoolNewsPost> = ({
                 title={translate("news.markRead")}
                 className="text-primary hover:bg-primary/5 relative grid size-7 shrink-0 place-content-center rounded-md opacity-50 transition hover:opacity-100 active:scale-90"
               >
-                <Check className="size-4" strokeWidth={2} />
+                <Check className="size-3.5" strokeWidth={2} />
               </button>
             </>
           )}

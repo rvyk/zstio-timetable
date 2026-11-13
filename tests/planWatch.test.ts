@@ -28,7 +28,7 @@ test("summarizeChanges zgłasza plan tylko gdy coś się zmieniło", () => {
 test("changesEmbed grupuje plany po typie i podaje czas wykrycia", () => {
   const embed = changesEmbed(
     [plan("1A", "class"), plan("2B", "class"), plan("Kowalski", "teacher")],
-    "1 września 2026r.",
+    "1 września 2026",
     new Date("2026-08-30T12:34:00Z"),
   );
 
