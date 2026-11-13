@@ -14,6 +14,7 @@ import { useFavoritesStore } from "@/stores/favorites";
 import { useRecentStore } from "@/stores/recent";
 import { useSettingsWithoutStore } from "@/stores/settings";
 import { useTimetableStore } from "@/stores/timetable";
+import type { List } from "@majusss/timetable-parser";
 import {
   ArrowLeft,
   BookmarkIcon,
@@ -32,6 +33,7 @@ import { FC, Fragment, useEffect, useRef, useState } from "react";
 import { useIsClient, useMediaQuery } from "usehooks-ts";
 import SidebarContext, { useSidebarContext } from "./Context";
 import { Dropdown, DropdownContent } from "./Dropdown";
+import { NoScriptList } from "./NoScriptList";
 import { Search, useSearchResults } from "./Search";
 
 interface SidebarContentProps {
@@ -47,7 +49,9 @@ export const SidebarContent: FC<SidebarContentProps> = ({
   if (!isClient)
     return (
       <Fragment>
-        <div className={cn(isPreview && "w-12", "grid gap-10")}>
+        <div
+          className={cn(isPreview && "w-12", "hidden gap-10 in-data-js:grid")}
+        >
           <Skeleton className="h-12 w-full" />
           <div className={cn(isPreview && "mx-auto w-10", "grid gap-5")}>
             <Skeleton className="h-10 w-full" />
@@ -228,7 +232,7 @@ const SidebarActions: FC<{ collapsed: boolean; onExpand: () => void }> = ({
   );
 };
 
-export const Sidebar: FC = () => {
+export const Sidebar: FC<{ list: List }> = ({ list }) => {
   const collapsed = useSettingsWithoutStore(
     (state) => state.isSidebarCollapsed,
   );
@@ -268,6 +272,7 @@ export const Sidebar: FC = () => {
               onToggle={toggleSidebarCollapsed}
             />
             <div className="flex flex-1 flex-col justify-between gap-y-12">
+              <NoScriptList list={list} />
               <SidebarContent showTimetableDates />
             </div>
             <SidebarActions
