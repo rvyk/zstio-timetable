@@ -99,7 +99,7 @@ export const FreeRoomsBoard: FC<FreeRoomsBoardProps> = ({
           <h1 className="text-primary text-xl leading-none font-semibold tracking-[-0.02em]">
             {translate("freeRooms.title")}
           </h1>
-          <span className="text-primary/55 truncate text-xs max-sm:hidden">
+          <span className="text-primary/60 truncate text-xs max-sm:hidden">
             {translate("freeRooms.hint")}
           </span>
         </div>
@@ -197,10 +197,10 @@ export const FreeRoomsBoard: FC<FreeRoomsBoardProps> = ({
               }}
             >
               <div className="border-lines/70 bg-accent/40 flex items-baseline justify-center gap-1 rounded-lg border px-2 py-2 sm:justify-between sm:px-3">
-                <span className="text-primary/55 tabular font-mono text-[11px] font-semibold">
+                <span className="text-primary/60 tabular font-mono text-[11px] font-semibold">
                   {hour.number}
                 </span>
-                <span className="text-primary/55 tabular font-mono text-[11px] max-sm:hidden">
+                <span className="text-primary/60 tabular font-mono text-[11px] max-sm:hidden">
                   {hour.timeFrom}
                 </span>
               </div>
@@ -232,7 +232,7 @@ export const FreeRoomsBoard: FC<FreeRoomsBoardProps> = ({
                   >
                     <span
                       className={cn(
-                        count === 0 ? "text-primary/40" : "text-primary/88",
+                        count === 0 ? "text-primary/60" : "text-primary/88",
                         "tabular font-mono text-xs",
                       )}
                     >
@@ -250,7 +250,7 @@ export const FreeRoomsBoard: FC<FreeRoomsBoardProps> = ({
             {...presenceProps}
             className="border-lines data-[state=open]:animate-rise data-[state=closed]:animate-fall mt-4 border-t pt-4"
           >
-            <p className="text-primary/55 mb-2 text-xs font-medium">
+            <p className="text-primary/60 mb-2 text-xs font-medium">
               {shown &&
                 translate("freeRooms.selection", {
                   day: dayLabel(locale, dayNames[shown[0]] ?? "", "long"),

@@ -90,7 +90,7 @@ export const SchoolNewsCard: FC<SchoolNewsPost> = ({
             >
               {title}
             </span>
-            <span className="text-primary/55 truncate text-[11px] leading-tight">
+            <span className="text-primary/60 truncate text-[11px] leading-tight">
               {phase === "idle" ? (
                 <>
                   {translate("news.source")}

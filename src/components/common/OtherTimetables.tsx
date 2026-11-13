@@ -32,7 +32,7 @@ export const OtherTimetables: FC = () => {
   if (links.length === 0) return null;
 
   return (
-    <p className="text-primary/55 text-[11px]">
+    <p className="text-primary/60 text-[11px]">
       {translate("settings.otherTimetables")}{" "}
       {links.map(({ href, label }, index) => (
         <Fragment key={label}>

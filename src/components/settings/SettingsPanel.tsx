@@ -110,7 +110,7 @@ const SettingButton = ({
         <h2 className="text-primary text-[13px] leading-none font-medium tracking-tight">
           {title}
         </h2>
-        <div className="text-primary/55 text-[11px] leading-relaxed">
+        <div className="text-primary/60 text-[11px] leading-relaxed">
           {description}
         </div>
       </div>
@@ -287,7 +287,7 @@ const AccessibilitySetting = ({
             <AccessibilityIcon className="size-4 shrink-0" strokeWidth={1.75} />
             {translate("a11y.label")}
             {activeCount > 0 && (
-              <span className="text-primary/45 tabular text-xs">
+              <span className="text-primary/60 tabular text-xs">
                 {activeCount}/{A11Y_OPTIONS.length}
               </span>
             )}
@@ -339,7 +339,7 @@ const AccessibilitySetting = ({
             <span className="text-primary text-[13px] leading-none font-medium tracking-tight">
               {translate("a11y.label")}
             </span>
-            <span className="text-primary text-[11px] leading-relaxed opacity-55">
+            <span className="text-primary text-[11px] leading-relaxed opacity-60">
               {activeCount > 0
                 ? translate("a11y.active", { count: activeCount })
                 : translate("a11y.summary")}
@@ -366,7 +366,7 @@ const AccessibilitySetting = ({
                   <span className="text-primary text-[13px] leading-none font-medium tracking-tight">
                     {translate(option.label)}
                   </span>
-                  <span className="text-primary/55 text-[11px] leading-relaxed">
+                  <span className="text-primary/60 text-[11px] leading-relaxed">
                     {translate(option.hint)}
                   </span>
                 </span>
@@ -589,7 +589,7 @@ export const SettingsMenu = () => {
             <SettingsList onSelect={() => setIsOpen(false)} includePrint />
           </div>
 
-          <p className="border-lines text-primary/50 border-t pt-3 text-center text-[11px] leading-relaxed">
+          <p className="border-lines text-primary/60 border-t pt-3 text-center text-[11px] leading-relaxed">
             © 2024 Made with ❤️ for ZSTiO by <br /> Szymański Paweł & Majcher
             Kacper <br />
             <Link

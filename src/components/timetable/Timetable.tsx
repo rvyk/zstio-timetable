@@ -110,7 +110,7 @@ export const Timetable: FC<TimetableProps> = ({ timetable, renderedOn }) => {
             {timetable.title || translate("timetable.notFound")}
           </h1>
           {timetable.title && (
-            <span className="text-primary/55 truncate text-xs">
+            <span className="text-primary/60 truncate text-xs">
               {translate("timetable.schedule", {
                 type: translate(`type.${timetable.type}`),
               })}

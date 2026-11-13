@@ -89,7 +89,7 @@ export const Dropdown: FC<DropdownProps> = ({
         >
           {label}
           {isClient && (
-            <span className="text-primary tabular ml-1.5 font-mono text-[11px] opacity-35">
+            <span className="text-primary tabular ml-1.5 font-mono text-[11px] opacity-60">
               {itemCount}
             </span>
           )}
@@ -117,7 +117,7 @@ export const Dropdown: FC<DropdownProps> = ({
           >
             <Icon className="size-4 shrink-0" strokeWidth={1.75} />
             {label}
-            <span className="text-primary tabular font-mono text-[11px] opacity-35">
+            <span className="text-primary tabular font-mono text-[11px] opacity-60">
               {isClient ? itemCount : ""}
             </span>
             <ChevronDown
@@ -131,7 +131,7 @@ export const Dropdown: FC<DropdownProps> = ({
             <DialogTitle>
               {label}
               {isClient && (
-                <span className="text-primary tabular ml-2 font-mono text-sm font-normal opacity-40">
+                <span className="text-primary tabular ml-2 font-mono text-sm font-normal opacity-60">
                   {itemCount}
                 </span>
               )}
@@ -207,7 +207,7 @@ export const DropdownContent: FC<DropdownContentProps> = ({
           />
         ))
       ) : (
-        <p className="text-primary/55 px-4 py-3 text-sm">
+        <p className="text-primary/60 px-4 py-3 text-sm">
           {translate("list.empty")}
         </p>
       )}

@@ -59,7 +59,7 @@ export const DayTabs: FC<DayTabsProps> = ({
             </span>
             <span
               className={cn(
-                isToday ? "text-accent-table" : "opacity-85",
+                isToday && "text-accent-table",
                 "tabular font-mono text-[11px] leading-none",
               )}
             >

@@ -183,7 +183,7 @@ export const DayBoard: FC<DayBoardProps> = ({
                             >
                               {slot.hour.number}
                             </span>
-                            <span className="text-primary/40 tabular text-center text-[10px] leading-tight tracking-tight whitespace-nowrap">
+                            <span className="text-primary/60 tabular text-center text-[10px] leading-tight tracking-tight whitespace-nowrap">
                               {slot.hour.timeFrom}–{slot.hour.timeTo}
                             </span>
                             {isLive && (
@@ -218,7 +218,7 @@ export const DayBoard: FC<DayBoardProps> = ({
                               ))}
                             </div>
                           ) : (
-                            <span className="text-primary/35 text-xs">
+                            <span className="text-primary/60 text-xs">
                               {translate("timetable.gap")}
                             </span>
                           )}

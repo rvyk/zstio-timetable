@@ -123,7 +123,7 @@ export const PlanChanges: FC<{ timetable: OptivumTimetable }> = ({
               >
                 {translate("changes.title")}
               </span>
-              <span className="text-primary/55 truncate text-[11px] leading-tight">
+              <span className="text-primary/60 truncate text-[11px] leading-tight">
                 {phase === "idle" ? (
                   translate("changes.summary", { count: changes.length })
                 ) : (
@@ -175,7 +175,7 @@ export const PlanChanges: FC<{ timetable: OptivumTimetable }> = ({
                 </li>
               ))}
               {changes.length > VISIBLE_CHANGES && (
-                <li className="text-primary/50">
+                <li className="text-primary/60">
                   {translate("changes.more", {
                     count: changes.length - VISIBLE_CHANGES,
                   })}

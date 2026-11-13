@@ -52,15 +52,15 @@ export const TableBoard: FC<TableBoardProps> = ({
           "w-full table-fixed border-separate border-spacing-0 text-left",
           "[&_td]:px-2 [&_td]:py-2 [&_th]:px-2 [&_th]:py-2.5",
           "@3xl/table:[&_td]:px-3 @3xl/table:[&_td]:py-3 @3xl/table:[&_th]:py-3",
-          "[&_h3]:truncate [&_h3]:text-[13px] @3xl/table:[&_h3]:text-[15px]",
-          "[&_h3+div]:flex-nowrap [&_h3+div]:overflow-hidden [&_h3+div]:text-[11px] @3xl/table:[&_h3+div]:text-xs",
-          "[&_h3+div>span]:min-w-0 [&_h3+div>span]:truncate",
+          "[&_h2]:truncate [&_h2]:text-[13px] @3xl/table:[&_h2]:text-[15px]",
+          "[&_h2+div]:flex-nowrap [&_h2+div]:overflow-hidden [&_h2+div]:text-[11px] @3xl/table:[&_h2+div]:text-xs",
+          "[&_h2+div>span]:min-w-0 [&_h2+div>span]:truncate",
         )}
       >
         <thead>
           <tr>
             <th className="border-lines bg-foreground sticky top-0 z-20 w-20 border-b text-center align-bottom @3xl/table:w-24">
-              <span className="text-primary/45 text-xs leading-tight font-medium @3xl/table:text-[13px]">
+              <span className="text-primary/60 text-xs leading-tight font-medium @3xl/table:text-[13px]">
                 {translate("timetable.hour")}
               </span>
             </th>
@@ -79,7 +79,7 @@ export const TableBoard: FC<TableBoardProps> = ({
                   <div className="flex min-w-0 items-baseline gap-1.5">
                     <span
                       className={cn(
-                        isToday ? "text-accent-table" : "text-primary/45",
+                        isToday ? "text-accent-table" : "text-primary/60",
                         "tabular font-mono text-xs font-semibold @3xl/table:text-[13px]",
                       )}
                     >
@@ -168,7 +168,7 @@ export const TableBoard: FC<TableBoardProps> = ({
                       >
                         {hour.number}
                       </span>
-                      <span className="text-primary/40 tabular text-center text-[10px] leading-tight tracking-tight whitespace-nowrap">
+                      <span className="text-primary/60 tabular text-center text-[10px] leading-tight tracking-tight whitespace-nowrap">
                         {hour.timeFrom}–{hour.timeTo}
                       </span>
                       {isLiveHour && (

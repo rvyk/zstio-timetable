@@ -61,7 +61,7 @@ const PageLink: FC<NonNullable<TopbarProps["page"]>> = ({
       <span className="text-primary truncate text-sm leading-tight font-semibold tracking-tight">
         {title}
       </span>
-      <span className="text-primary/55 truncate text-[11px] leading-tight">
+      <span className="text-primary/60 truncate text-[11px] leading-tight">
         {backLabel}
       </span>
     </span>
@@ -75,7 +75,6 @@ const SchoolLink: FC = () => {
     <Link
       href={SCHOOL_WEBSITE}
       className="group -m-1 flex items-center gap-x-2.5 rounded-lg p-1"
-      aria-label={translate("school.linkAria", { school: SCHOOL_SHORT })}
     >
       <Image
         src={school_logo}
@@ -86,7 +85,7 @@ const SchoolLink: FC = () => {
         <span className="text-primary text-sm leading-none font-semibold tracking-tight">
           {SCHOOL_SHORT}
         </span>
-        <span className="text-primary flex items-center gap-1 text-[11px] leading-none opacity-55">
+        <span className="text-primary flex items-center gap-1 text-[11px] leading-none opacity-60">
           <ArrowLeft className="size-3" strokeWidth={2} />
           {translate("school.link")}
         </span>

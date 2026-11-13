@@ -34,7 +34,7 @@ export const FavoriteStar: FC<FavoriteStarProps> = ({
 
   return (
     <button
-      aria-label={label}
+      aria-label={withLabel ? undefined : label}
       title={withLabel ? undefined : label}
       aria-pressed={isFavorite}
       onClick={(e) => {
@@ -46,7 +46,9 @@ export const FavoriteStar: FC<FavoriteStarProps> = ({
         "shrink-0 rounded-sm transition-colors",
         isFavorite
           ? "text-accent-table"
-          : "text-primary/55 hover:text-primary/80",
+          : withLabel
+            ? "text-primary/70 hover:text-primary"
+            : "text-primary/55 hover:text-primary/80",
         revealOnHover &&
           !isFavorite &&
           "opacity-0 group-focus-within:opacity-100 group-hover:opacity-100 focus-visible:opacity-100 max-md:opacity-100",
