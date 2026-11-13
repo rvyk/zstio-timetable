@@ -45,7 +45,7 @@ export const ShortLessonSwitcherCell: FC<{ className?: string }> = ({
   return (
     <div
       className={cn(
-        "flex gap-2 px-3 py-2 max-md:flex-col-reverse max-md:items-stretch md:items-center @max-3xl/head:gap-1.5 @max-3xl/head:pl-2",
+        "flex gap-2 px-3 py-2 max-md:flex-col-reverse max-md:items-stretch md:items-center @max-3xl/head:gap-1.5 @max-3xl/head:pr-2",
         className,
       )}
     >

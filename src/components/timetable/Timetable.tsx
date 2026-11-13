@@ -113,6 +113,7 @@ export const Timetable: FC<TimetableProps> = ({ timetable }) => {
           )}
         </div>
         <div className="flex shrink-0 items-center">
+          <ShortLessonSwitcherCell />
           {timetable.title && (
             <FavoriteStar
               item={{
@@ -121,10 +122,9 @@ export const Timetable: FC<TimetableProps> = ({ timetable }) => {
                 type: timetable.type,
               }}
               withLabel
-              className="border-lines bg-accent hover:bg-accent/60 h-9 rounded-lg border px-3 @max-3xl/head:gap-0 @max-3xl/head:px-2.5 @max-3xl/head:[&>span]:hidden"
+              className="border-lines bg-accent hover:bg-accent/60 mr-3 h-9 rounded-lg border px-3 @max-3xl/head:gap-0 @max-3xl/head:px-2.5 @max-3xl/head:[&>span]:hidden"
             />
           )}
-          <ShortLessonSwitcherCell />
         </div>
       </div>
 
