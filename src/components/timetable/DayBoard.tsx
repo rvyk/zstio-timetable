@@ -45,7 +45,7 @@ export const DayBoard: FC<DayBoardProps> = ({
 }) => {
   const translate = useT();
   const now = useNowSeconds();
-  const [transition, setTransition] = useState<Transition>("swap");
+  const [transition, setTransition] = useState<Transition | null>(null);
   const touchStartX = useRef<number | null>(null);
 
   const goTo = (index: number, swipeDirection?: Transition) => {
@@ -98,7 +98,10 @@ export const DayBoard: FC<DayBoardProps> = ({
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
       >
-        <div key={selectedDayIndex} className={TRANSITION_CLASS[transition]}>
+        <div
+          key={selectedDayIndex}
+          className={transition ? TRANSITION_CLASS[transition] : undefined}
+        >
           {slots.length > 0 ? (
             <table className="w-full table-fixed border-collapse text-left">
               <caption className="sr-only">

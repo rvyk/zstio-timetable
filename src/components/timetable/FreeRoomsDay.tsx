@@ -72,7 +72,8 @@ export const FreeRoomsDay: FC<FreeRoomsDayProps> = ({
                     ? "border-accent-table/60 bg-accent-table/[0.07]"
                     : "border-lines/70 bg-accent/40",
                   isEmpty && "opacity-65",
-                  "animate-rise flex min-h-11 items-center gap-3 rounded-lg border px-3 py-2.5 text-left transition duration-150 not-disabled:active:scale-[0.98]",
+                  pickedDayIndex !== null && "animate-rise",
+                  "flex min-h-11 items-center gap-3 rounded-lg border px-3 py-2.5 text-left transition duration-150 not-disabled:active:scale-[0.98]",
                 )}
               >
                 <span
