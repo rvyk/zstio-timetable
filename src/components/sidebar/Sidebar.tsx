@@ -15,6 +15,7 @@ import { useFavoritesStore } from "@/stores/favorites";
 import { useRecentStore } from "@/stores/recent";
 import { useSettingsWithoutStore } from "@/stores/settings";
 import { useTimetableStore } from "@/stores/timetable";
+import type { List } from "@majusss/timetable-parser";
 import {
   ArrowLeft,
   BookmarkIcon,
@@ -33,6 +34,7 @@ import { FC, Fragment, useEffect, useState } from "react";
 import { useIsClient, useMediaQuery } from "usehooks-ts";
 import SidebarContext, { useSidebarContext } from "./Context";
 import { Dropdown, DropdownContent } from "./Dropdown";
+import { NoScriptList } from "./NoScriptList";
 import { Search, useSearchResults } from "./Search";
 
 interface SidebarContentProps {
@@ -71,7 +73,7 @@ const SidebarListSkeleton: FC = () => {
 
   if (isPreview)
     return (
-      <div className="grid w-8 gap-2">
+      <div className="hidden w-8 gap-2 in-data-js:grid">
         <Skeleton className="size-8" />
         <Skeleton className="size-8" />
         <hr className="border-lines my-1" />
@@ -82,7 +84,7 @@ const SidebarListSkeleton: FC = () => {
     );
 
   return (
-    <div className="grid gap-10">
+    <div className="hidden gap-10 in-data-js:grid">
       <Skeleton className="h-12 w-full" />
       <div className="grid gap-5">
         <Skeleton className="h-10 w-full" />
@@ -247,7 +249,7 @@ const SidebarActions: FC<{ collapsed: boolean; onExpand: () => void }> = ({
   );
 };
 
-export const Sidebar: FC = () => {
+export const Sidebar: FC<{ list: List }> = ({ list }) => {
   const collapsed = useSettingsWithoutStore(
     (state) => state.isSidebarCollapsed,
   );
@@ -299,6 +301,7 @@ export const Sidebar: FC = () => {
             />
             <div className="grid flex-1 grid-rows-[1fr_auto] gap-y-12">
               <div className="col-start-1 row-start-1">
+                <NoScriptList list={list} />
                 {isClient ? (
                   <TimetableSidebarDropdowns />
                 ) : (

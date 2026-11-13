@@ -1,10 +1,17 @@
+import { getOptivumList } from "@/actions/getOptivumList";
 import { Sidebar } from "@/components/sidebar/Sidebar";
 import { ReactNode } from "react";
 
-export default function MainLayout({ children }: { children: ReactNode }) {
+export default async function MainLayout({
+  children,
+}: {
+  children: ReactNode;
+}) {
+  const list = await getOptivumList();
+
   return (
     <>
-      <Sidebar />
+      <Sidebar list={list} />
       {children}
     </>
   );
