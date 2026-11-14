@@ -11,8 +11,10 @@ export const adjustShortenedLessons = (
 
     const previousHour = adjustedHours[adjustedHours.length - 1];
 
-    if (hourNumber >= startIndex && previousHour) {
-      const timeFrom = shiftTime(previousHour.timeTo, BREAK_LENGTH);
+    if (hourNumber >= startIndex) {
+      const timeFrom = previousHour
+        ? shiftTime(previousHour.timeTo, BREAK_LENGTH)
+        : hour.timeFrom;
 
       adjustedHours.push({
         ...hour,

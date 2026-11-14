@@ -1,7 +1,12 @@
 import { getOptivumTimetable } from "@/actions/getOptivumTimetable";
 import { env } from "@/env";
 import { getTimetableBaseUrl, joinDataSourcePath } from "@/lib/dataSource";
-import { planGrid, type PlanGrid } from "@/lib/planDiff";
+import {
+  planChanges,
+  planGrid,
+  type PlanChange,
+  type PlanGrid,
+} from "@/lib/planDiff";
 import {
   changesEmbed,
   summarizeChanges,
@@ -19,11 +24,26 @@ const PROBE_FALLBACK = "1";
 
 type Snapshots = Record<string, PlanGrid>;
 
+export interface StoredPlanChanges {
+  type: OptivumTimetable["type"];
+  value: string;
+  title: string;
+  changes: PlanChange[];
+}
+
+export interface LastChanges {
+  detectedAt: string;
+  validDate: string | null;
+  plans: StoredPlanChanges[];
+}
+
 interface SnapshotFile {
   generatedDate: string | null;
   stamp: string | null;
   probe: string;
   grids: Snapshots;
+  checkedAt: string | null;
+  lastChanges: LastChanges | null;
 }
 
 const EMPTY_FILE: SnapshotFile = {
@@ -31,6 +51,8 @@ const EMPTY_FILE: SnapshotFile = {
   stamp: null,
   probe: PROBE_FALLBACK,
   grids: {},
+  checkedAt: null,
+  lastChanges: null,
 };
 
 const probeStamp = async (index: string): Promise<string | null> => {
@@ -62,6 +84,8 @@ const readSnapshots = async (): Promise<SnapshotFile> => {
       stamp: parsed.stamp ?? null,
       probe: parsed.probe ?? PROBE_FALLBACK,
       grids: parsed.grids,
+      checkedAt: parsed.checkedAt ?? null,
+      lastChanges: parsed.lastChanges ?? null,
     };
   } catch {
     return EMPTY_FILE;
@@ -163,6 +187,7 @@ export const runPlanWatch = async () => {
   ];
 
   const changed: ChangedPlan[] = [];
+  const storedChanges: StoredPlanChanges[] = [];
   const grids: Snapshots = {};
 
   for (let i = 0; i < targets.length; i += CONCURRENCY) {
@@ -179,7 +204,15 @@ export const runPlanWatch = async () => {
         if (!before) return;
 
         const summary = summarizeChanges(value, timetable, before, grid);
-        if (summary) changed.push(summary);
+        if (summary) {
+          changed.push(summary);
+          storedChanges.push({
+            type,
+            value,
+            title: timetable.title,
+            changes: planChanges(before, grid),
+          });
+        }
       }),
     );
   }
@@ -188,11 +221,22 @@ export const runPlanWatch = async () => {
     return { checked: 0, changed: [], notified: false, skipped: "unreachable" };
   }
 
+  const now = new Date().toISOString();
+
   await writeSnapshots({
     generatedDate: probe.generatedDate,
     stamp,
     probe: list.classes[0]?.value ?? stored.probe,
     grids,
+    checkedAt: now,
+    lastChanges:
+      storedChanges.length > 0 && !isFirstRun
+        ? {
+            detectedAt: now,
+            validDate: probe.validDate,
+            plans: storedChanges,
+          }
+        : stored.lastChanges,
   });
 
   await revalidateDeployments();
@@ -209,6 +253,16 @@ export const runPlanWatch = async () => {
     changed,
     notified,
     skipped: null,
+  };
+};
+
+export const readPlanWatchState = async () => {
+  const { checkedAt, lastChanges, grids } = await readSnapshots();
+
+  return {
+    enabled: Boolean(env.DISCORD_WEBHOOK_URL) || Object.keys(grids).length > 0,
+    checkedAt,
+    lastChanges,
   };
 };
 

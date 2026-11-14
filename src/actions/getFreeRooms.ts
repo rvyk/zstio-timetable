@@ -14,6 +14,7 @@ const combineRooms = async (): Promise<Room[]> => {
 
   const roomPromises = roomList.map(async (room) => {
     const timetable = await getOptivumTimetable("room", room.value);
+    if (!timetable.title) throw new Error("Brak planu sali");
 
     return {
       id: room.value,

@@ -2,18 +2,12 @@
 
 import { useLocale, useT } from "@/components/common/LocaleProvider";
 import type { Locale } from "@/lib/i18n";
+import type { SchoolNewsPost } from "@/lib/schoolNews";
 import { cn } from "@/lib/utils";
 import { useNewsStore } from "@/stores/news";
 import { ArrowUpRight, Check, Megaphone } from "lucide-react";
 import { FC, useEffect, useState } from "react";
 import { useIsClient } from "usehooks-ts";
-
-export interface SchoolNewsPost {
-  id: number;
-  title: string;
-  link: string;
-  date: string;
-}
 
 const newsDate = (locale: Locale) =>
   new Intl.DateTimeFormat(locale === "uk" ? "uk-UA" : "pl-PL", {

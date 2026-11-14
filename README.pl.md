@@ -15,6 +15,7 @@ Nowoczesna i odświeżona aplikacja planu lekcji dla Zespołu Szkół Techniczny
 - **Inteligentne Skrócone Lekcje ⏱️:** Automatyczna adaptacja planu do skróconych godzin lekcyjnych.
 - **Podgląd Trwającej Lekcji ⏳:** Widzisz aktualną lekcję, trwającą przerwę i pozostały czas.
 - **Subskrypcja Kalendarza (webcal) 📅:** Zasubskrybuj aktualizowany na bieżąco kanał `webcal://` w aplikacji kalendarza lub Google Calendar — z automatycznym pominięciem świąt i ferii.
+- **Publiczne REST API 🔌:** JSON-owe API tylko do odczytu pod `/api/v1`, ze specyfikacją OpenAPI 3.1 i interaktywną dokumentacją pod `/api/v1/docs`.
 - **Wykrywanie Zmian w Planie 🔔:** Opcjonalny watcher wykrywa zmiany w planie i wysyła je na webhooka Discorda.
 - **Aktualności Szkolne 📰:** Opcjonalnie pobiera najnowsze wpisy ze strony szkoły i pokazuje je jako powiadomienie, które można zamknąć.
 - **Wielojęzyczny Interfejs 🌐:** Pełne tłumaczenia polskie i ukraińskie.
@@ -42,6 +43,41 @@ Nowoczesna i odświeżona aplikacja planu lekcji dla Zespołu Szkół Techniczny
 - **Vercel Analytics:** Opcjonalna analityka użycia.
 - **Sentry:** Śledzenie błędów i monitorowanie wydajności w czasie rzeczywistym.
 - **Docker:** Konteneryzacja ułatwiająca wdrożenie.
+
+## 🔌 Publiczne API
+
+Pod `/api/v1` działa JSON-owe API tylko do odczytu. Nie wymaga klucza, CORS jest otwarty dla każdej domeny, a dane ze szkoły są cache'owane przez 15 minut jak reszta aplikacji. Odpowiedzi mają `ETag`, więc odpytywanie z `If-None-Match` dostaje tanie `304`. Pełna dokumentacja powstaje ze specyfikacji OpenAPI 3.1, wersja interaktywna jest pod `/api/v1/docs`.
+
+`type` to `class`, `teacher` albo `room`, `id` to numeryczny identyfikator Optivum z `/api/v1/timetables`. `day` przyjmuje `0`-`6` (od poniedziałku), angielskie nazwy dni, `today` i `tomorrow`. Endpointy planu, dnia, `now` i `hours` przyjmują też `hours=short` albo `hours=custom&shortenFrom=N` dla skróconych lekcji, a każdy endpoint planu przyjmuje `group=1/2`, który zostawia jedną grupę i lekcje całej klasy. `at` przyjmuje datę ISO z offsetem albo lokalny czas warszawski `YYYY-MM-DDTHH:MM`. `/changes` wymaga watchera planu z trwałym snapshotem, więc na Vercelu jest puste.
+
+| Endpoint                                        | Opis                                                |
+| ----------------------------------------------- | --------------------------------------------------- |
+| `GET /api/v1`                                   | Indeks wszystkich endpointów                        |
+| `GET /api/v1/docs`                              | Interaktywna dokumentacja                           |
+| `GET /api/v1/openapi.json`                      | Specyfikacja OpenAPI 3.1                            |
+| `GET /api/v1/status`                            | Stan źródła i daty planu                            |
+| `GET /api/v1/timetables?type=&q=`               | Wszystkie klasy, nauczyciele i sale, z filtrowaniem |
+| `GET /api/v1/search?q=&limit=`                  | Wyszukiwanie po nazwie z rankingiem                 |
+| `GET /api/v1/timetables/{type}/{id}`            | Cały tydzień z godzinami lekcji                     |
+| `GET /api/v1/timetables/{type}/{id}/week?from=` | Tydzień z datami i zaznaczonymi dniami wolnymi      |
+| `GET /api/v1/timetables/{type}/{id}/next?at=`   | Następna lekcja, z pominięciem weekendów i świąt    |
+| `GET /api/v1/timetables/{type}/{id}/days/{day}` | Jeden dzień                                         |
+| `GET /api/v1/timetables/{type}/{id}/now?at=`    | Bieżąca i następna lekcja (czas warszawski)         |
+| `GET /api/v1/timetables/{type}/{id}/subjects`   | Przedmioty z liczbą godzin w tygodniu               |
+| `GET /api/v1/timetables/{type}/{id}/calendar`   | Kanał iCalendar                                     |
+| `GET /api/v1/hours`                             | Dzwonki                                             |
+| `GET /api/v1/free-rooms?day=&lesson=`           | Wolne sale na dzień i lekcję                        |
+| `GET /api/v1/free-rooms/now?at=`                | Sale wolne na bieżącej lekcji                       |
+| `GET /api/v1/changes?type=&id=`                 | Ostatnie zmiany w planie wykryte przez watcher      |
+| `GET /api/v1/news?limit=`                       | Najnowsze wpisy ze strony szkoły                    |
+| `GET /api/v1/days-off?from=&weeks=&weekends=`   | Święta i przerwy w nauce                            |
+
+```bash
+curl "https://plan.zstiojar.edu.pl/api/v1/search?q=4tp"
+curl "https://plan.zstiojar.edu.pl/api/v1/timetables/class/27/next?group=1/2"
+```
+
+Błędy zawsze mają postać `{"error": {"status": 404, "code": "not_found", "message": "..."}}`.
 
 ## Instalacja i Konfiguracja
 

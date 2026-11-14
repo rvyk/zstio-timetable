@@ -15,6 +15,7 @@ A modern and refreshed timetable application for Zespół Szkół Technicznych i
 - **Smart Shortened Lesson Calculator ⏱️:** Dynamically adjusts the timetable to reflect shortened lesson durations.
 - **Live Lesson Progress ⏳:** See the current lesson, the break in progress, and how much time is left.
 - **Calendar Subscription (webcal) 📅:** Subscribe to a live `webcal://` feed that stays up to date in your calendar app or Google Calendar, with Polish holidays and school breaks excluded automatically.
+- **Public REST API 🔌:** Read-only JSON API under `/api/v1` with an OpenAPI 3.1 spec and interactive docs at `/api/v1/docs`.
 - **Plan Change Watcher 🔔:** An optional background watcher detects timetable changes and posts them to a Discord webhook.
 - **School News 📰:** Optionally pulls the latest posts from the school website and shows them as a dismissible notification.
 - **Multi-language Interface 🌐:** Full Polish and Ukrainian translations.
@@ -42,6 +43,41 @@ A modern and refreshed timetable application for Zespół Szkół Technicznych i
 - **Vercel Analytics:** Optional, privacy-friendly usage analytics.
 - **Sentry:** Real-time error tracking and performance monitoring.
 - **Docker:** Containerization for simplified deployment.
+
+## 🔌 Public API
+
+A read-only JSON API is served under `/api/v1`. No key is needed, CORS is open to every origin and upstream data is cached for 15 minutes like the rest of the app. Responses carry an `ETag`, so polling with `If-None-Match` gets a cheap `304`. The full reference is generated from the OpenAPI 3.1 document: open `/api/v1/docs` for the interactive version.
+
+`type` is `class`, `teacher` or `room`, `id` is the numeric Optivum id from `/api/v1/timetables`. `day` accepts `0`-`6` (Monday first), English weekday names, `today` and `tomorrow`. Timetable, day, now and hours endpoints also take `hours=short` or `hours=custom&shortenFrom=N` for shortened lessons, and every timetable endpoint takes `group=1/2` to keep only one group plus whole-class lessons. `at` accepts an ISO date-time with an offset or a local Warsaw `YYYY-MM-DDTHH:MM`. `/changes` needs the plan watcher with a persistent snapshot, so it stays empty on Vercel.
+
+| Endpoint                                        | Description                                   |
+| ----------------------------------------------- | --------------------------------------------- |
+| `GET /api/v1`                                   | Index with every endpoint                     |
+| `GET /api/v1/docs`                              | Interactive documentation                     |
+| `GET /api/v1/openapi.json`                      | OpenAPI 3.1 document                          |
+| `GET /api/v1/status`                            | Source health and plan dates                  |
+| `GET /api/v1/timetables?type=&q=`               | Every class, teacher and room, filterable     |
+| `GET /api/v1/search?q=&limit=`                  | Ranked name search                            |
+| `GET /api/v1/timetables/{type}/{id}`            | Whole week with bell times                    |
+| `GET /api/v1/timetables/{type}/{id}/days/{day}` | Single day                                    |
+| `GET /api/v1/timetables/{type}/{id}/week?from=` | Dated week with holidays marked               |
+| `GET /api/v1/timetables/{type}/{id}/now?at=`    | Current and next lesson today (Europe/Warsaw) |
+| `GET /api/v1/timetables/{type}/{id}/next?at=`   | Next lesson, skipping weekends and holidays   |
+| `GET /api/v1/timetables/{type}/{id}/subjects`   | Subjects with weekly counts                   |
+| `GET /api/v1/timetables/{type}/{id}/calendar`   | iCalendar feed                                |
+| `GET /api/v1/hours`                             | Bell schedule                                 |
+| `GET /api/v1/free-rooms?day=&lesson=`           | Free rooms per day and lesson                 |
+| `GET /api/v1/free-rooms/now?at=`                | Free rooms in the current lesson              |
+| `GET /api/v1/days-off?from=&weeks=&weekends=`   | Holidays and school breaks                    |
+| `GET /api/v1/changes?type=&id=`                 | Latest plan changes found by the watcher      |
+| `GET /api/v1/news?limit=`                       | Latest posts from the school website          |
+
+```bash
+curl "https://plan.zstiojar.edu.pl/api/v1/search?q=4tp"
+curl "https://plan.zstiojar.edu.pl/api/v1/timetables/class/27/next?group=1/2"
+```
+
+Errors always look like `{"error": {"status": 404, "code": "not_found", "message": "..."}}`.
 
 ## Installation and Setup
 

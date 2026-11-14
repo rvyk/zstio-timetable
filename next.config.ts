@@ -16,6 +16,18 @@ const nextConfig: NextConfig = {
         : false,
   },
 
+  headers: async () => [
+    {
+      source: "/api/v1/:path*",
+      headers: [
+        { key: "Access-Control-Allow-Origin", value: "*" },
+        { key: "Access-Control-Allow-Methods", value: "GET, OPTIONS" },
+        { key: "Access-Control-Expose-Headers", value: "ETag, X-API-Version" },
+        { key: "X-API-Version", value: "1.1.0" },
+      ],
+    },
+  ],
+
   redirects: async () => [
     {
       source: "/zastepstwa/:path*",

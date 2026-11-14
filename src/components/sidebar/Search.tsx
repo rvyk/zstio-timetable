@@ -1,5 +1,6 @@
 import { useT } from "@/components/common/LocaleProvider";
 import { MAX_RESULTS } from "@/constants/settings";
+import { normalizeSearch as normalize } from "@/lib/apiShape";
 import { setLastVisitedCookie } from "@/lib/utils";
 import { useRecentStore } from "@/stores/recent";
 import { OptivumTimetable } from "@/types/optivum";
@@ -15,13 +16,6 @@ import {
   useRef,
 } from "react";
 import { useIsClient } from "usehooks-ts";
-
-const normalize = (value: string) =>
-  value
-    .toLowerCase()
-    .replace(/ł/g, "l")
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "");
 
 const listKeys: Record<string, string> = {
   classes: "class",

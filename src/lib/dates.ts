@@ -47,6 +47,60 @@ export const warsawToday = (at: Date = new Date()): Date => {
   return new Date(Date.UTC(Number(year), Number(month) - 1, Number(day)));
 };
 
+const WARSAW_HM = new Intl.DateTimeFormat("en-GB", {
+  timeZone: "Europe/Warsaw",
+  hour: "2-digit",
+  minute: "2-digit",
+  hourCycle: "h23",
+});
+
+const WARSAW_FULL = new Intl.DateTimeFormat("en-US", {
+  timeZone: "Europe/Warsaw",
+  year: "numeric",
+  month: "2-digit",
+  day: "2-digit",
+  hour: "2-digit",
+  minute: "2-digit",
+  second: "2-digit",
+  hourCycle: "h23",
+});
+
+const warsawOffset = (instant: number): number => {
+  const { year, month, day, hour, minute, second } = parts(
+    WARSAW_FULL,
+    new Date(instant),
+  );
+  const local = Date.UTC(
+    Number(year),
+    Number(month) - 1,
+    Number(day),
+    Number(hour),
+    Number(minute),
+    Number(second),
+  );
+
+  return local - Math.floor(instant / 1000) * 1000;
+};
+
+export const warsawLocal = (
+  year: number,
+  month: number,
+  day: number,
+  hours = 0,
+  minutes = 0,
+  seconds = 0,
+): Date => {
+  const guess = Date.UTC(year, month - 1, day, hours, minutes, seconds);
+  const first = guess - warsawOffset(guess);
+
+  return new Date(guess - warsawOffset(first));
+};
+
+export const warsawMinutes = (at: Date = new Date()): number => {
+  const { hour, minute } = parts(WARSAW_HM, at);
+  return Number(hour) * 60 + Number(minute);
+};
+
 export const warsawDayIndex = (at?: Date): number =>
   (warsawToday(at).getUTCDay() + 6) % 7;
 

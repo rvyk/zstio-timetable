@@ -204,3 +204,29 @@ export const getCalendar = async (timetable: OptivumTimetable) => {
       .replaceAll("\r\n\t", "\r\n "),
   };
 };
+
+export const calendarResponse = async (timetable: OptivumTimetable) => {
+  const { error, value } = await getCalendar(timetable);
+
+  if (error ?? !value) {
+    console.error("Failed to build calendar:", error);
+    return Response.json(
+      {
+        error: {
+          status: 500,
+          code: "calendar_error",
+          message: "Calendar could not be generated",
+        },
+      },
+      { status: 500, headers: { "Cache-Control": "no-store" } },
+    );
+  }
+
+  return new Response(value, {
+    headers: {
+      "Content-Type": "text/calendar; charset=utf-8",
+      "Content-Disposition": `inline; filename="${timetable.id}.ics"`,
+      "Cache-Control": "public, max-age=0, s-maxage=900",
+    },
+  });
+};

@@ -1,5 +1,6 @@
+import { getOptivumList } from "@/actions/getOptivumList";
 import { getOptivumTimetable } from "@/actions/getOptivumTimetable";
-import { getCalendar } from "@/lib/calendar";
+import { calendarResponse } from "@/lib/calendar";
 import type { OptivumTimetable } from "@/types/optivum";
 
 const PREFIX_TO_TYPE: Record<string, OptivumTimetable["type"]> = {
@@ -20,23 +21,20 @@ export const GET = async (
 
   if (!type) return new Response("Not found", { status: 404 });
 
+  const list = await getOptivumList();
+  const listed = {
+    class: list.classes,
+    teacher: list.teachers,
+    room: list.rooms,
+  }[type];
+  if (!listed?.some((item) => item.value === match[2])) {
+    return new Response("Not found", { status: 404 });
+  }
+
   const timetable = await getOptivumTimetable(type, match[2]!);
   if (!timetable.lessons?.length) {
     return new Response("Not found", { status: 404 });
   }
 
-  const { error, value } = await getCalendar(timetable);
-
-  if (error ?? !value) {
-    console.error("Failed to build calendar:", error);
-    return new Response("Calendar error", { status: 500 });
-  }
-
-  return new Response(value, {
-    headers: {
-      "Content-Type": "text/calendar; charset=utf-8",
-      "Content-Disposition": `inline; filename="${timetable.id}.ics"`,
-      "Cache-Control": "public, max-age=0, s-maxage=900",
-    },
-  });
+  return calendarResponse(timetable);
 };
