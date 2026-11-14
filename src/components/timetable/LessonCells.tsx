@@ -1,7 +1,6 @@
 "use client";
 
 import { LinkWithCookie } from "@/components/common/Link";
-import { useT } from "@/components/common/LocaleProvider";
 import { cn } from "@/lib/utils";
 import { TableLesson } from "@majusss/timetable-parser";
 import { FC } from "react";
@@ -14,9 +13,9 @@ interface LessonItemProps {
 export const LessonEntry: FC<LessonItemProps> = ({ lesson, inline }) =>
   inline ? (
     <div className="flex flex-wrap items-baseline gap-x-1.5 gap-y-0.5">
-      <h3 className="text-primary text-[15px] leading-snug font-medium tracking-[-0.01em]">
+      <h2 className="text-primary text-[15px] leading-snug font-medium tracking-[-0.01em]">
         {lesson.subject}
-      </h3>
+      </h2>
       <GroupName groupName={lesson.groupName} inline />
       <LessonMeta
         classId={lesson.classId}
@@ -30,10 +29,10 @@ export const LessonEntry: FC<LessonItemProps> = ({ lesson, inline }) =>
     </div>
   ) : (
     <div className="grid gap-0.5">
-      <h3 className="text-primary text-[15px] leading-tight font-medium tracking-[-0.01em]">
+      <h2 className="text-primary text-[15px] leading-tight font-medium tracking-[-0.01em]">
         {lesson.subject}
         <GroupName groupName={lesson.groupName} />
-      </h3>
+      </h2>
       <LessonMeta
         classId={lesson.classId}
         className={lesson.className}
@@ -52,7 +51,7 @@ const GroupName: FC<{ groupName?: string; inline?: boolean }> = ({
   groupName ? (
     <span
       className={cn(
-        "text-primary/55 font-mono text-[11px] font-normal",
+        "text-primary/60 font-mono text-[11px] font-normal",
         !inline && "ml-1.5",
       )}
     >
@@ -92,14 +91,19 @@ const LessonMeta: FC<LessonMetaProps> = ({
       className={cn(
         "flex flex-wrap items-baseline",
         inline
-          ? "text-primary/55 gap-x-2 text-[13px]"
+          ? "text-primary/60 gap-x-3 text-[13px]"
           : "text-primary/65 items-center gap-x-1.5 text-xs",
       )}
     >
       {parts.map((part, index) => (
         <span key={part.type} className="inline-flex items-center gap-x-1.5">
           {!inline && index > 0 && <span className="text-primary/40">·</span>}
-          <LessonLink id={part.id} name={part.name} type={part.type} />
+          <LessonLink
+            id={part.id}
+            name={part.name}
+            type={part.type}
+            inline={inline}
+          />
         </span>
       ))}
     </div>
@@ -110,15 +114,16 @@ interface LessonLinkProps {
   id?: string;
   name?: string;
   type: string;
+  inline?: boolean;
 }
 
-const LessonLink: FC<LessonLinkProps> = ({ id, name, type }) => {
-  const translate = useT();
-
-  return id && name ? (
+const LessonLink: FC<LessonLinkProps> = ({ id, name, type, inline }) =>
+  id && name ? (
     <LinkWithCookie
-      aria-label={translate("timetable.goTo", { target: `/${type}/${id}` })}
-      className="hover:text-primary decoration-primary/40 transition-colors hover:underline hover:underline-offset-2"
+      className={cn(
+        "hover:text-primary decoration-primary/40 transition-colors hover:underline hover:underline-offset-2",
+        inline && "-mx-1.5 -my-1 px-1.5 py-1",
+      )}
       href={`/${type}/${id}`}
     >
       {name}
@@ -126,4 +131,3 @@ const LessonLink: FC<LessonLinkProps> = ({ id, name, type }) => {
   ) : (
     <span>{name}</span>
   );
-};

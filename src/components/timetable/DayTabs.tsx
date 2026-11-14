@@ -9,6 +9,7 @@ interface DayTabsProps {
   dayNames: string[];
   selectedDayIndex: number;
   todayIndex: number;
+  today: Date;
   onSelect: (index: number) => void;
   className?: string;
 }
@@ -17,6 +18,7 @@ export const DayTabs: FC<DayTabsProps> = ({
   dayNames,
   selectedDayIndex,
   todayIndex,
+  today,
   onSelect,
   className,
 }) => {
@@ -35,7 +37,7 @@ export const DayTabs: FC<DayTabsProps> = ({
     >
       {dayNames.map((dayName, dayIndex) => {
         const short = dayLabel(locale, dayName, "short");
-        const date = getDayNumberForNextWeek(dayName);
+        const date = getDayNumberForNextWeek(dayName, today);
         const isActive = dayIndex === selectedDayIndex;
         const isToday = dayIndex === todayIndex;
 
@@ -57,7 +59,7 @@ export const DayTabs: FC<DayTabsProps> = ({
             </span>
             <span
               className={cn(
-                isToday ? "text-accent-table" : "opacity-85",
+                isToday && "text-accent-table",
                 "tabular font-mono text-[11px] leading-none",
               )}
             >

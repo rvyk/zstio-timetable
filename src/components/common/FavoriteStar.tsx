@@ -30,10 +30,12 @@ export const FavoriteStar: FC<FavoriteStarProps> = ({
   );
 
   const [clicks, setClicks] = useState(0);
+  const label = translate(isFavorite ? "favorites.remove" : "favorites.add");
 
   return (
     <button
-      aria-label={translate(isFavorite ? "favorites.remove" : "favorites.add")}
+      aria-label={withLabel ? undefined : label}
+      title={withLabel ? undefined : label}
       aria-pressed={isFavorite}
       onClick={(e) => {
         e.preventDefault();
@@ -44,7 +46,9 @@ export const FavoriteStar: FC<FavoriteStarProps> = ({
         "shrink-0 rounded-sm transition-colors",
         isFavorite
           ? "text-accent-table"
-          : "text-primary/55 hover:text-primary/80",
+          : withLabel
+            ? "text-primary/70 hover:text-primary"
+            : "text-primary/55 hover:text-primary/80",
         revealOnHover &&
           !isFavorite &&
           "opacity-0 group-focus-within:opacity-100 group-hover:opacity-100 focus-visible:opacity-100 max-md:opacity-100",
@@ -78,12 +82,14 @@ export const DefaultPlanButton: FC<{ item: ListItem; className?: string }> = ({
   const path = favoritePath(item);
   const isDefault = useFavoritesStore((state) => state.defaultPath === path);
   const setDefaultPath = useFavoritesStore((state) => state.setDefaultPath);
+  const label = translate(
+    isDefault ? "favorites.unsetDefault" : "favorites.setDefault",
+  );
 
   return (
     <button
-      aria-label={translate(
-        isDefault ? "favorites.unsetDefault" : "favorites.setDefault",
-      )}
+      aria-label={label}
+      title={label}
       aria-pressed={isDefault}
       onClick={(e) => {
         e.preventDefault();

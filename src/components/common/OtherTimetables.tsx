@@ -1,7 +1,6 @@
 "use client";
 
 import { useT } from "@/components/common/LocaleProvider";
-import { env } from "@/env";
 import { useAltTimetable } from "@/hooks/useAltTimetable";
 import { getTimetableBaseUrl, joinDataSourcePath } from "@/lib/dataSource";
 import { FC, Fragment } from "react";
@@ -10,7 +9,9 @@ export const OtherTimetables: FC = () => {
   const translate = useT();
   const hasAltTimetable = useAltTimetable();
 
-  const altUrl = hasAltTimetable ? env.NEXT_PUBLIC_ALT_TIMETABLE_URL : null;
+  const altUrl = hasAltTimetable
+    ? process.env.NEXT_PUBLIC_ALT_TIMETABLE_URL
+    : null;
 
   const links = [
     {
@@ -31,7 +32,7 @@ export const OtherTimetables: FC = () => {
   if (links.length === 0) return null;
 
   return (
-    <p className="text-primary/55 text-[11px]">
+    <p className="text-primary/60 text-[11px]">
       {translate("settings.otherTimetables")}{" "}
       {links.map(({ href, label }, index) => (
         <Fragment key={label}>

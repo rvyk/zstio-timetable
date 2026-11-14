@@ -5,21 +5,23 @@ import { Toaster } from "@/components/ui/Toaster";
 import {
   SCHOOL_CITY,
   SCHOOL_NAME,
-  SCHOOL_NAME_ACCUSATIVE,
   SCHOOL_SHORT,
   SCHOOL_WEBSITE,
 } from "@/constants/school";
 import { env } from "@/env";
-import { t } from "@/lib/i18n";
-import { getLocale } from "@/lib/locale.server";
+import { LOCALES, t } from "@/lib/i18n";
+import { getLocale, type LocaleParams } from "@/lib/locale.server";
+import { SITE_DESCRIPTION, siteSeo } from "@/lib/seo";
 import { cn } from "@/lib/utils";
 import { Analytics } from "@vercel/analytics/next";
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { ReactNode } from "react";
-import "./globals.css";
+import "../globals.css";
 
 export const fetchCache = "default-cache";
+
+export const generateStaticParams = () => LOCALES.map((locale) => ({ locale }));
 
 const geistSans = Geist({
   subsets: ["latin", "latin-ext"],
@@ -31,14 +33,13 @@ const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
 });
 
-const DESCRIPTION = `Aktualny plan lekcji ${SCHOOL_NAME_ACCUSATIVE}. Sprawdź rozkład zajęć klas, nauczycieli i sal oraz wolne sale w całym tygodniu.`;
-
 export const metadata: Metadata = {
+  ...siteSeo(),
   title: {
     template: `%s | ${SCHOOL_SHORT} ${SCHOOL_CITY}`,
     default: `Plan lekcji ${SCHOOL_SHORT} ${SCHOOL_CITY}`,
   },
-  description: DESCRIPTION,
+  description: SITE_DESCRIPTION,
   metadataBase: new URL(env.NEXT_PUBLIC_APP_URL),
   applicationName: `Plan lekcji ${SCHOOL_SHORT}`,
   keywords: [
@@ -53,25 +54,6 @@ export const metadata: Metadata = {
   authors: [{ name: "rvyk", url: "https://github.com/rvyk" }],
   creator: "rvyk",
   publisher: SCHOOL_NAME,
-
-  alternates: {
-    canonical: "./",
-  },
-
-  openGraph: {
-    type: "website",
-    locale: "pl_PL",
-    siteName: `Plan lekcji ${SCHOOL_SHORT}`,
-    title: `Plan lekcji ${SCHOOL_SHORT} ${SCHOOL_CITY}`,
-    description: DESCRIPTION,
-    url: "./",
-  },
-
-  twitter: {
-    card: "summary_large_image",
-    title: `Plan lekcji ${SCHOOL_SHORT} ${SCHOOL_CITY}`,
-    description: DESCRIPTION,
-  },
 
   robots: {
     index: true,
@@ -117,7 +99,7 @@ const jsonLd = {
       "@type": "WebSite",
       url: env.NEXT_PUBLIC_APP_URL,
       name: `Plan lekcji ${SCHOOL_SHORT} ${SCHOOL_CITY}`,
-      description: DESCRIPTION,
+      description: SITE_DESCRIPTION,
       inLanguage: "pl-PL",
       publisher: { "@id": `${SCHOOL_WEBSITE}/#school` },
     },
@@ -126,10 +108,12 @@ const jsonLd = {
 
 export default async function RootLayout({
   children,
+  params,
 }: Readonly<{
   children: ReactNode;
+  params: LocaleParams;
 }>) {
-  const locale = await getLocale();
+  const locale = await getLocale(params);
 
   return (
     <html lang={locale} suppressHydrationWarning data-scroll-behavior="smooth">
@@ -142,7 +126,7 @@ export default async function RootLayout({
       >
         <script
           dangerouslySetInnerHTML={{
-            __html: `try{var a=JSON.parse(localStorage.getItem("timetable-settings")).state.a11y;for(var k in a)if(a[k])document.documentElement.setAttribute("data-a11y-"+k,"")}catch(e){}`,
+            __html: `document.documentElement.setAttribute("data-js","");try{var a=JSON.parse(localStorage.getItem("timetable-settings")).state.a11y;for(var k in a)if(a[k])document.documentElement.setAttribute("data-a11y-"+k,"")}catch(e){}`,
           }}
         />
         <script
@@ -164,6 +148,7 @@ export default async function RootLayout({
             {children}
           </LocaleProvider>
         </ThemeProvider>
+        <div aria-hidden className="noise" />
       </body>
     </html>
   );

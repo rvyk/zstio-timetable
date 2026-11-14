@@ -123,7 +123,7 @@ export const PlanChanges: FC<{ timetable: OptivumTimetable }> = ({
               >
                 {translate("changes.title")}
               </span>
-              <span className="text-primary/55 truncate text-[11px] leading-tight">
+              <span className="text-primary/60 truncate text-[11px] leading-tight">
                 {phase === "idle" ? (
                   translate("changes.summary", { count: changes.length })
                 ) : (
@@ -161,7 +161,7 @@ export const PlanChanges: FC<{ timetable: OptivumTimetable }> = ({
                   title={translate("changes.dismiss")}
                   className="text-primary hover:bg-primary/5 grid size-7 shrink-0 place-content-center rounded-md opacity-50 transition hover:opacity-100 active:scale-90"
                 >
-                  <Check className="size-4" strokeWidth={2} />
+                  <Check className="size-3.5" strokeWidth={2} />
                 </button>
               </>
             )}
@@ -175,7 +175,7 @@ export const PlanChanges: FC<{ timetable: OptivumTimetable }> = ({
                 </li>
               ))}
               {changes.length > VISIBLE_CHANGES && (
-                <li className="text-primary/50">
+                <li className="text-primary/60">
                   {translate("changes.more", {
                     count: changes.length - VISIBLE_CHANGES,
                   })}

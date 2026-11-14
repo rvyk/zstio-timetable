@@ -4,11 +4,10 @@ import { getOptivumTimetable } from "@/actions/getOptivumTimetable";
 import { FreeRoomsBoard } from "@/components/timetable/FreeRoomsBoard";
 import { Topbar } from "@/components/topbar/Topbar";
 import { SCHOOL_NAME_ACCUSATIVE } from "@/constants/school";
+import { warsawToday } from "@/lib/dates";
 import { t } from "@/lib/i18n";
-import { getLocale } from "@/lib/locale.server";
+import { getLocale, type LocaleParams } from "@/lib/locale.server";
 import { pageSeo } from "@/lib/seo";
-
-export const dynamic = "force-dynamic";
 
 export const metadata = pageSeo(
   "Wolne sale",
@@ -16,8 +15,8 @@ export const metadata = pageSeo(
   "/free-rooms",
 );
 
-const FreeRoomsPage = async () => {
-  const locale = await getLocale();
+const FreeRoomsPage = async ({ params }: { params: LocaleParams }) => {
+  const locale = await getLocale(params);
   const { rooms } = await getOptivumList();
 
   const sample = rooms?.[0]
@@ -43,6 +42,7 @@ const FreeRoomsPage = async () => {
         hours={hours}
         freeRooms={freeRooms}
         rooms={rooms ?? []}
+        renderedOn={warsawToday()}
       />
     </main>
   );

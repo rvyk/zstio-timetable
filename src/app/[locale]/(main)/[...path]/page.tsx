@@ -1,5 +1,3 @@
-import { getOptivumList } from "@/actions/getOptivumList";
-import { getOptivumTimetable } from "@/actions/getOptivumTimetable";
 import { BottomBar } from "@/components/common/BottomBar";
 import { PlanChanges } from "@/components/common/PlanChanges";
 import { SchoolNews } from "@/components/common/SchoolNews";
@@ -8,32 +6,22 @@ import { TimetableController } from "@/components/timetable/TimetableController"
 import { Topbar } from "@/components/topbar/Topbar";
 import { SCHOOL_NAME_ACCUSATIVE } from "@/constants/school";
 import { TRANSLATION_DICT } from "@/constants/translations";
-import { lastVisitedPath } from "@/lib/lastVisited.server";
-import { pageSeo } from "@/lib/seo";
-import type { OptivumTimetable } from "@/types/optivum";
+import { warsawToday } from "@/lib/dates";
+import { pageSeo, siteSeo } from "@/lib/seo";
+import {
+  getTimetable,
+  isTimetableType,
+  timetableStaticParams,
+  type TimetableRouteParams,
+} from "@/lib/timetableRoute";
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { Fragment } from "react";
 
-interface PageParams {
-  path?: string[];
-}
-
-const TIMETABLE_TYPES: readonly OptivumTimetable["type"][] = [
-  "class",
-  "teacher",
-  "room",
-] as const;
-
-const isTimetableType = (
-  value: string | undefined,
-): value is OptivumTimetable["type"] =>
-  TIMETABLE_TYPES.includes(value as OptivumTimetable["type"]);
-
 export const generateMetadata = async ({
   params,
 }: {
-  params: Promise<PageParams>;
+  params: Promise<TimetableRouteParams>;
 }): Promise<Metadata> => {
   const resolvedParams = await params;
   const [type, value] = resolvedParams.path ?? [];
@@ -42,10 +30,13 @@ export const generateMetadata = async ({
     return { robots: { index: false, follow: true } };
   }
 
-  const timetable = await getOptivumTimetable(type, value);
+  const timetable = await getTimetable(type, value);
 
   if (!timetable.title) {
-    return { robots: { index: false, follow: true } };
+    return {
+      ...siteSeo(`/${type}/${value}`),
+      robots: { index: false, follow: true },
+    };
   }
 
   return pageSeo(
@@ -55,15 +46,19 @@ export const generateMetadata = async ({
   );
 };
 
-const TimetablePage = async ({ params }: { params: Promise<PageParams> }) => {
+const TimetablePage = async ({
+  params,
+}: {
+  params: Promise<TimetableRouteParams>;
+}) => {
   const resolvedParams = await params;
   const [type, value] = resolvedParams.path ?? [];
 
   if (!isTimetableType(type) || !value) {
-    redirect(await lastVisitedPath());
+    redirect("/");
   }
 
-  const timetable = await getOptivumTimetable(type, value);
+  const timetable = await getTimetable(type, value);
 
   return (
     <Fragment>
@@ -72,22 +67,13 @@ const TimetablePage = async ({ params }: { params: Promise<PageParams> }) => {
         <Topbar timetable={timetable} />
         <SchoolNews />
         <PlanChanges timetable={timetable} />
-        <Timetable timetable={timetable} />
+        <Timetable timetable={timetable} renderedOn={warsawToday()} />
         <BottomBar timetable={timetable} />
       </main>
     </Fragment>
   );
 };
 
-export async function generateStaticParams() {
-  const { classes, rooms, teachers } = await getOptivumList();
-
-  const classParams = classes.map((c) => ({ path: ["class", c.value] }));
-  const roomParams = rooms?.map((r) => ({ path: ["room", r.value] })) ?? [];
-  const teacherParams =
-    teachers?.map((t) => ({ path: ["teacher", t.value] })) ?? [];
-
-  return [...classParams, ...roomParams, ...teacherParams];
-}
+export const generateStaticParams = timetableStaticParams;
 
 export default TimetablePage;

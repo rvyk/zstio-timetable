@@ -29,6 +29,7 @@ interface DayBoardProps {
   lessons: TableLesson[][][];
   hours: TableHour[];
   todayIndex: number;
+  today: Date;
   selectedDayIndex: number;
   onDayChange: (index: number) => void;
 }
@@ -38,12 +39,13 @@ export const DayBoard: FC<DayBoardProps> = ({
   lessons,
   hours,
   todayIndex,
+  today,
   selectedDayIndex,
   onDayChange,
 }) => {
   const translate = useT();
   const now = useNowSeconds();
-  const [transition, setTransition] = useState<Transition>("swap");
+  const [transition, setTransition] = useState<Transition | null>(null);
   const touchStartX = useRef<number | null>(null);
 
   const goTo = (index: number, swipeDirection?: Transition) => {
@@ -87,6 +89,7 @@ export const DayBoard: FC<DayBoardProps> = ({
         dayNames={dayNames}
         selectedDayIndex={selectedDayIndex}
         todayIndex={todayIndex}
+        today={today}
         onSelect={goTo}
       />
 
@@ -95,7 +98,10 @@ export const DayBoard: FC<DayBoardProps> = ({
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
       >
-        <div key={selectedDayIndex} className={TRANSITION_CLASS[transition]}>
+        <div
+          key={selectedDayIndex}
+          className={transition ? TRANSITION_CLASS[transition] : undefined}
+        >
           {slots.length > 0 ? (
             <table className="w-full table-fixed border-collapse text-left">
               <caption className="sr-only">
@@ -177,7 +183,7 @@ export const DayBoard: FC<DayBoardProps> = ({
                             >
                               {slot.hour.number}
                             </span>
-                            <span className="text-primary/40 tabular text-center text-[10px] leading-tight tracking-tight whitespace-nowrap">
+                            <span className="text-primary/60 tabular text-center text-[10px] leading-tight tracking-tight whitespace-nowrap">
                               {slot.hour.timeFrom}–{slot.hour.timeTo}
                             </span>
                             {isLive && (
@@ -212,7 +218,7 @@ export const DayBoard: FC<DayBoardProps> = ({
                               ))}
                             </div>
                           ) : (
-                            <span className="text-primary/35 text-xs">
+                            <span className="text-primary/60 text-xs">
                               {translate("timetable.gap")}
                             </span>
                           )}

@@ -27,9 +27,11 @@ import {
   CalendarArrowDownIcon,
   ChevronDown,
   DownloadIcon,
+  Languages,
   PrinterIcon,
   Search,
   SlidersHorizontal,
+  SunMoon,
 } from "lucide-react";
 import { useTheme } from "next-themes";
 import Link from "next/link";
@@ -55,6 +57,9 @@ type SettingsItem = {
   hidden?: boolean;
 };
 
+const COMPACT_ROW =
+  "flex w-full items-center gap-2.5 rounded-md px-2 py-2 text-left text-[13px] text-primary/70 transition-colors hover:bg-primary/5 hover:text-primary";
+
 const SettingButton = ({
   icon: Icon,
   title,
@@ -62,8 +67,28 @@ const SettingButton = ({
   onClick,
   href,
   index = 0,
-}: Omit<SettingsItem, "key" | "hidden"> & { index?: number }) => {
+  compact,
+}: Omit<SettingsItem, "key" | "hidden"> & {
+  index?: number;
+  compact?: boolean;
+}) => {
   const Tag = href ? "a" : "button";
+
+  if (compact) {
+    return (
+      <Tag
+        href={href}
+        target={href ? "_blank" : undefined}
+        rel={href ? "noopener" : undefined}
+        onClick={onClick}
+        style={{ animationDelay: `${60 + index * 35}ms` }}
+        className={cn("animate-rise", COMPACT_ROW)}
+      >
+        <Icon className="size-4 shrink-0" strokeWidth={1.75} />
+        {title}
+      </Tag>
+    );
+  }
 
   return (
     <Tag
@@ -85,7 +110,7 @@ const SettingButton = ({
         <h2 className="text-primary text-[13px] leading-none font-medium tracking-tight">
           {title}
         </h2>
-        <div className="text-primary/55 text-[11px] leading-relaxed">
+        <div className="text-primary/60 text-[11px] leading-relaxed">
           {description}
         </div>
       </div>
@@ -118,16 +143,50 @@ const useThemeSwitch = () => {
   return { theme, switchTheme };
 };
 
-const ThemeSetting = () => {
+type RowProps = { compact?: boolean; index?: number };
+
+const ChoiceSetting = ({
+  icon: Icon,
+  label,
+  compact,
+  index = 0,
+  children,
+}: RowProps & {
+  icon: LucideIcon;
+  label: string;
+  children: ReactNode;
+}) => {
+  const style = { animationDelay: `${60 + index * 35}ms` };
+
+  return compact ? (
+    <div
+      style={style}
+      className="text-primary/70 animate-rise flex items-center gap-2.5 px-2 py-1 text-[13px]"
+    >
+      <Icon className="size-4 shrink-0" strokeWidth={1.75} />
+      <span className="min-w-0 flex-1 truncate">{label}</span>
+      <div className="w-40 shrink-0">{children}</div>
+    </div>
+  ) : (
+    <div style={style} className="animate-rise grid gap-2 p-2.5">
+      <span className="text-primary/60 text-xs font-medium">{label}</span>
+      {children}
+    </div>
+  );
+};
+
+const ThemeSetting = ({ compact, index }: RowProps) => {
   const translate = useT();
   const { theme, switchTheme } = useThemeSwitch();
   const isClient = useIsClient();
 
   return (
-    <div className="grid gap-2 p-2.5">
-      <span className="text-primary/55 text-[11px] font-medium tracking-[0.06em] uppercase">
-        {translate("theme.label")}
-      </span>
+    <ChoiceSetting
+      icon={SunMoon}
+      label={translate("theme.label")}
+      compact={compact}
+      index={index}
+    >
       <Segmented
         options={THEMES.map(({ value, key }) => ({
           value,
@@ -135,23 +194,28 @@ const ThemeSetting = () => {
         }))}
         value={isClient ? (theme ?? "system") : "system"}
         onSelect={switchTheme}
-        buttonClassName="py-1.5 text-[11px] font-medium"
+        buttonClassName={cn(
+          compact ? "py-0.5" : "py-1.5",
+          "text-[11px] font-medium",
+        )}
         keepTransition
       />
-    </div>
+    </ChoiceSetting>
   );
 };
 
-const LanguageSetting = () => {
+const LanguageSetting = ({ compact, index }: RowProps) => {
   const translate = useT();
   const locale = useLocale();
   const setLocale = useSetLocale();
 
   return (
-    <div className="grid gap-2 p-2.5">
-      <span className="text-primary/55 text-[11px] font-medium tracking-[0.06em] uppercase">
-        {translate("language.label")}
-      </span>
+    <ChoiceSetting
+      icon={Languages}
+      label={translate("language.label")}
+      compact={compact}
+      index={index}
+    >
       <Segmented
         options={LOCALES.map((option) => ({
           value: option,
@@ -160,10 +224,13 @@ const LanguageSetting = () => {
         }))}
         value={locale}
         onSelect={setLocale}
-        buttonClassName="py-1.5 text-[11px] font-medium"
+        buttonClassName={cn(
+          compact ? "py-0.5" : "py-1.5",
+          "text-[11px] font-medium",
+        )}
         keepTransition
       />
-    </div>
+    </ChoiceSetting>
   );
 };
 
@@ -173,7 +240,30 @@ const A11Y_OPTIONS = [
   { key: "motion", label: "a11y.motion", hint: "a11y.motionHint" },
 ] as const;
 
-const AccessibilitySetting = ({ index = 0 }: { index?: number }) => {
+const A11ySwitch = ({ active }: { active: boolean }) => (
+  <span
+    aria-hidden
+    className={cn(
+      "border-lines relative h-5 w-8.5 shrink-0 rounded-full border transition-colors duration-200",
+      active ? "bg-accent-table border-transparent" : "bg-accent",
+    )}
+  >
+    <span
+      className={cn(
+        "ease-out-quint absolute top-0.5 left-0.5 size-3.5 rounded-full transition-transform duration-200",
+        active ? "translate-x-3.5 bg-white" : "bg-primary/35 translate-x-0",
+      )}
+    />
+  </span>
+);
+
+const AccessibilitySetting = ({
+  index = 0,
+  compact,
+}: {
+  index?: number;
+  compact?: boolean;
+}) => {
   const translate = useT();
   const a11y = useSettingsStore((state) => state.a11y);
   const toggleA11y = useSettingsStore((state) => state.toggleA11y);
@@ -182,6 +272,57 @@ const AccessibilitySetting = ({ index = 0 }: { index?: number }) => {
   const activeCount = isClient
     ? A11Y_OPTIONS.filter((option) => a11y[option.key]).length
     : 0;
+
+  if (compact) {
+    return (
+      <Accordion type="single" collapsible>
+        <AccordionItem value="a11y">
+          <AccordionTrigger
+            style={{ animationDelay: `${60 + index * 35}ms` }}
+            className={cn(
+              "group animate-rise data-[state=open]:text-primary justify-start font-normal",
+              COMPACT_ROW,
+            )}
+          >
+            <AccessibilityIcon className="size-4 shrink-0" strokeWidth={1.75} />
+            {translate("a11y.label")}
+            {activeCount > 0 && (
+              <span className="text-primary/60 tabular text-xs">
+                {activeCount}/{A11Y_OPTIONS.length}
+              </span>
+            )}
+            <ChevronDown
+              className="text-primary/45 ml-auto size-3.5 shrink-0 transition-transform duration-300 group-data-[state=open]:rotate-180"
+              strokeWidth={2}
+            />
+          </AccordionTrigger>
+          <AccordionContent contentClassName="grid gap-0.5 pt-0.5">
+            {A11Y_OPTIONS.map((option) => {
+              const active = isClient && a11y[option.key];
+
+              return (
+                <button
+                  key={option.key}
+                  role="switch"
+                  aria-checked={active}
+                  title={translate(option.hint)}
+                  onClick={() => toggleA11y(option.key)}
+                  className={cn(
+                    COMPACT_ROW,
+                    "py-1.5 pl-8.5",
+                    active && "text-primary",
+                  )}
+                >
+                  <span className="flex-1">{translate(option.label)}</span>
+                  <A11ySwitch active={active} />
+                </button>
+              );
+            })}
+          </AccordionContent>
+        </AccordionItem>
+      </Accordion>
+    );
+  }
 
   return (
     <Accordion type="single" collapsible>
@@ -198,7 +339,7 @@ const AccessibilitySetting = ({ index = 0 }: { index?: number }) => {
             <span className="text-primary text-[13px] leading-none font-medium tracking-tight">
               {translate("a11y.label")}
             </span>
-            <span className="text-primary text-[11px] leading-relaxed opacity-55">
+            <span className="text-primary text-[11px] leading-relaxed opacity-60">
               {activeCount > 0
                 ? translate("a11y.active", { count: activeCount })
                 : translate("a11y.summary")}
@@ -225,26 +366,11 @@ const AccessibilitySetting = ({ index = 0 }: { index?: number }) => {
                   <span className="text-primary text-[13px] leading-none font-medium tracking-tight">
                     {translate(option.label)}
                   </span>
-                  <span className="text-primary/55 text-[11px] leading-relaxed">
+                  <span className="text-primary/60 text-[11px] leading-relaxed">
                     {translate(option.hint)}
                   </span>
                 </span>
-                <span
-                  aria-hidden
-                  className={cn(
-                    "border-lines relative h-5 w-8.5 shrink-0 rounded-full border transition-colors duration-200",
-                    active ? "bg-accent-table border-transparent" : "bg-accent",
-                  )}
-                >
-                  <span
-                    className={cn(
-                      "ease-out-quint absolute top-0.5 left-0.5 size-3.5 rounded-full transition-transform duration-200",
-                      active
-                        ? "translate-x-3.5 bg-white"
-                        : "bg-primary/35 translate-x-0",
-                    )}
-                  />
-                </span>
+                <A11ySwitch active={active} />
               </button>
             );
           })}
@@ -257,9 +383,11 @@ const AccessibilitySetting = ({ index = 0 }: { index?: number }) => {
 export const SettingsList = ({
   onSelect,
   includePrint,
+  compact,
 }: {
   onSelect?: () => void;
   includePrint?: boolean;
+  compact?: boolean;
 }) => {
   const router = useRouter();
   const translate = useT();
@@ -362,22 +490,28 @@ export const SettingsList = ({
   const visibleSettings = settings.filter((setting) => !setting.hidden);
 
   return (
-    <div className="grid gap-0.5 p-1">
+    <div
+      className={cn(
+        "grid gap-0.5",
+        compact ? "border-lines ml-4 border-l py-1 pl-2" : "p-1",
+      )}
+    >
       {visibleSettings.map(({ key, onClick, ...setting }, index) => (
         <SettingButton
           key={key}
           {...setting}
           index={index}
+          compact={compact}
           onClick={() => {
             onClick?.();
             onSelect?.();
           }}
         />
       ))}
-      <AccessibilitySetting index={visibleSettings.length} />
-      <hr className="border-lines my-1" />
-      <ThemeSetting />
-      <LanguageSetting />
+      <AccessibilitySetting index={visibleSettings.length} compact={compact} />
+      {!compact && <hr className="border-lines my-1" />}
+      <ThemeSetting compact={compact} index={visibleSettings.length + 1} />
+      <LanguageSetting compact={compact} index={visibleSettings.length + 2} />
     </div>
   );
 };
@@ -455,7 +589,7 @@ export const SettingsMenu = () => {
             <SettingsList onSelect={() => setIsOpen(false)} includePrint />
           </div>
 
-          <p className="border-lines text-primary/50 border-t pt-3 text-center text-[11px] leading-relaxed">
+          <p className="border-lines text-primary/60 border-t pt-3 text-center text-[11px] leading-relaxed">
             © 2024 Made with ❤️ for ZSTiO by <br /> Szymański Paweł & Majcher
             Kacper <br />
             <Link
