@@ -348,7 +348,11 @@ export const SidebarInfo: FC<{
         "border-lines gap-2 px-2 max-md:mt-6 max-md:border-t max-md:pt-4",
       )}
     >
-      {dates ?? <StoredTimetableInfo showTimetableDates={showTimetableDates} />}
+      {dates ? (
+        <Fragment>{dates}</Fragment>
+      ) : (
+        <StoredTimetableInfo showTimetableDates={showTimetableDates} />
+      )}
       <OtherTimetables />
     </div>
   );
