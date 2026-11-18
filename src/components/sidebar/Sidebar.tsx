@@ -281,7 +281,7 @@ export const Sidebar: FC<{ list: List; sidebarInfo?: ReactNode }> = ({
     <aside
       className={cn(
         collapsed ? "w-16" : "w-80",
-        "border-lines bg-foreground relative m-3 mr-0 h-[calc(100dvh-1.5rem)] shrink-0 rounded-xl border shadow-(--shadow-soft) transition-[width] duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] max-md:hidden",
+        "border-lines bg-foreground relative m-3 mr-0 h-[calc(100%-1.5rem)] shrink-0 rounded-xl border shadow-(--shadow-soft) transition-[width] duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] max-md:hidden",
       )}
     >
       <SidebarContext.Provider value={{ isPreview: collapsed }}>
