@@ -200,6 +200,13 @@ const DICT = {
   "freeRooms.count": { pl: "{count} wolnych", uk: "вільних: {count}" },
   "freeRooms.now": { pl: "Teraz", uk: "Зараз" },
 
+  "connection.offline": { pl: "Brak połączenia", uk: "Немає з'єднання" },
+  "connection.savedAt": { pl: "plan z {time}", uk: "розклад від {time}" },
+  "connection.restored": {
+    pl: "Połączono ponownie",
+    uk: "З'єднання відновлено",
+  },
+
   "offline.title": { pl: "Jesteś offline", uk: "Ви офлайн" },
   "offline.description": {
     pl: "Złap zasięg, żeby załadować plan zajęć. Ostatnio otwarte plany zostały zapisane i działają bez internetu.",

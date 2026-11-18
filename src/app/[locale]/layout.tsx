@@ -1,3 +1,4 @@
+import { ConnectionStatus } from "@/components/common/ConnectionStatus";
 import { LocaleProvider } from "@/components/common/LocaleProvider";
 import { ServiceWorker } from "@/components/common/ServiceWorker";
 import { ThemeProvider } from "@/components/common/ThemeProvider";
@@ -121,7 +122,7 @@ export default async function RootLayout({
         className={cn(
           geistSans.variable,
           geistMono.variable,
-          "bg-foreground md:bg-background flex h-dvh font-sans antialiased",
+          "bg-foreground md:bg-background flex h-dvh font-sans antialiased has-[[data-connection-bar]]:pt-[calc(1.75rem+env(safe-area-inset-top))]",
         )}
       >
         <script
@@ -139,6 +140,7 @@ export default async function RootLayout({
         <ThemeProvider attribute="class">
           <LocaleProvider locale={locale}>
             <Toaster />
+            <ConnectionStatus />
             <a
               href="#plan"
               className="bg-accent-table sr-only rounded-md px-4 py-2 text-sm font-medium text-white focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50"
